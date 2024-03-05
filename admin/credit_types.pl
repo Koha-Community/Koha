@@ -99,7 +99,7 @@ elsif ( $op eq 'cud-add_validate' ) {
     };
     $op = 'list';
 }
-elsif ( $op eq 'archive' ) {
+elsif ( $op eq 'cud-archive' ) {
     try {
         $credit_type->archived(1)->store();
         push @messages, { code => 'success_on_archive', type => 'message' };
@@ -110,7 +110,7 @@ elsif ( $op eq 'archive' ) {
     };
     $op = 'list';
 }
-elsif ( $op eq 'unarchive' ) {
+elsif ( $op eq 'cud-unarchive' ) {
     try {
         $credit_type->archived(0)->store();
         push @messages, { code => 'success_on_restore', type => 'message' };

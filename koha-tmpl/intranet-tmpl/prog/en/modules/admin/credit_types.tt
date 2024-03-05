@@ -202,11 +202,20 @@
                                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                             [% END %]
                                             [% IF !credit_type.is_system && !credit_type.archived %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                                <form id="archive_[% credit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/credit_types.pl">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-archive" />
+                                                    <input type="hidden" name="code" value="[% credit_type.code | html %]" />
+                                                </form>
+                                                <a class="btn btn-default btn-xs archive_button" href="#" data-code="[% credit_type.code | html %]"><i class="fa fa-archive"></i> Archive</a>
                                             [% END %]
-
                                             [% IF !credit_type.is_system && credit_type.archived %]
-                                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=unarchive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
+                                                <form id="unarchive_[% credit_type.code | html %]" method="post" action="/cgi-bin/koha/admin/credit_types.pl">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-unarchive" />
+                                                    <input type="hidden" name="code" value="[% credit_type.code | html %]" />
+                                                </form>
+                                                <a class="btn btn-default btn-xs unarchive_button" href="#" data-code="[% credit_type.code | html %]"><i class="fa fa-undo"></i> Restore</a>
                                             [% END %]
                                         </td>
                                     </tr>
@@ -265,6 +274,18 @@
 
             //Start filtered
             $('#filter_system').click();
+
+            $(".archive_button").on("click", function(e){
+                e.preventDefault();
+                var code = $(this).data('code');
+                $('#archive_'+code).submit();
+            });
+
+            $(".unarchive_button").on("click", function(e){
+                e.preventDefault();
+                var code = $(this).data('code');
+                $('#unarchive_'+code).submit();
+            });
         });
     </script>
 [% END %]
