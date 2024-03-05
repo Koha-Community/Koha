@@ -32,7 +32,7 @@ export class SysprefAPIClient extends HttpClient {
                         .map(variable =>
                             sysprefs[variable].length
                                 ? sysprefs[variable].map(value =>
-                                      "%s=%s".format(variable, value)
+                                      "%s=%s".format(variable, encodeURIComponent(value))
                                   )
                                 : "%s=".format(variable)
                         )
