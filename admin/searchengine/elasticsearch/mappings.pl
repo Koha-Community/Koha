@@ -196,7 +196,7 @@ if ( $op eq 'edit' ) {
         $update_mappings->();
     }
 }
-elsif( $op eq 'reset_confirmed' ) {
+elsif( $op eq 'cud-reset_confirmed' ) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     push @messages, { type => 'message', code => 'success_on_reset' };
     C4::Log::logaction( 'SEARCHENGINE', 'RESET_MAPPINGS', undef, q{} );
