@@ -312,14 +312,9 @@
                             </li>
                             <li>
                                 <label for="supplier">Vendor:</label>
-                                <select id="supplier" name="supplierid">
-                                    <option value="">All</option>
-                                    [% FOREACH supplier IN suppliers_loop %]
-                                        [% IF ( supplier.selected ) %]
-                                            <option selected="selected" value="[% supplier.booksellerid | html %]">[% supplier.suppliername | html %]</option>
-                                        [% ELSE %]
-                                            <option value="[% supplier.booksellerid | html %]">[% supplier.suppliername | html %]</option>
-                                        [% END %]
+                                <select id="supplierid" name="supplierid">
+                                    [% IF ( supplier ) %]
+                                        <option selected="selected" value="[% supplier.id | html %]">[% supplier.name | html %]</option>
                                     [% END %]
                                 </select>
                             </li>
@@ -420,6 +415,7 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         $(document).ready(function() {
             $('[id^="CheckAll"]').click( function() {
@@ -522,6 +518,50 @@
                     $('#merge_invoices').show();
                 }
             });
+
+            function display_vendor(vendor) {
+                var $text;
+                $text = $('<span>'+vendor.text+'</span>');
+                return $text;
+            }
+
+            $("#supplierid").kohaSelect({
+                width: '50%',
+                allowClear: false,
+                ajax: {
+                    url: '/api/v1/acquisitions/vendors',
+                    delay: 300, // wait 300 milliseconds before triggering the request
+                    cache: true,
+                    dataType: 'json',
+                    data: function (params) {
+                        var search_term = (params.term === undefined) ? '' : params.term;
+                        var query = {
+                            "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
+                            "_order_by": "name",
+                            "_page": params.page
+                        };
+
+                        return query;
+                    },
+                    processResults: function (data) {
+                        var results = [];
+                        data.results.forEach( function ( vendor ) {
+                            results.push(
+                                {
+                                    "id": vendor.id,
+                                    "text": vendor.name.escapeHtml()
+                                }
+                            );
+                        });
+                        return { "results": results, "pagination": { "more": data.pagination.more } };
+                    }
+                },
+                templateResult: display_vendor,
+                templateSelection: display_vendor
+            });
+
+
+
         });
     </script>
 [% END %]
