@@ -211,17 +211,17 @@
                                         </div>
 
                                         <div class="links">
-                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) || loggedinusername ) %]
+                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'opacuserlogin' ) == 1 && Koha.Preference('virtualshelves') ) || loggedinusername ) %]
                                                 <span class="selections">Select titles to:</span>
                                             [% END %]
-                                            [% IF Koha.Preference( 'opacbookbag' ) == 1 OR Koha.Preference('virtualshelves') %]
+                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'opacuserlogin' ) == 1 && Koha.Preference('virtualshelves') ) ) %]
                                                 <span class="addto">
                                                     <select class="disabled form-control form-control-sm" name="addto" id="addto">
                                                         <option>Add to...</option>
                                                         [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                             <option value="addtocart">Cart</option>
                                                         [% END %]
-                                                        [% IF Koha.Preference('virtualshelves') %]
+                                                        [% IF Koha.Preference('virtualshelves') && Koha.Preference('opacuserlogin') == 1 %]
                                                             [% IF loggedinusername AND add_to_some_private_shelves.count %]
                                                                 <optgroup label="Your lists:">
                                                                 [% SET number_of_private_shelves = 0 %]
@@ -250,7 +250,7 @@
                                                                 <option value="morelists">[ More lists ]</option>
                                                             [% END %]
                                                             <option value="newlist">[ New list ]</option>
-                                                        [% END # /IF virtualshelves %]
+                                                        [% END # /IF virtualshelves and opacuserlogin %]
                                                     </select>
                                                     <input type="submit" class="btn btn-sm btn-primary" value="Save" />
                                                 </span>
