@@ -252,6 +252,64 @@
                                     </fieldset>
                                 [% END %]
                             </form>
+                        [% ELSIF op == 'unauth_view' %]
+                            <div class="alert alert-success" role="alert">Your request has been placed. Please check your email for further instructions.</div>
+                            <h1>View interlibrary loan request</h1>
+                            [% INCLUDE messages %]
+                            [% status = request.status %]
+                            <fieldset class="rows">
+                                <legend id="library_legend">Details from library</legend>
+                                <ol>
+                                    [% type = request.get_type %]
+                                    <li>
+                                        <label for="request_id">Request ID:</label>
+                                        [% request.id | html %]
+                                    </li>
+                                    <li>
+                                        <label for="backend">Requested from:</label>
+                                        [% request.backend | html %]
+                                    </li>
+                                    [% IF request.biblio_id %]
+                                        <li>
+                                            <label for="biblio">Requested item:</label>
+                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% request.biblio_id | uri %]">View the requested item</a>
+                                        </li>
+                                    [% END %]
+                                    <li>
+                                        <label for="branchcode">Collection library:</label>
+                                        [% Branches.GetName(request.branchcode) | html %]
+                                    </li>
+                                    <li>
+                                        <label for="status">Status:</label>
+                                        [% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]
+                                    </li>
+                                    <li>
+                                        <label for="medium">Request type:</label>
+                                        [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </li>
+                                    <li>
+                                        <label for="placed">Request placed:</label>
+                                        [% request.placed | $KohaDates %]
+                                    </li>
+                                    <li>
+                                        <label for="updated">Last updated:</label>
+                                        [% request.updated | $KohaDates %]
+                                    </li>
+                                    <li>
+                                        <label for="notesopac">Notes:</label>
+                                        [% request.notesopac | html %]
+                                    </li>
+                                </ol>
+                            </fieldset>
+                            <div id="ill-supplier-metadata" class="rows">
+                                <legend id="backend_legend">Details from [% request.backend | html %]</legend>
+                                [% FOREACH meta IN request.metadata %]
+                                    <div class="requestattr-[% meta.key | replace(' ', '_') | html %]">
+                                        <span class="label">[% meta.key | html %]:</span>
+                                        <span class="value">[% IF meta.value %][% meta.value | html %][% ELSE %]N/A[% END %]</span>
+                                    </div>
+                                [% END %]
+                            </div>
                         [% ELSIF op == 'availability' %]
                             <h1>Interlibrary loan item availability</h1>
                             <div id="results">
