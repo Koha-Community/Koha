@@ -225,7 +225,12 @@
                                     <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 [% END %]
                                 [% IF !restriction.is_system && !restriction.is_default %]
-                                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=make_default&amp;code=[% restriction.code | uri %]"><i class="fa fa-archive"></i> Make default</a>
+                                    <form id="make_default_[% restriction.code | html %]" method="post" action="/cgi-bin/koha/admin/restrictions.pl">
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-make_default" />
+                                        <input type="hidden" name="code" value="[% restriction.code | html %]" />
+                                    </form>
+                                    <a class="btn btn-default btn-xs make_default_button" href="#" data-code="[% restriction.code | html %]"><i class="fa fa-archive"></i> Make default</a>
                                 [% END %]
                             </td>
                         </tr>
@@ -270,6 +275,13 @@
                 $("#fee_limit").prop("required",false).nextAll().remove();
             }
         });
+
+        $(".make_default_button").on("click", function(e){
+            e.preventDefault();
+            var code = $(this).data('code');
+            $('#make_default_'+code).submit();
+        });
+
     </script>
     [% Asset.js("js/restrictiontypes.js") | $raw %]
 [% END %]

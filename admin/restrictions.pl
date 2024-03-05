@@ -99,11 +99,11 @@ if ( $op eq 'add_form') {
         }
     }
     $op = 'list';
-} elsif ( $op eq 'make_default' ) {
+} elsif ( $op eq 'cud-make_default' ) {
     my $restriction = Koha::Patron::Restriction::Types->find($code);
     $restriction->make_default;
     $op = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     $template->param(
         restriction => scalar Koha::Patron::Restriction::Types->find($code)
     );
