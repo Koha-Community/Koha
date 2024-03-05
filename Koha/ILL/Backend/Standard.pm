@@ -186,7 +186,15 @@ sub status_graph {
             next_actions   => [],
             ui_method_icon => 'fa-edit',
         },
-
+        UNAUTH => {
+            prev_actions   => [],
+            id             => 'UNAUTH',
+            name           => 'Unauthenticated',
+            ui_method_name => 0,
+            method         => 0,
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],
+            ui_method_icon => 0,
+        },
     };
 }
 
@@ -985,7 +993,7 @@ sub add_request {
     $request->biblio_id($biblionumber) unless $biblionumber == 0;
     $request->borrowernumber( $brw->borrowernumber );
     $request->branchcode( $params->{other}->{branchcode} );
-    $request->status('NEW');
+    $request->status( $unauthenticated_request ? 'UNAUTH' : 'NEW' );
     $request->backend( $params->{other}->{backend} );
     $request->placed( dt_from_string() );
     $request->updated( dt_from_string() );
