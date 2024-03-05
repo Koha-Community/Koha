@@ -8,7 +8,13 @@ KOHA.Preferences = {
             return;
         }
 
-        let sysprefs = $(form).find('.modified').toArray().reduce((map, e) => ({ ...map, [$(e).attr('name')]: [$(e).val()].flat()}), {});
+        let sysprefs = $(form).find('.modified').not('.preference-checkbox').toArray().reduce((map, e) => ({ ...map, [$(e).attr('name')]: [$(e).val()].flat()}), {});
+
+        // language prefs
+        $(form).find('.modified.preference-checkbox:checked').toArray().forEach((elt) => {
+            (sysprefs[$(elt).attr('name')] = sysprefs[$(elt).attr('name')] || []).push($(elt).val());
+        });
+
         if ( !Object.keys(sysprefs).length ) {
             humanMsg.displayAlert( __("Nothing to save") );
             return;
