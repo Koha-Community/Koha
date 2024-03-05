@@ -406,13 +406,15 @@ subtest do_checkin => sub {
     is( $patron->checkouts->count, 0, 'Checkin should have been done successfully' );
 
     my $result = $ci_transaction->do_checkin( $library2->branchcode, undef );
+    my $transfer = $item->get_transfer;
     is( $ci_transaction->alert_type, '04', "Checkin of item no issued at another branch succeeds" );
     is_deeply(
         $result,
         {
             messages => {
                 'NotIssued'       => $item->barcode,
-                'WasTransfered'   => $library->branchcode,
+                'WasTransfered'   => $transfer->branchtransfer_id,
+                'TransferTo'      => $library->branchcode,
                 'TransferTrigger' => 'ReturnToHome'
             }
         },

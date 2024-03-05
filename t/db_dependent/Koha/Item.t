@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 35;
+use Test::More tests => 37;
 use Test::Exception;
 use Test::MockModule;
 
