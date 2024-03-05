@@ -487,11 +487,11 @@ sub TransferCollection {
                             replace       => 1
                         }
                     );    # Replace transfer
-                    # FIXME: If we just replaced a StockRotationAdvance,
-                    # it will get enqueued afresh on the next cron run.. but
-                    # that will also push the stage on too.. and what about if
-                    # we were at the first stage.. then there won't be a datearrived
-                    # to calculate against. See bug 35100
+                          # FIXME: If we just replaced a StockRotationAdvance,
+                          # it will get enqueued afresh on the next cron run.. but
+                          # that will also push the stage on too.. and what about if
+                          # we were at the first stage.. then there won't be a datearrived
+                          # to calculate against. See bug 35100
                 }
             }
             elsif ( $_->isa('Koha::Exceptions::Item::Transfer::Limit') ) {
