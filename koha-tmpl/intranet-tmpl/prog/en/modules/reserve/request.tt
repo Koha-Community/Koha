@@ -666,17 +666,35 @@
                                             <tr>
                                                 <th>Hold</th>
                                                 <th>Item group</th>
+                                                <th>Holdable items</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             [% FOREACH g IN biblio_info.object.item_groups.search({}, { order_by => ['display_order'] }) %]
-                                                [% IF g.items %]
+                                                [% IF g.items.count %]
                                                     <tr>
                                                         <td>
                                                             <input id="item_group_id_[% g.id | html %]" type="radio" name="item_group_id" value="[% g.id | html %]" />
                                                         </td>
                                                         <td>
                                                             <label for="item_group_id_[% g.id | html %]">[% g.description | html %]</label>
+                                                        </td>
+                                                        <td>
+                                                            [% FOREACH i IN g.items %]
+                                                                <div><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% i.biblionumber | uri %]#item[% i.itemnumber | uri %]">[% i.barcode | html %]</a></div>
+                                                            [% END %]
+                                                        </td>
+                                                    </tr>
+                                                [% ELSE %]
+                                                    <tr>
+                                                        <td>
+                                                            <input id="item_group_id_[% g.id | html %]" type="radio" name="item_group_id" value="[% g.id | html %]" disabled="disabled" />
+                                                        </td>
+                                                        <td>
+                                                            <label for="item_group_id_[% g.id | html %]">[% g.description | html %]</label>
+                                                        </td>
+                                                        <td>
+                                                            <div class="error">No holdable items in this item group.</div>
                                                         </td>
                                                     </tr>
                                                 [% END %]
