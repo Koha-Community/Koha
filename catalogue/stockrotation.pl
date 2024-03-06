@@ -127,7 +127,7 @@ if (!defined $op) {
         C4::Search::enabled_staff_search_views
     );
 
-} elsif ($op eq "toggle_in_demand") {
+} elsif ($op eq "cud-toggle_in_demand") {
 
     # Toggle in demand
     toggle_indemand($params{item_id}, $params{stage_id});
@@ -135,7 +135,7 @@ if (!defined $op) {
     # Return to items list
     print $input->redirect("?biblionumber=$biblionumber");
 
-} elsif ($op eq "remove_item_from_stage") {
+} elsif ($op eq "cud-remove_item_from_stage") {
 
     # Remove from the stage
     remove_from_stage($params{item_id}, $params{stage_id});
@@ -143,7 +143,7 @@ if (!defined $op) {
     # Return to items list
     print $input->redirect("?biblionumber=$biblionumber");
 
-} elsif ($op eq "move_to_next_stage") {
+} elsif ($op eq "cud-move_to_next_stage") {
 
     move_to_next_stage($params{item_id}, $params{stage_id});
 

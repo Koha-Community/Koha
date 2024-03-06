@@ -112,25 +112,42 @@
                                     [% IF item.stockrotationitem %]
                                         [% in_transit = item.bib_item.get_transfer %]
                                         [% IF !in_transit && item.stages.size > 1 %]
-                                            <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
+                                            <form id="move_to_next_stage_[% item.bib_item.id | html %]" method="post" action="/cgi-bin/koha/catalogue/stockrotation.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-move_to_next_stage" />
+                                                <input type="hidden" name="stage_id" value="[% item.stockrotationitem.stage.stage_id | html %]" />
+                                                <input type="hidden" name="item_id" value="[% item.bib_item.id | html %]" />
+                                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-arrow-right"></i> Move to next stage</button>
+                                            </form>
                                         [% ELSE %]
-                                            <a class="btn btn-default btn-xs" disabled>
+                                            <a class="btn btn-default btn-xs" disabled><i class="fa fa-arrow-right"></i> Move to next stage</a>
                                         [% END %]
-                                            <i class="fa fa-arrow-right"></i>
-                                            Move to next stage
-                                        </a>
+
                                         [% IF !in_transit %]
-                                            <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
+                                            <form id="toggle_in_demand_[% item.bib_item.id | html %]" method="post" action="/cgi-bin/koha/catalogue/stockrotation.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-toggle_in_demand" />
+                                                <input type="hidden" name="stage_id" value="[% item.stockrotationitem.stage.stage_id | html %]" />
+                                                <input type="hidden" name="item_id" value="[% item.bib_item.id | html %]" />
+                                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-fire"></i>
+                                            [% IF item.stockrotationitem.indemand %]
+                                                Remove "In demand"
+                                            [% ELSE %]
+                                                Add "In demand"
+                                            [% END %]</button>
+                                            </form>
                                         [% ELSE %]
-                                            <a class="btn btn-default btn-xs" disabled>
-                                        [% END %]
-                                            <i class="fa fa-fire"></i>
+                                            <a class="btn btn-default btn-xs" disabled><i class="fa fa-fire"></i>
                                             [% IF item.stockrotationitem.indemand %]
                                                 Remove "In demand"
                                             [% ELSE %]
                                                 Add "In demand"
                                             [% END %]
                                         </a>
+                                        [% END %]
+
                                         [% IF !in_transit %]
                                             <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                         [% ELSE %]
@@ -170,7 +187,14 @@
         <div class="dialog alert">
             <h3>Are you sure you want to remove this item from it's rota?</h3>
             <p>
-                <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;stage_id=[% stage_id | uri %]&amp;item_id=[% item_id | uri %]&amp;biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
+                <form id="remove_item_from_stage_[% item.bib_item.id | html %]" method="post" action="/cgi-bin/koha/catalogue/stockrotation.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-remove_item_from_stage" />
+                    <input type="hidden" name="stage_id" value="[% stage_id | html %]" />
+                    <input type="hidden" name="item_id" value="[% item_id | html %]" />
+                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                    <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i>Yes</button>
+                </form>
                 <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-times"></i>No</a>
             </p>
         </div>
