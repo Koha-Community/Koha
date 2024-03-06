@@ -215,7 +215,7 @@ if ( $backends_available ) {
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
 
-    } elsif ( $op eq 'edit_action' ) {
+    } elsif ( $op eq 'cud-edit_action' ) {
         # Handle edits to the Illrequest object.
         # (not the Illrequestattributes)
         # We simulate the API for backend requests for uniformity.
