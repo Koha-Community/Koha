@@ -307,7 +307,8 @@ if ( $backends_available ) {
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
 
-    } elsif ( $op eq 'generic_confirm' ) {
+    } elsif ( $op eq 'cud-generic_confirm' ) {
+        $op =~ s/^cud-//;
         my $backend_result;
         my $request;
         try {
