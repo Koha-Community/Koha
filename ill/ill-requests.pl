@@ -444,6 +444,7 @@ if ( $backends_available ) {
     } elsif ( $op eq "batch_create" ) {
         # Do not remove, it prevents us falling through to the 'else'
     } else {
+        $op =~ s/^cud-//;
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->custom_capability($op, $params);
         $template->param(
