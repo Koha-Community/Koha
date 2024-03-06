@@ -225,6 +225,7 @@ if ( $backends_available ) {
             order_by => { -asc => 'name' }
         });
         if ( !$params->{stage} ) {
+            $op =~ s/^cud-//;
             my $backend_result = {
                 error   => 0,
                 status  => '',
