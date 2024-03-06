@@ -631,6 +631,62 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     });
                 }
 
+                // Create a bookings store keyed on date
+                let bookingsByDate = {};
+                // Iterate through the bookings array
+                bookings.forEach(booking => {
+                    const start_date = flatpickr.parseDate(booking.start_date);
+                    const end_date = flatpickr.parseDate(booking.end_date);
+                    const item_id = booking.item_id;
+
+                    // Iterate through each date within the range of start_date and end_date
+                    let currentDate = new Date(start_date);
+                    while (currentDate <= end_date) {
+                        const currentDateStr = currentDate
+                            .toISOString()
+                            .split("T")[0];
+
+                        // If the date key doesn't exist in the hash, create an empty array for it
+                        if (!bookingsByDate[currentDateStr]) {
+                            bookingsByDate[currentDateStr] = [];
+                        }
+
+                        // Push the booking ID to the array corresponding to the date key
+                        bookingsByDate[currentDateStr].push(item_id);
+
+                        // Move to the next day
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                });
+
+                // Set onDayCreate for flatpickr
+                let dayCreateExists = periodPicker.config.onDayCreate.filter(
+                    f => f.name === "dayCreate"
+                );
+                if (dayCreateExists.length === 0) {
+                    periodPicker.config.onDayCreate.push(function dayCreate(
+                        dObj,
+                        dStr,
+                        instance,
+                        dayElem
+                    ) {
+                        const currentDate = dayElem.dateObj
+                            .toISOString()
+                            .split("T")[0];
+
+                        if (bookingsByDate[currentDate]) {
+                            const dots = document.createElement("span");
+                            dots.className = "event-dots";
+                            dayElem.appendChild(dots);
+                            bookingsByDate[currentDate].forEach(item => {
+                                const dot = document.createElement("span");
+                                dot.className = "event item_" + item;
+                                dots.appendChild(dot);
+                            });
+                        }
+                    });
+                }
+
                 // Enable flatpickr now we have date function populated
                 periodPicker.redraw();
                 $("#period_fields :input").prop("disabled", false);
