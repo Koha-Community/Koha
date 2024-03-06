@@ -320,7 +320,9 @@
                                                             <select name="item_group_id_[% bibitemloo.biblionumber | html %]" id="item_group_id_[% bibitemloo.biblionumber | html %]">
                                                                 <option value="">Any item group</option>
                                                                 [% FOREACH g IN bibitemloo.object.item_groups.search({}, { order_by => ['display_order'] }) %]
-                                                                    <option value="[% g.id | html %]">[% g.description | html %]</option>
+                                                                    [% IF g.items.count %]
+                                                                        <option value="[% g.id | html %]">[% g.description | html %]</option>
+                                                                    [% END %]
                                                                 [% END %]
                                                             </select>
                                                         </li>
