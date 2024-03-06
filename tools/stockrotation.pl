@@ -107,7 +107,7 @@ if (!defined $op) {
         op   => $op
     );
 
-} elsif ($op eq 'toggle_rota') {
+} elsif ($op eq 'cud-toggle_rota') {
 
     # Find and update the active status of the rota
     my $rota = Koha::StockRotationRotas->find($params{rota_id});
@@ -223,7 +223,7 @@ if (!defined $op) {
         op       => $op
     );
 
-} elsif ($op eq 'delete_rota') {
+} elsif ($op eq 'cud-delete_rota') {
 
     # Get the rota we're deleting
     my $rota = Koha::StockRotationRotas->find($params{rota_id});
@@ -243,7 +243,7 @@ if (!defined $op) {
         stage => $stage
     );
 
-} elsif ($op eq 'delete_stage') {
+} elsif ($op eq 'cud-delete_stage') {
 
     # Get the stage we're deleting
     my $stage = Koha::StockRotationStages->find($params{stage_id});
@@ -315,14 +315,14 @@ if (!defined $op) {
         op       => $op
     );
 
-} elsif ($op eq 'move_to_next_stage') {
+} elsif ($op eq 'cud-move_to_next_stage') {
 
     move_to_next_stage($params{item_id}, $params{stage_id});
 
     # Return to the items list
     print $input->redirect("?op=manage_items&rota_id=" . $params{rota_id});
 
-} elsif ($op eq 'toggle_in_demand') {
+} elsif ($op eq 'cud-toggle_in_demand') {
 
     # Toggle the item's in_demand
     toggle_indemand($params{item_id}, $params{stage_id});
@@ -330,7 +330,7 @@ if (!defined $op) {
     # Return to the items list
     print $input->redirect("?op=manage_items&rota_id=".$params{rota_id});
 
-} elsif ($op eq 'remove_item_from_stage') {
+} elsif ($op eq 'cud-remove_item_from_stage') {
 
     # Remove the item from the stage
     remove_from_stage($params{item_id}, $params{stage_id});

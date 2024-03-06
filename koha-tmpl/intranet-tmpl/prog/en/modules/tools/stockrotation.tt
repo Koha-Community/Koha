@@ -147,14 +147,18 @@
                                                         [% END %]
                                                     </ul>
                                                 </div>
-                                                <a class="btn btn-default btn-xs" href="?op=toggle_rota&amp;rota_id=[% rota.rota_id | uri %]">
-                                                    <i class="fa fa-power-off"></i>
+                                                <form id="toggle_rota_[% rota.rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                    <input type="hidden" name="op" value="cud-toggle_rota" />
+                                                    <input type="hidden" name="rota_id" value="[% rota.rota_id | html %]" />
+                                                    <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-power-off"></i>
                                                     [% IF !rota.active %]
                                                         Activate
                                                     [% ELSE %]
                                                         Deactivate
                                                     [% END %]
-                                                </a>
+                                                    </button>
+                                                </form>
                                                 <a class="btn btn-default btn-xs" href="?op=confirm_delete_rota&amp;rota_id=[% rota.rota_id | uri %]">
                                                     <i class="fa fa-trash"></i>
                                                     Delete
@@ -380,8 +384,15 @@
                     <div class="dialog alert">
                         <h1>Are you sure you wish to remove this item from its rota</h1>
                         <p>
-                            <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;item_id=[% item_id | uri %]&amp;stage_id=[% stage_id | uri %]&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
-                            <a class="btn btn-default btn-xs deny" href="?op=manage_items&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-times"></i>No</a>
+                            <form id="remove_item_from_stage_[% item_id | html %]_[% rota.rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-remove_item_from_stage" />
+                                <input type="hidden" name="item_id" value="[% item_id | html %]" />
+                                <input type="hidden" name="rota_id" value="[% rota_id | html %]" />
+                                <input type="hidden" name="stage_id" value="[% stage_id | html %]" />
+                                <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
+                            </form>
+                            <a class="btn btn-default btn-xs deny" href="?op=manage_items&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-times"></i> No</a>
                         </p>
                     </div>
                 [% ELSIF (op == 'confirm_delete_rota') %]
@@ -396,8 +407,13 @@
                             [% END %]
                         [% END %]
                         <p>
-                            <a class="btn btn-default btn-xs approve" href="?op=delete_rota&amp;rota_id=[% rota_id | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
-                            <a class="btn btn-default btn-xs deny" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa fa-fw fa-times"></i>No</a>
+                            <form id="delete_rota_[% rota.rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_rota" />
+                                <input type="hidden" name="rota_id" value="[% rota.rota_id | html %]" />
+                                <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
+                            </form>
+                            <a class="btn btn-default btn-xs deny" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa fa-fw fa-times"></i> No</a>
                         </p>
                     </div>
                 [% ELSIF (op == 'confirm_delete_stage') %]
@@ -413,8 +429,13 @@
                             </ul>
                         [% END %]
                         <p>
-                            <a class="btn btn-default btn-xs approve" href="?op=delete_stage&amp;stage_id=[% stage.stage_id | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
-                            <a class="btn btn-default btn-xs deny" href="?op=manage_stages&amp;rota_id=[% stage.rota.rota_id | uri %]"><i class="fa fa-fw fa-times"></i>No</a>
+                            <form id="delete_stage_[% stage.stage_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_stage" />
+                                <input type="hidden" name="stage_id" value="[% stage.stage_id | html %]" />
+                                <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
+                            </form>
+                            <a class="btn btn-default btn-xs deny" href="?op=manage_stages&amp;rota_id=[% stage.rota.rota_id | uri %]"><i class="fa fa-fw fa-times"></i> No</a>
                         </p>
                     </div>
                 [% ELSIF (op == 'manage_items') %]
@@ -517,26 +538,36 @@
                                                 [% in_transit = sritem.item.get_transfer %]
                                                 [% IF stages.size < 2 %]
                                                     <a class="btn btn-default btn-xs" title="Rota has a single stage, advancing will have no effect" disabled>
-                                                [% ELSIF !in_transit %]
-                                                    <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]">
                                                 [% ELSE %]
-                                                    <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;rota_id=[% rota.id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;stage_id=[% sritem.stage.stage_id | uri %]" title="Item is in transit, it will be directed to new stage when checked in">
+                                                    <form id="move_to_next_stage_[% sritem.id | html %]_[% rota.id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="op" value="cud-move_to_next_stage" />
+                                                        <input type="hidden" name="item_id" value="[% sritem.id | html %]" />
+                                                        <input type="hidden" name="rota_id" value="[% rota.id | html %]" />
+                                                        <input type="hidden" name="stage_id" value="[% sritem.stage.stage_id | html %]" />
+                                                        [% IF !in_transit %]
+                                                            <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-arrow-right"></i> Move to next stage</button>
+                                                        [% ELSE %]
+                                                            <button class="btn btn-default btn-xs" type="submit" title="Item is in transit, it will be directed to new stage when checked in"><i class="fa fa-arrow-right"></i> Move to next stage</button>
+                                                        [% END %]
+                                                    </form>
                                                 [% END %]
-                                                    <i class="fa fa-arrow-right"></i>
-                                                    Move to next stage
-                                                </a>
+
                                                 [% IF !in_transit %]
-                                                    <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
-                                                [% ELSE %]
-                                                    <a class="btn btn-default btn-xs" disabled>
+                                                    <form id="toggle_in_demand_[% sritem.id | html %]_[% rota.id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                                                        [% INCLUDE 'csrf-token.inc' %]
+                                                        <input type="hidden" name="op" value="cud-toggle_in_demand" />
+                                                        <input type="hidden" name="item_id" value="[% sritem.id | html %]" />
+                                                        <input type="hidden" name="rota_id" value="[% rota.id | html %]" />
+                                                        <input type="hidden" name="stage_id" value="[% sritem.stage.stage_id | html %]" />
+                                                        [% IF sritem.indemand %]
+                                                            <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-fire"></i> Remove &quot;In demand&quot;</button>
+                                                        [% ELSE %]
+                                                            <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-fire"></i> Add &quot;In demand&quot;</button>
+                                                        [% END %]
+                                                    </form>
                                                 [% END %]
-                                                    <i class="fa fa-fire"></i>
-                                                    [% IF sritem.indemand %]
-                                                    <span>Remove &quot;In demand&quot;</span>
-                                                    [% ELSE %]
-                                                    <span>Add &quot;In demand&quot;</span>
-                                                    [% END %]
-                                                </a>
+
                                                 [% IF !in_transit %]
                                                     <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% sritem.stage.stage_id | uri %]&amp;item_id=[% sritem.id | uri %]&amp;rota_id=[% rota.id | uri %]">
                                                 [% ELSE %]
