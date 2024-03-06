@@ -81,7 +81,7 @@
             type: 'GET'
         });
         var bookings = $.ajax({
-            url: '/api/v1/biblios/[% biblionumber | uri %]/bookings',
+            url: '/api/v1/biblios/[% biblionumber | uri %]/bookings?_per_page=-1',
             headers: { 'x-koha-embed': 'patron' },
             dataType: 'json',
             type: 'GET',
