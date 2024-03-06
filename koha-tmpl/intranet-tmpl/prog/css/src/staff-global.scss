@@ -2412,6 +2412,17 @@ td.bundle {
     pointer-events: auto;
 }
 
+.patron_search_modal {
+    .modal-body {
+        display: flex;
+        column-gap: 2em;
+    }
+
+    .search_results_block {
+        flex-grow: 1;
+    }
+}
+
 #cartDetails {
     background-color: #352C2E;
     box-shadow: 1px 1px 3px 0 #666;
@@ -4863,4 +4874,12 @@ div .suggestion_note {
     bottom: 40px;
     right: 40px;
     z-index: 1000;
+}
+
+@media only screen and ( max-width: 1200px ) {
+    .patron_search_modal {
+        .modal-body {
+            display: block;
+        }
+    }
 }

@@ -29,23 +29,21 @@
 [%# - search_type: select 'contains' or 'starts with' %]
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
-    <form method="get" class="patron_search_form">
-        <fieldset class="brief">
-            <h3>Search for patron</h3>
-            <ol>
-                <li>
-                    <label>
-                        Search:
+    <aside>
+        <form method="get" class="patron_search_form">
+            <fieldset class="brief">
+                <h3>Search for patron</h3>
+                <ol>
+                    <li>
+                        <label>Search:</label>
                         <input type="text" class="search_patron_filter" value="[% search_filter | html %]" class="focus" />
-                    </label>
-                </li>
+                    </li>
 
-                [% FOR f IN filters %]
-                    [% SWITCH f %]
-                    [% CASE 'branch' %]
-                        <li>
-                            <label>
-                                Library:
+                    [% FOR f IN filters %]
+                        [% SWITCH f %]
+                        [% CASE 'branch' %]
+                            <li>
+                                <label>Library:</label>
                                 <select class="branchcode_filter">
                                     [% SET libraries = Branches.all( only_from_group => 1 ) %]
                                     [% IF libraries.size != 1 %]
@@ -59,12 +57,10 @@
                                         [% END %]
                                     [% END %]
                                 </select>
-                            </label>
-                        </li>
-                    [% CASE 'category' %]
-                        <li>
-                            <label>
-                                Category:
+                            </li>
+                        [% CASE 'category' %]
+                            <li>
+                                <label>Category:</label>
                                 <select class="categorycode_filter">
                                     <option value="">Any</option>
                                     [% FOREACH category IN Categories.limited.unblessed %]
@@ -75,30 +71,24 @@
                                         [% END %]
                                     [% END %]
                                 </select>
-                            </label>
-                        </li>
-                    [% CASE 'sort1' %]
-                        <li>
-                            <label>
-                                Sort 1:
+                            </li>
+                        [% CASE 'sort1' %]
+                            <li>
+                                <label>Sort 1:</label>
                                 [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort1_filter", category="Bsort1", empty=1, size = 20 %]
-                            </label>
-                        </li>
-                    [% CASE 'sort2' %]
-                        <li>
-                            <label>
-                                Sort 2:
-                                [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
-                            </label>
-                        </li>
-                    [% CASE 'search_field' %]
-                        <li>
-                            [% INCLUDE patron_fields_dropdown %]
-                        </li>
-                    [% CASE 'search_type' %]
-                        <li>
-                            <label>
-                                Search type:
+                            </li>
+                        [% CASE 'sort2' %]
+                            <li>
+                                <label>Sort 2:</label>
+                                    [% PROCESS 'av-build-dropbox.inc' no_id => 1, name="sort2_filter", category="Bsort2", empty=1, size = 20 %]
+                            </li>
+                        [% CASE 'search_field' %]
+                            <li>
+                                [% INCLUDE patron_fields_dropdown %]
+                            </li>
+                        [% CASE 'search_type' %]
+                            <li>
+                                <label>Search type:</label>
                                 <select name="searchtype" class="searchtype_filter">
                                     [% IF searchtype == "starts_with" %]
                                         <option value='starts_with' selected="selected">Starts with</option>
@@ -108,17 +98,17 @@
                                         <option value="contains" selected="selected">Contains</option>
                                     [% END %]
                                 </select>
-                            </label>
-                        </li>
+                            </li>
+                        [% END %]
                     [% END %]
-                [% END %]
-            </ol>
-            <fieldset class="action">
-                <input type="submit" class="btn btn-primary" value="Search" />
-                <input type="button" value="Clear" class="btn btn-default clear_search" />
+                </ol>
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Search" />
+                    <input type="button" value="Clear" class="btn btn-default clear_search" />
+                </fieldset>
             </fieldset>
-        </fieldset>
-    </form>
+        </form>
+    </aside>
 [% END %]
 
 [%# Display the table with: %]
@@ -928,7 +918,7 @@
 
     [% search_results_block_id = patron_search_modal_id _ '_searchresults' %]
 
-    <div id="[% patron_search_modal_id | html %]" class="modal modal-full" tabindex="-1" role="dialog" aria-labelledby="patronSearchLabel" aria-hidden="true" data-backdrop="">
+    <div id="[% patron_search_modal_id | html %]" class="modal modal-full patron_search_modal" tabindex="-1" role="dialog" aria-labelledby="patronSearchLabel" aria-hidden="true" data-backdrop="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -938,7 +928,7 @@
                 <div class="modal-body">
                     [% PROCESS patron_search_filters filters => ['branch','category','sort1','sort2'] %]
 
-                    <div id="[% search_results_block_id | html %]"> <!-- FIXME removed style from #searchresults, is that bad? -->
+                    <div id="[% search_results_block_id | html %]" class="search_results_block"> <!-- FIXME removed style from #searchresults, is that bad? -->
                         [% IF columns.grep('checkbox').size %]
                             <div class="searchheader fh-fixedHeader" style="display:none;">
                                 <div>
