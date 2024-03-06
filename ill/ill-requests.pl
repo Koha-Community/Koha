@@ -531,7 +531,7 @@ sub get_metadata_enrichment {
     my @services = ();
     foreach my $plugin(@candidates) {
         my $supported = $plugin->provides_api();
-        if ($supported->{type} eq 'cud-search') {
+        if ($supported->{type} eq 'search') {
             push @services, $supported;
         }
     }
