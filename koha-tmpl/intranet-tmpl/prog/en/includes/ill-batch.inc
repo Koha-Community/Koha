@@ -1,4 +1,4 @@
-[% IF query_type == "batch_list" %]
+[% IF op == "batch_list" %]
 <h1>
     <span>View ILL requests batches</span>
 </h1>
