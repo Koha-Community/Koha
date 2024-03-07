@@ -104,7 +104,7 @@
                         </div>
                     [% END %]
                     [% UNLESS patron %]
-                        <fieldset class="brief">
+                        <fieldset id="searchresults" class="brief">
                             <label>Search patrons</label>
                             [% PROCESS patron_search_filters_simple %]
                             [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
