@@ -203,7 +203,8 @@
             },
             "embed": [
                 "item",
-                "patron"
+                "patron",
+                "pickup_library"
             ],
             "columns": [{
                 "data": "booking_id",
@@ -234,6 +235,15 @@
                         display_cardnumber: true,
                         url: true
                     });
+                }
+            },
+            {
+                "data": "pickup_library.name",
+                "title": _("Pickup library"),
+                "searchable": true,
+                "orderable": true,
+                "render": function(data, type, row, meta) {
+                    return row.pickup_library.name;
                 }
             },
             {
