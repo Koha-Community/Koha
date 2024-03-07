@@ -70,8 +70,7 @@ sub store {
     my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
 
     my $result = $self->SUPER::store();
-
-    if( $emailpurchasesuggestions ){
+    if ( $emailpurchasesuggestions && $self->STATUS eq 'ASKED' ) {
 
         if (
             my $letter = C4::Letters::GetPreparedLetter(
