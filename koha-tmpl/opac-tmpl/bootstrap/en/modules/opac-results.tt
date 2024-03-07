@@ -557,9 +557,9 @@
                             <ul>
                                 [% IF suggestion %]
                                     [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
-                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
+                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add_form">purchase suggestion</a></li>
                                     [% ELSIF loggedinusername %]
-                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
+                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add_form">purchase suggestion</a></li>
                                     [% END %]
                                 [% END %]
                                 [% IF Koha.Preference( 'ILLModule' ) == 1 && loggedinusername %]
