@@ -602,6 +602,28 @@ sub GetPreparedLetter {
          return;
     my $want_librarian = $params{want_librarian};
 
+    $letter->{content} = _process_tt(
+        {
+            content    => $letter->{content},
+            lang       => $lang,
+            loops      => $loops,
+            objects    => $objects,
+            substitute => $substitute,
+            tables     => $tables,
+        }
+    );
+
+    $letter->{title} = _process_tt(
+        {
+            content    => $letter->{title},
+            lang       => $lang,
+            loops      => $loops,
+            objects    => $objects,
+            substitute => $substitute,
+            tables     => $tables,
+        }
+    );
+
     if (%$substitute) {
         while ( my ($token, $val) = each %$substitute ) {
             $val //= q{};
@@ -671,28 +693,6 @@ sub GetPreparedLetter {
             $letter->{content} =~ s/\Q$line\E/$replaceby/s;
         }
     }
-
-    $letter->{content} = _process_tt(
-        {
-            content    => $letter->{content},
-            lang       => $lang,
-            loops      => $loops,
-            objects    => $objects,
-            substitute => $substitute,
-            tables     => $tables,
-        }
-    );
-
-    $letter->{title} = _process_tt(
-        {
-            content    => $letter->{title},
-            lang       => $lang,
-            loops      => $loops,
-            objects    => $objects,
-            substitute => $substitute,
-            tables     => $tables,
-        }
-    );
 
     $letter->{content} =~ s/<<\S*>>//go; #remove any stragglers
 
