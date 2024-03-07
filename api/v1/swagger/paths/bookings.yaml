@@ -46,6 +46,7 @@
             - biblio
             - item
             - patron
+            - pickup_library
         collectionFormat: csv
     produces:
       - application/json
@@ -121,7 +122,7 @@
       permissions:
         circulate: manage_bookings
     x-mojo-to: Bookings#add
-'/bookings/{booking_id}':
+"/bookings/{booking_id}":
   delete:
     operationId: deleteBooking
     parameters:

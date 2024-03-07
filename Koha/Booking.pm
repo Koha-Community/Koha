@@ -58,6 +58,19 @@ sub patron {
     return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
+=head3 pickup_library
+
+Returns the related Koha::Library object for this booking
+
+=cut
+
+sub pickup_library {
+    my ($self) = @_;
+
+    my $pickup_library_rs = $self->_result->pickup_library;
+    return Koha::Library->_new_from_dbic($pickup_library_rs);
+}
+
 =head3 item
 
 Returns the related Koha::Item object for this Booking

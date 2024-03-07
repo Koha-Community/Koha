@@ -32,6 +32,14 @@ properties:
     type:
       - object
       - "null"
+  pickup_library_id:
+    description: Internal pickup_library identifier
+    type: string
+  pickup_library:
+    description: Embedable pickup_library representation
+    type:
+      - object
+      - "null"
   start_date:
     description: Start date and time of this booking
     format: date-time
@@ -40,6 +48,7 @@ required:
   - biblio_id
   - item_id
   - patron_id
+  - pickup_library_id
   - start_date
   - end_date
 type: object
