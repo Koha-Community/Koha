@@ -247,6 +247,7 @@ is( $ISBN_letter->{name}, 'book', 'letter name for "ISBN" letter is book' );
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
 t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
+t::lib::Mocks::mock_preference( 'ReplytoDefault', q{} );
 
 my $sms_content = 'This is a SMS for an <<status>>';
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,'my title',?,'sms')|, undef, $library->{branchcode}, $sms_content );
@@ -525,9 +526,9 @@ t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
     }
     qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
-    is( $err,                                                1,                        "Successfully sent order." );
-    is( $email_object->email->header('To'),                  'testemail@mydomain.com', "mailto correct in sent order" );
-    is( defined( $email_object->email->header('Reply-To') ), '',                       "No reply-to address is set" );
+    is( $err,                                            1,                        "Successfully sent order." );
+    is( $email_object->email->header('To'),              'testemail@mydomain.com', "mailto correct in sent order" );
+    is( scalar $email_object->email->header('Reply-To'), undef,                    "No reply-to address is set" );
     is(
         $email_object->email->body,
         'my vendor|John Smith|Ordernumber '
@@ -764,8 +765,7 @@ subtest 'SendAlerts - claimissue' => sub {
     is( $err, 1, "Successfully sent claim" );
     is( $email_object->email->header('To'),
         'testemail@mydomain.com', "mailto correct in sent claim" );
-    is( defined($email_object->email->header('Reply-To')),
-        '', "reply-to is not set" );
+    is( scalar $email_object->email->header('Reply-To'), undef, "reply-to is not set" );
     is(
         $email_object->email->body,
         "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy",
