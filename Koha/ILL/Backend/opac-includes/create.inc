@@ -17,6 +17,7 @@
 [% IF whole.stage == "form" %]
 <h2>Create a manual ILL request</h2>
 <form id="create_form" method="POST" action="">
+  [% INCLUDE 'csrf-token.inc' %]
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
@@ -106,7 +107,7 @@
     <input id="ill-submit" class="btn btn-default" type="submit" value="Create"/>
     <a class="cancel" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
   </fieldset>
-  <input type="hidden" name="method" value="create" />
+  <input type="hidden" name="op" value="cud-create" />
   <input type="hidden" name="stage" value="form" />
   <input type="hidden" name="backend" value="Standard" />
 </form>
