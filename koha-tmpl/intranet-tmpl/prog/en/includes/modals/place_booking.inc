@@ -25,6 +25,12 @@
                                 </select>
                                 <div class="hint">Enter patron card number or partial name</div>
                             </li>
+                            <li>
+                                <label class="required" for="booking_pickup">Pickup at:</label>
+                                <select name="booking_pickup" id="pickup_library_id" required="required" disabled="true"></select>
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
                             <label for="booking_item_id">Item: </label>
                                 <select name="booking_item_id" id="booking_item_id" disabled="true">
                                     <option value="0">Any item</option>
