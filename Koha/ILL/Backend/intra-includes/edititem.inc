@@ -9,6 +9,7 @@
 [% IF whole.stage == "form" %]
   <h2>Edit a manual ILL request</h2>
   <form id="standard_edit_form" method="POST" action="">
+    [% INCLUDE 'csrf-token.inc' %]
     <fieldset class="rows">
       <legend>General details</legend>
       <ol id="general-standard-fields">
@@ -76,7 +77,7 @@
       <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl">Cancel</a>
     </fieldset>
     <input type="hidden" name="illrequest_id" value="[% whole.value.other.illrequest_id | html %]" />
-    <input type="hidden" name="method" value="edititem" />
+    <input type="hidden" name="op" value="cud-edititem" />
     <input type="hidden" name="stage" value="form" />
     <input type="hidden" name="backend" value="Standard" />
   </form>
