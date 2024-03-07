@@ -104,6 +104,13 @@ properties:
   pickup_location:
     type: boolean
     description: If the library can act as a pickup location
+  pickup_items:
+    type:
+      - array
+      - 'null'
+    description: Array of items available for pickup at this library if the library is marked as a pickup location
+    items:
+      type: integer
   public:
     type: boolean
     description: If the library is visible to the public

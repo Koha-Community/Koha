@@ -530,6 +530,7 @@ sub pickup_locations {
             my $pickup_locations = $c->objects->search($pl_set);
             @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
         }
+        @response = map { $_->{pickup_items} = $pl_set->{_pickup_location_items}->{ $_->{library_id} }; $_; } @response;
 
         return $c->render(
             status  => 200,

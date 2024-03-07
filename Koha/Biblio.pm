@@ -383,25 +383,34 @@ sub pickup_locations {
     my ( $self, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
-      unless exists $params->{patron};
+        unless exists $params->{patron};
 
     my $patron = $params->{patron};
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
     my @pickup_locations;
+    my $location_items;
     foreach my $item ( $self->items->as_list ) {
         my $cache_key = sprintf "Pickup_locations:%s:%s:%s:%s:%s",
-           $item->itype,$item->homebranch,$item->holdingbranch,$item->ccode || "",$patron->branchcode||"" ;
-        my $item_pickup_locations = $memory_cache->get_from_cache( $cache_key );
-        unless( $item_pickup_locations ){
-          @{ $item_pickup_locations } = $item->pickup_locations( { patron => $patron } )->_resultset->get_column('branchcode')->all;
-          $memory_cache->set_in_cache( $cache_key, $item_pickup_locations );
+            $item->itype, $item->homebranch, $item->holdingbranch, $item->ccode || "", $patron->branchcode || "";
+        my $item_pickup_locations = $memory_cache->get_from_cache($cache_key);
+        unless ($item_pickup_locations) {
+            @{$item_pickup_locations} =
+                $item->pickup_locations( { patron => $patron } )->_resultset->get_column('branchcode')->all;
+            $memory_cache->set_in_cache( $cache_key, $item_pickup_locations );
         }
-        push @pickup_locations, @{ $item_pickup_locations }
+        push @pickup_locations, @{$item_pickup_locations};
+        for my $location (@{$item_pickup_locations}) {
+            push @{ $location_items->{$location} }, $item->itemnumber;
+        }
     }
 
-    return Koha::Libraries->search(
-        { branchcode => { '-in' => \@pickup_locations } }, { order_by => ['branchname'] } );
+    my $resultSet =
+        Koha::Libraries->search( { branchcode => { '-in' => \@pickup_locations } }, { order_by => ['branchname'] } );
+
+    $resultSet->{_pickup_location_items} = $location_items;
+
+    return $resultSet;
 }
 
 =head3 hidden_in_opac
