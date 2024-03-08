@@ -256,15 +256,6 @@ sub restore_schema {
     # return something, then this function should, too.
 }
 
-=head2 flush_schema_cache
-
-=cut
-
-sub flush_schema_cache {
-    delete $database->{schema};
-    return 1;
-}
-
 =head2 db_scheme2dbi
 
     my $dbd_driver_name = Koha::Database::db_scheme2dbi($scheme);
