@@ -1248,17 +1248,18 @@ sub CanBookBeIssued {
             } else {
                 $alerts{'BOOKED'} = $booking;
             }
+        }
 
-        } else {
-
-            # Loan falls inside booking
-            if ( $now > $booking_start ) {
-                $issuingimpossible{'BOOKED_TO_ANOTHER'} = $booking;
+        # Booked to another patron
+        else {
+            # Booking starts before due date, reduce loan?
+            if ( $now < $booking_start && $duedate > $booking_start ) {
+                $needsconfirmation{'BOOKED_TO_ANOTHER'} = $booking;
             }
 
-            # Booking starts before due date, reduce loan?
+            # Loan falls inside booking
             else {
-                $needsconfirmation{'BOOKED_TO_ANOTHER'} = $booking;
+                $issuingimpossible{'BOOKED_TO_ANOTHER'} = $booking;
             }
         }
     }
