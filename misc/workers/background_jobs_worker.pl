@@ -73,6 +73,7 @@ my ( $help, @queues );
 my $max_processes = $ENV{MAX_PROCESSES};
 $max_processes ||= C4::Context->config('background_jobs_worker')->{max_processes} if C4::Context->config('background_jobs_worker');
 $max_processes ||= 1;
+my $mq_timeout = $ENV{MQ_TIMEOUT} // 10;
 
 my $not_found_retries = {};
 my $max_retries = $ENV{MAX_RETRIES} || 10;
@@ -114,9 +115,10 @@ if ( $conn ) {
 }
 while (1) {
     if ( $conn ) {
-        my $frame = $conn->receive_frame;
+        my $frame = $conn->receive_frame( { timeout => $mq_timeout } );
         if ( !defined $frame ) {
-            # maybe log connection problems
+            # timeout or connection issue?
+            $pm->reap_finished_children;
             next;    # will reconnect automatically
         }
 
