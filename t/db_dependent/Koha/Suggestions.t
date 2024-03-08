@@ -23,6 +23,8 @@ use Test::More tests => 11;
 use Test::Exception;
 
 use Koha::Suggestions;
+use Koha::Config::SysPrefs;
+use Koha::Notice::Messages;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -49,7 +51,7 @@ my $new_suggestion_2 = Koha::Suggestion->new(
 )->store;
 
 subtest 'store' => sub {
-    plan tests => 5;
+    plan tests => 8;
     my $suggestion  = Koha::Suggestion->new(
         {   suggestedby  => $patron->{borrowernumber},
             biblionumber => $biblio_1->biblionumber,
@@ -65,6 +67,44 @@ subtest 'store' => sub {
     $suggestion->reason('because!')->store;
     $suggestion = Koha::Suggestions->find( $suggestion->suggestionid );
     is( $suggestion->suggesteddate, $two_days_ago_sql, 'If suggestion id modified, suggesteddate should not be modified' );
+
+    my $syspref = Koha::Config::SysPrefs->find('EmailPurchaseSuggestions');
+    $syspref->value(0)->store;
+    Koha::Notice::Messages->search->delete;
+    $suggestion->STATUS('ASKED')->store;
+    my $last_message = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->single;
+    if ( !defined $last_message ) {
+        $last_message = "No message was sent";
+    }
+    is(
+        $last_message, 'No message was sent',
+        'If EmailPurchaseSuggestions is not enabled, a message should not be sent'
+    );
+
+    $syspref = Koha::Config::SysPrefs->find('EmailPurchaseSuggestions');
+    $syspref->value('EmailAddressForSuggestions')->store;
+    Koha::Notice::Messages->search->delete;
+    $suggestion->STATUS('ASKED')->store;
+    $last_message = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->single;
+    if ( !defined $last_message ) {
+        fail('No message was sent');
+    } else {
+        is(
+            $last_message->letter_code, 'NEW_SUGGESTION',
+            'If EmailPurchaseSuggestions is enabled and the status of suggestion is set to ASKED, a message should be sent'
+        );
+    }
+
+    Koha::Notice::Messages->search->delete;
+    $suggestion->STATUS('ACCEPTED')->store;
+    $last_message = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->single;
+    if ( !defined $last_message ) {
+        $last_message = "No message was sent";
+    }
+    is(
+        $last_message, 'No message was sent',
+        'If the status of suggestion is not set to ASKED, a message should not be sent'
+    );
 
     throws_ok {
         $suggestion->STATUS('UNKNOWN')->store;
