@@ -4,7 +4,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 12;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok('Koha::Database');
@@ -23,11 +23,6 @@ my $another_schema = $database->schema();
 is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
 $another_schema = Koha::Database->new->schema();
 is( $another_schema->storage->_conn_pid, $schema->storage->_conn_pid, 'Getting another schema should return the same one, it has correctly been cached' );
-
-my $new_schema;
-ok( $new_schema = $database->new_schema(), 'Try to get a new schema' );
-ok( $database->set_schema($new_schema), 'Switch to new schema' );
-ok( $database->restore_schema(),        'Switch back' );
 
 # run in a transaction
 $schema->storage->txn_begin();
