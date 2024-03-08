@@ -819,8 +819,9 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    if ( $patron->category->category_type eq 'X' && (  $item_object->barcode  )) {
-    	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
+    if ( $patron->category->category_type eq 'X' && ( $item_object->barcode ) ) {
+
+        # stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         C4::Stats::UpdateStats(
             {
                 branch         => C4::Context->userenv->{'branch'},
@@ -835,8 +836,10 @@ sub CanBookBeIssued {
             }
         );
         my $block_lost_return = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
-        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
-            AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 ) if $item_object->onloan;
+        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower );
+        ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
+            AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 )
+            if $item_object->onloan;
         ModDateLastSeen( $item_object->itemnumber, $block_lost_return );    # FIXME Move to Koha::Item
         return (
             {

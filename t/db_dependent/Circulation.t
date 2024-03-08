@@ -2479,7 +2479,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     plan tests => 14;
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library           = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category_x = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
@@ -2505,7 +2505,10 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     );
 
     my ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_1->barcode );
-    is( $error->{STATS}, 1, '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)' );
+    is(
+        $error->{STATS}, 1,
+        '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)'
+    );
 
     my $stat = Koha::Statistics->search( { itemnumber => $item_1->itemnumber } )->next;
     is( $stat->branch,         C4::Context->userenv->{'branch'}, 'Recorded a branch' );
@@ -2532,15 +2535,24 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     my $item_3 = $builder->build_sample_item( { library => $library->branchcode } );
     CanBookBeIssued( $patron, $item_3->barcode );
     $item_3->discard_changes;
-    is( Koha::Statistics->search( { itemnumber => $item_3->itemnumber } )->count, 1, 'Single entry recorded in the stats table' );
+    is(
+        Koha::Statistics->search( { itemnumber => $item_3->itemnumber } )->count, 1,
+        'Single entry recorded in the stats table'
+    );
 
     my $item_4 = $builder->build_sample_item( { library => $library->branchcode } );
     AddIssue( $patron_2, $item_4->barcode );
     $item_4->discard_changes;
-    is( Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 1, 'Issue should be recorded in statistics table for item 4.' );
+    is(
+        Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 1,
+        'Issue should be recorded in statistics table for item 4.'
+    );
     CanBookBeIssued( $patron, $item_4->barcode );
     $item_4->discard_changes;
-    is( Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 3, 'Issue, return, and localuse should be recorded in statistics table for item 4.' );
+    is(
+        Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 3,
+        'Issue, return, and localuse should be recorded in statistics table for item 4.'
+    );
 
     # TODO There are other tests to provide here
 };
