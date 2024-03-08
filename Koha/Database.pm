@@ -256,14 +256,6 @@ sub restore_schema {
     # return something, then this function should, too.
 }
 
-=head2 get_schema_cached
-
-=cut
-
-sub get_schema_cached {
-    return $database->{schema};
-}
-
 =head2 flush_schema_cache
 
 =cut
