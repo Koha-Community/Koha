@@ -15,6 +15,10 @@ return {
           });
 
           say $out "Added column 'bookings.pickup_library_id'";
+
+          $dbh->do(
+              q{UPDATE bookings JOIN items ON bookings.item_id = items.itemnumber SET bookings.pickup_library_id = items.homebranch }
+          );
         }
     },
 };
