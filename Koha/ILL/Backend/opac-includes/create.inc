@@ -21,6 +21,27 @@
 <h2>Create a manual ILL request</h2>
 <form id="create_form" method="POST" action="">
   [% INCLUDE 'csrf-token.inc' %]
+    <fieldset class="rows">
+    <legend>Patron options</legend>
+    <ol>
+      <li>
+        [% WRAPPER ill_select_field required = 1 id = 'branchcode' label = t('Destination library') %]
+          <option value="" />
+          [% FOREACH branch IN branches %]
+            [% IF whole.value.other.branchcode && branch.branchcode == whole.value.other.branchcode %]
+            <option value="[% branch.branchcode | html %]" selected>
+              [% branch.branchname | html %]
+            </option>
+            [% ELSE %]
+            <option value="[% branch.branchcode | html %]">
+              [% branch.branchname | html %]
+            </option>
+            [% END %]
+          [% END %]
+        [% END #ill_select_field %]
+      </li>
+    </ol>
+  </fieldset>
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
@@ -81,28 +102,6 @@
       [% INCLUDE "${cwd}/shared-includes/forms/${type}.inc" %]
   [% END %]
   [% INCLUDE "${cwd}/shared-includes/custom_fields.inc" %]
-  <fieldset class="rows">
-    <legend>Patron options</legend>
-    <ol>
-      <li>
-        [% WRAPPER ill_select_field required = 1 id = 'branchcode' label = t('Destination library') %]
-          <option value="" />
-          [% FOREACH branch IN branches %]
-            [% IF whole.value.other.branchcode && branch.branchcode == whole.value.other.branchcode %]
-            <option value="[% branch.branchcode | html %]" selected>
-              [% branch.branchname | html %]
-            </option>
-            [% ELSE %]
-            <option value="[% branch.branchcode | html %]">
-              [% branch.branchname | html %]
-            </option>
-            [% END %]
-          [% END %]
-        [% END #ill_select_field %]
-      </li>
-    </ol>
-  </fieldset>
-
   <fieldset class="action">
     <input id="ill-submit" class="btn btn-primary" type="submit" value="Create"/>
     <a class="cancel" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
