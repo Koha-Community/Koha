@@ -73,6 +73,7 @@ builder {
     enable "Plack::Middleware::Static";
 
     # + is required so Plack doesn't try to prefix Plack::Middleware::
+    enable "+Koha::Middleware::UserEnv";
     enable "+Koha::Middleware::SetEnv";
     enable "+Koha::Middleware::RealIP";
 
