@@ -1344,7 +1344,7 @@ legend:hover {
                                             [% UNLESS ( !CanUpdatePasswordExpiration ) %]
                                                 <li>
                                                     <label for="password_expiration_date">Password expiration date:</label>
-                                                    <input type="text" id="password_expiration_date" name="password_expiration_date" maxlength="10" size="10" value="[% password_expiration_date | html %]" class="flatpickr" />
+                                                    <input type="text" id="password_expiration_date" name="password_expiration_date" maxlength="10" size="10" value="[% borrower_data.password_expiration_date | html %]" class="flatpickr" />
                                                 </li>
                                             [% END %]
                                         </ol>
