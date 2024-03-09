@@ -104,16 +104,16 @@ sub backend_dir {
     return $self->{configuration}->{backend_directory};
 }
 
-=head3 get_installed_backend_plugins
+=head3 get_backend_plugin_names
 
-    $backends = $config->get_installed_backend_plugins;
+    my @backend_names = $config->get_backend_plugin_names();
 
-Returns a list of all installed ILL backend plugins
+Returns a list of names for all the installed ILL backend plugins.
 
 =cut
 
-sub get_installed_backend_plugins {
-    my ( $self, $reduce ) = @_;
+sub get_backend_plugin_names {
+    my ( $self ) = @_;
 
     my @backend_plugins = Koha::Plugins->new()->GetPlugins(
         {
@@ -140,7 +140,7 @@ sub available_backends {
     my ( $self, $reduce ) = @_;
 
     # New way of loading backends: Through plugins
-    my @backend_plugins_names = $self->get_installed_backend_plugins;
+    my @backend_plugins_names = $self->get_backend_plugin_names;
 
     # Old way of loading backends: Through backend_dir config
     my $backend_dir = $self->backend_dir;
