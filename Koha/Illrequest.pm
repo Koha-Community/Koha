@@ -436,13 +436,11 @@ sub load_backend {
             "An invalid backend ID was requested ('')");
     }
 
+    # Find plugin implementing the backend for the request
     my $backend_plugin = $self->get_backend_plugin($backend_name);
     if ($backend_plugin) {
 
-        # New way of loading backends: Through plugins
-        my $backend_plugin_class = $backend_plugin->{class};
-
-        $self->{_my_backend} = $backend_plugin_class->new_backend(
+        $self->{_my_backend} = $backend_plugin->new_ill_backend(
             {
                 config => $self->_config,
                 logger => Koha::Illrequest::Logger->new
@@ -450,7 +448,7 @@ sub load_backend {
         );
     } elsif ($backend_name) {
 
-        # Old way of loading backends: Through backend_dir config
+        # Fallback to loading through backend_dir config
         my @raw           = qw/Koha Illbackends/;                         # Base Path
         my $location      = join "/",  @raw, $backend_name, "Base.pm";    # File to load
         my $backend_class = join "::", @raw, $backend_name, "Base";       # Package name
