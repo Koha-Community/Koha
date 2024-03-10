@@ -516,17 +516,6 @@ RETRY:
             }
         }
 
-        # Remove any item which have no finite transport cost with respect to any of the hold requests.
-        for ( my $i = 0, my $i0 = 0 ; $i < $num_agents ; $i++ ) {
-            if ( !$candidate_agents[$i] ) {
-                splice @m,               $i - $i0, 1;
-                splice @remaining_items, $i - $i0, 1;
-                $i0++;
-            }
-        }
-
-        $num_agents = scalar(@remaining_items);
-
         # Remove any hold request for which there is no finite transport cost item available.
         my $removed_something = 0;
 
