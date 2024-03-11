@@ -15,7 +15,7 @@ use Koha::Authorities;
 use Getopt::Long;
 use YAML;
 use List::MoreUtils qw/uniq/;
-use Pod::Usage qw( pod2usage );
+use Pod::Usage      qw( pod2usage );
 
 =head1 NAME
 
@@ -68,7 +68,7 @@ will only auths with a low auth_id (old records)
 
 =item B<--verbose>
 
-display verbose loggin, can be repeated twice for more info
+display verbose logging, can be repeated twice for more info
 
 
 =item B<--help>
@@ -100,7 +100,7 @@ my $result = GetOptions(
 pod2usage( -verbose => 2 ) if ($help);
 
 print "RUNNING IN TEST MODE, NO CHANGES WILL BE MADE\n" unless $confirm;
-$verbose = 1 unless ( $confirm || $verbose );
+$verbose = 1                                            unless ( $confirm || $verbose );
 
 my @choose_subs;
 @methods = ('used') unless @methods;
