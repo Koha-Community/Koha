@@ -6343,21 +6343,40 @@ subtest 'Tests for transfer not in transit' => sub {
 
 subtest 'Tests for RecordLocalUseOnReturn' => sub {
 
-    plan tests => 2;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference('RecordLocalUseOnReturn', 0);
     my $item = $builder->build_sample_item();
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            onloan => undef,
+        }
+    );
+
     $item->withdrawn(1)->itemlost(1)->store;
     my @return = AddReturn( $item->barcode, $item->homebranch, 0, undef );
     is_deeply(
         \@return,
         [ 0, { NotIssued => $item->barcode, withdrawn => 1  }, undef, {} ], "RecordLocalUSeOnReturn is off, no local use recorded");
 
+    AddReturn( $item_2->barcode, $item_2->homebranch );
+    $item_2->discard_changes; # refresh
+    is( $item_2->localuse, undef , 'Without RecordLocalUseOnReturn no localuse is recorded.');
+
     t::lib::Mocks::mock_preference('RecordLocalUseOnReturn', 1);
     my @return2 = AddReturn( $item->barcode, $item->homebranch, 0, undef );
     is_deeply(
         \@return2,
         [ 0, { NotIssued => $item->barcode, withdrawn => 1, LocalUse => 1  }, undef, {} ], "Local use is recorded");
+
+    AddReturn( $item_2->barcode, $item_2->homebranch );
+    $item_2->discard_changes; # refresh
+    is( $item_2->localuse, 1 , 'With RecordLocalUseOnReturn localuse is recorded.');
+
+    AddReturn( $item_2->barcode, $item_2->homebranch );
+    $item_2->discard_changes; # refresh
+    is( $item_2->localuse, 2 , 'With RecordLocalUseOnReturn localuse is recorded.');
 };
 
 subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
