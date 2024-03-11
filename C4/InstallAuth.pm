@@ -252,7 +252,6 @@ sub checkauth {
     my $session = Koha::Session->get_session( { sessionID => $sessionID, storage_method => 'file' } );
 
     if ( $session ) {
-        C4::Context->_new_userenv($sessionID);
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
                 $session->param('number'),
@@ -279,7 +278,7 @@ sub checkauth {
 
     if ($logout || !$session) {
         # voluntary logout the user
-        C4::Context->_unset_userenv($sessionID);
+        C4::Context->unset_userenv();
         $session = Koha::Session->get_session( { storage_method => 'file' } );
     }
 
@@ -288,7 +287,6 @@ sub checkauth {
     unless ($userid) {
         $userid = $query->param('login_userid');
         my $password = $query->param('login_password');
-        C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $userid, $password );
         if ($return) {
             $loggedin = 1;
@@ -334,7 +332,7 @@ sub checkauth {
         else {
             if ($userid) {
                 $info{'invalid_username_or_password'} = 1;
-                C4::Context->_unset_userenv($sessionID);
+                C4::Context->unset_userenv();
             }
         }
     }

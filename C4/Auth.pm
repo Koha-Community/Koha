@@ -933,7 +933,7 @@ sub checkauth {
                 $session->delete();
                 $session->flush;
                 $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
-                C4::Context::_unset_userenv($sessionID);
+                C4::Context::unset_userenv();
                 $sessionID = undef;
                 undef $userid; # IMPORTANT: this assures us a new session in code below
                 $auth_state = 'failed';
@@ -982,7 +982,7 @@ sub checkauth {
             $session->delete();
             $session->flush;
         }
-        C4::Context::_unset_userenv($sessionID);
+        C4::Context::unset_userenv();
         $cookie = $cookie_mgr->clear_unless( $query->cookie, @$cookie );
 
         if ($cas and $caslogout) {
@@ -1012,7 +1012,6 @@ sub checkauth {
         }
 
         $sessionID = $session->id;
-        C4::Context->_new_userenv($sessionID);
         $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
             -name     => 'CGISESSID',
             -value    => $sessionID,
@@ -1158,7 +1157,7 @@ sub checkauth {
                     # although we do present an authorization failure. (Yes, the
                     # authentication was actually correct.)
                     $info{'nopermission'} = 1;
-                    C4::Context::_unset_userenv($sessionID);
+                    C4::Context::unset_userenv();
                 }
                 my ( $borrowernumber, $firstname, $surname, $userflags,
                     $branchcode, $branchname, $emailaddress, $desk_id,
@@ -1306,7 +1305,7 @@ sub checkauth {
             else {
                 if ($userid) {
                     $info{'invalid_username_or_password'} = 1;
-                    C4::Context::_unset_userenv($sessionID);
+                    C4::Context::unset_userenv();
                 }
                 $session->param( 'lasttime', time() );
                 $session->param( 'ip',       $session->remote_addr() );
@@ -1667,7 +1666,6 @@ sub check_api_auth {
             return ( "failed", undef, undef ) unless $session;
 
             my $sessionID = $session->id;
-            C4::Context->_new_userenv($sessionID);
             my $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => $sessionID,
@@ -1831,7 +1829,7 @@ sub check_cookie_auth {
     unless ( $sessionID ) {
         return ( "failed", undef );
     }
-    C4::Context::_unset_userenv($sessionID); # remove old userenv first
+    C4::Context::unset_userenv();
     my $session   = get_session($sessionID);
     if ($session) {
         my $userid   = $session->param('id');
@@ -1868,7 +1866,6 @@ sub check_cookie_auth {
             return ("password_expired", undef ) if $patron->password_expired;
             my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
-                C4::Context->_new_userenv($sessionID);
                 if ( !C4::Context->interface ) {
                     # No need to override the interface, most often set by get_template_and_user
                     C4::Context->interface( $session->param('interface') );
@@ -1898,7 +1895,6 @@ sub check_cookie_auth {
             }
 
         } else {
-            C4::Context->_new_userenv($sessionID);
             C4::Context->interface($session->param('interface'));
             C4::Context->set_userenv( undef, q{} );
             return ( "anon", $session );

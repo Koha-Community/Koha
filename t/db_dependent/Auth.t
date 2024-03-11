@@ -199,7 +199,6 @@ subtest 'checkauth() tests' => sub {
         $session->param( 'interface', 'intranet' );
         $session->flush;
         my $sessionID = $session->id;
-        C4::Context->_new_userenv($sessionID);
 
         my ($return) =
             C4::Auth::check_cookie_auth( $sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
@@ -233,7 +232,6 @@ subtest 'checkauth() tests' => sub {
         $session->param( 'interface',    'opac' );
         $session->flush;
         my $previous_sessionID = $session->id;
-        C4::Context->_new_userenv($previous_sessionID);
 
         my ( $return ) = C4::Auth::check_cookie_auth( $previous_sessionID, undef, { skip_version_check => 1, remote_addr => '1.2.3.4' } );
         is( $return, 'ok', 'Former session in shape now' );
@@ -262,7 +260,6 @@ subtest 'checkauth() tests' => sub {
         $session->param( 'interface',    'intranet' );
         $session->flush;
         $previous_sessionID = $session->id;
-        C4::Context->_new_userenv($previous_sessionID);
         $cgi->param( -name => 'login_userid',             -value => $patron2->userid );
         $cgi->param( -name => 'login_password',           -value => $password );
         $cgi->param( -name => 'koha_login_context', -value => 1 );
@@ -417,7 +414,6 @@ subtest 'checkauth() tests' => sub {
         is( $sesh->param('branch'), $branch->branchcode, "If user is superlibrarian, they should be able to choose a branch" );
 
     };
-    C4::Context->_new_userenv; # For next tests
 };
 
 subtest 'no_set_userenv parameter tests' => sub {
@@ -430,8 +426,8 @@ subtest 'no_set_userenv parameter tests' => sub {
     my $password = set_weak_password($patron);
 
     ok( checkpw( $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
+    C4::Context->unset_userenv;
     is( C4::Context->userenv, undef, 'Userenv should be undef as required' );
-    C4::Context->_new_userenv('DUMMY SESSION');
     C4::Context->set_userenv(0,0,0,'firstname','surname', $library->branchcode, 'Library 1', 0, '', '');
     is( C4::Context->userenv->{branch}, $library->branchcode, 'Userenv gives correct branch' );
     ok( checkpw( $patron->userid, $password, undef, undef, 1 ), 'checkpw returns true' );
@@ -940,7 +936,6 @@ subtest 'Userenv clearing in check_cookie_auth' => sub {
     is( C4::Context->userenv, undef, 'Environment should be cleared too' );
 
     # Show that we clear the userenv again: set up env and check deleted session
-    C4::Context->_new_userenv( $sessionID );
     C4::Context->set_userenv; # empty
     is( defined C4::Context->userenv, 1, 'There should be an empty userenv again' );
     ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );

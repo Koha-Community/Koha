@@ -45,7 +45,7 @@ subtest 'session_register_id' => sub {
         '1', "Returns the register id when set in the userenv" );
 
     # Unset the userenv
-    C4::Context->_new_userenv(undef);
+    C4::Context->unset_userenv();
 };
 
 subtest 'session_register_name' => sub {
@@ -61,7 +61,7 @@ subtest 'session_register_name' => sub {
         'Register One', "Returns the register name when set in the userenv" );
 
     # Unset the userenv
-    C4::Context->_new_userenv(undef);
+    C4::Context->unset_userenv();
 };
 
 subtest 'all() tests' => sub {

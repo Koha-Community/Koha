@@ -170,7 +170,6 @@ sub process {
 
     if ( $self->context ) {
         my $context = $self->json->decode($self->context);
-        C4::Context->_new_userenv(-1);
         C4::Context->interface( $context->{interface} );
         C4::Context->set_userenv(
             $context->{number},       $context->{id},

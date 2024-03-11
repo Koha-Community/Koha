@@ -47,7 +47,6 @@ my $library         = $builder->build({ source => 'Branch' });
 my $another_library = $builder->build({ source => 'Branch' });
 my $itemtype        = $builder->build({ source => 'Itemtype' })->{itemtype};
 
-C4::Context->_new_userenv('xxx');
 my $patron = $builder->build_object({
     class => 'Koha::Patrons',
     value => {

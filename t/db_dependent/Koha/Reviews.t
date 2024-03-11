@@ -70,7 +70,6 @@ is( $retrieved_review_1_1->review, $new_review_1_1->review, 'Find a review by id
 
 subtest 'search_limited' => sub {
     plan tests => 2;
-    C4::Context->_new_userenv('xxx');
     my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
     my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
     Koha::Library::Group->new({ parent_id => $group_1->id,  branchcode => $patron_1->branchcode })->store();

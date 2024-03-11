@@ -182,7 +182,6 @@ sub new {
 
     $self->{"Zconn"} = undef;    # Zebra Connections
     $self->{"userenv"} = undef;        # User env
-    $self->{"activeuser"} = undef;        # current active user
     $self->{"shelves"} = undef;
     $self->{tz} = undef; # local timezone object
 
@@ -758,19 +757,10 @@ sub restore_dbh
 
 Retrieves a hash for user environment variables.
 
-This hash shall be cached for future use: if you call
-C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
-
 =cut
 
-#'
 sub userenv {
-    my $var = $context->{"activeuser"};
-    if (defined $var and defined $context->{"userenv"}->{$var}) {
-        return $context->{"userenv"}->{$var};
-    } else {
-        return;
-    }
+    return $context->{userenv};
 }
 
 =head2 set_userenv
@@ -798,7 +788,6 @@ sub set_userenv {
         $register_id,  $register_name
     ) = @_;
 
-    my $var=$context->{"activeuser"} || '';
     my $cell = {
         "number"     => $usernum,
         "id"         => $userid,
@@ -817,44 +806,21 @@ sub set_userenv {
         "register_id"   => $register_id,
         "register_name" => $register_name
     };
-    $context->{userenv}->{$var} = $cell;
+    $context->{userenv} = $cell;
     return $cell;
 }
 
-=head2 _new_userenv
+=head2 unset_userenv
 
-  C4::Context->_new_userenv($session);  # FIXME: This calling style is wrong for what looks like an _internal function
+  C4::Context->unset_userenv;
 
-Builds a hash for user environment variables.
-
-This hash shall be cached for future use: if you call
-C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
-
-_new_userenv is called in Auth.pm
+Destroys user environment variables.
 
 =cut
 
-#'
-sub _new_userenv
+sub unset_userenv
 {
-    shift;  # Useless except it compensates for bad calling style
-    my ($sessionID)= @_;
-     $context->{"activeuser"}=$sessionID;
-}
-
-=head2 _unset_userenv
-
-  C4::Context->_unset_userenv;
-
-Destroys the hash for activeuser user environment variables.
-
-=cut
-
-#'
-
-sub _unset_userenv
-{
-    delete $context->{activeuser};
+    $context->{userenv} = {};
 }
 
 

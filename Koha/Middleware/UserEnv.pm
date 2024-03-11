@@ -22,7 +22,7 @@ sub call {
 
     my $req = Plack::Request->new($env);
 
-    C4::Context->_unset_userenv;
+    C4::Context->unset_userenv;
 
     return $self->app->($env);
 }

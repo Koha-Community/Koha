@@ -1317,7 +1317,7 @@ subtest 'store' => sub {
             C4::Circulation::LostItem( $item->itemnumber, 1 );
 
             # Unset the userenv
-            C4::Context->_new_userenv(undef);
+            C4::Context->unset_userenv();
 
             # Simluate item marked as found
             $item->itemlost(0)->store;

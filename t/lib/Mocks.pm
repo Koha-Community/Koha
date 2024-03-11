@@ -119,8 +119,6 @@ Also, some sane defaults are set if no parameters are passed.
 sub mock_userenv {
     my ( $params ) = @_;
 
-    C4::Context->_new_userenv(42);
-
     my $userenv;
     if ( $params and my $patron = $params->{patron} ) {
         $userenv = $patron->unblessed;

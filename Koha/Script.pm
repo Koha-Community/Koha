@@ -46,11 +46,9 @@ sub import {
     my $class = shift;
     my @flags = @_;
 
-    C4::Context->_new_userenv(1);
     if ( ( $flags[0] || '' ) eq '-cron' ) {
 
         # Set userenv
-        C4::Context->_new_userenv(1);
         C4::Context->set_userenv(
             undef, undef, undef, 'CRON', 'CRON',
             undef, undef, undef, undef,  undef
