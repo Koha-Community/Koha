@@ -19,7 +19,7 @@ package C4::Context;
 
 use Modern::Perl;
 
-use vars qw($AUTOLOAD $context @context_stack);
+use vars qw($AUTOLOAD $context);
 BEGIN {
     if ( $ENV{'HTTP_USER_AGENT'} ) { # Only hit when plack is not enabled
 
@@ -79,18 +79,6 @@ This module takes care of setting up the context for a script:
 figuring out which configuration file to load, and loading it, opening
 a connection to the right database, and so forth.
 
-Most scripts will only use one context. They can simply have
-
-  use C4::Context;
-
-at the top.
-
-Other scripts may need to use several contexts. For instance, if a
-library has two databases, one for a certain collection, and the other
-for everything else, it might be necessary for a script to use two
-different contexts to search both databases. Such scripts should use
-the C<&set_context> and C<&restore_context> functions, below.
-
 By default, C4::Context reads the configuration from
 F</etc/koha/koha-conf.xml>. This may be overridden by setting the C<$KOHA_CONF>
 environment variable to the pathname of a configuration file to use.
@@ -116,7 +104,6 @@ environment variable to the pathname of a configuration file to use.
 #     A connection object for the Zebra server
 
 $context = undef;        # Initially, no context is set
-@context_stack = ();        # Initially, no saved contexts
 
 sub import {
     # Create the default context ($C4::Context::Context)
@@ -196,14 +183,6 @@ sub new {
 or
   set_context C4::Context $context;
 
-  ...
-  restore_context C4::Context;
-
-In some cases, it might be necessary for a script to use multiple
-contexts. C<&set_context> saves the current context on a stack, then
-sets the context to C<$context>, which will be used in future
-operations. To restore the previous context, use C<&restore_context>.
-
 =cut
 
 #'
@@ -230,37 +209,8 @@ sub set_context
         $new_context = $self;
     }
 
-    # Save the old context, if any, on the stack
-    push @context_stack, $context if defined($context);
-
     # Set the new context
     $context = $new_context;
-}
-
-=head2 restore_context
-
-  &restore_context;
-
-Restores the context set by C<&set_context>.
-
-=cut
-
-#'
-sub restore_context
-{
-    my $self = shift;
-
-    if ($#context_stack < 0)
-    {
-        # Stack underflow.
-        die "Context stack underflow";
-    }
-
-    # Pop the old context and set it.
-    $context = pop @context_stack;
-
-    # FIXME - Should this return something, like maybe the context
-    # that was current when this was called?
 }
 
 =head2 config
@@ -700,9 +650,6 @@ sub new_dbh
   ...
   C4::Connect->restore_dbh;
 
-C<&set_dbh> and C<&restore_dbh> work in a manner analogous to
-C<&set_context> and C<&restore_context>.
-
 C<&set_dbh> saves the current database handle on a stack, then sets
 the current database handle to C<$my_dbh>.
 
@@ -746,9 +693,6 @@ sub restore_dbh
 
     # Pop the old database handle and set it.
     $context->{"dbh"} = pop @{$context->{"dbh_stack"}};
-
-    # FIXME - If it is determined that restore_context should
-    # return something, then this function should, too.
 }
 
 =head2 userenv
