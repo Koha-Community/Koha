@@ -376,6 +376,11 @@ if (@$barcodes && $op eq 'cud-checkout') {
                 BORROWER  => $stats_borrower,
             );
         }
+
+        #increment items.localuse
+        my $localuse_count = $item->localuse;
+        $localuse_count++;
+        $item->localuse( $localuse_count )->store;
     }
     # Fix for bug 7494: optional checkout-time fallback search for a book
 

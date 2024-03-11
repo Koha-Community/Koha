@@ -2144,6 +2144,7 @@ sub AddReturn {
 
     my $itemnumber = $item->itemnumber;
     my $itemtype = $item->effective_itemtype;
+    my $localuse_count = $item->localuse || 0;
 
     my $issue  = $item->checkout;
     if ( $issue ) {
@@ -2159,6 +2160,8 @@ sub AddReturn {
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
         # Record this as a local use, instead of a return, if the RecordLocalUseOnReturn is on
         if (C4::Context->preference("RecordLocalUseOnReturn")) {
+           $localuse_count++;
+           $item->localuse( $localuse_count )->store;
            $messages->{'LocalUse'} = 1;
            $stat_type = 'localuse';
         }
