@@ -80,13 +80,24 @@ return {
         my @misspelled;
         my $pref;
 
+        my $good_exists = $dbh->selectrow_array(
+            q{SELECT variable FROM systempreferences WHERE variable = 'OAI-PMH:AutoUpdateSetsEmbedItemData'});
+
         $pref = $dbh->selectrow_array(
             q{SELECT variable FROM systempreferences WHERE variable = 'OAI-PMH:AutoUpdateSetEmbedItemData'});
+
         if ( $pref eq "OAI-PMH:AutoUpdateSetEmbedItemData" ) {
-            $dbh->do(
-                q{UPDATE systempreferences SET variable = 'OAI-PMH:AutoUpdateSetsEmbedItemData' WHERE variable = "OAI-PMH:AutoUpdateSetEmbedItemData"}
-            );
-            push @misspelled, "AutoUpdateSetsEmbedItemData";
+            if ($good_exists) {
+
+                # Already exists, just delete the bad one
+                $dbh->do(q{DELETE FROM systempreferences WHERE variable = "OAI-PMH:AutoUpdateSetEmbedItemData"});
+            } else {
+                $dbh->do(
+                    q{UPDATE systempreferences SET variable = 'OAI-PMH:AutoUpdateSetsEmbedItemData' WHERE variable = "OAI-PMH:AutoUpdateSetEmbedItemData"}
+                );
+            }
+
+            push @misspelled, "OAI-PMH:AutoUpdateSetsEmbedItemData";
         }
 
         # Fix capitalization issues breaking unit tests
