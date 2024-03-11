@@ -2846,7 +2846,10 @@ sub ModBiblioMarc {
         Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForModifierName'), $borrowername);
     }
 
-    Koha::Plugins->call( 'before_biblio_metadata_store', $record );
+    Koha::Plugins->call(
+        'before_biblio_action',
+        { action => 'save', payload => { biblio_id => $biblionumber, record => $record } }
+    );
 
     $m_rs->metadata( $record->as_xml_record($encoding) );
     $m_rs->store;
