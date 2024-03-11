@@ -119,6 +119,8 @@ SKIP: {
     like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
     $s->fill_form( $sample_data->{patron} );
     $driver->find_element('//button[@id="saverecord"]')->click;
+    my $borrowernumber = Koha::Patrons->_resultset->get_column('borrowernumber')->max;
+    $driver->get($base_url.'/members/moremember.pl?borrowernumber='.$borrowernumber);
     like( $driver->get_title(), qr(Patron details for $sample_data->{patron}{surname}), );
 
     ####$driver->get($base_url.'/members/members-home.pl');
