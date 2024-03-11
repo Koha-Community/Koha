@@ -149,8 +149,13 @@ sub after_hold_create {
     Koha::Exception->throw("after_hold_create called with parameter " . ref($param) );
 }
 
-sub before_biblio_metadata_store {
-    my ( $self, $record ) = @_;
+sub before_biblio_action {
+    my ( $self, $params ) = @_;
+
+    my $action   = $params->{action} // '';
+    my $payload  = $params->{payload};
+    my $bibli_id = $payload->{biblio_id};
+    my $record   = $payload->{record};
 
     $record->insert_fields_ordered(
         MARC::Field->new(

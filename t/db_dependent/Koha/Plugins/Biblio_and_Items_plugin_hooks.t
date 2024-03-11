@@ -88,7 +88,7 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'before_biblio_metadata_store() hooks tests' => sub {
+subtest 'before_biblio_action() hooks tests' => sub {
 
     plan tests => 5;
 
