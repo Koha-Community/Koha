@@ -97,9 +97,6 @@ environment variable to the pathname of a configuration file to use.
 #    file (/etc/koha/koha-conf.xml).
 # dbh
 #    A handle to the appropriate database for this context.
-# dbh_stack
-#    Used by &set_dbh and &restore_dbh to hold other database
-#    handles for this context.
 # Zconn
 #     A connection object for the Zebra server
 
@@ -602,14 +599,8 @@ Returns a database handle connected to the Koha database for the
 current context. If no connection has yet been made, this method
 creates one, and connects to the database.
 
-This database handle is cached for future use: if you call
-C<C4::Context-E<gt>dbh> twice, you will get the same handle both
-times. If you need a second database handle, use C<&new_dbh> and
-possibly C<&set_dbh>.
-
 =cut
 
-#'
 sub dbh
 {
     my $self = shift;
@@ -641,58 +632,6 @@ sub new_dbh
     my $self = shift;
 
     return &dbh({ new => 1 });
-}
-
-=head2 set_dbh
-
-  $my_dbh = C4::Connect->new_dbh;
-  C4::Connect->set_dbh($my_dbh);
-  ...
-  C4::Connect->restore_dbh;
-
-C<&set_dbh> saves the current database handle on a stack, then sets
-the current database handle to C<$my_dbh>.
-
-C<$my_dbh> is assumed to be a good database handle.
-
-=cut
-
-#'
-sub set_dbh
-{
-    my $self = shift;
-    my $new_dbh = shift;
-
-    # Save the current database handle on the handle stack.
-    # We assume that $new_dbh is all good: if the caller wants to
-    # screw himself by passing an invalid handle, that's fine by
-    # us.
-    push @{$context->{"dbh_stack"}}, $context->{"dbh"};
-    $context->{"dbh"} = $new_dbh;
-}
-
-=head2 restore_dbh
-
-  C4::Context->restore_dbh;
-
-Restores the database handle saved by an earlier call to
-C<C4::Context-E<gt>set_dbh>.
-
-=cut
-
-#'
-sub restore_dbh
-{
-    my $self = shift;
-
-    if ($#{$context->{"dbh_stack"}} < 0)
-    {
-        # Stack underflow
-        die "DBH stack underflow";
-    }
-
-    # Pop the old database handle and set it.
-    $context->{"dbh"} = pop @{$context->{"dbh_stack"}};
 }
 
 =head2 userenv
