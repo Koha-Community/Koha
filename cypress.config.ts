@@ -5,6 +5,7 @@ export default defineConfig({
     screenshotsFolder: "t/cypress/screenshots",
     videosFolder: "t/cypress/videos",
     defaultCommandTimeout: 10000,
+    requestTimeout: 10000,
 
     e2e: {
         setupNodeEvents(on, config) {
