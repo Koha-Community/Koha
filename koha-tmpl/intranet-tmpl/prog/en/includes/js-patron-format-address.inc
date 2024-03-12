@@ -7,7 +7,7 @@
 
         const roadtypes = [% To.json(AuthorisedValues.Get('ROADTYPE')) | $raw %];
         let roadtypes_map = roadtypes.reduce((map, r) => {
-            map[r.street_type] = r;
+            map[r.authorised_value] = r.lib;
             return map;
         }, {});
 
@@ -17,7 +17,7 @@
                 if ( data.address ) {
                     let roadtype_desc = '';
                     if ( data.street_type ) {
-                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type].street_type : data.street_type;
+                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type] : data.street_type;
                     }
                     address += include_li ? '<li class="patronaddress1">' : '';
                     address += escape_str(data.street_number) + ' ' + escape_str(data.address) + ' ' + escape_str(roadtype_desc);
@@ -59,10 +59,10 @@
                 if ( data.address ) {
                     let roadtype_desc = '';
                     if ( data.street_type ) {
-                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type].street_type : data.street_type;
+                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type] : data.street_type;
                     }
                     address += include_li ? '<li class="patronaddress1">' : ' ';
-                    address += escape_str(data.address) + ' ' + escape_str(roadtype_desc) + escape_str(data.street_number);
+                    address += escape_str(data.address) + ' ' + escape_str(roadtype_desc) + ' ' + escape_str(data.street_number);
                     address += include_li ? '</li>' : '';
                 }
             }
@@ -88,10 +88,10 @@
                 if ( data.address ) {
                     let roadtype_desc = '';
                     if ( data.street_type ) {
-                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type].street_type : data.street_type;
+                        roadtype_desc = roadtypes_map[data.street_type] ? roadtypes_map[data.street_type] : data.street_type;
                     }
                     address += include_li ? '<li class="patronaddress1">' : '';
-                    address += escape_str(data.street_number) + ' ' + escape_str(roadtype_desc) + escape_str(data.address);
+                    address += escape_str(data.street_number) + ' ' + escape_str(roadtype_desc) + ' ' + escape_str(data.address);
                     address += include_li ? '</li>' : '';
                 }
             }
