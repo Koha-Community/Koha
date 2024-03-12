@@ -43,6 +43,7 @@ use Koha::Holds;
 use C4::Context;
 use CGI::Session;
 use Koha::AuthorisedValues;
+use Koha::Checkouts::ReturnClaims;
 use Koha::CsvProfiles;
 use Koha::Patrons;
 use Koha::DateUtils qw( dt_from_string );
@@ -496,6 +497,31 @@ if (@$barcodes && $op eq 'cud-checkout') {
         }
     }
 
+    if ( C4::Context->preference('ClaimReturnedLostValue') ) {
+        my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
+
+        my $claims = Koha::Checkouts::ReturnClaims->search(
+            {
+                itemnumber => $item->id,
+            }
+        );
+        if ( $claims->count ) {
+            if ($autoClaimReturnCheckout) {
+                my $claim = $claims->next;
+
+                my $patron_id  = $patron->borrowernumber;
+                my $resolution = $autoClaimReturnCheckout;
+
+                $claim->resolve(
+                    {
+                        resolution  => $resolution,
+                        resolved_by => $patron_id,
+                    }
+                );
+                $template_params->{CLAIM_RESOLUTION} = $claim;
+            }
+        }
+    }
     if ($needsconfirmation->{RESERVE_WAITING} or $needsconfirmation->{RESERVED} or $needsconfirmation->{TRANSFERRED} or $needsconfirmation->{PROCESSING}){
         $template->param(
             reserveborrowernumber => $needsconfirmation->{'resborrowernumber'},

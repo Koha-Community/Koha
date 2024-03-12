@@ -83,6 +83,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AuthSuccessLog','0',NULL,'If enabled, log successful authentications','YesNo'),
 ('AutoApprovePatronProfileSettings', '0', '', 'Automatically approve patron profile changes from the OPAC.', 'YesNo'),
 ('autoBarcode','OFF','incremental|annual|hbyymmincr|EAN13|OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','Choice'),
+('AutoClaimReturnStatusOnCheckin','','NULL','When in use this system preference will automatically resolve the claim return and will update the lost authorized value upon check in.','Free'),
+('AutoClaimReturnStatusOnCheckout','','NULL','When in use this system preference will automatically resolve the claim return and will update the lost authorized value upon check out.','Free'),
 ('autoControlNumber','OFF','biblionumber|OFF','Used to autogenerate a Control Number: biblionumber will be as biblionumber, OFF will leave the field as it is;','Choice'),
 ('AutoCreateAuthorities','0',NULL,'Automatically create authorities that do not exist when cataloging records.','YesNo'),
 ('AutoCreditNumber', '', '', 'Automatically generate a number for account credits', 'Choice'),

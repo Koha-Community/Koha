@@ -747,6 +747,9 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'ReturnClaims' ) {
         $template->param( ReturnClaims => $messages->{ReturnClaims} );
+    }
+      elsif ( $code eq 'ClaimAutoResolved' ) {
+          $template->param( ClaimAutoResolved => $messages->{ClaimAutoResolved} );
     } elsif ( $code eq 'RecallFound' ) {
         ;
     } elsif ( $code eq 'RecallNeedsTransfer' ) {

@@ -191,7 +191,11 @@
                             [% END %]
 
                             <!-- Item has return claim(s) -->
-                            [% IF ( ReturnClaims ) %]
+                            [% IF ( ClaimAutoResolved ) %]
+                            <div class="dialog alert resolved-claim">
+                            <p><strong>The previously claimed returned item has been found, automatically resolving the associated claim.</strong></p>
+                            </div>
+                            [% ELSIF( ReturnClaims ) %]
                                 <div class="dialog alert return-claim">
                                     <h3>This item has been claimed as returned by:</h3>
                                     <ul>
