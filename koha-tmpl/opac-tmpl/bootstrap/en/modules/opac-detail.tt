@@ -494,9 +494,15 @@
                             [% END %]
                         [% END %]
 
-                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
-                            [% WRAPPER tab_item tabname= "author_identifiers" %]
-                                <span>Author identifiers</span>
+                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size || Koha.Preference( 'OPACAuthorInformation' ) && author_information.size %]
+                            [% WRAPPER tab_item tabname= "author_identifiers_info" %]
+                                [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size && Koha.Preference( 'OPACAuthorInformation' ) && author_information.size %]
+                                    <span>Author identifiers/information</span>
+                                [% ELSIF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                                    <span>Author identifiers</span>
+                                [% ELSIF Koha.Preference( 'OPACAuthorInformation' ) && author_information.size %]
+                                    <span>Author information</span>
+                                [% END %]
                             [% END %]
                         [% END %]
 
@@ -942,8 +948,19 @@
                             [% END # /tab_panel#images %]
                         [% END # / IF OPACLocalCoverImages && localimages.size %]
 
-                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
-                            [% WRAPPER tab_panel tabname="author_identifiers" %]
+                        [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size || Koha.Preference( 'OPACAuthorInformation' ) && author_information.size %]
+                            [% WRAPPER tab_panel tabname="author_identifiers_info" %]
+                                [% FOR author IN author_information %]
+                                    <div class="author_information">
+                                        <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
+                                        <ul>
+                                        [% FOR info IN author.information.keys %]
+                                            [% PROCESS "authority-information.inc" information => author.information.$info, info_type => info %]
+                                        [% END %]
+                                        </ul>
+                                    </div>
+                                [% END %]
+
                                 [% FOR author IN author_identifiers %]
                                     <div class="author_identifier">
                                         <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
@@ -954,7 +971,7 @@
                                         </ul>
                                     </div>
                                 [% END %]
-                            [% END # /tab_panel#author_identifiers %]
+                            [% END # /tab_panel#author_identifiers_info %]
                         [% END %]
 
                         [% IF ( NovelistSelectProfile && NovelistSelectView == 'below' && ( normalized_isbn || normalized_upc ) ) %]

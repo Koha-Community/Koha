@@ -1251,4 +1251,22 @@ if ( C4::Context->preference('OPACAuthorIdentifiers') ) {
     $template->param( author_identifiers => \@author_identifiers );
 }
 
+if ( C4::Context->preference('OPACAuthorInformation') ) {
+    my @author_information;
+    for my $author ( @{ $biblio->get_marc_authors } ) {
+        my $authid    = $author->{authoritylink};
+        my $authority = Koha::Authorities->find($authid);
+        next unless $authority;
+        my $information = $authority->get_information;
+        next unless $information;
+        my ($name) =
+          map  { $_->{value} }
+          grep { $_->{code} eq 'a' ? $_ : () }
+          @{ $author->{MARCAUTHOR_SUBFIELDS_LOOP} };
+        push @author_information,
+          { authid => $authid, name => $name, information => $information };
+    }
+    $template->param( author_information => \@author_information );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;

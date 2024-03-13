@@ -150,7 +150,7 @@ Return a list of identifiers of the authors which are in 024$2$a
 =cut
 
 sub get_identifiers {
-    my ( $self, $params ) = @_;
+    my ( $self ) = @_;
 
     my $record = $self->record;
 
@@ -164,6 +164,112 @@ sub get_identifiers {
 
     return \@identifiers;
 }
+
+=head3 get_information
+
+    my $information = $author->get_information;
+
+Return a list of information of the authors (syspref OPACAuthorInformation)
+
+=cut
+
+sub get_information {
+    my ($self) = @_;
+
+    my $record = $self->record;
+
+    # FIXME UNIMARC not supported yet.
+    return if C4::Context->preference('marcflavour') eq 'UNIMARC';
+
+    my $information;
+    for my $info ( split ',', C4::Context->preference('OPACAuthorInformation') ) {
+        if ( $info eq 'activity' ) {
+
+            # activity: Activity (372$a$s$t)
+            for my $field ( $record->field('372') ) {
+                my $sf_a = $field->subfield('a');
+                my $sf_s = $field->subfield('s');
+                my $sf_t = $field->subfield('t');
+                push @{ $information->{activity} },
+                    { field_of_activity => $sf_a, start_period => $sf_s, end_period => $sf_t, };
+            }
+        } elsif ( $info eq 'address' ) {
+
+            # address: Address (371$a$b$d$e)
+            for my $field ( $record->field('371') ) {
+                my $sf_a = $field->subfield('a');
+                my $sf_b = $field->subfield('b');
+                my $sf_d = $field->subfield('d');
+                my $sf_e = $field->subfield('e');
+                push @{ $information->{address} },
+                    { address => $sf_a, city => $sf_b, country => $sf_d, postal_code => $sf_e, };
+            }
+        } elsif ( $info eq 'associated_group' ) {
+
+            # associated_group: Associated group (373$a$s$t$u$v$0)
+            for my $field ( $record->field('373') ) {
+                my $sf_a = $field->subfield('a');
+                my $sf_s = $field->subfield('s');
+                my $sf_t = $field->subfield('t');
+                my $sf_u = $field->subfield('u');
+                my $sf_v = $field->subfield('v');
+                my $sf_0 = $field->subfield('0');
+                push @{ $information->{associated_group} },
+                    {
+                    associated_group      => $sf_a, start_period            => $sf_s, end_period => $sf_t, uri => $sf_u,
+                    source_of_information => $sf_v, authority_record_number => $sf_0,
+                    };
+            }
+        } elsif ( $info eq 'email_address' ) {
+
+            # email_address: Electronic mail address (371$m)
+            for my $field ( $record->field('371') ) {
+                my $sf_m = $field->subfield('m');
+                push @{ $information->{email_address} }, { email_address => $sf_m, };
+            }
+        } elsif ( $info eq 'occupation' ) {
+
+            # occupation: Occupation (374$a$s$t$u$v$0)
+            for my $field ( $record->field('374') ) {
+                my $sf_a = $field->subfield('a');
+                my $sf_s = $field->subfield('s');
+                my $sf_t = $field->subfield('t');
+                my $sf_u = $field->subfield('u');
+                my $sf_v = $field->subfield('v');
+                my $sf_0 = $field->subfield('0');
+                push @{ $information->{occupation} },
+                    {
+                    occupation            => $sf_a, start_period            => $sf_s, end_period => $sf_t, uri => $sf_u,
+                    source_of_information => $sf_v, authority_record_number => $sf_0,
+                    };
+            }
+        } elsif ( $info eq 'place_of_birth' ) {
+
+            # place_of_birth: Place of birth (370$a)
+            for my $field ( $record->field('370') ) {
+                my $sf_a = $field->subfield('a');
+                push @{ $information->{place_of_birth} }, { place_of_birth => $sf_a, };
+            }
+        } elsif ( $info eq 'place_of_death' ) {
+
+            # place_of_death: Place of death (370$b)
+            for my $field ( $record->field('370') ) {
+                my $sf_b = $field->subfield('b');
+                push @{ $information->{place_of_death} }, { place_of_death => $sf_b, };
+            }
+        } elsif ( $info eq 'uri' ) {
+
+            # uri: URI (371$u)
+            for my $field ( $record->field('371') ) {
+                my $sf_u = $field->subfield('u');
+                push @{ $information->{uri} }, { uri => $sf_u, };
+            }
+        }
+    }
+
+    return $information;
+}
+
 
 =head3 record
 
