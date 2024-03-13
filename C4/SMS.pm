@@ -25,8 +25,12 @@ C4::SMS - send SMS messages
 
 =head1 SYNOPSIS
 
-my $success = C4::SMS->send_sms({ message     => 'This is my text message',
-                                  destination => '212-555-1212' });
+my ( $success, $error ) = C4::SMS->send_sms(
+    {
+        message     => 'This is my text message',
+        destination => '212-555-1212'
+    }
+);
 
 =head1 DESCRIPTION
 
@@ -87,7 +91,7 @@ sub send_sms {
 
     # This allows the user to override the driver. See SMS::Send::Test
     my $driver = exists $params->{'driver'} ? $params->{'driver'} : $self->driver();
-    return unless $driver;
+    return ( undef, 'SMS_SEND_DRIVER_MISSING' ) unless $driver;
 
     my ($sent, $sender);
 
@@ -127,7 +131,7 @@ sub send_sms {
     #Catch those errors and fail the sms-sending gracefully.
     if ($@) {
         warn $@;
-        return;
+        return ( undef, $@ );
     }
     # warn 'failure' unless $sent;
     return $sent;

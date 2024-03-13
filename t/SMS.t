@@ -19,44 +19,52 @@ use Modern::Perl;
 
 use t::lib::Mocks;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 BEGIN {
-    use_ok('C4::SMS', qw( driver send_sms ));
+    use_ok( 'C4::SMS', qw( driver send_sms ) );
 }
 
-
 my $driver = 'my mock driver';
-t::lib::Mocks::mock_preference('SMSSendDriver', $driver);
+t::lib::Mocks::mock_preference( 'SMSSendDriver', $driver );
 is( C4::SMS->driver(), $driver, 'driver returns the SMSSendDriver correctly' );
 
-t::lib::Mocks::mock_preference('SMSSendUsername', 'username');
-t::lib::Mocks::mock_preference('SMSSendPassword', 'pwd');
+t::lib::Mocks::mock_preference( 'SMSSendUsername', 'username' );
+t::lib::Mocks::mock_preference( 'SMSSendPassword', 'pwd' );
 
-my $send_sms = C4::SMS->send_sms();
+my ( $send_sms, $error ) = C4::SMS->send_sms();
 is( $send_sms, undef, 'send_sms without arguments returns undef' );
 
-$send_sms = C4::SMS->send_sms({
-    destination => 'my destination',
-});
+($send_sms) = C4::SMS->send_sms(
+    {
+        destination => 'my destination',
+    }
+);
 is( $send_sms, undef, 'send_sms without message returns undef' );
 
-$send_sms = C4::SMS->send_sms({
-    message => 'my message',
-});
+($send_sms) = C4::SMS->send_sms(
+    {
+        message => 'my message',
+    }
+);
 is( $send_sms, undef, 'send_sms without destination returns undef' );
 
-$send_sms = C4::SMS->send_sms({
-    destination => 'my destination',
-    message => 'my message',
-    driver => '',
-});
-is( $send_sms, undef, 'send_sms with an undef driver returns undef' );
+( $send_sms, $error ) = C4::SMS->send_sms(
+    {
+        destination => 'my destination',
+        message     => 'my message',
+        driver      => '',
+    }
+);
+is( $send_sms, undef,                     'send_sms with an undef driver returns undef' );
+is( $error,    'SMS_SEND_DRIVER_MISSING', 'Error code returned is SMS_SEND_DRIVER_MISSING' );
 
-$send_sms = C4::SMS->send_sms({
-    destination => '+33123456789',
-    message => 'my message',
-    driver => 'Test',
-});
+( $send_sms, $error ) = C4::SMS->send_sms(
+    {
+        destination => '+33123456789',
+        message     => 'my message',
+        driver      => 'Test',
+    }
+);
 is( $send_sms, 1, 'send_sms returns 1' );
 

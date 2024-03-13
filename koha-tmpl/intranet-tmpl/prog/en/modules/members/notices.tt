@@ -108,9 +108,11 @@
                                                     [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]<span class="clearfix">Missing SMS number</span>
                                                     [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]<span class="clearfix">Message is duplicate</span>
                                                     [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]<span class="clearfix">No notes from SMS driver</span>
+                                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]<span class="clearfix">The SMS driver could not be loaded</span>
                                                     [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]<span class="clearfix">Unhandled email failure, check the logs for further details</span>
                                                     [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]<span class="clearfix">Unknown error</span>
-                                                    [% ELSE %]<span class="clearfix">Error occurred while sending email</span>
+                                                    [% ELSE %]
+                                                        <span class="clearfix">Message failed to send with the following error: [% QUEUED_MESSAGE.failure_code | html %]</span>
                                                     [% END %]
                                                 [% END %]
                                                 [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]

@@ -1598,7 +1598,7 @@ sub _send_message_by_sms {
         return;
     }
 
-    my $success = C4::SMS->send_sms(
+    my ( $success, $error ) = C4::SMS->send_sms(
         {
             destination => $patron->smsalertnumber,
             message     => $message->{'content'},
@@ -1619,7 +1619,7 @@ sub _send_message_by_sms {
             {
                 message_id   => $message->{'message_id'},
                 status       => 'failed',
-                failure_code => 'NO_NOTES'
+                failure_code => $error || 'NO_NOTES',
             }
         );
     }
