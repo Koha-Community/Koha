@@ -556,22 +556,24 @@ RETRY:
         # end.
         $inf = $max * $num_tasks + 1;
 
+        my @m0 = map {[(undef) x  $num_tasks]} (1..$num_agents);
         for ( my $i = 0 ; $i < $num_agents ; $i++ ) {
             for ( my $j = 0 ; $j < $num_tasks ; $j++ ) {
                 if ( $m[$i][$j] < 0 ) {
-
                     # Bias towards not allocating items to holds closer to
                     # the end of the queue in the queue if not all holds
                     # can be filled by representing infinity with
                     # different values.
-                    $m[$i][$j] = $inf + ( $num_tasks - $j );
+                    $m0[$i][$j] = $inf + ( $num_tasks - $j );
+                } else {
+                    $m0[$i][$j] = $m[$i][$j];
                 }
             }
         }
 
         my $res = [ (undef) x $num_agents ];
 
-        Algorithm::Munkres::assign( \@m, $res );
+        Algorithm::Munkres::assign( \@m0, $res );
 
         my @unallocated = ();
         @allocated = ();
@@ -584,7 +586,7 @@ RETRY:
                 # allocated to nonexisting items ($j >= 0).  We just ignore these.
                 next;
             }
-            if ( $m[$i][$j] > $max ) {
+            if ( $m0[$i][$j] > $max ) {
 
                 # No finite cost item was assigned to this hold.
                 push @unallocated, $j;
