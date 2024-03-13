@@ -144,13 +144,13 @@
                             </form>
                             <form id="patron_form" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="" />
+                                <input type="hidden" name="op" value="cud-" />
                                 <input type="hidden" name="batch_id" value="" />
                                 <input type="hidden" name="label_id" value="" />
                             </form>
                             <form id="batch_form" action="/cgi-bin/koha/patroncards/manage.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="" />
+                                <input type="hidden" name="op" value="cud-" />
                             </form>
                             [% ELSE %]
                                 <fieldset class="rows" style="border-bottom: 0px; border: 0px;">

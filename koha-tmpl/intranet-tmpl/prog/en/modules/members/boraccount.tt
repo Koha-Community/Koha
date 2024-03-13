@@ -244,7 +244,7 @@
 
     <!-- Issue payout modal -->
     <div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
-        <form  id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
+        <form id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="payoutline">
             <input type="hidden" name="op" value="cud-payout">
@@ -288,7 +288,6 @@
                         </fieldset> <!-- /.rows -->
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
-                        <input type="hidden" name="op" value="payout">
                         <button type="submit" class="btn btn-default" id="borr_payout_confirm">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div> <!-- /.modal-footer -->
@@ -346,7 +345,6 @@
                         </fieldset> <!-- /.rows -->
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
-                        <input type="hidden" name="op" value="refund">
                         <button type="submit" class="btn btn-default" id="borr_refund_confirm">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div> <!-- /.modal-footer -->
@@ -386,7 +384,6 @@
                         </fieldset> <!-- /.rows -->
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
-                        <input type="hidden" name="op" value="discount">
                         <button type="submit" class="btn btn-default">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div> <!-- /.modal-footer -->

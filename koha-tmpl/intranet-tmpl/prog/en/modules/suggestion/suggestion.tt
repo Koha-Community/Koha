@@ -722,12 +722,12 @@
                         [% WRAPPER tab_panel tabname= suggestion.suggestiontype %]
                             <form id="action_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="" />[%# filled by click event %]
+                                <input type="hidden" name="op" value="cud-" />[%# filled by click event %]
                                 <input type="hidden" name="suggestionid" value="" />
                             </form>
                             <form class="update_suggestions" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
                                 [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="" />[%# filled by submit %]
+                                <input type="hidden" name="op" value="cud-" />[%# filled by submit %]
 
                                 [% IF suggestion.suggestions.size %]
                                     <p>

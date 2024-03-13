@@ -368,7 +368,7 @@ if ( $backends_available ) {
 
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
-    } elsif ( $op eq 'check_out') {
+    } elsif ( $op eq 'cud-check_out') {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->check_out($params);
         $template->param(
@@ -409,7 +409,7 @@ if ( $backends_available ) {
             }
         }
 
-    } elsif ( $op eq "save_comment" ) {
+    } elsif ( $op eq "cud-save_comment" ) {
         my $comment = Koha::Illcomment->new({
             illrequest_id  => scalar $params->{illrequest_id},
             borrowernumber => $patronnumber,

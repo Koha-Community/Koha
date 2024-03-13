@@ -1417,9 +1417,10 @@
                         </table>
                     </form>
 
+                    <!-- This is a placeholder form to be filled by JS functions attached to buttons/links -->
                     <form id="delete_form" action="/cgi-bin/koha/admin/smart-rules.pl" method="post">
                         [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="" />
+                        <input type="hidden" name="op" value="cud-" />
                         <input type="hidden" name="itemtype" value="" />
                         <input type="hidden" name="categorycode" value="" />
                         <input type="hidden" name="branch" value="" />

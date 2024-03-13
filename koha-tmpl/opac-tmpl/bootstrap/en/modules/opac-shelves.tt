@@ -245,8 +245,7 @@
 
                                         [% IF can_manage_shelf %]
                                             <span class="sep">|</span>
-                                            <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
-                                                [% INCLUDE 'csrf-token.inc' %]
+                                            <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                                 <input type="hidden" name="op" value="edit_form" />
                                                 <input type="hidden" name="referer" value="view" />
                                                 <input type='hidden' name='public' value='[% shelf.public | html %]' />
@@ -554,8 +553,7 @@
                                     <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a>
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
-                                        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
-                                            [% INCLUDE 'csrf-token.inc' %]
+                                        <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="d-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
                                             <input type="hidden" name="public" value="[% shelf.public | html %]" />

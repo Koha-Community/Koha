@@ -1418,8 +1418,7 @@
                 [% END # /IF ( editsql ) %]
 
                 [% IF ( errors ) %]
-                    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
+                    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
                         <div class="dialog alert">
                             <strong>The following error was encountered:</strong><br />
                             [% FOREACH error IN errors %]

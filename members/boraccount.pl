@@ -156,7 +156,7 @@ if ( $op eq 'cud-refund' ) {
     );
 }
 
-if ( $op eq 'discount' ) {
+if ( $op eq 'cud-discount' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $charge_id        = scalar $input->param('accountlines_id');
     my $charge           = Koha::Account::Lines->find($charge_id);

@@ -96,8 +96,7 @@ a.add, a.delete {
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
             </form>
 
-            <form method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form method="get">
                 <button type="submit" class="deny"><i class="fa fa-fw fa-times"></i> No, do not reset mappings</button>
             </form>
         </div>
@@ -505,7 +504,12 @@ a.add, a.delete {
         [% END # /WRAPPER tabs %]
 
         <fieldset class="action">
-            <button class="btn btn-primary" type="submit" name="op" value="cud-edit"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Save</button>
+            <input type="hidden" name="op" value="cud-edit">
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> Save</button>
+        </fieldset>
+    </form>
+    <form method="get">
+        <fieldset class="action">
             <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Reset mappings</button>
         </fieldset>
     </form>

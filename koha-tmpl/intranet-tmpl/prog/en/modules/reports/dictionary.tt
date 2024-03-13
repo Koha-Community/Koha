@@ -87,8 +87,7 @@
 		[% IF ( definitions ) %]
             <div class="page-section">
                 <h2>Current terms</h2>
-                <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
+                <form action="/cgi-bin/koha/reports/dictionary.pl" method="get">
                     <input type="hidden" name="op" value="list" />
                     [% IF ( areas ) %]
                         Filter by area

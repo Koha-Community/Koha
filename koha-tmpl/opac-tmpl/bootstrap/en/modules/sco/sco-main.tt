@@ -115,8 +115,7 @@
                                 </form>
                             [% END %]
 
-                            <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
+                            <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="get">
                                 <legend class="sr-only">Error</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -175,8 +174,7 @@
                                 </form>
                             [% END %]
 
-                            <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
+                            <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="get">
                                 <legend class="sr-only">Cancel</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />

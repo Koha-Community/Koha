@@ -86,7 +86,7 @@ while ( my ( $key, $value ) = each(%{Koha::SearchEngine::Elasticsearch::QueryBui
     $search_fields_aliases->{$value} = $field_aliases;
 }
 
-if ( $op eq 'edit' ) {
+if ( $op eq 'cud-edit' ) {
 
     $schema->storage->txn_begin;
 

@@ -265,7 +265,7 @@
                                     </ol>
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="hidden" value="check_out" name="op">
+                                    <input type="hidden" value="cud-check_out" name="op">
                                     <input type="hidden" value="form" name="stage">
                                     [% IF items.size == 1 %]
                                         <input name="branchcode" type="hidden" value="[% branchcode | html %]">
@@ -789,7 +789,7 @@
                                 <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
                                 <div id="addcomment" class="content_hidden">
                                     <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
-                                        <input type="hidden" value="save_comment" name="op">
+                                        <input type="hidden" value="cud-save_comment" name="op">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                                         <fieldset class="rows">
