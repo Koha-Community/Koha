@@ -1753,8 +1753,8 @@ sub api_auth {
     my ( $username, $password, $branch ) = @_;
     $ENV{REMOTE_USER} = $username;
     my $query = CGI->new();
-    $query->param( userid   => $username );
-    $query->param( password => $password );
+    $query->param( login_userid   => $username );
+    $query->param( login_password => $password );
     if ($branch) {
         $query->param( branch => $branch );
     }
