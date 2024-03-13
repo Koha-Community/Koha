@@ -39,8 +39,10 @@ for my $file ( @files ) {
     push @errors, sprintf "%s:%s", $file, join (",", @e) if @e;
 }
 
-is( @errors, 0, "The <form> in the following files are missing it's corresponding op parameter, or op does not start with 'cud-' (see bug 34478)" )
-    or diag( Dumper @errors );
+is(
+    @errors, 0,
+    "The <form> in the following files are missing it's corresponding op parameter, or op does not start with 'cud-' (see bug 34478)"
+) or diag( Dumper @errors );
 
 sub catch_missing_op {
     my ($file) = @_;
@@ -59,7 +61,7 @@ sub catch_missing_op {
         if ( $in_form && $line =~ m{name="op"} ) {
             $has_op = 1;
             if ( $line =~ m{value="(.*)"} ) {
-                $op_value = $1
+                $op_value = $1;
             }
         }
         if ( $in_form && $line =~ m{</form} ) {
