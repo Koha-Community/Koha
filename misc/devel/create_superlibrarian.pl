@@ -18,11 +18,18 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
+use Try::Tiny    qw(catch try);
+
+use Koha::Database;
+use Koha::Exceptions::Object;
+use Koha::Libraries;
+use Koha::Patron::Categories;
+use Koha::Patrons;
 
 use Koha::Script;
-use Koha::Patrons;
 
 my ( $help, $surname, $userid, $password, $branchcode, $categorycode, $cardnumber );
 GetOptions(
@@ -41,16 +48,65 @@ pod2usage("branchcode is mandatory")   unless $branchcode;
 pod2usage("categorycode is mandatory") unless $categorycode;
 pod2usage("cardnumber is mandatory")   unless $cardnumber;
 
-my $patron = Koha::Patron->new({
-    surname      => $surname,
-    userid       => $userid,
-    cardnumber   => $cardnumber,
-    branchcode   => $branchcode,
-    categorycode => $categorycode,
-    flags        => 1,
-})->store;
+try {
+    Koha::Database->new->schema->txn_do(
+        sub {
+            Koha::Exceptions::Object::FKConstraint->throw(
+                error     => 'Broken FK constraint',
+                broken_fk => 'branchcode'
+            ) unless Koha::Libraries->find($branchcode);
 
-$patron->set_password({ password => $password, skip_validation => 1 });
+            Koha::Exceptions::Object::DuplicateID->throw( duplicate_id => 'userid' )
+                if Koha::Patrons->find( { userid => $userid } );
+
+            Koha::Exceptions::Object::DuplicateID->throw( duplicate_id => 'cardnumber' )
+                if Koha::Patrons->find( { cardnumber => $cardnumber } );
+
+            my $patron = Koha::Patron->new(
+                {
+                    surname      => $surname,
+                    userid       => $userid,
+                    cardnumber   => $cardnumber,
+                    branchcode   => $branchcode,
+                    categorycode => $categorycode,
+                    flags        => 1,               # superlibrarian
+                }
+            )->store;
+
+            # password is set on a separate step (store would set the hashed password)
+            $patron->set_password( { password => $password, skip_validation => 1 } );
+        }
+    );
+} catch {
+    if ( ref($_) eq 'Koha::Exceptions::Object::FKConstraint' ) {
+
+        my $value =
+              $_->broken_fk eq 'branchcode'   ? $branchcode
+            : $_->broken_fk eq 'categorycode' ? $categorycode
+            :                                   'ERROR';
+
+        my @valid_values =
+              $_->broken_fk eq 'branchcode'   ? Koha::Libraries->new->get_column('branchcode')
+            : $_->broken_fk eq 'categorycode' ? Koha::Patron::Categories->new->get_column('categorycode')
+            :                                   ('UNEXPECTED');
+
+        printf STDERR "ERROR: '%s' is not valid for the '%s' field\n", $value, $_->broken_fk;
+        printf STDERR "Possible values are: " . join( ', ', @valid_values ) . "\n";
+
+    } elsif ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
+
+        my $value =
+              $_->duplicate_id eq 'cardnumber' ? $cardnumber
+            : $_->duplicate_id eq 'userid'     ? $userid
+            :                                    'ERROR';
+
+        printf STDERR "Field '%s' must be unique. Value '%s' is used already.\n", $_->duplicate_id, $value;
+    } else {
+        print STDERR "Uncaught exception: $_\n";
+    }
+
+    exit 1;
+};
 
 =head1 NAME
 
