@@ -49,313 +49,342 @@
             <main>
                 [% INCLUDE 'messages.inc' %]
 
-    <h1>Inventory</h1>
-    [% IF (moddatecount) %]<div class="dialog message">[% moddatecount | html %] items modified : datelastseen set to [% date | $KohaDates with_hours => 1 %]</div>
-    <div class="dialog alert">Number of potential barcodes read: [% LinesRead | html %]</div>[% END %]
-    [% IF (errorfile) %]<div class="dialog alert">[% errorfile | html %] can't be opened</div>[% END %]
-    [% IF (err_length && err_length==1) %]<div class="dialog alert">There was 1 barcode that was too long.</div>[% END %]
-    [% IF (err_length && err_length>1) %]<div class="dialog alert">There were [% err_length | html %] barcodes that were too long.</div>[% END %]
-    [% IF (err_data && err_data==1) %]<div class="dialog alert">There was 1 barcode that contained at least one unprintable character.</div>[% END %]
-    [% IF (err_data && err_data>1) %]<div class="dialog alert">There were [% err_data | html %] barcodes that contained at least one unprintable character.</div>[% END %]
-    [% FOREACH error IN errorloop %]
-        <div class="dialog alert">
-            [% error.barcode | html %]
-            [% IF (error.ERR_BARCODE) %]: <span>Barcode not found.</span>[% END %]
-            [% IF (error.ERR_WTHDRAWN) %]: <span>Item withdrawn.</span>[% END %]
-            [% IF (error.ERR_ONLOAN_RET) %]: <span>Item was on loan. It was checked in before being marked as seen.</span>[% END %]
-            [% IF (error.ERR_ONLOAN_NOT_RET) %]: <span>Item was on loan and could not be checked in.</span>[% END %]
-        </div>
-    [% END %]
-       [% UNLESS op %]
-
-    <form method="post" id="inventory_form" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
-        [% INCLUDE 'csrf-token.inc' %]
-        <fieldset class="rows">
-          <legend>Use a barcode file</legend>
-          <ol>
-            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" />
-            <input type="button" id="resetuploadbarcodes" name="resetuploadbarcodes" value="Reset" /></li>
-          </ol>
-        </fieldset>
-        <fieldset class="rows">
-            <legend>Or scan items one by one</legend>
-            <ol>
-                <li>
-                  <label for="barcodelist">Barcode list (one barcode per line): </label>
-                  <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
-                </li>
-            </ol>
-        </fieldset>
-        <fieldset class="rows">
-            <legend>Parameters</legend>
-            <ol>
-                <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | html %]" class="flatpickr" /></li>
-                <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
-                <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
-                <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
-            </ol>
-        </fieldset>
-        <fieldset class="rows">
-        <legend>Item location filters</legend>
-        <ol><li>
-        <label for="branch">Location: </label>
-            <input type="radio" name="branch" value="homebranch"> Home library</input>
-            <input type="radio" name="branch" value="holdingbranch"> Current library</input>
-        </li><li>
-        <label for="branchloop">Library: </label><select id="branchloop" name="branchcode" style="width:12em;">
-            <option value="">All libraries</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
-        </select>
-        </li>
-        [% IF (authorised_values) %]
-        <li>
-            <label for="locationloop">Shelving location (items.location) is: </label>
-        <select id="locationloop" name="location">
-                <option value="">Filter location</option>
-        [% FOREACH value IN authorised_values %]
-            [% IF (value.selected) %]
-                <option value="[% value.authorised_value | html %]" selected="selected">[% value.lib | html %]</option>
-            [% ELSE %]
-                <option value="[% value.authorised_value | html %]">[% value.lib | html %]</option>
-            [% END %]
-        [% END %]
-        </select>        </li>
-        [% END %]
-        [% SET ccodes = AuthorisedValues.GetAuthValueDropbox('CCODE') %]
-        [% IF ( ccodes.count > 0 ) %]
-        <li>
-            <label for="ccode">Collection code: </label>
-            <select id="ccodeloop" name="ccode">
-                        <option value="">Filter collection</option>
-                [% FOREACH cc IN ccodes %]
-                    [% IF (ccode == cc.authorised_value) %]
-                        <option value="[% cc.authorised_value | html %]" selected="selected">[% cc.lib | html %]</option>
-                    [% ELSE %]
-                        <option value="[% cc.authorised_value | html %]">[% cc.lib | html %]</option>
-                    [% END %]
-                [% END %]
-            </select>
-        </li>
-        [% END %]
-        <li>
-            <label for="minlocation">Item call number between: </label>
-                <input type="text" name="minlocation" id="minlocation" value="[% minlocation | html %]" /> (items.itemcallnumber)  </li>
-           <li><label for="maxlocation">...and: </label>
-                <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
-           <li>
-            <label for="class_source">Call number classification scheme</label>
-            <select name="class_source">
-            [% FOREACH class_source IN class_sources %]
-                [% IF class_source.cn_source == pref_class %]
-                <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %] (default)</option>
-                [% ELSE %]
-                <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
-                [% END %]
-            [% END %]
-            </select>
-          </li>
-    </ol>
-    </fieldset>
-
-    <fieldset class="rows" id="optionalfilters">
-            <legend>Optional filters for inventory list or comparing barcodes</legend>
-            <span class="hint">Scanned items are expected to match one of the selected "not for loan" criteria if any are checked.</span>
-            <br/>
-            <div id="statuses" style="display: block;">
-                  [% FOREACH status IN statuses %]
-                      [% IF (status.values) %]
-                          <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
-                              <legend>[% status.fieldname | html %]</legend>
-                              <ul id="statuses-[% fieldname | html %]" style="display: inline;">
-                              [% FOREACH value IN status.values %]
-                                  [% IF (value.lib) %]
-                                    <li style="list-style: none;">
-                                    <label for="[% value.id | html %]">
-                                        [% IF ( status.fieldname == 'items.notforloan' && value.authorised_value == 0 && value.lib == '__IGNORE__' ) %]
-                                            For loan
-                                        [% ELSE %]
-                                            [% value.lib | html %]
-                                        [% END %]
-                                    </label>
-                                    <input type="checkbox" name="status-[% status.fieldname | html %]-[% value.authorised_value | html %]" id="[% value.authorised_value | html %]" />
-                                    </li>
-                                  [% END %]
-                              [% END %]
-                              </ul>
-                          </fieldset>
-                      [% END %]
-                  [% END %]
-                </div>
-        <ol>
-        <li>
-            <br/>
-            <label for="datelastseen">Last inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | html %]" class="flatpickr" />
-            (Skip records marked as seen on or after this date.)
-        </li>
-        <li>
-            <label for="ignoreissued">Skip items on loan: </label>
-            [% IF (ignoreissued) %]
-                <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" id="ignoreissued" name="ignoreissued" />
-            [% END %]
-        </li>
-        <li>
-            <label for="ignore_waiting_holds">Skip items on hold awaiting pickup: </label>
-            <input type="checkbox" id="ignore_waiting_holds" name="ignore_waiting_holds" />
-        </li>
-        <li>
-            <label>Item types: </label>
-            <div class="branchselector">
-                <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-times"></i> Clear all</a></p>
-                <div class="branchgridrow">
-                    [% FOREACH itemtype IN itemtypes %]
-                        <div class="branchgriditem">
-                            <input id="itemtype-[% itemtype.itemtype | html %]" class="branch_select" type="checkbox" name="itemtype-[% itemtype.itemtype | html %]" value="[% itemtype.itemtype | html %]" />
-                            <label for="itemtype-[% itemtype.itemtype | html %]">[% itemtype.description | html %]</label>
+                <h1>Inventory</h1>
+                [% IF (moddatecount) %]<div class="dialog message">[% moddatecount | html %] items modified : datelastseen set to [% date | $KohaDates with_hours => 1 %]</div>
+                    <div class="dialog alert">Number of potential barcodes read: [% LinesRead | html %]</div>[% END %]
+                    [% IF (errorfile) %]<div class="dialog alert">[% errorfile | html %] can't be opened</div>[% END %]
+                    [% IF (err_length && err_length==1) %]<div class="dialog alert">There was 1 barcode that was too long.</div>[% END %]
+                    [% IF (err_length && err_length>1) %]<div class="dialog alert">There were [% err_length | html %] barcodes that were too long.</div>[% END %]
+                    [% IF (err_data && err_data==1) %]<div class="dialog alert">There was 1 barcode that contained at least one unprintable character.</div>[% END %]
+                    [% IF (err_data && err_data>1) %]<div class="dialog alert">There were [% err_data | html %] barcodes that contained at least one unprintable character.</div>[% END %]
+                    [% FOREACH error IN errorloop %]
+                        <div class="dialog alert">
+                            [% error.barcode | html %]
+                            [% IF (error.ERR_BARCODE) %]: <span>Barcode not found.</span>[% END %]
+                            [% IF (error.ERR_WTHDRAWN) %]: <span>Item withdrawn.</span>[% END %]
+                            [% IF (error.ERR_ONLOAN_RET) %]: <span>Item was on loan. It was checked in before being marked as seen.</span>[% END %]
+                            [% IF (error.ERR_ONLOAN_NOT_RET) %]: <span>Item was on loan and could not be checked in.</span>[% END %]
                         </div>
-                        [% IF loop.count() % 4 == 0 && !loop.last() %]
-                            </div>
-                            <div class="branchgridrow">
-                        [% END %]
-                    [% END %]
-                </div>
-            </div>
-        </li>
-
-        </ol>
-
-    </fieldset>
-
-        <fieldset class="rows">
-          <legend>Additional options</legend>
-          <ol>
-
-        <li>
-           <label for="CSVexport">Export to CSV file: </label>
-           <input type="checkbox" name="CSVexport" id="CSVexport" />
-        </li>
-        </ol>
-            <input type="hidden" name="op" value="do_it" />
-  </fieldset>
-
-            <fieldset class="action"><input type="submit" class="btn btn-primary" value="Submit" /></fieldset>
-    </form>
-
-    [% END %]
-    [% IF (op) %]
-    <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="minlocation" value="[% minlocation | html %]" />
-    <input type="hidden" name="maxlocation" value="[% maxlocation | html %]" />
-    <input type="hidden" name="location" value="[% location | html %]" />
-    <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
-    <input type="hidden" name="datelastseen" value="[% datelastseen | html %]" />
-    <input type="hidden" name="ccode" value="[% ccode | html %]" />
-
-    [% UNLESS uploadedbarcodesflag %]
-      <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
-    [% END %]
-
-    <div class="page-section">
-    <table id="inventoryt">
-    <thead>
-        <tr>
-            [% UNLESS uploadedbarcodesflag %]<th>Seen</th>[% END %]
-            <th>Barcode</th>
-            <th>Call number</th>
-            <th>Library</th>
-            <th>Collection code</th>
-            <th class="anti-the">Title</th>
-            <th>Not for loan</th>
-            <th>Lost</th>
-            <th>Damaged</th>
-            <th>Withdrawn</th>
-            <th>Last seen</th>
-            <th>Problems</th>
-        </tr>
-    </thead>
-    <tbody>
-    [% FOREACH result IN loop %]
-        <tr>
-            [% UNLESS uploadedbarcodesflag %]
-              <td>
-                <input type="checkbox" name="SEEN-[% result.itemnumber | html %]" value="1" />
-              </td>
-            [% END %]
-            <td>
-            [% result.barcode | html %]
-            </td>
-            <td data-order="[% result.cn_sort | html %]">
-                [% result.itemcallnumber | html %]
-            </td>
-            <td>
-                [% Branches.GetName( result.homebranch ) | html %]
-                <span class="shelvingloc">[% result.location | html %]</span>
-            </td>
-            <td>
-                <span class="ccode">[% result.ccode | html %]</span>
-            </td>
-            <td>
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber | uri %]" class="openWin">[% result.title | html %]</a>
-                [% IF ( result.author ) %]
-                    by <span class="author">[% result.author | html %]</span>
                 [% END %]
-            </td>
-            <td>
-            [% result.notforloan | html %]
-            </td>
-            <td>
-            [% result.itemlost | html %]
-            </td>
-            <td>
-            [% result.damaged | html %]
-            </td>
-            <td>
-            [% result.withdrawn | html %]
-            </td>
-            <td data-order="[% result.datelastseen | html %]">
-                [% result.datelastseen | $KohaDates with_hours => 1 %]
-            </td>
-            <td>
-            [% FOREACH problem IN result.problems %]
-                [% IF problem.key == 'wrongplace' %]
-                    <span>Found in wrong place</span><br/>
-                [% ELSIF problem.key == 'changestatus' %]
-                    [% IF result.notforloan %]
-                        <span>Item has unselected "Not for loan" status "[% result.notforloan | html %]"</span><br/>
-                    [% ELSE %]
-                        <span>Items has no "not for loan" status</span><br/>
-                    [% END %]
-                [% ELSIF problem.key == 'not_scanned' %]
-                    <span>Missing (not scanned)</span><br/>
-                [% ELSIF problem.key == 'checkedout' %]
-                    <span>Still checked out</span><br/>
-                [% ELSIF problem.key == 'no_barcode' %]
-                    <span>No barcode</span><br/>
-                [% ELSIF problem.key == 'out_of_order' %]
-                    <span>Item may be shelved out of order</span><br/>
+
+                [% UNLESS op %]
+                <form method="post" id="inventory_form" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="do_it" />
+
+                    <fieldset class="rows">
+                        <legend>Use a barcode file</legend>
+                        <ol>
+                            <li>
+                                <label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" />
+                                <input type="button" id="resetuploadbarcodes" name="resetuploadbarcodes" value="Reset" />
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="rows">
+                        <legend>Or scan items one by one</legend>
+                        <ol>
+                            <li>
+                                <label for="barcodelist">Barcode list (one barcode per line): </label>
+                                <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="rows">
+                        <legend>Parameters</legend>
+                        <ol>
+                            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | html %]" class="flatpickr" /></li>
+                            <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
+                            <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
+                            <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="rows">
+                        <legend>Item location filters</legend>
+                        <ol>
+                            <li>
+                                <label for="branch">Location: </label>
+                                <input type="radio" name="branch" value="homebranch"> Home library</input>
+                                <input type="radio" name="branch" value="holdingbranch"> Current library</input>
+                            </li>
+
+                            <li>
+                                <label for="branchloop">Library: </label>
+                                <select id="branchloop" name="branchcode" style="width:12em;">
+                                    <option value="">All libraries</option>
+                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                                </select>
+                            </li>
+
+                            [% IF (authorised_values) %]
+                                <li>
+                                    <label for="locationloop">Shelving location (items.location) is: </label>
+                                    <select id="locationloop" name="location">
+                                        <option value="">Filter location</option>
+                                        [% FOREACH value IN authorised_values %]
+                                            [% IF (value.selected) %]
+                                                <option value="[% value.authorised_value | html %]" selected="selected">[% value.lib | html %]</option>
+                                            [% ELSE %]
+                                            <option value="[% value.authorised_value | html %]">[% value.lib | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                            [% END %]
+
+                            [% SET ccodes = AuthorisedValues.GetAuthValueDropbox('CCODE') %]
+                            [% IF ( ccodes.count > 0 ) %]
+                                <li>
+                                    <label for="ccode">Collection code: </label>
+                                    <select id="ccodeloop" name="ccode">
+                                        <option value="">Filter collection</option>
+                                        [% FOREACH cc IN ccodes %]
+                                            [% IF (ccode == cc.authorised_value) %]
+                                                <option value="[% cc.authorised_value | html %]" selected="selected">[% cc.lib | html %]</option>
+                                            [% ELSE %]
+                                                <option value="[% cc.authorised_value | html %]">[% cc.lib | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                            [% END %]
+
+                            <li>
+                                <label for="minlocation">Item call number between: </label>
+                                <input type="text" name="minlocation" id="minlocation" value="[% minlocation | html %]" /> (items.itemcallnumber)
+                            </li>
+                            <li>
+                                <label for="maxlocation">...and: </label>
+                                <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
+                                <li>
+                                    <label for="class_source">Call number classification scheme</label>
+                                    <select name="class_source">
+                                        [% FOREACH class_source IN class_sources %]
+                                            [% IF class_source.cn_source == pref_class %]
+                                                <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %] (default)</option>
+                                            [% ELSE %]
+                                                <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="rows" id="optionalfilters">
+                        <legend>Optional filters for inventory list or comparing barcodes</legend>
+                        <span class="hint">Scanned items are expected to match one of the selected "not for loan" criteria if any are checked.</span>
+                        <br/>
+                        <div id="statuses" style="display: block;">
+                            [% FOREACH status IN statuses %]
+                                [% IF (status.values) %]
+                                    <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
+                                        <legend>[% status.fieldname | html %]</legend>
+                                        <ul id="statuses-[% fieldname | html %]" style="display: inline;">
+                                            [% FOREACH value IN status.values %]
+                                                [% IF (value.lib) %]
+                                                    <li style="list-style: none;">
+                                                        <label for="[% value.id | html %]">
+                                                            [% IF ( status.fieldname == 'items.notforloan' && value.authorised_value == 0 && value.lib == '__IGNORE__' ) %]
+                                                                For loan
+                                                            [% ELSE %]
+                                                                [% value.lib | html %]
+                                                            [% END %]
+                                                        </label>
+                                                        <input type="checkbox" name="status-[% status.fieldname | html %]-[% value.authorised_value | html %]" id="[% value.authorised_value | html %]" />
+                                                    </li>
+                                                [% END %]
+                                            [% END %]
+                                        </ul>
+                                    </fieldset>
+                                [% END %]
+                            [% END %]
+                        </div>
+
+                        <ol>
+                            <li>
+                                <br/>
+                                <label for="datelastseen">Last inventory date:</label>
+                                <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | html %]" class="flatpickr" />
+                                (Skip records marked as seen on or after this date.)
+                            </li>
+                            <li>
+                                <label for="ignoreissued">Skip items on loan: </label>
+                                [% IF (ignoreissued) %]
+                                    <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" />
+                                [% ELSE %]
+                                    <input type="checkbox" id="ignoreissued" name="ignoreissued" />
+                                [% END %]
+                            </li>
+                            <li>
+                                <label for="ignore_waiting_holds">Skip items on hold awaiting pickup: </label>
+                                <input type="checkbox" id="ignore_waiting_holds" name="ignore_waiting_holds" />
+                            </li>
+                            <li>
+                                <label>Item types: </label>
+                                <div class="branchselector">
+                                    <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-times"></i> Clear all</a></p>
+                                    <div class="branchgridrow">
+                                        [% FOREACH itemtype IN itemtypes %]
+                                            <div class="branchgriditem">
+                                                <input id="itemtype-[% itemtype.itemtype | html %]" class="branch_select" type="checkbox" name="itemtype-[% itemtype.itemtype | html %]" value="[% itemtype.itemtype | html %]" />
+                                                <label for="itemtype-[% itemtype.itemtype | html %]">[% itemtype.description | html %]</label>
+                                            </div>
+                                            [% IF loop.count() % 4 == 0 && !loop.last() %]
+                                                </div>
+                                                <div class="branchgridrow">
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="rows">
+                        <legend>Additional options</legend>
+                        <ol>
+                            <li>
+                                <label for="CSVexport">Export to CSV file: </label>
+                                <input type="checkbox" name="CSVexport" id="CSVexport" />
+                            </li>
+                        </ol>
+                    </fieldset>
+
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                    </fieldset>
+                </form>
                 [% END %]
-            [% END %]
-            </td>
-        </tr>
-    [% END %]
-    </tbody>
-    </table>
-    </div>
 
-    <div class="spacer"></div>
-    [% UNLESS uploadedbarcodesflag %]
-      <div style="padding : .3em 0"><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
-      <input type="submit" id="markseenandquit" class="btn btn-primary" value="Mark seen and quit" />
-      <input type="submit" value="Mark seen and continue &gt;&gt;" id="markseenandcontinuebutton" />
-      <input type="submit" value="Continue without marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />
-    [% END %]
-    </form>
+                [% IF op %]
+                <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="minlocation" value="[% minlocation | html %]" />
+                    <input type="hidden" name="maxlocation" value="[% maxlocation | html %]" />
+                    <input type="hidden" name="location" value="[% location | html %]" />
+                    <input type="hidden" name="branchcode" value="[% branchcode | html %]" />
+                    <input type="hidden" name="datelastseen" value="[% datelastseen | html %]" />
+                    <input type="hidden" name="ccode" value="[% ccode | html %]" />
 
+                    [% UNLESS uploadedbarcodesflag %]
+                      <div><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
+                    [% END %]
 
-    [% END %]
+                    <div class="page-section">
+                        <table id="inventoryt">
+                            <thead>
+                                <tr>
+                                    [% UNLESS uploadedbarcodesflag %]
+                                        <th>Seen</th>
+                                    [% END %]
+                                    <th>Barcode</th>
+                                    <th>Call number</th>
+                                    <th>Library</th>
+                                    <th>Collection code</th>
+                                    <th class="anti-the">Title</th>
+                                    <th>Not for loan</th>
+                                    <th>Lost</th>
+                                    <th>Damaged</th>
+                                    <th>Withdrawn</th>
+                                    <th>Last seen</th>
+                                    <th>Problems</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH result IN loop %]
+                                    <tr>
+                                        [% UNLESS uploadedbarcodesflag %]
+                                            <td>
+                                                <input type="checkbox" name="SEEN-[% result.itemnumber | html %]" value="1" />
+                                            </td>
+                                        [% END %]
+
+                                        <td>
+                                            [% result.barcode | html %]
+                                        </td>
+
+                                        <td data-order="[% result.cn_sort | html %]">
+                                            [% result.itemcallnumber | html %]
+                                        </td>
+
+                                        <td>
+                                            [% Branches.GetName( result.homebranch ) | html %]
+                                            <span class="shelvingloc">[% result.location | html %]</span>
+                                        </td>
+
+                                        <td>
+                                            <span class="ccode">[% result.ccode | html %]</span>
+                                        </td>
+
+                                        <td>
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber | uri %]" class="openWin">[% result.title | html %]</a>
+                                            [% IF ( result.author ) %]
+                                                by <span class="author">[% result.author | html %]</span>
+                                            [% END %]
+                                        </td>
+
+                                        <td>
+                                            [% result.notforloan | html %]
+                                        </td>
+
+                                        <td>
+                                            [% result.itemlost | html %]
+                                        </td>
+
+                                        <td>
+                                            [% result.damaged | html %]
+                                        </td>
+
+                                        <td>
+                                            [% result.withdrawn | html %]
+                                        </td>
+
+                                        <td data-order="[% result.datelastseen | html %]">
+                                            [% result.datelastseen | $KohaDates with_hours => 1 %]
+                                        </td>
+
+                                        <td>
+                                            [% FOREACH problem IN result.problems %]
+                                                [% IF problem.key == 'wrongplace' %]
+                                                    <span>Found in wrong place</span><br/>
+                                                [% ELSIF problem.key == 'changestatus' %]
+                                                    [% IF result.notforloan %]
+                                                        <span>Item has unselected "Not for loan" status "[% result.notforloan | html %]"</span><br/>
+                                                    [% ELSE %]
+                                                        <span>Items has no "not for loan" status</span><br/>
+                                                    [% END %]
+                                                [% ELSIF problem.key == 'not_scanned' %]
+                                                    <span>Missing (not scanned)</span><br/>
+                                                [% ELSIF problem.key == 'checkedout' %]
+                                                    <span>Still checked out</span><br/>
+                                                [% ELSIF problem.key == 'no_barcode' %]
+                                                    <span>No barcode</span><br/>
+                                                [% ELSIF problem.key == 'out_of_order' %]
+                                                    <span>Item may be shelved out of order</span><br/>
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="spacer"></div>
+
+                    [% UNLESS uploadedbarcodesflag %]
+                      <div style="padding : .3em 0"><a href="#" class="checkall"><i class="fa fa-check"></i> Select all</a> <a href="#" class="clearall"><i class="fa fa-times"></i> Clear all</a></div>
+                      <input type="submit" id="markseenandquit" class="btn btn-primary" value="Mark seen and quit" />
+                      <input type="submit" value="Mark seen and continue &gt;&gt;" id="markseenandcontinuebutton" />
+                      <input type="submit" value="Continue without marking &gt;&gt;" id="continuewithoutmarkingbutton" class="submit" />
+                    [% END %]
+                </form>
+                [% END %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
