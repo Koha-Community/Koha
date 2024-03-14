@@ -128,10 +128,18 @@ sub batch_add {
     return try {
         my $params = $c->req->json;
 
-        my @libraries = Koha::Libraries->search->as_list;
-
-        my @from_branches = $params->{from_library_id} ? $params->{from_library_id} : map { $_->id } @libraries;
-        my @to_branches = $params->{to_library_id} ? $params->{to_library_id} : map { $_->id } @libraries;
+        my ( @from_branches, @to_branches );
+        if ( $params->{from_library_id} ) {
+            @from_branches = ( $params->{from_library_id} );
+        }
+        if ( $params->{to_library_id} ) {
+            @to_branches = ( $params->{to_library_id} );
+        }
+        unless ( $params->{from_library_id} && $params->{to_library_id} ) {
+            my @library_ids = Koha::Libraries->search->get_column('branchcode');
+            @from_branches = @library_ids unless $params->{from_library_id};
+            @to_branches   = @library_ids unless $params->{to_library_id};
+        }
 
         my @results;
         foreach my $from ( @from_branches ) {
