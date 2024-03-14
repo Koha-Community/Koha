@@ -141,32 +141,39 @@ sub batch_add {
             @to_branches   = @library_ids unless $params->{to_library_id};
         }
 
+        my $dbic_params = Koha::Item::Transfer::Limits->new->attributes_from_api($params);
+        my %existing_limits =
+            map { sprintf( "%s:%s:%s:%s", $_->fromBranch, $_->toBranch, $_->itemtype, $_->ccode ) => 1 }
+            Koha::Item::Transfer::Limits->search($dbic_params)->as_list;
+
         my @results;
-        foreach my $from ( @from_branches ) {
-            foreach my $to ( @to_branches ) {
-                my $limit_params = { %$params };
+        foreach my $from (@from_branches) {
+            foreach my $to (@to_branches) {
+                my $limit_params = {%$params};
 
                 $limit_params->{from_library_id} = $from;
-                $limit_params->{to_library_id} = $to;
+                $limit_params->{to_library_id}   = $to;
 
                 next if $to eq $from;
 
-                my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $limit_params );
-                my $exists = Koha::Item::Transfer::Limits->search( $transfer_limit->unblessed )->count;
-                unless ( $exists ) {
-                    $transfer_limit->store;
-                    push( @results, $transfer_limit->to_api());
-                }
+                my $key = sprintf(
+                    "%s:%s:%s:%s", $limit_params->{from_branch_id} || q{},
+                    $limit_params->{to_branch_id} || q{}, $limit_params->{item_type} || q{},
+                    $limit_params->{collection_code} || q{}
+                );
+                next if exists $existing_limits{$key};
+
+                my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api($limit_params);
+                $transfer_limit->store;
+                push( @results, $transfer_limit->to_api() );
             }
         }
-        my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api( $params );
 
         return $c->render(
             status  => 201,
             openapi => \@results
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
