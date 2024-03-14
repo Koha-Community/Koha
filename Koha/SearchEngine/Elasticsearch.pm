@@ -28,6 +28,7 @@ use Koha::Filter::MARC::EmbedSeeFromHeadings;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 use Koha::Caches;
+use Koha::AuthorisedValueCategories;
 use C4::Heading;
 use C4::AuthoritiesMarc qw( GuessAuthTypeCode );
 use C4::Biblio;
@@ -1413,28 +1414,18 @@ sub _read_configuration {
     return $configuration;
 }
 
-=head2 get_facetable_fields
+=head2 get_facet_fields
 
-my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+my @facet_fields = Koha::SearchEngine::Elasticsearch->get_facet_fields();
 
-Returns the list of Koha::SearchFields marked to be faceted in the ES configuration
+Returns the list of Koha::SearchFields marked to be faceted.
 
 =cut
 
-sub get_facetable_fields {
+sub get_facet_fields {
     my ($self) = @_;
 
-    # These should correspond to the ES field names, as opposed to the CCL
-    # things that zebra uses.
-    my @search_field_names = qw( author itype location su-geo title-series subject ccode holdingbranch homebranch ln );
-    my @faceted_fields = Koha::SearchFields->search(
-        { name => { -in => \@search_field_names }, facet_order => { '!=' => undef } }, { order_by => ['facet_order'] }
-    )->as_list;
-    my @not_faceted_fields = Koha::SearchFields->search(
-        { name => { -in => \@search_field_names }, facet_order => undef }, { order_by => ['facet_order'] }
-    )->as_list;
-    # This could certainly be improved
-    return ( @faceted_fields, @not_faceted_fields );
+    return Koha::SearchFields->search( { facet_order => { '!=' => undef } }, { order_by => ['facet_order'] } )->as_list;
 }
 
 =head2 clear_search_fields_cache

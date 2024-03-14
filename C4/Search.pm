@@ -579,6 +579,7 @@ sub getRecords {
                             "type_label_"
                               . $facets_info->{$link_value}->{'label_value'} =>
                               1,
+                            label      => $facets_info->{$link_value}->{'label_value'},
                             facets     => \@this_facets_array,
                           }
                           unless (

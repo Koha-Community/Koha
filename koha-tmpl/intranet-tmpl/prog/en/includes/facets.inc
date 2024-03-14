@@ -51,38 +51,31 @@
                     [% IF facets_loo.facets.size > 0 %]
                         <li id="[% facets_loo.type_id | html %]">
                             [% facets_loo.type_label | html %]
-                            [% IF facets_loo.type_label_Authors %]
+                            [% SWITCH facets_loo.label %]
+                            [% CASE 'Authors' %]
                                 <span id="facet-authors">Authors</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Titles %]
+                            [% CASE 'Titles' %]
                                 <span id="facet-titles">Titles</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Topics %]
+                            [% CASE 'Topics' %]
                                 <span id="facet-topics">Topics</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Places %]
+                            [% CASE 'Places' %]
                                 <span id="facet-places">Places</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Series %]
+                            [% CASE 'Series' %]
                                 <span id="facet-series">Series</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_ItemTypes %]
+                            [% CASE 'ItemTypes' %]
                                 <span id="facet-itemtypes">Item types</span>
-                            [% END %]
-                            [% IF ( facets_loo.type_label_HomeLibrary ) %]
+                            [% CASE 'HomeLibrary' %]
                                 <span id="facet-home-libraries">Home libraries</span>
-                            [% END %]
-                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]
+                            [% CASE 'HoldingLibrary' %]
                                 <span id="facet-holding-libraries">Holding libraries</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Location %]
+                            [% CASE 'Location' %]
                                 <span id="facet-locations">Locations</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_CollectionCodes %]
+                            [% CASE 'CollectionCodes' %]
                                 <span id="facet-collections">Collections</span>
-                            [% END %]
-                            [% IF facets_loo.type_label_Language %]
+                            [% CASE 'Languages' %]
                                 <span id="facet-languages">Languages</span>
+                            [% CASE %]
+                                <span id="facet-[% facets_loo.type_link_value | html %]">[% facets_loo.label | html %]</span>
                             [% END %]
                             <ul>
                                 [% SET url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi _ limit_cgi %]

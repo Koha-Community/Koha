@@ -498,7 +498,6 @@ a.add, a.delete {
                                             <th>Order</th>
                                             <th class="NoSort">Search field</th>
                                             <th class="NoSort">Label</th>
-                                            <th class="NoSort">Display</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -509,26 +508,20 @@ a.add, a.delete {
                                                     [% f.name | html %]
                                                 </td>
                                                 <td>
-                                                    [% SWITCH f.name %]
-                                                    [% CASE 'author' %]<span>Authors</span>
-                                                    [% CASE 'itype' %]<span>Item types</span>
-                                                    [% CASE 'location' %]<span>Locations</span>
-                                                    [% CASE 'su-geo' %]<span>Places</span>
-                                                    [% CASE 'title-series' %]<span>Series</span>
-                                                    [% CASE 'subject' %]<span>Topics</span>
-                                                    [% CASE 'ccode' %]<span>Collections</span>
-                                                    [% CASE 'holdingbranch' %]<span>Holding libraries</span>
-                                                    [% CASE 'homebranch' %]<span>Home libraries</span>
-                                                    [% CASE 'ln' %]<span>Language</span>
-                                                    [% CASE %][% f | html %]
+                                                    [% SWITCH f.label %]
+                                                    [% CASE 'Authors' %]<span>Authors</span>
+                                                    [% CASE 'Item types' %]<span>Item types</span>
+                                                    [% CASE 'Locations' %]<span>Locations</span>
+                                                    [% CASE 'Places' %]<span>Places</span>
+                                                    [% CASE 'Series' %]<span>Series</span>
+                                                    [% CASE 'Topics' %]<span>Topics</span>
+                                                    [% CASE 'Collections' %]<span>Collections</span>
+                                                    [% CASE 'Holding libraries' %]<span>Holding libraries</span>
+                                                    [% CASE 'Home libraries' %]<span>Home libraries</span>
+                                                    [% CASE 'Languages' %]<span>Languages</span>
+                                                    [% CASE %]<span>[% f.label | html %]</span>
                                                     [% END %]
-                                                </td>
-                                                <td>
-                                                    [% IF f.facet_order %]
-                                                        <input type="checkbox" name="display_facet" value="[% f.name | html %]" checked="checked" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" name="display_facet" value="[% f.name | html %]" />
-                                                    [% END %]
+                                                    <input type="hidden" name="facet_name" value="[% f.name | html %]" />
                                                 </td>
                                             </tr>
                                         [% END %]

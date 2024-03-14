@@ -48,6 +48,7 @@ use URI::Escape qw( uri_escape_utf8 );
 use C4::Context;
 use Koha::Exceptions;
 use Koha::Caches;
+use Koha::AuthorisedValueCategories;
 
 our %index_field_convert = (
     'kw' => '',
@@ -226,27 +227,23 @@ sub build_query {
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
     my $size = C4::Context->preference('FacetMaxCount');
-    $res->{aggregations} = {
-        author         => { terms => { field => "author__facet" , size => $size } },
-        subject        => { terms => { field => "subject__facet", size => $size } },
-        itype          => { terms => { field => "itype__facet", size => $size} },
-        location       => { terms => { field => "location__facet", size => $size } },
-        'su-geo'       => { terms => { field => "su-geo__facet", size => $size} },
-        'title-series' => { terms => { field => "title-series__facet", size => $size } },
-        ccode          => { terms => { field => "ccode__facet", size => $size } },
-        ln             => { terms => { field => "ln__facet", size => $size } },
+    my @facets = Koha::SearchEngine::Elasticsearch->get_facet_fields;
+    for my $f ( @facets ) {
+        my $name = $f->name;
+        $res->{aggregations}->{$name} = { terms => { field => "${name}__facet" , size => $size } };
     };
 
-    my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
-    if (   $display_library_facets eq 'both'
-        or $display_library_facets eq 'home' ) {
-        $res->{aggregations}{homebranch} = { terms => { field => "homebranch__facet", size => $size } };
-    }
-    if (   $display_library_facets eq 'both'
-        or $display_library_facets eq 'holding' ) {
-        $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet", size => $size } };
-    }
 
+    # FIXME We need a way to show/hide the facet individually
+    #my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
+    #if (   $display_library_facets eq 'both'
+    #    or $display_library_facets eq 'home' ) {
+    #    $res->{aggregations}{homebranch} = { terms => { field => "homebranch__facet", size => $size } };
+    #}
+    #if (   $display_library_facets eq 'both'
+    #    or $display_library_facets eq 'holding' ) {
+    #    $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet", size => $size } };
+    #}
     $res = _rebuild_to_es_advanced_query($res) if @$es_advanced_searches ;
     return $res;
 }

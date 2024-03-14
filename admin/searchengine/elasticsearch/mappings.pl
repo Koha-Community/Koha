@@ -105,7 +105,7 @@ if ( $op eq 'cud-edit' ) {
     my @mapping_search      = $input->multi_param('mapping_search');
     my @mapping_filter      = $input->multi_param('mapping_filter');
     my @mapping_marc_field  = $input->multi_param('mapping_marc_field');
-    my @faceted_field_names = $input->multi_param('display_facet');
+    my @faceted_field_names = $input->multi_param('facet_name');
 
     eval {
 
@@ -143,7 +143,7 @@ if ( $op eq 'cud-edit' ) {
         }
 
         Koha::SearchMarcMaps->search( { marc_type => $marc_type, } )->delete;
-        my @facetable_fields      = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+        my @facetable_fields      = Koha::SearchEngine::Elasticsearch->get_facet_fields();
         my @facetable_field_names = map { $_->name } @facetable_fields;
 
         my $mandatory_before = Koha::SearchFields->search( { mandatory => 1 } )->count;
@@ -235,7 +235,7 @@ for my $index_name (@index_names) {
     }
 }
 
-my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facet_fields();
 for my $index_name (@index_names) {
     my $search_fields = Koha::SearchFields->search(
         {

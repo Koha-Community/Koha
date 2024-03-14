@@ -45,6 +45,7 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use Koha::ItemTypes;
 use Koha::AuthorisedValues;
+use Koha::AuthorisedValueCategories;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Search;
 use Koha::Exceptions::Elasticsearch;
@@ -441,28 +442,8 @@ sub _convert_facets {
 
     return if !$es;
 
-    # These should correspond to the ES field names, as opposed to the CCL
-    # things that zebra uses.
-    my %type_to_label;
-    my %label = (
-        author         => 'Authors',
-        itype          => 'ItemTypes',
-        location       => 'Location',
-        'su-geo'       => 'Places',
-        'title-series' => 'Series',
-        subject        => 'Topics',
-        ccode          => 'CollectionCodes',
-        holdingbranch  => 'HoldingLibrary',
-        homebranch     => 'HomeLibrary',
-        ln             => 'Language',
-    );
-    my @facetable_fields =
-      Koha::SearchEngine::Elasticsearch->get_facetable_fields;
-    for my $f (@facetable_fields) {
-        next unless defined $f->facet_order;
-        $type_to_label{ $f->name } =
-          { order => $f->facet_order, label => $label{ $f->name } };
-    }
+    my %type_to_label = map { $_->name => { order => $_->facet_order, label => $_->label } }
+        Koha::SearchEngine::Elasticsearch->get_facet_fields;
 
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
@@ -487,6 +468,7 @@ sub _convert_facets {
         my $facet = {
             type_id    => $type . '_id',
             "type_label_$type_to_label{$type}{label}" => 1,
+            label => $type_to_label{$type}{label},
             type_link_value                    => $type,
             order      => $type_to_label{$type}{order},
         };
