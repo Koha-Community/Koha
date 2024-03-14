@@ -651,7 +651,7 @@ sub host_items {
 
     my $host_itemnumbers = $self->_host_itemnumbers;
 
-    return Koha::Items->search( { itemnumber => { -in => $host_itemnumbers } } );
+    return Koha::Items->search( { "me.itemnumber" => { -in => $host_itemnumbers } } );
 }
 
 =head3 _host_itemnumbers
