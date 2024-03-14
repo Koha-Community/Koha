@@ -702,6 +702,10 @@ for (my $i=0;$i<@servers;$i++) {
 
             # BZ17530: 'Intelligent' guess if result can be article requested
             $res->{artreqpossible} = ( $art_req_itypes->{ $res->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
+
+            if ( C4::Context->preference('OPACLocalCoverImages') ) {
+                $res->{has_local_cover_image} = $res->{biblio_object}->cover_images->count;
+            }
         }
 
         if ($results_hashref->{$server}->{"hits"}){

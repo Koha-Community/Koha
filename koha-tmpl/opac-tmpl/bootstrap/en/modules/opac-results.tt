@@ -340,7 +340,7 @@
                                                 <div class="coverimages cover-slides itemtype_[% SEARCH_RESULT.itemtype | html %]" data-isbn="[% To.json(SEARCH_RESULT.normalized_isbn) | $raw %]" data-imgtitle="[% img_title | html %]">
                                                     <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
 
-                                                        [% IF ( OPACLocalCoverImages ) %]
+                                                        [% IF ( OPACLocalCoverImages && SEARCH_RESULT.has_local_cover_image ) %]
                                                             <span title="[% img_title | html %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                         [% END %]
 
