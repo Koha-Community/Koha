@@ -950,7 +950,8 @@
                                     <div class="author_information">
                                         <span class="author_name"><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% author.authid | uri %]">[% author.name | html %]</a></span>
                                         <ul>
-                                        [% FOR info IN author.information.keys %]
+                                        [% FOR info IN Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ).split(',') %]
+                                            [% NEXT IF author.information.keys.grep(info).size <= 0 %]
                                             [% PROCESS "authority-information.inc" information => author.information.$info, info_type => info %]
                                         [% END %]
                                         </ul>

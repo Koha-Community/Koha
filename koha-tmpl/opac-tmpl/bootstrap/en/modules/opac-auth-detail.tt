@@ -185,7 +185,8 @@
                         <div class="author_identifier_info">
                             <span>Identifiers/information</span>
                             <ul>
-                            [% FOR info IN author_information.keys %]
+                            [% FOR info IN Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ).split(',') %]
+                                [% NEXT IF author_information.keys.grep(info).size <= 0 %]
                                 [% PROCESS "authority-information.inc" information => author_information.$info, info_type => info %]
                             [% END %]
                             </ul>

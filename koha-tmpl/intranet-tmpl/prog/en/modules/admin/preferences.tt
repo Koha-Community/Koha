@@ -151,6 +151,20 @@
                                 </option>
                             [% END %]
                         </select>
+                    [% ELSIF ( CHUNK.type_multiple_sortable ) %]
+                        <ul class="sortable" style="max-width: 30em;">
+                            [% FOREACH CHOICE IN CHUNK.CHOICES %]
+                                <li>
+                                    <i class="fa-solid fa-fw fa-grip-vertical" aria-hidden="true" style="color:#B7B7B7"></i>
+                                    <label for="pref_[% CHUNK.name | html %]_[% CHOICE.value | html %]">[% CHOICE.text | html %]</label>
+                                    [% IF ( CHOICE.selected ) %]
+                                        <input type="checkbox" id="pref_[% CHUNK.name | html %]_[% CHOICE.value | html %]" name="pref_[% CHUNK.name | html %]" value="[% CHOICE.value | html %]" checked="checked" class="preference preference-checkbox">
+                                    [% ELSE %]
+                                        <input type="checkbox" id="pref_[% CHUNK.name | html %]_[% CHOICE.value | html %]" name="pref_[% CHUNK.name | html %]" value="[% CHOICE.value | html %]" class="preference preference-checkbox">
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        </ul>
                     [% ELSIF ( CHUNK.type_textarea )%]
                         [% IF ( CHUNK.syntax == "text/html" && Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
                             <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>

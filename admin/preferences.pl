@@ -161,7 +161,24 @@ sub _get_chunk {
               }
               keys %{ $options{multiple} }
         ];
+    } elsif ( $options{'multiple_sortable'} ) {
+        my @values;
+        @values = split /,/, $value if defined($value);
+        $chunk->{type}    = 'multiple_sortable';
+        $chunk->{CHOICES} = [
+            sort { $a->{'text'} cmp $b->{'text'} }
+              map {
+                my $option_value = $_;
+                {
+                    text     => $options{multiple_sortable}->{$option_value},
+                    value    => $option_value,
+                    selected => (grep { $_ eq $option_value } @values) ? 1 : 0,
+                }
+              }
+              keys %{ $options{multiple_sortable} }
+        ];
     }
+
 
     $chunk->{ 'type_' . $chunk->{'type'} } = 1;
 
