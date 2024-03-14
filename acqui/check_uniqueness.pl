@@ -37,6 +37,13 @@ use C4::Output qw( output_with_http_headers );
 use C4::Items qw( SearchItems );
 
 my $input = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
+
 my @field = $input->multi_param('field[]');
 my @value = $input->multi_param('value[]');
 

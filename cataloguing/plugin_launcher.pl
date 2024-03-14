@@ -19,10 +19,18 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use C4::Auth qw( check_cookie_auth );
 
 use Koha::FrameworkPlugin;
 
 my $input = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
+
 my $plugin= Koha::FrameworkPlugin->new( {
     name => scalar $input->param("plugin_name"),
 });

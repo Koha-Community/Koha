@@ -27,6 +27,13 @@ use Koha::CsvProfiles;
 use Text::CSV_XS;
 
 my $query = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $query->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $query->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
+
 my $supplierid = $query->param('supplierid');
 my @serialids = $query->multi_param('serialid');
 my $op = $query->param('op') || q{};
