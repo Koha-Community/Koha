@@ -254,9 +254,9 @@ sub GetRecords {
             $item{'holdingbranchname'} = $holding_library ? $holding_library->branchname : '';
 
             if ($item->location) {
-                my $authorised_value = Koha::AuthorisedValues->find_by_koha_field({ kohafield => 'items.location', authorised_value => $item->location });
+                my $authorised_value = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield => 'items.location', authorised_value => $item->location });
                 if ($authorised_value) {
-                    $item{location_description} = $authorised_value->opac_description;
+                    $item{location_description} = $authorised_value->{opac_description};
                 }
             }
 
