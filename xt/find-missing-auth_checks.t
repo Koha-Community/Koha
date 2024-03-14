@@ -35,7 +35,6 @@ sub wanted {
           |circ
           |clubs
           |course_reserves
-          |installer
           |labels
           |members
           |patroncards
@@ -62,7 +61,7 @@ my @missing_auth_check;
 FILE: foreach my $name (@files) {
     open( FILE, $name ) || die "cannot open file $name $!";
     while ( my $line = <FILE> ) {
-        for my $routine ( qw( get_template_and_user check_cookie_auth checkauth check_api_auth ) ) {
+        for my $routine ( qw( get_template_and_user check_cookie_auth checkauth check_api_auth C4::Service->init ) ) {
             next FILE if $line =~ m|^[^#]*$routine|;
         }
     }
