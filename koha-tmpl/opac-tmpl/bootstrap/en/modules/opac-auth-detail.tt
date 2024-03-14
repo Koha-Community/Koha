@@ -38,12 +38,12 @@
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                    [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
                         <div class="col-lg-5 order-first order-md-first order-lg-2">
                     [% ELSE %]
                         <div class="col-lg-10 order-first order-md-first order-lg-2">
                     [% END %]
-                [% ELSIF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                [% ELSIF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
                     <div class="col-lg-6 order-first order-md-first order-lg-2">
                 [% ELSE %]
                     <div class="col order-first order-md-first order-lg-2">
@@ -176,17 +176,17 @@
 
                     </div> <!-- / .#userauthdetails -->
                 </div> <!-- / .col-lg-10/12 -->
-                [% IF Koha.Preference( 'OPACAuthorIdentifiers' ) && author_identifiers.size %]
+                [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
                     [% IF ( OpacNav || OpacNavBottom ) %]
                         <div class="col-lg-5 order-lg-3">
                     [% ELSE %]
                         <div class="col-lg-6 order-lg-3">
                     [% END %]
-                        <div class="author_identifier">
-                            <span>Identifiers</span>
+                        <div class="author_identifier_info">
+                            <span>Identifiers/information</span>
                             <ul>
-                            [% FOR identifier IN author_identifiers %]
-                                [% PROCESS "authority-identifiers.inc" identifier => identifier %]
+                            [% FOR info IN author_information.keys %]
+                                [% PROCESS "authority-information.inc" information => author_information.$info, info_type => info %]
                             [% END %]
                             </ul>
                         </div>

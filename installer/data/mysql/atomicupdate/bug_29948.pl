@@ -1,16 +1,24 @@
 use Modern::Perl;
 
 return {
-    bug_number => "29948",
+    bug_number  => "29948",
     description => "Display author information for researchers",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
-        $dbh->do(q{
-            INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
-            ('OPACAuthorInformation','0','','Display author information on the OPAC detail page','multiple_sortable')
-        });
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
+        my ($OPACAuthorIdentifiers) =
+            $dbh->selectrow_array(q{SELECT value FROM systempreferences WHERE variable="OPACAuthorIdentifiers"});
+        my $value = $OPACAuthorIdentifiers ? 'identifiers' : '';
 
-        say $out "Added new system preference 'OPACAuthorInformation'";
+        $dbh->do(
+            q{
+            INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            ('OPACAuthorIdentifiersAndInformation', ?, '', 'Display author information on the OPAC detail page','multiple_sortable')
+        }, undef, $value
+        );
+        say $out "Added new system preference 'OPACAuthorIdentifiersAndInformation'";
+
+        $dbh->do(q{DELETE FROM systempreferences WHERE variable="OPACAuthorIdentifiers"});
+        say $out "  Removed system preference 'OPACAuthorIdentifiers'";
     },
 };

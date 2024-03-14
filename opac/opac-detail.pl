@@ -1233,38 +1233,20 @@ $template->param(
     'OpacLocationBranchToDisplay' => C4::Context->preference('OpacLocationBranchToDisplay'),
 );
 
-if ( C4::Context->preference('OPACAuthorIdentifiers') ) {
-    my @author_identifiers;
-    for my $author ( @{ $biblio->get_marc_authors } ) {
-        my $authid    = $author->{authoritylink};
-        my $authority = Koha::Authorities->find($authid);
-        next unless $authority;
-        my $identifiers = $authority->get_identifiers;
-        next unless $identifiers && @$identifiers;
-        my ($name) =
-          map  { $_->{value} }
-          grep { $_->{code} eq 'a' ? $_ : () }
-          @{ $author->{MARCAUTHOR_SUBFIELDS_LOOP} };
-        push @author_identifiers,
-          { authid => $authid, name => $name, identifiers => $identifiers };
-    }
-    $template->param( author_identifiers => \@author_identifiers );
-}
-
-if ( C4::Context->preference('OPACAuthorInformation') ) {
+if ( C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
     my @author_information;
     for my $author ( @{ $biblio->get_marc_authors } ) {
         my $authid    = $author->{authoritylink};
         my $authority = Koha::Authorities->find($authid);
         next unless $authority;
-        my $information = $authority->get_information;
+        my $information = $authority->get_identifiers_and_information;
         next unless $information;
         my ($name) =
           map  { $_->{value} }
           grep { $_->{code} eq 'a' ? $_ : () }
           @{ $author->{MARCAUTHOR_SUBFIELDS_LOOP} };
         push @author_information,
-          { authid => $authid, name => $name, information => $information };
+          { authid => $authid, name => $name, information => $information};
     }
     $template->param( author_information => \@author_information );
 }

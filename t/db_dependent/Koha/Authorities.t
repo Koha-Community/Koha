@@ -242,10 +242,11 @@ sub few_marc_records {
     return [ $marc ];
 }
 
-subtest 'get_identifiers' => sub {
+subtest 'get_identifiers_and_information' => sub {
     plan tests => 1;
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+    t::lib::Mocks::mock_preference( 'OPACAuthorIdentifiersAndInformation', 'identifiers' );
     my $record = MARC::Record->new();
     $record->add_fields(
         [
@@ -271,17 +272,19 @@ subtest 'get_identifiers' => sub {
     my $authid = C4::AuthoritiesMarc::AddAuthority($record, undef, 'PERSO_NAME');
     my $authority = Koha::Authorities->find($authid);
     is_deeply(
-        $authority->get_identifiers,
-        [
-            {
-                source  => 'orcid',
-                number  => '0000-0002-1234-5678',
-            },
-            {
-                source => 'scopus',
-                number => '01234567890',
-            }
-        ]
+        $authority->get_identifiers_and_information,
+        {
+            identifiers => [
+                {
+                    source => 'orcid',
+                    number => '0000-0002-1234-5678',
+                },
+                {
+                    source => 'scopus',
+                    number => '01234567890',
+                }
+            ]
+        }
     );
 };
 

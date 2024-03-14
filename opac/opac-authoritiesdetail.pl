@@ -188,10 +188,10 @@ if ($show_marc) {
         $template->param(summary => $summary);
     }
 
-    if ( C4::Context->preference('OPACAuthorIdentifiers') ) {
+    if ( C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
         my $authority = Koha::Authorities->find($authid);
-        my $identifiers = $authority->get_identifiers;
-        $template->param( author_identifiers => $identifiers );
+        my $information = $authority->get_identifiers_and_information;
+        $template->param( author_information => $information );
     }
 }
 

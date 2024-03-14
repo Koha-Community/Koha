@@ -1,5 +1,25 @@
 [% FOREACH info IN information %]
     [% SWITCH info_type %]
+    [% CASE 'identifiers' %]
+        <li>
+        [% SWITCH info.source.lower %]
+            [% CASE 'orcid' %]
+                <span>ORCID: </span>
+                <a href="https://orcid.org/[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'scopus' %]
+                <span>ScopusID: </span>
+                <a href="https://www.scopus.com/authid/detail.uri?authorId=[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'loop' %]
+                <span>loop: </span>
+                <a href="https://loop.frontiersin.org/people/[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'rid' %]
+                <span>Publons: </span>
+                <a href="https://publons.com/researcher/[% info.number | url %]">[% info.number | html %]</a>
+            [% CASE 'viaf' %]
+                <span>VIAF: </span>
+                <a href="https://viaf.org/viaf/[% info.number | url %]">[% info.number | html %]</a>
+            [% END %]
+        </li>
     [% CASE 'activity' %]
         <li>
             <span>

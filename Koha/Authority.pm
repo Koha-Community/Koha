@@ -141,39 +141,15 @@ sub controlled_indicators {
     });
 }
 
-=head3 get_identifiers
+=head3 get_identifiers_and_information
 
-    my $identifiers = $author->get_identifiers;
+    my $information = $author->get_identifiers_and_information;
 
-Return a list of identifiers of the authors which are in 024$2$a
-
-=cut
-
-sub get_identifiers {
-    my ( $self ) = @_;
-
-    my $record = $self->record;
-
-    my @identifiers;
-    for my $field ( $record->field('024') ) {
-        my $sf_2 = $field->subfield('2');
-        my $sf_a = $field->subfield('a');
-        next unless $sf_2 && $sf_a;
-        push @identifiers, {source => $sf_2, number => $sf_a, };
-    }
-
-    return \@identifiers;
-}
-
-=head3 get_information
-
-    my $information = $author->get_information;
-
-Return a list of information of the authors (syspref OPACAuthorInformation)
+Return a list of information of the authors (syspref OPACAuthorIdentifiersAndInformation)
 
 =cut
 
-sub get_information {
+sub get_identifiers_and_information {
     my ($self) = @_;
 
     my $record = $self->record;
@@ -182,8 +158,17 @@ sub get_information {
     return if C4::Context->preference('marcflavour') eq 'UNIMARC';
 
     my $information;
-    for my $info ( split ',', C4::Context->preference('OPACAuthorInformation') ) {
-        if ( $info eq 'activity' ) {
+    for my $info ( split ',', C4::Context->preference('OPACAuthorIdentifiersAndInformation') ) {
+        if ( $info eq 'identifiers' ) {
+
+            # identifiers (024$2$a)
+            for my $field ( $record->field('024') ) {
+                my $sf_2 = $field->subfield('2');
+                my $sf_a = $field->subfield('a');
+                next unless $sf_2 && $sf_a;
+                push @{ $information->{identifiers} }, { source => $sf_2, number => $sf_a, };
+            }
+        } elsif ( $info eq 'activity' ) {
 
             # activity: Activity (372$a$s$t)
             for my $field ( $record->field('372') ) {
