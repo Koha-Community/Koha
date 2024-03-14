@@ -21,6 +21,16 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use CGI qw ( -utf8 );
+use C4::Auth qw( check_cookie_auth );
+my $input = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
+
 my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
