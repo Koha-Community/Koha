@@ -234,7 +234,9 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
         qr/^guarantor_surname$/,
         qr/^delete_guarantor$/,
     );
-    push @keys_to_delete, map { qr/^$_$/ } split( /\s*\|\s*/, C4::Context->preference('BorrowerUnwantedField') || q{} );
+    push @keys_to_delete,
+        map { qr/^$_$/ }
+        grep { $_ ne 'dateexpiry' } split( /\s*\|\s*/, C4::Context->preference('BorrowerUnwantedField') || q{} );
     push @keys_to_delete, qr/^password_expiration_date$/ unless $CanUpdatePasswordExpiration;
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
