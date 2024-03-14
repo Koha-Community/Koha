@@ -26,6 +26,12 @@ use XML::Simple;
 use C4::Labels;
 
 my $cgi = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $cgi->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $cgi->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
 
 my $batch_id;
 my @label_ids;
