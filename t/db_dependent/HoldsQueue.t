@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 62;
+use Test::More tests => 63;
 use Data::Dumper;
 
 use C4::Calendar qw( new insert_single_holiday );
