@@ -69,8 +69,6 @@ my $searchtype       = $input->param('searchtype');
 
 $template->param( 'alphabet' => C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' );
 
-my $defer_loading = $input->request_method() eq "GET"  && !$circsearch ? 1 : 0;
-
 $template->param(
     patron_lists => [ GetPatronLists() ],
     searchmember        => $searchmember,
@@ -79,7 +77,6 @@ $template->param(
     searchtype          => $searchtype,
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
-    do_not_defer_loading => !$defer_loading,
     circsearch          => $circsearch,
 );
 

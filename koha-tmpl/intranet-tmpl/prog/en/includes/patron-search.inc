@@ -293,11 +293,6 @@
         let Sticky;
         let singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-        [% IF do_not_defer_loading %]
-            let defer_loading = 0;
-        [% ELSE %]
-            let defer_loading = 1;
-        [% END %]
 
         [% IF adjust_history %]
             /* popstate event triggered by forward and back button. Need to refresh search */
@@ -439,7 +434,6 @@
                     [% END %]
                 },
                 [% END %]
-                "deferLoading": defer_loading,
                 "columns": [
                     [% FOR column IN columns %]
                         [% IF default_sort_column == column %]
@@ -729,7 +723,8 @@
                 patron_search_form.find(".searchpattern").parent().hide();
             });
 
-            if ( !defer_loading ) {
+            let urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.size > 0){
                 patron_search_form.submit();
             }
 
