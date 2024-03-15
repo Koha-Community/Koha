@@ -1,16 +1,16 @@
 #!/bin/sh
 # Copyright 2010-2011  Catalyst IT, Ltd
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -40,7 +40,7 @@ EOH
 
 exclude_indexes=""
 
-CMD_LINE=`getopt -o h --long days:,output:,help,exclude-indexes -n 'koha-run-backups' -- "$@"`
+CMD_LINE=`getopt -o h --long days:,output:,help,exclude-indexes,exclude-logs -n 'koha-run-backups' -- "$@"`
 
 if [ $? != 0 ] ; then show_help ; exit 1 ; fi
 
@@ -55,6 +55,8 @@ while true ; do
             dirname=$2; shift 2 ;;
         --exclude-indexes)
             exclude_indexes='--exclude-indexes'; shift ;;
+        --exclude-logs)
+            exclude_logs='--exclude-logs'; shift ;;
         --) shift ; break ;;
         *) echo "Unknown error parsing the command line!" ; exit 1 ;;
     esac
@@ -67,7 +69,7 @@ fi
 
 for name in $(koha-list --enabled | grep -Fxv demo)
 do
-    if koha-dump ${exclude_indexes} "$name" > /dev/null; then
+    if koha-dump ${exclude_indexes} ${exclude_logs} "$name" > /dev/null; then
         # Only delete old backups if dump script return success.
 
         if [ -z "$dirname" ]; then
@@ -79,4 +81,3 @@ do
         find $backupdir -maxdepth 1 \( -mtime +$days -or -mtime $days \) -name $name-'[1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].???'.gz  \( -name \*.sql.gz -or -name \*.tar.gz \) -print0 | xargs -0 -r rm
     fi
 done
-
