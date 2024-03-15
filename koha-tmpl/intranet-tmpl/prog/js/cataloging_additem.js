@@ -25,9 +25,6 @@ $(document).ready(function(){
             $(edit_link).text( LABEL_EDIT_ITEM );
             var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=' + frameworkcode + '&biblionumber=' + biblionumber + '&itemnumber=' + num_rowid + '&searchid=' + searchid + '"></a>');
             $(delete_link).text( LABEL_DELETE_ITEM );
-            $(delete_link).on('click', function() {
-                return confirm_deletion();
-            });
             var tools_node = $('<span class="linktools"></span>');
             $(tools_node).append(edit_link);
             $(tools_node).append(delete_link);
