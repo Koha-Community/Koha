@@ -1030,11 +1030,9 @@
                                 </table> <!-- /#requestspecific -->
 
                                 [% IF hiddencount %]
-                                    <form method="get">
                                         <p class="hiddencount">
                                             <a href="request.pl?biblionumber=[% biblio_info.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
                                         </p>
-                                    </form>
                                 [% END # /IF hiddencount %]
 
                             [% ELSE # /UNLESS multi_hold %]
