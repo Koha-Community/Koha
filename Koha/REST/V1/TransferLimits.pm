@@ -128,6 +128,28 @@ sub batch_add {
     return try {
         my $params = $c->req->json;
 
+        if ( $params->{item_type} && $params->{collection_code} ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error => "You can only pass 'item_type' or 'collection_code' at a time",
+                }
+            );
+        }
+
+        if (   ( C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' && $params->{collection_code} )
+            || ( C4::Context->preference("BranchTransferLimitsType") eq 'ccode' && $params->{item_type} ) )
+        {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error => $params->{collection_code}
+                    ? "You passed 'collection_code' but configuration expects 'item_type'"
+                    : "You passed 'item_type' but configuration expects 'collection_code'"
+                }
+            );
+        }
+
         my ( @from_branches, @to_branches );
         if ( $params->{from_library_id} ) {
             @from_branches = ( $params->{from_library_id} );
@@ -195,7 +217,7 @@ sub batch_delete {
 
         Koha::Item::Transfer::Limits->search($search_params)->delete;
 
-        return $c->render( status => 204, openapi => '');
+        return $c->render( status => 204, openapi => q{} );
     }
     catch {
         $c->unhandled_exception($_);
