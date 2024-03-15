@@ -220,7 +220,7 @@ sub GetRecords {
 
         my $record = $biblio->metadata->record({ embed_items => 1 });
         if ($record) {
-            $biblioitem->{marcxml} = $record->as_xml_record();
+            $biblioitem->{marcxml} = $record->as_xml_record( C4::Context->preference('marcflavour') );
         }
 
         # Get most of the needed data
