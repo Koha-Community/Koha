@@ -1,10 +1,9 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 $| = 1;
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Warn;
 
 BEGIN {
@@ -82,3 +81,5 @@ eval{
 if ($@) {
     pass("Test should have failed on entry of 'Client' and it did. YAY!");
 }
+
+is( C4::Scrubber->new('comment')->scrub('<span>Allow span</span>'), '<span>Allow span</span>' );
