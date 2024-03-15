@@ -27,6 +27,7 @@ use Try::Tiny;
 
 use C4::Context;
 use C4::Log qw( logaction );
+use C4::Scrubber;
 use Koha::Account;
 use Koha::ArticleRequests;
 use C4::Letters;
@@ -218,6 +219,12 @@ sub store {
             $self->relationship(undef) # We do not want to store an empty string in this field
               if defined $self->relationship
                      and $self->relationship eq "";
+
+            for my $note_field ( qw( borrowernotes opacnote ) ) {
+                if ( !$self->in_storage || $self->_result->is_column_changed($note_field) ) {
+                    $self->$note_field(C4::Scrubber->new('comment')->scrub($self->$note_field));
+                }
+            }
 
             unless ( $self->in_storage ) {    #AddMember
 

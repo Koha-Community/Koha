@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::Warn;
 
@@ -1292,3 +1292,35 @@ subtest 'encode_secret and decoded_secret' => sub {
 
     $schema->storage->txn_rollback;
 };
+subtest 'Scrub the note fields' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $bad_message     = '<script>alert("booh!")</script><span>all</span><b>good</b>now';
+    my $cleaned_message = '<span>all</span><b>good</b>now';
+    my $tmp_patron      = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_data     = $tmp_patron->unblessed;
+    $tmp_patron->delete;
+    delete $tmp_patron->{borrowernumber};
+
+    my $patron = Koha::Patron->new(
+
+        {
+            %$patron_data,
+            borrowernotes => $bad_message, opacnote => $bad_message,
+        }
+    )->store;
+
+    is( $patron->get_from_storage->borrowernotes, $cleaned_message );
+    is( $patron->get_from_storage->opacnote,      $cleaned_message );
+
+    $patron->borrowernotes($bad_message)->store;
+    $patron->opacnote($bad_message)->store;
+
+    is( $patron->get_from_storage->borrowernotes, $cleaned_message );
+    is( $patron->get_from_storage->opacnote,      $cleaned_message );
+
+    $schema->storage->txn_rollback;
+};
+
