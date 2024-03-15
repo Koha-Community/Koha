@@ -131,12 +131,13 @@ $(document).ready(function(){
         });
     }
 
-    $(".delete").on("click", function(e){
+
+    $(document).on('click', '.delete', function(e) {
         e.preventDefault();
-        if ( confirmDelete(MSG_CONFIRM_DELETE_ITEM) ) {
-            return $(this).siblings('form').submit();
+        if (confirmDelete(MSG_CONFIRM_DELETE_ITEM)) {
+            return $("#" + $(this).data("item") + "-delete-item-form").submit();
         }
-    });
+    }) ;
 });
 
 function CheckTemplateForm(f) {
