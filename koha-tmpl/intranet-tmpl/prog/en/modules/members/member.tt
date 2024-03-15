@@ -291,22 +291,6 @@
                     }
                 });
             });
-
-            [% IF searchmember %]
-                $("#searchmember_filter").val("[% searchmember | html %]");
-            [% END %]
-            [% IF searchfieldstype %]
-                $("searchfieldstype_filter").val("[% searchfieldstype | html %]");
-            [% END %]
-            [% IF searchtype %]
-                $("#searchtype_filter option[value='[% searchtype | html %]']").prop("selected", true);
-            [% END %]
-            [% IF categorycode_filter %]
-                $("#categorycode_filter").val("[% categorycode_filter | html %]");
-            [% END %]
-            [% IF branchcode_filter %]
-                $("#branchcode_filter").val("[% branchcode_filter | html %]");
-            [% END %]
         });
 
         function patronListAdd(){
