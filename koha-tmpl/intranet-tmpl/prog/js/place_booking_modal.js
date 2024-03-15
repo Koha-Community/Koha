@@ -117,7 +117,7 @@ $('#placeBookingModal').on('show.bs.modal', function(e) {
 
         // Fetch list of bookable items
         let itemsFetch = $.ajax({
-            url: '/api/v1/biblios/' + biblionumber + '/items?bookable=1' + '?_per_page=-1',
+            url: '/api/v1/biblios/' + biblionumber + '/items?bookable=1' + '&_per_page=-1',
             dataType: 'json',
             type: 'GET'
         });
