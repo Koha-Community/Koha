@@ -5,7 +5,7 @@
     description: This resource returns a list of existing transfer limits.
     summary: List transfer limits
     tags:
-      - transfer
+      - transfer_limits
     parameters:
       - name: to_library_id
         in: query
@@ -75,7 +75,7 @@
     description: This resource accepts a new transfer limit and creates it if it does not
       already exist.
     tags:
-      - transfer
+      - transfer_limits
     summary: Add a transfer limit
     parameters:
       - name: body
@@ -127,7 +127,7 @@
     operationId: deleteTransferLimit
     description: This resource deletes a transfer limit for the given limit id
     tags:
-      - transfer
+      - transfer_limits
     summary: Delete transfer limit
     parameters:
       - $ref: "../swagger.yaml#/parameters/transfer_limit_id_pp"
@@ -172,6 +172,10 @@
 
       This resource batch creates new transfer limits based on the given data.
 
+      Transfer limits can be defined based on `collection_code` or `item_type`. The endpoint
+      only accepts one at a time, and which one is used will depend on the value of the
+      `BranchTransferLimitsType` system preference.
+
       For example, if the paramters `to_library_id: 'BranchA'` and `item_type: 'BOOK'` are passed in
       new transfer limits for `BOOK`s will be created, with one transfer limit each for all the
       branches defined in Koha. Given 4 branches, 3 limits would be created:
@@ -184,13 +188,11 @@
       The body of the query would look like
 
       ```
-
       {
           'to_library_id': 'BranchA',
           'item_type': 'BOOK'
 
       }
-
       ```
 
       As another example, imagine we have an itemtype that is never supposed to be transferred to another library.
@@ -199,14 +201,12 @@
       library. The body of the query would look like
 
       ```
-
       {
           'item_type': 'LOCAL_ONLY'
       }
-
       ```
     tags:
-      - transfer
+      - transfer_limits
     summary: Batch add transfer limits
     parameters:
       - name: body
@@ -255,6 +255,10 @@
         description: Access forbidden
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -276,7 +280,7 @@
       version](#op-post-transfer_limits-batch), except it deletes transfer in
       batch rather than creating them.
     tags:
-      - transfer
+      - transfer_limits
     summary: Batch delete transfer limits
     parameters:
       - name: body
@@ -309,8 +313,6 @@
     responses:
       "204":
         description: Transfer limits deleted
-        schema:
-          type: string
       "401":
         description: Authentication required
         schema:
