@@ -1739,7 +1739,7 @@ subtest "CanBookBeRenewed | bookings" => sub {
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference('RenewalPeriodBase', 'date_due');
+    t::lib::Mocks::mock_preference( 'RenewalPeriodBase', 'date_due' );
 
     my $renewing_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $booked_patron   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1763,7 +1763,7 @@ subtest "CanBookBeRenewed | bookings" => sub {
 
     # Proposed renewal would encroach on booking
     my ( $renewok, $error ) = CanBookBeRenewed( $renewing_patron, $issue, 0 );
-    is( $renewok, 0,  "Renewal not allowed as it would mean the item was not returned before the next booking" );
+    is( $renewok, 0,        "Renewal not allowed as it would mean the item was not returned before the next booking" );
     is( $error,   'booked', "Error is 'booked'" );
 
     $schema->storage->txn_rollback;
