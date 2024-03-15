@@ -55,7 +55,7 @@ my $ignore_waiting_holds = $input->param('ignore_waiting_holds');
 my $datelastseen = $input->param('datelastseen'); # last inventory date
 my $branchcode = $input->param('branchcode') || '';
 my $branch     = $input->param('branch');
-my $op         = $input->param('op');
+my $op         = $input->param('op') // q{};
 my $compareinv2barcd = $input->param('compareinv2barcd');
 my $dont_checkin = $input->param('dont_checkin');
 my $out_of_order = $input->param('out_of_order');
@@ -162,7 +162,9 @@ my $results = {};
 my @scanned_items;
 my @errorloop;
 my $moddatecount = 0;
-if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length($barcodelist) > 0) ) {
+if ( $op eq 'cud-inventory'
+    && ( ( $uploadbarcodes && length($uploadbarcodes) > 0 ) || ( $barcodelist && length($barcodelist) > 0 ) ) )
+{
     my $dbh = C4::Context->dbh;
     my $date = $input->param('setdate');
     my $date_dt = dt_from_string($date);
@@ -228,8 +230,8 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
             $moddatecount++;
             unless ( $dont_checkin ) {
                 if ( $item->onloan ){
-                    #FIXME Is this correct? Shouldn't the item be checked in at the branch we are signed in at?
-                    my ($doreturn, $messages, $iteminformation, $borrower) =AddReturn($barcode, $item->homebranch);
+                    #TODO Assuming item homebranch for return here. Might allow current branch too?
+                    my ($doreturn, $messages, $iteminformation, $borrower) = AddReturn($barcode, $item->homebranch);
                     if( $doreturn ) {
                         $item_unblessed->{onloan} = undef;
                         $item_unblessed->{datelastseen} = dt_from_string;
@@ -250,7 +252,7 @@ if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length
 # Build inventorylist: used as result list when you do not pass barcodes
 # This list is also used when you want to compare with barcodes
 my ( $inventorylist, $rightplacelist );
-if ( $op && ( !$uploadbarcodes || $compareinv2barcd )) {
+if ( $op eq 'cud-inventory' && ( !$uploadbarcodes || $compareinv2barcd )) {
     ( $inventorylist ) = GetItemsForInventory({
       minlocation  => $minlocation,
       maxlocation  => $maxlocation,
