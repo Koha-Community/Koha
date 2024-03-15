@@ -20,18 +20,19 @@ use Test::More;
 
 use File::Slurp qw(read_file);
 
-my @excluded_paths = qw(C4 debian docs etc installer/data install_misc Koha misc selenium t test tmp xt changelanguage.pl build-resources.PL fix-perl-path.PL );
-push @excluded_paths, 'opac'; # We cannot test the OPAC scripts, some can be accessed without authentication
+my @excluded_paths =
+    qw(C4 debian docs etc installer/data install_misc Koha misc selenium t test tmp xt changelanguage.pl build-resources.PL fix-perl-path.PL koha_perl_deps.pl );
+push @excluded_paths, 'opac';    # We cannot test the OPAC scripts, some can be accessed without authentication
 
-my $grep_cmd      = q{git grep -l '#!/usr/bin/perl' -- } . join( ' ', map { qq{':!$_'} } @excluded_paths );
-my @files         = `$grep_cmd`;
+my $grep_cmd = q{git grep -l '#!/usr/bin/perl' -- } . join( ' ', map { qq{':!$_'} } @excluded_paths );
+my @files    = `$grep_cmd`;
 
 my @missing_auth_check;
 FILE: foreach my $file (@files) {
     chomp $file;
     my @lines = read_file($file);
-    for my $line ( @lines ) {
-        for my $routine ( qw( get_template_and_user check_cookie_auth checkauth check_api_auth C4::Service->init ) ) {
+    for my $line (@lines) {
+        for my $routine (qw( get_template_and_user check_cookie_auth checkauth check_api_auth C4::Service->init )) {
             next FILE if $line =~ m|^[^#]*$routine|;
         }
     }
