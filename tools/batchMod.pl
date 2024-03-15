@@ -206,7 +206,7 @@ $template->param(
 # build screen with existing items. and "new" one
 #-------------------------------------------------------------------------------
 
-if ($op eq "cud-show"){
+if ($op eq "cud-show" || $op eq "show"){
     my $filefh = $input->upload('uploadfile');
     my $filecontent = $input->param('filecontent');
     my ( @notfoundbarcodes, @notfounditemnumbers);
