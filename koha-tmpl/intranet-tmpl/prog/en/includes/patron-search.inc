@@ -52,7 +52,11 @@
                                         <option value="">Any</option>
                                     [% END %]
                                     [% FOREACH l IN libraries %]
-                                        <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                        [% IF (l.branchcode == branchcode_filter) %]
+                                            <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                        [% END %]
                                     [% END %]
                                 </select>
                             </label>
@@ -64,7 +68,11 @@
                                 <select class="categorycode_filter">
                                     <option value="">Any</option>
                                     [% FOREACH category IN Categories.limited.unblessed %]
-                                        <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                                        [% IF ( category.categorycode == categorycode_filter ) %]
+                                            <option value="[% category.categorycode | html %]" selected="selected">[% category.description | html %]</option>
+                                        [% ELSE %]
+                                            <option value="[% category.categorycode | html %]">[% category.description | html %]</option>
+                                        [% END %]
                                     [% END %]
                                 </select>
                             </label>
