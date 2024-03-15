@@ -3121,7 +3121,7 @@ sub CanBookBeRenewed {
     }
 
     # CHECK FOR BOOKINGS
-    if( $item->bookings->count ){
+    if ( $item->bookings->count ) {
         my $startdate =
             ( C4::Context->preference('RenewalPeriodBase') eq 'date_due' )
             ? dt_from_string( $issue->date_due, 'sql' )

@@ -51,12 +51,12 @@ sub do_renew_for  {
         $self->{due} = $self->duedatefromissue($issue, $self->{item}->{itemnumber});
         $self->renewal_ok(1);
     } else {
-        $renewerror=~s/on_reserve/Item unavailable due to outstanding holds/;
-        $renewerror=~s/booked/Item is booked for another borrower/;
-        $renewerror=~s/too_many/Item has reached maximum renewals/;
-        $renewerror=~s/too_unseen/Item has reached maximum consecutive renewals without being seen/;
-        $renewerror=~s/item_denied_renewal/Item renewal is not allowed/;
-        $renewerror=~s/item_issued_to_other_patron/Item already issued to other borrower/;
+        $renewerror =~ s/on_reserve/Item unavailable due to outstanding holds/;
+        $renewerror =~ s/booked/Item is booked for another borrower/;
+        $renewerror =~ s/too_many/Item has reached maximum renewals/;
+        $renewerror =~ s/too_unseen/Item has reached maximum consecutive renewals without being seen/;
+        $renewerror =~ s/item_denied_renewal/Item renewal is not allowed/;
+        $renewerror =~ s/item_issued_to_other_patron/Item already issued to other borrower/;
         $self->screen_msg($renewerror);
         $self->renewal_ok(0);
     }
