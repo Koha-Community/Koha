@@ -137,14 +137,14 @@
                                 <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
                                 [% UNLESS item.nomod %]
                                     <li>
-                                        <form action="/cgi-bin/koha/cataloguing/additem.pl" method="post">
+                                        <form id="[% item.itemnumber | html %]-delete-item-form" action="/cgi-bin/koha/cataloguing/additem.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-delitem" />
                                             <input type="hidden" name="biblionumber" value="[% item.biblionumber | html %]" />
                                             <input type="hidden" name="itemnumber" value="[% item.itemnumber | html %]" />
                                             <input type="hidden" name="searchid" value="[% searchid | html %]" />
                                         </form>
-                                        <a class="delete" href="#">Delete</a>
+                                        <a class="delete" data-item="[% item.itemnumber | html %]" href="#">Delete</a>
                                     </li>
                                 [% END %]
                             [% END %]
