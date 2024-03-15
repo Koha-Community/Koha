@@ -143,7 +143,7 @@ sub batch_add {
 
         my $dbic_params = Koha::Item::Transfer::Limits->new->attributes_from_api($params);
         my %existing_limits =
-            map { sprintf( "%s:%s:%s:%s", $_->fromBranch, $_->toBranch, $_->itemtype, $_->ccode ) => 1 }
+            map { sprintf( "%s:%s:%s:%s", $_->fromBranch, $_->toBranch, $_->itemtype // q{}, $_->ccode // q{} ) => 1 }
             Koha::Item::Transfer::Limits->search($dbic_params)->as_list;
 
         my @results;
