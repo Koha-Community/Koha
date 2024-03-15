@@ -3039,18 +3039,10 @@ sub CanBookBeRenewed {
     return ( 0, "on_reserve" )
       if ( $item->current_holds->search( { non_priority => 0 } )->count );
 
-    my $fillable_holds = Koha::Holds->search(
-        {
-            biblionumber => $item->biblionumber,
-            non_priority => 0,
-            found        => undef,
-            reservedate  => { '<=' => \'NOW()' },
-            suspend      => 0
-        }
-    );
-    if ( $fillable_holds->count ) {
+
+    my ($status, $matched_reserve, $fillable_holds) = CheckReserves($item);
+    if ( $fillable_holds ) {
         if ( C4::Context->preference('AllowRenewalIfOtherItemsAvailable') ) {
-            my @possible_holds = $fillable_holds->as_list;
 
             # Get all other items that could possibly fill reserves
             # FIXME We could join reserves (or more tables) here to eliminate some checks later
@@ -3060,14 +3052,12 @@ sub CanBookBeRenewed {
                 notforloan   => 0,
                 -not         => { itemnumber => $item->itemnumber } })->as_list;
 
-            return ( 0, "on_reserve" ) if @possible_holds && (scalar @other_items < scalar @possible_holds);
+            return ( 0, "on_reserve" ) if @{$fillable_holds} && (scalar @other_items < scalar @{$fillable_holds} );
 
             my %matched_items;
-            foreach my $possible_hold (@possible_holds) {
+            foreach my $possible_hold ( @{$fillable_holds} ) {
                 my $fillable = 0;
-                my $patron_with_reserve = Koha::Patrons->find($possible_hold->borrowernumber);
-
-                # FIXME: We are not checking whether the item we are renewing can fill the hold
+                my $patron_with_reserve = Koha::Patrons->find($possible_hold->{borrowernumber});
 
                 foreach my $other_item (@other_items) {
                   next if defined $matched_items{$other_item->itemnumber};
@@ -3085,7 +3075,6 @@ sub CanBookBeRenewed {
             }
         }
         else {
-            my ($status, $matched_reserve, $possible_reserves) = CheckReserves($item);
             return ( 0, "on_reserve" ) if $status;
         }
     }

@@ -4199,12 +4199,9 @@ subtest 'ItemsDeniedRenewal rules are checked' => sub {
         }
     );
 
-    my $allow_book = $builder->build_object({ class => 'Koha::Items', value => {
+    my $allow_book = $builder->build_sample_item({
         homebranch => $idr_lib->branchcode,
-        withdrawn => 0,
-        itype => 'NOHIDE',
-        location => 'NOPROC'
-        }
+        holdingbranch => $idr_lib->branchcode,
     });
 
     my $idr_borrower = $builder->build_object({ class => 'Koha::Patrons', value=> {
