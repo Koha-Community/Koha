@@ -23,7 +23,7 @@ $(document).ready(function(){
             $(".linktools").remove();
             var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=' + frameworkcode + '&biblionumber=' + biblionumber + '&itemnumber=' + num_rowid + '&searchid=' + searchid + '#edititem"></a>');
             $(edit_link).text( LABEL_EDIT_ITEM );
-            var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=' + frameworkcode + '&biblionumber=' + biblionumber + '&itemnumber=' + num_rowid + '&searchid=' + searchid + '"></a>');
+            var delete_link = $('<a class="delete" data-item="'+num_rowid+'" href="#"></a>');
             $(delete_link).text( LABEL_DELETE_ITEM );
             var tools_node = $('<span class="linktools"></span>');
             $(tools_node).append(edit_link);
