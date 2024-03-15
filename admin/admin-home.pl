@@ -24,24 +24,26 @@ use Koha::Plugins;
 
 my $query = CGI->new;
 
-my $mana_url        = C4::Context->config('mana_config');
+my $mana_url = C4::Context->config('mana_config');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "admin/admin-home.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { parameters => '*' },
+        template_name => "admin/admin-home.tt",
+        query         => $query,
+        type          => "intranet",
+        flagsrequired => { parameters => '*' },
     }
 );
 
 if ( C4::Context->config('enable_plugins') ) {
-    my @admin_plugins = Koha::Plugins->new()->GetPlugins({
-        method => 'admin',
-    });
+    my @admin_plugins = Koha::Plugins->new()->GetPlugins(
+        {
+            method => 'admin',
+        }
+    );
     $template->param( admin_plugins => \@admin_plugins );
 }
 
-$template->param( mana_url        => $mana_url, );
+$template->param( mana_url => $mana_url, );
 
 output_html_with_http_headers $query, $cookie, $template->output;
