@@ -34,11 +34,14 @@ Options:
                        (default: 2)
     --exclude-indexes  Exclude Zebra indexes from the backups (default: false)
 
+    --exclude-logs     Exclude /var/log/koha/name from the backup (default: false)
+
 Note: backups produced using this tool can be restored using \`koha-restore'.
 EOH
 }
 
 exclude_indexes=""
+exclude_logs=""
 
 CMD_LINE=`getopt -o h --long days:,output:,help,exclude-indexes,exclude-logs -n 'koha-run-backups' -- "$@"`
 
