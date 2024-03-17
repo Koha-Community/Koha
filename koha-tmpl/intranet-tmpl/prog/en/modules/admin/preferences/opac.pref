@@ -580,7 +580,7 @@ OPAC:
               choices:
                   1: Allow
                   0: "Don't allow"
-            - patrons to renew their own books on the OPAC.
+            - patrons to renew their own checkouts on the OPAC.
         -
             - Use 
             - pref: OpacRenewalBranch
@@ -592,7 +592,7 @@ OPAC:
                   opacrenew: "'OPACRenew'"
             - as branchcode to store in the statistics table.
         -
-            - Only allow patrons to renew their own books on the OPAC if they have less than
+            - Only allow patrons to renew their own checkouts on the OPAC if they have less than
             - pref: OPACFineNoRenewals
               class: currency
             - '[% local_currency %] in charges (leave blank to disable).'
@@ -666,7 +666,7 @@ OPAC:
               choices:
                   1: Allow
                   0: "Don't allow"
-            - patrons to see what books they have checked out in the past.
+            - patrons to see what itms they have checked out in the past.
         -
             - pref: OPACHoldsHistory
               choices:
