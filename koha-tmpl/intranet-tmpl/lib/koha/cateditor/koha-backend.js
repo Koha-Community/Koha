@@ -136,20 +136,19 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             record = record.clone();
             _removeBiblionumberFields( record );
 
-            $.ajax( {
-                type: 'POST',
-                url: '/cgi-bin/koha/svc/new_bib?frameworkcode=' + encodeURIComponent(frameworkcode),
-                data: record.toXML(),
-                contentType: 'text/xml'
-            } ).done( function( data ) {
-                var record = _fromXMLStruct( data );
-                if ( record.marcxml ) {
-                    record.marcxml[0].frameworkcode = frameworkcode;
+            const client = APIClient.cataloguing;
+            client.catalog_bib.create({ frameworkcode, record }).then(
+                success => {
+                    var record = _fromXMLStruct( data );
+                    if ( record.marcxml ) {
+                        record.marcxml[0].frameworkcode = frameworkcode;
+                    }
+                    callback( record );
+                },
+                error => {
+                    callback( { error: _('Could not save record') } );
                 }
-                callback( record );
-            } ).fail( function( data ) {
-                callback( { error: _('Could not save record') } );
-            } );
+            );
         },
 
         SaveRecord: function( id, record, callback ) {
