@@ -352,6 +352,9 @@ sub validate_query_parameters {
         push @errors, { path => "/query/" . $param, message => 'Malformed query string' } unless exists $valid_parameters{$param};
     }
 
+    push @errors, { path => "/query/_per_page", message => 'Invalid value: 0' }
+        if exists $existing_params->{_per_page} && $existing_params->{_per_page} == 0;
+
     Koha::Exceptions::BadParameter->throw(
         error => \@errors
     ) if @errors;
