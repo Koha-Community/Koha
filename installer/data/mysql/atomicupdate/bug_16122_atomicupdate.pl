@@ -27,5 +27,7 @@ return {
             );
             say $out "Added column 'deleteditems.localuse'";
         }
+        say $out
+            "You may use the new /misc/maintenance/update_localuse_from_statistics.pl script to populate the new field from the existing statistics data";
     },
     }
