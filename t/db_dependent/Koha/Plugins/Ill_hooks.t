@@ -54,7 +54,7 @@ subtest 'ill_table_actions hook' => sub {
         [
             {
                 button_class                  => 'btn btn-default btn-sm',
-                button_link                   => '/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=',
+                button_link                   => '/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=',
                 append_column_data_to_link    => 1,
                 button_link_translatable_text => 'ill_manage'
             },
