@@ -993,15 +993,19 @@ $(document).ready(function() {
         issuesTable.api().ajax.reload();
     });
 
-    // Don't load return claims table unless it is clicked on
+    // Don't load return claims table unless its tab is shown
     var returnClaimsTable;
-    $("#return-claims-tab").click( function() {
+    $("#return-claims-tab").on('shown.bs.tab', function() {
         refreshReturnClaimsTable();
     });
 
     function refreshReturnClaimsTable(){
-        loadReturnClaimsTable();
-        $("#return-claims-table").DataTable().ajax.reload();
+        const table = $('#return-claims-table');
+        if ($.fn.dataTable.isDataTable(table)) {
+            table.DataTable().ajax.reload();
+        } else {
+            loadReturnClaimsTable();
+        }
     }
     function loadReturnClaimsTable() {
         if ( ! returnClaimsTable ) {
