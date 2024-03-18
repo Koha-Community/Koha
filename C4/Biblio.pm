@@ -3205,7 +3205,7 @@ Helper method that takes care of calling all plugin hooks
 =cut
 
 sub _after_biblio_action_hooks {
-    my ( $args ) = @_;
+    my ($args) = @_;
 
     my $biblio_id = $args->{biblio_id};
     my $action    = $args->{action} // q{};
@@ -3214,7 +3214,12 @@ sub _after_biblio_action_hooks {
     Koha::Plugins->call(
         'after_biblio_action',
         {
-            action    => $action,
+            action  => $action,
+            payload => {
+                biblio    => $biblio,
+                biblio_id => $biblio_id,
+            },
+            # NOTE: Deprecate these duplicate params for 24.11.00
             biblio    => $biblio,
             biblio_id => $biblio_id,
         }
