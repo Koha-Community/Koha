@@ -1230,7 +1230,7 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
 };
 
 subtest 'host_items() tests' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -1260,6 +1260,27 @@ subtest 'host_items() tests' => sub {
     is( $host_items->count, 2 );
     is_deeply( [ $host_items->get_column('itemnumber') ],
         [ $host_item_1->itemnumber, $host_item_2->itemnumber ] );
+
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $host_item_1->itemnumber,
+                frombranch => $host_item_1->holdingbranch,
+            }
+        }
+    );
+    ok(
+        $host_items->search(
+            {},
+            {
+                join     => 'branchtransfers',
+                order_by => 'branchtransfers.daterequested'
+            }
+        )->as_list,
+        "host_items can be used with a join query on itemnumber"
+    );
+    $transfer->delete;
 
     t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
     $host_items = $biblio->host_items;
