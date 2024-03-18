@@ -517,7 +517,7 @@ legend:hover {
                                                                         <label for="guarantor_relationship">Relationship: </label>
                                                                         <select class="new_guarantor_relationship" name="new_guarantor_relationship">
                                                                     [% END %]
-                                                                        <option value="" selected>Empty option</option>
+                                                                        <option value=""></option>
                                                                         [% FOREACH pr IN possible_relationships.split('\|') %]
                                                                             [% IF pr != "" %]
                                                                                 <option value="[% pr | html %]">[% pr | html %]</option>
