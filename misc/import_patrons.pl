@@ -35,7 +35,7 @@ my $welcome_new = 0;
 my %defaults;
 my $ext_preserve = 0;
 my $confirm;
-my $verbose      = 0;
+my $verbose = 0;
 my $help;
 my @preserve_fields;
 my $update_dateexpiry;
@@ -61,9 +61,9 @@ GetOptions(
     'h|help|?'                       => \$help,
 ) or pod2usage(2);
 
-pod2usage(1) if $help;
+pod2usage(1)                                       if $help;
 pod2usage(q|--ee and --et are mutually exclusive|) if $update_dateexpiry_from_today && $update_dateexpiry_from_existing;
-pod2usage(q|--file is required|) unless $csv_file;
+pod2usage(q|--file is required|)       unless $csv_file;
 pod2usage(q|--matchpoint is required|) unless $matchpoint;
 
 if ($confirm) {
@@ -111,14 +111,14 @@ if ($verbose) {
     say q{};
 }
 
-if ($verbose > 1 ) {
+if ( $verbose > 1 ) {
     say "Errors:";
-    say Data::Dumper::Dumper( $errors );
+    say Data::Dumper::Dumper($errors);
 }
 
-if ($verbose > 2 ) {
+if ( $verbose > 2 ) {
     say "Feedback:";
-    say Data::Dumper::Dumper( $feedback );
+    say Data::Dumper::Dumper($feedback);
 }
 
 my $info =
