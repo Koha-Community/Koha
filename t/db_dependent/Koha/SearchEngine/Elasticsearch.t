@@ -1031,7 +1031,7 @@ subtest 'marc_records_to_documents should set the "available" field' => sub {
     $marc_record_1->append_fields(
         MARC::Field->new('245', '', '', a => 'Title'),
     );
-    my ($biblionumber) = C4::Biblio::AddBiblio($marc_record_1, '', { defer_marc_save => 1 });
+    my ($biblionumber) = C4::Biblio::AddBiblio( $marc_record_1, '' );
 
     my $docs = $see->marc_records_to_documents([$marc_record_1]);
     is_deeply($docs->[0]->{available}, \0, 'a biblio without items is not available');
