@@ -409,7 +409,7 @@ use C4::Biblio qw( GetMarcFromKohaField );
             $count++;
             print "Loop $count, borrowers id  : ";
             foreach my $borrower_id (@$table) {
-                print "$borrower_id | ";
+                print "$borrower_id , ";
             }
             print "\n";
         }
