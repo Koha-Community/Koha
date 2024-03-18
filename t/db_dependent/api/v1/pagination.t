@@ -34,7 +34,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() pagination tests' => sub {
 
-    plan tests => 66;
+    plan tests => 69;
 
     $schema->storage->txn_begin;
 
@@ -185,6 +185,13 @@ subtest 'list() pagination tests' => sub {
       ->tx->res->json;
 
     is( scalar @{$cities}, 10, '10 cities retrieved, -1 means all' );
+
+    $t->get_ok("//$userid:$password@/api/v1/cities?_per_page=0")->status_is(400)->json_is(
+        '/0' => {
+            message => 'Invalid value: 0',
+            path    => '/query/_per_page'
+        }
+    );
 
     $schema->storage->txn_rollback;
 };
