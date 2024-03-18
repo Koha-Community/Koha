@@ -25,8 +25,7 @@ use C4::Context;
 use Koha::Items;
 use Koha::Statistics;
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-
+use Pod::Usage   qw( pod2usage );
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -40,20 +39,20 @@ sub update_localuse {
     my $items = Koha::Items->search();
 
     # Loop through each item and update it with statistics info
-    while( my $item = $items->next ){
-      my $itemnumber = $item->itemnumber;
+    while ( my $item = $items->next ) {
+        my $itemnumber = $item->itemnumber;
 
-      my $localuse_count = Koha::Statistics->search( { itemnumber => $itemnumber, type => 'localuse' } )->count;
-      $item->localuse( $localuse_count );
-      $item->store;
+        my $localuse_count = Koha::Statistics->search( { itemnumber => $itemnumber, type => 'localuse' } )->count;
+        $item->localuse($localuse_count);
+        $item->store;
 
-      print "Updated item $itemnumber with localuse statistics info.\n";
+        print "Updated item $itemnumber with localuse statistics info.\n";
     }
 }
 
-my ( $help );
+my ($help);
 my $result = GetOptions(
-    'help|h'      => \$help,
+    'help|h' => \$help,
 );
 
 usage() if $help;
