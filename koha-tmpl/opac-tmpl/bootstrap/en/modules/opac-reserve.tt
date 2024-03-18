@@ -288,7 +288,7 @@
                                                 [% IF ( reserve_in_future ) %]
                                                     <li>
                                                         <label for="from[% bibitemloo.biblionumber | html %]">Hold starts on date:</label>
-                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr holddatefrom" />
+                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" data-flatpickr-futureinclusive="true" size="10" class="flatpickr holddatefrom" />
                                                         <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                         <div class="required_label" style="display:none;">Required</div>
                                                     </li>
@@ -296,7 +296,7 @@
 
                                                 <li>
                                                     <label for="to[% bibitemloo.biblionumber | html %]">Hold not needed after:</label>
-                                                    <input type="text" name="expiration_date_[% bibitemloo.biblionumber | html %]" id="to[% bibitemloo.biblionumber | html %]" size="10" class="flatpickr futuredate" />
+                                                    <input type="text" name="expiration_date_[% bibitemloo.biblionumber | html %]" id="to[% bibitemloo.biblionumber | html %]" size="10" data-flatpickr-future="true" class="flatpickr futuredate" />
                                                     <span class="date-format to" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                     <div class="required_label" style="display:none;">Required</div>
                                                 </li>
