@@ -24,10 +24,10 @@ use URI;
 use URI::Escape qw( uri_escape_utf8 );
 use Try::Tiny;
 
-use C4::Koha qw( GetNormalizedISBN GetNormalizedUPC GetNormalizedOCLCNumber );
-use C4::Biblio qw( DelBiblio );
-use C4::Serials qw( CountSubscriptionFromBiblionumber );
-use C4::Reserves qw( MergeHolds );
+use C4::Koha        qw( GetNormalizedISBN GetNormalizedUPC GetNormalizedOCLCNumber );
+use C4::Biblio      qw( DelBiblio );
+use C4::Serials     qw( CountSubscriptionFromBiblionumber );
+use C4::Reserves    qw( MergeHolds );
 use C4::Acquisition qw( ModOrder GetOrdersByBiblionumber );
 
 use Koha::Database;
