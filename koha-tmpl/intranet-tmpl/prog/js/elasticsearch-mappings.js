@@ -90,11 +90,6 @@ $(document).ready(function () {
             let dt = $('#' + table_id).DataTable();
             dt.row.add(new_line).draw();
 
-            var search_field_line = $('input[name="search_field_name"][value="' + search_field_name + '"]').closest("tr");
-            $(search_field_line).find('a.btn-default').addClass('disabled');
-
-            clean_line(line);
-
             $(table).on( 'click', '.delete', function () {
                 var table = $(this).closest('table');
                 let dt = $(table).DataTable();
@@ -128,23 +123,25 @@ $(document).ready(function () {
 
     $('.add-search-field').click(function() {
         var table = $(this).closest('table');
-        var line = $(this).closest("tr");
-        var name = $(line).find('input[data-id="search_field_name"]').val();
-        let already_exist = 0;
+        let table_id = table.attr('id');
+        var line = $(this).closest('tr');
+        var search_field_name = $(line).find('input[data-id="search_field_name"]').val();
+        if (search_field_name.length > 0) {
+            var new_line = clone_line(line);
+            new_line.find('td:first').attr({'data-order': search_field_name});
+            new_line.appendTo($('table#' + table_id + '>tbody'));
+            let dt = $('#' + table_id).DataTable();
+            dt.row.add(new_line).draw();
 
-        if ( $('input[name="search_field_name"][value="' + name + '"]').val() ) {
-            already_exist = 1;
-        }
+            $(table).on( 'click', '.delete', function () {
+                var table = $(this).closest('table');
+                let dt = $(table).DataTable();
+                dt.row( $(this).closest('tr') ).remove().draw();
+            } );
 
-        if (already_exist) {
-            alert("SearchField "+ name + " already exist");
+            clean_line(line);
         } else {
-            var label = $(line).find('input[data-id="search_field_label"]').val();
-            if ( name.length > 0 && label.length > 0 ) {
-                var new_line = clone_line( line );
-                new_line.appendTo(table.find('tbody'));
-                clean_line(line);
-            }
+            alert("SearchField "+ name + " already exist");
         }
     });
 });
