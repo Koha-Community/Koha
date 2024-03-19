@@ -2,7 +2,11 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="record_source_edit">
         <h1 v-if="record_source.record_source_id">
-            {{ $__("Edit '%s'").format(record_source.name) }}
+            {{
+                $__("Edit record source #%s").format(
+                    record_source.record_source_id
+                )
+            }}
         </h1>
         <h1 v-else>{{ $__("Add record source") }}</h1>
         <form @submit="onSubmit($event)">
