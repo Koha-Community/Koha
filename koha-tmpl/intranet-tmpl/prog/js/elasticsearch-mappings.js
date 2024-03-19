@@ -124,13 +124,18 @@ $(document).ready(function () {
     $('.add-search-field').click(function() {
         var table = $(this).closest('table');
         let table_id = table.attr('id');
+        let dt = $('#' + table_id).DataTable();
         var line = $(this).closest('tr');
         var search_field_name = $(line).find('input[data-id="search_field_name"]').val();
+        let already_exists = dt.data().filter((row, idx) => row[0]['@data-order'] === search_field_name);
+        if ( already_exists.length ) {
+            alert(__("SearchField '%s' already exist".format(search_field_name)));
+            return;
+        }
         if (search_field_name.length > 0) {
             var new_line = clone_line(line);
             new_line.find('td:first').attr({'data-order': search_field_name});
             new_line.appendTo($('table#' + table_id + '>tbody'));
-            let dt = $('#' + table_id).DataTable();
             dt.row.add(new_line).draw();
 
             $(table).on( 'click', '.delete', function () {
@@ -140,8 +145,6 @@ $(document).ready(function () {
             } );
 
             clean_line(line);
-        } else {
-            alert("SearchField "+ name + " already exist");
         }
     });
 });
