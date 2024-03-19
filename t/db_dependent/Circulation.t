@@ -37,7 +37,7 @@ use C4::Circulation qw( AddIssue AddReturn CanBookBeRenewed GetIssuingCharges Ad
 use C4::Biblio;
 use C4::Items qw( ModItemTransfer );
 use C4::Log;
-use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll ModReserveAffect CheckReserves GetOtherReserves );
+use C4::Reserves qw( AddReserve ModReserve ModReserveCancelAll ModReserveAffect CheckReserves );
 use C4::Overdues qw( CalcFine UpdateFine get_chargeable_units );
 use C4::Members::Messaging qw( SetMessagingPreference );
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -6269,8 +6269,10 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     ModItemTransfer( $item->itemnumber, $library_1->branchcode,
         $library_2->branchcode, 'Manual' );
     ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
-    GetOtherReserves( $item->itemnumber )
-      ;    # To put the Reason, it's what does returns.pl...
+    ModItemTransfer(
+        $item->itemnumber,      $library_1->branchcode,
+        $library_2->branchcode, 'Reserve'
+    );    # To put the Reason, it's what does returns.pl...
     my $hold = Koha::Holds->find($reserve_id);
     is( $hold->found, 'T', 'Hold is in transit' );
     my $transfer = $item->get_transfer;

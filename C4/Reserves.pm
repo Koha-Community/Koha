@@ -106,7 +106,6 @@ BEGIN {
 
       GetReserveStatus
 
-      GetOtherReserves
       ChargeReserveFee
       GetReserveFee
 
@@ -714,55 +713,6 @@ sub CanReserveBeCanceledFromOpac {
     return $reserve->is_cancelable_from_opac;
 }
 
-=head2 GetOtherReserves
-
-  ($messages,$nextreservinfo)=$GetOtherReserves(itemnumber);
-
-Check queued list of this document and check if this document must be transferred
-
-=cut
-
-sub GetOtherReserves {
-    my ($itemnumber) = @_;
-    my $messages;
-    my $nextreservinfo;
-    my $item = Koha::Items->find($itemnumber);
-    my ( undef, $checkreserves, undef ) = CheckReserves($item);
-    if ($checkreserves) {
-        if ( $item->holdingbranch ne $checkreserves->{'branchcode'} ) {
-            $messages->{'transfert'} = $checkreserves->{'branchcode'};
-            #minus priorities of others reservs
-            ModReserveMinusPriority(
-                $itemnumber,
-                $checkreserves->{'reserve_id'},
-            );
-
-            #launch the subroutine dotransfer
-            C4::Items::ModItemTransfer(
-                $itemnumber,
-                $item->holdingbranch,
-                $checkreserves->{'branchcode'},
-                'Reserve'
-              ),
-              ;
-        }
-
-     #step 2b : case of a reservation on the same branch, set the waiting status
-        else {
-            $messages->{'waiting'} = 1;
-            ModReserveMinusPriority(
-                $itemnumber,
-                $checkreserves->{'reserve_id'},
-            );
-            ModReserveStatus($itemnumber,'W');
-        }
-
-        $nextreservinfo = $checkreserves;
-    }
-
-    return ( $messages, $nextreservinfo );
-}
-
 =head2 ChargeReserveFee
 
     $fee = ChargeReserveFee( $borrowernumber, $fee, $title );
@@ -1298,7 +1248,7 @@ sub ModReserveAffect {
 
   ($messages,$nextreservinfo) = &ModReserveCancelAll($itemnumber,$borrowernumber,$reason);
 
-function to cancel reserv,check other reserves, and transfer document if it's necessary
+function to cancel reserve and check other reserves
 
 =cut
 
@@ -1306,14 +1256,24 @@ sub ModReserveCancelAll {
     my $messages;
     my $nextreservinfo;
     my ( $itemnumber, $borrowernumber, $cancellation_reason ) = @_;
+    my $item = Koha::Items->find($itemnumber);
 
     #step 1 : cancel the reservation
     my $holds = Koha::Holds->search({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
     return unless $holds->count;
     $holds->next->cancel({ cancellation_reason => $cancellation_reason });
 
-    #step 2 launch the subroutine of the others reserves
-    ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
+    #step 2 check for other reserves on this item
+    ( undef, $nextreservinfo, undef ) = CheckReserves($item);
+
+    if ($nextreservinfo) {
+        if( $item->holdingbranch ne $nextreservinfo->{'branchcode'} ) {
+            $messages->{'transfert'} = $nextreservinfo->{'branchcode'};
+        }
+        else {
+            $messages->{'waiting'} = 1;
+        }
+    }
 
     return ( $messages, $nextreservinfo->{borrowernumber} );
 }

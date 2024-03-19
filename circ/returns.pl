@@ -41,7 +41,7 @@ use C4::Items qw( ModItemTransfer );
 use C4::Members::Messaging;
 use C4::Members;
 use C4::Output qw( output_html_with_http_headers );
-use C4::Reserves qw( ModReserve ModReserveAffect GetOtherReserves );
+use C4::Reserves qw( ModReserve ModReserveAffect CheckReserves );
 use C4::RotatingCollections;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
@@ -162,15 +162,21 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
         } # FIXME else?
     } else {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
+
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
         ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
-    }
-#   check if we have other reserves for this document, if we have a return send the message of transfer
-    my ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
 
-    my $patron = Koha::Patrons->find( $nextreservinfo );
-    if ( $messages->{'transfert'} ) {
+        if ($diffBranchSend) {
+            ModItemTransfer( $itemnumber, $userenv_branch, $diffBranchSend, 'Reserve' );
+        }
+    }
+    # check if we have other reserves for this document, if we have a result send the message of transfer
+    # FIXME do we need to do this if we didn't take the cancel_reserve branch above?
+    my ( undef, $nextreservinfo, undef ) = CheckReserves($item);
+
+    my $patron = Koha::Patrons->find( $nextreservinfo->{'borrowernumber'} );
+    if ( $userenv_branch ne $nextreservinfo->{'branchcode'} ) {
         $template->param(
             itemtitle      => $biblio->title,
             itembiblionumber => $biblio->biblionumber,
@@ -595,15 +601,18 @@ if ( $messages->{'ResFound'} ) {
 
         my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
         ModReserveAffect( $itemnumber, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id}, $desk_id );
-        my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
+
+        if ($diffBranchSend) {
+            ModItemTransfer( $itemnumber, $item->holdingbranch, $reserve->{branchcode}, 'Reserve' );
+        }
 
         $template->param(
             hold_auto_filled => 1,
             print_slip       => C4::Context->preference('HoldsAutoFillPrintSlip'),
-            reserve_id       => $nextreservinfo->{reserve_id},
+            reserve_id       => $reserve->{reserve_id},
         );
 
-        if ( $messages->{'transfert'} ) {
+        if ($diffBranchSend) {
             $template->param(
                 itemtitle        => $biblio->title,
                 itembiblionumber => $biblio->biblionumber,
