@@ -7,7 +7,7 @@ function clean_line(line) {
 
 function clone_line(line) {
     var new_line = $(line).clone();
-    $(new_line).find('td:last-child>a').removeClass("add").addClass("delete").html( __("Delete") );
+    $(new_line).find('td:last-child>a').removeClass("add").addClass("delete").html('<i class="fa fa-trash"></i> %s'.format(__("Delete") ));
     $(new_line).find('[data-id]').each(function () {
         $(this).attr({ name: $(this).attr('data-id') }).removeAttr('data-id');
     });
