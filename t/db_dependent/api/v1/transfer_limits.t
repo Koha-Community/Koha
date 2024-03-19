@@ -212,7 +212,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json =>
             { item_type => 'X', collection_code => 'Y' } )->status_is(400)
-        ->json_is( '/error' => "Only one of 'item_type' and 'collecion_code' can be passed at a time" );
+        ->json_is( '/error' => "You can only pass 'item_type' or 'collection_code' at a time" );
 
     t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'ccode' );
 
