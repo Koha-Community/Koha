@@ -18,6 +18,9 @@ use Koha::Util::FrameworkPlugin qw( biblio_008 );
 our @includes;
 GetOptions( 'include=s{,}' => \@includes ); #not used by default !
 
+# Because of CGI::Session being buggy (see bug 17427) and a use of get_session somewhere here
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 our $dbh = C4::Context->dbh;
