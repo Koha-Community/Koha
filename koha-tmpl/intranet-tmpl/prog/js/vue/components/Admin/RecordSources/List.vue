@@ -105,7 +105,7 @@ export default {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
-                        "Are you sure you want to remove this record source?"
+                        "Are you sure you want to delete this record source?"
                     ),
                     message: record_source.name,
                     accept_label: this.$__("Yes, delete"),
@@ -118,9 +118,9 @@ export default {
                         .then(
                             success => {
                                 this.setMessage(
-                                    this.$__("Record source %s deleted").format(
-                                        record_source.name
-                                    ),
+                                    this.$__(
+                                        "Record source '%s' deleted"
+                                    ).format(record_source.name),
                                     true
                                 )
                                 dt.draw()

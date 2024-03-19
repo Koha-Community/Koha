@@ -162,18 +162,18 @@ describe("Record sources CRUD tests", () => {
             .contains("Delete")
             .click();
         cy.get(".dialog.alert.confirmation h1").contains(
-            "Are you sure you want to remove this record source?"
+            "Are you sure you want to delete this record source?"
         );
         cy.contains("Source 2");
-        cy.contains("No, do not remove").click();
+        cy.contains("No, do not delete").click();
 
         cy.get("#record_sources_list table tbody tr:nth-child(2n+2)")
             .contains("Delete")
             .click();
         cy.contains("Source 2");
-        cy.contains("Yes, remove").click();
+        cy.contains("Yes, delete").click();
         cy.get("main div[class='dialog message']").contains(
-            "Record source 'Source 2' removed"
+            "Record source 'Source 2' deleted"
         );
     });
 });
