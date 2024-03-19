@@ -18,6 +18,15 @@ export class CataloguingAPIClient extends HttpClient {
                             "text/xml",
                     },
                 }),
+            update: bib_info =>
+                this.post({
+                    endpoint: "bib/%s?frameworkcode=%s".format( bib_info.id, bib_info.frameworkcode ),
+                    body: bib_info.record.toXML(),
+                    headers: {
+                        "Content-Type":
+                            "text/xml",
+                    },
+                }),
         };
     }
 
