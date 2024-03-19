@@ -102,7 +102,7 @@
                                         [% END %]
                                         <span>[% op_count | html %] Term(s).</span>
                                     </div>
-                                [% END %]
+                                [% END # /IF op_count %]
                                 [% IF ( message_loop ) %]
                                     <div class="dialog alert" id="main_error">
                                         [% FOREACH message_loo IN message_loop %]
@@ -118,7 +118,7 @@
                                             [% END %]
                                         [% END %]
                                     </div>
-                                [% END %]
+                                [% END  # /IF message_loop %]
                                 [% IF ( pagination_bar ) %]
                                     <div class="pages" id="pagination_top">
                                         [% pagination_bar | $raw %]
@@ -199,14 +199,14 @@
                                                             [% UNLESS ( filter_approved_pending ) %]
                                                                 <td>&nbsp;</td>
                                                             [% END %]
-                                                        [% END %]
+                                                        [% END # /IF ( tagloo.approved ) %]
                                                         <td data-order="[% tagloo.date_approved | html %]">
                                                             [% tagloo.date_approved | $KohaDates %]
                                                         </td>
                                                     </tr>
-                                                [% END %]
+                                                [% END # /FOREACH tagloo %]
                                             </tbody>
-                                        </table>
+                                        </table> <!-- /#tagst -->
                                     </div> <!-- /.page-section -->
                                 [% END %]
                                 [% IF ( tagloop ) %]
@@ -216,7 +216,7 @@
                                     </fieldset>
                                 [% END %]
                             </form>
-                        </div>
+                        </div> <!-- /.col-sm-8 -->
                         <div class="col-sm-2 col-sm-push-2">
                             <aside>
                                 <fieldset class="brief">
@@ -264,7 +264,7 @@
                                         </form>
                                 </fieldset>
                             </aside>
-                        </div>
+                        </div> <!-- /.col-sm-2 -->
                         <div class="col-sm-2 col-sm-pull-10">
                             <aside>
                                 <form method="post" action="/cgi-bin/koha/tags/review.pl">
@@ -307,11 +307,11 @@
                                 [% INCLUDE 'tools-menu.inc' %]
 
                             </aside>
-                        </div>
-                    </div>
+                        </div> <!-- /.col-sm-2 -->
+                    </div> <!-- /.row -->
                 </main>
-            </div>
-        </div>
+            </div> <!-- /.col-sm-12 -->
+        </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
