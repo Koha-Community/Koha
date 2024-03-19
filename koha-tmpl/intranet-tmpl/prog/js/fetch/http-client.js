@@ -38,10 +38,11 @@ class HttpClient {
             headers: { ...this._headers, ...headers },
         })
             .then(response => {
+                const is_json = response.headers.get("content-type")?.includes("application/json");
                 if (!response.ok) {
                     return response.text().then(text => {
                         let message;
-                        if (text) {
+                        if (text && is_json) {
                             let json = JSON.parse(text);
                             message =
                                 json.error ||
@@ -53,7 +54,10 @@ class HttpClient {
                         throw new Error(message);
                     });
                 }
-                return return_response ? response : response.json();
+                if ( return_response || !is_json ) {
+                    return response;
+                }
+                return response.json();
             })
             .then(result => {
                 res = result;

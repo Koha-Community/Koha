@@ -139,7 +139,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             const client = APIClient.cataloguing;
             client.catalog_bib.create({ frameworkcode, record }).then(
                 success => {
-                    var record = _fromXMLStruct( data );
+                    var record = _fromXMLStruct( success );
                     if ( record.marcxml ) {
                         record.marcxml[0].frameworkcode = frameworkcode;
                     }
