@@ -128,7 +128,7 @@ describe("CSRF", () => {
 
         cy.visit("/cgi-bin/koha/admin/branches.pl");
         cy.get("select[name='libraries_length']").select("-1");
-        cy.get("#delete_library_" + branchcode).click();
+        cy.get("#delete_library_" + branchcode).click({ force: true });
 
         // Remove CSRF Token
         cy.get("form[method='post']")
@@ -157,7 +157,7 @@ describe("CSRF", () => {
 
         cy.visit("/cgi-bin/koha/admin/branches.pl");
         cy.get("select[name='libraries_length']").select("-1");
-        cy.get("#delete_library_" + branchcode).click();
+        cy.get("#delete_library_" + branchcode).click({ force: true });
 
         cy.contains("Yes, delete").click();
 
