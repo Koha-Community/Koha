@@ -923,10 +923,16 @@ sub pickup_locations {
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
-    return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_local_hold_group' && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
-    return Koha::Libraries->new()->empty if $branchitemrule->{holdallowed} eq 'from_home_library' && $self->home_branch->branchcode ne $patron->branchcode;
+    if (
+        $branchitemrule->{holdallowed} eq 'from_local_hold_group' &&
+        !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} ) ||
+        $branchitemrule->{holdallowed} eq 'from_home_library' &&
+        $self->home_branch->branchcode ne $patron->branchcode
+    ) {
+        return Koha::Libraries->new()->empty;
+    }
 
-    my $pickup_libraries = Koha::Libraries->search();
+    my $pickup_libraries;
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
         $pickup_libraries = $self->home_branch->get_hold_libraries;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup') {
@@ -936,7 +942,9 @@ sub pickup_locations {
         $pickup_libraries = Koha::Libraries->search({ branchcode => $self->homebranch });
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {
         $pickup_libraries = Koha::Libraries->search({ branchcode => $self->holdingbranch });
-    };
+    } else {
+        $pickup_libraries = Koha::Libraries->search();
+    }
 
     return $pickup_libraries->search(
         {
@@ -948,7 +956,8 @@ sub pickup_locations {
     ) unless C4::Context->preference('UseBranchTransferLimits');
 
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
-    my ($ccode, $itype) = (undef, undef);
+    my $ccode;
+    my $itype;
     if( $limittype eq 'ccode' ){
         $ccode = $self->ccode;
     } else {
