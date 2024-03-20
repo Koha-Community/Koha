@@ -267,9 +267,9 @@ subtest '_embed_items' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'source_allows_editing() tests' => sub {
+subtest 'record_source() and source_allows_editing() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -278,11 +278,16 @@ subtest 'source_allows_editing() tests' => sub {
     my $metadata = $biblio->metadata;
     is( $metadata->record_source_id, undef, 'No record source defined for metatada object' );
     ok( $metadata->source_allows_editing, 'No record source, can be edited' );
+    is( $metadata->record_source, undef );
 
     my $source = $builder->build_object( { class => 'Koha::RecordSources', value => { can_be_edited => 1 } } );
     $metadata->record_source_id( $source->id )->store();
 
+    my $retrieved_source = $metadata->record_source;
+
     ok( $metadata->source_allows_editing, 'Record source allows, can be edited' );
+    is( ref($retrieved_source), 'Koha::RecordSource' );
+    is( $retrieved_source->id,  $source->id );
 
     $source->can_be_edited(0)->store();
     $metadata->discard_changes;

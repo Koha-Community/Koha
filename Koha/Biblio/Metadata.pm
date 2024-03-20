@@ -23,8 +23,10 @@ use Scalar::Util qw( blessed );
 use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Charset qw( StripNonXmlChars );
 use C4::Items qw( GetMarcItem );
+
 use Koha::Database;
 use Koha::Exceptions::Metadata;
+use Koha::RecordSources;
 
 use base qw(Koha::Object);
 
@@ -185,6 +187,22 @@ sub source_allows_editing {
     my $rs = $self->_result->record_source;
     return 1 unless $rs;
     return $rs->can_be_edited;
+}
+
+=head3 record_source
+
+    my $record_source = $metadata->record_source;
+
+Returns a I<Koha::RecordSource> object for the linked record source.
+
+=cut
+
+sub record_source {
+    my ($self) = @_;
+
+    my $rs = $self->_result->record_source;
+    return unless $rs;
+    return Koha::RecordSource->_new_from_dbic($rs);
 }
 
 =head2 Internal methods
