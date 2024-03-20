@@ -1220,6 +1220,7 @@ sub checkauth {
                         # we have to check they are coming from the right ip range
                         my $domain = $branches->{$branchcode}->{'branchip'};
                         $domain =~ s|\.\*||g;
+                        $domain =~ s/\s+//g;
                         if ( $ip !~ /^$domain/ ) {
                             $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                                 -name     => 'CGISESSID',
