@@ -29,7 +29,8 @@ use C4::Context;
 my %scrubbertypes = (
     default => {}, # place holder, default settings are below as fallbacks in call to constructor
     tag     => {},                                               # uses defaults
-    comment => { allow => [qw[ p b i u hr br em big small strong span div ]] },
+    comment => { allow => [qw( br b i em big small strong )], },
+    note    => { allow => [qw[ p b i u hr br em big small strong span div ]] },
     staff   => {
         default => [ 1 => { '*' => 1 } ],
         comment => 1,
@@ -49,6 +50,7 @@ sub new {
         rules   => exists $settings->{rules} ? $settings->{rules} : [],
         default => exists $settings->{default} ? $settings->{default} : [ 0 => { '*' => 0 } ],
         comment => exists $settings->{comment} ? $settings->{comment} : 0,
+        note    => exists $settings->{note} ? $settings->{note} : 0,
         process => 0,
     );
     return $scrubber;
