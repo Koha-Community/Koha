@@ -22,6 +22,7 @@
   <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
   <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
   <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
+  <xsl:variable name="ContentWarningField" select="marc:sysprefs/marc:syspref[@name='ContentWarningField']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
@@ -346,6 +347,11 @@
       </xsl:for-each>
     </span>
   </xsl:if>
+
+  <!-- Content Warning -->
+  <xsl:call-template name="tag_content_warning">
+    <xsl:with-param name="tag" select="$ContentWarningField" />
+  </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=955]">
     <span class="results_summary sudoc_serial_history">
