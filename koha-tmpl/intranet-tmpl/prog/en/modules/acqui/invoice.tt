@@ -230,7 +230,7 @@
                                         [% END # /IF adjustment.encumber_open  %]
                                         [% UNLESS readonly %]
                                             <td>
-                                                <a class="btn btn-default btn-xs submit-form-link" href="#" data-adjustment_id="[% adjustment.adjustment_id | html %]" data-invoiceid="[% invoiceid | html %]" data-action="invoice.pl" data-method="post" data-op="cud-del_adj" data-confirmation="confirm_del_adj">
+                                                <a class="btn btn-default btn-xs submit-form-link" href="#" data-adjustment_id="[% adjustment.adjustment_id | html %]" data-invoiceid="[% invoiceid | html %]" data-action="invoice.pl" data-method="post" data-op="cud-del_adj" data-confirmation-msg="[% t('Are you sure you want to delete this adjustment?') %]">
                                                 <i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         [% END %]
@@ -538,7 +538,6 @@
 </span> <!-- /#all_fund_dropdown -->
 
 [% MACRO jsinclude BLOCK %]
-    <script>var confirm_del_adj = _("Are you sure you want to delete this adjustment?");</script>
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% Asset.js("js/form-submit.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]

@@ -4,11 +4,11 @@ $(document).ready(function(){
         e.preventDefault();
         let form_data = $(this).data();
 
-        form_confirm = form_data.confirmation;
+        let confirm_msg = form_data.confirmationMsg;
         let confirmation = 1;
-        if( form_confirm ){
-            delete form_data.confirmation;
-            confirmation = confirm( eval(form_confirm) );
+        if( confirm_msg ){
+            delete form_data.confirmationMsg;
+            confirmation = confirm( confirm_msg );
         }
         if( !confirmation ){ return false }
 
