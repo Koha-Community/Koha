@@ -220,9 +220,9 @@ sub store {
               if defined $self->relationship
                      and $self->relationship eq "";
 
-            for my $note_field ( qw( borrowernotes opacnote ) ) {
+            for my $note_field (qw( borrowernotes opacnote )) {
                 if ( !$self->in_storage || $self->_result->is_column_changed($note_field) ) {
-                    $self->$note_field(C4::Scrubber->new('comment')->scrub($self->$note_field));
+                    $self->$note_field( C4::Scrubber->new('note')->scrub( $self->$note_field ) );
                 }
             }
 
