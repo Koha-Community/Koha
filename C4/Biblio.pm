@@ -212,7 +212,7 @@ sub AddBiblio {
     my $skip_record_index = $options->{'skip_record_index'} // 0;
     my $disable_autolink  = $options->{disable_autolink}    // 0;
 
-    if (!$record) {
+    if ( !$record ) {
         carp('AddBiblio called with undefined record');
         return;
     }
@@ -220,102 +220,106 @@ sub AddBiblio {
     my $schema = Koha::Database->schema;
     my ( $biblionumber, $biblioitemnumber );
     try {
-        $schema->txn_do(sub {
+        $schema->txn_do(
+            sub {
 
-            # transform the data into koha-table style data
-            SetUTF8Flag($record);
-            my $olddata = TransformMarcToKoha({ record => $record, limit_table => 'no_items' });
+                # transform the data into koha-table style data
+                SetUTF8Flag($record);
+                my $olddata = TransformMarcToKoha( { record => $record, limit_table => 'no_items' } );
 
-            my $biblio = Koha::Biblio->new(
-                {
-                    frameworkcode => $frameworkcode,
-                    author        => $olddata->{author},
-                    title         => $olddata->{title},
-                    subtitle      => $olddata->{subtitle},
-                    medium        => $olddata->{medium},
-                    part_number   => $olddata->{part_number},
-                    part_name     => $olddata->{part_name},
-                    unititle      => $olddata->{unititle},
-                    notes         => $olddata->{notes},
-                    serial        => $olddata->{serial},
-                    seriestitle   => $olddata->{seriestitle},
-                    copyrightdate => $olddata->{copyrightdate},
-                    datecreated   => \'NOW()',
-                    abstract      => $olddata->{abstract},
+                my $biblio = Koha::Biblio->new(
+                    {
+                        frameworkcode => $frameworkcode,
+                        author        => $olddata->{author},
+                        title         => $olddata->{title},
+                        subtitle      => $olddata->{subtitle},
+                        medium        => $olddata->{medium},
+                        part_number   => $olddata->{part_number},
+                        part_name     => $olddata->{part_name},
+                        unititle      => $olddata->{unititle},
+                        notes         => $olddata->{notes},
+                        serial        => $olddata->{serial},
+                        seriestitle   => $olddata->{seriestitle},
+                        copyrightdate => $olddata->{copyrightdate},
+                        datecreated   => \'NOW()',
+                        abstract      => $olddata->{abstract},
+                    }
+                )->store;
+                $biblionumber = $biblio->biblionumber;
+                Koha::Exceptions::ObjectNotCreated->throw unless $biblio;
+
+                my ($cn_sort) =
+                    GetClassSort( $olddata->{'biblioitems.cn_source'}, $olddata->{'cn_class'}, $olddata->{'cn_item'} );
+                my $biblioitem = Koha::Biblioitem->new(
+                    {
+                        biblionumber          => $biblionumber,
+                        volume                => $olddata->{volume},
+                        number                => $olddata->{number},
+                        itemtype              => $olddata->{itemtype},
+                        isbn                  => $olddata->{isbn},
+                        issn                  => $olddata->{issn},
+                        publicationyear       => $olddata->{publicationyear},
+                        publishercode         => $olddata->{publishercode},
+                        volumedate            => $olddata->{volumedate},
+                        volumedesc            => $olddata->{volumedesc},
+                        collectiontitle       => $olddata->{collectiontitle},
+                        collectionissn        => $olddata->{collectionissn},
+                        collectionvolume      => $olddata->{collectionvolume},
+                        editionstatement      => $olddata->{editionstatement},
+                        editionresponsibility => $olddata->{editionresponsibility},
+                        illus                 => $olddata->{illus},
+                        pages                 => $olddata->{pages},
+                        notes                 => $olddata->{bnotes},
+                        size                  => $olddata->{size},
+                        place                 => $olddata->{place},
+                        lccn                  => $olddata->{lccn},
+                        url                   => $olddata->{url},
+                        cn_source             => $olddata->{'biblioitems.cn_source'},
+                        cn_class              => $olddata->{cn_class},
+                        cn_item               => $olddata->{cn_item},
+                        cn_suffix             => $olddata->{cn_suff},
+                        cn_sort               => $cn_sort,
+                        totalissues           => $olddata->{totalissues},
+                        ean                   => $olddata->{ean},
+                        agerestriction        => $olddata->{agerestriction},
+                    }
+                )->store;
+                Koha::Exceptions::ObjectNotCreated->throw unless $biblioitem;
+                $biblioitemnumber = $biblioitem->biblioitemnumber;
+
+                _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
+
+                # update MARC subfield that stores biblioitems.cn_sort
+                _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
+
+                if ( !$disable_autolink && C4::Context->preference('AutoLinkBiblios') ) {
+                    BiblioAutoLink( $record, $frameworkcode );
                 }
-            )->store;
-            $biblionumber = $biblio->biblionumber;
-            Koha::Exceptions::ObjectNotCreated->throw unless $biblio;
 
-            my ($cn_sort) = GetClassSort( $olddata->{'biblioitems.cn_source'}, $olddata->{'cn_class'}, $olddata->{'cn_item'} );
-            my $biblioitem = Koha::Biblioitem->new(
-                {
-                    biblionumber          => $biblionumber,
-                    volume                => $olddata->{volume},
-                    number                => $olddata->{number},
-                    itemtype              => $olddata->{itemtype},
-                    isbn                  => $olddata->{isbn},
-                    issn                  => $olddata->{issn},
-                    publicationyear       => $olddata->{publicationyear},
-                    publishercode         => $olddata->{publishercode},
-                    volumedate            => $olddata->{volumedate},
-                    volumedesc            => $olddata->{volumedesc},
-                    collectiontitle       => $olddata->{collectiontitle},
-                    collectionissn        => $olddata->{collectionissn},
-                    collectionvolume      => $olddata->{collectionvolume},
-                    editionstatement      => $olddata->{editionstatement},
-                    editionresponsibility => $olddata->{editionresponsibility},
-                    illus                 => $olddata->{illus},
-                    pages                 => $olddata->{pages},
-                    notes                 => $olddata->{bnotes},
-                    size                  => $olddata->{size},
-                    place                 => $olddata->{place},
-                    lccn                  => $olddata->{lccn},
-                    url                   => $olddata->{url},
-                    cn_source      => $olddata->{'biblioitems.cn_source'},
-                    cn_class       => $olddata->{cn_class},
-                    cn_item        => $olddata->{cn_item},
-                    cn_suffix      => $olddata->{cn_suff},
-                    cn_sort        => $cn_sort,
-                    totalissues    => $olddata->{totalissues},
-                    ean            => $olddata->{ean},
-                    agerestriction => $olddata->{agerestriction},
+                # now add the record, don't index while we are in the transaction though
+                ModBiblioMarc(
+                    $record, $biblionumber,
+                    {
+                        skip_record_index => 1,
+                        record_source_id  => $options->{record_source_id},
+                    }
+                );
+
+                # update OAI-PMH sets
+                if ( C4::Context->preference("OAI-PMH:AutoUpdateSets") ) {
+                    C4::OAI::Sets::UpdateOAISetsBiblio( $biblionumber, $record );
                 }
-            )->store;
-            Koha::Exceptions::ObjectNotCreated->throw unless $biblioitem;
-            $biblioitemnumber = $biblioitem->biblioitemnumber;
 
-            _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
+                _after_biblio_action_hooks( { action => 'create', biblio_id => $biblionumber } );
 
-            # update MARC subfield that stores biblioitems.cn_sort
-            _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
+                logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
 
-            if (!$disable_autolink && C4::Context->preference('AutoLinkBiblios')) {
-                BiblioAutoLink( $record, $frameworkcode );
             }
+        );
 
-            # now add the record, don't index while we are in the transaction though
-            ModBiblioMarc(
-                $record, $biblionumber,
-                {
-                    skip_record_index => 1,
-                    record_source_id  => $options->{record_source_id},
-                }
-            );
-
-            # update OAI-PMH sets
-            if(C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
-                C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
-            }
-
-            _after_biblio_action_hooks({ action => 'create', biblio_id => $biblionumber });
-
-            logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
-
-        });
         # We index now, after the transaction is committed
-        unless ( $skip_record_index ) {
-            my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        unless ($skip_record_index) {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
             $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
         }
     } catch {
