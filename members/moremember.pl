@@ -37,6 +37,7 @@ use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
 use Koha::Patron::Attribute::Types;
 use Koha::Patron::Restriction::Types;
+use Koha::Patron::Categories;
 use Koha::Patron::Messages;
 use Koha::CsvProfiles;
 use Koha::Holds;
@@ -130,6 +131,10 @@ if ( !$patron->is_valid_age ) {
     $template->param( age_limitations => 1 );
     $template->param( age_low => $patron->category->dateofbirthrequired );
     $template->param( age_high => $patron->category->upperagelimit );
+}
+
+unless ( Koha::Patron::Categories->search_with_library_limits( { 'me.categorycode' => $patron->categorycode } )->count ) {
+    $template->param( limited_category => 1 );
 }
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

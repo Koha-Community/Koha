@@ -1,10 +1,11 @@
 [% USE raw %]
 [% USE Branches %]
+[% USE Categories %]
 [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
 [% SET return_claims = patron.return_claims %]
 [% SET logged_in_branchcode = Branches.GetLoggedInBranchcode() %]
 
-[% IF ( has_modifications || warndeparture || returnbeforeexpiry || expired || patron.gonenoaddress || patron.lost || userdebarred || odues || ( return_claims.count > ClaimReturnedWarningThreshold ) || age_limitations || charges || charges_guarantors_guarantees || charges_guarantees || credits ) %]
+[% IF ( has_modifications || warndeparture || returnbeforeexpiry || expired || patron.gonenoaddress || patron.lost || userdebarred || odues || ( return_claims.count > ClaimReturnedWarningThreshold ) || age_limitations || limited_category || charges || charges_guarantors_guarantees || charges_guarantees || credits ) %]
     <h3>Attention</h3>
     <ul>
         [% IF ( has_modifications ) %]
@@ -93,6 +94,13 @@
             <li class="invalid_age">
                 <span class="circ-hlt">Patron's age is incorrect for their category.</span>
                 Ages allowed are [% age_low | html %]-[% age_high | html %].
+                <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3" class="btn btn-default btn-xs">Change category</a>
+            </li>
+        [% END %]
+
+        [% IF limited_category %]
+            <li class="limited_category">
+                <span class="circ-hlt">The patron's current category ([% Categories.GetName(patron.categorycode) | html %]) is limited to other libraries.</span>
                 <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]&amp;step=3" class="btn btn-default btn-xs">Change category</a>
             </li>
         [% END %]
