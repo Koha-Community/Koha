@@ -153,6 +153,18 @@
             <span id="catalogue_detail_elastic_record" class="results_summary"><span class="label">Elasticsearch record:</span> <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a></span>
         [% END %]
 
+        [% SET record_source = biblio.metadata.record_source %]
+        [% IF ( record_source ) %]
+            <span id="catalogue_detail_record_source" class="results_summary">
+                <span class="label">Record source:</span>
+                [% IF record_source.can_be_edited %]
+                    [% record_source.name | html %]
+                [% ELSE %]
+                    [% record_source.name | html %] <i class="fa fa-lock"></i>
+                [% END %]
+            </span>
+        [% END %]
+
         [% IF ( holdcount ) %]
             <span class="results_summary">
                 <span class="label">Holds:</span>
