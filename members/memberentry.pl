@@ -163,7 +163,6 @@ foreach (@field_check) {
     next unless m/\w/o;
     $template->param( "no$_" => 1 );
 }
-$template->param( "op" => $op );
 $template->param( "quickadd" => 1 ) if ( $quickadd );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
@@ -607,6 +606,9 @@ if ($nok or !$nodouble){
         $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 );
     }  
 } 
+
+$template->param( "op" => $op );
+
 if (C4::Context->preference("IndependentBranches")) {
     my $userenv = C4::Context->userenv;
     if ( !C4::Context->IsSuperLibrarian() && $data{'branchcode'} ) {
