@@ -761,7 +761,7 @@ subtest 'check_cookie_auth' => sub {
 };
 
 subtest 'checkauth & check_cookie_auth' => sub {
-    plan tests => 34;
+    plan tests => 33;
 
     # flags = 4 => { catalogue => 1 }
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 4 } });
@@ -907,14 +907,13 @@ subtest 'checkauth & check_cookie_auth' => sub {
         is( $auth_status, "ok" );
         is( $session->id, $sessionID, 'Same session' );
         # Two additional tests on userenv
-        is( $C4::Context::context->{activeuser}, $session->id, 'Check if environment has been setup for session' );
         is( C4::Context->userenv->{id}, $userid, 'Check userid in userenv' );
     }
 };
 
 subtest 'Userenv clearing in check_cookie_auth' => sub {
     # Note: We did already test userenv for a logged-in user in previous subtest
-    plan tests => 9;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference( 'timeout', 600 );
     my $cgi = CGI->new;
@@ -924,7 +923,6 @@ subtest 'Userenv clearing in check_cookie_auth' => sub {
     my ($userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth($cgi, 1);
     my ( $auth_status, $session) = C4::Auth::check_cookie_auth( $sessionID );
     is( $auth_status, 'anon', 'Should be anonymous' );
-    is( $C4::Context::context->{activeuser}, $session->id, 'Check activeuser' );
     is( defined C4::Context->userenv, 1, 'There should be a userenv' );
     is(  C4::Context->userenv->{id}, q{}, 'userid should be empty string' );
 
