@@ -31,6 +31,7 @@
   <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
   <xsl:variable name="singleBranchMode" select="marc:sysprefs/marc:syspref[@name='singleBranchMode']"/>
   <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
+  <xsl:variable name="ContentWarningField" select="marc:sysprefs/marc:syspref[@name='ContentWarningField']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
@@ -154,6 +155,11 @@
   <xsl:call-template name="tag_210-214" />
 
   <xsl:call-template name="tag_215" />
+
+  <!-- Content Warning -->
+  <xsl:call-template name="tag_content_warning">
+    <xsl:with-param name="tag" select="$ContentWarningField" />
+  </xsl:call-template>
 
   <span class="results_summary availability">
     <span class="label">Availability: </span>

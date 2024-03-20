@@ -16,6 +16,7 @@
 
 <xsl:template match="marc:record">
   <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='Display856uAsImage']"/>
+  <xsl:variable name="ContentWarningField" select="marc:sysprefs/marc:syspref[@name='ContentWarningField']"/>
   <xsl:variable name="leader" select="marc:leader"/>
   <xsl:variable name="leader6" select="substring($leader,7,1)"/>
   <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -305,6 +306,11 @@
       </xsl:for-each>
     </span>
   </xsl:if>
+
+  <!-- Content Warning -->
+  <xsl:call-template name="tag_content_warning">
+    <xsl:with-param name="tag" select="$ContentWarningField" />
+  </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=955]">
     <span class="results_summary sudoc_serial_history">
