@@ -67,13 +67,15 @@
 
 [% IF ( add_form ) %]
     <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
-        <input type="hidden" name="op" value="add_validated" />
+        [% INCLUDE 'csrf-token.inc' %]
         [% IF op == 'edit' %]
             <h1>Modify OAI repository</h1>
             <input type="hidden" name="id" value="[% server.id | html %]" />
         [% ELSE %]
             <h1>New OAI repository</h1>
         [% END %]
+
+        <input type="hidden" name="op" value="cud-add_validated" />
         <fieldset class="rows">
         <ol>
         <li><label for="name" class="required">Repository name: </label>
@@ -153,7 +155,15 @@
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                         <li><a href="/cgi-bin/koha/admin/oaiservers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
                         <li><a href="/cgi-bin/koha/admin/oaiservers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li><a href="/cgi-bin/koha/admin/oaiservers.pl?op=delete_confirmed&amp;id=[% loo.id | uri %]" class="delete" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a></li>
+                        <li>
+                            <a href="#" class="delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/oaiservers.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-delete_confirmed">
+                                <input type="hidden" name="id" value="[% loo.id | uri %]">
+                            </form>
+                        </li>
+
                     </ul>
                 </div>
             </td>
@@ -216,7 +226,9 @@
                 }));
                 $(".delete").on("click",function(e){
                     var servername = $(this).data("servername");
+                    let formid = $(this).data("formid");
                     if( confirm( _("Are you sure you want to delete repository %s?").format(servername) ) ) {
+                        $('#'+formid).submit();
                         return true;
                     } else {
                         e.preventDefault();

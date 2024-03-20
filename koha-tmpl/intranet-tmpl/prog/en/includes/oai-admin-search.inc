@@ -3,16 +3,16 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="oai_search" role="tabpanel" class="tab-pane active">
-            <form action="/cgi-bin/koha/admin/oaiservers.pl" method="post">
+            <form action="/cgi-bin/koha/admin/oaiservers.pl" method="get">
                 <div class="form-title">
-                    <label class="control-label">Search OAI repositories</label>
+                    <label class="control-label" for="searchfield">Search OAI repositories</label>
                 </div>
 
                 <div class="form-content">
                     <input class="head-searchbox form-control" type="text" name="searchfield" id="searchfield" value="[% searchfield | html %]" placeholder="OAI repository search" />
                 </div>
-
-                <button type="submit"><i class="fa fa-arrow-right"></i></button>
+                <input type="hidden" name="op" value="search" />
+                <button type="submit" aria-label="Search"><i class="fa fa-arrow-right"></i></button>
             </form>
         </div>
 

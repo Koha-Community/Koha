@@ -23,7 +23,7 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
 use Koha::OaiServers;
@@ -31,8 +31,8 @@ use Koha::OaiServers;
 # Initialize CGI, template, database
 
 my $input       = CGI->new;
-my $op          = $input->param('op') || 'list';
-my $id          = $input->param('id') || 0;
+my $op          = $input->param('op')   || 'list';
+my $id          = $input->param('id')   || 0;
 my $type        = $input->param('type') || '';
 my $searchfield = '';
 
@@ -54,7 +54,7 @@ my $schema = Koha::Database->new()->schema();
 # Main code
 # First process a confirmed delete, or save a validated record
 
-if ( $op eq 'delete_confirmed' && $id ) {
+if ( $op eq 'cud-delete_confirmed' && $id ) {
     my $server = Koha::OaiServers->find($id);
     if ($server) {
         $server->delete;
@@ -63,7 +63,7 @@ if ( $op eq 'delete_confirmed' && $id ) {
         $template->param( msg_notfound => 1, msg_add => $id );
     }
     $id = 0;
-} elsif ( $op eq 'add_validated' ) {
+} elsif ( $op eq 'cud-add_validated' ) {
     my @fields = qw/endpoint oai_set dataformat
         recordtype servername
         add_xslt/;
@@ -81,7 +81,7 @@ if ( $op eq 'delete_confirmed' && $id ) {
         Koha::OaiServer->new($formdata)->store;
         $template->param( msg_added => 1, msg_add => $formdata->{servername} );
     }
-} else {
+} elsif ( $op eq 'search' ) {
 
     #use searchfield only in remaining operations
     $searchfield = $input->param('searchfield') || '';
@@ -92,7 +92,7 @@ if ( $op eq 'delete_confirmed' && $id ) {
 my $data = [];
 if ( $op eq 'add' || $op eq 'edit' ) {
     $data = ServerSearch( $schema, $id, $searchfield ) if $searchfield || $id;
-    delete $data->[0]->{id} if @$data && $op eq 'add';    #cloning record
+    delete $data->[0]->{id}                            if @$data && $op eq 'add';    #cloning record
     $template->param(
         add_form => 1, server => @$data ? $data->[0] : undef,
         op => $op, type => $op eq 'add' ? lc $type : ''
