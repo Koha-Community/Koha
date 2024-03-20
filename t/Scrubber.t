@@ -82,4 +82,4 @@ if ($@) {
     pass("Test should have failed on entry of 'Client' and it did. YAY!");
 }
 
-is( C4::Scrubber->new('comment')->scrub('<span>Allow span</span>'), '<span>Allow span</span>' );
+is( C4::Scrubber->new('note')->scrub('<span>Allow span</span>'), '<span>Allow span</span>' );
