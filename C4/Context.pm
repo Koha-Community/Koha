@@ -703,7 +703,7 @@ Destroys user environment variables.
 
 sub unset_userenv
 {
-    $context->{userenv} = {};
+    $context->{userenv} = undef;
 }
 
 
