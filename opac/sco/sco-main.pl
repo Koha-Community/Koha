@@ -61,14 +61,6 @@ unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
     exit;
 }
 
-if (C4::Context->preference('AutoSelfCheckAllowed'))
-{
-    my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
-    my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
-    $query->param(-name=>'userid',-values=>[$AutoSelfCheckID]);
-    $query->param(-name=>'password',-values=>[$AutoSelfCheckPass]);
-    $query->param(-name=>'koha_login_context',-values=>['sco']);
-}
 $query->param(-name=>'sco_user_login',-values=>[1]);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

@@ -183,11 +183,19 @@ sub get_template_and_user {
         $in->{'query'},
     );
 
-    my $request_method = $in->{query}->request_method // q{};
-    unless ( $request_method eq 'POST' && $in->{query}->param('op') eq 'cud-login' ) {
-        for my $v ( qw( login_userid login_password ) ) {
-            $in->{query}->param($v, '')
-                if $in->{query}->param($v);
+    if ( C4::Context->preference('AutoSelfCheckAllowed') && $in->{template_name} =~ m|sco/| ) {
+        my $AutoSelfCheckID   = C4::Context->preference('AutoSelfCheckID');
+        my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
+        $in->{query}->param( -name => 'login_userid',       -values => [$AutoSelfCheckID] );
+        $in->{query}->param( -name => 'login_password',     -values => [$AutoSelfCheckPass] );
+        $in->{query}->param( -name => 'koha_login_context', -values => ['sco'] );
+    } else {
+        my $request_method = $in->{query}->request_method // q{};
+        unless ( $request_method eq 'POST' && $in->{query}->param('op') eq 'cud-login' ) {
+            for my $v (qw( login_userid login_password )) {
+                $in->{query}->param( $v, '' )
+                    if $in->{query}->param($v);
+            }
         }
     }
 
