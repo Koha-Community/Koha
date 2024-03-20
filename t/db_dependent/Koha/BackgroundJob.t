@@ -230,6 +230,7 @@ subtest 'process tests' => sub {
     my $job    = Koha::BackgroundJobs->find($job_id);
 
     C4::Context->interface('opac');
+    C4::Context->unset_userenv;
     is( C4::Context->userenv, undef, "Userenv unset prior to calling process");
     is( C4::Context->interface, 'opac', "Interface set to opac prior to calling process");
 
