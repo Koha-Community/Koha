@@ -603,6 +603,16 @@ function CheckImportantSubfields(p){
     return total;
 }
 
+function initializeSortable(selector) {
+    $(selector).each((i, e) => {
+        Sortable.create(e, {
+            handle: '.handle',
+            direction: 'vertical',
+            animation: 150,
+        });
+    });
+}
+
 $(document).ready(function() {
     $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
     $(document).ajaxSuccess(function() {
