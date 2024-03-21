@@ -2,7 +2,7 @@
 
 function clean_line(line) {
     $(line).find('input[type="text"]').val("");
-    $(line).find('select').find('option:first').attr("selected", "selected");
+    $(line).find('select').find('option:first').prop("selected", true);
 }
 
 function clone_line(line) {
