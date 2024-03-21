@@ -152,7 +152,7 @@ a place to store the holdingbranch when item is on course reserve
   is_nullable: 1
   size: 80
 
-new shelving location for the item to have while on reseve (optional)
+new shelving location for the item to have while on reserve (optional)
 
 =head2 location_enabled
 
@@ -177,7 +177,7 @@ a place to store the location when the item is on course reserve
   extra: {list => ["yes","no"]}
   is_nullable: 0
 
-if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
+if at least one enabled course has this item on reserve, this field will be 'yes', otherwise it will be 'no'
 
 =head2 timestamp
 

@@ -34,7 +34,7 @@ or, in crontab:
 
 =head1 DESCRIPTION
 
-This script calls C4::Reserves::CancelExpiredReserves which will find and cancel all expired reseves in the system.
+This script calls C4::Reserves::CancelExpiredReserves which will find and cancel all expired reserves in the system.
 
 =cut
 
