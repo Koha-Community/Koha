@@ -82,7 +82,9 @@ if (defined($config->{'server-params'})) {
         push @parms, $key . '=' . $val;
     }
 }
-
+# Add user and group to prevent warn from Net::Server.
+push @parms, 'user=' . $>;
+push @parms, 'group=' . $>;
 
 #
 # This is the main event.
