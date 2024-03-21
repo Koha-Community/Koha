@@ -101,8 +101,6 @@ if ( $op eq 'add_form' ) {
 
     # build authorised value list
     $sth2->finish;
-    $sth2 = $dbh->prepare("select distinct category from authorised_values");
-    $sth2->execute;
     my @authorised_values= Koha::AuthorisedValueCategories->search->get_column('category_name');
 
     # build thesaurus categories list
