@@ -498,6 +498,7 @@ a.add, a.delete {
                                             <th>Order</th>
                                             <th class="NoSort">Search field</th>
                                             <th class="NoSort">Label</th>
+                                            <th class="NoSort">&nbsp;</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -523,9 +524,26 @@ a.add, a.delete {
                                                     [% END %]
                                                     <input type="hidden" name="facet_name" value="[% f.name | html %]" />
                                                 </td>
+                                                <td>
+                                                    <a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                                </td>
                                             </tr>
                                         [% END %]
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <select data-id="facet-search-field">
+                                                    [% FOREACH search_field IN all_search_fields %]
+                                                        <option value="[% search_field.name | html %]" data-label="[% search_field.label | html %]">[% search_field.name | html %]</option>
+                                                    [% END %]
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                            <td><a class="btn btn-default btn-xs add-facet"><i class="fa fa-plus"></i> Add</a></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         [% END %]

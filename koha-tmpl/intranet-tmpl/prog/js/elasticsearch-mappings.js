@@ -156,4 +156,34 @@ $(document).ready(function () {
             clean_line(line);
         }
     });
+
+    $('.add-facet').click(function() {
+        var table = $(this).closest('table');
+        let table_id = table.attr('id');
+        let dt = $('#' + table_id).DataTable();
+        var line = $(this).closest('tr');
+        let selected_option = $(line).find('select[data-id="facet-search-field"] option:selected');
+        var search_field_name = selected_option.val();
+        let dt_data = dt.data();
+        let already_exists = dt_data.filter((row, idx) => row[1] === search_field_name);
+        if ( already_exists.length ) {
+            alert(__("Facet '%s' already exist".format(search_field_name)));
+            return;
+        }
+        if (search_field_name.length > 0) {
+            const next_id = Math.max.apply(null, dt_data.map(row => row[0])) + 1;
+            const label = selected_option.data('label');
+            new_line = [next_id, search_field_name, '<span>%s</span><input type="hidden" name="facet_name" value="%s" />'.format(label.escapeHtml(), search_field_name.escapeHtml()), '<a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> %s</a>'.format(__("Delete"))];
+            dt.row.add(new_line).draw();
+
+            $(table).on( 'click', '.delete', function () {
+                var table = $(this).closest('table');
+                let dt = $(table).DataTable();
+                dt.row( $(this).closest('tr') ).remove().draw();
+            } );
+
+            clean_line(line);
+        }
+    });
+
 });
