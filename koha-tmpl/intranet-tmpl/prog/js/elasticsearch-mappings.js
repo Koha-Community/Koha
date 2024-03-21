@@ -100,7 +100,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#facetst").DataTable(
+    $("#facet_biblios_table").DataTable(
         $.extend(true, {}, dataTablesDefaults, {
             "columnDefs": [
                 { "orderable": false, "searchable": false, 'targets': ['NoSort'] },
