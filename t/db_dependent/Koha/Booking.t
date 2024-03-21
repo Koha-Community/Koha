@@ -33,7 +33,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'Relation accessor tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     subtest 'biblio relation tests' => sub {
         plan tests => 3;
@@ -72,6 +72,29 @@ subtest 'Relation accessor tests' => sub {
         $THE_patron->delete;
         $booking = Koha::Bookings->find( $booking->booking_id );
         is( $booking, undef, "The booking is deleted when the patron it's attached to is deleted" );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'pickup_library relation tests' => sub {
+        plan tests => 3;
+        $schema->storage->txn_begin;
+
+        my $pickup_library = $builder->build_object( { class => "Koha::Libraries" } );
+        my $booking =
+            $builder->build_object(
+            { class => 'Koha::Bookings', value => { pickup_library_id => $pickup_library->branchcode } } );
+
+        my $THE_pickup_library = $booking->pickup_library;
+        is( ref($THE_pickup_library), 'Koha::Library', "Koha::Booking->pickup_library returns a Koha::Library object" );
+        is(
+            $THE_pickup_library->branchcode, $pickup_library->branchcode,
+            "Koha::Booking->pickup_library returns the linked pickup library object"
+        );
+
+        $THE_pickup_library->delete;
+        $booking = Koha::Bookings->find( $booking->booking_id );
+        is( $booking, undef, "The booking is deleted when the pickup_library it's attached to is deleted" );
 
         $schema->storage->txn_rollback;
     };
@@ -116,11 +139,12 @@ subtest 'store() tests' => sub {
 
     my $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $deleted_item->itemnumber,
-            start_date => $start_0,
-            end_date   => $end_0
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $deleted_item->itemnumber,
+            pickup_library_id => $deleted_item->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0
         }
     );
 
@@ -129,11 +153,12 @@ subtest 'store() tests' => sub {
 
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $wrong_item->itemnumber,
-            start_date => $start_0,
-            end_date   => $end_0
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $wrong_item->itemnumber,
+            pickup_library_id => $wrong_item->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0
         }
     );
 
@@ -142,11 +167,12 @@ subtest 'store() tests' => sub {
 
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_1->itemnumber,
-            start_date => $start_0,
-            end_date   => $end_0
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0
         }
     );
 
@@ -166,11 +192,12 @@ subtest 'store() tests' => sub {
     my $end_1   = $start_1->clone()->add( days => 6 );
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_1->itemnumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     );
     throws_ok { $booking->store } 'Koha::Exceptions::Booking::Clash',
@@ -183,11 +210,12 @@ subtest 'store() tests' => sub {
     $end_1   = $start_1->clone()->add( days => 6 );
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_1->itemnumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     );
     throws_ok { $booking->store } 'Koha::Exceptions::Booking::Clash',
@@ -200,11 +228,12 @@ subtest 'store() tests' => sub {
     $end_1   = $start_1->clone()->add( days => 10 );
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_1->itemnumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     );
     throws_ok { $booking->store } 'Koha::Exceptions::Booking::Clash',
@@ -217,11 +246,12 @@ subtest 'store() tests' => sub {
     $end_1   = $start_1->clone()->add( days => 4 );
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_1->itemnumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     );
     throws_ok { $booking->store } 'Koha::Exceptions::Booking::Clash',
@@ -235,11 +265,12 @@ subtest 'store() tests' => sub {
     # ✓ Item 2     |--|
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            item_id    => $item_2->itemnumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_2->itemnumber,
+            pickup_library_id => $item_2->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     )->store();
     ok(
@@ -253,10 +284,11 @@ subtest 'store() tests' => sub {
     # ✘ Any        |--|
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $item_2->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     );
     throws_ok { $booking->store } 'Koha::Exceptions::Booking::Clash',
@@ -270,10 +302,11 @@ subtest 'store() tests' => sub {
     $end_1   = $start_1->clone()->add( days => 4 );
     $booking = Koha::Booking->new(
         {
-            patron_id  => $patron->borrowernumber,
-            biblio_id  => $biblio->biblionumber,
-            start_date => $start_1,
-            end_date   => $end_1
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            pickup_library_id => $item_2->homebranch,
+            start_date        => $start_1,
+            end_date          => $end_1
         }
     )->store();
     ok( $booking->in_storage, 'Booking stored OK when item not specified and the booking slot is available' );
