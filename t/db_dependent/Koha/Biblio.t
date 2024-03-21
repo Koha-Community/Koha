@@ -243,7 +243,7 @@ subtest 'is_serial() tests' => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -442,31 +442,77 @@ subtest 'pickup_locations() tests' => sub {
         "PatronLibrary-2-8" => 3,
     };
 
-    sub _doTest {
-        my ( $cbranch, $biblio, $patron, $results ) = @_;
-        t::lib::Mocks::mock_preference('ReservesControlBranch', $cbranch);
+    my $items_results = {
+        "ItemHomeLibrary-1-1" => {
+            $library1->branchcode => [ $item1_1->itemnumber ],
+            $library2->branchcode => [ $item1_1->itemnumber ],
+            $library4->branchcode => [ $item1_1->itemnumber ],
+            $library5->branchcode => [ $item1_1->itemnumber ],
+            $library6->branchcode => [ $item1_1->itemnumber ],
+            $library7->branchcode => [ $item1_1->itemnumber ]
+        },
+        "ItemHomeLibrary-1-8" => {
+            $library4->branchcode => [ $item1_7->itemnumber ],
+        },
+        "ItemHomeLibrary-2-1" => {
+            $library1->branchcode => [ $item2_2->itemnumber ],
+            $library2->branchcode => [ $item2_2->itemnumber ],
+        },
+        "ItemHomeLibrary-2-8" => {},
+        "PatronLibrary-1-1"   => {
+            $library1->branchcode => [ $item1_1->itemnumber ],
+            $library2->branchcode => [ $item1_1->itemnumber ],
+            $library4->branchcode => [ $item1_1->itemnumber ],
+            $library5->branchcode => [ $item1_1->itemnumber ],
+            $library6->branchcode => [ $item1_1->itemnumber ],
+            $library7->branchcode => [ $item1_1->itemnumber ]
+        },
+        "PatronLibrary-1-8" => {
+            $library5->branchcode => [ $item1_1->itemnumber, $item1_3->itemnumber, $item1_7->itemnumber ],
+            $library6->branchcode => [ $item1_1->itemnumber, $item1_3->itemnumber, $item1_7->itemnumber ],
+            $library7->branchcode => [ $item1_1->itemnumber, $item1_3->itemnumber, $item1_7->itemnumber ],
+        },
+        "PatronLibrary-2-1" => {},
+        "PatronLibrary-2-8" => {
+            $library5->branchcode => [ $item2_2->itemnumber, $item2_4->itemnumber, $item2_6->itemnumber ],
+            $library6->branchcode => [ $item2_2->itemnumber, $item2_4->itemnumber, $item2_6->itemnumber ],
+            $library7->branchcode => [ $item2_2->itemnumber, $item2_4->itemnumber, $item2_6->itemnumber ],
+        }
+    };
 
+    sub _doTest {
+        my ( $cbranch, $biblio, $patron, $results, $items_results ) = @_;
+        t::lib::Mocks::mock_preference( 'ReservesControlBranch', $cbranch );
+
+        my $pl = $biblio->pickup_locations( { patron => $patron } );
+
+        # Filter to just test branches
         my @pl = map {
             my $pickup_location = $_;
             grep { $pickup_location->branchcode eq $_ } @branchcodes
-        } $biblio->pickup_locations( { patron => $patron } )->as_list;
+        } $pl->as_list;
 
         ok(
-            scalar(@pl) == $results->{ $cbranch . '-'
-                  . $biblio->title . '-'
-                  . $patron->firstname },
+            scalar(@pl) == $results->{ $cbranch . '-' . $biblio->title . '-' . $patron->firstname },
             'ReservesControlBranch: '
-              . $cbranch
-              . ', biblio'
-              . $biblio->title
-              . ', patron'
-              . $patron->firstname
-              . ' should return '
-              . $results->{ $cbranch . '-'
-                  . $biblio->title . '-'
-                  . $patron->firstname }
-              . ' but returns '
-              . scalar(@pl)
+                . $cbranch
+                . ', biblio'
+                . $biblio->title
+                . ', patron'
+                . $patron->firstname
+                . ' should return '
+                . $results->{ $cbranch . '-' . $biblio->title . '-' . $patron->firstname }
+                . ' and returns '
+                . scalar(@pl)
+        );
+
+        my %filtered_location_items = map { $_ => $pl->{_pickup_location_items}->{$_} }
+            grep { exists $pl->{_pickup_location_items}->{$_} } @branchcodes;
+
+        is_deeply(
+            \%filtered_location_items, \%{ $items_results->{ $cbranch . '-'
+                        . $biblio->title . '-'
+                        . $patron->firstname } }, 'Items per location correctly cached in resultset'
         );
     }
 
@@ -475,7 +521,7 @@ subtest 'pickup_locations() tests' => sub {
         $cache->flush(); # needed since we change ReservesControlBranch
         foreach my $biblio ($biblio1, $biblio2) {
             foreach my $patron ($patron1, $patron8) {
-                _doTest($cbranch, $biblio, $patron, $results);
+                _doTest($cbranch, $biblio, $patron, $results, $items_results);
             }
         }
     }
