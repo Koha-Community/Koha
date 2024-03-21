@@ -28,6 +28,7 @@ use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::SearchMarcMaps;
 use Koha::SearchFields;
 use Koha::Caches;
+use Koha::AuthorisedValueCategories;
 
 use Try::Tiny qw( catch try );
 use Module::Load::Conditional qw( can_load );
@@ -118,6 +119,7 @@ if ( $op eq 'cud-edit' ) {
             my $field_weight       = $field_weight[$i];
             my $field_staff_client = $field_staff_client[$i];
             my $field_opac         = $field_opac[$i];
+            my $av_category = $input->param('facet_av_cat_' . $field_name);
 
             my $search_field = Koha::SearchFields->find_or_create(
                 {
@@ -139,6 +141,7 @@ if ( $op eq 'cud-edit' ) {
 
             my $facet_order = first { $faceted_field_names[$_] eq $field_name } 0 .. $#faceted_field_names;
             $search_field->facet_order( defined $facet_order ? $facet_order + 1 : undef );
+            $search_field->authorised_value_category($av_category);
             $search_field->store;
         }
 
@@ -297,12 +300,14 @@ while ( my $search_field = $search_fields->next ) {
     push @all_search_fields, $search_field_unblessed;
 }
 
+my @authorised_value_categories = Koha::AuthorisedValueCategories->search->get_column('category_name');
 push @messages, @errors;
 $template->param(
     indexes           => \@indexes,
     all_search_fields => \@all_search_fields,
     facetable_fields  => \@facetable_fields,
     messages          => \@messages,
+    authorised_value_categories => \@authorised_value_categories,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

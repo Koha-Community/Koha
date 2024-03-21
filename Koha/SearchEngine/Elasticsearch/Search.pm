@@ -442,7 +442,7 @@ sub _convert_facets {
 
     return if !$es;
 
-    my %type_to_label = map { $_->name => { order => $_->facet_order, label => $_->label } }
+    my %type_to_label = map { $_->name => { order => $_->facet_order, av_cat => $_->authorised_value_category, label => $_->label } }
         Koha::SearchEngine::Elasticsearch->get_facet_fields;
 
     # We also have some special cases, e.g. itypes that need to show the
@@ -471,7 +471,12 @@ sub _convert_facets {
             label => $type_to_label{$type}{label},
             type_link_value                    => $type,
             order      => $type_to_label{$type}{order},
+            av_cat     => $type_to_label{$type}{av_cat},
         };
+        my %authorised_values;
+        if ( $type_to_label{$type}{av_cat} ) {
+            %authorised_values = map {$_->{authorised_value} => $_->{lib}} @{C4::Koha::GetAuthorisedValues($type_to_label{$type}{av_cat}, $opac)};
+        }
         $limit = @{ $data->{buckets} } if ( $limit > @{ $data->{buckets} } );
         foreach my $term ( @{ $data->{buckets} }[ 0 .. $limit - 1 ] ) {
             my $t = $term->{key};
@@ -480,6 +485,9 @@ sub _convert_facets {
             my $label;
             if ( exists( $special{$type} ) ) {
                 $label = $special{$type}->{$t} // $t;
+            }
+            elsif ( $type_to_label{$type}{av_cat} ) {
+                $label = $authorised_values{$t};
             }
             else {
                 $label = $t;
