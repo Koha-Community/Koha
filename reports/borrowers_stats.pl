@@ -184,15 +184,14 @@ sub calculate {
     foreach my $i (0 .. scalar @$filters) {
         my %cell;
         if ( @$filters[$i] ) {
-            if    ( $i == 0)  { $cell{crit} = "Cat code"; }
-            elsif ( $i == 1 ) { $cell{crit} = "ZIP/Postal code"; }
-            elsif ( $i == 2 ) { $cell{crit} = "Branch code"; }
-            elsif ( $i == 3 ||
-                    $i == 4 ) { $cell{crit} = "Date of birth"; }
-            elsif ( $i == 5 ) { $cell{crit} = "Sex"; }
-            elsif ( $i == 6 ) { $cell{crit} = "Sort1"; }
-            elsif ( $i == 7 ) { $cell{crit} = "Sort2"; }
-            else { $cell{crit} = "Unknown"; }
+            if    ( $i == 0 )            { $cell{crit} = "Cat code";        $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 1 )            { $cell{crit} = "ZIP/Postal code"; $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 2 )            { $cell{crit} = "Branch code";     $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 3 || $i == 4 ) { $cell{crit} = "Date of birth";   $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 5 )            { $cell{crit} = "Sex";             $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 6 )            { $cell{crit} = "Sort1";           $cell{filter} = @$filters[$i]; }
+            elsif ( $i == 7 )            { $cell{crit} = "Sort2";           $cell{filter} = @$filters[$i]; }
+            else                         { $cell{crit} = "Unknown"; }
 
             push @loopfilter, \%cell;
         }
