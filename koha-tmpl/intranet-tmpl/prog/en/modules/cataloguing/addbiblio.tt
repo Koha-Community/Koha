@@ -78,15 +78,6 @@
             selectTab( "#tab0XX_panel" );
         }
 
-        function initializeSortable(selector) {
-            $(selector).each((i, e) => {
-                Sortable.create(e, {
-                    handle: '.handle',
-                    direction: 'vertical',
-                    animation: 150,
-                });
-            });
-        }
         initializeSortable("#addbibliotabs ul.sortable_field");
         initializeSortable("#addbibliotabs ul.sortable_subfield");
 
