@@ -3,9 +3,17 @@
 [% USE Koha %]
 [% USE KohaPlugins %]
 [% USE To %]
-[% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) %]
-[% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) %]
-[% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
+[% SET LoginEnabled = ( Koha.Preference('opacuserlogin') == 1 ) %]
+[% IF ( Koha.Preference('TagsEnabled') ) %]
+    [% SET TagsShowEnabled = ( ( Koha.Preference('TagsEnabled') == 1 ) && ( Koha.Preference('TagsShowOnList') > 0 ) ) %]
+    [% SET TagsInputEnabled = LoginEnabled && TagsShowEnabled && ( Koha.Preference('TagsInputOnList') > 0 ) %]
+[% END %]
+[% SET CartEnabled = ( Koha.Preference('opacbookbag') == 1 ) %]
+[% SET ListsEnabled = ( Koha.Preference('virtualshelves') == 1 ) && LoginEnabled %]
+[% SET HoldsEnabled = ( Koha.Preference('OPACHoldRequests') == 1 ) && LoginEnabled %]
+[% SET RecallsEnabled = ( Koha.Preference('UseRecalls') == 1 ) && LoginEnabled %]
+[% SET ArticleRequestsEnabled = ( Koha.Preference('ArticleRequests') == 1 ) && LoginEnabled %]
+[% SET MultiHolds = ( Koha.Preference('DisplayMultiPlaceHold') == 1 ) && HoldsEnabled %]
 
 [% IF firstPage %]
      [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
@@ -192,94 +200,7 @@
                                         [% END # /UNLESS tag %]
                                     </div> <!-- / #toolbar -->
 
-                                    <div class="selections-toolbar toolbar noprint">
-                                        [% IF ( OpacHighlightedWords ) %]
-                                            <div class="highlight_controls noprint">
-                                                <a href="#" class="btn btn-link btn-sm highlight_toggle" id="highlight_toggle_off"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Unhighlight</a>
-                                                <a href="#" class="btn btn-link btn-sm highlight_toggle" id="highlight_toggle_on"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Highlight</a>
-                                            </div>
-                                        [% END %]
-
-                                        <div class="check_control">
-                                            <!-- checkall, clearall are now needed for placehold -->
-                                            <span class="clearall">
-                                                <a id="CheckAll" class="btn btn-link btn-sm" href="#">Select all</a>
-                                            </span>
-                                            <span class="checkall">
-                                                <a id="CheckNone" class="btn btn-link btn-sm" href="#">Clear all</a>
-                                            </span>
-                                        </div>
-
-                                        <div class="links">
-                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'opacuserlogin' ) == 1 && Koha.Preference('virtualshelves') ) || loggedinusername ) %]
-                                                <span class="selections">Select titles to:</span>
-                                            [% END %]
-                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'opacuserlogin' ) == 1 && Koha.Preference('virtualshelves') ) ) %]
-                                                <span class="addto">
-                                                    <select class="disabled form-control form-control-sm" name="addto" id="addto">
-                                                        <option>Add to...</option>
-                                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                                            <option value="addtocart">Cart</option>
-                                                        [% END %]
-                                                        [% IF Koha.Preference('virtualshelves') && Koha.Preference('opacuserlogin') == 1 %]
-                                                            [% IF loggedinusername AND add_to_some_private_shelves.count %]
-                                                                <optgroup label="Your lists:">
-                                                                [% SET number_of_private_shelves = 0 %]
-                                                                [% FOREACH s IN add_to_some_private_shelves %]
-                                                                    [% IF shelfnumber != s.shelfnumber %]
-                                                                        <option id="s[% s.shelfnumber | html %]" value="addtolist">[% s.shelfname | html %]</option>
-                                                                        [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                                                        [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
-                                                                    [% END %]
-                                                                [% END %]
-                                                                </optgroup>
-                                                            [% END %]
-                                                            [% IF add_to_some_public_shelves.count %]
-                                                                <optgroup label="Public lists:">
-                                                                [% SET number_of_public_shelves = 0 %]
-                                                                [% FOREACH s IN add_to_some_public_shelves %]
-                                                                    [% IF shelfnumber != s.shelfnumber %]
-                                                                        <option id="s[% s.shelfnumber | html %]" value="addtolist">[% s.shelfname | html %]</option>
-                                                                        [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                                                        [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
-                                                                    [% END %]
-                                                                [% END %]
-                                                                </optgroup>
-                                                            [% END %]
-                                                            [% IF ( add_to_some_private_shelves and add_to_some_private_shelves.count > 10 ) or ( add_to_some_public_shelves and add_to_some_public_shelves.count > 10 ) %]
-                                                                <option value="morelists">[ More lists ]</option>
-                                                            [% END %]
-                                                            <option value="newlist">[ New list ]</option>
-                                                        [% END # /IF virtualshelves and opacuserlogin %]
-                                                    </select>
-                                                    <input type="submit" class="btn btn-sm btn-primary" value="Save" />
-                                                </span>
-                                            [% END # /IF opacbookbag || virtualshelves %]
-
-                                            [% IF ( ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) && DisplayMultiPlaceHold ) %]
-                                                <button class="btn btn-link btn-sm hold disabled" type="button">
-                                                    <i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold
-                                                </button>
-                                            [% END %]
-
-                                            [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                                <span id="tagsel_span">
-                                                    <button id="tagsel_tag" class="btn btn-link btn-sm disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</button>
-                                                </span>
-                                            [% END %]
-                                        </div> <!-- / .links -->
-                                        [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <div id="tagsel_form" style="display:none">
-                                                <label for="tagsel_new">New tag:</label>
-                                                <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                                <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-sm btn-primary" title="Add" type="submit" value="Add" />
-                                                <a href="#" id="tagsel_cancel">(done)</a>
-                                            </div>
-                                            <div id="tagsel_status" class="tagsel_tatus" style="display:none;">
-                                                Tag status here.
-                                            </div>
-                                        [% END %]
-                                    </div> <!-- / .selections-toolbar -->
+                                    [% INCLUDE 'result-batch-controls.inc' results=1 %]
                                 </div> <!-- /#floating -->
 
                                 <!-- TABLE RESULTS START -->
@@ -531,7 +452,6 @@
                             </form> <!-- / #bookbag_form -->
 
                             <form id="hold_form" name="hold_form" method="get" action="/cgi-bin/koha/opac-reserve.pl">
-                                <legend class="sr-only">Pages</legend>
                                 <!-- The value will be set by holdBiblioNums() in basket.js -->
                                 <input id="hold_form_biblios" type="hidden" name="biblionumbers" value=""/>
                             </form>
@@ -581,91 +501,12 @@
     [% END %]
     [% CoverImagePlugins | $raw %]
     <script>
-        [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) %]
-            function holdMultiple() {
-                var checkedBiblioNums = ""; // Separated by "/"
-                var checkedCount = 0;
-                if(document.bookbag_form.biblionumber.length > 0) {
-                    for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
-                        if (document.bookbag_form.biblionumber[i].checked) {
-                            checkedBiblioNums += (document.bookbag_form.biblionumber[i].value + "/");
-                            checkedCount++;
-                        }
-                    }
-                }
-
-                if (checkedCount > 0) {
-                    holdBiblioNums(checkedBiblioNums);
-                } else {
-                    alert( _("No item was selected") );
-                }
-            }
-
-            function holdBiblioNums(numList) {
-                // numList: biblio numbers separated by "/"
-                $("#hold_form_biblios").attr("value", numList);
-                $("#hold_form").submit();
-            }
-        [% END # /IF opacuserlogin && OPACHoldRequests %]
-
-        [% IF ( TagsInputEnabled && loggedinusername ) %]
-            function tagSelected() {
-                var checkedBoxes = $(".searchresults :checkbox:checked");
-                if ($(checkedBoxes).size() == 0) {
-                    alert( _("No item was selected") );
-                } else {
-                    $("#tagsel_tag").hide();
-                    $(".resort").hide();
-                    $("#tagsel_form").show();
-                }
-            }
-
-            function tagCanceled() {
-                $("#tagsel_form").hide();
-                $("#tagsel_tag").show();
-                $(".resort").show();
-                $("#tagsel_new").val("");
-                $("#tagsel_status, .tagstatus").empty().hide();
-            }
-
-            function tagAdded() {
-                var checkedBoxes = $(".searchresults :checkbox:checked");
-                if ($(checkedBoxes).size() == 0) {
-                    alert( _("No item was selected") );
-                    return false;
-                }
-
-                var tag = $("#tagsel_new").val();
-                if (!tag || (tag == "")) {
-                    alert( _("No tag was specified.") );
-                    return false;
-                }
-
-                var bibs = [];
-                for (var i = 0; i < $(checkedBoxes).size(); i++) {
-                    var box = $(checkedBoxes).get(i);
-                    bibs[i] = $(box).val();
-                }
-
-                KOHA.Tags.add_multitags_button(bibs, tag);
-                return false;
-            }
-        [% END # /IF TagsInputEnabled && loggedinusername %]
-
-
-        function enableCheckboxActions(){
-            // Enable/disable controls if checkboxes are checked
-            var checkedBoxes = $(".cb:checked");
-            var controls = $(".selections-toolbar .links a, .selections-toolbar .links input, .selections-toolbar .links select, .selections-toolbar .links label, .selections-toolbar .links button");
-            if ($(checkedBoxes).size()) {
-                $(".selections").html(_("With selected titles: "));
-                $(controls).removeClass("disabled");
-            } else {
-                $(".selections").html(_("Select titles to: "));
-                $(controls).addClass("disabled");
-            }
-        }
-
+        const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
+        const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
+        const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
+    </script>
+    [% Asset.js("js/results-list.js") | $raw %]
+    <script>
         [% IF ( OpacHighlightedWords ) %]
             var q_array = new Array();  // holds search terms if available
 
@@ -704,11 +545,6 @@
                 });
             [% END %]
 
-            $(".cb").click(function(){
-                enableCheckboxActions();
-            });
-            enableCheckboxActions();
-
             $(".br-readonly a").on("click", function(e){
                 e.preventDefault();
             });
@@ -719,70 +555,6 @@
 
             $('#results_per_page').change(function() {
                 $('#bookbag_form').submit();
-            });
-
-            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
-                    $("#addto").on("change",function(){
-                        cartList();
-                    });
-                    $(".addto").find("input:submit").click(function(){
-                        cartList();
-                        return false;
-                    });
-                [% ELSE %]
-                    $("#addto").on("click",function(){
-                        cartList();
-                        return false;
-                    });
-                [% END %]
-            [% END %]
-
-            function cartList(){
-                addtoOption = $("#addto").find("option:selected");
-                addtoval = addtoOption.val();
-                if(addtoval == "addtolist"){
-                    var shelfnumber = addtoOption.attr("id").replace("s","");
-                    if (vShelfAdd()) {
-                        Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
-                    }
-                    return false;
-                } else if(addtoval == "newlist"){
-                    [% IF ( loggedinusername ) %]if (vShelfAdd()) {
-                        Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
-                    }[% ELSE %]
-                        alert(_("You must be logged in to create or add to lists"));
-                    [% END %]
-                    return false;
-                } else if(addtoval == "morelists"){
-                    [% IF ( loggedinusername ) %]
-                        if (vShelfAdd()) {
-                            Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
-                        }
-                    [% ELSE %]
-                        alert(_("You must be logged in to create or add to lists"));
-                    [% END %]
-                    return false;
-                }
-                if(addtoval == "addtocart" || $("#addto").attr("class") == "addtocart"){
-                    addMultiple();
-                    return false;
-                }
-            }
-            $("#CheckAll").on("click",function(e){
-                e.preventDefault();
-                $(".cb").prop("checked", true);
-                enableCheckboxActions();
-            });
-            $("#CheckNone").on("click",function(e){
-                e.preventDefault();
-                $(".cb").prop("checked", false);
-                enableCheckboxActions();
-            });
-
-            $(".hold").on("click", function(e){
-                e.preventDefault();
-                holdMultiple();
             });
 
             [% IF ( query_desc ) %]
@@ -842,50 +614,6 @@
                 [% END # /IF OpenLibrarySearch %]
             [% END # /IF query_desc %]
 
-            [% IF ( TagsInputEnabled && loggedinusername ) %]
-                $("#tagsel_tag").show().click(function(){
-                    tagSelected();
-                    return false;
-                });
-                $("#tagsel_cancel").click(function(){
-                    tagCanceled();
-                    return false;
-                });
-                $("#tagsel_button").click(function(){
-                    tagAdded();
-                    return false;
-                });
-
-                $(".tag_add").click(function(){
-                    var thisid = $(this).attr("id");
-                    thisid = thisid.replace("tag_add","");
-                    $(this).addClass("hidden");
-                    $("#tagform"+thisid).show();
-                    $("#newtag"+thisid).focus();
-                    $("#newtag"+thisid+"_status").empty().hide();
-                    return false;
-                });
-                $(".cancel_tag_add").click(function(){
-                    var thisid = $(this).attr("id");
-                    thisid = thisid.replace("cancel","");
-                    $("#tagform"+thisid).hide();
-                    $("#tag_add"+thisid).removeClass("hidden");
-                    $("#newtag"+thisid).val("");
-                    $("#newtag"+thisid+"_status").empty().hide();
-                    return false;
-                });
-                $(".tagbutton").click(function(){
-                    var thisid = $(this).attr("title");
-                    var tag = $("#newtag"+thisid).val();
-                    if (!tag || (tag == "")) {
-                        alert( _("No tag was specified.") );
-                        return false;
-                    }
-                    KOHA.Tags.add_tag_button(thisid, tag);
-                    return false;
-                });
-            [% END # /IF TagsInputEnabled && loggedinusername %]
-
             [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
             [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
             [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
@@ -903,13 +631,6 @@
             $("input.newtag").on('keydown', function(e){
                 if (e.keyCode == 13) { e.preventDefault(); }
             });
-
-            Sticky = $("#floating");
-            Sticky.hcSticky({
-                stickTo: ".searchresults",
-                stickyClass: "floating"
-            });
-
         });
     </script>
 [% END %]

@@ -5,8 +5,17 @@
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
-[% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsShowOnList') ) %]
-[% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && Koha.Preference('TagsInputOnList') ) %]
+[% SET LoginEnabled = ( Koha.Preference('opacuserlogin') == 1 ) %]
+[% IF ( Koha.Preference('TagsEnabled') ) %]
+    [% SET TagsShowEnabled = ( ( Koha.Preference('TagsEnabled') == 1 ) && ( Koha.Preference('TagsShowOnList') > 0 ) ) %]
+    [% SET TagsInputEnabled = LoginEnabled && TagsShowEnabled && ( Koha.Preference('TagsInputOnList') > 0 ) %]
+[% END %]
+[% SET CartEnabled = ( Koha.Preference('opacbookbag') == 1 ) %]
+[% SET ListsEnabled = ( Koha.Preference('virtualshelves') == 1 ) && LoginEnabled %]
+[% SET HoldsEnabled = ( Koha.Preference('OPACHoldRequests') == 1 ) && LoginEnabled %]
+[% SET RecallsEnabled = ( Koha.Preference('UseRecalls') == 1 ) && LoginEnabled %]
+[% SET ArticleRequestsEnabled = ( Koha.Preference('ArticleRequests') == 1 ) && LoginEnabled %]
+[% SET MultiHolds = ( Koha.Preference('DisplayMultiPlaceHold') == 1 ) && HoldsEnabled %]
 
 [% BLOCK delete_shelf %]
     <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="deleteshelf[% shelf.shelfnumber | html %]" class="d-inline">
@@ -345,48 +354,7 @@
                                     </form> <!-- /#sorting-form -->
 
                                 </div> <!-- / #toolbar -->
-
-                                <div class="selections-toolbar toolbar noprint">
-                                    <div class="check_control">
-                                        <span class="checkall">
-                                            <a id="CheckAll" class="btn btn-link btn-sm" href="#">Select all</a>
-                                        </span>
-                                        <span class="clearall">
-                                            <a id="CheckNone" class="btn btn-link btn-sm" href="#">Clear all</a>
-                                        </span>
-                                    </div>
-                                    <div class="links">
-                                        <span class="selections">Select titles to: </span>
-                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
-                                            <span id="placehold">
-                                                <a href="#" class="btn btn-link hold tag_hides disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
-                                            </span>
-                                        [% END %]
-
-                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                            <a href="#" class="btn btn-link listaddtocart disabled"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
-                                        [% END %]
-
-                                        [% IF Koha.Preference('virtualshelves') %]
-                                            <a href="#" class="btn btn-link addtolist disabled"><i class="fa fa-list" aria-hidden="true"></i> Add to list</a>
-                                        [% END %]
-
-                                        [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <span id="addtags">
-                                                <a id="tagsel_tag" href="#" class="btn btn-link disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
-                                            </span>
-                                            <span id="tagsel_form" class="form-inline" style="display:none">
-                                                <label for="tagsel_new">New tag(s), separated by a comma:</label>
-                                                <input class="form-control form-control-sm" type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                                <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-primary btn-sm" title="tagsel_button" type="submit" value="Add" />
-                                                <a href="#" id="tagsel_cancel">Cancel</a>
-                                            </span>
-                                        [% END %]
-                                        [% IF loggedinusername && can_remove_biblios %]
-                                            <a href="#" class="btn btn-link disabled removeitems tag_hides"><i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list</a>
-                                        [% END %]
-                                    </div> <!-- / .links -->
-                                </div> <!-- / .selections-toolbar -->
+                                [% INCLUDE 'result-batch-controls.inc' %]
                             </div> <!-- /#floating -->
 
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="bookbag_form">
@@ -556,6 +524,10 @@
                                     <input type="hidden" name="modifyshelfcontents" value="1" />
                                 </form>
                             [% END %]
+                            <form id="hold_form" name="hold_form" method="get" action="/cgi-bin/koha/opac-reserve.pl">
+                                <!-- The value will be set by holdBiblioNums() in basket.js -->
+                                <input id="hold_form_biblios" type="hidden" name="biblionumbers" value=""/>
+                            </form>
                         [% ELSE %]
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
@@ -845,21 +817,12 @@
     [% Asset.js("js/openlibrary.js") | $raw %]
 [% END %]
 <script>
-
-[% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
-    function holdSelections() {
-        var checkedBoxes = $("input:checkbox:checked");
-        if ($(checkedBoxes).size() == 0) {
-            alert( _("No item was selected") );
-        } else {
-            var bibs = "";
-            $(checkedBoxes).each(function(){
-                bibs += $(this).val() + "/";
-            });
-            document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers="+bibs;
-        }
-    }
-[% END %]
+    const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
+    const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];
+    const virtualshelves = [% ( virtualshelves ) ? 1 : 0 | html %];
+</script>
+[% Asset.js("js/results-list.js") | $raw %]
+<script>
 [% IF ( TagsInputEnabled && loggedinusername ) %]
     function tagSelected() {
         var checkedBoxes = $("input:checkbox:checked");
@@ -904,45 +867,8 @@
     }
 [% END %]
 
-function enableCheckboxActions(){
-    // Enable/disable controls if checkboxes are checked
-    var checkedBoxes = $(".cb:checked");
-    if ($(checkedBoxes).size()) {
-      $(".selections").html(_("With selected titles: "));
-      $(".selections-toolbar .links a").removeClass("disabled");
-    } else {
-      $(".selections").html(_("Select titles to: "));
-      $(".selections-toolbar .links a").addClass("disabled");
-    }
-}
-
 $(function() {
-    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]$(".addtocart,.cartRemove").removeClass("hidden");[% END %]
-
-    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'OPACHoldRequests' ) == 1 ) ) %]
-        $(".selections-toolbar a.hold").click(function(e){
-            e.preventDefault();
-            holdSelections();
-        });
-    [% END %]
-
     $("a.print").show();
-
-    $("#CheckAll").on("click",function(e){
-        e.preventDefault();
-        $(".cb").prop("checked", true);
-        enableCheckboxActions();
-    });
-    $("#CheckNone").on("click",function(e){
-        e.preventDefault();
-        $(".cb").prop("checked", false);
-        enableCheckboxActions();
-    });
-
-    $(".cb").click(function(){
-      enableCheckboxActions();
-    });
-    enableCheckboxActions();
 
     [% IF ( TagsInputEnabled && loggedinusername ) %]
         var tagAdd = $(".tag_add");
@@ -1056,12 +982,6 @@ $(function() {
 
     AdjustRemark();
 
-    Sticky = $("#floating");
-    Sticky.hcSticky({
-        stickTo: "#usershelves",
-        stickyClass: "floating"
-    });
-
     [% IF itemsloop %]
         sortMenu( $("#sorting-form") );
 
@@ -1119,27 +1039,6 @@ $(function() {
         let link = this.href;
         Dopop( link );
     });
-
-    $(".listaddtocart").on("click", function(e){
-        e.preventDefault();
-        addMultiple();
-    });
-
-    $(".addtolist").on("click", function(e){
-        e.preventDefault();
-        cartList();
-    });
-
-    function cartList(){
-        [% IF ( loggedinusername ) %]
-            if (vShelfAdd()) {
-                Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
-            }
-        [% ELSE %]
-            alert(_("You must be logged in to create or add to lists"));
-        [% END %]
-        return false;
-    }
 
 }); // document.ready
 

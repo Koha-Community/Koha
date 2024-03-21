@@ -464,6 +464,25 @@ if ( $op eq 'view' ) {
                     ),
                 );
             }
+            my $some_private_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    borrowernumber => $loggedinuser,
+                    add_allowed    => 1,
+                    public         => 0,
+                }
+            );
+            my $some_public_shelves = Koha::Virtualshelves->get_some_shelves(
+                {
+                    borrowernumber => $loggedinuser,
+                    add_allowed    => 1,
+                    public         => 1,
+                }
+            );
+
+            $template->param(
+                add_to_some_private_shelves => $some_private_shelves,
+                add_to_some_public_shelves  => $some_public_shelves,
+            );
         } else {
             push @messages, { type => 'error', code => 'unauthorized_on_view' };
             undef $shelf;

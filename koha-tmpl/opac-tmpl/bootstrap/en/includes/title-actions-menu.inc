@@ -1,27 +1,25 @@
 <div class="actions-menu noprint">
-    [% IF Koha.Preference( 'OPACHoldRequests' ) == 1 %]
+    [% IF ( HoldsEnabled ) %]
         [% UNLESS ( items.norequests ) %]
-            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                [% IF ( shelf AND op == 'view' ) # Lists view has more granular checking of hold availability %]
-                    [% IF ( items.allow_onshelf_holds ) %]
-                        <span class="actions"><a class="btn btn-link btn-sm" aria-label="Place a hold on [% items.title | html %]" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></span>
-                    [% ELSE %]
-                        [% IF ( items.itemsissued ) %]
-                            <span class="actions"><a class="btn btn-link btn-sm" aria-label="Place a hold on [% items.title | html %]" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></span>
-                        [% END %]
-                    [% END %]
-                [% ELSE %]
+            [% IF ( shelf AND op == 'view' ) # Lists view has more granular checking of hold availability %]
+                [% IF ( items.allow_onshelf_holds ) %]
                     <span class="actions"><a class="btn btn-link btn-sm" aria-label="Place a hold on [% items.title | html %]" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></span>
+                [% ELSE %]
+                    [% IF ( items.itemsissued ) %]
+                        <span class="actions"><a class="btn btn-link btn-sm" aria-label="Place a hold on [% items.title | html %]" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></span>
+                    [% END %]
                 [% END %]
-            [% END # / IF opacuserlogin %]
+            [% ELSE %]
+                <span class="actions"><a class="btn btn-link btn-sm" aria-label="Place a hold on [% items.title | html %]" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></span>
+            [% END %]
         [% END # / UNLESS items.norequests %]
     [% END # / OPACHoldRequests %]
 
-    [% IF Koha.Preference('UseRecalls') %]
+    [% IF ( RecallsEnabled ) %]
         <span class="actions"><a class="btn btn-link btn-sm recall" href="/cgi-bin/koha/opac-recall.pl?biblionumber=[% items.biblionumber | html %]"><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Place recall</a></span>
     [% END %]
 
-    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+    [% IF ( LoginEnabled ) %]
         [% IF items.artreqpossible %]
             <span class="actions"><a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% items.biblionumber | uri %]" class="btn btn-link btn-sm"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Request article</a></span>
         [% END %]
@@ -48,7 +46,7 @@
         [% END # IF loggedinusername %]
     [% END # if TagsInputEnabled %]
 
-    [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
+    [% IF ( ListsEnabled ) %]
         [% IF ( shelf AND op == 'view' ) %]
             <span class="actions"><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% items.biblionumber | uri %]" class="addtoshelf btn btn-link btn-sm"><i class="fa fa-list" aria-hidden="true"></i> Save to another list</a></span>
             [% IF can_remove_biblios %]
@@ -59,7 +57,7 @@
         [% END # /IF ( shelf AND op == 'view' ) %]
     [% END # /IF Koha.Preference( 'opacuserlogin' ) %]
 
-    [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
+    [% IF ( CartEnabled ) %]
         [% IF ( items.incart ) %]
             <span class="actions cart-actions"><a data-biblionumber="[% items.biblionumber | html %]" class="btn btn-link btn-sm addtocart cart[% items.biblionumber | html %]" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> In your cart</a> <a data-biblionumber="[% items.biblionumber | html %]" class="btn btn-link btn-sm remove cartRemove cartR[% items.biblionumber | html %]" href="#">(remove)</a></span>
         [% ELSE %]
