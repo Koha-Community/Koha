@@ -70,7 +70,6 @@ use URI::Escape;
 use JSON qw/decode_json encode_json/;
 use Business::ISBN;
 
-my $DisplayMultiPlaceHold = C4::Context->preference("DisplayMultiPlaceHold");
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
 use CGI qw('-no_undef_params' -utf8);
@@ -174,13 +173,6 @@ if (C4::Context->preference('BakerTaylorEnabled')) {
         BakerTaylorLinkURL  => &link_url(),
         BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
     );
-}
-
-if (C4::Context->preference('TagsEnabled')) {
-    $template->param(TagsEnabled => 1);
-    foreach (qw(TagsShowOnList TagsInputOnList)) {
-        C4::Context->preference($_) and $template->param($_ => 1);
-    }
 }
 
 ## URI Re-Writing
@@ -792,7 +784,6 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
             $template->param(offset     => $offset);
-            $template->param(DisplayMultiPlaceHold => $DisplayMultiPlaceHold);
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
             }
