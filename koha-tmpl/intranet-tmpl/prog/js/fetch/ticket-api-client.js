@@ -1,3 +1,4 @@
+/* keep tidy */
 import HttpClient from "./http-client.js";
 
 export class TicketAPIClient extends HttpClient {
@@ -7,7 +8,7 @@ export class TicketAPIClient extends HttpClient {
         });
     }
 
-    get tickets () {
+    get tickets() {
         return {
             mark_as_viewed: ticket_id =>
                 this.post({
@@ -36,7 +37,7 @@ export class TicketAPIClient extends HttpClient {
                             "application/x-www-form-urlencoded;charset=utf-8",
                     },
                 }),
-        }
+        };
     }
 }
 

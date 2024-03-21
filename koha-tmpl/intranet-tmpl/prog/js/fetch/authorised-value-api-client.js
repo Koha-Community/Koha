@@ -1,3 +1,4 @@
+/* keep tidy */
 import HttpClient from "./http-client.js";
 
 export class AVAPIClient extends HttpClient {
@@ -20,7 +21,7 @@ export class AVAPIClient extends HttpClient {
                         encodeURIComponent(value.category),
                         encodeURIComponent(value.value),
                         encodeURIComponent(value.description),
-                        encodeURIComponent(value.opac_description),
+                        encodeURIComponent(value.opac_description)
                     ),
                 }),
         };

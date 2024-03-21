@@ -1,3 +1,4 @@
+/* keep tidy */
 class Dialog {
     constructor(options = {}) {}
 
@@ -17,9 +18,10 @@ class Dialog {
 class HttpClient {
     constructor(options = {}) {
         this._baseURL = options.baseURL || "";
-        this._headers = options.headers || { // FIXME we actually need to merge the headers
+        this._headers = options.headers || {
+            // FIXME we actually need to merge the headers
             "Content-Type": "application/json;charset=utf-8",
-            "X-Requested-With": "XMLHttpRequest"
+            "X-Requested-With": "XMLHttpRequest",
         };
         this.csrf_token = $('meta[name="csrf-token"]').attr("content");
     }
@@ -38,7 +40,9 @@ class HttpClient {
             headers: { ...this._headers, ...headers },
         })
             .then(response => {
-                const is_json = response.headers.get("content-type")?.includes("application/json");
+                const is_json = response.headers
+                    .get("content-type")
+                    ?.includes("application/json");
                 if (!response.ok) {
                     return response.text().then(text => {
                         let message;
@@ -54,7 +58,7 @@ class HttpClient {
                         throw new Error(message);
                     });
                 }
-                if ( return_response || !is_json ) {
+                if (return_response || !is_json) {
                     return response;
                 }
                 return response.json();
@@ -133,7 +137,6 @@ class HttpClient {
             true
         );
     }
-
 }
 
 export default HttpClient;

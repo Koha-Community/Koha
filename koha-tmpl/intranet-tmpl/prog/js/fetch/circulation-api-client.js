@@ -1,3 +1,4 @@
+/* keep tidy */
 import HttpClient from "./http-client.js";
 
 export class CirculationAPIClient extends HttpClient {
@@ -32,7 +33,12 @@ export class CirculationAPIClient extends HttpClient {
             renew: checkout =>
                 this.post({
                     endpoint: "renew",
-                    body: "itemnumber=%s&borrowernumber=%s&branchcode=%s&override_limit=%s".format(checkout.item_id, checkout.patron_id, checkout.library_id, checkout.override_limit),
+                    body: "itemnumber=%s&borrowernumber=%s&branchcode=%s&override_limit=%s".format(
+                        checkout.item_id,
+                        checkout.patron_id,
+                        checkout.library_id,
+                        checkout.override_limit
+                    ),
                     //+ ( checkout.seen !== undefined ? "&seen=%s".format(checkout.seen) : "" ) + (checkout.date_due !== undefined ? "&date_due=%s".format(checkout.date_due) : ""),
                     headers: {
                         "Content-Type":
@@ -51,13 +57,16 @@ export class CirculationAPIClient extends HttpClient {
             mark_as_not_seen: checkout_id =>
                 this.post({
                     endpoint: "checkout_notes",
-                    body: "issue_id=%s&op=%s".format(checkout_id, "cud-notseen"),
+                    body: "issue_id=%s&op=%s".format(
+                        checkout_id,
+                        "cud-notseen"
+                    ),
                     headers: {
                         "Content-Type":
                             "application/x-www-form-urlencoded;charset=utf-8",
                     },
-                })
-        }
+                }),
+        };
     }
 }
 
