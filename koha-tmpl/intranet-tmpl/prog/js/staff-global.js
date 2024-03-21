@@ -19,7 +19,9 @@ function formatstr(str, col) {
 var HtmlCharsToEscape = {
     '&': '&amp;',
     '<': '&lt;',
-    '>': '&gt;'
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
 };
 String.prototype.escapeHtml = function() {
     return this.replace(/[&<>]/g, function(c) {
@@ -176,9 +178,9 @@ $(document).ready(function() {
             });
 
             const previous_patron = {
-                "borrowernumber": $("#hiddenborrowernumber").val(),
-                "name": $("#hiddenborrowername").val(),
-                "card": $("#hiddenborrowercard").val()
+                "borrowernumber": escape_str($("#hiddenborrowernumber").val()),
+                "name": escape_str($("#hiddenborrowername").val()),
+                "card": escape_str($("#hiddenborrowercard").val())
             };
 
             previous_patrons.unshift( previous_patron );
