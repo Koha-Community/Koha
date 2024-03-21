@@ -120,7 +120,7 @@
 
                             <ul>
                                 [%IF ( AGE_RESTRICTION ) %]
-                                    <li>
+                                    <li class="needsconfirm age_restriction">
                                         Age restriction [% AGE_RESTRICTION | html %].
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check out anyway?
@@ -130,43 +130,43 @@
 
 
                                 [% IF ( DEBT ) %]
-                                    <li>The patron has a debt of [% DEBT | $Price %].</li>
+                                    <li class="needsconfirm debt">The patron has a debt of [% DEBT | $Price %].</li>
                                 [% END %]
 
                                 [% IF ( DEBT_GUARANTEES ) %]
-                                    <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price %].</li>
+                                    <li class="needsconfirm debt_guarantees">The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price %].</li>
                                 [% END %]
 
                                 [% IF ( DEBT_GUARANTORS ) %]
-                                    <li>The patron's guarantors and their other guarantees collectively have a debt of [% DEBT_GUARANTORS | $Price %].</li>
+                                    <li class="needsconfirm debt_gaurantors">The patron's guarantors and their other guarantees collectively have a debt of [% DEBT_GUARANTORS | $Price %].</li>
                                 [% END %]
 
                                 [% IF ( RENTALCHARGE && RENTALCHARGE > 0 ) %]
-                                    <li>Rental charge for this item: [% RENTALCHARGE | $Price %]</li>
+                                    <li class="needsconfirm rentalcharge">Rental charge for this item: [% RENTALCHARGE | $Price %]</li>
                                 [% END %]
 
                                 [% IF ( RENEW_ISSUE ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is currently checked out to this patron.  Renew?</li>
+                                    <li class="needsconfirm renew_issue">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is currently checked out to this patron.  Renew?</li>
                                 [% END %]
 
                                 [% IF ( RESERVE_WAITING ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
+                                    <li class="needsconfirm reserve_waiting">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
                                 [% END %]
 
                                 [% IF ( TRANSFERRED ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) and being transferred to [% Branches.GetName( resbranchcode ) | html %]</li>
+                                    <li class="needsconfirm transferred">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) and being transferred to [% Branches.GetName( resbranchcode ) | html %]</li>
                                 [% END %]
 
                                 [% IF ( PROCESSING ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is being processed for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %]</li>
+                                    <li class="needsconfirm processing">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is being processed for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %]</li>
                                 [% END %]
 
                                 [% IF ( RESERVED ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
+                                    <li class="needsconfirm reserved">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
                                 [% END %]
 
                                 [% IF ( ISSUED_TO_ANOTHER ) %]
-                                    <li>Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | uri %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
+                                    <li class="needsconfirm issued_to_another">Item <em>[% getTitleMessageIteminfo | html %]</em> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | uri %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check in and check out?
                                         [% END %]
@@ -174,35 +174,35 @@
                                 [% END %]
 
                                 [% IF TOO_MANY and TOO_MANY == 'TOO_MANY_CHECKOUTS' %]
-                                    <li>Too many checked out. [% current_loan_count | html %] checked out, only [% max_loans_allowed | html %] are allowed.</li>
-                                    <li>
+                                    <li class="needsconfirm too_many_checkouts">Too many checked out. [% current_loan_count | html %] checked out, only [% max_loans_allowed | html %] are allowed.</li>
+                                    <li class="needsconfirm too_many_checkouts2">
                                         Maximum checkouts calculated from the circulation rule for
                                         [% INCLUDE circulation_rule_criteria rule=circulation_rule_TOO_MANY %]
                                     </li>
                                 [% END %]
 
                                 [% IF TOO_MANY and TOO_MANY == 'TOO_MANY_ONSITE_CHECKOUTS' %]
-                                    <li>Too many on-site checked out. [% current_loan_count | html %] on-site checked out, only [% max_loans_allowed | html %] are allowed.</li>
-                                    <li>
+                                    <li class="needsconfirm too_many_onsite_checkouts">Too many on-site checked out. [% current_loan_count | html %] on-site checked out, only [% max_loans_allowed | html %] are allowed.</li>
+                                    <li class="needsconfirm too_many_onsite_checkouts2">
                                         Maximum checkouts calculated from the circulation rule for
                                         [% INCLUDE circulation_rule_criteria rule=circulation_rule_TOO_MANY %]
                                     </li>
                                 [% END %]
 
                                 [% IF ( BORRNOTSAMEBRANCH ) %]
-                                    <li>This patron is from a different library ([% Branches.GetName( BORRNOTSAMEBRANCH ) | html %])</li>
+                                    <li class="needsconfirm borrower_not_same_branch">This patron is from a different library ([% Branches.GetName( BORRNOTSAMEBRANCH ) | html %])</li>
                                 [% END %]
 
                                 [% IF ( PATRON_CANT ) %]
-                                    <li>This patron can't check out this item per library circulation policy.</li>
+                                    <li class="needsconfirm patron_cant">This patron can't check out this item per library circulation policy.</li>
                                 [% END %]
 
                                 [% IF ( TOO_MANY and TOO_MANY == 'NO_RULE_DEFINED' ) %]
-                                    <li>No circulation rule is defined for this patron and itemtype combination.</li>
+                                    <li class="needsconfirm no_rule_defined">No circulation rule is defined for this patron and itemtype combination.</li>
                                 [% END %]
 
                                 [% IF ( NOT_FOR_LOAN_FORCING ) %]
-                                    <li>
+                                    <li class="needsconfirm not_for_loan_forcing">
                                     [% IF ( itemtype_notforloan ) %]
                                         <span>Item type is normally not for loan.</span>
                                     [% ELSIF ( item_notforloan ) %]
@@ -216,7 +216,7 @@
                                 [% END %]
 
                                 [% IF ( USERBLOCKEDOVERDUE ) %]
-                                    <li>Patron has [% USERBLOCKEDOVERDUE %] overdue item(s).
+                                    <li class="needsconfirm userblocked_overdue">Patron has [% USERBLOCKEDOVERDUE %] overdue item(s).
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check out anyway?
                                         [% END %]
@@ -224,7 +224,7 @@
                                 [% END %]
 
                                 [% IF ( ITEM_LOST ) %]
-                                    <li>This item has been lost with a status of "[% ITEM_LOST | html %]".
+                                    <li class="needsconfirm item_lost">This item has been lost with a status of "[% ITEM_LOST | html %]".
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check out anyway?
                                         [% END %]
@@ -232,15 +232,15 @@
                                 [% END %]
 
                                 [% IF HIGHHOLDS %]
-                                    <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration | html %] days (due [% HIGHHOLDS.returndate | $KohaDates %]). Check out anyway?</li>
+                                    <li class="needsconfirm highholds">High demand item. Loan period shortened to [% HIGHHOLDS.duration | html %] days (due [% HIGHHOLDS.returndate | $KohaDates %]). Check out anyway?</li>
                                 [% END %]
 
                                 [% IF PREVISSUE %]
-                                    <li>Patron has previously checked out this title: <strong>[% biblio.title | html %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</strong>. Check out anyway?</li>
+                                    <li class="needsconfirm previssue">Patron has previously checked out this title: <strong>[% biblio.title | html %] [% IF biblio.author %] by [% biblio.author | html %][% END %]</strong>. Check out anyway?</li>
                                 [% END %]
 
                                 [% IF BIBLIO_ALREADY_ISSUED %]
-                                    <li>
+                                    <li class="needsconfirm already_issued">
                                         Patron has already checked out another item from this record.
                                         [% IF CAN_user_circulate_force_checkout %]
                                             Check out anyway?
@@ -249,27 +249,27 @@
                                 [% END %]
 
                                 [% IF ADDITIONAL_MATERIALS %]
-                                    <li>
+                                    <li class="needsconfirm additional_materials">
                                         Please confirm that the accompanying materials are present: [% ADDITIONAL_MATERIALS | html %]
                                     </li>
                                 [% END %]
 
                                 [% IF RECALLED %]
                                     [% IF RECALLED.waiting %]
-                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> ([% RECALLED.item.barcode | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.waiting_date | $KohaDates %]</li>
+                                        <li class="needsconfirm recalled">Item <i>[% RECALLED.biblio.title | html %]</i> ([% RECALLED.item.barcode | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.waiting_date | $KohaDates %]</li>
                                     [% ELSIF RECALLED.requested or RECALLED.overdue %]
-                                        <li>Item <i>[% RECALLED.biblio.title | html %]</i> [% IF RECALLED.item %]([% RECALLED.item.barcode | html %])[% END %] has been recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.created_date | $KohaDates %]</li>
+                                        <li class="needsconfirm recalled2">Item <i>[% RECALLED.biblio.title | html %]</i> [% IF RECALLED.item %]([% RECALLED.item.barcode | html %])[% END %] has been recalled by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% RECALLED.patron_id | uri %]">[% RECALLED.patron.firstname | html %] [% RECALLED.patron.surname | html %]</a> ([% RECALLED.patron.cardnumber | html %]) at [% Branches.GetName( RECALLED.pickup_library_id ) | html %] since [% RECALLED.created_date | $KohaDates %]</li>
                                     [% END %]
                                 [% END %]
 
                                 [% IF ( BOOKED_TO_ANOTHER ) %]
-                                    <li>
+                                    <li class="needsconfirm booked_to_another">
                                         Due for another patron booking by: [% BOOKED_TO_ANOTHER.start_date | $KohaDates %]
                                     </li>
                                 [% END %]
 
                                 [% IF ( BOOKED_EARLY ) %]
-                                    <li>
+                                    <li class="needsconfirm booked_early">
                                         Patron has this item booked for checkout on [% BOOKED_EARLY.start_date | $KohaDates %]
                                     </li>
                                 [% END %]
