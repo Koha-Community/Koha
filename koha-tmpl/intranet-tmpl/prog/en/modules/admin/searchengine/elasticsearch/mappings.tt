@@ -263,16 +263,16 @@ a.add, a.delete {
                                     </td>
                                     <td>
                                         [% IF search_field.is_mapped %]
-                                            <a class="btn btn-default btn-xs disabled delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                            <a class="btn btn-default btn-xs disabled delete-search-field" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
                                         [% ELSE %]
-                                            <a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                            <a class="btn btn-default btn-xs delete-search-field" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
                                         [% END %]
                                     </td>
                                 </tr>
                             [% END %]
                         </tbody>
                         <tfoot>
-                            <tr>
+                            <tr data-type="search-field">
                                 <td>
                                     <input type="text" data-id="search_field_name"/>
                                 </td>
@@ -434,16 +434,16 @@ a.add, a.delete {
                                                 <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
                                             </td>
                                             [% IF mapping.search_field_mandatory %]
-                                                <td><a class="btn btn-default btn-xs delete mandatory" data-field_name="[% mapping.search_field_name | html %]" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
+                                                <td><a class="btn btn-default btn-xs delete-mapping mandatory" data-field_name="[% mapping.search_field_name | html %]" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                             [% ELSE %]
-                                                <td><a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
+                                                <td><a class="btn btn-default btn-xs delete-mapping" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                             [% END %]
                                         </tr>
                                     [% END %]
                                 [% END %]
                             </tbody>
                             <tfoot>
-                                <tr>
+                                <tr data-type="mapping">
                                     <td>
                                         <input data-id="mapping_index_name" type="hidden" value="[% index.index_name | html %]" />
                                         <select data-id="mapping_search_field_name">
@@ -525,13 +525,13 @@ a.add, a.delete {
                                                     <input type="hidden" name="facet_name" value="[% f.name | html %]" />
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
+                                                    <a class="btn btn-default btn-xs delete-facet" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
                                                 </td>
                                             </tr>
                                         [% END %]
                                     </tbody>
                                     <tfoot>
-                                        <tr>
+                                        <tr data-type="facet">
                                             <td></td>
                                             <td>
                                                 <select data-id="facet-search-field">

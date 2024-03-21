@@ -5,9 +5,20 @@ function clean_line(line) {
     $(line).find('select').find('option:first').prop("selected", true);
 }
 
+function build_delete_link(del_class){
+    return '<a class="btn btn-default btn-xs %s" style="cursor: pointer;"><i class="fa fa-trash"></i> %s</a>'.format(del_class, __("Delete"));
+}
+
+function remove_line(line){
+    var table = $(line).closest('table');
+    let dt = $(table).DataTable();
+    dt.row(line).remove().draw();
+}
+
 function clone_line(line) {
     var new_line = $(line).clone();
-    $(new_line).find('td:last-child>a').removeClass("add").addClass("delete").html('<i class="fa fa-trash"></i> %s'.format(__("Delete") ));
+    let type = $(line).data('type');
+    $(new_line).find('td:last-child').html(build_delete_link('delete-%s'.format(type)));
     $(new_line).find('[data-id]').each(function () {
         $(this).attr({ name: $(this).attr('data-id') }).removeAttr('data-id');
     });
@@ -47,15 +58,19 @@ $(document).ready(function () {
         tableInit( oldtabid, newtabid );
     });
 
-    $(document).on('click', '.delete', function() {
+    $(document).on('click', '.delete-facet', function() {
+        var line = $(this).closest("tr");
+        remove_line(line);
+    });
+    $(document).on('click', '.delete-mapping', function() {
+        var line = $(this).closest("tr");
+        remove_line(line);
+    });
+    $(document).on('click', '.delete-search-field', function() {
         if ($(this).hasClass('mandatory') && $(".mandatory[data-field_name=" + $(this).attr('data-field_name') + "]").length < 2) {
             alert( __("This field is mandatory and must have at least one mapping") );
             return;
         } else {
-            var table = $(this).closest('table');
-            let dt = $(table).DataTable();
-            dt.row( $(this).closest('tr') ).remove().draw();
-            $(this).parents('tr').remove();
             var line = $(this).closest("tr");
 
             var name;
@@ -74,27 +89,23 @@ $(document).ready(function () {
                 var search_field_line = $('input[name="search_field_name"][value="' + search_field_name + '"]').closest("tr");
                 $(search_field_line).find('a.btn-default').removeClass('disabled');
             }
+
+            remove_line(line);
         }
     });
 
     $('.add').click(function () {
         var table = $(this).closest('table');
         let table_id = table.attr('id');
-        var index_name = $(table).attr('data-index_name');
+        let dt = $('#' + table_id).DataTable();
         var line = $(this).closest("tr");
         var marc_field = $(line).find('input[data-id="mapping_marc_field"]').val();
-        if (marc_field.length > 0) {
+        let dt_data = dt.data();
+        if ( marc_field.length ) {
             var new_line = clone_line(line);
-            var search_field_name = $(line).find('select[data-id="mapping_search_field_name"] option:selected').text();
-            new_line.appendTo($('table[data-index_name="' + index_name + '"]>tbody'));
+            var index_name = $(table).attr('data-index_name');
             let dt = $('#' + table_id).DataTable();
             dt.row.add(new_line).draw();
-
-            $(table).on( 'click', '.delete', function () {
-                var table = $(this).closest('table');
-                let dt = $(table).DataTable();
-                dt.row( $(this).closest('tr') ).remove().draw();
-            } );
 
             clean_line(line);
         }
@@ -144,14 +155,7 @@ $(document).ready(function () {
         if (search_field_name.length > 0) {
             var new_line = clone_line(line);
             new_line.find('td:first').attr({'data-order': search_field_name});
-            new_line.appendTo($('table#' + table_id + '>tbody'));
             dt.row.add(new_line).draw();
-
-            $(table).on( 'click', '.delete', function () {
-                var table = $(this).closest('table');
-                let dt = $(table).DataTable();
-                dt.row( $(this).closest('tr') ).remove().draw();
-            } );
 
             clean_line(line);
         }
@@ -173,14 +177,8 @@ $(document).ready(function () {
         if (search_field_name.length > 0) {
             const next_id = Math.max.apply(null, dt_data.map(row => row[0])) + 1;
             const label = selected_option.data('label');
-            new_line = [next_id, search_field_name, '<span>%s</span><input type="hidden" name="facet_name" value="%s" />'.format(label.escapeHtml(), search_field_name.escapeHtml()), '<a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> %s</a>'.format(__("Delete"))];
+            new_line = [next_id, search_field_name, '<span>%s</span><input type="hidden" name="facet_name" value="%s" />'.format(label.escapeHtml(), search_field_name.escapeHtml()), build_delete_link()]
             dt.row.add(new_line).draw();
-
-            $(table).on( 'click', '.delete', function () {
-                var table = $(this).closest('table');
-                let dt = $(table).DataTable();
-                dt.row( $(this).closest('tr') ).remove().draw();
-            } );
 
             clean_line(line);
         }
