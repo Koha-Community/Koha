@@ -1225,7 +1225,7 @@ CREATE TABLE `bookings` (
   `patron_id` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this booking is for',
   `biblio_id` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the biblio table defining which bib record this booking is on',
   `item_id` int(11) DEFAULT NULL COMMENT 'foreign key from the items table defining the specific item the patron has placed a booking for',
-  `pickup_library_id` varchar(10) DEFAULT NULL COMMENT 'Identifier for booking pickup library',
+  `pickup_library_id` varchar(10) NOT NULL COMMENT 'Identifier for booking pickup library',
   `start_date` datetime DEFAULT NULL COMMENT 'the start date of the booking',
   `end_date` datetime DEFAULT NULL COMMENT 'the end date of the booking',
   PRIMARY KEY (`booking_id`),
