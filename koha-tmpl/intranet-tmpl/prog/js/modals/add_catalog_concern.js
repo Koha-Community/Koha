@@ -1,3 +1,4 @@
+/* keep tidy */
 $(document).ready(function() {
 
     // Pre-populate empty message with template

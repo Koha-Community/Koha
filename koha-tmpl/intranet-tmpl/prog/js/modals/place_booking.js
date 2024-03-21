@@ -1,3 +1,4 @@
+/* keep tidy */
 let dataFetched = false;
 let bookable_items,
     bookings,

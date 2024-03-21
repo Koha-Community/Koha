@@ -1,3 +1,4 @@
+/* keep tidy */
 $(document).ready(function() {
     $('#ticketDetailsModal').on('show.bs.modal', function(event) {
         let modal = $(this);
