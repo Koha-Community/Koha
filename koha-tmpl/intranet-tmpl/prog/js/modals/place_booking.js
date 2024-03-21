@@ -452,6 +452,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 // Setup listener for pickup location select2
                 $("#pickup_library_id").on("select2:select", function (e) {
                     let valid_items = e.params.data.pickup_items;
+                    valid_items.push(0);
 
                     // Disable items not available at the pickup location
                     $("#booking_item_id > option").each(function () {
