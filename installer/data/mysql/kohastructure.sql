@@ -5653,6 +5653,7 @@ CREATE TABLE `search_field` (
   `staff_client` tinyint(1) NOT NULL DEFAULT 1,
   `opac` tinyint(1) NOT NULL DEFAULT 1,
   `mandatory` tinyint(1) DEFAULT NULL COMMENT 'if marked this field is not editable or removable',
+  `authorised_value_category` varchar(32) DEFAULT NULL COMMENT 'link to authorised value category',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
