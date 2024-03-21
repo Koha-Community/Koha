@@ -85,6 +85,14 @@ the order place of the field in facet list if faceted
 
 if marked this field is not editable or removable
 
+=head2 authorised_value_category
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 32
+
+link to authorised value category
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -124,6 +132,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "mandatory",
   { data_type => "tinyint", is_nullable => 1 },
+  "authorised_value_category",
+  { data_type => "varchar", is_nullable => 1, size => 32 },
 );
 
 =head1 PRIMARY KEY
@@ -170,8 +180,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 09:10:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NE6QXq/8skTxjjoK15fYrg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-07 09:45:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/WPJEu04y32zDMr+vnK5og
 
 __PACKAGE__->add_columns(
     '+mandatory' => { is_boolean => 1 },
