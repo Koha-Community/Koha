@@ -17,9 +17,9 @@ return {
         );
 
         if ($count) {
-            say $out "WARNING - Biblio.RecallsCount is used in at least one notice template";
-            say $out "It is deprecated and will be remove in a future version of Koha.";
-            say $out "Replace it with biblio.recalls.search( completed => 0 ).count instead";
+            say $out "WARNING - Biblio.RecallsCount is used in at least one notice template.";
+            say $out "It is deprecated and will be removed in a future version of Koha.";
+            say $out "Replace it with biblio.recalls.search( completed => 0 ).count";
         }
     },
 };
