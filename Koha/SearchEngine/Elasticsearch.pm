@@ -288,6 +288,9 @@ sub raw_elasticsearch_mappings {
             $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{mandatory} = $search_field->mandatory;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order if defined $search_field->facet_order;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{authorised_value_category} =
+                $search_field->authorised_value_category
+                if defined $search_field->authorised_value_category;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight if defined $search_field->weight;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{opac} = $search_field->opac if defined $search_field->opac;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{staff_client} = $search_field->staff_client if defined $search_field->staff_client;
@@ -368,7 +371,7 @@ sub reset_elasticsearch_mappings {
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
 
-            my %sf_params = map { $_ => $data->{$_} } grep { exists $data->{$_} } qw/ type label weight staff_client opac facet_order mandatory/;
+            my %sf_params = map { $_ => $data->{$_} } grep { exists $data->{$_} } qw/ type label weight staff_client opac facet_order authorised_value_category mandatory/;
 
             # Set default values
             $sf_params{staff_client} //= 1;
