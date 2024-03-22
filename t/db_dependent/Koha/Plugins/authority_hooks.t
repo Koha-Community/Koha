@@ -53,15 +53,15 @@ subtest 'after_authority_action hook' => sub {
     my $plugin = Koha::Plugin::Test->new->enable;
     my $id;
 
-    warning_like { ( $id ) = C4::AuthoritiesMarc::AddAuthority( MARC::Record->new, undef, 'PERSO_NAME' ); }
+    warnings_exist { ( $id ) = C4::AuthoritiesMarc::AddAuthority( MARC::Record->new, undef, 'PERSO_NAME' ); }
             qr/after_authority_action called with action: create, id: \d+/,
             'AddAuthority calls the hook with action=create, id passed';
 
-    warning_like { C4::AuthoritiesMarc::ModAuthority( $id, MARC::Record->new, 'PERSO_NAME', { skip_merge => 1 } ); }
+    warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, MARC::Record->new, 'PERSO_NAME', { skip_merge => 1 } ); }
             qr/after_authority_action called with action: modify, id: $id/,
             'ModAuthority calls the hook with action=modify, id passed';
 
-    warning_like { C4::AuthoritiesMarc::DelAuthority({ authid => $id, skip_merge => 1 }); }
+    warnings_exist { C4::AuthoritiesMarc::DelAuthority({ authid => $id, skip_merge => 1 }); }
             qr/after_authority_action called with action: delete, id: $id/,
             'DelAuthority calls the hook with action=delete, id passed';
 
