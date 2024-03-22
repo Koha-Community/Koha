@@ -559,12 +559,9 @@ a.add, a.delete {
                                             <td></td>
                                             <td>
                                                 <select data-id="facet-av-cat">
+                                                    <option value=""></option>
                                                     [% FOR av_cat IN authorised_value_categories %]
-                                                        [% IF f.authorised_value_category == av_cat %]
-                                                            <option value="[% av_cat | html %]" selected="selected">[% av_cat | html %]</option>
-                                                        [% ELSE %]
-                                                            <option value="[% av_cat | html %]">[% av_cat | html %]</option>
-                                                        [% END %]
+                                                        <option value="[% av_cat | html %]">[% av_cat | html %]</option>
                                                     [% END %]
                                                 </select>
                                             </td>
