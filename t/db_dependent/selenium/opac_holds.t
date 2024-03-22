@@ -325,24 +325,12 @@ SKIP: {
         DelBiblio($second_biblionumber);
     }
 
-=head3 withdraw_items
-
-Withdraws items by setting their 'withdrawn' flag to 1.
-
-=cut
-
     sub withdraw_items {
         my $dbh = C4::Context->dbh;
         $dbh->do(
             qq|UPDATE items SET withdrawn=1 WHERE itemnumber IN ('$item_1_itemnumber','$item_2_itemnumber','$item_3_itemnumber','$item_4_itemnumber')|
         );
     }
-
-=head3 set_holdallowed_not_allowed
-
-Set holdallowed as not_allowed in the circulation rules
-
-=cut
 
     sub set_holdallowed_not_allowed {
         Koha::CirculationRules->set_rules(
@@ -356,15 +344,6 @@ Set holdallowed as not_allowed in the circulation rules
         );
     }
 
-=head3 set_onshelfholds
-
-Set holdallowed as not_allowed in the circulation rules
-0 - "If any unavailable"
-1 - "Yes"
-2 - "If all unavailable"
-
-=cut
-
     sub set_onshelfholds {
         my ($rule_value) = @_;
         Koha::CirculationRules->set_rule(
@@ -377,12 +356,6 @@ Set holdallowed as not_allowed in the circulation rules
             }
         );
     }
-
-=head3 search_page_hold_button_absent
-
-Function to visit search results and test for the absence of place hold buttons
-
-=cut
 
     sub search_page_hold_button_absent {
         my ($message) = @_;
@@ -402,12 +375,6 @@ Function to visit search results and test for the absence of place hold buttons
         );
     }
 
-=head3 search_page_hold_button_present
-
-Function to visit search results and test for the presence of place hold buttons
-
-=cut
-
     sub search_page_hold_button_present {
         my ($message) = @_;
 
@@ -424,12 +391,6 @@ Function to visit search results and test for the presence of place hold buttons
         );
     }
 
-=head3 detail_page_hold_button_absent
-
-Visits the detail page and tests the absence of the place hold button
-
-=cut
-
     sub detail_page_hold_button_absent {
         my ($message) = @_;
         $driver->get( $s->opac_base_url . "opac-detail.pl?biblionumber=" . $biblionumber );
@@ -440,12 +401,6 @@ Visits the detail page and tests the absence of the place hold button
             'Detail page - Place hold button should be absent. ' . $message,
         );
     }
-
-=head3 detail_page_hold_button_present
-
-Visits the detail page and tests the presence of the place hold button
-
-=cut
 
     sub detail_page_hold_button_present {
         my ($message) = @_;
