@@ -70,5 +70,11 @@ __PACKAGE__->set_primary_key("plugin_class", "plugin_key");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g4MbnMszG6BGSG0vHxWQig
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_objects_class {
+    'Koha::Plugins::Datas';
+}
+sub koha_object_class {
+    'Koha::Plugins::Data';
+}
+
 1;
