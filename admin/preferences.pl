@@ -32,7 +32,7 @@ use Koha::Database::Columns;
 use IO::File;
 use YAML::XS;
 use Encode;
-use List::MoreUtils qw( any );
+use List::MoreUtils qw( any uniq );
 
 sub GetTab {
     my ( $input, $tab ) = @_;
@@ -165,8 +165,8 @@ sub _get_chunk {
         my @values;
         @values = split /,/, $value if defined($value);
         $chunk->{type}    = 'multiple_sortable';
+        my @options = sort keys %{ $options{multiple_sortable} };
         $chunk->{CHOICES} = [
-            sort { $a->{'text'} cmp $b->{'text'} }
               map {
                 my $option_value = $_;
                 {
@@ -175,7 +175,7 @@ sub _get_chunk {
                     selected => (grep { $_ eq $option_value } @values) ? 1 : 0,
                 }
               }
-              keys %{ $options{multiple_sortable} }
+              uniq(@values, @options)
         ];
     }
 
