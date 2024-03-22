@@ -3,7 +3,10 @@
         "browser": true,
         "jquery": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "prettier"
+    ],
     "rules": {
         "indent": [
             "error",
@@ -17,5 +20,6 @@
             "error",
             "always"
         ]
-    }
+    },
+    "prettier/prettier": "error"
 }
