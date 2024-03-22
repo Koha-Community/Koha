@@ -474,16 +474,16 @@
     [% END %]
 [% END %]
 
-[% # [ WRAPPER accordion id="accordion container id" ]           %]
-[% #     [ WRAPPER accordion_item ]                              %]
-[% #         [ WRAPPER accordion_heading panel_id = "panel id" ] %]
-[% #             [Clickable panel heading ]                      %]
-[% #         [ END ]                                             %]
-[% #         [ WRAPPER accordion_panel panel_id = "panel id" ]   %]
-[% #             [Expanding content panel]                       %]
-[% #         [ END ]                                             %]
-[% #     [ END ]                                                 %]
-[% # [ END ]                                                     %]
+[% # [ WRAPPER accordion panelgroup_id="accordion container id" ] %]
+[% #     [ WRAPPER accordion_item ]                               %]
+[% #         [ WRAPPER accordion_heading panel_id = "panel id" ]  %]
+[% #             [Clickable panel heading ]                       %]
+[% #         [ END ]                                              %]
+[% #         [ WRAPPER accordion_panel panel_id = "panel id" ]    %]
+[% #             [Expanding content panel]                        %]
+[% #         [ END ]                                              %]
+[% #     [ END ]                                                  %]
+[% # [ END ]                                                      %]
 
 [% BLOCK accordion %]
     <div class="panel-group" id="[% panelgroup_id | $raw %]_group" role="tablist" aria-multiselectable="true">
@@ -500,7 +500,7 @@
 [% BLOCK accordion_heading %]
     <div class="panel-heading" role="tab" id="[% panel_id | $raw %]_heading">
         <h2 class="panel-title">
-            <a id="[% panel_id | $raw %]Toggle" href="#[% panel_id | $raw %]_panel" class="collapsed" role="button" data-toggle="collapse" data-parent="#[% panelgroup_id | $raw %]_group" href="#" aria-expanded="false" aria-controls="[% panel_id | $raw %]_panel">
+            <a id="[% panel_id | $raw %]Toggle" href="#[% panel_id | $raw %]_panel" class="collapsed" role="button" data-toggle="collapse" data-parent="#[% panelgroup_id | $raw %]_group" aria-expanded="false" aria-controls="[% panel_id | $raw %]_panel">
                 [% content | $raw %]
             </a>
         </h2>
