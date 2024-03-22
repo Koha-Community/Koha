@@ -10,7 +10,7 @@ export class AcquisitionAPIClient extends HttpClient {
     get vendors() {
         return {
             getAll: (query, params) =>
-                this.get({
+                this.getAll({
                     endpoint: "vendors",
                     query,
                     params,
