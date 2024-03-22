@@ -54,19 +54,37 @@
             [% FOREACH facets_loo IN facets_loop %]
                 [% IF facets_loo.facets.size > 0 %]
                     <li id="[% facets_loo.type_id | html %]">
-                        [% IF facets_loo.type_label_Authors %]<h3 id="facet-authors">Authors</h3>[% END %]
-                        [% IF facets_loo.type_label_Titles %]<h3 id="facet-titles">Titles</h3>[% END %]
-                        [% IF facets_loo.type_label_Topics %]<h3 id="facet-topics">Topics</h3>[% END %]
-                        [% IF facets_loo.type_label_Places %]<h3 id="facet-places">Places</h3>[% END %]
-                        [% IF facets_loo.type_label_Series %]<h3 id="facet-series">Series</h3>[% END %]
-                        [% IF facets_loo.type_label_ItemTypes %]<h3 id="facet-itemtypes">Item types</h3>[% END %]
-                        [% IF facets_loo.type_label_CollectionCodes %]<h3 id="facet-collections">Collections</h3>[% END %]
-                        [% IF facets_loo.type_label_Language %]<h3 id="facet-languages">Languages</h3>[% END %]
-                        [% UNLESS singleBranchMode %]
-                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<h3 id="facet-home-libraries">Home libraries</h3>[% END %]
-                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<h3 id="facet-holding-libraries">Holding libraries</h3>[% END %]
+                        [% SWITCH facets_loo.label %]
+                        [% CASE 'Authors' %]
+                            <h3 id="facet-authors">Authors</h3>
+                        [% CASE 'Titles' %]
+                            <h3 id="facet-titles">Titles</h3>
+                        [% CASE 'Topics' %]
+                            <h3 id="facet-topics">Topics</h3>
+                        [% CASE 'Places' %]
+                            <h3 id="facet-places">Places</h3>
+                        [% CASE 'Series' %]
+                            <h3 id="facet-series">Series</h3>
+                        [% CASE 'ItemTypes' %]
+                            <h3 id="facet-itemtypes">Item types</h3>
+                        [% CASE 'Location' %]
+                            <h3 id="facet-locations">Locations</h3>
+                        [% CASE 'CollectionCodes' %]
+                            <h3 id="facet-collections">Collections</h3>
+                        [% CASE 'Languages' %]
+                            <h3 id="facet-languages">Languages</h3>
+                        [% CASE %]
+                            <h3 id="facet-[% facets_loo.type_link_value | html %]">[% facets_loo.label | html %]</h3>
                         [% END %]
-                        [% IF facets_loo.type_label_Location %]<h3 id="facet-locations">Locations</h3>[% END %]
+
+                        [% UNLESS singleBranchMode %]
+                            [% IF ( facets_loo.label == HomeLibrary ) %]
+                            <h3 id="facet-home-libraries">Home libraries</h3>
+                            [% END %]
+                            [% IF ( facets_loo.label == 'HoldingLibrary' ) %]
+                            <h3 id="facet-holding-libraries">Holding libraries</h3>
+                            [% END %]
+                        [% END %]
                         <ul>
                             [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                             [% IF ( sort_by ) %]
@@ -103,14 +121,14 @@
                                 <li class="moretoggle">
                                     [% FOR label IN more_less_labels.keys %]
                                         [% IF facets_loo.item('type_label_' _ label) %]
-                                            <a href="#" aria-label="[% more_less_labels.item(label).more | html | trim %]"><strong>Show more</strong></a>
+                                            <a href="#" aria-label="[% more_less_labels.item(label).more || t('Show more') | html | trim %]"><strong>Show more</strong></a>
                                         [% END %]
                                     [% END %]
                                 </li>
                                 <li class="moretoggle" style="display:none">
                                     [% FOR label IN more_less_labels.keys %]
                                         [% IF facets_loo.item('type_label_' _ label) %]
-                                            <a href="#" aria-label="[% more_less_labels.item(label).less | html | trim %]"><strong>Show less</strong></a>
+                                            <a href="#" aria-label="[% more_less_labels.item(label).less || t('Show less') | html | trim %]"><strong>Show less</strong></a>
                                         [% END %]
                                     [% END %]
                                 </li>
