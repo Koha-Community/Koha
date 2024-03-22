@@ -527,7 +527,9 @@ a.add, a.delete {
                                                     <input type="hidden" name="facet_name" value="[% f.name | html %]" />
                                                 </td>
                                                 <td>
+                                                    [% IF f.name != 'itype' && f.name != 'location' && f.name != 'holdingbranch' && f.name != 'homebranch' && f.name != 'ln' && f.name != 'ccode' %]
                                                     <select name="facet_av_cat_[% f.name | html %]">
+                                                        <option value=""></option>
                                                         [% FOR av_cat IN authorised_value_categories %]
                                                             [% IF f.authorised_value_category == av_cat %]
                                                                 <option value="[% av_cat | html %]" selected="selected">[% av_cat | html %]</option>
@@ -536,6 +538,7 @@ a.add, a.delete {
                                                             [% END %]
                                                         [% END %]
                                                     </select>
+                                                    [% END %]
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-default btn-xs delete-facet" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a>
