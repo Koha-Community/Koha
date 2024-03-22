@@ -233,17 +233,6 @@ sub build_query {
         $res->{aggregations}->{$name} = { terms => { field => "${name}__facet" , size => $size } };
     };
 
-
-    # FIXME We need a way to show/hide the facet individually
-    #my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
-    #if (   $display_library_facets eq 'both'
-    #    or $display_library_facets eq 'home' ) {
-    #    $res->{aggregations}{homebranch} = { terms => { field => "homebranch__facet", size => $size } };
-    #}
-    #if (   $display_library_facets eq 'both'
-    #    or $display_library_facets eq 'holding' ) {
-    #    $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet", size => $size } };
-    #}
     $res = _rebuild_to_es_advanced_query($res) if @$es_advanced_searches ;
     return $res;
 }

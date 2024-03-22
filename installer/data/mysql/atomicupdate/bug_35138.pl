@@ -27,7 +27,22 @@ return {
         }
 
         $sth->execute( 'Collections', 'ccode', 'collection-code');
-        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary');
-        $sth->execute( 'Home libraries', 'homebranch', 'homelibrary');
+
+        # Deal with DisplayLibraryFacets
+        my ($DisplayLibraryFacets) = $dbh->selectrow_array(q{
+            SELECT value FROM systempreferences WHERE variable='DisplayLibraryFacets'
+        });
+        my ($homebranch, $holdingbranch);
+        if ( $DisplayLibraryFacets eq 'both' ) {
+            $homebranch = 1;
+            $holdingbranch = 1;
+        } elsif ( $DisplayLibraryFacets eq 'holding' ) {
+            $holdingbranch = 1;
+        } elsif ( $DisplayLibraryFacets eq 'home' ) {
+            $homebranch = 1;
+        }
+        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary') if $holdingbranch;
+        $sth->execute( 'Home libraries', 'homebranch', 'homelibrary') if $homebranch;
+
     },
 };
