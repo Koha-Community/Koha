@@ -3040,8 +3040,12 @@ sub CanBookBeRenewed {
       if ( $item->current_holds->search( { non_priority => 0 } )->count );
 
 
-    my ($status, $matched_reserve, $fillable_holds) = CheckReserves($item);
-    if ( $fillable_holds ) {
+    my ( $status, $matched_reserve, $possible_holds ) = CheckReserves($item);
+    my @fillable_holds = ();
+    foreach my $possible_hold ( @{$possible_holds} ) {
+        push @fillable_holds, $possible_hold unless $possible_hold->{non_priority};
+    }
+    if ( @fillable_holds ) {
         if ( C4::Context->preference('AllowRenewalIfOtherItemsAvailable') ) {
 
             # Get all other items that could possibly fill reserves
@@ -3052,10 +3056,10 @@ sub CanBookBeRenewed {
                 notforloan   => 0,
                 -not         => { itemnumber => $item->itemnumber } })->as_list;
 
-            return ( 0, "on_reserve" ) if @{$fillable_holds} && (scalar @other_items < scalar @{$fillable_holds} );
+            return ( 0, "on_reserve" ) if @fillable_holds && (scalar @other_items < scalar @fillable_holds );
 
             my %matched_items;
-            foreach my $possible_hold ( @{$fillable_holds} ) {
+            foreach my $possible_hold ( @fillable_holds ) {
                 my $fillable = 0;
                 my $patron_with_reserve = Koha::Patrons->find($possible_hold->{borrowernumber});
 
