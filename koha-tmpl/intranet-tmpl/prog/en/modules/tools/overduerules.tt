@@ -67,7 +67,7 @@
             </div>
             [% END %]
             [% IF ( table ) %]
-                <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
+                <form method="post" id="overduerulesf" action="/cgi-bin/koha/tools/overduerules.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-save" />
                     <input type="hidden" name="branch" value="[% branch | html %]" />
@@ -198,6 +198,12 @@
                 "dom": '<"top pager"f>rt<"clear">',
                 "paginate": false,
             }));
+
+            $("#overduerulesf").on("submit", function(e){
+                $(".overduerulest").DataTable().search('').draw();
+                return true;
+            });
+
         });
     </script>
 [% END %]
