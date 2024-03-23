@@ -26,12 +26,13 @@ use Koha::PseudonymizedTransactions;
 
 use C4::Context;
 
-my ( $help, $verbose, $before );
+my ( $help, $verbose, $before, $confirm );
 my $result = GetOptions(
     'h|help'     => \$help,
     'v|verbose'  => \$verbose,
     'b|before:s' => \$before,
-) || pod2usage(1);
+    'c|confirm'  => \$confirm,
+) || pod2usage(0);
 
 if ($help) {
     pod2usage(0);
@@ -60,6 +61,10 @@ if ( $statistics->count && $existing_pseudo_stats ) {
     exit unless uc($continue) eq 'Y';
 }
 
+if ( !$confirm ) {
+    print $statistics->count() . " statistics would have been pseudonymized\n" if $verbose;
+    exit 1;
+}
 
 while ( my $statistic = $statistics->next ) {
     $statistic->pseudonymize();
@@ -93,6 +98,10 @@ Verbose mode.
 =item B<-b|--before=DATE>
 
 This option allows for specifying a date to pseudonmyize before. Useful if you have enabled pseudonymization and want to pseudonymize transactions before that date. If not passed all statistics before current time will be pseudonymized.
+
+=item B<-c|--confirm>
+
+Without this parameter the script will be run in test mode and no changes will be made.
 
 =back
 
