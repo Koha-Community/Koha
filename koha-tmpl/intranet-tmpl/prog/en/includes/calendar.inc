@@ -179,7 +179,7 @@
          || $(input).data("flatpickr-futuredate") === true ) {
             let original_date = $(input).val();
             if ( original_date ) {
-                original_date = Date_from_syspref( original_date ).getTime();
+                original_date = flatpickr.parseDate(original_date, 'Y-m-d').getTime();
                 let tomorrow = new Date().fp_incr(1).getTime();
 
                 options['enable'] = [function(date){
