@@ -574,13 +574,25 @@ sub item_group {
 
 =head3 branch
 
-Returns the related Koha::Library object for this Hold
+Returns the related Koha::Library object for this hold
+
+DEPRECATED
 
 =cut
 
 sub branch {
+    return shift->pickup_library(@_);
+}
+
+=head3 pickup_library
+
+Returns the related Koha::Library object for this hold
+
+=cut
+
+sub pickup_library {
     my ($self) = @_;
-    my $rs = $self->_result->branchcode;
+    my $rs = $self->_result->pickup_library;
     return Koha::Library->_new_from_dbic($rs);
 }
 

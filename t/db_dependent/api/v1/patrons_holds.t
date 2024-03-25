@@ -35,7 +35,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -51,12 +51,33 @@ subtest 'list() tests' => sub {
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_is( [] );
 
-    my $hold_1 = $builder->build_object({ class => 'Koha::Holds', value => { borrowernumber => $patron->id } });
-    my $hold_2 = $builder->build_object({ class => 'Koha::Holds', value => { borrowernumber => $patron->id } });
+    my $hold_1 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
+    my $hold_2 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
+    my $hold_3 = $builder->build_object( { class => 'Koha::Holds', value => { borrowernumber => $patron->id } } );
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?_order_by=+me.hold_id')
-      ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '' => [ $hold_1->to_api, $hold_2->to_api ], 'Holds retrieved' );
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?_order_by=+me.hold_id' )
+        ->status_is( 200, 'SWAGGER3.2.2' )
+        ->json_is( '' => [ $hold_1->to_api, $hold_2->to_api, $hold_3->to_api ], 'Holds retrieved' );
+
+    $hold_1->fill;
+    $hold_3->fill;
+
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?_order_by=+me.hold_id' )
+        ->status_is( 200, 'SWAGGER3.2.2' )->json_is( '' => [ $hold_2->to_api ], 'Only current holds retrieved' );
+
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?old=1&_order_by=+me.hold_id' )
+        ->status_is( 200, 'SWAGGER3.2.2' )
+        ->json_is( '' => [ $hold_1->to_api, $hold_3->to_api ], 'Only old holds retrieved' );
+
+    my $old_hold_1 = Koha::Old::Holds->find( $hold_1->id );
+    $old_hold_1->item->delete;
+    $old_hold_1->pickup_library->delete;
+
+    $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron->id . '/holds?old=1&_order_by=+me.hold_id' )
+        ->status_is( 200, 'SWAGGER3.2.2' )->json_is(
+        '' => [ $old_hold_1->get_from_storage->to_api, $hold_3->to_api ],
+        'Old holds even after item and library removed'
+        );
 
     my $non_existent_patron = $builder->build_object({ class => 'Koha::Patrons' });
     my $non_existent_patron_id = $non_existent_patron->id;

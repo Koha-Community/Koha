@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Test::Exception;
 use Test::MockModule;
@@ -83,6 +83,23 @@ subtest 'biblio() tests' => sub {
     throws_ok { $hold->biblionumber(undef)->store; }
     'DBIx::Class::Exception',
         'reserves.biblionumber cannot be null, exception thrown';
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pickup_library/branch tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $hold = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+        }
+    );
+
+    is( ref( $hold->pickup_library ), 'Koha::Library', '->pickup_library should return a Koha::Library object' );
 
     $schema->storage->txn_rollback;
 };

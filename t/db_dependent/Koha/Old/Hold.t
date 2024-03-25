@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use Koha::Database;
@@ -115,6 +115,31 @@ subtest 'biblio() tests' => sub {
     );
 
     is_deeply( $hold_3->biblio->unblessed, $biblio->unblessed, 'Old hold has a biblionumber, returns a biblio object' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'item/pickup_library() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $old_hold = $builder->build_object(
+        {
+            class => 'Koha::Old::Holds',
+        }
+    );
+    is( ref( $old_hold->item ),           'Koha::Item',    '->item should return a Koha::Item object' );
+    is( ref( $old_hold->pickup_library ), 'Koha::Library', '->pickup_library should return a Koha::Library object' );
+
+    $old_hold->item->delete;
+    $old_hold->pickup_library->delete;
+
+    $old_hold = $old_hold->get_from_storage;    # Be on the safe side
+
+    is( $old_hold->item,           undef, 'Item has been deleted, ->item should return undef' );
+    is( $old_hold->pickup_library, undef, 'Library has been deleted, ->pickup_library should return undef' );
 
     $schema->storage->txn_rollback;
 };
