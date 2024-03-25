@@ -846,6 +846,42 @@ input {
     }
 }
 
+$dayLeadBackground: #fad2cf !default;
+$dayTrailBackground: #fcdcb3 !default;
+.flatpickr-day {
+
+    &.leadRangeStart {
+        border-radius: 50px 0 0 50px;
+    }
+
+    &.leadRange {
+        box-shadow: -2.5 * $dayMargin 0 0 $dayLeadBackground, 2.5 * $dayMargin 0 0 $dayLeadBackground;
+        background: $dayLeadBackground;
+    }
+
+    &.selected {
+       &.leadRangeEnd {
+           border-radius: 0;
+       }
+    }
+
+    &:hover,
+    &.selected {
+        &.trailRangeStart {
+            border-radius: 0;
+        }
+    }
+
+    &.trailRange {
+        box-shadow: -2.5 * $dayMargin 0 0 $dayTrailBackground, 2.5 * $dayMargin 0 0 $dayTrailBackground;
+        background: $dayTrailBackground;
+    }
+
+    &.trailRangeEnd {
+        border-radius: 0 50px 50px 0;
+    }
+}
+
 .input-warning {
     background-color: #FF9;
     border-color: #900;
