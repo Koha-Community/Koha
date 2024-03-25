@@ -26,56 +26,34 @@ use Koha::Patrons;
 
 my $input = CGI->new;
 
-my $borrowernumber;
-my $cardnumber;
-my @all_holds;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "members/holdshistory.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { borrowers => 'edit_borrowers' },
+    }
+);
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/holdshistory.tt",
-                query => $input,
-                type => "intranet",
-                flagsrequired => {borrowers => 'edit_borrowers'},
-                });
-
-my $patron;
-
-if ($input->param('cardnumber')) {
-    $cardnumber = $input->param('cardnumber');
-    $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
-}
-if ($input->param('borrowernumber')) {
-    $borrowernumber = $input->param('borrowernumber');
-    $patron = Koha::Patrons->find( $borrowernumber );
-}
+my $cardnumber     = $input->param('cardnumber');
+my $borrowernumber = $input->param('borrowernumber');
+my $patron         = Koha::Patrons->find( $cardnumber ? { cardnumber => $cardnumber } : $borrowernumber );
 
 unless ( $patron ) {
     print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
 
-my $holds;
-my $old_holds;
+if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ) {
 
-if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
     # use of 'eq' in the above comparison is intentional -- the
     # system preference value could be blank
     $template->param( is_anonymous => 1 );
-} else {
-    $holds = $patron->holds;
-    $old_holds = $patron->old_holds;
-
-    while (my $hold = $holds->next) {
-        push @all_holds, $hold;
-    }
-
-    while (my $hold = $old_holds->next) {
-        push @all_holds, $hold;
-    }
 }
 
 $template->param(
     holdshistoryview => 1,
     patron           => $patron,
-    holds            => \@all_holds,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
