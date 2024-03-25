@@ -700,7 +700,7 @@
                                 <li class="type_disclaimer_date">
                                     <span class="label type_disclaimer_date">Type disclaimer date:</span>
                                     [% type_disclaimer_date = request.get_type_disclaimer_date %]
-                                    [% IF type_disclaimer_date %][% type_disclaimer_date | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    [% IF type_disclaimer_date %][% type_disclaimer_date | $KohaDates  with_hours => 1 %][% ELSE %]<span>N/A</span>[% END %]
                                 </li>
                                 <li class="cost">
                                     <span class="label cost">Cost:</span>
