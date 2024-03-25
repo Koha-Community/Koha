@@ -369,6 +369,7 @@ if ( $backends_available ) {
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
     } elsif ( $op eq 'cud-check_out') {
+        $op =~ s/^cud-//;
         my $request = Koha::ILL::Requests->find($params->{illrequest_id});
         my $backend_result = $request->check_out($params);
         $template->param(

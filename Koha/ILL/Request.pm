@@ -2158,6 +2158,7 @@ sub get_op_param_deprecation {
         $op = 'cud-generic_confirm' if $op eq 'generic_confirm';
         $op = 'cud-cancel' if $op eq 'cancel';
         $op = 'cud-delete' if $op eq 'delete';
+        $op = 'cud-check_out' if $op eq 'check_out';
     }
     return $op;
 }
