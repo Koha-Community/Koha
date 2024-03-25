@@ -53,7 +53,9 @@ subtest 'Fun with KitchenSink, Handler->delete' => sub {
     push @INC, $plugins_dir;
     my $ae = Archive::Extract->new( archive => "$Bin/KitchenSinkPlugin.kpz", type => 'zip' );
     $ae->extract( to => $plugins_dir ) or warn "ERROR: " . $ae->error;
-    my $mock = Test::MockModule->new($module_name)->mock( install => 1 )->mock( uninstall => 1 );
+    my $mock = Test::MockModule->new($module_name);
+    $mock->mock( install   => 1 );
+    $mock->mock( uninstall => 1 );
     warning_is { Koha::Plugins->new->InstallPlugins; } undef, 'No warnings from InstallPlugins';
     ok( Koha::Plugins::Datas->count > $count_d,   'More records in plugin_data' );
     ok( Koha::Plugins::Methods->count > $count_m, 'More records in plugin_methods' );
