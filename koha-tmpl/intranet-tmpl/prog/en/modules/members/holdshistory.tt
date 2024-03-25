@@ -47,74 +47,60 @@
         <div class="alert alert-warning">Staff members are not allowed to access patron's holds history</div>
     [% ELSIF is_anonymous %]
         <div class="alert alert-warning">This is the anonymous patron, so no holds history is displayed.</div>
-    [% ELSIF ( !holds ) %]
-        <div class="alert alert-info">This patron has no holds history.</div>
     [% ELSE %]
 
         [% SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') %]
 
         <div id="holdshistory" class="page-section">
-            <table id="table_holdshistory">
-                <thead>
-                    <tr>
-                        <th class="anti-the">Title</th>
-                        <th>Author</th>
-                        <th>Barcode</th>
-                        <th>Call number</th>
-                        <th>Library</th>
-                        <th>Hold date</th>
-                        <th>Expiration date</th>
-                        <th>Waiting date</th>
-                        <th>Cancellation date</th>
-                        [% IF show_itemtype_column %]
-                            <th>Requested item type</th>
-                        [% END %]
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH hold IN holds %]
+            <h2>Current holds</h2>
+            [% IF patron.holds.count %]
+                <table id="table_holdshistory">
+                    <thead>
                         <tr>
-                            <td>[% INCLUDE 'biblio-title.inc' biblio=hold.biblio link = 1 %]</td>
-                            <td>[% hold.biblio.author | html %]</td>
-                            <td>[% hold.item.barcode | html %]</td>
-                            <td>[% hold.item.itemcallnumber | html %]</td>
-                            <td>[% Branches.GetName( hold.branchcode ) | html %]</td>
-                            <td data-order="[% hold.reservedate | html %]">[% hold.reservedate | $KohaDates %]</td>
-                            <td data-order="[% hold.expirationdate | html %]"> [% hold.expirationdate | $KohaDates %] </td>
-                            <td data-order="[% hold.waitingdate | html %]"> [% hold.waitingdate | $KohaDates %] </td>
-                            <td data-order="[% hold.cancellationdate | html %]"> [% hold.cancellationdate | $KohaDates %] </td>
+                            <th class="anti-the">Title</th>
+                            <th>Author</th>
+                            <th>Barcode</th>
+                            <th>Call number</th>
+                            <th>Library</th>
+                            <th>Hold date</th>
+                            <th>Expiration date</th>
+                            <th>Waiting date</th>
+                            <th>Cancellation date</th>
                             [% IF show_itemtype_column %]
-                                <td>
-                                    [% IF hold.itemtype %]
-                                        [% ItemTypes.GetDescription( hold.itemtype ) | html %]
-                                    [% ELSE %]
-                                        <span>Any item type</span>
-                                    [% END %]
-                                </td>
+                                <th>Requested item type</th>
                             [% END %]
-                            <td>
-                                [% IF hold.found == 'F' %]
-                                    <span>Fulfilled</span>
-                                [% ELSIF hold.cancellationdate %]
-                                    <span>Cancelled</span>
-                                    [% IF hold.cancellation_reason %]
-                                        ([% AuthorisedValues.GetByCode('HOLD_CANCELLATION', hold.cancellation_reason) | html %])
-                                    [% END %]
-                                [% ELSIF hold.found == 'W' %]
-                                    <span>Waiting</span>
-                                [% ELSIF hold.found == 'P' %]
-                                    <span>Processing</span>
-                                [% ELSIF hold.found == 'T' %]
-                                    <span>In transit</span>
-                                [% ELSE %]
-                                    <span>Pending</span>
-                                [% END %]
-                            </td>
+                            <th>Status</th>
                         </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                    </thead>
+                </table>
+            [% ELSE %]
+                <div class="dialog message">This patron has no current holds.</div>
+            [% END %]
+
+            <h2>Historical holds</h2>
+            [% IF patron.old_holds.count %]
+                <table id="table_oldholdshistory">
+                    <thead>
+                        <tr>
+                            <th class="anti-the">Title</th>
+                            <th>Author</th>
+                            <th>Barcode</th>
+                            <th>Call number</th>
+                            <th>Library</th>
+                            <th>Hold date</th>
+                            <th>Expiration date</th>
+                            <th>Waiting date</th>
+                            <th>Cancellation date</th>
+                            [% IF show_itemtype_column %]
+                                <th>Requested item type</th>
+                            [% END %]
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            [% ELSE %]
+                <div class="dialog message">This patron has no historical holds.</div>
+            [% END %]
         </div>
     [% END %]
 [% END %]
@@ -123,6 +109,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% INCLUDE 'js-biblio-format.inc' %]
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings('members', 'holdshistory', 'holdshistory-table', 'json') | $raw %];
@@ -130,13 +117,135 @@
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
-            var table = $("#table_holdshistory").kohaTable(
-                {
-                    pagingType: "full",
-                    order: [[4, "desc"]],
-                },
-                table_settings
-            );
+            build_holds_table("#table_holdshistory");
+            build_holds_table("#table_oldholdshistory", 1);
+            function build_holds_table(table_id, old){
+                let table_url = '/api/v1/patrons/[% patron.borrowernumber | uri %]/holds';
+                if (old){table_url += '?old=1'}
+                $(table_id).kohaTable({
+                    ajax: {
+                        url: table_url,
+                    },
+                    order: [],
+                    embed: ['biblio', 'item', 'pickup_library', 'pickup_library.branchname'],
+                    columns: [
+                        {
+                            data: "biblio.title:biblio.subtitle:biblio.medium",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $biblio_to_html(row.biblio, { link: 1 });
+                            }
+                        },
+                        {
+                            data: "biblio.author",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.biblio.author;
+                            }
+                        },
+                        {
+                            data: "item.external_id",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.item ? row.item.external_id : "";
+                            }
+                        },
+                        {
+                            data: "item.callnumber",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.item ? row.item.callnumber: "";
+                            }
+                        },
+                        {
+                            data: "pickup_library_id:pickup_library.branchname",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return row.pickup_library.name;
+                            }
+                        },
+                        {
+                            data: "hold_date",
+                            type: "date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row.hold_date);
+                            }
+                        },
+                        {
+                            data: "expiration_date",
+                            type: "date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row.expiration_date)
+                            }
+                        },
+                        {
+                            data: "waiting_date",
+                            type: "date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row.waiting_date)
+                            }
+                        },
+                        {
+                            data: "cancellation_date",
+                            type: "date",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                return $date(row.cancellation_date)
+                            }
+                        },
+                        [% IF show_itemtype_column %]
+                        {
+                            data: "item_type.item_type",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                if ( row.item_type ) {
+                                    return row.item_type.item_type;
+                                } else {
+                                    return _("Any item type");
+                                }
+                            }
+                        },
+                        [% END %]
+                        {
+                            data: "found", // FIXME filter with dropdown list
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                if ( row.status == 'F' ) {
+                                    return _("Fulfilled");
+                                } else if (row.cancellation_date) {
+                                    let r = _("Cancelled");
+                                    if (row.cancellation_reason){
+                                        r += "(%s)".format("FIXME"); //FIXME Add HOLD_CANCELLATION description
+                                    }
+                                    return r;
+                                } else if (row.status == 'W') {
+                                    return _("Waiting");
+                                } else if (row.status == 'P') {
+                                    return _("Processing");
+                                } else if (row.status == 'T') {
+                                    return _("In transit");
+                                }
+
+                                return _("Pending");
+                            }
+                        },
+                    ],
+                }, table_settings);
+            }
         });
     </script>
 [% END %]
