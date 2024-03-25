@@ -417,6 +417,8 @@ subtest 'filter_by_late' => sub {
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
                 orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -438,6 +440,8 @@ subtest 'filter_by_late' => sub {
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
                 orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -459,6 +463,8 @@ subtest 'filter_by_late' => sub {
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
                 orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -480,6 +486,8 @@ subtest 'filter_by_late' => sub {
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
                 orderstatus             => 'ordered',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -492,6 +500,8 @@ subtest 'filter_by_late' => sub {
                 datecancellationprinted => undef,
                 estimated_delivery_date => undef,
                 orderstatus             => 'complete',
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
@@ -576,6 +586,8 @@ subtest 'filter_by_late' => sub {
                 datereceived            => undef,
                 datecancellationprinted => undef,
                 estimated_delivery_date => $now->clone->subtract( days => 2 ),
+                quantity                => 1,
+                quantityreceived        => 0,
             }
         }
     );
