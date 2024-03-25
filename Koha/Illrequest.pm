@@ -413,7 +413,6 @@ sub get_backend_plugin {
             method   => 'ill_backend',
             metadata => { name => $backend_id },
             all      => 1,
-            errors   => 1
         }
     );
 
