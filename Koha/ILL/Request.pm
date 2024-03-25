@@ -49,12 +49,12 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::ILL::Request - Koha Illrequest Object class
+Koha::ILL::Request - Koha ILL request Object class
 
 =head1 (Re)Design
 
-An ILLRequest consists of two parts; the ILL::Request Koha::Object, and a series
-of related Illrequestattributes.
+An ILL request consists of two parts; the Koha::ILL::Request Koha::Object, and a series
+of related Koha::ILL::Request::Attributes.
 
 The former encapsulates the basic necessary information that any ILL requires
 to be usable in Koha.  The latter is a set of additional properties used by
@@ -105,11 +105,11 @@ An interface request has determined branch address details are incomplete.
 =item * cancel_success
 
 The interface's cancel_request method was successful in cancelling the
-Illrequest using the API.
+ILL request using the API.
 
 =item * cancel_fail
 
-The interface's cancel_request method failed to cancel the Illrequest using
+The interface's cancel_request method failed to cancel the ILL request using
 the API.
 
 =item * unavailable
@@ -288,7 +288,7 @@ sub extended_attributes {
 
 =head3 status_alias
 
-    $Illrequest->status_alias(143);
+    $request->status_alias(143);
 
 Overloaded getter/setter for status_alias,
 that only returns authorised values from the
@@ -349,7 +349,7 @@ sub status_alias {
 
 =head3 status
 
-    $Illrequest->status('CANREQ');
+    $request->status('CANREQ');
 
 Overloaded getter/setter for request status,
 also nullifies status_alias and records the fact that the status has changed
@@ -930,7 +930,7 @@ sub backend_update_status {
 
 =head3 backend_cancel
 
-    my $ILLResponse = $illRequest->backend_cancel;
+    my $ILLResponse = $request->backend_cancel;
 
 The standard interface method allowing for request cancellation.
 
@@ -949,7 +949,7 @@ sub backend_cancel {
 
 =head3 backend_renew
 
-    my $renew_response = $illRequest->backend_renew;
+    my $renew_response = $request->backend_renew;
 
 The standard interface method allowing for request renewal queries.
 
@@ -1206,11 +1206,9 @@ sub get_type_disclaimer_date {
     return $attr->value;
 }
 
-#### Illrequests Imports
-
 =head3 check_limits
 
-    my $ok = $illRequests->check_limits( {
+    my $ok = $requests->check_limits( {
         borrower   => $borrower,
         branchcode => 'branchcode' | undef,
     } );
@@ -1291,7 +1289,7 @@ sub _limit_counter {
 
 =head3 requires_moderation
 
-    my $status = $illRequest->requires_moderation;
+    my $status = $request->requires_moderation;
 
 Return the name of the status if moderation by staff is required; or 0
 otherwise.
@@ -1524,7 +1522,7 @@ sub check_out {
 
 =head3 generic_confirm
 
-    my $stage_summary = $illRequest->generic_confirm;
+    my $stage_summary = $request->generic_confirm;
 
 Handle the generic_confirm extended method.  The first stage involves creating
 a template email for the end user to edit in the browser.  The second stage
@@ -1889,7 +1887,7 @@ sub append_to_note {
 
     my $prefix = $record->id_prefix;
 
-Return the prefix appropriate for the current Illrequest as derived from the
+Return the prefix appropriate for the current ILL request as derived from the
 borrower and branch associated with this request's Status, and the config
 file.
 
@@ -1906,7 +1904,7 @@ sub id_prefix {
 
 =head3 _censor
 
-    my $params = $illRequest->_censor($params);
+    my $params = $request->_censor($params);
 
 Return $params, modified to reflect our censorship requirements.
 
@@ -1924,7 +1922,7 @@ sub _censor {
 
 =head3 store
 
-    $Illrequest->store;
+    $request->store;
 
 Overloaded I<store> method that, in addition to performing the 'store',
 possibly records the fact that something happened
@@ -1972,7 +1970,7 @@ sub store {
 
 =head3 requested_partners
 
-    my $partners_string = $illRequest->requested_partners;
+    my $partners_string = $request->requested_partners;
 
 Return the string representing the email addresses of the partners to
 whom a request has been sent
@@ -1989,7 +1987,7 @@ sub requested_partners {
 
 =head3 TO_JSON
 
-    $json = $illrequest->TO_JSON
+    $json = $request->TO_JSON
 
 Overloaded I<TO_JSON> method that takes care of inserting calculated values
 into the unblessed representation of the object.
