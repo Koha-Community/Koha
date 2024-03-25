@@ -47,6 +47,32 @@ sub biblio {
     return Koha::Biblio->_new_from_dbic($rs);
 }
 
+=head3 item
+
+Returns the related Koha::Item object for this old Hold
+
+=cut
+
+sub item {
+    my ($self) = @_;
+    my $rs = $self->_result->itemnumber;
+    return unless $rs;
+    return Koha::Item->_new_from_dbic($rs);
+}
+
+=head3 pickup_library
+
+Returns the related Koha::Biblio object for this old hold
+
+=cut
+
+sub pickup_library {
+    my ($self) = @_;
+    my $rs = $self->_result->pickup_library;
+    return unless $rs;
+    return Koha::Library->_new_from_dbic($rs);
+}
+
 =head3 anonymize
 
     $old_hold->anonymize();

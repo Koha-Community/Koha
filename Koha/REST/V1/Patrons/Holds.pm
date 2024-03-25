@@ -49,16 +49,18 @@ sub list {
         );
     }
 
+    my $old = $c->param('old');
+    $c->req->params->remove('old');
+
     return try {
+        my $holds_set =
+            $old
+            ? $patron->old_holds
+            : $patron->holds;
 
-        my $holds = $c->objects->search( $patron->holds );
-
-        return $c->render(
-            status  => 200,
-            openapi => $holds
-        );
-    }
-    catch {
+        my $holds = $c->objects->search( $holds_set );
+        return $c->render( status => 200, openapi => $holds );
+    } catch {
         $c->unhandled_exception($_);
     };
 }

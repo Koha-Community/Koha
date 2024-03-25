@@ -88,6 +88,11 @@
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
       - $ref: "../swagger.yaml#/parameters/request_id_header"
+      - name: old
+        in: query
+        description: By default, current holds are returned, when this is true then
+          old holds are returned as result.
+        type: boolean
       - name: x-koha-embed
         in: header
         required: false
@@ -97,6 +102,8 @@
           type: string
           enum:
             - cancellation_requested
+            - biblio
+            - pickup_library
           collectionFormat: csv
     produces:
       - application/json

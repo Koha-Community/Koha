@@ -26,6 +26,7 @@ use C4::Reserves;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Holds;
+use Koha::Old::Holds;
 use Koha::DateUtils qw( dt_from_string );
 
 use List::MoreUtils qw( any );
@@ -44,11 +45,18 @@ Method that handles listing Koha::Hold objects
 sub list {
     my $c = shift->openapi->valid_input or return;
 
+    my $old = $c->param('old');
+    $c->req->params->remove('old');
+
     return try {
-        my $holds = $c->objects->search( Koha::Holds->new );
+        my $holds_set =
+              $old
+            ? Koha::Old::Holds->new
+            : Koha::Holds->new;
+
+        my $holds = $c->objects->search($holds_set);
         return $c->render( status => 200, openapi => $holds );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
