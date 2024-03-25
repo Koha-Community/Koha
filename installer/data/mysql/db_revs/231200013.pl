@@ -14,5 +14,6 @@ return {
             VALUES ('HoldRatioDefault','3','','Default value for the Hold ratio report','Integer')
         }
         );
+        say $out "Added new system preference 'HoldRatioDefault'";
     },
 };
