@@ -76,7 +76,7 @@ router.afterEach((to, from) => {
     } else if (to.path.match(/\/erm\/eholdings\/local\/titles/)) {
         tab_id = "title";
     }
-    let node = document.getElementById(`${tab_id}_search_tab`);
+    let node = document.getElementById(`${tab_id}_search-tab`);
 
     if (node) {
         node.click();
