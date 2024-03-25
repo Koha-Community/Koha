@@ -28,7 +28,7 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 
-use Test::More tests => 9;
+use Test::More tests => 8;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -37,52 +37,46 @@ use_ok('Koha::ILL::Comments');
 
 $schema->storage->txn_begin;
 
-Koha::ILL::Requests->search->delete;
-
 # Create a patron
-my $patron = $builder->build( { source => 'Borrower' } );
-
-# Create an ILL request
-my $illrq = $builder->build(
-    {
-        source => 'Illrequest',
-        value  => { borrowernumber => $patron->{borrowernumber} }
-    }
-);
-my $illrq_obj = Koha::ILL::Requests->find( $illrq->{illrequest_id} );
-isa_ok( $illrq_obj, 'Koha::ILL::Request' );
+my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
 # Create a librarian
-my $librarian = $builder->build( { source => 'Borrower' } );
+my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+
+# Create an ILL request
+my $illrq = $builder->build_object(
+    {
+        class => 'Koha::ILL::Requests',
+        value => { borrowernumber => $patron->{borrowernumber} }
+    }
+);
 
 # Create a comment and tie it to the request and the librarian
 my $comment_text = 'xyz';
-my $illcomment   = $builder->build(
+my $illcomment   = $builder->build_object(
     {
-        source => 'Illcomment',
-        value  => {
-            illrequest_id  => $illrq_obj->illrequest_id,
-            borrowernumber => $librarian->{borrowernumber},
+        class => 'Koha::ILL::Comments',
+        value => {
+            illrequest_id  => $illrq->id,
+            borrowernumber => $librarian->id,
             comment        => $comment_text,
         }
     }
 );
 
 # Get all the comments
-my $comments = $illrq_obj->illcomments;
-isa_ok( $comments, 'Koha::ILL::Comments', "Illcomments" );
+my $comments = $illrq->illcomments;
+isa_ok( $comments, 'Koha::ILL::Comments' );
 my @comments_list = $comments->as_list();
 is( scalar @comments_list, 1, "We have 1 comment" );
 
 # Get the first (and only) comment
 my $comment = $comments->next();
-isa_ok( $comment, 'Koha::ILL::Comment', "Illcomment" );
+isa_ok( $comment, 'Koha::ILL::Comment' );
 
 # Check the different data in the comment
-is( $comment->illrequest_id,  $illrq_obj->illrequest_id,    'illrequest_id getter works' );
-is( $comment->borrowernumber, $librarian->{borrowernumber}, 'borrowernumber getter works' );
-is( $comment->comment,        $comment_text,                'comment getter works' );
-
-$illrq_obj->delete;
+is( $comment->illrequest_id,  $illrq->id,     'illrequest_id getter works' );
+is( $comment->borrowernumber, $librarian->id, 'borrowernumber getter works' );
+is( $comment->comment,        $comment_text,  'comment getter works' );
 
 $schema->storage->txn_rollback;
