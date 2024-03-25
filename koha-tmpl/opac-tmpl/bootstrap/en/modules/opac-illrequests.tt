@@ -262,7 +262,7 @@
                                     <legend><h2>Displaying availability results</h2></legend>
                                     [% FOREACH key IN whole.keys %]
                                         [% value = whole.$key %]
-                                        [% IF key != 'custom_key' && key != 'custom_value' %]
+                                        [% IF key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' %]
                                         <input type="hidden" name="[% key | html %]" value="[% value | html %]">
                                         [% END %]
                                     [% END %]
@@ -307,7 +307,7 @@
                                     <fieldset class="action">
                                         [% FOREACH key IN whole.keys %]
                                             [% value = whole.$key %]
-                                            [% IF key != 'custom_key' && key != 'custom_value' %]
+                                            [% IF key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' %]
                                             <input type="hidden" name="[% key | html %]" value="[% value | html %]">
                                             [% END %]
                                         [% END %]
