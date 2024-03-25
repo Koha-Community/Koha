@@ -54,6 +54,30 @@
         <div id="holdshistory" class="page-section">
             <h2>Current holds</h2>
             [% IF patron.holds.count %]
+                <div id="current_holds_filters" data-table-id="table_holdshistory">
+                    <p>
+                        <span class="selected">
+                            <input id="current_show_all" type="checkbox" checked="checked" class="show_all" />
+                            <label for="current_show_all">Show all</label>
+                        </span>
+                        <span class="selected">
+                            <input id="current_pending_filter" type="checkbox" checked="checked" />
+                            <label for="current_pending_filter">Pending</label>
+                        </span>
+                        <span class="selected">
+                            <input id="current_waiting_filter" type="checkbox" checked="checked" />
+                            <label for="current_waiting_filter">Waiting</label>
+                        </span>
+                        <span class="selected">
+                            <input id="current_processing_filter" type="checkbox" checked="checked" />
+                            <label for="current_processing_filter">Processing</label>
+                        </span>
+                        <span class="selected">
+                            <input id="current_transit_filter" type="checkbox" checked="checked" />
+                            <label for="current_transit_filter">In transit</label>
+                        </span>
+                    </p>
+                </div>
                 <table id="table_holdshistory">
                     <thead>
                         <tr>
@@ -79,6 +103,22 @@
 
             <h2>Historical holds</h2>
             [% IF patron.old_holds.count %]
+                <div id="old_holds_filters" data-table-id="table_oldholdshistory">
+                    <p>
+                        <span class="selected">
+                            <input id="old_show_all" type="checkbox" checked="checked" class="show_all" />
+                            <label for="old_show_all">Show all</label>
+                        </span>
+                        <span class="selected">
+                            <input id="old_fulfilled_filter" type="checkbox" checked="checked" />
+                            <label for="old_fulfilled_filter">Fulfilled</label>
+                        </span>
+                        <span class="selected">
+                            <input id="old_cancelled_filter" type="checkbox" checked="checked" />
+                            <label for="old_cancelled_filter">Cancelled</label>
+                        </span>
+                    </p>
+                </div>
                 <table id="table_oldholdshistory">
                     <thead>
                         <tr>
@@ -117,12 +157,46 @@
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
-            build_holds_table("#table_holdshistory");
-            build_holds_table("#table_oldholdshistory", 1);
+            let current_holds_table = build_holds_table("#table_holdshistory");
+            let old_holds_table = build_holds_table("#table_oldholdshistory", 1);
             function build_holds_table(table_id, old){
+                let additional_filters = {
+                    "-or": function(){
+                        let statuses = [];
+                        let include_cancelled = false;
+                        if ( table_id == '#table_holdshistory' ) {
+                            if ( $("#current_pending_filter").is(":checked") ) {
+                                statuses.push(null);
+                            }
+                            if ( $("#current_waiting_filter").is(":checked") ) {
+                                statuses.push("W");
+                            }
+                            if ( $("#current_processing_filter").is(":checked") ) {
+                                statuses.push("P");
+                            }
+                            if ( $("#current_transit_filter").is(":checked") ) {
+                                statuses.push("T");
+                            }
+                        } else {
+                            if ( $("#old_fulfilled_filter").is(":checked") ) {
+                                statuses.push("F");
+                            }
+                            if ( $("#old_cancelled_filter").is(":checked") ) {
+                                include_cancelled = true;
+                            }
+                        }
+                        if ( include_cancelled ) {
+                            return [{status: statuses}, { cancellation_date: {"<": new Date().toISOString() } } ]; // cancellation_date cannot be in the future. Would be better a 'not null' here however.
+                        } else {
+                            return [{status: statuses}];
+                        }
+                    },
+
+                };
+
                 let table_url = '/api/v1/patrons/[% patron.borrowernumber | uri %]/holds';
                 if (old){table_url += '?old=1'}
-                $(table_id).kohaTable({
+                return $(table_id).kohaTable({
                     ajax: {
                         url: table_url,
                     },
@@ -220,8 +294,8 @@
                         },
                         [% END %]
                         {
-                            data: "found", // FIXME filter with dropdown list
-                            searchable: true,
+                            data: "status",
+                            searchable: false,
                             orderable: true,
                             render: function (data, type, row, meta) {
                                 if ( row.status == 'F' ) {
@@ -244,8 +318,21 @@
                             }
                         },
                     ],
-                }, table_settings);
+                }, table_settings, true, additional_filters);
             }
+            $("#current_holds_filters :checkbox, #old_holds_filters :checkbox").on("change", function(e){
+                e.preventDefault();
+                let container = $(this).closest("div");
+                if ( $(this).hasClass("show_all") ) {
+                    if ( $(this).is(":checked") ) {
+                        container.find(":checkbox").prop("checked", true);
+                    }
+                } else if ( $(this).not(":checked") ) {
+                    container.find(".show_all").prop("checked", false);
+                }
+                let table_dt = $("#"+container.data("table-id")).DataTable();
+                table_dt.draw();
+            });
         });
     </script>
 [% END %]
