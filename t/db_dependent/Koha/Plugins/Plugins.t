@@ -333,13 +333,16 @@ subtest 'RemovePlugins' => sub {
         Koha::Plugins::Method->new( { plugin_class => "$class_basename$i", plugin_method => "testmr$i" } )->store;
 
         # no_auto => 1 here prevents loading of a not-existing module
-        $mocks->[$i] = Test::MockModule->new( "$class_basename$i", no_auto => 1 )->mock( new => 1 )
-            unless $mocks->[$i];
+        unless ( $mocks->[$i] ) {
+            $mocks->[$i] = Test::MockModule->new( "$class_basename$i", no_auto => 1 );
+            $mocks->[$i]->mock( new => 1 );
+        }
     }
 
     # We will (re)create new plugins (without modules)
     # This requires mocking can_load from Module::Load::Conditional
-    my $mlc_mock     = Test::MockModule->new('Koha::Plugins')->mock( can_load => 1 );
+    my $mlc_mock = Test::MockModule->new('Koha::Plugins');
+    $mlc_mock->mock( can_load => 1 );
     my $plugin_mocks = [];
     my @enabled_plugins;
 
