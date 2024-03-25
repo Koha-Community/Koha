@@ -54,10 +54,12 @@
 [% END %]
 
 <ul class="patronbriefinfo">
+
+    [% IF patron.pronouns %]
+        <li class="patronpronouns">([% patron.pronouns | html %])</li>
+    [% END %]
+
     [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
-        [% IF patron.pronouns %]
-            <li class="patronpronouns">([% patron.pronouns | html %])</li>
-        [% END %]
 
         [% PROCESS 'display-address-style' %]
 
