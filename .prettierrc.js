@@ -1,6 +1,5 @@
 module.exports = {
     arrowParens: "avoid",
-    editorconfig: "false",
     trailingComma: "es5",
     overrides: [
         {
