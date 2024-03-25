@@ -40,7 +40,7 @@ if ( $auth_status ne "ok" ) {
 }
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+print $input->header( -type => 'application/json', -charset => 'UTF-8' );
 
 my $itemnumber     = $input->param('itemnumber');
 my $borrowernumber = $input->param('borrowernumber');
