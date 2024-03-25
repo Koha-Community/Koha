@@ -347,7 +347,7 @@
     [% ELSE %]
         [% SET redirect_url = '/cgi-bin/koha/members/moremember.pl' %]
     [% END %]
-    [% PROCESS patron_search_js table_id => 'memberresultst', categories => categories, libraries => libraries, columns => columns,actions => ['edit', 'checkout'], redirect_if_one_result => 1, redirect_url => redirect_url, sticky_header => "searchheader", sticky_to => "searchresults", default_sort_column => 'name-address', display_search_description => 1, remember_selections => 1, adjust_history => 1 %]
+    [% PROCESS patron_search_js defer_loading => defer_loading, table_id => 'memberresultst', categories => categories, libraries => libraries, columns => columns,actions => ['edit', 'checkout'], redirect_if_one_result => 1, redirect_url => redirect_url, sticky_header => "searchheader", sticky_to => "searchresults", default_sort_column => 'name-address', display_search_description => 1, remember_selections => 1, adjust_history => 1 %]
 
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

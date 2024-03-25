@@ -226,6 +226,7 @@
 [%# callback: name of the JS function that will be called when a patron is selected. Only work with action=select %]
 [%# display_search_description: boolean, default off. Display the description of the search %]
 [%# adjust_history: boolean, default off. Change the current url when a first letter is selected %]
+[%# defer_loading: boolean, default on. If true, it will not load the table until a search is triggered %]
 [% BLOCK patron_search_js %]
 
     [% IF redirect_if_one_result && !redirect_url %]
@@ -293,7 +294,7 @@
         let Sticky;
         let singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
-
+        let defer_loading = Number( '[% defer_loading | html %]' || 1 );
         [% IF adjust_history %]
             /* popstate event triggered by forward and back button. Need to refresh search */
             window.addEventListener('popstate', (event) => {
@@ -724,8 +725,7 @@
                 patron_search_form.find(".searchpattern").parent().hide();
             });
 
-            let urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.size > 0){
+            if ( !defer_loading ) {
                 patron_search_form.submit();
             }
 
