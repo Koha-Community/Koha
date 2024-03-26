@@ -1673,9 +1673,9 @@ sub _process_tt {
     my $substitute = $params->{substitute} || {};
     my $lang       = 'en';
     my $interface  = C4::Context->interface;
-    if(defined($params->{lang}) && $params->{lang} ne 'default'){
+    if ( defined( $params->{lang} ) && $params->{lang} ne 'default' ) {
         $lang = $params->{lang};
-    } elsif($interface eq 'intranet' || $interface eq 'opac') {
+    } elsif ( $interface eq 'intranet' || $interface eq 'opac' ) {
         #use interface language
         $lang = C4::Languages::getlanguage();
     } else {
