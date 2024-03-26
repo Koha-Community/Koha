@@ -28,6 +28,7 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.min.css") | $raw %]
 <style>#enrolmentmessage.hint { display : none; }</style>
 </head>
 
@@ -340,25 +341,27 @@
                       [% END %]
                     </select>
                 </li>
-                <li><label for="block_expired">Block expired patrons:</label>
-                    <select name="BlockExpiredPatronOpacActions" id="block_expired">
-                        [% IF not category or category.BlockExpiredPatronOpacActions == -1%]
-                            <option value="-1" selected="selected"> Follow system preference BlockExpiredPatronOpacActions </option>
+                <li><label for="block_expired">Block expired patrons actions:</label>
+                    <select name="BlockExpiredPatronOpacActions" id="block_expired" multiple="multiple">
+                        <optgroup label="Follow system preference">
+                        [% IF not category or category.BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions') %]
+                            <option value="follow_syspref_BlockExpiredPatronOpacActions" selected="selected"> Follow system preference BlockExpiredPatronOpacActions </option>
                         [% ELSE %]
-                            <option value="-1"> Follow system preference BlockExpiredPatronOpacActions </option>
+                            <option value="follow_syspref_BlockExpiredPatronOpacActions"> BlockExpiredPatronOpacActions </option>
                         [% END %]
-
-                        [% IF category and category.BlockExpiredPatronOpacActions == 1 %]
-                            <option value="1" selected="selected"> Block </option>
+                        </optgroup>
+                        <optgroup label="Specific actions">
+                        [% IF category and category.BlockExpiredPatronOpacActions_contains('hold') %]
+                            <option value="hold" selected="selected"> Placing a hold on an item </option>
                         [% ELSE %]
-                            <option value="1"> Block </option>
+                            <option value="hold"> Placing a hold on an item </option>
                         [% END %]
-
-                        [% IF category and category.BlockExpiredPatronOpacActions == 0 %]
-                            <option value="0" selected="selected"> Don't block </option>
+                        [% IF category and category.BlockExpiredPatronOpacActions_contains('renew') %]
+                            <option value="renew" selected="selected"> Renewing an item </option>
                         [% ELSE %]
-                            <option value="0"> Don't block </option>
+                            <option value="renew"> Renewing an item </option>
                         [% END %]
+                        </optgroup>
                     </select>
                     <div class="hint">
                         Choose whether patrons of this category be blocked from public catalog actions such as renewing and placing holds when their cards have expired.
@@ -751,6 +754,7 @@
     </script>
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]

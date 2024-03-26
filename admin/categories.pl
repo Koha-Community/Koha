@@ -70,7 +70,7 @@ elsif ( $op eq 'cud-add_validate' ) {
     my $hidelostitems = $input->param('hidelostitems');
     my $overduenoticerequired = $input->param('overduenoticerequired');
     my $category_type = $input->param('category_type');
-    my $BlockExpiredPatronOpacActions = $input->param('BlockExpiredPatronOpacActions');
+    my $BlockExpiredPatronOpacActions = join( ',', $input->multi_param('BlockExpiredPatronOpacActions') );
     my $checkPrevCheckout = $input->param('checkprevcheckout');
     my $can_place_ill_in_opac = $input->param('can_place_ill_in_opac') // 1;
     my $default_privacy = $input->param('default_privacy');
