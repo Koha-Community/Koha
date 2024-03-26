@@ -1796,7 +1796,7 @@ CREATE TABLE `categories` (
   `reservefee` decimal(28,6) DEFAULT NULL COMMENT 'cost to place holds',
   `hidelostitems` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'are lost items shown to this category (1 for yes, 0 for no)',
   `category_type` varchar(1) NOT NULL DEFAULT 'A' COMMENT 'type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)',
-  `BlockExpiredPatronOpacActions` tinyint(1) NOT NULL DEFAULT -1 COMMENT 'wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions',
+  `BlockExpiredPatronOpacActions` mediumtext NOT NULL DEFAULT 'follow_syspref_BlockExpiredPatronOpacActions' COMMENT 'specific actions expired patrons of this category are blocked from performing or if the BlockExpiredPatronOpacActions system preference is to be followed',
   `default_privacy` enum('default','never','forever') NOT NULL DEFAULT 'default' COMMENT 'Default privacy setting for this patron category',
   `checkprevcheckout` varchar(7) NOT NULL DEFAULT 'inherit' COMMENT 'produce a warning for this patron category if this item has previously been checked out to this patron if ''yes'', not if ''no'', defer to syspref setting if ''inherit''.',
   `can_place_ill_in_opac` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'can this patron category place interlibrary loan requests',
