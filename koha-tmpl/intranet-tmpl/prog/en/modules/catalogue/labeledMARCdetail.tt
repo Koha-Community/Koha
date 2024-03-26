@@ -100,6 +100,11 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
+    [% Asset.js("lib/dayjs/dayjs.min.js") | $raw %]
+    [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+    [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
+    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
+    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]

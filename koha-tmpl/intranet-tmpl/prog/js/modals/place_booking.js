@@ -760,46 +760,28 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 }
 
                 // Add hints for days before the start range and after the end range
-                let leadDays = 2;
-                let trailDays = 3;
+                const leadDays = 2;
+                const trailDays = 3;
                 periodPicker.calendarContainer.addEventListener(
                     "mouseover",
-                    function (e) {
-                        const target = e.target;
-                        const startDate = periodPicker.selectedDates[0]
-                            ? dayjs(periodPicker.selectedDates[0]).startOf(
-                                  "day"
-                              )
-                            : null;
-
+                    function (event) {
+                        const target = event.target;
                         if (target.classList.contains("flatpickr-day")) {
                             const hoverDate = dayjs(target.dateObj).startOf(
                                 "day"
                             );
-                            let leadStart;
-                            let leadEnd;
-                            const trailStart = hoverDate
-                                .add(0, "day")
-                                .startOf("day");
-                            const trailEnd = hoverDate
-                                .add(trailDays, "day")
-                                .startOf("day");
+                            const startDate = periodPicker.selectedDates[0]
+                                ? dayjs(periodPicker.selectedDates[0]).startOf(
+                                      "day"
+                                  )
+                                : null;
 
-                            if (!startDate) {
-                                leadStart = hoverDate
-                                    .subtract(leadDays, "day")
-                                    .startOf("day");
-                                leadEnd = hoverDate
-                                    .subtract(0, "day")
-                                    .startOf("day");
-                            } else {
-                                leadStart = startDate
-                                    .subtract(leadDays, "day")
-                                    .startOf("day");
-                                leadEnd = startDate
-                                    .subtract(0, "day")
-                                    .startOf("day");
-                            }
+                            const leadStart = startDate
+                                ? startDate.subtract(leadDays, "day")
+                                : hoverDate.subtract(leadDays, "day");
+                            const leadEnd = startDate ? startDate : hoverDate;
+                            const trailStart = hoverDate;
+                            const trailEnd = hoverDate.add(trailDays, "day");
 
                             periodPicker.calendarContainer
                                 .querySelectorAll(".flatpickr-day")
@@ -808,57 +790,32 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                         dayElem.dateObj
                                     ).startOf("day");
 
-                                    if (elemDate.isSame(leadStart)) {
-                                        dayElem.classList.add("leadRangeStart");
-                                    } else {
-                                        dayElem.classList.remove(
-                                            "leadRangeStart"
-                                        );
-                                    }
-
-                                    if (
-                                        elemDate >= leadStart &&
-                                        elemDate < leadEnd
-                                    ) {
-                                        dayElem.classList.add("leadRange");
-                                    } else {
-                                        dayElem.classList.remove("leadRange");
-                                    }
-
-                                    if (elemDate.isSame(leadEnd)) {
-                                        dayElem.classList.add("leadRangeEnd");
-                                    } else {
-                                        dayElem.classList.remove(
-                                            "leadRangeEnd"
-                                        );
-                                    }
-
-                                    if (elemDate.isSame(trailStart)) {
-                                        dayElem.classList.add(
-                                            "trailRangeStart"
-                                        );
-                                    } else {
-                                        dayElem.classList.remove(
-                                            "trailRangeStart"
-                                        );
-                                    }
-
-                                    if (
-                                        elemDate > trailStart &&
-                                        elemDate <= trailEnd
-                                    ) {
-                                        dayElem.classList.add("trailRange");
-                                    } else {
-                                        dayElem.classList.remove("trailRange");
-                                    }
-
-                                    if (elemDate.isSame(trailEnd)) {
-                                        dayElem.classList.add("trailRangeEnd");
-                                    } else {
-                                        dayElem.classList.remove(
-                                            "trailRangeEnd"
-                                        );
-                                    }
+                                    dayElem.classList.toggle(
+                                        "leadRangeStart",
+                                        elemDate.isSame(leadStart)
+                                    );
+                                    dayElem.classList.toggle(
+                                        "leadRange",
+                                        elemDate.isSameOrAfter(leadStart) &&
+                                            elemDate.isBefore(leadEnd)
+                                    );
+                                    dayElem.classList.toggle(
+                                        "leadRangeEnd",
+                                        elemDate.isSame(leadEnd)
+                                    );
+                                    dayElem.classList.toggle(
+                                        "trailRangeStart",
+                                        elemDate.isSame(trailStart)
+                                    );
+                                    dayElem.classList.toggle(
+                                        "trailRange",
+                                        elemDate.isAfter(trailStart) &&
+                                            elemDate.isSameOrBefore(trailEnd)
+                                    );
+                                    dayElem.classList.toggle(
+                                        "trailRangeEnd",
+                                        elemDate.isSame(trailEnd)
+                                    );
                                 });
                         }
                     }

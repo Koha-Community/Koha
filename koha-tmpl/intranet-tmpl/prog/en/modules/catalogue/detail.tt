@@ -1207,8 +1207,8 @@
     [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'catalog-strings.inc' %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'catalog-strings.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
@@ -1639,6 +1639,10 @@
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
+    [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
+    [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
+    <script>dayjs.extend(window.dayjs_plugin_isSameOrAfter)</script>
+    <script>dayjs.extend(window.dayjs_plugin_isSameOrBefore)</script>
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
