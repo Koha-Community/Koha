@@ -113,7 +113,7 @@ if ( $#biblionumbers < 0 && $op ne 'cud-place_reserve' ) {
 #
 #
 my $noreserves     = 0;
-if ( $category->effective_BlockExpiredPatronOpacActions ) {
+if ( $category->effective_BlockExpiredPatronOpacActions_contains('hold') ) {
     if ( $patron->is_expired ) {
         # cannot reserve, their card has expired and the rules set mean this is not allowed
         $noreserves = 1;

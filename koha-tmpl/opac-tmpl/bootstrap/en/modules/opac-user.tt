@@ -342,7 +342,7 @@
                                                         <th>Barcode</th>
                                                     [% END %]
                                                         <th>Call number</th>
-                                                    [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                                    [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
                                                         <th>Renew</th>
                                                     [% END %]
                                                     [% IF ( OPACFinesTab ) %]
@@ -444,7 +444,7 @@
                                                         <span class="tdlabel">Call number:</span>
                                                         [% ISSUE.itemcallnumber | html %]
                                                     </td>
-                                                    [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                                    [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
                                                         [% IF ( ISSUE.status && canrenew ) %]
                                                             <td class="renew" data-order="[% ISSUE.renewsleft | html %]">
                                                         [% ELSE %]
@@ -550,14 +550,14 @@
                                                 [% END # /FOREACH ISSUES %]
                                             </tbody>
                                         </table>
-                                        [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                        [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
                                             <input type="submit" class="btn btn-primary d-print-none" value="Renew selected" />
                                             <input type="hidden" name="op" value="cud-renew" />
                                             <button type="button" id="renewall_js" class="btn btn-primary d-print-none">Renew all</button>
                                         [% END %]
                                     </form>
 
-                                    [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                    [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
                                         <form id="renewall" class="js-hide" action="/cgi-bin/koha/opac-renew.pl" method="post">
                                             [% INCLUDE 'csrf-token.inc' %]
                                             <legend class="sr-only">Renew</legend>

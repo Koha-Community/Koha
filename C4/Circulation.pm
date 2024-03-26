@@ -4668,7 +4668,7 @@ sub _CanBookBeAutoRenewed {
         }
     );
 
-    if ( $patron->is_expired && $patron->category->effective_BlockExpiredPatronOpacActions ) {
+    if ( $patron->is_expired && $patron->category->effective_BlockExpiredPatronOpacActions_contains('renew') ) {
         return 'auto_account_expired';
     }
 

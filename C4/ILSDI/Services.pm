@@ -751,7 +751,8 @@ sub HoldTitle {
     return { code => 'PatronRestricted' } if $patron->is_debarred;
 
     # Check for patron expired, category and syspref settings
-    return { code => 'PatronExpired' } if ($patron->category->effective_BlockExpiredPatronOpacActions && $patron->is_expired);
+    return { code => 'PatronExpired' }
+        if ( $patron->category->effective_BlockExpiredPatronOpacActions_contains('hold') && $patron->is_expired );
 
     # Get the biblio record, or return an error code
     my $biblionumber = $cgi->param('bib_id');
@@ -855,7 +856,8 @@ sub HoldItem {
     return { code => 'PatronRestricted' } if $patron->is_debarred;
 
     # Check for patron expired, category and syspref settings
-    return { code => 'PatronExpired' } if ($patron->category->effective_BlockExpiredPatronOpacActions && $patron->is_expired);
+    return { code => 'PatronExpired' }
+        if ( $patron->category->effective_BlockExpiredPatronOpacActions_contains('hold') && $patron->is_expired );
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
