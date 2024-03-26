@@ -641,9 +641,9 @@ OPAC:
             - "OPAC users to share private lists with other patrons."
         -
             - pref: BlockExpiredPatronOpacActions
-              choices:
-                1: "Block"
-                0: "Don't block"
+              multiple:
+                  renew: "Renewing an item"
+                  hold: "Placing a hold on an item"
             - expired patrons from OPAC actions such as placing a hold or renewing. Note that the setting for a patron category takes priority over this system preference.
         -
             - The cleanup_database.pl cronjob automatically deletes unaccepted private list share invites after
