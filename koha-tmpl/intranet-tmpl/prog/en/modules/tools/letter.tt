@@ -568,7 +568,7 @@
     [% END %]
 
 [% BLOCK message_templates %]
-    [% WRAPPER accordion id="group_${lang}" %]
+    [% WRAPPER accordion panelgroup_id="${lang}" %]
         [% FOR mtt IN letters.$lang.templates.keys.sort %]
             [% SET letter = letters.$lang.templates.$mtt %]
             [% NEXT IF letter.message_transport_type == "itiva" && !Koha.Preference('TalkingTechItivaPhoneNotification') %]
