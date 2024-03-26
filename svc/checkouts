@@ -62,7 +62,7 @@ $sorting_direction = $sorting_direction eq 'asc' ? 'asc' : 'desc';
 $results_per_page = undef if ( $results_per_page == -1 );
 
 binmode STDOUT, ":encoding(UTF-8)";
-print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+print $input->header( -type => 'application/json', -charset => 'UTF-8' );
 
 my @parameters;
 my $sql = '

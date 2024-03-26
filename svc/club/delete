@@ -44,6 +44,6 @@ if ($club && $op eq 'cud-delete') {
 }
 
 binmode STDOUT, ':encoding(UTF-8)';
-print $cgi->header( -type => 'text/plain', -charset => 'UTF-8' );
+print $cgi->header( -type => 'application/json', -charset => 'UTF-8' );
 
 print to_json( { success => $success ? 1 : 0 } );
