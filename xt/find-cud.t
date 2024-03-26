@@ -19,7 +19,7 @@ use Modern::Perl;
 use Test::More tests => 1;
 use Data::Dumper;
 
-my @files = `git grep 'cud-' ':(exclude)xt/find-cud.t'`;
+my @files = `git grep 'cud-' ':(exclude)xt/find-cud.t' ':(exclude)misc/release_notes/*'`;
 chomp for @files;
 
 is( @files, 0, "This branch is not supposed to have 'cud-', see bug 34478." )
