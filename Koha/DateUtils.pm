@@ -20,6 +20,7 @@ use Modern::Perl;
 use DateTime;
 use C4::Context;
 use Koha::Exceptions;
+use Koha::DateTime::Format::RFC3339;
 
 use vars qw(@ISA @EXPORT_OK);
 BEGIN {
@@ -72,6 +73,10 @@ sub dt_from_string {
         return $date_string->clone();
     }
 
+    if ($date_format eq 'rfc3339') {
+        return Koha::DateTime::Format::RFC3339->parse_datetime($date_string);
+    }
+
     my $regex;
 
     # The fallback format is sql/iso
@@ -113,28 +118,6 @@ sub dt_from_string {
             (?<year>\d{4})
         |xms;
     }
-    elsif ( $date_format eq 'rfc3339' ) {
-        $regex = qr/
-            (?<year>\d{4})
-            -
-            (?<month>\d{2})
-            -
-            (?<day>\d{2})
-            ([Tt\s])
-            (?<hour>\d{2})
-            :
-            (?<minute>\d{2})
-            :
-            (?<second>\d{2})
-            (\.\d{1,3})?(([Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9])))
-        /xms;
-
-        # Default to UTC (when 'Z' is passed) for inbound timezone.
-        # The regex above succeeds for both 'z', 'Z' and '+/-' offset.
-        # We set tz as though Z was passed by default and then correct it later if an offset is detected
-        # by the presence fo the <offset> variable.
-        $tz = DateTime::TimeZone->new( name => 'UTC' );
-    }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
         # iso or sql format are yyyy-dd-mm[ hh:mm:ss]"
         $regex = $fallback_re;
@@ -164,7 +147,7 @@ sub dt_from_string {
                 )?
             )?
     }xms;
-    $regex .= $time_re unless ( $date_format eq 'rfc3339' );
+    $regex .= $time_re;
     $fallback_re .= $time_re;
 
     # Ensure we only accept date strings and not other characters.
@@ -310,8 +293,7 @@ sub output_pref {
     }
     elsif ( $pref =~ m/^rfc3339/ ) {
         if (!$dateonly) {
-            $date = $dt->strftime('%FT%T%z');
-            substr($date, -2, 0, ':'); # timezone "HHmm" => "HH:mm"
+            $date = Koha::DateTime::Format::RFC3339->format_datetime($dt);
         }
         else {
             $date = $dt->strftime("%Y-%m-%d");

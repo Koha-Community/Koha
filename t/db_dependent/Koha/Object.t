@@ -213,7 +213,7 @@ subtest 'TO_JSON tests' => sub {
             (([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
         /xms;
     like( $updated_on, $rfc3999_regex, "Date-time $updated_on formatted correctly");
-    like( $lastseen, $rfc3999_regex, "Date-time $updated_on formatted correctly");
+    like( $lastseen, $rfc3999_regex, "Date-time $lastseen formatted correctly");
 
     # Test JSON doesn't receive strings
     my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
