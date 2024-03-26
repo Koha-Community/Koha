@@ -140,7 +140,7 @@ cmp_ok( $dt0->epoch(), 'eq', '1325455199', 'dt_from_string handles seconds with 
 eval {
     $dt0 = dt_from_string( '2012-01-01T23:59:59.999Z+02:00', 'rfc3339' ); # Do not combine Z with +02 !
 };
-like( $@, qr/.*does not match the date format \(rfc3339\).*/, 'dt_from_string should die when passed a bad rfc3339 date string' );
+like( $@, qr/Invalid date format/, 'dt_from_string should die when passed a bad rfc3339 date string' );
 
 eval {
     $dt0 = dt_from_string('2021-11-03T10:16:59Z+00:00', 'iso'); # Z and +00 are the same, but should not be together
