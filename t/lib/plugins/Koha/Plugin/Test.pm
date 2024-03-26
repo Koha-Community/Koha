@@ -474,4 +474,12 @@ sub _private_sub {
     return "";
 }
 
+sub elasticsearch_to_document {
+    my ( $self, $params ) = @_;
+    my $record = $params->{record};
+    my $doc    = $params->{document};
+
+    Koha::Exception->throw( "elasticsearch_to_document ref record: " . ref($record) . " - ref document: " . ref($doc) );
+}
+
 1;

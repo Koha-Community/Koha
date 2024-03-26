@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 
 use File::Basename;
@@ -136,4 +136,50 @@ subtest 'before_biblio_action() hooks tests' => sub {
 
     $schema->storage->txn_rollback;
     Koha::Plugins::Methods->delete;
+};
+
+subtest 'elasticsearch_to_document() hooks tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my $plugin = Koha::Plugin::Test->new->enable;
+
+    my $test_plugin1 = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin1->mock( 'after_biblio_action', undef );
+
+    # Create a record
+    my $record = MARC::Record->new();
+    $record->append_fields( MARC::Field->new( '009', '123456789' ) );
+
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+    my $documents;
+    warning_like { $documents = $indexer->marc_records_to_documents( [$record] ); }
+    qr/elasticsearch_to_document ref record: MARC::Record - ref document: HASH/,
+        'ES marc_records_to_document calls the hook';
+
+    my $test_plugin2 = Test::MockModule->new('Koha::Plugin::Test');
+    $test_plugin2->mock( 'after_biblio_action', undef );
+
+    # Create an ES search field 'ppn' and populate it with 009 field
+    $test_plugin2->mock(
+        'elasticsearch_to_document',
+        sub {
+            my ( $self, $params ) = @_;
+            my $record   = $params->{record};
+            my $document = $params->{document};
+            my $value    = $record->field('009')->data;
+            $document->{ppn} = [$value];
+        }
+    );
+    $documents = $indexer->marc_records_to_documents( [$record] );
+    ok( ref($documents) eq 'ARRAY',                 'Indexer marc_records_to_documents returns an ARRAY' );
+    ok( scalar(@$documents) == 1,                   'This array contains one (1) document' );
+    ok( ref( $documents->[0] ) eq 'HASH',           'The document is a HASH' );
+    ok( exists( $documents->[0]->{ppn} ),           'Generated field ppn exists' );
+    ok( $documents->[0]->{ppn}->[0] eq '123456789', 'Field ppn contains 123456789' );
 };
