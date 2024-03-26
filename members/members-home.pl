@@ -73,6 +73,7 @@ $template->param(
     PatronAutoComplete => C4::Context->preference('PatronAutoComplete'),
     patron_lists => [ GetPatronLists() ],
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
+    defer_loading => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -78,6 +78,7 @@ $template->param(
     searchfieldstype    => $searchfieldstype,
     PatronsPerPage      => C4::Context->preference("PatronsPerPage") || 20,
     circsearch          => $circsearch,
+    defer_loading       => 0,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
