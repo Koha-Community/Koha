@@ -36,18 +36,60 @@ Koha::Patron;;Category - Koha Patron;;Category Object class
 
 =cut
 
-=head3 effective_BlockExpiredPatronOpacActions
+=head3 effective_BlockExpiredPatronOpacActions_contains
 
-my $BlockExpiredPatronOpacActions = $category->effective_BlockExpiredPatronOpacActions
+my $actionBlocked = $category->effective_BlockExpiredPatronOpacActions_contains('hold');
 
-Return the effective BlockExpiredPatronOpacActions value.
+Return if the provided action is blocked by BlockExpiredPatronOpacActions, accounting for the syspref.
+
+=over
+
+=item action
+
+Action, can be one of: ['hold', 'renew']
+
+=back
 
 =cut
 
-sub effective_BlockExpiredPatronOpacActions {
-    my( $self) = @_;
-    return C4::Context->preference('BlockExpiredPatronOpacActions') if $self->BlockExpiredPatronOpacActions == -1;
-    return $self->BlockExpiredPatronOpacActions
+sub effective_BlockExpiredPatronOpacActions_contains {
+    my ( $self, $action ) = @_;
+
+    my $blocked_actions = {
+        map { ( $_, 1 ); } split /\s*\,\s*/,
+        C4::Context->preference('BlockExpiredPatronOpacActions')
+    };
+
+    return $blocked_actions->{$action} if $self->BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions');
+    return $self->BlockExpiredPatronOpacActions_contains($action)
+}
+
+=head3 BlockExpiredPatronOpacActions_contains
+
+my $actionBlocked = $self->BlockExpiredPatronOpacActions_contains('hold');
+
+Return if the provided action is blocked by this category's BlockExpiredPatronOpacActions value.
+
+=over
+
+=item action
+
+Action, can be one of: ['hold', 'renew']
+
+=back
+
+=cut
+
+sub BlockExpiredPatronOpacActions_contains {
+    my ( $self, $action ) = @_;
+
+    my $blocked_actions = {
+        map { ( $_, 1 ); } split /\s*\,\s*/,
+        $self->BlockExpiredPatronOpacActions
+    };
+
+    return unless $blocked_actions->{$action};
+    return 1;
 }
 
 =head3 store
