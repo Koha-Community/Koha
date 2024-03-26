@@ -886,6 +886,15 @@ sub marc_records_to_documents {
             }
         }
 
+        Koha::Plugins->call(
+            'elasticsearch_to_document',
+            {
+                index    => $self->index,
+                record   => $record,
+                document => $record_document,
+            }
+        );
+
         push @record_documents, $record_document;
     }
     return \@record_documents;
