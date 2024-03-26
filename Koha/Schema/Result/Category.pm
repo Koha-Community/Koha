@@ -138,11 +138,11 @@ type of Koha patron (Adult, Child, Professional, Organizational, Statistical, St
 =head2 BlockExpiredPatronOpacActions
 
   accessor: 'block_expired_patron_opac_actions'
-  data_type: 'tinyint'
-  default_value: -1
+  data_type: 'mediumtext'
+  default_value: ''follow_syspref_BlockExpiredPatronOpacActions''
   is_nullable: 0
 
-wheither or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions
+specific actions expired patrons of this category are blocked from performing or if the BlockExpiredPatronOpacActions system preference is to be followed
 
 =head2 default_privacy
 
@@ -249,8 +249,8 @@ __PACKAGE__->add_columns(
   "BlockExpiredPatronOpacActions",
   {
     accessor      => "block_expired_patron_opac_actions",
-    data_type     => "tinyint",
-    default_value => -1,
+    data_type     => "mediumtext",
+    default_value => "'follow_syspref_BlockExpiredPatronOpacActions'",
     is_nullable   => 0,
   },
   "default_privacy",
@@ -388,8 +388,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 20:49:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:r0Mftlw4TU7x+Ze2pAlwYQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-26 17:00:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6I6SD78A/PJ0AhUc1IEOPg
 
 sub koha_object_class {
     'Koha::Patron::Category';
