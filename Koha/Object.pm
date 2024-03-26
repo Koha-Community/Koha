@@ -25,10 +25,12 @@ use Mojo::JSON;
 use Scalar::Util qw( blessed looks_like_number );
 use Try::Tiny qw( catch try );
 use List::MoreUtils qw( any );
+use DateTime::Format::MySQL;
 
 use Koha::Database;
+use Koha::DateTime::Format::RFC3339;
+use Koha::DateTime::Format::SQL;
 use Koha::Exceptions::Object;
-use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Object::Message;
 
 =head1 NAME
@@ -423,10 +425,8 @@ sub TO_JSON {
         elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             eval {
                 return unless $unblessed->{$col};
-                $unblessed->{$col} = output_pref({
-                    dateformat => 'rfc3339',
-                    dt         => dt_from_string($unblessed->{$col}, 'sql'),
-                });
+                my $dt = Koha::DateTime::Format::SQL->parse_datetime( $unblessed->{$col} );
+                $unblessed->{$col} = Koha::DateTime::Format::RFC3339->format_datetime($dt);
             };
         }
     }
@@ -832,19 +832,21 @@ sub attributes_from_api {
             $value = ( $value ) ? 1 : 0;
         }
         elsif ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
-            try {
-                if ( $columns_info->{$koha_field_name}->{data_type} eq 'date' ) {
-                    $value = $dtf->format_date(dt_from_string($value, 'iso'))
-                        if defined $value;
+            if (defined $value) {
+                try {
+                    if ( $columns_info->{$koha_field_name}->{data_type} eq 'date' ) {
+                        my $dt = DateTime::Format::MySQL->parse_date($value);
+                        $value = $dtf->format_date($dt);
+                    }
+                    else {
+                        my $dt = Koha::DateTime::Format::RFC3339->parse_datetime($value);
+                        $value = $dtf->format_datetime($dt);
+                    }
                 }
-                else {
-                    $value = $dtf->format_datetime(dt_from_string($value, 'rfc3339'))
-                        if defined $value;
-                }
+                catch {
+                    Koha::Exceptions::BadParameter->throw( parameter => $key );
+                };
             }
-            catch {
-                Koha::Exceptions::BadParameter->throw( parameter => $key );
-            };
         }
 
         $params->{$koha_field_name} = $value;
