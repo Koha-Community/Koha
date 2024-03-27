@@ -602,6 +602,16 @@ sub find_booking {
     my $due_date      = $params->{due_date};
     my $biblio        = $self->biblio;
 
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name  => 'bookings_lead_period',
+            itemtype   => $self->effective_itemtype,
+            branchcode => "*"
+        }
+    );
+    my $preparation_period = $rule ? $rule->rule_value : 0;
+    $due_date = $due_date->clone->add( days => $preparation_period );
+
     my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
     my $bookings = $biblio->bookings(
         [
