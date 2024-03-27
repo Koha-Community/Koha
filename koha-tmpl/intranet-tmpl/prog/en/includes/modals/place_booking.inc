@@ -1,3 +1,4 @@
+[% USE ItemTypes %]
 <!-- Place booking modal -->
 <div class="modal" id="placeBookingModal" tabindex="-1" role="dialog" aria-labelledby="placeBookingLabel">
     <form method="get" id="placeBookingForm">
@@ -30,6 +31,14 @@
                                 <select name="booking_pickup" id="pickup_library_id" required="required" disabled="disabled"></select>
                                 <span class="required">Required</span>
                             </li>
+                            <li>
+                                <label for="booking_itemtype">Itemtype: </label>
+                                [% SET itemtypes = ItemTypes.Get() %]
+                                <select id="booking_itemtype" name="booking_itemtype" disabled="true">
+                                    [% FOREACH itemtype IN itemtypes %]
+                                        <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html%]</option>
+                                    [% END %]
+                                </select>
                             <li>
                             <label for="booking_item_id">Item: </label>
                                 <select name="booking_item_id" id="booking_item_id" disabled="disabled">
