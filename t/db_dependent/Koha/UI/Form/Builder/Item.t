@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 use Test::More tests => 9;
+use Test::MockModule;
 use Data::Dumper qw( Dumper );
 use utf8;
 
@@ -27,6 +28,10 @@ use Koha::MarcSubfieldStructures;
 use Koha::UI::Form::Builder::Item;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+
+# Auth required for cataloguing plugins
+my $mAuth = Test::MockModule->new('C4::Auth');
+$mAuth->mock( 'check_cookie_auth', sub { return ('ok') } );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
