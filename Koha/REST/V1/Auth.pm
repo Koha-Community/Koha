@@ -95,10 +95,7 @@ sub under {
 
     } catch {
         unless (blessed($_)) {
-            return $c->render(
-                status => 500,
-                json => { error => 'Something went wrong, check the logs.' }
-            );
+            $c->unhandled_exception($_);
         }
         if ($_->isa('Koha::Exceptions::UnderMaintenance')) {
             return $c->render(status => 503, json => { error => $_->error });
@@ -128,10 +125,7 @@ sub under {
             return $c->render(status => 500, json => { error => $_->error });
         }
         else {
-            return $c->render(
-                status => 500,
-                json => { error => 'Something went wrong, check the logs.' }
-            );
+            $c->unhandled_exception($_);
         }
     };
 

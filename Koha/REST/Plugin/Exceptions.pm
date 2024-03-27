@@ -71,10 +71,9 @@ sub register {
             $c->app->log->error( "$message" );
 
             $c->render(
-                status  => 500,
-                openapi => {
-                    error =>
-                      "Something went wrong, check Koha logs for details.",
+                status => 500,
+                json   => {
+                    error      => "Something went wrong, check Koha logs for details.",
                     error_code => 'internal_server_error',
                 }
             );
