@@ -632,73 +632,82 @@ sub apply {
 
     my $schema = Koha::Database->new->schema;
 
-    $schema->txn_do( sub {
-        for my $debit ( @{$debits} ) {
+    $schema->txn_do(
+        sub {
+            for my $debit ( @{$debits} ) {
 
-            unless ( $debit->is_debit ) {
-                Koha::Exceptions::Account::IsNotDebit->throw(
-                    error => 'Account line ' . $debit->id . 'is not a debit'
-                );
-            }
-            my $amount_to_cancel;
-            my $owed = $debit->amountoutstanding;
-
-            if ( $available_credit >= $owed ) {
-                $amount_to_cancel = $owed;
-            }
-            else {    # $available_credit < $debit->amountoutstanding
-                $amount_to_cancel = $available_credit;
-            }
-
-            # record the account offset
-            Koha::Account::Offset->new(
-                {   credit_id => $self->id,
-                    debit_id  => $debit->id,
-                    amount    => $amount_to_cancel * -1,
-                    type      => 'APPLY'
+                unless ( $debit->is_debit ) {
+                    Koha::Exceptions::Account::IsNotDebit->throw(
+                        error => 'Account line ' . $debit->id . 'is not a debit' );
                 }
-            )->store();
+                my $amount_to_cancel;
+                my $owed = $debit->amountoutstanding;
 
-            $available_credit -= $amount_to_cancel;
+                if ( $available_credit >= $owed ) {
+                    $amount_to_cancel = $owed;
+                } else {    # $available_credit < $debit->amountoutstanding
+                    $amount_to_cancel = $available_credit;
+                }
 
-            $self->amountoutstanding( $available_credit * -1 )->store;
-            $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
-
-            # Attempt to renew the item associated with this debit if
-            # appropriate
-            if ( $self->credit_type_code ne 'FORGIVEN' && $debit->is_renewable ) {
-                my $outcome = $debit->renew_item( { interface => $params->{interface} } );
-                $self->add_message(
+                # record the account offset
+                Koha::Account::Offset->new(
                     {
-                        type    => 'info',
-                        message => 'renewal',
-                        payload => $outcome
+                        credit_id => $self->id,
+                        debit_id  => $debit->id,
+                        amount    => $amount_to_cancel * -1,
+                        type      => 'APPLY'
                     }
-                ) if $outcome;
-            }
-            $debit->discard_changes; # Refresh values from DB to clear floating point remainders
+                )->store();
 
-            # Same logic exists in Koha::Account::pay
-            if (
-                C4::Context->preference('MarkLostItemsAsReturned') =~
-                m|onpayment|
-                && $debit->debit_type_code
-                && $debit->debit_type_code eq 'LOST'
-                && $debit->amountoutstanding == 0
-                && $debit->itemnumber
-                && !(
-                       $self->credit_type_code eq 'LOST_FOUND'
-                    && $self->itemnumber == $debit->itemnumber
-                )
-              )
-            {
-                C4::Circulation::ReturnLostItem( $self->borrowernumber,
-                    $debit->itemnumber );
-            }
+                $available_credit -= $amount_to_cancel;
 
-            last if $available_credit == 0;
+                $self->amountoutstanding( $available_credit * -1 )->store;
+                $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
+
+                # Attempt to renew the item associated with this debit if
+                # appropriate
+                if ( $self->credit_type_code ne 'FORGIVEN' && $debit->is_renewable ) {
+                    my $outcome = $debit->renew_item( { interface => $params->{interface} } );
+                    $self->add_message(
+                        {
+                            type    => 'info',
+                            message => 'renewal',
+                            payload => $outcome
+                        }
+                    ) if $outcome;
+                }
+                $debit->discard_changes;    # Refresh values from DB to clear floating point remainders
+
+                if (   $debit->debit_type_code
+                    && $debit->debit_type_code eq 'LOST'
+                    && $debit->amountoutstanding == 0
+                    && $debit->itemnumber
+                    && !( $self->credit_type_code eq 'LOST_FOUND' && $self->itemnumber == $debit->itemnumber ) )
+                {
+
+                    if ( C4::Context->preference('UpdateItemLostStatusWhenPaid')
+                        && !( $self->credit_type_code eq 'WRITEOFF' || $self->credit_type_code eq 'VOID' ) )
+                    {
+                        $debit->item->itemlost( C4::Context->preference('UpdateItemLostStatusWhenPaid') )->store();
+                    }
+
+                    if ( C4::Context->preference('UpdateItemLostStatusWhenWriteOff')
+                        && ( $self->credit_type_code eq 'WRITEOFF' || $self->credit_type_code eq 'VOID' ) )
+                    {
+                        $debit->item->itemlost( C4::Context->preference('UpdateItemLostStatusWhenWriteOff') )->store();
+                    }
+
+                    if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment| ) {
+                        C4::Circulation::ReturnLostItem(
+                            $self->borrowernumber,
+                            $debit->itemnumber
+                        );
+                    }
+                }
+                last if $available_credit == 0;
+            }
         }
-    });
+    );
 
     Koha::Patron::Debarments::del_restrictions_after_payment( { borrowernumber => $self->borrowernumber } );
 

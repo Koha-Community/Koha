@@ -479,6 +479,18 @@ Circulation:
                 claim_returned: "when marking an item as a return claim"
             - .
         -
+            - "Update item status to"
+            - pref: UpdateItemLostStatusWhenPaid
+              choices: authval
+              source: LOST
+            - "when the outstanding balance is paid."
+        -
+            - "Update item status to"
+            - pref: UpdateItemLostStatusWhenWriteoff
+              choices: authval
+              source: LOST
+            - "when the outstanding balance is written off."
+        -
             - pref: AllowMultipleIssuesOnABiblio
               choices:
                   1: Allow
