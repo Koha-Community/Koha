@@ -254,6 +254,7 @@
                                                 <th>Primary email</th>
                                                 <th>Primary phone</th>
                                                 <th>Other phone</th>
+                                                <th>Fax</th>
                                                 <th>Registration date</th>
                                                 <th>Expiry date</th>
                                                 [% IF CanUpdatePasswordExpiration %]
@@ -293,6 +294,7 @@
                                                     <td>[% borrower.email | html %]</td>
                                                     <td>[% borrower.phone | html %]</td>
                                                     <td>[% borrower.mobile | html %]</td>
+                                                    <td>[% borrower.fax | html %]</td>
                                                     <td data-order="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</td>
                                                     <td data-order="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</td>
                                                     [% IF CanUpdatePasswordExpiration %]
@@ -351,6 +353,7 @@
                                                 [% CASE 'email' %]<span>Primary email:</span>
                                                 [% CASE 'phone' %]<span>Primary phone:</span>
                                                 [% CASE 'mobile' %]<span>Other phone:</span>
+                                                [% CASE 'fax' %]<span>Fax:</span>
                                                 [% CASE 'sort1' %]<span>Sort 1:</span>
                                                 [% CASE 'sort2' %]<span>Sort 2:</span>
                                                 [% CASE 'dateenrolled' %]<span>Registration date:</span>

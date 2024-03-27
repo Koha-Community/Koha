@@ -281,6 +281,12 @@ if ( $op eq 'cud-show' ) {
         }
         ,
         {
+            name      => "fax",
+            type      => "text",
+            mandatory => ( grep /fax/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
             name => "sort1",
             type => @sort1_option ? "select" : "text",
             option => \@sort1_option,
@@ -345,10 +351,13 @@ if ( $op eq 'cud-do' ) {
 
     my @disabled = $input->multi_param('disable_input');
     my $infos;
-    for my $field ( qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment/ ) {
+    for my $field (
+        qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment/
+        )
+    {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
-        $infos->{$field} = "" if grep { $_ eq $field } @disabled;
+        $infos->{$field} = ""     if grep { $_ eq $field } @disabled;
     }
 
     for my $field ( qw( dateenrolled dateexpiry debarred password_expiration_date ) ) {
