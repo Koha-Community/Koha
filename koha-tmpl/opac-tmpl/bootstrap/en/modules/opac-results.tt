@@ -25,11 +25,12 @@
 &rsaquo;
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog
 </title>
+<meta name="robots" content="noindex">
 [% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %][% END %]
 
 <link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" />
 </head>
-[% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
