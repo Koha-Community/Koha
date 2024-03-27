@@ -495,8 +495,8 @@ sub SendAlerts {
                 ),
                 from => (
                     $type eq 'claimissues'
-                    ? C4::Context->preference('SerialsDefaultEMailAddress')
-                    : C4::Context->preference('AcquisitionsDefaultEMailAddress')
+                    ? C4::Context->preference('SerialsDefaultEmailAddress')
+                    : C4::Context->preference('AcquisitionsDefaultEmailAddress')
                     )
                     || $library->branchemail
                     || C4::Context->preference('KohaAdminEmailAddress'),
