@@ -16,7 +16,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 52;
+use Test::More tests => 15;
 
 BEGIN {
     use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
