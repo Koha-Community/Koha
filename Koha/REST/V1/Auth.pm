@@ -527,14 +527,16 @@ sub _basic_auth {
         Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
     }
 
-    my $decoded_credentials = decode_base64( $credentials );
-    my ( $user_id, $password ) = split( /:/, $decoded_credentials, 2 );
+    my $decoded_credentials = decode_base64($credentials);
+    my ( $identifier, $password ) = split( /:/, $decoded_credentials, 2 );
 
-    unless ( checkpw_internal($user_id, $password ) ) {
+    my $patron = Koha::Patrons->find( { userid => $identifier } );
+    $patron //= Koha::Patrons->find( { cardnumber => $identifier } );
+
+    unless ( checkpw_internal( $identifier, $password ) ) {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Invalid password' );
     }
 
-    my $patron = Koha::Patrons->find({ userid => $user_id });
     if ( $patron->password_expired ) {
         Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Password has expired' );
     }
