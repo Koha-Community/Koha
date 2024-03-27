@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 7;
+use Test::MockModule;
 
 use C4::ClassSource;
 
@@ -25,6 +26,10 @@ use Koha::ClassSources;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Libraries;
+
+# Auth required for cataloguing plugins
+my $mAuth = Test::MockModule->new('C4::Auth');
+$mAuth->mock( 'check_cookie_auth', sub { return ('ok') } );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
