@@ -90,7 +90,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
-my $record = $biblio_object->metadata->record({ embed_items => 1 });
+my $record;
+$record = $biblio_object->metadata->record({ embed_items => 1 }) if $biblio_object;
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
