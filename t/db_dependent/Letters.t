@@ -538,7 +538,7 @@ t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
     );
 
     # SendAlerts should use specific email addresses if set
-    t::lib::Mocks::mock_preference( 'AcquisitionsDefaultEMailAddress', 'acq-default@domain.com' );
+    t::lib::Mocks::mock_preference( 'AcquisitionsDefaultEmailAddress', 'acq-default@domain.com' );
     t::lib::Mocks::mock_preference( 'AcquisitionsDefaultReplyTo',      'acq-replyto@domain.com' );
 
     warning_like {
@@ -548,7 +548,7 @@ t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
         "SendAlerts is using the mocked send_or_die routine (orderacquisition)";
     is(
         $email_object->email->header('From'), 'acq-default@domain.com',
-        "AcquisitionsDefaultEMailAddress is used to sent acq notification"
+        "AcquisitionsDefaultEmailAddress is used to sent acq notification"
     );
     is(
         $email_object->email->header('Reply-To'), 'acq-replyto@domain.com',
@@ -773,7 +773,7 @@ subtest 'SendAlerts - claimissue' => sub {
     );
     }
 
-    t::lib::Mocks::mock_preference( 'SerialsDefaultEMailAddress', 'ser-default@domain.com' );
+    t::lib::Mocks::mock_preference( 'SerialsDefaultEmailAddress', 'ser-default@domain.com' );
     t::lib::Mocks::mock_preference( 'SerialsDefaultReplyTo', 'ser-replyto@domain.com' );
 
     {
@@ -782,7 +782,7 @@ subtest 'SendAlerts - claimissue' => sub {
         qr|Fake send_or_die|,
         "SendAlerts is using the mocked send_or_die routine (claimissues)";
     is( $email_object->email->header('From'),
-        'ser-default@domain.com', "SerialsDefaultEMailAddress is used to serial claim issue" );
+        'ser-default@domain.com', "SerialsDefaultEmailAddress is used to serial claim issue" );
     is( $email_object->email->header('Reply-To'),
         'ser-replyto@domain.com', "SerialsDefaultReplyTo is used to sent serial claim issue" );
 
