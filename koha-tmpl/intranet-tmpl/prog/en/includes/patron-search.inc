@@ -434,6 +434,7 @@
                     [% END %]
                 },
                 [% END %]
+                "deferLoading": defer_loading,
                 "columns": [
                     [% FOR column IN columns %]
                         [% IF default_sort_column == column %]
