@@ -187,7 +187,7 @@ if ( $op eq 'add_form' or $op eq 'edit_form' ) {
     }
 
     $op = 'list';
-} elsif ( $op eq 'edit_category' ) {
+} elsif ( $op eq 'cud-edit_category' ) {
     my $category_name   = $input->param('category');
     my $is_integer_only = $input->param('is_integer_only') ? 1 : 0;
     my $category        = Koha::AuthorisedValueCategories->find($category_name);
