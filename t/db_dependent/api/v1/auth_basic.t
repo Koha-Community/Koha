@@ -32,7 +32,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'success tests' => sub {
 
-    plan tests => 10;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -40,39 +40,73 @@ subtest 'success tests' => sub {
 
     my $password = 'AbcdEFG123';
 
-    my $patron = $builder->build_object(
-        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
-    $patron->set_password({ password => $password });
-    my $userid = $patron->userid;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { userid => 'tomasito' } } );
+    $patron->set_password( { password => $password } );
+
+    my $userid     = $patron->userid;
+    my $cardnumber = $patron->cardnumber;
 
     my $stash;
     my $interface;
     my $userenv;
 
-    $t->app->hook(after_dispatch => sub {
-        $stash     = shift->stash;
-        $interface = C4::Context->interface;
-        $userenv   = C4::Context->userenv;
-    });
+    $t->app->hook(
+        after_dispatch => sub {
+            $stash     = shift->stash;
+            $interface = C4::Context->interface;
+            $userenv   = C4::Context->userenv;
+        }
+    );
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons")
-      ->status_is( 200, 'Successful authentication and permissions check' );
+    subtest '`userid` login' => sub {
 
-    my $user = $stash->{'koha.user'};
-    ok( defined $user, 'The \'koha.user\' object is defined in the stash') and
-    is( ref($user), 'Koha::Patron', 'Stashed koha.user object type is Koha::Patron') and
-    is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
-    is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
-    is( $interface, 'api', "Interface correctly set to \'api\'" );
+        plan tests => 10;
 
-    $patron->flags(undef)->store;
+        $patron->flags( 2**4 )->store;
 
-    $t->get_ok("//$userid:$password@/api/v1/patrons")
-      ->status_is( 403, 'Successful authentication and not enough permissions' )
-      ->json_is(
-        '/error' => 'Authorization failure. Missing required permission(s).',
-        'Error message returned'
-      );
+        $t->get_ok("//$userid:$password@/api/v1/patrons")
+            ->status_is( 200, 'Successful authentication and permissions check' );
+
+        my $user = $stash->{'koha.user'};
+        ok( defined $user, 'The \'koha.user\' object is defined in the stash' )
+            and is( ref($user),            'Koha::Patron',          'Stashed koha.user object type is Koha::Patron' )
+            and is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
+        is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
+        is( $interface,         'api',                   "Interface correctly set to \'api\'" );
+
+        $patron->flags(undef)->store;
+
+        $t->get_ok("//$userid:$password@/api/v1/patrons")
+            ->status_is( 403, 'Successful authentication and not enough permissions' )->json_is(
+            '/error' => 'Authorization failure. Missing required permission(s).',
+            'Error message returned'
+            );
+    };
+
+    subtest '`cardnumber` login' => sub {
+
+        plan tests => 10;
+
+        $patron->flags( 2**4 )->store;
+
+        $t->get_ok("//$cardnumber:$password@/api/v1/patrons")
+            ->status_is( 200, 'Successful authentication and permissions check' );
+
+        my $user = $stash->{'koha.user'};
+        ok( defined $user, 'The \'koha.user\' object is defined in the stash' )
+            and is( ref($user),            'Koha::Patron',          'Stashed koha.user object type is Koha::Patron' )
+            and is( $user->borrowernumber, $patron->borrowernumber, 'The stashed user is the right one' );
+        is( $userenv->{number}, $patron->borrowernumber, 'userenv set correctly' );
+        is( $interface,         'api',                   "Interface correctly set to \'api\'" );
+
+        $patron->flags(undef)->store;
+
+        $t->get_ok("//$cardnumber:$password@/api/v1/patrons")
+            ->status_is( 403, 'Successful authentication and not enough permissions' )->json_is(
+            '/error' => 'Authorization failure. Missing required permission(s).',
+            'Error message returned'
+            );
+    };
 
     $schema->storage->txn_rollback;
 };
