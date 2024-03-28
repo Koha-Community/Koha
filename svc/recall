@@ -33,7 +33,7 @@ my $json = encode_json({ success => 0 });
 my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { recall => 'manage_recalls' } );
 
 if ( $auth_status ne "ok" ) {
-    print $input->header(-type => 'text/plain', -status => '403 Forbidden');
+    print $input->header(-type => 'application/json', -status => '403 Forbidden');
     exit 0;
 }
 
