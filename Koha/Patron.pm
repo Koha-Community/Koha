@@ -385,8 +385,10 @@ sub store {
                     my @skip_fields  = (qw/lastseen updated_on/);
                     for my $key ( keys %{$from_storage} ) {
                         next if any { /$key/ } @skip_fields;
-                        if (   ( $from_storage->{$key} || $from_object->{$key} )
-                            && ( $from_storage->{$key} ne $from_object->{$key} ) )
+                        my $storage_value = $from_storage->{$key} // q{};
+                        my $object_value  = $from_object->{$key}  // q{};
+                        if (   ( $storage_value || $object_value )
+                            && ( $storage_value ne $object_value ) )
                         {
                             $info->{$key} = {
                                 before => $from_storage->{$key},
