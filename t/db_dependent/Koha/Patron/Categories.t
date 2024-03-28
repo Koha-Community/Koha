@@ -103,18 +103,19 @@ subtest 'get_expiry_date' => sub {
 };
 
 subtest 'BlockExpiredPatronOpacActions' => sub {
-    plan tests => 2;
-    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 42);
+    plan tests => 3;
+    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 'hold');
     my $category = Koha::Patron::Category->new({
         categorycode => 'ya_cat',
         category_type => 'A',
         description  => 'yacatdesc',
         enrolmentperiod => undef,
-        BlockExpiredPatronOpacActions => -1,
+        BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
     })->store;
-    is( $category->effective_BlockExpiredPatronOpacActions, 42 );
-    $category->BlockExpiredPatronOpacActions(24)->store;
-    is( $category->effective_BlockExpiredPatronOpacActions, 24 );
+    is( $category->effective_BlockExpiredPatronOpacActions_contains('hold'), 1 );
+    is( $category->effective_BlockExpiredPatronOpacActions_contains('renew'), undef );
+    $category->BlockExpiredPatronOpacActions('renew')->store;
+    is( $category->effective_BlockExpiredPatronOpacActions_contains('renew'), 1 );
     $category->delete;
 };
 

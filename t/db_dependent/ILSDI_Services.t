@@ -274,7 +274,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         source => 'Category',
         value  => {
             category_type                 => 'A',
-            BlockExpiredPatronOpacActions => -1,
+            BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
         }
     } );
 
@@ -584,7 +584,7 @@ subtest 'Holds test' => sub {
     # Test Patron cannot reserve if expired and BlockExpiredPatronOpacActions
     my $category = $builder->build({
         source => 'Category',
-        value => { BlockExpiredPatronOpacActions => -1 }
+        value => { BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions' }
         });
 
     my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
@@ -597,7 +597,7 @@ subtest 'Holds test' => sub {
         dateexpiry => '2000-01-01',
     })->store->borrowernumber;
 
-    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 1);
+    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 'hold,renew');
 
     my $item5 = $builder->build({
         source => 'Item',

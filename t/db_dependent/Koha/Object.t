@@ -1049,7 +1049,7 @@ subtest 'unblessed_all_relateds' => sub {
             value  => {
                 category_type                 => 'P',
                 enrolmentfee                  => 0,
-                BlockExpiredPatronOpacActions => -1, # Pick the pref value
+                BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
             }
         }
     );

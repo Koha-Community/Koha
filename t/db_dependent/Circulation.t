@@ -157,7 +157,7 @@ my $patron_category = $builder->build(
         value  => {
             category_type                 => 'P',
             enrolmentfee                  => 0,
-            BlockExpiredPatronOpacActions => -1, # Pick the pref value
+            BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
         }
     }
 );
@@ -1340,20 +1340,20 @@ subtest "CanBookBeRenewed tests" => sub {
         my $ten_days_before = dt_from_string->add( days => -10 );
         my $ten_days_ahead = dt_from_string->add( days => 10 );
 
-        # Patron is expired and BlockExpiredPatronOpacActions=0
+        # Patron is expired and BlockExpiredPatronOpacActions=''
         # => auto renew is allowed
-        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 0);
+        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', '');
         my $issue = AddIssue( $expired_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $expired_borrower_obj, $issue );
         is( $renewokay, 1, 'Renew, even if renewal is automatic' );
-        is( $error, 'auto_renew', 'Can auto renew, patron is expired but BlockExpiredPatronOpacActions=0' );
+        is( $error, 'auto_renew', 'Can auto renew, patron is expired but BlockExpiredPatronOpacActions=\'\'' );
         Koha::Checkouts->find( $issue->issue_id )->delete;
 
 
-        # Patron is expired and BlockExpiredPatronOpacActions=1
+        # Patron is expired and BlockExpiredPatronOpacActions='renew'
         # => auto renew is not allowed
-        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 1);
+        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 'renew');
         $issue = AddIssue( $expired_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $expired_borrower_obj, $issue );
@@ -1363,12 +1363,12 @@ subtest "CanBookBeRenewed tests" => sub {
 
         # Patron is not expired and BlockExpiredPatronOpacActions=1
         # => auto renew is allowed
-        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 1);
+        t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 'renew');
         $issue = AddIssue( $renewing_borrower_obj, $item_to_auto_renew->barcode, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrower_obj, $issue );
         is( $renewokay, 1, 'Renew, even if renewal is automatic' );
-        is( $error, 'auto_renew', 'Can auto renew, BlockExpiredPatronOpacActions=1 but patron is not expired' );
+        is( $error, 'auto_renew', 'Can auto renew, BlockExpiredPatronOpacActions=\'renew\' but patron is not expired' );
         $issue->delete;
     };
 
@@ -1983,7 +1983,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
             value  => {
                 category_type                 => 'P',
                 enrolmentfee                  => 0,
-                BlockExpiredPatronOpacActions => -1, # Pick the pref value
+                BlockExpiredPatronOpacActions => 'follow_syspref_BlockExpiredPatronOpacActions',
             }
         }
     );
