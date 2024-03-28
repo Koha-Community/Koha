@@ -42,6 +42,6 @@ my $enrollment = Koha::Club::Enrollments->find($id);
 $enrollment->cancel();
 
 binmode STDOUT, ':encoding(UTF-8)';
-print $cgi->header( -type => 'text/plain', -charset => 'UTF-8' );
+print $cgi->header( -type => 'application/json', -charset => 'UTF-8' );
 
 print to_json( { success => $enrollment ? 1 : 0 } );
