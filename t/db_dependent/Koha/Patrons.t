@@ -1608,7 +1608,7 @@ $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons - 1, 'Delete should have deleted the patron' );
 
 subtest 'BorrowersLog tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1627,6 +1627,13 @@ subtest 'BorrowersLog tests' => sub {
     $patron->update_lastseen('connection');
     @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
     is( scalar @logs, 1, 'With BorrowerLogs and TrackLastPatronActivityTriggers we should not spam the logs');
+
+    Koha::ActionLogs->search()->delete();
+    $patron->get_from_storage();
+    $patron->set( { debarred => "" });
+    $patron->store;
+    my $log = Koha::ActionLogs->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } )->next;
+    isnt( defined $log, "No action log generated where incoming changed column is empty string and value in storage is NULL" );
 };
 $schema->storage->txn_rollback;
 
