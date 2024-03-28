@@ -12,17 +12,8 @@
 
 [% SET branchcode = humanbranch || undef %]
 
-[% SET categorycodes = [] %]
-[% FOREACH pc IN patron_categories %]
-    [% categorycodes.push( pc.id ) %]
-[% END %]
-[% categorycodes.push(undef) %]
-
-[% SET itemtypes = [] %]
-[% FOREACH i IN itemtypeloop %]
-    [% itemtypes.push( i.itemtype ) %]
-[% END %]
-[% itemtypes.push(undef) %]
+[% SET categorycodes = used_categorycodes %]
+[% SET itemtypes = used_itemtypes %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]

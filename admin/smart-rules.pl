@@ -739,6 +739,11 @@ my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['des
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
+my @used_categorycodes =
+    Koha::CirculationRules->search( {}, { columns => ['categorycode'], distinct => 1, } )->get_column('categorycode');
+my @used_itemtypes =
+    Koha::CirculationRules->search( {}, { columns => ['itemtype'], distinct => 1, } )->get_column('itemtype');
+
 my $humanbranch = ( $branch ne '*' ? $branch : undef );
 
 my $all_rules = Koha::CirculationRules->search({ branchcode => $humanbranch });
@@ -753,12 +758,14 @@ while ( my $r = $all_rules->next ) {
 $template->param(show_branch_cat_rule_form => 1);
 
 $template->param(
-    patron_categories => $patron_categories,
-    itemtypeloop      => $itemtypes,
-    humanbranch       => $humanbranch,
-    current_branch    => $branch,
-    definedbranch     => $definedbranch,
-    all_rules         => $rules,
+    used_categorycodes => \@used_categorycodes,
+    used_itemtypes     => \@used_itemtypes,
+    patron_categories  => $patron_categories,
+    itemtypeloop       => $itemtypes,
+    humanbranch        => $humanbranch,
+    current_branch     => $branch,
+    definedbranch      => $definedbranch,
+    all_rules          => $rules,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
