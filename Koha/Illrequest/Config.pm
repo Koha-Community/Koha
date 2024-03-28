@@ -118,8 +118,7 @@ sub get_backend_plugin_names {
     my @backend_plugins = Koha::Plugins->new()->GetPlugins(
         {
             method => 'ill_backend',
-            all    => 1,
-            errors => 1
+            all    => 1
         }
     );
 
