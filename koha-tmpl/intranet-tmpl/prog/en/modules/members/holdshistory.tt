@@ -52,7 +52,10 @@
         [% SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') %]
 
         <div id="holdshistory" class="page-section">
-            <h2>Current holds</h2>
+            <h2 id="current_holds_heading">Current holds</h2>
+            <p
+                ><a href="#past_holds_heading"><i class="fa fa-arrow-down" aria-hidden="true"></i> View past holds</a></p
+            >
             [% IF patron.holds.count %]
                 <div id="current_holds_filters" data-table-id="table_holdshistory">
                     <p>
@@ -101,7 +104,10 @@
                 <div class="dialog message">This patron has no current holds.</div>
             [% END %]
 
-            <h2>Historical holds</h2>
+            <h2 id="past_holds_heading">Past holds</h2>
+            <p
+                ><a href="#current_holds_heading"><i class="fa fa-arrow-up" aria-hidden="true"></i> View current holds</a></p
+            >
             [% IF patron.old_holds.count %]
                 <div id="old_holds_filters" data-table-id="table_oldholdshistory">
                     <p>
