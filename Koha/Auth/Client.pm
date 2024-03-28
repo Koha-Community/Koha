@@ -19,6 +19,8 @@ package Koha::Auth::Client;
 
 use Modern::Perl;
 
+use C4::Context;
+
 use Koha::Exceptions::Auth;
 use Koha::Auth::Identity::Providers;
 
@@ -61,6 +63,29 @@ sub get_user {
     my $provider = Koha::Auth::Identity::Providers->search({ code => $provider_code })->next;
 
     my ( $mapped_data, $patron ) = $self->_get_data_and_patron({ provider => $provider, data => $data, config => $config });
+
+    # Call the plugin hook "auth_client_get_user" of all plugins in
+    # ascending priority.
+    if ( C4::Context->config('enable_plugins') ) {
+        my @plugins = Koha::Plugins->new()->GetPlugins(
+            {
+                method => 'auth_client_get_user',
+            }
+        );
+        @plugins = sort { $a->retrieve_data('priority') <=> $b->retrieve_data('priority') } @plugins;
+        my $args = {
+            provider    => $provider,
+            data        => $data,
+            config      => $config,
+            mapped_data => $mapped_data,
+            patron      => $patron,
+        };
+        foreach my $plugin (@plugins) {
+            $plugin->auth_client_get_user($args);
+        }
+        $mapped_data = $args->{'mapped_data'};
+        $patron      = $args->{'patron'};
+    }
 
     $mapped_data //= {};
 

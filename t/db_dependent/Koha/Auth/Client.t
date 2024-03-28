@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 
 use Test::MockModule;
+use Test::MockObject;
 use Test::Exception;
 
 use JSON qw(encode_json);
@@ -38,7 +39,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'get_user() tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -76,6 +77,46 @@ subtest 'get_user() tests' => sub {
     is( $mapped_data->{firstname},            'test name',                                   'Data mapped correctly' );
     is( $mapped_data->{surname},              undef,                                         'No surname mapped' );
     is( $domain->identity_provider_domain_id, $resolved_domain->identity_provider_domain_id, 'Is the same domain' );
+
+    # Test the plugin hook "auth_client_get_user".
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    my $get_plugins = sub {
+        my $methods = [
+            {
+                auth_client_get_user => sub {
+                    $_[1]->{mapped_data}->{firstname} = 'test name modified 1';
+                    return;
+                },
+                retrieve_data => sub { return $_[1] eq 'priority' ? 2 : undef; }
+            },
+            {
+                auth_client_get_user => sub {
+                    $_[1]->{mapped_data}->{firstname} = 'test name modified 2';
+                    return;
+                },
+                retrieve_data => sub { return $_[1] eq 'priority' ? 1 : undef; }
+            }
+        ];
+        my @plugins;
+        foreach my $method ( @{$methods} ) {
+            my $plugin = Test::MockObject->new;
+            foreach my $name ( keys %{$method} ) {
+                $plugin->mock( $name, $method->{$name} );
+            }
+            push @plugins, $plugin;
+        }
+        return @plugins;
+    };
+    my $plugins_module = Test::MockModule->new('Koha::Plugins');
+    $plugins_module->mock( 'GetPlugins',          $get_plugins );
+    $plugins_module->mock( 'get_enabled_plugins', $get_plugins );
+    ( $resolved_patron, $mapped_data, $resolved_domain ) =
+        $client->get_user( { provider => $provider->code, data => $data, interface => 'opac' } );
+    is(
+        $mapped_data->{firstname},
+        'test name modified 1',
+        'Data modified correctly by plugins'
+    );
 
     $schema->storage->txn_rollback;
 
