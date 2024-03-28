@@ -133,6 +133,7 @@ $(document).ready(function () {
             ) {
                 blocked_actions_select.multipleSelect("uncheck", "hold");
                 blocked_actions_select.multipleSelect("uncheck", "renew");
+                blocked_actions_select.multipleSelect("uncheck", "ill_request");
             } else if (
                 view.value != "follow_syspref_BlockExpiredPatronOpacActions" &&
                 view.selected

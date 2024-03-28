@@ -46,7 +46,7 @@ Return if the provided action is blocked by BlockExpiredPatronOpacActions, accou
 
 =item action
 
-Action, can be one of: ['hold', 'renew']
+Action, can be one of: ['hold', 'renew', 'ill_request']
 
 =back
 
@@ -74,7 +74,7 @@ Return if the provided action is blocked by this category's BlockExpiredPatronOp
 
 =item action
 
-Action, can be one of: ['hold', 'renew']
+Action, can be one of: ['hold', 'renew', 'ill_request']
 
 =back
 

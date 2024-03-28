@@ -361,6 +361,11 @@
                         [% ELSE %]
                             <option value="renew"> Renewing an item </option>
                         [% END %]
+                        [% IF category and category.BlockExpiredPatronOpacActions_contains('ill_request') %]
+                            <option value="ill_request" selected="selected"> Placing an ILL request </option>
+                        [% ELSE %]
+                            <option value="ill_request"> Placing an ILL request </option>
+                        [% END %]
                         </optgroup>
                     </select>
                     <div class="hint">
