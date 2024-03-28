@@ -29,7 +29,7 @@ require.config( {
             themelang: '[% themelang | html %]',
         },
     },
-    waitSeconds: 30,
+    waitSeconds: 0,
 } );
 </script>
 
