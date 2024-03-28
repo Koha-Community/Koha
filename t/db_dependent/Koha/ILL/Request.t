@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Test::More tests => 3;
+use Test::MockModule;
 
 use Koha::ILL::Requests;
 
@@ -30,11 +31,20 @@ my $schema  = Koha::Database->new->schema;
 
 subtest 'patron() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_module = Test::MockModule->new('Koha::Patron');
+
+    my $patroncategory = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { can_place_ill_in_opac => 1, BlockExpiredPatronOpacActions => 'ill_request' }
+        }
+    );
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patroncategory->id } } );
     my $request =
         $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => $patron->id } } );
 
@@ -45,6 +55,14 @@ subtest 'patron() tests' => sub {
     $request = $builder->build_object( { class => 'Koha::ILL::Requests', value => { borrowernumber => undef } } );
 
     is( $request->patron, undef );
+
+    # patron is not expired, is allowed
+    $patron_module->mock( 'is_expired', sub { return 0; } );
+    is( $request->can_patron_place_ill_in_opac($patron), 1 );
+
+    # patron is expired, is not allowed
+    $patron_module->mock( 'is_expired', sub { return 1; } );
+    is( $request->can_patron_place_ill_in_opac($patron), 0 );
 
     $schema->storage->txn_rollback;
 };
