@@ -470,13 +470,13 @@ sub checkout {
     return Koha::Checkout->_new_from_dbic( $checkout_rs );
 }
 
-=head3 serialitem
+=head3 serial_item
 
 =cut
 
-sub serialitem {
+sub serial_item {
     my ( $self ) = @_;
-    my $rs = $self->_result->serialitem;
+    my $rs = $self->_result->serial_item;
     return unless $rs;
     return Koha::Serial::Item->_new_from_dbic($rs);
 }

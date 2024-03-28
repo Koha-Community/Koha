@@ -1062,6 +1062,13 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->might_have(
+  "serial_item",
+  "Koha::Schema::Result::Serialitem",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 use C4::Context;
 sub effective_itemtype {
     my ( $self ) = @_;

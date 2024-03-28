@@ -217,7 +217,7 @@
         embed.push('item_group_item.item_group.description');
     [% END %]
     [% IF biblio.serial %]
-        embed.push('serialitem.serial');
+        embed.push('serial_item.serial');
     [% END %]
     [% IF Koha.Preference('UseRecalls') %]
         embed.push('recall', 'recall+strings', 'recall.patron')
@@ -428,7 +428,7 @@
                 render: function (data, type, row, meta) {
                     let nodes = "";
                     [%# FIXME Previously we displayed the column if at least one item of the biblio had an enumchron/serial_issue_number. Now it's only if one item of the ones displayed on the current page, how is that bad? How can it be fixed in an elegant way? Should we display the column only if biblio.serial? %]
-                    let serial = row.serialitem ? row.serialitem.serial : null;
+                    let serial = row.serial_item ? row.serial_item.serial : null;
                     if ( row.serial_issue_number && serial && serial.serialseq ) {
                         nodes += '<span class="enum">%s</span>'.format(escape_str(row.serial_issue_number));
                         if ( serial.serialseq && row.serial_issue_number != serial.serialseq ) {
