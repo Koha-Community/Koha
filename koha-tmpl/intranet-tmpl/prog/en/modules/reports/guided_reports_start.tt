@@ -74,6 +74,10 @@
     .data-plain {
         display: none;
     }
+    div.radio label {
+        font-weight: bold;
+        margin: 0;
+    }
 </style>
 [% Asset.css("css/reports.css") | $raw %]
 [% Asset.css("lib/d3c3/c3.min.css") | $raw %]
@@ -1515,17 +1519,23 @@
                             <div class="hint">Select which authorized value category the user will choose from.</div>
                         </div>
                         <div id="runtime_param_options" style="display:none">
-                            <label>Parameter options:</label>
-                            <div class="form-check-inline">
-                                <input type="radio" class="form-check-input" id="single_param_check" name="param_option" value="" checked>
-                                <label class="form-check-label" for="single_param_check">Single parameter only</label>
-                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression should use ="></i>
-                                <input type="radio" class="form-check-input" id="include_all_check" name="param_option" value=":all">
-                                <label class="form-check-label" for="include_all_check">Include option for all</label>
-                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression must use LIKE"></i>
-                                <input type="radio" class="form-check-input" id="multi_select_check" name="param_option" value=":in">
-                                <label class="form-check-label" for="multi_select_check">Allow multiple selections</label>
-                                <i id="info_param_options" data-toggle="tooltip" title="" data-placement="top" class="fa fa-info-circle" data-original-title="Query expression must use IN"></i>
+                            <h5>Parameter options:</h5>
+                            <div class="radio">
+                                <input type="radio" id="single_param_check" name="param_option" value="" checked="checked" />
+                                <label for="single_param_check">Single parameter only</label>
+                                <span class="hint">- Query expression should use =</span>
+                            </div>
+
+                            <div class="radio">
+                                <input type="radio" id="include_all_check" name="param_option" value=":all">
+                                <label for="include_all_check">Include option for all</label>
+                                <span class="hint">- Query expression must use LIKE</span>
+                            </div>
+
+                            <div class="radio">
+                                <input type="radio" id="multi_select_check" name="param_option" value=":in">
+                                <label for="multi_select_check">Allow multiple selections</label>
+                                <span class="hint">- Query expression must use IN</span>
                             </div>
                         </div>
                     </div> <!-- /.modal-body -->
