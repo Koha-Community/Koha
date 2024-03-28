@@ -2108,6 +2108,32 @@ sub strings_map {
     return $strings;
 }
 
+=head3 can_patron_place_ill_in_opac
+
+    my $can_patron_place_ill_in_opac = Koha::Illrequest->can_patron_place_ill_in_opac($patron);
+
+Returns whether the given patron can place an ILL request in OPAC
+
+=over
+
+=item patron
+
+Patron object
+
+=back
+
+=cut
+
+sub can_patron_place_ill_in_opac {
+    my ( $self, $patron ) = @_;
+
+    return 0
+        unless $patron->_result->categorycode->can_place_ill_in_opac
+        && !( $patron->is_expired
+        && $patron->category->effective_BlockExpiredPatronOpacActions_contains('ill_request') );
+    return 1;
+}
+
 =head3 get_op_param_deprecation
 
     my $op = $req->check_url_param_deprecation($params);

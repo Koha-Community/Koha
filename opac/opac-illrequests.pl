@@ -73,7 +73,8 @@ if ( $illrequest_id = $params->{illrequest_id} ) {
     }
 }
 
-if ( ( $op eq 'cud-create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$patron->_result->categorycode->can_place_ill_in_opac ) {
+my $can_patron_place_ill_in_opac = Koha::ILL::Request->can_patron_place_ill_in_opac($patron);
+if ( ( $op eq 'cud-create' || $op eq 'cancreq' || $op eq 'cud-update' ) && !$can_patron_place_ill_in_opac ) {
     print $query->redirect('/cgi-bin/koha/errors/403.pl');
     exit;
 }
@@ -181,10 +182,10 @@ if ( $op eq 'list' ) {
 }
 
 $template->param(
-    can_place_ill_in_opac => $patron->_result->categorycode->can_place_ill_in_opac,
-    message               => $params->{message},
-    illrequestsview       => 1,
-    op                    => $op
+    can_patron_place_ill_in_opac => $can_patron_place_ill_in_opac,
+    message                      => $params->{message},
+    illrequestsview              => 1,
+    op                           => $op
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
