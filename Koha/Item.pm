@@ -502,6 +502,14 @@ sub item_group {
     return $item_group;
 }
 
+=head3 item_group_item
+
+    my $item_group_item = $item->item_group_item;
+
+Return the item group for this item
+
+=cut
+
 sub item_group_item {
     my ( $self ) = @_;
     my $rs = $self->_result->item_group_item;
@@ -792,6 +800,23 @@ sub get_transfer {
     return  Koha::Item::Transfer->_new_from_dbic($transfer) if $transfer;
 }
 
+=head3 transfer
+
+    my $transfer = $item->transfer;
+
+Returns the active transfer request. Returns I<undef> if no active transfer
+is found.
+
+Note: Transfers are retrieved in a Modified FIFO (First In First Out) order
+whereby the most recently sent, but not received, transfer will be returned
+if it exists, otherwise the oldest unsatisfied transfer will be returned.
+
+This allows for transfers to queue, which is the case for stock rotation and
+rotating collections where a manual transfer may need to take precedence but
+we still expect the item to end up at a final location eventually.
+
+=cut
+
 sub transfer {
     return shift->get_transfer(@_);
 }
@@ -1077,6 +1102,14 @@ sub current_holds {
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
+
+=head3 first_hold
+
+    my $first_hold = $item->first_hold;
+
+Returns the first I<Koha::Hold> for the item.
+
+=cut
 
 sub first_hold {
     my ( $self ) = @_;
@@ -1769,7 +1802,7 @@ sub to_api_mapping {
 
     my $itemtype = $item->itemtype;
 
-    Returns Koha object for effective itemtype
+Returns Koha object for effective itemtype
 
 =cut
 
@@ -1778,6 +1811,23 @@ sub itemtype {
 
     return Koha::ItemTypes->find( $self->effective_itemtype );
 }
+
+=head3 item_type
+
+    my $item_type = $item->item_type;
+
+Returns the effective I<Koha::ItemType> for the item.
+
+FIXME: it should either return the 'real item type' or undef if no item type
+defined. And effective_itemtype should return... the effective itemtype. Right
+now it returns an id... This is all inconsistent. And the API should make it clear
+if the attribute is part of the resource, or a calculated value i.e. if the item
+is not linked to an item type on its own, then the API response should contain
+item_type: null! And the effective item type... be another attribute. I understand
+that this complicates filtering, but some query trickery could do it in the controller.
+
+=cut
+
 sub item_type {
     return shift->itemtype;
 }
@@ -2388,6 +2438,16 @@ sub is_denied_renewal {
     }
     return 0;
 }
+
+=head3 analytics_count
+
+    my $analytics_count = $item->analytics_count;
+
+Return the related analytic records count.
+
+It returns 0 if I<EasyAnalyticalRecords> is disabled.
+
+=cut
 
 sub analytics_count {
     my ($self) = @_;
