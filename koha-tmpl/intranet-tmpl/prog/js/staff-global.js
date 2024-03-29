@@ -31,8 +31,6 @@ var HtmlCharsToEscape = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
-    "'": '&#39;',
-    '"': '&quot;'
 };
 String.prototype.escapeHtml = function () {
     return this.replace(/[&<>]/g, function (c) {
