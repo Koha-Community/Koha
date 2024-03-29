@@ -382,7 +382,7 @@ sub store {
                     $from_object->{dateexpiry} = dt_from_string( $from_object->{dateexpiry} )->ymd
                         if $from_object->{dateexpiry};
 
-                    my @skip_fields  = (qw/lastseen updated_on/);
+                    my @skip_fields = (qw/lastseen updated_on/);
                     for my $key ( keys %{$from_storage} ) {
                         next if any { /$key/ } @skip_fields;
                         my $storage_value = $from_storage->{$key} // q{};
