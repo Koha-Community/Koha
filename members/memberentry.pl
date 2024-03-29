@@ -601,7 +601,6 @@ if ($nok or !$nodouble){
     $op = 'add_form'  if ( $op eq 'cud-insert' );
     $op = 'edit_form' if ( $op eq 'cud-save' );
     %data=%newdata; 
-    $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "cud-insert"... but we just changed $op!
     unless ($step){  
         $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1, step_7 => 1 );
     }  
