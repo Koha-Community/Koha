@@ -1630,10 +1630,19 @@ subtest 'BorrowersLog tests' => sub {
 
     Koha::ActionLogs->search()->delete();
     $patron->get_from_storage();
-    $patron->set( { debarred => "" });
+    $patron->set( { debarred => "" } );
     $patron->store;
-    my $log = Koha::ActionLogs->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } )->next;
-    isnt( defined $log, "No action log generated where incoming changed column is empty string and value in storage is NULL" );
+    my $log = Koha::ActionLogs->search(
+        {
+            module => 'MEMBERS',
+            action => 'MODIFY',
+            object => $patron->borrowernumber,
+        }
+    )->next;
+    isnt(
+        defined $log,
+        "No action log generated where incoming changed column is empty string and value in storage is NULL"
+    );
 };
 $schema->storage->txn_rollback;
 
