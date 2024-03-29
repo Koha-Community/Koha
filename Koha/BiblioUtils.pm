@@ -140,6 +140,11 @@ sub get_all_biblios_iterator {
     my $rs = Koha::Biblios->search(
         $search_terms,
         $search_options );
+
+    if ( my $sql = $options{where} ) {
+        $rs = $rs->search( \[$sql] );
+    }
+
     my $next_func = sub {
         # Warn and skip bad records, otherwise we break the loop
         while (1) {

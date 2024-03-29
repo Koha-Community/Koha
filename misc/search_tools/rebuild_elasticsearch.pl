@@ -34,6 +34,7 @@ B<rebuild_elasticsearch.pl>
 [B<--desc>]
 [B<-bn|--bnumber>]
 [B<-ai|--authid>]
+[B<-w|--where SQL>]
 [B<-p|--processes>]
 [B<-v|--verbose>]
 [B<-h|--help>]
@@ -87,6 +88,10 @@ repeated.
 Only index the supplied authority id, mostly for testing purposes. May be
 repeated.
 
+=item B<-w|--where>
+
+Pass some additional SQL to limit the records to be indexed.
+
 =item B<-p|--processes>
 
 Number of processes to use for indexing. This can be used to do more indexing
@@ -128,7 +133,7 @@ my $verbose = 0;
 my $commit = 5000;
 my ($delete, $reset, $help, $man, $processes);
 my ($index_biblios, $index_authorities);
-my (@biblionumbers,@authids);
+my (@biblionumbers,@authids,$where);
 my $desc;
 
 $|=1; # flushes output
@@ -142,6 +147,7 @@ GetOptions(
     'desc'          => \$desc,
     'bn|bnumber=i'  => \@biblionumbers,
     'ai|authid=i'   => \@authids,
+    'w|where=s'     => \$where,
     'p|processes=i' => \$processes,
     'v|verbose+'    => \$verbose,
     'h|help'        => \$help,
@@ -195,6 +201,10 @@ if ($slice_count > 1) {
 
 if( $desc ){
     $iterator_options{desc} = 1;
+}
+
+if ($where) {
+    $iterator_options{where} = $where;
 }
 
 my $next;
