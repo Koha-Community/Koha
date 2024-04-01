@@ -570,7 +570,7 @@
                             [% IF ( Koha.Preference('AllowHoldDateInFuture') ) %]
                                 <li>
                                     <label for="from">Hold starts on date:</label>
-                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-date_to="expiration_date" class="flatpickr" data-flatpickr-futuredate="true" />
+                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-date_to="expiration_date" class="flatpickr" data-flatpickr-futureinclusive="true" />
                                 </li>
                             [% END %]
 
