@@ -3,7 +3,7 @@
 use Modern::Perl;
 
 $| = 1;
-use Test::More tests => 30;
+use Test::More tests => 31;
 use Test::Warn;
 
 BEGIN {
@@ -82,4 +82,12 @@ if ($@) {
     pass("Test should have failed on entry of 'Client' and it did. YAY!");
 }
 
-is( C4::Scrubber->new('note')->scrub('<span>Allow span</span>'), '<span>Allow span</span>' );
+my $scrub_text =
+    '<div><span><p><b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br><u>under</u><hr></p></span></div>';
+my $scrub_comment =
+    '<b>bold</b><i>ital</i><em>emphatic</em><big>embiggen</big><small>shrink</small><strong>strongbad</strong><br>under';
+is( C4::Scrubber->new('comment')->scrub($scrub_text), $scrub_comment, "Comment scrubber removes expected elements" );
+is(
+    C4::Scrubber->new('note')->scrub($scrub_text), $scrub_text,
+    "Note scrubber removes (additional) expected elements"
+);
