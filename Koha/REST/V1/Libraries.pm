@@ -200,4 +200,35 @@ sub list_desks {
     };
 }
 
+=head3 list_cash_registers
+
+Controller function that handles retrieving the library's cash registers
+
+=cut
+
+sub list_cash_registers {
+    my $c = shift->openapi->valid_input or return;
+
+    return $c->render( status => 404, openapi => { error => "Feature disabled" } )
+        unless C4::Context->preference('UseCashRegisters');
+
+    return try {
+        my $library = Koha::Libraries->find( $c->param('library_id') );
+
+        unless ($library) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Library not found" }
+            );
+        }
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api( $library->cash_registers )
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;

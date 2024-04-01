@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Mojo;
 use Test::Warn;
 
@@ -351,6 +351,51 @@ subtest 'list_desks() tests' => sub {
 
     my $res = $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/desks" )->status_is(200)
         ->json_is( '/0/desk_id' => $desk_1->id )->json_is( '/1/desk_id' => $desk_2->id )->tx->res->json;
+
+    is( scalar @{$res}, 2 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'list_cash_registers() tests' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/cash_registers" )->status_is(404)
+        ->json_is( '/error' => q{Feature disabled} );
+
+    my $non_existent_code = $library->branchcode;
+    $library->delete;
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $non_existent_code . "/cash_registers" )->status_is(404)
+        ->json_is( '/error' => 'Library not found' );
+
+    my $cash_register_1 =
+        $builder->build_object( { class => 'Koha::Cash::Registers', value => { branch => $library->id } } );
+    my $cash_register_2 =
+        $builder->build_object( { class => 'Koha::Cash::Registers', value => { branch => $library->id } } );
+
+    my $res =
+        $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode . "/cash_registers" )
+        ->status_is(200)->json_is( '/0/cash_register_id' => $cash_register_1->id )
+        ->json_is( '/1/cash_register_id' => $cash_register_2->id )->tx->res->json;
 
     is( scalar @{$res}, 2 );
 

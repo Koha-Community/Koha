@@ -1,0 +1,33 @@
+---
+type: object
+properties:
+  cash_register_id:
+    type: integer
+    description: Internal cash register identifier
+  name:
+    type: string
+    description: The cash register display name
+  library_id:
+    type: string
+    description: Internally assigned library identifier
+    maxLength: 10
+    minLength: 1
+  description:
+    type: string
+    description: A description
+  starting_float:
+    type:
+      - number
+      - "null"
+    description: The starting float this account register should be assigned
+  archived:
+    type: boolean
+    description: If this till is archived
+  branch_default:
+    type: boolean
+    description: If this till is the branch default
+additionalProperties: false
+required:
+  - cash_register_id
+  - name
+  - library_id
