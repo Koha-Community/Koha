@@ -348,6 +348,48 @@
     x-koha-authorization:
       permissions:
         catalogue: 1
+"/libraries/{library_id}/cash_registers":
+  get:
+    x-mojo-to: Libraries#list_cash_registers
+    operationId: listLibraryCashRegisters
+    tags:
+      - cash_registers
+    summary: List the library's cash registers
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    produces:
+      - application/json
+    responses:
+      200:
+        description: A list of desks for the library
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/cash_register"
+      404:
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: 1
 /public/libraries:
   get:
     x-mojo-to: Libraries#list

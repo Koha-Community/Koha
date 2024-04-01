@@ -22,6 +22,8 @@ definitions:
     $ref: ./definitions/booking.yaml
   bundle_link:
     $ref: ./definitions/bundle_link.yaml
+  cash_register:
+    $ref: ./definitions/cash_register.yaml
   cashup:
     $ref: ./definitions/cashup.yaml
   checkout:
@@ -419,6 +421,8 @@ paths:
     $ref: ./paths/libraries.yaml#/~1libraries
   "/libraries/{library_id}":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}"
+  "/libraries/{library_id}/cash_registers":
+    $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1cash_registers"
   "/libraries/{library_id}/desks":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1desks"
   "/oauth/login/{provider_code}/{interface}":
@@ -1047,6 +1051,9 @@ tags:
   - description: "Manage bibliographic records\n"
     name: biblios
     x-displayName: Biblios
+  - description: "Manage cash registers\n"
+    name: cash_registers
+    x-displayName: Cash registers
   - description: "Manage cash register cashups\n"
     name: cashups
     x-displayName: Cashups
