@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Database;
 use Koha::AdditionalContents;
@@ -158,6 +158,30 @@ subtest 'opac_info tests' => sub {
     $html01->delete;
     is( $library02->opac_info, undef, 'unknown library, default language (after removing html01)' );
     is( $library02->opac_info({ lang => 'de-DE' }), undef, 'unknown library, unknown language (after removing html01)' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'desks() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $rs = $library->desks;
+    is( ref($rs), 'Koha::Desks' );
+    is( $rs->count, 0, 'No desks' );
+
+    my $desk_1 = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
+    my $desk_2 = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
+
+    $rs = $library->desks;
+
+    is( $rs->count,    2 );
+    is( $rs->next->id, $desk_1->id );
+    is( $rs->next->id, $desk_2->id );
 
     $schema->storage->txn_rollback;
 };

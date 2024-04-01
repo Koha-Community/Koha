@@ -24,6 +24,7 @@ use C4::Context;
 
 use Koha::Caches;
 use Koha::Database;
+use Koha::Desks;
 use Koha::StockRotationStages;
 use Koha::SMTP::Servers;
 use Koha::Library::Hours;
@@ -268,6 +269,19 @@ sub cash_registers {
     my ( $self ) = @_;
     my $rs = $self->_result->cash_registers;
     return Koha::Cash::Registers->_new_from_dbic( $rs );
+}
+
+=head3 desks
+
+    my $desks = $library->desks;
+
+Returns Koha::Desks associated with this library.
+
+=cut
+
+sub desks {
+    my ($self) = @_;
+    return Koha::Desks->_new_from_dbic( scalar $self->_result->desks );
 }
 
 =head3 get_hold_libraries
