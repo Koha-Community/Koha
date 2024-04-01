@@ -3057,9 +3057,12 @@ sub UpdateTotalIssues {
         return;
     }
 
-    my $record = $biblio->metadata->record;
-    unless ($record) {
-        carp "UpdateTotalIssues could not get biblio record";
+    my $record;
+    eval { $record = $biblio->metadata->record };
+    if ($@) {
+        my $exception = $@;
+        $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+        warn "UpdateTotalIssues could not get bibliographic record";
         return;
     }
     my $biblioitem = $biblio->biblioitem;
