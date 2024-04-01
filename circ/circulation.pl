@@ -307,7 +307,9 @@ if ($patron) {
         $template->param( age_high => $patron->category->upperagelimit );
     }
 
-    unless ( Koha::Patron::Categories->search_with_library_limits( { 'me.categorycode' => $patron->categorycode } )->count ) {
+    unless (
+        Koha::Patron::Categories->search_with_library_limits( { 'me.categorycode' => $patron->categorycode } )->count )
+    {
         $template->param( limited_category => 1 );
     }
 }
