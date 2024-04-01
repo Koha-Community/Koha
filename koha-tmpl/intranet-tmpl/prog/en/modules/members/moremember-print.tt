@@ -121,6 +121,7 @@
                     <th>Placed on</th>
                     <th>Expires on</th>
                     <th>Pick up location</th>
+                    <th>Hold priority</th>
                 </tr>
             </thead>
             <tbody>
@@ -131,6 +132,7 @@
                         <td>[% reserve.reservedate | $KohaDates %]</td>
                         <td>[% reserve.expirationdate | $KohaDates %]</td>
                         <td>[% reserve.waiting_at | html %]</td>
+                        <td>[% reserve.priority | html %]</td>
                     </tr>
                 [% END %]
             </tbody>

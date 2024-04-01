@@ -118,6 +118,7 @@ sub build_reserve_data {
             reservedate    => $reserve->reservedate(),
             expirationdate => $reserve->expirationdate(),
             waiting_at     => $reserve->branch()->branchname(),
+            priority       => $reserve->priority,
         };
 
         push( @{$return}, $row );
