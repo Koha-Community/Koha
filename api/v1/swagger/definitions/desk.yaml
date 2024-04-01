@@ -1,0 +1,19 @@
+---
+type: object
+properties:
+  desk_id:
+    type: integer
+    description: Internal desk identifier
+  name:
+    type: string
+    description: The desk display name
+  library_id:
+    type: string
+    description: Internally assigned library identifier
+    maxLength: 10
+    minLength: 1
+additionalProperties: false
+required:
+  - desk_id
+  - name
+  - library_id

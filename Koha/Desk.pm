@@ -29,9 +29,23 @@ Koha::Desk - Koha Desk Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Desk object
+on the API.
 
 =cut
+
+sub to_api_mapping {
+    return {
+        branchcode => 'library_id',
+        desk_name  => 'name',
+    };
+}
+
+=head2 Internal methods
 
 =head3 _type
 
