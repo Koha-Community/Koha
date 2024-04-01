@@ -138,7 +138,8 @@ $template->param(
     csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),
 );
 
-unless ( Koha::Patron::Categories->search_with_library_limits( { 'me.categorycode' => $patron->categorycode } )->count ) {
+unless ( Koha::Patron::Categories->search_with_library_limits( { 'me.categorycode' => $patron->categorycode } )->count )
+{
     $template->param( limited_category => 1 );
 }
 
