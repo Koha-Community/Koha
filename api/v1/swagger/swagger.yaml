@@ -38,6 +38,8 @@ definitions:
     $ref: ./definitions/credit.yaml
   debit:
     $ref: ./definitions/debit.yaml
+  desk:
+    $ref: ./definitions/desk.yaml
   edifact_file:
     $ref: ./definitions/edifact_file.yaml
   erm_config:
@@ -417,6 +419,8 @@ paths:
     $ref: ./paths/libraries.yaml#/~1libraries
   "/libraries/{library_id}":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}"
+  "/libraries/{library_id}/desks":
+    $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1desks"
   "/oauth/login/{provider_code}/{interface}":
     $ref: ./paths/oauth.yaml#/~1oauth~1login~1{provider_code}~1{interface}
   /oauth/token:
@@ -1058,6 +1062,9 @@ tags:
   - description: "Manage patron clubs\n"
     name: clubs
     x-displayName: Clubs
+  - description: "Manage circulation desks\n"
+    name: desks
+    x-displayName: Circulation desks
   - description: "Manage ERM agreements\n"
     name: erm_agreements
     x-displayName: ERM agreements

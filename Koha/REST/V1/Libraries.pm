@@ -169,4 +169,35 @@ sub delete {
     };
 }
 
+=head3 list_desks
+
+Controller function that handles retrieving the library's desks
+
+=cut
+
+sub list_desks {
+    my $c = shift->openapi->valid_input or return;
+
+    return $c->render( status => 404, openapi => { error => "Feature disabled" } )
+        unless C4::Context->preference('UseCirculationDesks');
+
+    return try {
+        my $library = Koha::Libraries->find( $c->param('library_id') );
+
+        unless ($library) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Library not found" }
+            );
+        }
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api( $library->desks )
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
