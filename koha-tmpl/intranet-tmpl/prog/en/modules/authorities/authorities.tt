@@ -419,12 +419,12 @@
 </style>
 </head>
 <body id="auth_authorities" class="auth">
-
+    [% WRAPPER 'header.inc' %]
+        [% INCLUDE 'authorities-search.inc' %]
+    [% END %]
     <div id="loading">
         <div>Loading, please wait...</div>
     </div>
-
-    [% INCLUDE 'header.inc' %]
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
