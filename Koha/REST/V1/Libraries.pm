@@ -73,10 +73,9 @@ sub get {
 
         return $c->render(
             status  => 200,
-            openapi => $library->to_api
+            openapi => $c->objects->to_api($library),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
