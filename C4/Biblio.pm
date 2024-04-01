@@ -3042,19 +3042,21 @@ sub UpdateTotalIssues {
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
         warn $exception;
         warn "UpdateTotalIssues could not get bibliographic record for biblionumber $biblionumber";
-        return;
+        return -1;
     }
     my $biblioitem = $biblio->biblioitem;
     my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField( 'biblioitems.totalissues' );
     unless ($totalissuestag) {
-        return 1; # There is nothing to do
+        return 0; # There is nothing to do
     }
 
+    my $current_issues = $biblioitem->totalissues // 0;
     if (defined $value) {
         $totalissues = $value;
     } else {
         $totalissues = $biblioitem->totalissues + $increase;
     }
+    return 0 if $current_issues == $totalissues;    # No need to update if no changes
 
      my $field = $record->field($totalissuestag);
      if (defined $field) {
