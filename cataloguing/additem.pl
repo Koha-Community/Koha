@@ -54,7 +54,7 @@ use URI::Escape qw( uri_escape_utf8 );
 our $dbh = C4::Context->dbh;
 
 sub add_item_to_item_group {
-    my ( $biblionumber, $itemnumber, $item_group, $item_group_description ) = @_;
+    my ( $biblionumber, $itemnumber, $item_group, $item_group_description, $display_order ) = @_;
 
     return unless $item_group;
 
@@ -64,6 +64,7 @@ sub add_item_to_item_group {
             {
                 biblio_id   => $biblionumber,
                 description => $item_group_description,
+                display_order => $display_order,
             }
         )->store();
 
@@ -136,6 +137,7 @@ my $fa_stickyduedate       = $input->param('stickyduedate');
 my $fa_duedatespec         = $input->param('duedatespec');
 my $item_group             = $input->param('item_group');
 my $item_group_description = $input->param('item_group_description');
+my $display_order          = $input->param('item_group_display_order');
 
 our $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -332,7 +334,7 @@ if ($op eq "cud-additem") {
         }
         unless ( @errors ) {
             $item->store->discard_changes;
-            add_item_to_item_group( $item->biblionumber, $item->itemnumber, $item_group, $item_group_description );
+            add_item_to_item_group( $item->biblionumber, $item->itemnumber, $item_group, $item_group_description, $display_order );
 
             # This is a bit tricky : if there is a cookie for the last created item and
             # we just added an item, the cookie value is not correct yet (it will be updated
@@ -445,7 +447,7 @@ if ($op eq "cud-additem") {
                     $current_item = $current_item->unblessed;
                     add_item_to_item_group(
                         $item->biblionumber, $item->itemnumber, $item_group,
-                        $item_group_description
+                        $item_group_description, $display_order
                     );
 
 # We count the item only if it was really added
