@@ -35,6 +35,8 @@
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
                                     <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
+                                [% ELSIF pagename == 'detail' AND ( tablename == 'holdings_table' || tablename == 'otherholdings_table' ) %]
+                                    <div class="alert">Please note that if a field is not used on the first page of items in the holdings table, it will be automatically hidden from display and can be made visible on demand. You can still use the column configuration to permanently hide columns from the holdings table.</div>
                                 [% END %]
                                 <table>
                                     <caption>
