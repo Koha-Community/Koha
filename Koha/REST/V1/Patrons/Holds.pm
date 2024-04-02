@@ -80,10 +80,7 @@ sub delete_public {
 
         if ( $hold->is_cancelable_from_opac ) {
             $hold->cancel;
-            return $c->render(
-                status  => 204,
-                openapi => q{},
-            );
+            return $c->render_resource_deleted;
         } elsif ( $hold->is_waiting and $hold->cancellation_requestable_from_opac ) {
             $hold->add_cancellation_request;
             return $c->render(

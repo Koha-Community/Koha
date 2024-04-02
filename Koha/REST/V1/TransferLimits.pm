@@ -109,7 +109,7 @@ sub delete {
 
     return try {
         $transfer_limit->delete;
-        return $c->render( status => 204, openapi => '');
+        return $c->render_resource_deleted;
     }
     catch {
         $c->unhandled_exception($_);
@@ -217,7 +217,7 @@ sub batch_delete {
 
         Koha::Item::Transfer::Limits->search($search_params)->delete;
 
-        return $c->render( status => 204, openapi => q{} );
+        return $c->render_resource_deleted;
     }
     catch {
         $c->unhandled_exception($_);

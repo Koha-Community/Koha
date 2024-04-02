@@ -148,7 +148,7 @@ sub delete {
 
     return try {
         $status->delete_and_log;
-        return $c->render( status => 204, openapi => '' );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

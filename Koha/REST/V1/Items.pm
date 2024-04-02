@@ -158,11 +158,7 @@ sub delete {
         }
 
         $item->safe_delete;
-
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     }
     catch {
         $c->unhandled_exception($_);
@@ -421,10 +417,7 @@ sub remove_from_bundle {
 
     return try {
         $bundle_item->remove_from_bundle;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' ) {
             return $c->render(

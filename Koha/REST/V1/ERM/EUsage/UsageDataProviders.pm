@@ -263,10 +263,7 @@ sub delete {
 
     return try {
         $usage_data_provider->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

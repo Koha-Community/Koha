@@ -330,10 +330,7 @@ sub delete {
 
         $hold->cancel;
 
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     }
     catch {
         $c->unhandled_exception($_);
@@ -397,7 +394,7 @@ sub resume {
 
     return try {
         $hold->resume;
-        return $c->render( status => 204, openapi => {} );
+        return $c->render_resource_deleted;
     }
     catch {
         $c->unhandled_exception($_);

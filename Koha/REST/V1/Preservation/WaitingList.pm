@@ -145,10 +145,7 @@ sub remove_item {
 
         $item->notforloan(0)->store;
 
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

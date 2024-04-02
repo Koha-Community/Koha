@@ -140,10 +140,7 @@ sub delete {
 
     return try {
         $booking->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

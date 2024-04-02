@@ -414,10 +414,7 @@ sub delete {
                 $patron->move_to_deleted;
                 $patron->delete;
 
-                return $c->render(
-                    status  => 204,
-                    openapi => q{}
-                );
+                return $c->render_resource_deleted;
             }
         );
     } catch {
