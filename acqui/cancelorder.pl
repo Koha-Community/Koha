@@ -45,13 +45,13 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     flagsrequired   => { 'acquisition' => 'order_manage' },
 } );
 
-my $op = $input->param('op') || q{};
-my $ordernumber = $input->param('ordernumber');
-my $biblionumber = $input->param('biblionumber');
-my $order  = Koha::Acquisition::Orders->find($ordernumber);
-my $basketno = $order->basketno;
-my $basket = Koha::Acquisition::Baskets->find({ basketno => $basketno }, { prefetch => 'booksellerid' });
-my $referrer = $input->param('referrer') || $input->referer;
+my $op            = $input->param('op') || q{};
+my $ordernumber   = $input->param('ordernumber');
+my $biblionumber  = $input->param('biblionumber');
+my $order         = Koha::Acquisition::Orders->find($ordernumber);
+my $basketno      = $order->basketno;
+my $basket        = Koha::Acquisition::Baskets->find( { basketno => $basketno }, { prefetch => 'booksellerid' } );
+my $referrer      = $input->param('referrer') || $input->referer;
 my $delete_biblio = $input->param('del_biblio') ? 1 : 0;
 
 if( $op eq "cud-confirmcancel" ) {
