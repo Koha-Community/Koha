@@ -89,7 +89,7 @@ sub get {
 
         return $c->render(
             status  => 200,
-            openapi => $job->to_api
+            openapi => $c->objects->to_api($job),
         );
     }
     catch {

@@ -115,7 +115,7 @@ sub add {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $provider->identity_provider_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $provider->to_api
+                    openapi => $c->objects->to_api($provider),
                 );
             }
         );
@@ -178,7 +178,7 @@ sub update {
 
                 return $c->render(
                     status  => 200,
-                    openapi => $provider->to_api
+                    openapi => $c->objects->to_api($provider),
                 );
             }
         );

@@ -70,11 +70,9 @@ sub get {
             );
         }
 
-        my $embed = $c->stash('koha.embed');
-
         return $c->render(
             status  => 200,
-            openapi => $smtp_server->to_api({ embed => $embed })
+            openapi => $c->objects->to_api($smtp_server),
         );
     }
     catch {
@@ -100,7 +98,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $smtp_server->to_api
+            openapi => $c->objects->to_api($smtp_server),
         );
     }
     catch {
@@ -144,7 +142,7 @@ sub update {
 
         return $c->render(
             status  => 200,
-            openapi => $smtp_server->to_api
+            openapi => $c->objects->to_api($smtp_server),
         );
     }
     catch {

@@ -70,7 +70,7 @@ sub add {
         my $profile = Koha::ImportBatchProfile->new_from_api( $body )->store;
         return $c->render(
             status  => 201,
-            openapi => $profile->to_api
+            openapi => $c->objects->to_api($profile),
         );
     }
     catch {
@@ -100,7 +100,7 @@ sub edit {
 
         return $c->render(
             status  => 200,
-            openapi => $profile->to_api
+            openapi => $c->objects->to_api($profile),
         );
     }
     catch {

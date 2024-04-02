@@ -100,7 +100,7 @@ sub add {
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $package->to_api
+                    openapi => $c->objects->to_api($package),
                 );
             }
         );
@@ -179,7 +179,7 @@ sub update {
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
                 return $c->render(
                     status  => 200,
-                    openapi => $package->to_api
+                    openapi => $c->objects->to_api($package),
                 );
             }
         );

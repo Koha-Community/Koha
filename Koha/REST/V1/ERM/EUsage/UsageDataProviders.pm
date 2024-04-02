@@ -161,7 +161,7 @@ sub add {
                     $c->req->url->to_string . '/' . $usage_data_provider->erm_usage_data_provider_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $usage_data_provider->to_api
+                    openapi => $c->objects->to_api($usage_data_provider),
                 );
             }
         );
@@ -227,7 +227,7 @@ sub update {
                     $c->req->url->to_string . '/' . $usage_data_provider->erm_usage_data_provider_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $usage_data_provider->to_api
+                    openapi => $c->objects->to_api($usage_data_provider),
                 );
             }
         );

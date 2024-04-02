@@ -96,7 +96,7 @@ sub add {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $processing->processing_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $processing->to_api
+                    openapi => $c->objects->to_api($processing),
                 );
             }
         );
@@ -165,7 +165,7 @@ sub update {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $processing->processing_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $processing->to_api
+                    openapi => $c->objects->to_api($processing),
                 );
             }
         );

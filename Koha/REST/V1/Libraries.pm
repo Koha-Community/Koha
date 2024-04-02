@@ -97,7 +97,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $library->to_api
+            openapi => $c->objects->to_api($library),
         );
     }
     catch {
@@ -136,7 +136,7 @@ sub update {
         $library->store();
         return $c->render(
             status  => 200,
-            openapi => $library->to_api
+            openapi => $c->objects->to_api($library),
         );
     }
     catch {

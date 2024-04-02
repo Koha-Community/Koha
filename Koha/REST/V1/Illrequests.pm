@@ -98,7 +98,7 @@ sub add {
                 $c->res->headers->location($c->req->url->to_string . '/' . $new_req->illrequest_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $new_req->to_api
+                    openapi => $c->objects->to_api($new_req),
                 );
             }
         );

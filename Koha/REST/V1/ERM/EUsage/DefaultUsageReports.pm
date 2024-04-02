@@ -69,7 +69,7 @@ sub add {
                     $c->req->url->to_string . '/' . $default_report->erm_default_usage_report_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $default_report->to_api
+                    openapi => $c->objects->to_api($default_report),
                 );
             }
         );

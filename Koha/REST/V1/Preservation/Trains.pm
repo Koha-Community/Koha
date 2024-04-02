@@ -96,7 +96,7 @@ sub add {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $train->train_id );
                 return $c->render(
                     status  => 201,
-                    openapi => $train->to_api
+                    openapi => $c->objects->to_api($train),
                 );
             }
         );
@@ -162,7 +162,7 @@ sub update {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $train->train_id );
                 return $c->render(
                     status  => 200,
-                    openapi => $train->to_api
+                    openapi => $c->objects->to_api($train),
                 );
             }
         );

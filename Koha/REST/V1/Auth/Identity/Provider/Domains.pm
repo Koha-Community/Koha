@@ -129,7 +129,7 @@ sub add {
                 $c->res->headers->location( $c->req->url->to_string . '/' . $domain->id );
                 return $c->render(
                     status  => 201,
-                    openapi => $domain->to_api
+                    openapi => $c->objects->to_api($domain),
                 );
             }
         );
@@ -184,7 +184,7 @@ sub update {
 
                 return $c->render(
                     status  => 200,
-                    openapi => $domain->to_api
+                    openapi => $c->objects->to_api($domain),
                 );
             }
         );

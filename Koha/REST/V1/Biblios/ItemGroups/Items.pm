@@ -71,11 +71,9 @@ sub add {
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $item_id );
 
-        my $embed = $c->stash('koha.embed');
-
         return $c->render(
             status  => 201,
-            openapi => $item_group->to_api({ embed => $embed })
+            openapi => $c->objects->to_api($item_group),
         );
     }
     catch {

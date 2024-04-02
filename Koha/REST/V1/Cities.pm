@@ -58,7 +58,7 @@ sub get {
                             openapi => { error => "City not found" } );
         }
 
-        return $c->render( status => 200, openapi => $city->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($city), );
     }
     catch {
         $c->unhandled_exception($_);
@@ -78,7 +78,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $city->cityid );
         return $c->render(
             status  => 201,
-            openapi => $city->to_api
+            openapi => $c->objects->to_api($city),
         );
     }
     catch {
@@ -103,7 +103,7 @@ sub update {
     return try {
         $city->set_from_api( $c->req->json );
         $city->store();
-        return $c->render( status => 200, openapi => $city->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($city), );
     }
     catch {
         $c->unhandled_exception($_);

@@ -117,7 +117,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $club_hold->to_api
+            openapi => $c->objects->to_api($club_hold),
         );
     }
     catch {

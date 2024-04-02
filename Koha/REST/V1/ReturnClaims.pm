@@ -69,7 +69,7 @@ sub claim_returned {
         $c->res->headers->location($c->req->url->to_string . '/' . $claim->id );
         return $c->render(
             status  => 201,
-            openapi => $claim->to_api
+            openapi => $c->objects->to_api($claim),
         );
     }
     catch {
@@ -128,7 +128,7 @@ sub update_notes {
 
         return $c->render(
             status  => 200,
-            openapi => $claim->to_api
+            openapi => $c->objects->to_api($claim),
         );
     }
     catch {
@@ -174,7 +174,7 @@ sub resolve_claim {
 
         return $c->render(
             status  => 200,
-            openapi => $claim->to_api
+            openapi => $c->objects->to_api($claim),
         );
     }
     catch {
