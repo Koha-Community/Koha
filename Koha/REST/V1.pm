@@ -150,11 +150,12 @@ sub startup {
         $self->app->log->warn( "Warning: Failed to fetch oauth configuration: " . $_ );
     };
 
-    $self->plugin( 'Koha::REST::Plugin::Pagination' );
-    $self->plugin( 'Koha::REST::Plugin::Query' );
-    $self->plugin( 'Koha::REST::Plugin::Objects' );
-    $self->plugin( 'Koha::REST::Plugin::Exceptions' );
-    $self->plugin( 'Koha::REST::Plugin::Auth::IdP' );
+    $self->plugin('Koha::REST::Plugin::Pagination');
+    $self->plugin('Koha::REST::Plugin::Query');
+    $self->plugin('Koha::REST::Plugin::Objects');
+    $self->plugin('Koha::REST::Plugin::Exceptions');
+    $self->plugin('Koha::REST::Plugin::Responses');
+    $self->plugin('Koha::REST::Plugin::Auth::IdP');
     $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
 }
 
