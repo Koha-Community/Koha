@@ -321,21 +321,6 @@ A recall for this item was found, and the item needs to be transferred to the re
 
 =cut
 
-my $query = CGI->new;
-
-my $stickyduedate      = $query->param('stickyduedate');
-my $duedatespec        = $query->param('duedatespec');
-my $restoreduedatespec = $query->param('restoreduedatespec') || $duedatespec;
-if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {
-    undef $restoreduedatespec;
-}
-my $issueconfirmed = $query->param('issueconfirmed');
-my $cancelreserve  = $query->param('cancelreserve');
-my $cancel_recall  = $query->param('cancel_recall');
-my $recall_id      = $query->param('recall_id');
-my $debt_confirmed = $query->param('debt_confirmed') || 0;     # Don't show the debt error dialog twice
-my $charges        = $query->param('charges')        || q{};
-
 sub transferbook {
     my $params   = shift;
     my $tbr      = $params->{to_branch};
@@ -815,6 +800,7 @@ sub CanBookBeIssued {
 
     my $onsite_checkout     = $params->{onsite_checkout}     || 0;
     my $override_high_holds = $params->{override_high_holds} || 0;
+    my $issueconfirmed      = $params->{issueconfirmed}      || 0;
 
     my $item_object = $params->{item};
     if ( !$item_object and $barcode ) {
@@ -840,7 +826,7 @@ sub CanBookBeIssued {
 
     my $now = dt_from_string();
     my $message;
-    my @message;
+    my @message_log;
 
     $duedate ||= CalcDateDue( $now, $effective_itemtype, $circ_library->branchcode, $patron );
 
@@ -852,7 +838,7 @@ sub CanBookBeIssued {
             } else {
                 $message = "sticky due date is invalid or due date in the past";
             }
-            push( @message, "sticky due date is invalid or due date in the past" );
+            push( @message_log, "sticky due date is invalid or due date in the past" );
         }
 
     }
@@ -906,7 +892,7 @@ sub CanBookBeIssued {
             } else {
                 $message = "borrower is restricted";
             }
-            push( @message, "borrower is restricted" );
+            push( @message_log, "borrower is restricted" );
         }
     }
 
@@ -986,7 +972,7 @@ sub CanBookBeIssued {
                 } else {
                     $message = "borrower had amend";
                 }
-                push( @message, "borrower had amend" );
+                push( @message_log, "borrower had amend" );
             }
         } elsif ( $patron_borrowing_status->{noissuescharge}->{overlimit} && !$allowfineoverride ) {
             $issuingimpossible{DEBT} = $patron_borrowing_status->{noissuescharge}->{charge};
@@ -998,7 +984,7 @@ sub CanBookBeIssued {
                 } else {
                     $message = "borrower had amend";
                 }
-                push( @message, "borrower had amend" );
+                push( @message_log, "borrower had amend" );
             }
         }
     }
@@ -1086,7 +1072,7 @@ sub CanBookBeIssued {
                     } else {
                         $message = "item is checked out for someone else";
                     }
-                    push( @message, "item is checked out for someone else" );
+                    push( @message_log, "item is checked out for someone else" );
                 }
             }
         }
@@ -1121,7 +1107,7 @@ sub CanBookBeIssued {
                 } else {
                     $message = "too many checkout";
                 }
-                push( @message, "too many checkout" );
+                push( @message_log, "too many checkout" );
             }
         } else {
             $issuingimpossible{TOO_MANY}                  = $toomany->{reason};
@@ -1161,7 +1147,7 @@ sub CanBookBeIssued {
                 } else {
                     $message = "item not for loan";
                 }
-                push( @message, "item not for loan" );
+                push( @message_log, "item not for loan" );
             }
         }
     } else {
@@ -1214,7 +1200,7 @@ sub CanBookBeIssued {
             } else {
                 $message = "item lost";
             }
-            push( @message, "item lost" );
+            push( @message_log, "item lost" );
         }
     }
     if ( C4::Context->preference("IndependentBranches") ) {
@@ -1324,7 +1310,10 @@ sub CanBookBeIssued {
                         } else {
                             $message = "item is on reserve and waiting, but has been reserved by some other patron.";
                         }
-                        push( @message, "item is on reserve and waiting, but has been reserved by some other patron" );
+                        push(
+                            @message_log,
+                            "item is on reserve and waiting, but has been reserved by some other patron"
+                        );
                     }
                 } elsif ( $restype eq "Reserved" ) {
 
@@ -1344,7 +1333,7 @@ sub CanBookBeIssued {
                         } else {
                             $message = "item is on reserve for someone else";
                         }
-                        push( @message, "item is on reserve for someone else" );
+                        push( @message_log, "item is on reserve for someone else" );
                     }
                 } elsif ( $restype eq "Transferred" ) {
 
@@ -1364,7 +1353,7 @@ sub CanBookBeIssued {
                         } else {
                             $message = "item is determined hold being transferred for someone else";
                         }
-                        push( @message, "item is determined hold being transferred for someone else" );
+                        push( @message_log, "item is determined hold being transferred for someone else" );
                     }
                 } elsif ( $restype eq "Processing" ) {
 
@@ -1384,7 +1373,7 @@ sub CanBookBeIssued {
                         } else {
                             $message = "item is determined hold being processed for someone else";
                         }
-                        push( @message, "item is determined hold being processed for someone else" );
+                        push( @message_log, "item is determined hold being processed for someone else" );
                     }
                 }
             }
@@ -1434,7 +1423,7 @@ sub CanBookBeIssued {
             } else {
                 $message = "age restriction";
             }
-            push( @message, "age restriction" );
+            push( @message_log, "age restriction" );
         } else {
             $issuingimpossible{AGE_RESTRICTION} = "$agerestriction";
         }
@@ -1504,7 +1493,7 @@ sub CanBookBeIssued {
 
         my $infos = (
             {
-                message        => \@message,
+                message        => \@message_log,
                 borrowernumber => $borrower->borrowernumber,
                 barcode        => $barcode,
                 manager_id     => $user,
@@ -1522,7 +1511,7 @@ sub CanBookBeIssued {
         ) if C4::Context->preference("IssueLog");
     }
 
-    return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages, );
+    return ( \%issuingimpossible, \%needsconfirmation, \%alerts, \%messages, \@message_log );
 }
 
 =head2 CanBookBeReturned
