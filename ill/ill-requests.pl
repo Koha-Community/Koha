@@ -216,6 +216,7 @@ if ( $backends_available ) {
         handle_commit_maybe($backend_result, $request);
 
     } elsif ( $op eq 'cud-edit_action' ) {
+        $op =~ s/^cud-//;
         # Handle edits to the Illrequest object.
         # (not the Illrequestattributes)
         # We simulate the API for backend requests for uniformity.
@@ -225,7 +226,6 @@ if ( $backends_available ) {
             order_by => { -asc => 'name' }
         });
         if ( !$params->{stage} ) {
-            $op =~ s/^cud-//;
             my $backend_result = {
                 error   => 0,
                 status  => '',
