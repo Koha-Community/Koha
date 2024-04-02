@@ -64,7 +64,7 @@ sub get {
                            openapi => { error => "Search filter not found" } );
     }
 
-    return $c->render( status => 200, openapi => $filter->to_api );
+    return $c->render( status => 200, openapi => $c->objects->to_api($filter), );
 }
 
 =head3 add
@@ -82,7 +82,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $filter->id );
         return $c->render(
             status  => 201,
-            openapi => $filter->to_api
+            openapi => $c->objects->to_api($filter),
         );
     }
     catch {
@@ -115,7 +115,7 @@ sub update {
     return try {
         $filter->set_from_api( $c->req->json );
         $filter->store->discard_changes;
-        return $c->render( status => 200, openapi => $filter->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($filter), );
     }
     catch {
         $c->unhandled_exception($_);

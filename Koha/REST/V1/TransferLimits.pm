@@ -76,7 +76,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $transfer_limit->to_api
+            openapi => $c->objects->to_api($transfer_limit),
         );
     }
     catch {
@@ -187,7 +187,7 @@ sub batch_add {
 
                 my $transfer_limit = Koha::Item::Transfer::Limit->new_from_api($limit_params);
                 $transfer_limit->store;
-                push( @results, $transfer_limit->to_api() );
+                push( @results, $c->objects->to_api($transfer_limit) );
             }
         }
 

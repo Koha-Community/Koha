@@ -55,7 +55,7 @@ sub get {
         if ( $c->req->headers->accept =~ m/application\/json/ ) {
             return $c->render(
                 status => 200,
-                json   => $authority->to_api
+                json   => $c->objects->to_api($authority),
             );
         }
         else {
@@ -269,7 +269,7 @@ sub list {
         if ( $c->req->headers->accept =~ m/application\/json(;.*)?$/ ) {
             return $c->render(
                 status => 200,
-                json   => $authorities->to_api
+                json   => $c->objects->to_api($authorities),
             );
         }
         elsif (

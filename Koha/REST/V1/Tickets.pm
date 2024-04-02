@@ -63,7 +63,7 @@ sub get {
             );
         }
 
-        return $c->render( status => 200, openapi => $ticket->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($ticket), );
     }
     catch {
         $c->unhandled_exception($_);
@@ -92,7 +92,7 @@ sub add {
             $c->req->url->to_string . '/' . $ticket->id );
         return $c->render(
             status  => 201,
-            openapi => $ticket->to_api
+            openapi => $c->objects->to_api($ticket),
         );
     }
     catch {
@@ -119,7 +119,7 @@ sub update {
     return try {
         $ticket->set_from_api( $c->req->json );
         $ticket->store();
-        return $c->render( status => 200, openapi => $ticket->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($ticket), );
     }
     catch {
         $c->unhandled_exception($_);
@@ -249,7 +249,7 @@ sub add_update {
             $c->req->url->to_string . '/' . $update->id );
         return $c->render(
             status  => 201,
-            openapi => $update->to_api
+            openapi => $c->objects->to_api($update),
         );
     }
     catch {

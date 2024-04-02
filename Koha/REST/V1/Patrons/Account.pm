@@ -62,11 +62,11 @@ sub get {
                 balance            => $account->balance,
                 outstanding_debits => {
                     total => $debits->total_outstanding,
-                    lines => $debits->to_api
+                    lines => $c->objects->to_api($debits),
                 },
                 outstanding_credits => {
                     total => $credits->total_outstanding,
-                    lines => $credits->to_api
+                    lines => $c->objects->to_api($credits),
                 }
             }
         );
@@ -182,7 +182,7 @@ sub add_credit {
 
         return $c->render(
             status  => 201,
-            openapi => $credit->to_api
+            openapi => $c->objects->to_api($credit),
         );
     }
     catch {
@@ -255,7 +255,7 @@ sub add_debit {
 
         return $c->render(
             status  => 201,
-            openapi => $debit->to_api
+            openapi => $c->objects->to_api($debit),
         );
     }
     catch {

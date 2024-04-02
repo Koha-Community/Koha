@@ -46,15 +46,11 @@ sub list {
     my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
     return try {
-#my $item_groups_set = Koha::Biblio::ItemGroups->new;
-        my $item_groups_set = $biblio->item_groups;
-        my $item_groups     = $c->objects->search( $item_groups_set );
         return $c->render(
             status  => 200,
-            openapi => $item_groups
+            openapi => $c->objects->search( $biblio->item_groups ),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -122,7 +118,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $item_group->to_api
+            openapi => $c->objects->to_api($item_group),
         );
     }
     catch {
@@ -172,7 +168,7 @@ sub update {
 
         return $c->render(
             status  => 200,
-            openapi => $item_group->to_api
+            openapi => $c->objects->to_api($item_group),
         );
     }
     catch {

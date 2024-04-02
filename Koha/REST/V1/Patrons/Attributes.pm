@@ -99,7 +99,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $attribute->id );
         return $c->render(
             status  => 201,
-            openapi => $attribute->to_api
+            openapi => $c->objects->to_api($attribute),
         );
     }
     catch {
@@ -175,7 +175,7 @@ sub overwrite {
 
         return $c->render(
             status  => 200,
-            openapi => $attributes->to_api
+            openapi => $c->objects->to_api($attributes),
         );
     }
     catch {
@@ -256,7 +256,7 @@ sub update {
 
         return $c->render(
             status  => 200,
-            openapi => $attribute->to_api
+            openapi => $c->objects->to_api($attribute),
         );
     }
     catch {

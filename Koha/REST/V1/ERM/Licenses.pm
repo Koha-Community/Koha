@@ -99,7 +99,7 @@ sub add {
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $license->to_api
+                    openapi => $c->objects->to_api($license),
                 );
             }
         );
@@ -181,7 +181,7 @@ sub update {
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
                 return $c->render(
                     status  => 200,
-                    openapi => $license->to_api
+                    openapi => $c->objects->to_api($license),
                 );
             }
         );

@@ -84,7 +84,7 @@ sub get {
         });
     }
 
-    return $c->render( status => 200, openapi => $macro->to_api );
+    return $c->render( status => 200, openapi => $c->objects->to_api($macro) );
 }
 
 =head3 get_shared
@@ -108,7 +108,7 @@ sub get_shared {
             error => "This macro is not shared, you must access it via advanced_editor/macros"
         });
     }
-    return $c->render( status => 200, openapi => $macro->to_api );
+    return $c->render( status => 200, openapi => $c->objects->to_api($macro) );
 }
 
 =head3 add
@@ -133,7 +133,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
-            openapi => $macro->to_api
+            openapi => $c->objects->to_api($macro),
         );
     }
     catch {
@@ -162,7 +162,7 @@ sub add_shared {
         $c->res->headers->location( $c->req->url->to_string . '/' . $macro->id );
         return $c->render(
             status  => 201,
-            openapi => $macro->to_api
+            openapi => $c->objects->to_api($macro),
         );
     }
     catch {
@@ -202,7 +202,7 @@ sub update {
     return try {
         $macro->set_from_api( $body );
         $macro->store->discard_changes;
-        return $c->render( status => 200, openapi => $macro->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($macro), );
     }
     catch {
         $c->unhandled_exception($_);
@@ -235,7 +235,7 @@ sub update_shared {
     return try {
         $macro->set_from_api( $body );
         $macro->store->discard_changes;
-        return $c->render( status => 200, openapi => $macro->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($macro), );
     }
     catch {
         $c->unhandled_exception($_);

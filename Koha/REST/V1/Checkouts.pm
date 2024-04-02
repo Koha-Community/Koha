@@ -93,7 +93,7 @@ sub get {
     return try {
         return $c->render(
             status  => 200,
-            openapi => $checkout->to_api
+            openapi => $c->objects->to_api($checkout),
         );
     }
     catch {
@@ -269,7 +269,7 @@ sub add {
                 $c->req->url->to_string . '/' . $checkout->id );
             return $c->render(
                 status  => 201,
-                openapi => $checkout->to_api
+                openapi => $c->objects->to_api($checkout),
             );
         }
         else {
@@ -363,7 +363,7 @@ sub renew {
         $c->res->headers->location( $c->req->url->to_string );
         return $c->render(
             status  => 201,
-            openapi => $checkout->to_api
+            openapi => $c->objects->to_api($checkout),
         );
     }
     catch {

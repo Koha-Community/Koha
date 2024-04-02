@@ -78,10 +78,9 @@ sub get {
             );
         }
 
-        my $embed = $c->stash('koha.embed');
         return $c->render(
             status  => 200,
-            openapi => $cashup->to_api( { embed => $embed } )
+            openapi => $c->objects->to_api($cashup),
         );
     }
     catch {

@@ -112,7 +112,7 @@ sub add {
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(
                     status  => 201,
-                    openapi => $agreement->to_api
+                    openapi => $c->objects->to_api($agreement),
                 );
             }
         );
@@ -200,7 +200,7 @@ sub update {
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(
                     status  => 200,
-                    openapi => $agreement->to_api
+                    openapi => $c->objects->to_api($agreement),
                 );
             }
         );

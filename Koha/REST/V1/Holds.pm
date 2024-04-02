@@ -213,7 +213,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $hold->to_api
+            openapi => $c->objects->to_api($hold),
         );
     }
     catch {
@@ -291,7 +291,7 @@ sub edit {
 
         return $c->render(
             status  => 200,
-            openapi => $hold->to_api
+            openapi => $c->objects->to_api($hold),
         );
     }
     catch {

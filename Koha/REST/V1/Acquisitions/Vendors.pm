@@ -73,7 +73,7 @@ sub get {
     return try {
         return $c->render(
             status  => 200,
-            openapi => $vendor->to_api
+            openapi => $c->objects->to_api($vendor),
         );
     }
     catch {
@@ -97,7 +97,7 @@ sub add {
         $c->res->headers->location($c->req->url->to_string . '/' . $vendor->id );
         return $c->render(
             status  => 201,
-            openapi => $vendor->to_api
+            openapi => $c->objects->to_api($vendor),
         );
     }
     catch {
@@ -122,7 +122,7 @@ sub update {
         $vendor->store();
         return $c->render(
             status  => 200,
-            openapi => $vendor->to_api
+            openapi => $c->objects->to_api($vendor),
         );
     }
     catch {

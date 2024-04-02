@@ -60,7 +60,7 @@ sub get {
             );
         }
 
-        return $c->render( status => 200, openapi => $quote->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($quote), );
     }
     catch {
         $c->unhandled_exception($_);
@@ -80,7 +80,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $quote->id );
         return $c->render(
             status  => 201,
-            openapi => $quote->to_api
+            openapi => $c->objects->to_api($quote),
         );
     }
     catch {
@@ -105,7 +105,7 @@ sub update {
     return try {
         $quote->set_from_api( $c->req->json );
         $quote->store();
-        return $c->render( status => 200, openapi => $quote->to_api );
+        return $c->render( status => 200, openapi => $c->objects->to_api($quote), );
     }
     catch {
         $c->unhandled_exception($_);

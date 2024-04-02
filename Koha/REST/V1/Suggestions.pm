@@ -149,7 +149,7 @@ sub add {
 
         return $c->render(
             status  => 201,
-            openapi => $suggestion->to_api
+            openapi => $c->objects->to_api($suggestion),
         );
     }
     catch {
@@ -182,7 +182,7 @@ sub update {
 
         return $c->render(
             status  => 200,
-            openapi => $suggestion->to_api
+            openapi => $c->objects->to_api($suggestion),
         );
     }
     catch {

@@ -70,7 +70,7 @@ sub get {
         if ( $c->req->headers->accept =~ m/application\/json/ ) {
             return $c->render(
                 status => 200,
-                json   => $biblio->to_api
+                json   => $c->objects->to_api($biblio),
             );
         }
         else {
@@ -416,7 +416,7 @@ sub add_item {
 
         $c->render(
             status  => 201,
-            openapi => $item->to_api
+            openapi => $c->objects->to_api($item),
         );
     }
     catch {
@@ -471,8 +471,8 @@ sub update_item {
         $item->store->discard_changes;
 
         $c->render(
-            status => 200,
-            openapi => $item->to_api
+            status  => 200,
+            openapi => $c->objects->to_api($item),
         );
     }
     catch {
