@@ -349,6 +349,7 @@ if ( @$barcodes && $op eq 'cud-checkout' ) {
                 {
                     onsite_checkout     => $onsite_checkout,
                     override_high_holds => $override_high_holds || $override_high_holds_tmp || 0,
+                    issueconfirmed      => $issueconfirmed,
                 }
             );
         } catch {
