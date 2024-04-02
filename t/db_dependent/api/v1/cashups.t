@@ -63,7 +63,11 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No cash register, so 404 should be returned
-    $t->get_ok("//$userid:$password@/api/v1/cash_registers/1/cashups")
+    my $cash_register_to_delete = $builder->build_object( { class => 'Koha::Cash::Registers' } );
+    my $non_existent_cr_id      = $cash_register_to_delete->id;
+    $cash_register_to_delete->delete;
+
+    $t->get_ok("//$userid:$password@/api/v1/cash_registers/$non_existent_cr_id/cashups")
       ->status_is(404)->json_is( '/error' => 'Register not found' );
 
     my $register = $builder->build_object(
