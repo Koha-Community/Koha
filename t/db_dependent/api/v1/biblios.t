@@ -105,7 +105,7 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
                  => { Accept => 'application/marc' } )
       ->status_is(404)
-      ->json_is( '/error', 'Object not found.' );
+      ->json_is( '/error', 'Bibliographic record not found' );
 
     subtest 'marc-in-json encoding tests' => sub {
 
@@ -447,7 +447,7 @@ subtest 'get_public() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
                  => { Accept => 'application/marc' } )
       ->status_is(404)
-      ->json_is( '/error', 'Object not found.' );
+      ->json_is( '/error', 'Bibliographic record not found' );
 
     $schema->storage->txn_rollback;
 };
@@ -607,7 +607,7 @@ subtest 'pickup_locations() tests' => sub {
           . "/pickup_locations?"
           . "patron_id=" . $patron->id )
       ->status_is( 404 )
-      ->json_is( '/error' => 'Biblio not found' );
+      ->json_is( '/error' => 'Bibliographic record not found' );
 
     $schema->storage->txn_rollback;
 };

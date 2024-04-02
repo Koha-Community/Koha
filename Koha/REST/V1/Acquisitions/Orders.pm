@@ -97,12 +97,8 @@ sub get {
 
     my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
-    unless ($order) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Order not found" }
-        );
-    }
+    return $c->render_resource_not_found("Order")
+        unless $order;
 
     return try {
         return $c->render(
@@ -160,12 +156,8 @@ sub update {
 
     my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
-    unless ($order) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Order not found" }
-        );
-    }
+    return $c->render_resource_not_found("Order")
+        unless $order;
 
     return try {
         $order->set_from_api( $c->req->json );
@@ -195,10 +187,7 @@ sub delete {
     my $order = Koha::Acquisition::Orders->find( $c->param('order_id') );
 
     unless ($order) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => 'Order not found' }
-        );
+        return $c->render_resource_not_found("Order");
     } elsif ( ( $order->orderstatus && $order->orderstatus ne 'cancelled' ) || !$order->datecancellationprinted ) {
         # Koha may (historically) have inconsistent order data here (e.g. cancelled without date)
         return $c->render(

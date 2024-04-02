@@ -79,12 +79,8 @@ sub get {
         my $patron_id = $c->param('patron_id');
         my $patron    = $c->objects->find( Koha::Patrons->search_limited, $patron_id );
 
-        unless ($patron) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Patron not found." }
-            );
-        }
+        return $c->render_resource_not_found("Patron")
+            unless $patron;
 
         return $c->render(
             status  => 200,
@@ -264,12 +260,8 @@ sub update {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-         return $c->render(
-             status  => 404,
-             openapi => { error => "Patron not found" }
-         );
-     }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $body = $c->req->json;
@@ -382,12 +374,8 @@ sub delete {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ( $patron ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found" }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 

@@ -61,14 +61,8 @@ sub get {
     return try {
         my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
-        unless ($smtp_server) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => "SMTP server not found"
-                }
-            );
-        }
+        return $c->render_resource_not_found("SMTP server")
+            unless $smtp_server;
 
         return $c->render(
             status  => 200,
@@ -127,14 +121,8 @@ sub update {
 
     my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
-    if ( not defined $smtp_server ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found"
-            }
-        );
-    }
+    return $c->render_resource_not_found("SMTP server")
+        unless $smtp_server;
 
     return try {
         $smtp_server->set_from_api( $c->req->json );
@@ -171,10 +159,8 @@ sub delete {
 
     my $smtp_server = Koha::SMTP::Servers->find( $c->param('smtp_server_id') );
 
-    if ( not defined $smtp_server ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("SMTP server")
+        unless $smtp_server;
 
     return try {
         $smtp_server->delete;

@@ -59,10 +59,9 @@ Controller function that handles retrieving a single Koha::AdvancedEditorMacro
 sub get {
     my $c = shift->openapi->valid_input or return;
     my $filter = Koha::SearchFilters->find( $c->param('search_filter_id') );
-    unless ($filter) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Search filter not found" } );
-    }
+
+    return $c->render_resource_not_found("Search filter")
+        unless $filter;
 
     return $c->render( status => 200, openapi => $c->objects->to_api($filter), );
 }
@@ -107,10 +106,8 @@ sub update {
 
     my $filter = Koha::SearchFilters->find( $c->param('search_filter_id') );
 
-    if ( not defined $filter ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("Search filter")
+        unless $filter;
 
     return try {
         $filter->set_from_api( $c->req->json );
@@ -132,10 +129,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $filter = Koha::SearchFilters->find( $c->param('search_filter_id') );
-    if ( not defined $filter ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+
+    return $c->render_resource_not_found("Search filter")
+        unless $filter;
 
     return try {
         $filter->delete;

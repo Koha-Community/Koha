@@ -48,12 +48,8 @@ sub list {
 
         my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
 
-        unless ($vendor) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Vendor not found." }
-            );
-        }
+        return $c->render_resource_not_found("Vendor")
+            unless $vendor;
 
         my $issues_rs = $vendor->issues;
         my $issues    = $c->objects->search($issues_rs);

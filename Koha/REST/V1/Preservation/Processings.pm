@@ -57,12 +57,8 @@ sub get {
         my $processing_id = $c->param('processing_id');
         my $processing    = $c->objects->find( Koha::Preservation::Processings->search, $processing_id );
 
-        unless ($processing) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Processing not found" }
-            );
-        }
+        return $c->render_resource_not_found("Processing")
+            unless $processing;
 
         return $c->render(
             status  => 200,
@@ -144,12 +140,8 @@ sub update {
     my $processing_id = $c->param('processing_id');
     my $processing    = Koha::Preservation::Processings->find($processing_id);
 
-    unless ($processing) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Processing not found" }
-        );
-    }
+    return $c->render_resource_not_found("Processing")
+        unless $processing;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -204,12 +196,9 @@ sub delete {
 
     my $processing_id = $c->param('processing_id');
     my $processing    = Koha::Preservation::Processings->find($processing_id);
-    unless ($processing) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Processing not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Processing")
+        unless $processing;
 
     unless ( $processing->can_be_deleted ) {
         return $c->render(

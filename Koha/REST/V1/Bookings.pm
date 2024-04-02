@@ -55,12 +55,9 @@ sub get {
 
     return try {
         my $booking = $c->objects->find( Koha::Bookings->new, $c->param('booking_id') );
-        unless ($booking) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Booking not found" }
-            );
-        }
+
+        return $c->render_resource_not_found("Booking")
+            unless $booking;
 
         return $c->render( status => 200, openapi => $booking );
     } catch {
@@ -115,12 +112,8 @@ sub update {
 
     my $booking = $c->objects->find_rs( Koha::Bookings->new, $c->param('booking_id') );
 
-    if ( not defined $booking ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Booking")
+        unless $booking;
 
     return try {
         $booking->set_from_api( $c->req->json );
@@ -142,12 +135,8 @@ sub delete {
 
     my $booking = Koha::Bookings->find( $c->param('booking_id') );
 
-    unless ( $booking ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Booking")
+        unless $booking;
 
     return try {
         $booking->delete;

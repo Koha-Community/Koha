@@ -53,10 +53,8 @@ sub claim_returned {
 
         my $checkout = Koha::Checkouts->find( { itemnumber => $itemnumber } );
 
-        return $c->render(
-            openapi => { error => "Checkout not found" },
-            status  => 404
-        ) unless $checkout;
+        return $c->render_resource_not_found("Checkout")
+            unless $checkout;
 
         my $claim = $checkout->claim_returned(
             {
@@ -104,12 +102,8 @@ sub update_notes {
 
     my $claim = Koha::Checkouts::ReturnClaims->find( $claim_id );
 
-    return $c->render(
-        status  => 404,
-        openapi => {
-            error => "Claim not found"
-        }
-    ) unless $claim;
+    return $c->render_resource_not_found("Claim")
+        unless $claim;
 
     return try {
         my $updated_by = $body->{updated_by};
@@ -150,10 +144,8 @@ sub resolve_claim {
 
     my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
 
-    return $c->render(
-        status  => 404,
-        openapi => { error => "Claim not found" }
-    ) unless $claim;
+    return $c->render_resource_not_found("Claim")
+        unless $claim;
 
     return try {
 
@@ -195,10 +187,8 @@ sub delete_claim {
 
         my $claim = Koha::Checkouts::ReturnClaims->find( $c->param('claim_id') );
 
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Claim not found" }
-        ) unless $claim;
+        return $c->render_resource_not_found("Claim")
+            unless $claim;
 
         $claim->delete();
 

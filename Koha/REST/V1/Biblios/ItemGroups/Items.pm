@@ -45,14 +45,8 @@ sub add {
 
         my $item_group = Koha::Biblio::ItemGroups->find( $c->param('item_group_id') );
 
-        unless ( $item_group ) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => 'Item group not found'
-                }
-            );
-        }
+        return $c->render_resource_not_found("Item group")
+            unless $item_group;
 
         unless ( $item_group->biblio_id eq $c->param('biblio_id') ) {
             return $c->render(

@@ -130,12 +130,8 @@ sub remove_item {
 
         my $item = Koha::Items->find($item_id);
 
-        unless ($item) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Item not found" }
-            );
-        }
+        return $c->render_resource_not_found("Item")
+            unless $item;
 
         my $not_for_loan_waiting_list_in = C4::Context->preference('PreservationNotForLoanWaitingListIn');
         if ( $item->notforloan ne $not_for_loan_waiting_list_in ) {

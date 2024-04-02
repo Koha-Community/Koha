@@ -153,7 +153,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok(
         "//$userid:$password@/api/v1/suggestions/$non_existent_id")
-      ->status_is(404)->json_is( '/error' => 'Suggestion not found.' );
+      ->status_is(404)->json_is( '/error' => 'Suggestion not found' );
 
     $schema->storage->txn_rollback;
 };

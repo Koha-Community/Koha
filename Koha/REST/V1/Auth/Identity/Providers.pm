@@ -68,15 +68,8 @@ sub get {
 
         my $provider = $c->objects->find( Koha::Auth::Identity::Providers->new, $c->param('identity_provider_id') );
 
-        unless ( $provider ) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error      => 'Object not found',
-                    error_code => 'not_found',
-                }
-            );
-        }
+        return $c->render_resource_not_found("Identity provider")
+            unless $provider;
 
         return $c->render( status => 200, openapi => $provider );
     }
@@ -148,15 +141,8 @@ sub update {
 
     my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
 
-    unless ( $provider ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error      => 'Object not found',
-                error_code => 'not_found',
-            }
-        );
-    }
+    return $c->render_resource_not_found("Identity provider")
+        unless $provider;
 
     return try {
 
@@ -210,15 +196,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
-    unless ( $provider ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error      => 'Object not found',
-                error_code => 'not_found',
-            }
-        );
-    }
+
+    return $c->render_resource_not_found("Identity provider")
+        unless $provider;
 
     return try {
         $provider->delete;

@@ -56,12 +56,8 @@ sub get {
 
     return try {
         my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
-        unless ($ticket) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Ticket not found" }
-            );
-        }
+        return $c->render_resource_not_found("Ticket")
+            unless $ticket;
 
         return $c->render( status => 200, openapi => $c->objects->to_api($ticket), );
     }
@@ -109,12 +105,8 @@ sub update {
 
     my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
 
-    if ( not defined $ticket ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Ticket")
+        unless $ticket;
 
     return try {
         $ticket->set_from_api( $c->req->json );
@@ -134,12 +126,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
-    if ( not defined $ticket ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Ticket")
+        unless $ticket;
 
     return try {
         $ticket->delete;
@@ -162,12 +151,9 @@ sub list_updates {
 
     return try {
         my $ticket = Koha::Tickets->find( $c->param('ticket_id') );
-        unless ($ticket) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Ticket not found" }
-            );
-        }
+
+        return $c->render_resource_not_found("Ticket")
+            unless $ticket;
 
         my $updates_set = $ticket->updates;
         my $updates     = $c->objects->search($updates_set);

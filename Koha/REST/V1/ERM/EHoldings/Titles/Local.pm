@@ -59,12 +59,8 @@ sub get {
     return try {
         my $title = $c->objects->find( Koha::ERM::EHoldings::Titles->search, $c->param('title_id') );
 
-        unless ($title ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "eHolding title not found" }
-            );
-        }
+        return $c->render_resource_not_found("eHolding title")
+            unless $title;
 
         return $c->render(
             status  => 200,
@@ -153,12 +149,8 @@ sub update {
 
     my $title = Koha::ERM::EHoldings::Titles->find( $c->param('title_id') );
 
-    unless ($title) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "eHolding title not found" }
-        );
-    }
+    return $c->render_resource_not_found("eHolding title")
+        unless $title;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -218,12 +210,9 @@ sub delete {
     my $c = shift or return;
 
     my $title = Koha::ERM::EHoldings::Titles->find( $c->param('title_id') );
-    unless ($title) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "eHolding title not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("eHolding title")
+        unless $title;
 
     return try {
         $title->delete;
@@ -252,10 +241,7 @@ sub import_from_list {
     my $patron = $c->stash('koha.user');
 
     unless ( $list && $list->owner == $c->stash('koha.user')->borrowernumber ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "List not found" }
-        );
+        return $c->render_resource_not_found("List");
     }
 
 

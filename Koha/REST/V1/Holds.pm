@@ -114,10 +114,7 @@ sub add {
             $item = Koha::Items->find($item_id);
 
             unless ($item) {
-                return $c->render(
-                    status  => 404,
-                    openapi => { error => "item_id not found." }
-                );
+                return $c->render_resource_not_found("Item");
             }
             else {
                 $biblio = $item->biblio;
@@ -254,12 +251,8 @@ sub edit {
     return try {
         my $hold = Koha::Holds->find( $c->param('hold_id') );
 
-        unless ($hold) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Hold not found" }
-            );
-        }
+        return $c->render_resource_not_found("Hold")
+            unless $hold;
 
         my $overrides = $c->stash('koha.overrides');
         my $can_override = $overrides->{any} && C4::Context->preference('AllowHoldPolicyOverride');
@@ -318,9 +311,8 @@ sub delete {
 
     my $hold = Koha::Holds->find($c->param('hold_id'));
 
-    unless ($hold) {
-        return $c->render( status => 404, openapi => { error => "Hold not found." } );
-    }
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
 
@@ -400,9 +392,8 @@ sub resume {
     my $hold = Koha::Holds->find($c->param('hold_id'));
     my $body = $c->req->json;
 
-    unless ($hold) {
-        return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
-    }
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
         $hold->resume;
@@ -424,12 +415,8 @@ sub update_priority {
 
     my $hold = Koha::Holds->find($c->param('hold_id'));
 
-    unless ($hold) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Hold not found" }
-        );
-    }
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
         my $priority = $c->req->json;
@@ -459,12 +446,8 @@ sub pickup_locations {
 
     my $hold = Koha::Holds->find( $c->param('hold_id'), { prefetch => [ 'patron' ] } );
 
-    unless ($hold) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Hold not found" }
-        );
-    }
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
         my $ps_set;
@@ -524,13 +507,8 @@ sub update_pickup_location {
 
     my $hold = Koha::Holds->find($c->param('hold_id'));
 
-    unless ($hold) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Hold not found" }
-        );
-    }
-
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
 

@@ -71,12 +71,9 @@ sub get {
 
     return try {
         my $cashup = Koha::Cash::Register::Cashups->find( $c->param('cashup_id') );
-        unless ($cashup) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Cashup not found" }
-            );
-        }
+
+        return $c->render_resource_not_found("Cashup")
+            unless $cashup;
 
         return $c->render(
             status  => 200,

@@ -113,12 +113,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $default_report = Koha::ERM::EUsage::DefaultUsageReports->find( $c->param('erm_default_usage_report_id') );
-    unless ($default_report) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Default report not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Default report")
+        unless $default_report;
 
     return try {
         $default_report->delete;

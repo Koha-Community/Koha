@@ -124,12 +124,8 @@ sub get {
         my $usage_data_provider =
             Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
-        unless ($usage_data_provider) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Usage data provider not found" }
-            );
-        }
+        return $c->render_resource_not_found("Usage data provider")
+            unless $usage_data_provider;
 
         return $c->render(
             status  => 200,
@@ -208,12 +204,8 @@ sub update {
 
     my $usage_data_provider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
-    unless ($usage_data_provider) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Usage data provider not found" }
-        );
-    }
+    return $c->render_resource_not_found("Usage data provider")
+        unless $usage_data_provider;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -265,12 +257,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $usage_data_provider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
-    unless ($usage_data_provider) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Usage data provider not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Usage data provider")
+        unless $usage_data_provider;
 
     return try {
         $usage_data_provider->delete;
@@ -388,12 +377,8 @@ sub process_SUSHI_response {
 
     my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
-    unless ($udprovider) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Usage data provider not found" }
-        );
-    }
+    return $c->render_resource_not_found("Usage data provider")
+        unless $udprovider;
 
     return try {
         my $jobs = $udprovider->enqueue_sushi_harvest_jobs(
@@ -421,12 +406,9 @@ sub test_connection {
 
     my $udprovider = Koha::ERM::EUsage::UsageDataProviders->find( $c->param('erm_usage_data_provider_id') );
 
-    unless ($udprovider) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Usage data provider not found" }
-        );
-    }
+    return $c->render_resource_not_found("Usage data provider")
+        unless $udprovider;
+
     try {
         my $service_active = $udprovider->test_connection;
         return $c->render(

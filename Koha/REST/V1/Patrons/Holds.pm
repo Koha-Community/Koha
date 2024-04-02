@@ -40,14 +40,8 @@ sub list {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ( $patron ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     my $old = $c->param('old');
     $c->req->params->remove('old');
@@ -81,10 +75,7 @@ sub delete_public {
         my $hold = $c->objects->find_rs( Koha::Holds->new, $c->param('hold_id') );
 
         unless ( $hold and $c->param('patron_id') == $hold->borrowernumber ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => 'Object not found' }
-            );
+            return $c->render_resource_not_found("Hold");
         }
 
         if ( $hold->is_cancelable_from_opac ) {

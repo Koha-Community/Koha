@@ -46,15 +46,8 @@ sub list {
     return try {
         my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
 
-        unless ($provider) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error      => 'Object not found',
-                    error_code => 'not_found',
-                }
-            );
-        }
+        return $c->render_resource_not_found("Identity provider")
+            unless $provider;
 
         my $domains_rs = $provider->domains;
         return $c->render(
@@ -79,29 +72,15 @@ sub get {
 
         my $provider = Koha::Auth::Identity::Providers->find( $c->param('identity_provider_id') );
 
-        unless ($provider) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error      => 'Object not found',
-                    error_code => 'not_found',
-                }
-            );
-        }
+        return $c->render_resource_not_found("Identity provider")
+            unless $provider;
 
         my $domains_rs = $provider->domains;
 
         my $domain = $c->objects->find( $domains_rs, $c->param('identity_provider_domain_id') );
 
-        unless ($domain) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error      => 'Object not found',
-                    error_code => 'not_found',
-                }
-            );
-        }
+        return $c->render_resource_not_found("Identity provider domain")
+            unless $domain;
 
         return $c->render( status => 200, openapi => $domain );
     } catch {
@@ -164,15 +143,8 @@ sub update {
         }
     );
 
-    unless ($domain) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error      => 'Object not found',
-                error_code => 'not_found',
-            }
-        );
-    }
+    return $c->render_resource_not_found("Identity provider domain")
+        unless $domain;
 
     return try {
 
@@ -209,15 +181,8 @@ sub delete {
         }
     );
 
-    unless ($domain) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error      => 'Object not found',
-                error_code => 'not_found',
-            }
-        );
-    }
+    return $c->render_resource_not_found("Identity provider domain")
+        unless $domain;
 
     return try {
         $domain->delete;

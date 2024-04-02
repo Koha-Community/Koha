@@ -65,12 +65,8 @@ sub get {
     return try {
         my $suggestion = $c->objects->find( Koha::Suggestions->new, $c->param('suggestion_id') );
 
-        unless ($suggestion) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Suggestion not found." }
-            );
-        }
+        return $c->render_resource_not_found("Suggestion")
+            unless $suggestion;
 
         return $c->render(
             status  => 200,
@@ -168,10 +164,8 @@ sub update {
 
     my $suggestion = Koha::Suggestions->find( $c->param('suggestion_id') );
 
-    return $c->render(
-        status  => 404,
-        openapi => { error => 'Suggestion not found.' }
-    ) unless $suggestion;
+    return $c->render_resource_not_found("Suggestion")
+        unless $suggestion;
 
     return try {
 
@@ -202,10 +196,8 @@ sub delete {
 
     my $suggestion = Koha::Suggestions->find( $c->param('suggestion_id') );
 
-    return $c->render(
-        status  => 404,
-        openapi => { error => 'Suggestion not found.' }
-    ) unless $suggestion;
+    return $c->render_resource_not_found("Suggestion")
+        unless $suggestion;
 
     return try {
         $suggestion->delete;

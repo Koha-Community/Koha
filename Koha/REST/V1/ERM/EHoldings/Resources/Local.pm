@@ -63,12 +63,8 @@ sub get {
         my $resource_id = $c->param('resource_id');
         my $resource = $c->objects->find( Koha::ERM::EHoldings::Resources->search, $resource_id );
 
-        unless ($resource ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "eHolding resource not found" }
-            );
-        }
+        return $c->render_resource_not_found("eHolding resource")
+            unless $resource;
 
         return $c->render(
             status  => 200,

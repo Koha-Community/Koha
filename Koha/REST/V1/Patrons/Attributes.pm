@@ -45,14 +45,8 @@ sub list_patron_attributes {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 
@@ -79,14 +73,8 @@ sub add {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 
@@ -151,14 +139,8 @@ sub overwrite {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 
@@ -229,27 +211,15 @@ sub update {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $attribute = $patron->extended_attributes->find(
             $c->param('extended_attribute_id') );
 
-        unless ($attribute) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => 'Attribute not found'
-                }
-            );
-        }
+        return $c->render_resource_not_found("Attribute")
+            unless $attribute;
 
         $attribute->set_from_api( $c->req->json )->store;
         $attribute->discard_changes;
@@ -303,28 +273,16 @@ sub delete {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => 'Patron not found'
-            }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 
         my $attribute = $patron->extended_attributes->find(
             $c->param('extended_attribute_id') );
 
-        unless ($attribute) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => 'Attribute not found'
-                }
-            );
-        }
+        return $c->render_resource_not_found("Attribute")
+            unless $attribute;
 
         $attribute->delete;
         return $c->render(

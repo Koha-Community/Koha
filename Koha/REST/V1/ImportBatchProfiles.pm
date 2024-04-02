@@ -89,12 +89,9 @@ sub edit {
 
     return try {
         my $profile = Koha::ImportBatchProfiles->find( $c->param('import_batch_profile_id') );
-        unless ($profile) {
-            return $c->render(
-                status  => 404,
-                openapi => {error => "Import batch profile not found"}
-            );
-        }
+
+        return $c->render_resource_not_found("Import batch profile")
+            unless $profile;
 
         $profile->set_from_api($c->req->json)->store;
 
@@ -119,10 +116,8 @@ sub delete {
 
     my $profile = Koha::ImportBatchProfiles->find( $c->param('import_batch_profile_id') );
 
-    unless ($profile) {
-        return $c->render( status  => 404,
-                        openapi => {error => "Import batch profile not found"} );
-    }
+    return $c->render_resource_not_found("Import batch profile")
+        unless $profile;
 
     return try {
         $profile->delete;

@@ -53,12 +53,9 @@ sub get {
 
     return try {
         my $quote = Koha::Quotes->find( $c->param('quote_id') );
-        unless ($quote) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "quote not found" }
-            );
-        }
+
+        return $c->render_resource_not_found("Quote")
+            unless $quote;
 
         return $c->render( status => 200, openapi => $c->objects->to_api($quote), );
     }
@@ -97,10 +94,8 @@ sub update {
 
     my $quote = Koha::Quotes->find( $c->param('quote_id') );
 
-    if ( not defined $quote ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("Quote")
+        unless $quote;
 
     return try {
         $quote->set_from_api( $c->req->json );
@@ -120,10 +115,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $quote = Koha::Quotes->find( $c->param('quote_id') );
-    if ( not defined $quote ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+
+    return $c->render_resource_not_found("Quote")
+        unless $quote;
 
     return try {
         $quote->delete;

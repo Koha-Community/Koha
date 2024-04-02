@@ -122,7 +122,7 @@ subtest 'add() tests' => sub {
                 biblio_id         => $non_existent_biblio_id,
                 pickup_library_id => $non_existent_item_homebranch
               }
-        )->status_is(404)->json_is( '/error' => 'Biblio not found' );
+        )->status_is(404)->json_is( '/error' => 'Bibliographic record not found' );
 
         $t->post_ok(
                 "//$userid:$password@/api/v1/clubs/"

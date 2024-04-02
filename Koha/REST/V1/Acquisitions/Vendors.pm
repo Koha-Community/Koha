@@ -63,12 +63,9 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
-    unless ($vendor) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Vendor not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Vendor")
+        unless $vendor;
 
     return try {
         return $c->render(
@@ -114,25 +111,20 @@ Controller function that handles updating a Koha::Acquisition::Bookseller object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor;
+    my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
+
+    return $c->render_resource_not_found("Vendor")
+        unless $vendor;
 
     return try {
-        $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
         $vendor->set_from_api( $c->req->json );
         $vendor->store();
+
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($vendor),
         );
-    }
-    catch {
-        if ( not defined $vendor ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Object not found" }
-            );
-        }
-
+    } catch {
         $c->unhandled_exception($_);
     };
 
@@ -150,12 +142,8 @@ sub delete {
     return try {
         my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
 
-        unless ( $vendor ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Object not found" }
-            );
-        }
+        return $c->render_resource_not_found("Vendor")
+            unless $vendor;
 
         $vendor->delete;
 

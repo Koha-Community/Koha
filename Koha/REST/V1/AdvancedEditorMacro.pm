@@ -67,12 +67,10 @@ sub get {
     my $c = shift->openapi->valid_input or return;
     my $patron = $c->stash('koha.user');
     my $macro  = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
-    unless ($macro) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Macro not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
+
     if( $macro->shared ){
         return $c->render( status => 403, openapi => {
             error => "This macro is shared, you must access it via advanced_editor/macros/shared"
@@ -99,10 +97,10 @@ sub get_shared {
     my $macro = Koha::AdvancedEditorMacros->find({
         id => $c->param('advancededitormacro_id'),
     });
-    unless ($macro) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Macro not found" } );
-    }
+
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
+
     unless( $macro->shared ){
         return $c->render( status => 403, openapi => {
             error => "This macro is not shared, you must access it via advanced_editor/macros"
@@ -181,10 +179,9 @@ sub update {
 
     my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
 
-    if ( not defined $macro ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
+
     my $patron = $c->stash('koha.user');
 
     my $body = $c->req->json;
@@ -222,10 +219,8 @@ sub update_shared {
 
     my $body = $c->req->json;
 
-    if ( not defined $macro ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
 
     unless( $macro->shared == 1 || defined $body->{shared} && $body->{shared} == 1 ){
         return $c->render( status  => 403,
@@ -252,10 +247,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
-    if ( not defined $macro ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
 
     my $patron = $c->stash('koha.user');
     if( $macro->shared == 1 ){
@@ -287,10 +281,9 @@ sub delete_shared {
     my $c = shift->openapi->valid_input or return;
 
     my $macro = Koha::AdvancedEditorMacros->find( $c->param('advancededitormacro_id') );
-    if ( not defined $macro ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+
+    return $c->render_resource_not_found("Macro")
+        unless $macro;
 
     unless( $macro->shared == 1 ){
         return $c->render( status  => 403,

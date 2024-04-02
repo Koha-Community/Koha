@@ -108,7 +108,7 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/authorities/" . $authority->id
                  => { Accept => 'application/marc' } )
       ->status_is(404)
-      ->json_is( '/error', 'Object not found.' );
+      ->json_is( '/error', 'Authority record not found' );
 
     $schema->storage->txn_rollback;
 };

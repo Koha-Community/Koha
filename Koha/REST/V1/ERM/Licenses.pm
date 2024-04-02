@@ -57,12 +57,8 @@ sub get {
     return try {
         my $license = $c->objects->find( Koha::ERM::Licenses->search, $c->param('license_id') );
 
-        unless ($license) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "License not found" }
-            );
-        }
+        return $c->render_resource_not_found("License")
+            unless $license;
 
         return $c->render(
             status  => 200,
@@ -158,12 +154,8 @@ sub update {
 
     my $license = Koha::ERM::Licenses->find( $c->param('license_id') );
 
-    unless ($license) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "License not found" }
-        );
-    }
+    return $c->render_resource_not_found("License")
+        unless $license;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -230,12 +222,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $license = Koha::ERM::Licenses->find( $c->param('license_id') );
-    unless ($license) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "License not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("License")
+        unless $license;
 
     return try {
         $license->delete;

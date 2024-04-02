@@ -60,12 +60,8 @@ sub get {
         my $train_id = $c->param('train_id');
         my $train    = $c->objects->find( Koha::Preservation::Trains->search, $train_id );
 
-        unless ($train) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Train not found" }
-            );
-        }
+        return $c->render_resource_not_found("Train")
+            unless $train;
 
         return $c->render(
             status  => 200,
@@ -144,12 +140,8 @@ sub update {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -202,12 +194,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $train = Koha::Preservation::Trains->find( $c->param('train_id') );
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     return try {
         $train->delete;
@@ -232,12 +221,8 @@ sub get_item {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $train_item_id = $c->param('train_item_id');
 
@@ -276,12 +261,8 @@ sub add_items {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $body = $c->req->json;
     return try {
@@ -317,12 +298,8 @@ sub add_item {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $body = $c->req->json;
     return try {
@@ -385,24 +362,16 @@ sub copy_item {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $train_item_id = $c->param('train_item_id');
 
     my $train_item =
         Koha::Preservation::Train::Items->search( { train_item_id => $train_item_id, train_id => $train_id } )->single;
 
-    unless ($train_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $train_item;
 
     my $body = $c->req->json;
     return try {
@@ -489,24 +458,16 @@ sub update_item {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $train_item_id = $c->param('train_item_id');
 
     my $train_item =
         Koha::Preservation::Train::Items->search( { train_item_id => $train_item_id, train_id => $train_id } )->single;
 
-    unless ($train_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $train_item;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -536,23 +497,15 @@ sub remove_item {
     my $train_id = $c->param('train_id');
     my $train    = Koha::Preservation::Trains->find($train_id);
 
-    unless ($train) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train")
+        unless $train;
 
     my $train_item_id = $c->param('train_item_id');
 
     my $train_item = $train->items->find($train_item_id);
 
-    unless ($train_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Train item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Train item")
+        unless $train_item;
 
     return try {
         $train_item->delete;

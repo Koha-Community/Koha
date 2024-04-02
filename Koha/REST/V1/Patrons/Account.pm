@@ -42,12 +42,8 @@ sub get {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found." }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $account = $patron->account;
@@ -85,12 +81,8 @@ sub list_credits {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found." }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $credits = $c->objects->search( $patron->account->credits );
@@ -113,12 +105,8 @@ sub add_credit {
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
     my $user   = $c->stash('koha.user');
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found." }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     my $account = $patron->account;
     my $body    = $c->req->json;
@@ -199,12 +187,8 @@ sub list_debits {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found." }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $debits = $c->objects->search( $patron->account->debits );
@@ -224,12 +208,8 @@ sub add_debit {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found." }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
         my $data =

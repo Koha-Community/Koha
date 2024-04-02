@@ -54,12 +54,8 @@ sub get {
 
     my $status = Koha::ILL::Batch::Statuses->find( { code => $status_code } );
 
-    if ( not defined $status ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "ILL batch status not found" }
-        );
-    }
+    return $c->render_resource_not_found("ILL batch status")
+        unless $status;
 
     return $c->render(
         status  => 200,
@@ -109,12 +105,8 @@ sub update {
 
     my $status = Koha::ILL::Batch::Statuses->find( { code => $c->param('ill_batchstatus_code') } );
 
-    if ( not defined $status ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "ILL batch status not found" }
-        );
-    }
+    return $c->render_resource_not_found("ILL batch status")
+        unless $status;
 
     my $params = $c->req->json;
 
@@ -144,9 +136,8 @@ sub delete {
 
     my $status = Koha::ILL::Batch::Statuses->find( { code => $c->param('ill_batchstatus_code') } );
 
-    if ( not defined $status ) {
-        return $c->render( status => 404, openapi => { errors => [ { message => "ILL batch status not found" } ] } );
-    }
+    return $c->render_resource_not_found("ILL batch status")
+        unless $status;
 
     if ( $status->is_system ) {
         return $c->render(

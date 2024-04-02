@@ -64,12 +64,8 @@ sub get {
     return try {
         my $library = Koha::Libraries->find( $c->param('library_id') );
 
-        unless ($library) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Library not found" }
-            );
-        }
+        return $c->render_resource_not_found("Library")
+            unless $library;
 
         return $c->render(
             status  => 200,
@@ -122,12 +118,8 @@ sub update {
 
     my $library = Koha::Libraries->find( $c->param('library_id') );
 
-    if ( not defined $library ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Library not found" }
-        );
-    }
+    return $c->render_resource_not_found("Library")
+        unless $library;
 
     return try {
         my $params = $c->req->json;
@@ -155,9 +147,8 @@ sub delete {
 
     my $library = Koha::Libraries->find( $c->param( 'library_id' ) );
 
-    if ( not defined $library ) {
-        return $c->render( status => 404, openapi => { error => "Library not found" } );
-    }
+    return $c->render_resource_not_found("Library")
+        unless $library;
 
     return try {
         $library->delete;
@@ -183,12 +174,8 @@ sub list_desks {
     return try {
         my $library = Koha::Libraries->find( $c->param('library_id') );
 
-        unless ($library) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Library not found" }
-            );
-        }
+        return $c->render_resource_not_found("Library")
+            unless $library;
 
         return $c->render(
             status  => 200,
@@ -214,12 +201,8 @@ sub list_cash_registers {
     return try {
         my $library = Koha::Libraries->find( $c->param('library_id') );
 
-        unless ($library) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Library not found" }
-            );
-        }
+        return $c->render_resource_not_found("Library")
+            unless $library;
 
         return $c->render(
             status  => 200,

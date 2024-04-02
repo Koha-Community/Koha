@@ -59,12 +59,8 @@ sub get {
             $package_id
         );
 
-        unless ($package) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Package not found" }
-            );
-        }
+        return $c->render_resource_not_found("Package")
+            unless $package;
 
         return $c->render(
             status  => 200,
@@ -154,12 +150,8 @@ sub update {
     my $package_id = $c->param('package_id');
     my $package = Koha::ERM::EHoldings::Packages->find( $package_id );
 
-    unless ($package) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Package not found" }
-        );
-    }
+    return $c->render_resource_not_found("Package")
+        unless $package;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -222,12 +214,9 @@ sub delete {
     my $c = shift or return;
 
     my $package = Koha::ERM::EHoldings::Packages->find( $c->param('package_id') );
-    unless ($package) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Package not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Package")
+        unless $package;
 
     return try {
         $package->delete;

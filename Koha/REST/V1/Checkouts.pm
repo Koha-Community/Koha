@@ -79,16 +79,13 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $checkout_id = $c->param('checkout_id');
-    my $checkout = Koha::Checkouts->find( $checkout_id );
-    $checkout = Koha::Old::Checkouts->find( $checkout_id )
-        unless ($checkout);
 
-    unless ($checkout) {
-        return $c->render(
-            status => 404,
-            openapi => { error => "Checkout doesn't exist" }
-        );
-    }
+    my $checkout = Koha::Checkouts->find($checkout_id);
+    $checkout = Koha::Old::Checkouts->find($checkout_id)
+        unless $checkout;
+
+    return $c->render_resource_not_found("Checkout")
+        unless $checkout;
 
     return try {
         return $c->render(
@@ -295,16 +292,13 @@ sub get_renewals {
 
     try {
         my $checkout_id = $c->param('checkout_id');
-        my $checkout    = Koha::Checkouts->find($checkout_id);
-        $checkout = Koha::Old::Checkouts->find($checkout_id)
-          unless ($checkout);
 
-        unless ($checkout) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Checkout doesn't exist" }
-            );
-        }
+        my $checkout = Koha::Checkouts->find($checkout_id);
+        $checkout = Koha::Old::Checkouts->find($checkout_id)
+            unless $checkout;
+
+        return $c->render_resource_not_found("Checkout")
+            unless $checkout;
 
         my $renewals_rs = $checkout->renewals;
         my $renewals = $c->objects->search( $renewals_rs );
@@ -333,12 +327,8 @@ sub renew {
     my $seen = $c->param('seen') || 1;
     my $checkout = Koha::Checkouts->find( $checkout_id );
 
-    unless ($checkout) {
-        return $c->render(
-            status => 404,
-            openapi => { error => "Checkout doesn't exist" }
-        );
-    }
+    return $c->render_resource_not_found("Checkout")
+        unless $checkout;
 
     return try {
         my ($can_renew, $error) = CanBookBeRenewed($checkout->patron, $checkout);
@@ -383,12 +373,8 @@ sub allows_renewal {
     my $checkout_id = $c->param('checkout_id');
     my $checkout = Koha::Checkouts->find( $checkout_id );
 
-    unless ($checkout) {
-        return $c->render(
-            status => 404,
-            openapi => { error => "Checkout doesn't exist" }
-        );
-    }
+    return $c->render_resource_not_found("Checkout")
+        unless $checkout;
 
     return try {
         my ($can_renew, $error) = CanBookBeRenewed($checkout->patron, $checkout);

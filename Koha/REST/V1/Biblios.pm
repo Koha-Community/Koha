@@ -56,14 +56,8 @@ sub get {
 
     my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, $attributes );
 
-    unless ( $biblio ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
 
@@ -128,12 +122,8 @@ sub delete {
 
     my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
-    if ( not defined $biblio ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
         my $error = DelBiblio( $biblio->id );
@@ -166,14 +156,8 @@ sub get_public {
         { biblionumber => $c->param('biblio_id') },
         { prefetch     => ['metadata'] } );
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
 
@@ -187,14 +171,8 @@ sub get_public {
         # unless there's a logged in user, and there's an exception for it's
         # category
         unless ( $patron and $patron->category->override_hidden_items ) {
-            if ( $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) )
-            {
-                return $c->render(
-                    status  => 404,
-                    openapi => {
-                        error => "Object not found."
-                    }
-                );
+            if ( $biblio->hidden_in_opac( { rules => $opachiddenitems_rules } ) ) {
+                return $c->render_resource_not_found("Bibliographic record");
             }
         }
 
@@ -259,12 +237,8 @@ sub get_bookings {
 
     my $biblio = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['bookings'] } );
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found." }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
 
@@ -291,12 +265,8 @@ sub get_items {
     my $biblio        = Koha::Biblios->find( { biblionumber => $c->param('biblio_id') }, { prefetch => ['items'] } );
     my $bookable_only = $c->param('bookable');
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found." }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
 
@@ -330,12 +300,8 @@ sub add_item {
         my $biblio_id = $c->param('biblio_id');
         my $biblio    = Koha::Biblios->find( $biblio_id );
 
-        unless ($biblio) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Biblio not found" }
-            );
-        }
+        return $c->render_resource_not_found("Bibliographic record")
+            unless $biblio;
 
         my $body = $c->req->json;
 
@@ -443,21 +409,14 @@ sub update_item {
         my $biblio_id = $c->param('biblio_id');
         my $item_id   = $c->param('item_id');
         my $biblio    = Koha::Biblios->find( { biblionumber => $biblio_id } );
-        unless ($biblio) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Biblio not found" }
-            );
-        }
+
+        return $c->render_resource_not_found("Bibliographic record")
+            unless $biblio;
 
         my $item = $biblio->items->find({ itemnumber => $item_id });
 
-        unless ($item) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Item not found" }
-            );
-        }
+        return $c->render_resource_not_found("Item")
+            unless $item;
 
         my $body = $c->req->json;
 
@@ -501,12 +460,8 @@ sub get_checkouts {
     try {
         my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
-        unless ($biblio) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => 'Object not found' }
-            );
-        }
+        return $c->render_resource_not_found("Bibliographic record")
+            unless $biblio;
 
         my $checkouts =
           ($checked_in)
@@ -535,12 +490,8 @@ sub pickup_locations {
 
     my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Biblio not found" }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
     $c->req->params->remove('patron_id');
@@ -604,14 +555,8 @@ sub get_items_public {
         { prefetch => ['items'] }
     );
 
-    unless ( $biblio ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
-        );
-    }
+    return $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     return try {
 
@@ -641,14 +586,8 @@ sub set_rating {
 
     my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
-        );
-    }
+    $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     my $patron = $c->stash('koha.user');
     unless ($patron) {
@@ -775,12 +714,8 @@ sub update {
 
     my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
 
-    if ( ! defined $biblio ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    $c->render_resource_not_found("Bibliographic record")
+        unless $biblio;
 
     try {
         my $headers = $c->req->headers;

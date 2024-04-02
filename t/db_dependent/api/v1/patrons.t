@@ -363,9 +363,8 @@ subtest 'get() tests' => sub {
           ->status_is(200)
           ->json_is( '/patron_id' => $patron_1->id );
 
-        $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron_2->id )
-          ->status_is(404)
-          ->json_is({ error => "Patron not found." });
+        $t->get_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->id )->status_is(404)
+            ->json_is( '/error' => 'Patron not found' );
 
         $schema->storage->txn_rollback;
     };

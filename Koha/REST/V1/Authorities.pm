@@ -41,14 +41,9 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $authority = Koha::Authorities->find( { authid => $c->param('authority_id') } );
-    unless ( $authority ) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Object not found."
-            }
-        );
-    }
+
+    return $c->render_resource_not_found("Authority record")
+        unless $authority;
 
     return try {
 
@@ -111,12 +106,8 @@ sub delete {
 
     my $authority = Koha::Authorities->find( { authid => $c->param('authority_id') } );
 
-    if ( not defined $authority ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Authority record")
+        unless $authority;
 
     return try {
         DelAuthority( { authid => $authority->authid } );
@@ -206,12 +197,8 @@ sub update {
     my $authid = $c->param('authority_id');
     my $authority = Koha::Authorities->find( { authid => $authid } );
 
-    if ( not defined $authority ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Authority record")
+        unless $authority;
 
     try {
         my $headers = $c->req->headers;

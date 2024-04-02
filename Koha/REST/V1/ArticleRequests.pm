@@ -44,12 +44,8 @@ sub cancel {
 
     my $article_request = Koha::ArticleRequests->find( $c->param('article_request_id') );
 
-    unless ( $article_request ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Article request not found" }
-        );
-    }
+    return $c->render_resource_not_found("Article request")
+        unless $article_request;
 
     my $reason = $c->param('cancellation_reason');
     my $notes  = $c->param('notes');
@@ -82,23 +78,15 @@ sub patron_cancel {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ( $patron ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron not found" }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     # patron_id has been validated by the allow-owner check, so the following call to related
     # article requests covers the case of article requests not belonging to the patron
     my $article_request = $patron->article_requests->find( $c->param('article_request_id') );
 
-    unless ( $article_request ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Article request not found" }
-        );
-    }
+    return $c->render_resource_not_found("Article request")
+        unless $article_request;
 
     my $reason = $c->param('cancellation_reason');
     my $notes  = $c->param('notes');

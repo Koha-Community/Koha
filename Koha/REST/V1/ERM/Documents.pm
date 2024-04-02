@@ -42,12 +42,8 @@ sub get {
         # Do not use $c->objects->find here, we need the file_content
         my $document = Koha::ERM::Documents->find( $c->param('document_id') );
 
-        if ( !$document ) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Document not found" }
-            );
-        }
+        return $c->render_resource_not_found("Document")
+            unless $document;
 
         $c->render_file('data' => $document->file_content, 'filename' => $document->file_name);
     }

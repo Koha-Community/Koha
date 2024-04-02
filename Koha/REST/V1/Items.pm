@@ -96,12 +96,10 @@ sub get {
     try {
         my $items_rs = Koha::Items->new;
         my $item = $c->objects->find($items_rs, $c->param('item_id'));
-        unless ( $item ) {
-            return $c->render(
-                status => 404,
-                openapi => { error => 'Item not found'}
-            );
-        }
+
+        return $c->render_resource_not_found("Item")
+            unless $item;
+
         return $c->render( status => 200, openapi => $item );
     }
     catch {
@@ -120,12 +118,9 @@ sub delete {
 
     return try {
         my $item = Koha::Items->find($c->param('item_id'));
-        unless ( $item ) {
-            return $c->render(
-                status => 404,
-                openapi => { error => 'Item not found'}
-            );
-        }
+
+        return $c->render_resource_not_found("Item")
+            unless $item;
 
         my $safe_to_delete = $item->safe_to_delete;
 
@@ -185,12 +180,8 @@ sub get_bookings {
 
     my $item = Koha::Items->find( { itemnumber => $c->param('item_id') }, { prefetch => ['bookings'] } );
 
-    unless ($item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found." }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $item;
 
     return try {
 
@@ -218,12 +209,8 @@ sub pickup_locations {
     my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
-    unless ($item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $item;
 
     my $patron_id = $c->param('patron_id');
     my $patron    = Koha::Patrons->find( $patron_id );
@@ -286,12 +273,8 @@ sub bundled_items {
     my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
-    unless ($item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $item;
 
     return try {
         my $items_set = Koha::Items->search(
@@ -325,12 +308,8 @@ sub add_to_bundle {
     my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
-    unless ($item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $item;
 
     my $body = $c->req->json;
 
@@ -338,12 +317,8 @@ sub add_to_bundle {
     $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { barcode => $bundle_item_id } );
 
-    unless ($bundle_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Bundle item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Bundle item")
+        unless $bundle_item;
 
     return try {
         my $options = {
@@ -430,12 +405,8 @@ sub remove_from_bundle {
     my $item_id = $c->param('item_id');
     my $item = Koha::Items->find( $item_id );
 
-    unless ($item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $item;
 
     my $bundle_item_id = $c->param('bundled_item_id');
     $bundle_item_id = barcodedecode($bundle_item_id);

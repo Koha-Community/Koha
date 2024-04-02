@@ -141,7 +141,7 @@ my $job_current = $builder->build_object(
     $job->delete;
     $t->get_ok( "//$superlibrarian_userid:$password@/api/v1/jobs/"
           . $job->id )->status_is(404)
-      ->json_is( '/error' => 'Object not found' );
+      ->json_is( '/error' => 'Job not found' );
 }
 
 $schema->storage->txn_rollback;

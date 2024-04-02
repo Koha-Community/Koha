@@ -64,12 +64,8 @@ sub get {
     return try {
         my $agreement = $c->objects->find( Koha::ERM::Agreements->search, $c->param('agreement_id') );
 
-        unless ($agreement) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Agreement not found" }
-            );
-        }
+        return $c->render_resource_not_found("Agreement")
+            unless $agreement;
 
         return $c->render(
             status  => 200,
@@ -171,12 +167,8 @@ sub update {
 
     my $agreement = Koha::ERM::Agreements->find( $c->param('agreement_id') );
 
-    unless ($agreement) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Agreement not found" }
-        );
-    }
+    return $c->render_resource_not_found("Agreement")
+        unless $agreement;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -249,12 +241,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $agreement = Koha::ERM::Agreements->find( $c->param('agreement_id') );
-    unless ($agreement) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Agreement not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Agreement")
+        unless $agreement;
 
     return try {
         $agreement->delete;

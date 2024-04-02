@@ -206,12 +206,8 @@ sub delete {
         }
     );
 
-    if ( not defined $item_group ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item group not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item group")
+        unless $item_group;
 
     return try {
         $item_group->delete;

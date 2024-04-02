@@ -53,16 +53,13 @@ sub get {
 
     return try {
         my $city = Koha::Cities->find( $c->param('city_id') );
-        unless ($city) {
-            return $c->render( status  => 404,
-                            openapi => { error => "City not found" } );
-        }
+        return $c->render_resource_not_found("City")
+            unless $city;
 
         return $c->render( status => 200, openapi => $c->objects->to_api($city), );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
-    }
+    };
 }
 
 =head3 add
@@ -95,10 +92,8 @@ sub update {
 
     my $city = Koha::Cities->find( $c->param('city_id') );
 
-    if ( not defined $city ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+    return $c->render_resource_not_found("City")
+        unless $city;
 
     return try {
         $city->set_from_api( $c->req->json );
@@ -118,10 +113,9 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $city = Koha::Cities->find( $c->param('city_id') );
-    if ( not defined $city ) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Object not found" } );
-    }
+
+    return $c->render_resource_not_found("City")
+        unless $city;
 
     return try {
         $city->delete;

@@ -309,11 +309,8 @@ subtest 'add() tests' => sub {
 
     # Attempt to import titles from a virtualshelf that doesn't exist
     $virtual_shelf->delete;
-    $t->post_ok(
-    "//$userid:$password@/api/v1/erm/eholdings/local/titles/import" => json =>
-      $import_request )->status_is(404)->json_is(
-        { error => 'List not found' }
-      );
+    $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/import" => json => $import_request )
+        ->status_is(404)->json_is( '/error' => 'List not found' );
 
     # Authorized attempt to create with null id
     $ehtitle->{title_id} = undef;

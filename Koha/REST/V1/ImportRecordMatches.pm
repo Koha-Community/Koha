@@ -43,12 +43,10 @@ sub unset_chosen {
     my $matches = Koha::Import::Record::Matches->search({
         import_record_id => $c->param('import_record_id'),
     });
-    unless ($matches) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "No matches not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Matches")
+        unless $matches;
+
     return try {
         $matches->update({ chosen => 0 });
         return $c->render( status => 204, openapi => $matches );
@@ -80,12 +78,8 @@ sub set_chosen {
         candidate_match_id => $candidate_match_id
     });
 
-    unless ($match) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Match not found" }
-        );
-    }
+    return $c->render_resource_not_found("Match")
+        unless $match;
 
     return try {
         my $matches = Koha::Import::Record::Matches->search({

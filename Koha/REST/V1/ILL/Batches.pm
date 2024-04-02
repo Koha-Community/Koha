@@ -63,12 +63,8 @@ sub get {
     return try {
         my $ill_batch = $c->objects->find( Koha::ILL::Batches->new, $c->param('ill_batch_id') );
 
-        unless ($ill_batch) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "ILL batch not found" }
-            );
-        }
+        return $c->render_resource_not_found("ILL batch")
+            unless $ill_batch;
 
         return $c->render(
             status  => 200,
@@ -92,12 +88,8 @@ sub add {
 
     my $patron = Koha::Patrons->find( { cardnumber => $body->{cardnumber} } );
 
-    if ( not defined $patron ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Patron with cardnumber " . $body->{cardnumber} . " not found" }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     delete $body->{cardnumber};
     $body->{patron_id} = $patron->id;
@@ -138,12 +130,8 @@ sub update {
 
     my $batch = Koha::ILL::Batches->find( $c->param('ill_batch_id') );
 
-    unless ($batch) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "ILL batch not found" }
-        );
-    }
+    return $c->render_resource_not_found("ILL batch")
+        unless $batch;
 
     my $params = $c->req->json;
     delete $params->{cardnumber};
@@ -172,9 +160,8 @@ sub delete {
 
     my $batch = Koha::ILL::Batches->find( $c->param('ill_batch_id') );
 
-    if ( not defined $batch ) {
-        return $c->render( status => 404, openapi => { error => "ILL batch not found" } );
-    }
+    return $c->render_resource_not_found("ILL batch")
+        unless $batch;
 
     return try {
         $batch->delete_and_log;

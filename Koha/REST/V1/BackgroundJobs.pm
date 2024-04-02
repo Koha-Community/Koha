@@ -75,10 +75,8 @@ sub get {
 
         my $job = Koha::BackgroundJobs->find($job_id);
 
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        ) unless $job;
+        return $c->render_resource_not_found("Job")
+            unless $job;
 
         return $c->render(
             status  => 403,
