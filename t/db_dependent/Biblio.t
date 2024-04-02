@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -1021,6 +1021,27 @@ subtest 'ModBiblio on invalid record' => sub {
         "Metadata issue successfully logged in action logs"
     );
 };
+
+subtest 'UpdateTotalIssues on Invalid record' => sub {
+    plan tests => 2;
+
+    my $return_record = Test::MockModule->new('Koha::Biblio::Metadata');
+    $return_record->mock( 'record', sub { Koha::Exceptions::Metadata::Invalid->throw() } );
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $increase = 1;
+
+    my $success;
+    warning_is {
+        $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, '' );
+    }
+    "UpdateTotalIssues could not get biblio record", "Expected warning found";
+
+    ok( !$success, 'UpdateTotalIssues fails gracefully for invalid record' );
+
+};
+
 
 # Cleanup
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
