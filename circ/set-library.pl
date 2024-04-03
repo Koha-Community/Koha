@@ -51,55 +51,57 @@ my @updated;
 
 my $library = Koha::Libraries->find($branch);
 # $session lines here are doing the updating
+## Please see file perltidy.ERR
 if (
        $op eq 'cud-set-library'
     && $library
     && (   C4::Auth::haspermission( C4::Context->userenv->{'id'}, { 'loggedinlibrary' => 1 } )
-        or C4::Context::IsSuperLibraian() )
+        or C4::Context::IsSuperLibrarian() )
     )
 {
-    if ( !$userenv_branch or $userenv_branch ne $branch  )  {
+    if ( !$userenv_branch or $userenv_branch ne $branch ) {
         my $branchname = $library->branchname;
-        $session->param('branchname', $branchname);         # update sesssion in DB
-        $session->param('branch', $branch);                 # update sesssion in DB
+        $session->param( 'branchname', $branchname );    # update sesssion in DB
+        $session->param( 'branch',     $branch );        # update sesssion in DB
         push @updated, {
             updated_branch => 1,
-                old_branch => $userenv_branch,
-                new_branch => $branch,
+            old_branch     => $userenv_branch,
+            new_branch     => $branch,
         };
-    } # else branch the same, no update
-    if ( $desk_id && (!$userenv_desk or $userenv_desk ne $desk_id) ) {
-        my $desk = Koha::Desks->find( { desk_id => $desk_id } );
+    }    # else branch the same, no update
+} elsif ( $op eq 'cud-set-library' && $library ) {
+    if ( $desk_id && ( !$userenv_desk or $userenv_desk ne $desk_id ) ) {
+        my $desk          = Koha::Desks->find( { desk_id => $desk_id } );
         my $old_desk_name = '';
         if ($userenv_desk) {
-            $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk })->desk_name;
+            $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk } )->desk_name;
         }
         $template->param( LoginDeskname => $desk->desk_name );
-        $template->param( LoginDeskid => $desk->desk_id );
+        $template->param( LoginDeskid   => $desk->desk_id );
         $session->param( desk_name => $desk->desk_name );
-        $session->param( desk_id => $desk->desk_id );
+        $session->param( desk_id   => $desk->desk_id );
         $session->flush();
         push @updated, {
             updated_desk => 1,
-            old_desk => $old_desk_name,
+            old_desk     => $old_desk_name,
         };
     }
     if ( defined($register_id)
         && ( $userenv_register_id ne $register_id ) )
     {
         my $old_register_name = C4::Context->userenv->{'register_name'} || '';
-        my $register = Koha::Cash::Registers->find($register_id);
-        $session->param( 'register_id', $register_id );
+        my $register          = Koha::Cash::Registers->find($register_id);
+        $session->param( 'register_id',   $register_id );
         $session->param( 'register_name', $register ? $register->name : '' );
         push @updated,
-          {
+            {
             updated_register => 1,
             old_register     => $old_register_name
-          };
+            };
     }
     $session->flush();
 } else {
-    $branch = $userenv_branch;  # fallback value
+    $branch  = $userenv_branch;    # fallback value
     $desk_id = $userenv_desk;
 }
 
