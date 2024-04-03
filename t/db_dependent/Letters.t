@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 92;
+use Test::More tests => 93;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -1098,4 +1098,49 @@ subtest 'Test message_id parameter for SendQueuedMessages' => sub {
     my $message_2 = C4::Letters::GetMessage($message_id);
     is( $message_1->{status}, 'failed', 'Message 1 status is unchanged' );
     is( $message_2->{status}, 'sent', 'Valid from_address => status sent' );
+};
+
+subtest 'Template toolkit syntax in parameters' => sub {
+
+    my $borrowernumber = Koha::Patron->new(
+        {
+            firstname      => 'Robert',
+            surname        => '[% USE Categories %][% Categories.all().search_related("borrowers").count() %]',
+            categorycode   => $patron_category,
+            branchcode     => $library->{branchcode},
+            dateofbirth    => $date,
+            smsalertnumber => undef,
+        }
+    )->store->borrowernumber;
+
+    my $title   = q|<<branches.branchname>> - <<status>>|;
+    my $content = q{Dear <<borrowers.firstname>> <<borrowers.surname>>};
+
+    $dbh->do(
+        q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','tt test','my name',1,?,?,'email')|,
+        undef, $library->{branchcode}, $title, $content
+    );
+
+    my $tables = {
+        borrowers => $borrowernumber,
+        branches  => $library->{branchcode},
+        biblio    => $biblionumber,
+    };
+    my $substitute = {
+        status => 'overdue',
+    };
+    my $prepared_letter = GetPreparedLetter(
+        module      => 'my module',
+        branchcode  => $library->{branchcode},
+        letter_code => 'tt test',
+        tables      => $tables,
+        substitute  => $substitute,
+        repeat      => [],
+    );
+
+    is(
+        $prepared_letter->{content},
+        'Dear Robert [% USE Categories %][% Categories.all().search_related("borrowers").count() %]',
+        'Template toolkit syntax in parameter was not evaluated.'
+    );
 };

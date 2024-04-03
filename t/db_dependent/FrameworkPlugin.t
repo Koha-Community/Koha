@@ -144,6 +144,7 @@ sub test05 {
     my $mOutput = Test::MockModule->new('C4::Output');
     $mContext->mock( 'userenv', \&mock_userenv );
     $mAuth->mock( 'checkauth', sub { return ( 1, undef, 1, all_perms() ); } );
+    $mAuth->mock( 'check_cookie_auth', sub { return ('ok') } );
     $mOutput->mock('output_html_with_http_headers',  sub { ++$launched; } );
 
     my $cgi=CGI->new;
