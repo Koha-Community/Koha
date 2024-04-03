@@ -420,6 +420,11 @@ sub transform_prepared_letter {
     Koha::Exception->throw("transform_prepared_letter called with letter content $params->{letter}->{content}");
 }
 
+sub ill_backend {
+    my ( $class, $args ) = @_;
+    return 'Test Plugin';
+}
+
 sub auth_client_get_user {
     my ( $self, $params ) = @_;
 
