@@ -399,6 +399,7 @@ sub update_category_to {
     my ( $self, $params ) = @_;
     my $counter = 0;
     while( my $patron = $self->next ) {
+        $patron->discard_changes;
         $counter++;
         $patron->categorycode($params->{category})->store();
     }
