@@ -24,7 +24,7 @@
         </li>
         [% IF ( do_it ) %]
             <li>
-                <a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by item type</a>
+                <a href="/cgi-bin/koha/reports/catalog_by_itemtype.pl">Catalog by item type</a>
             </li>
             <li>
                 <a href="#" aria-current="page">
@@ -75,7 +75,7 @@
 [% END %]
 [% ELSE %]
         <h1>View a count of items held at your library grouped by item type</h1>
-        <form method="post" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
+        <form method="get" action="/cgi-bin/koha/reports/catalog_by_itemtype.pl">
           <fieldset class="rows">
             <ol>
               <li>

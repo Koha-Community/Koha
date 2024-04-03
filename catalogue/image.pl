@@ -34,6 +34,13 @@ use Koha::Exceptions;
 $| = 1;
 
 my $data  = CGI->new;
+my ($auth_status) =
+    check_cookie_auth( $data->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    print $data->header( -type => 'text/plain', -status => '403 Forbidden' );
+    exit 0;
+}
+
 my $imagenumber;
 
 =head1 NAME

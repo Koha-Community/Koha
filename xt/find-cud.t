@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2002 Katipo Communications
-#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -18,20 +16,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use CGI qw ( -utf8 );
-use C4::Auth qw( check_cookie_auth );
+use Test::More tests => 1;
+use Data::Dumper;
 
-use Koha::FrameworkPlugin;
+my @files = `git grep 'cud-' ':(exclude)xt/find-cud.t' ':(exclude)misc/release_notes/*'`;
+chomp for @files;
 
-my $input = CGI->new;
-my ($auth_status) =
-    check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => 1 } );
-if ( $auth_status ne "ok" ) {
-    print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
-    exit 0;
-}
-
-my $plugin= Koha::FrameworkPlugin->new( {
-    name => scalar $input->param("plugin_name"),
-});
-$plugin->launch({ cgi => $input });
+is( @files, 0, "This branch is not supposed to have 'cud-', see bug 34478." )
+    or diag( Dumper \@files );
