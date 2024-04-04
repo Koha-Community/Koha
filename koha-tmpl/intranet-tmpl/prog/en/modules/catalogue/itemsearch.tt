@@ -388,6 +388,7 @@
                 + '      <th id="items_widthdrawn">' + _("Withdrawn status") + '</th>'
                 + '      <th id="items_damaged">' + _("Damaged status") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
+                + '      <th id="items_datelastborrowed">' + _("Date last borrowed") + '</th>'
                 + '      <th id="items_date_due">' + _("Due date") + '</th>'
                 + '      <th id=""></th>'
                 + '    </tr>';
@@ -511,6 +512,7 @@
                     { 'name': 'withdrawn' },
                     { 'name': 'damaged' },
                     { 'name': 'issues' },
+                    { 'name': 'datelastborrowed' },
                     { 'name': 'date_due' },
                     { 'name': 'actions', 'orderable': false }
                 ],
@@ -567,6 +569,7 @@
                     [% ELSE %]
                         null,
                     [% END %]
+                    { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'text' },
                     null

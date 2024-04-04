@@ -41,4 +41,6 @@
 [%- delimiter | $raw -%]
 "[% (item.issues || 0) | $raw %]"
 [%- delimiter | $raw -%]
+"[% item.datelastborrowed | $KohaDates | $raw %]"
+[%- delimiter | $raw -%]
 "[% IF item.checkout %][% item.checkout.date_due | $KohaDates | $raw %][% END %]"
