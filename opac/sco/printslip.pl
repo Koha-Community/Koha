@@ -47,14 +47,6 @@ unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
     exit;
 }
 
-if (C4::Context->preference('AutoSelfCheckAllowed'))
-{
-    my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
-    my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
-    $input->param(-name=>'userid',-values=>[$AutoSelfCheckID]);
-    $input->param(-name=>'password',-values=>[$AutoSelfCheckPass]);
-    $input->param(-name=>'koha_login_context',-values=>['sco']);
-}
 $input->param(-name=>'sco_user_login',-values=>[1]);
 
 # patrons still need to be able to print receipts
