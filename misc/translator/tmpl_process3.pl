@@ -381,7 +381,7 @@ if ($action eq 'install') {
         } else {
         # just copying the file
             mkdir_recursive($targetdir) unless -d $targetdir;
-            system("cp -f $input $target");
+            system("cp -f '$input' '$target'") == 0 or warn "Cannot copy $input to $target";
             print STDERR "Copying $input...\n" unless $quiet;
         }
     }
