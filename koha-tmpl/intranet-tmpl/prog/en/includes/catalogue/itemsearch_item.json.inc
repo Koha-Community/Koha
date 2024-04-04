@@ -19,6 +19,7 @@
   "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]#item[% item.itemnumber | uri %]" title="Go to item details">[% item.barcode | html %]</a>
   [%~ END %]",
+  "[% item.itemnumber | html %]",
   "[% item.enumchron | html %]",
   "[% item.itemcallnumber | html %]",
   "[% Branches.GetName(item.homebranch) | html %]",

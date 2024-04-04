@@ -377,6 +377,7 @@
                 + '      <th id="items_publisher">' + _("Publisher") + '</th>'
                 + '      <th id="items_collection">' + _("Collection") + '</th>'
                 + '      <th id="items_barcode">' + _("Barcode") + '</th>'
+                + '      <th id="items_itemnumber">' + _("Item number") + '</th>'
                 + '      <th id="items_enumchron">' + _("Serial enumeration") + '</th>'
                 + '      <th id="items_callno">' + _("Call number") + '</th>'
                 + '      <th id="items_homebranch">' + _("Home library") + '</th>'
@@ -501,6 +502,7 @@
                     { 'name': 'publishercode' },
                     { 'name': 'ccode' },
                     { 'name': 'barcode' },
+                    { 'name': 'itemnumber' },
                     { 'name': 'enumchron' },
                     { 'name': 'itemcallnumber' },
                     { 'name': 'homebranch' },
@@ -534,6 +536,7 @@
                     [% ELSE %]
                         null,
                     [% END %]
+                    { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'text' },

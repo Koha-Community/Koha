@@ -17,6 +17,8 @@
 [%- delimiter | $raw -%]
 "[% item.barcode | replace('"', '""') | $raw %]"
 [%- delimiter | $raw -%]
+"[% item.itemnumber | replace('"', '""') | $raw %]"
+[%- delimiter | $raw -%]
 "[% item.enumchron | replace('"', '""') | $raw %]"
 [%- delimiter | $raw -%]
 "[% item.itemcallnumber | replace('"', '""') | $raw %]"
