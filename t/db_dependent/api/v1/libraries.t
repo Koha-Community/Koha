@@ -111,7 +111,7 @@ subtest 'list() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -127,6 +127,19 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode )
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_is( '' => $library->to_api, 'SWAGGER3.3.2' );
+
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/"
+            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )->status_is(200)
+        ->json_is( { %{ $library->to_api }, desks => [], cash_registers => [] } );
+
+    my $desk = $builder->build_object( { class => 'Koha::Desks', value => { branchcode => $library->id } } );
+    my $cash_register =
+        $builder->build_object( { class => 'Koha::Cash::Registers', value => { branch => $library->id } } );
+
+    $t->get_ok( "//$userid:$password@/api/v1/libraries/"
+            . $library->branchcode => { 'x-koha-embed' => 'cash_registers,desks' } )->status_is(200)
+        ->json_is(
+        { %{ $library->to_api }, desks => [ $desk->to_api ], cash_registers => [ $cash_register->to_api ] } );
 
     my $non_existent_code = $library->branchcode;
     $library->delete;
