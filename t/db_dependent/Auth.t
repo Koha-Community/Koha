@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -1348,6 +1348,98 @@ subtest 'AutoLocation' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'AutoSelfCheckAllowed' => sub {
+    plan tests => 5;
+
+    my $query = CGI->new;
+    my $auth  = Test::MockModule->new('C4::Auth');
+    $auth->mock( 'safe_exit', sub { return } );
+
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckAllowed', 0 );
+
+    # Pref is off, cannot access sco
+    {
+        # checkauth will redirect and safe_exit if not authenticated and not authorized
+        local *STDOUT;
+        my $stdout;
+        open STDOUT, '>', \$stdout;
+        my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+            {
+                template_name => "sco/sco-main.tt",
+                query         => $query,
+                type          => "opac",
+                flagsrequired => { self_check => "self_checkout_module" },
+            }
+        );
+        like( $stdout, qr{<title>\s*Log in to your account} );
+        close STDOUT;
+    };
+
+    # Pref is on from here
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckAllowed', 1 );
+
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckID',   '' );
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckPass', '' );
+
+    # Credential prefs are empty, cannot access sco
+    {
+        # checkauth will redirect and safe_exit if not authenticated and not authorized
+        local *STDOUT;
+        my $stdout;
+        open STDOUT, '>', \$stdout;
+        my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+            {
+                template_name => "sco/sco-main.tt",
+                query         => $query,
+                type          => "opac",
+                flagsrequired => { self_check => "self_checkout_module" },
+            }
+        );
+        like( $stdout, qr{<title>\s*Log in to your account} );
+        close STDOUT;
+    };
+
+    my $sco_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    my $password   = set_weak_password($sco_patron);
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckID',   $sco_patron->userid );
+    t::lib::Mocks::mock_preference( 'AutoSelfCheckPass', $password );
+
+    # Credential pref are good but patron does not have the self_checkout_module subpermission
+    {
+        # checkauth will redirect and safe_exit if not authenticated and not authorized
+        local *STDOUT;
+        my $stdout;
+        open STDOUT, '>', \$stdout;
+        my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+            {
+                template_name => "sco/sco-main.tt",
+                query         => $query,
+                type          => "opac",
+                flagsrequired => { self_check => "self_checkout_module" },
+            }
+        );
+        like( $stdout, qr{<title>\s*Log in to your account} );
+        close STDOUT;
+    };
+
+    # All good from now
+    C4::Context->dbh->do(
+        q|
+            INSERT INTO user_permissions (borrowernumber, module_bit, code) VALUES (?, ?, ?)
+        |, undef, $sco_patron->borrowernumber, 23, 'self_checkout_module'
+    );
+    my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
+        {
+            template_name => "sco/sco-main.tt",
+            query         => $query,
+            type          => "opac",
+            flagsrequired => { self_check => "self_checkout_module" },
+        }
+    );
+    is( $template->{VARS}->{logged_in_user}->id, $sco_patron->id );
+    is( $loggedinuser,                           $sco_patron->id );
 };
 
 sub set_weak_password {
