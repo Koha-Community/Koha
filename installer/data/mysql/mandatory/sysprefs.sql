@@ -93,7 +93,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AutomaticItemReturn','1',NULL,'If ON, Koha will automatically set up a transfer of this item to its homebranch','YesNo'),
 ('autoMemberNum','0','','If ON, patron number is auto-calculated','YesNo'),
 ('AutoRemoveOverduesRestrictions','no','no|when_no_overdue|when_no_overdue_causing_debarment', 'Defines if and on what conditions OVERDUES debarments should automatically be lifted when overdue items are returned by the patron.','Choice'),
-('AutoRenewalNotices','cron','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice'),
+('AutoRenewalNotices','preferences','cron|preferences|never','How should Koha determine whether to end autorenewal notices','Choice'),
 ('AutoResumeSuspendedHolds','1',NULL,'Allow suspended holds to be automatically resumed by a set date.','YesNo'),
 ('AutoReturnCheckedOutItems', '0', '', 'If disabled, librarian must confirm return of checked out item when checking out to another.', 'YesNo'),
 ('AutoSelfCheckAllowed','0','','For corporate and special libraries which want web-based self-check available from any PC without the need for a manual staff login. Most libraries will want to leave this turned off. If on, requires self-check ID and password to be entered in AutoSelfCheckID and AutoSelfCheckPass sysprefs.','YesNo'),
