@@ -10,10 +10,24 @@ KOHA.Preferences = {
 
         let sysprefs = $(form).find('.modified').not('.preference-checkbox').toArray().reduce((map, e) => ({ ...map, [$(e).attr('name')]: [$(e).val()].flat()}), {});
 
-        // language prefs
-        $(form).find('.modified.preference-checkbox:checked').toArray().forEach((elt) => {
-            (sysprefs[$(elt).attr('name')] = sysprefs[$(elt).attr('name')] || []).push($(elt).val());
-        });
+        // checkbox prefs
+        let modified_boxes = $(form).find(".modified.preference-checkbox");
+        let all_boxes_unchecked = true;
+        if (modified_boxes.length > 0) {
+            modified_boxes
+                .toArray()
+                .filter(elt => $(elt).prop("checked"))
+                .forEach(elt => {
+                    all_boxes_unchecked = false;
+                    (sysprefs[$(elt).attr("name")] =
+                        sysprefs[$(elt).attr("name")] || []).push($(elt).val());
+                });
+            if (all_boxes_unchecked) {
+                modified_boxes.toArray().forEach(elt => {
+                    sysprefs[$(elt).attr("name")] = [];
+                });
+            }
+        }
 
         if ( !Object.keys(sysprefs).length ) {
             humanMsg.displayAlert( __("Nothing to save") );
