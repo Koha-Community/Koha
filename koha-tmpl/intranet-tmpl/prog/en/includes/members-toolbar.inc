@@ -44,13 +44,16 @@
         <a id="searchtohold" class="btn btn-default" href="#"><i class="fa fa-search"></i> Search to hold</a>
     [% END %]
 
-    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
+    [% IF CAN_user_borrowers_edit_borrowers %]
+        <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
+    [% END %]
 
     [% IF Koha.Preference('CurbsidePickup') %]
         <a id="curbsidePickupLabel" href="/cgi-bin/koha/circ/curbside_pickups.pl?op=find-patron&borrowernumber=[% patron.borrowernumber | html %]" class="btn btn-default"><i class="fa-solid fa-rotate"></i> Schedule pickup</a>
     [% END %]
 
-         <div class="btn-group">
+    [% IF CAN_user_borrowers_edit_borrowers %]
+        <div class="btn-group">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-right">
                 [% IF CAN_user_borrowers_edit_borrowers %]
@@ -113,7 +116,8 @@
                     [% END %]
                 [% END %]
             </ul>
-    </div>
+        </div>
+    [% END %]
 </div>
 
 <!-- Modal -->
