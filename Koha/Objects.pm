@@ -25,7 +25,6 @@ use Class::Inspector;
 
 use Koha::Database;
 use Koha::Exceptions::Object;
-use Koha::DateUtils qw( dt_from_string );
 
 =head1 NAME
 
@@ -232,10 +231,10 @@ sub update {
 
 =head3 filter_by_last_update
 
-my $filtered_objects = $objects->filter_by_last_update({
-    from => $date1, to => $date2,
-    days|older_than => $days, min_days => $days, younger_than => $days,
-});
+    my $filtered_objects = $objects->filter_by_last_update({
+        from => $from_datetime, to => $to_datetime,
+        days|older_than => $days, min_days => $days, younger_than => $days,
+    });
 
 You should pass at least one of the parameters: from, to, days|older_than,
 min_days or younger_than. Make sure that they do not conflict with each other
@@ -243,7 +242,7 @@ to get meaningful results.
 Note: from, to and min_days are inclusive! And by nature days|older_than
 and younger_than are exclusive.
 
-The from and to parameters can be DateTime objects or date strings.
+The from and to parameters must be DateTime objects.
 
 =cut
 
@@ -254,21 +253,24 @@ sub filter_by_last_update {
     Koha::Exceptions::MissingParameter->throw("Please pass: days|from|to|older_than|younger_than")
         unless grep { exists $params->{$_} } qw/days from to older_than younger_than min_days/;
 
+    foreach my $key (qw(from to)) {
+        if (exists $params->{$key} and ref $params->{$key} ne 'DateTime') {
+            Koha::Exceptions::WrongParameter->throw("'$key' parameter must be a DateTime object");
+        }
+    }
+
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     foreach my $p ( qw/days older_than younger_than min_days/  ) {
         next if !exists $params->{$p};
-        my $dt = Koha::DateUtils::dt_from_string();
+        my $days = $params->{$p};
         my $operator = { days => '<', older_than => '<', min_days => '<=' }->{$p} // '>';
-        $dt->subtract( days => $params->{$p} )->truncate( to => 'day' );
-        $conditions->{$operator} = $dtf->format_datetime( $dt );
+        $conditions->{$operator} = \['DATE_SUB(CURDATE(), INTERVAL ? DAY)', $days];
     }
     if ( exists $params->{from} ) {
-        my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
-        $conditions->{'>='} = $dtf->format_datetime( $from );
+        $conditions->{'>='} = $dtf->format_datetime( $params->{from} );
     }
     if ( exists $params->{to} ) {
-        my $to = ref($params->{to}) ? $params->{to} : dt_from_string($params->{to});
-        $conditions->{'<='} = $dtf->format_datetime( $to );
+        $conditions->{'<='} = $dtf->format_datetime( $params->{to} );
     }
 
     return $self->search(

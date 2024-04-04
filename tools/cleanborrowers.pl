@@ -37,6 +37,8 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Members qw( GetBorrowersToExpunge );
+
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Old::Checkouts;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -149,7 +151,7 @@ elsif ( $op eq 'cud-delete' && $step == 3 ) {
         my $rows = Koha::Old::Checkouts
                      ->filter_by_anonymizable
                      ->filter_by_last_update({
-                         to => $last_issue_date, timestamp_column_name => 'returndate' })
+                         to => dt_from_string($last_issue_date), timestamp_column_name => 'returndate' })
                      ->anonymize;
 
         $template->param(

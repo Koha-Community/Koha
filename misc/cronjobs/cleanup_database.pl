@@ -701,6 +701,9 @@ if ( defined $pPseudoTransactions or $pPseudoTransactionsFrom or $pPseudoTransac
             $pPseudoTransactionsTo->set( hour => 23, minute => 59, second => 59 );
         }
     }
+    if ($pPseudoTransactionsFrom) {
+        $pPseudoTransactionsFrom = dt_from_string($pPseudoTransactionsFrom);
+    }
     my $anonymized_transactions = Koha::PseudonymizedTransactions->filter_by_last_update(
         {
             timestamp_column_name => 'datetime',
