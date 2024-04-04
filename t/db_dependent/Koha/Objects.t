@@ -1162,31 +1162,16 @@ subtest "filter_by_last_update" => sub {
     )->count;
     is( $count, 3, '3 patrons have been updated between D-4 and D-2' );
 
-    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );
-    try {
+    throws_ok {
         $count = $patrons->filter_by_last_update(
             { timestamp_column_name => 'updated_on', from => '1970-12-31' } )
           ->count;
-    }
-    catch {
-        ok(
-            $_->isa(
-                'No exception raised, from and to parameters can take an iso formatted date'
-            )
-        );
-    };
-    try {
+    } 'Koha::Exceptions::WrongParameter', 'from parameter must be a DateTime object';
+    throws_ok {
         $count = $patrons->filter_by_last_update(
-            { timestamp_column_name => 'updated_on', from => '31/12/1970' } )
+            { timestamp_column_name => 'updated_on', to => '1970-12-31' } )
           ->count;
-    }
-    catch {
-        ok(
-            $_->isa(
-                'No exception raised, from and to parameters can take an metric formatted date (depending on dateformat syspref)'
-            )
-        );
-    };
+    } 'Koha::Exceptions::WrongParameter', 'to parameter must be a DateTime object';
 
     subtest 'Parameters older_than, younger_than' => sub {
         my $now = dt_from_string();
