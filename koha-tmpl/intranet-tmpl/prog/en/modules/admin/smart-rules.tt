@@ -70,6 +70,7 @@
                     current checkouts allowed will be limited to either the maximum for the parent (counting sibling types)
                     or the specific rule's type, whichever is less.</p>
                     <p>To modify a rule, create a new one with the same patron category and item type.</p>
+                    <p>The circulation and fine rules are applied based on the CircControl system preference which is set to <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=CircControl">[% Koha.Preference('CircControl') | html %]</a> and the HomeOrHoldingBranch system preference which is set to <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=HomeOrHoldingBranch">[% Koha.Preference('HomeOrHoldingBranch') | html %]</a>.</p>
                 </div>
 
                 <div class="page-section">
