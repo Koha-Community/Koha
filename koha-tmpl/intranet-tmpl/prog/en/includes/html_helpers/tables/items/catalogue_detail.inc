@@ -325,8 +325,8 @@
                     node += '<div class="cover-slider">';
                     row.cover_image_ids.forEach(id => {
                         node += '<div class="cover-image local-coverimg">';
-                        node += '<a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=%s&amp;imagenumber=%s" title="Local cover image">'.format(id, id);
-                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=%s" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=%s" />'.format(id, id);
+                        node += '<a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=%s&amp;imagenumber=%s" title="%s">'.format(id, id, _("Local cover image"));
+                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=%s" alt="%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=%s" />'.format(id, id, _("Local cover image"));
                         node += '</a>';
                         node += '</div>';
                     });
@@ -690,7 +690,7 @@
                 orderable: false,
                 render: function (data, type, row, meta) {
                     if (row.analytics_count == 0) return ""
-                    return '<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=%s">%s analytics</a>'.format(row.item_id, row.analytics_count);
+                    return '<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=%s">%s</a>'.format(row.item_id, _("%s analytics").format(row.analytics_count));
                 }
             },
             {
@@ -698,7 +698,7 @@
                 searchable: false,
                 orderable: false,
                 render: function (data, type, row, meta) {
-                    return '<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=%s&amp;hostitemnumber=%s">Create analytics</a>'.format(row.biblio_id, row.item_id);
+                    return '<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=%s&amp;hostitemnumber=%s">%s</a>'.format(row.biblio_id, row.item_id, _("Create analytics"));
                 }
             },
             [% END %]
@@ -745,17 +745,17 @@
                     if ( can_edit_items_from[row.holding_library_id] ){
                         [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
                             nodes += '<div class="btn-group">';
-                            nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id);
+                            nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id, _("Edit"));
                             nodes += ' <ul class="dropdown-menu pull-right">';
-                            nodes += '  <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> Upload image</a></li>'.format(row.item_id);
+                            nodes += '  <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(row.item_id, _("Upload image"));
                             nodes += ' </ul>';
                             nodes += '</div>';
                         [% ELSE %]
-                            nodes += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> Edit</a>'.format(row.biblio_id, row.item_id);
+                            nodes += '<a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a>'.format(row.biblio_id, row.item_id, _("Edit"));
                         [% END %]
                     }
                     [% IF bundlesEnabled %]
-                        nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> Manage bundle (%s|%s)</button>'.format(escape_str(row.bundle_items_not_lost_count), escape_str(row.bundle_items_lost_count));
+                        nodes += '<button class="btn btn-default btn-xs details-control"><i class="fa fa-folder"></i> %s</button>'.format(_("Manage bundle (%s|%s)").format(row.bundle_items_not_lost_count, row.bundle_items_lost_count));
                     [% END %]
 
                     return nodes;
