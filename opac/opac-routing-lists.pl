@@ -39,7 +39,22 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $logged_in_user = Koha::Patrons->find($borrowernumber);
+my $message_id     = $query->param('message_id');
+my $message        = $logged_in_user->messages->find($message_id);
+
+unless ($message) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+unless ( $op =~ /^cud-/ && $message ) {
+    # exit early
+    print $query->redirect("/cgi-bin/koha/opac-user.pl");
+    exit;
+}
+
+$message->update({ patron_read_date => dt_from_string });
 
 $template->param(
     routinglistsview => 1,
