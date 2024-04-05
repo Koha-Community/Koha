@@ -636,9 +636,8 @@ describe("Data provider tab options", () => {
 
         cy.get("#files > form > fieldset > input[type=submit]").click();
 
-        cy.get(
-            "#erm > div > div.main.container-fluid > div > div.col-sm-10.col-sm-push-2 > main > div.dialog.message > li"
-        ).contains(
+        cy.get("main div[class='dialog message']").should(
+            "have.text",
             "Job for uploaded file has been queued. Check job progress."
         );
     });
@@ -742,9 +741,8 @@ describe("Data providers action buttons", () => {
                 cy.get(".dayContainer").contains(new RegExp("^1$")).click();
             });
         cy.get("#accept_modal").click();
-        cy.get(
-            "#erm > div > div.main.container-fluid > div > div.col-sm-10.col-sm-push-2 > main > div.dialog.message > li"
-        ).contains(
+        cy.get("main div[class='dialog message']").should(
+            "have.text",
             "Job for report type TR_J1 has been queued. Check job progress."
         );
     });
@@ -780,9 +778,8 @@ describe("Data providers action buttons", () => {
             .contains("Test")
             .click();
         cy.wait("@test-connection");
-        cy.get(
-            "#erm > div > div.main.container-fluid > div > div.col-sm-10.col-sm-push-2 > main > div.dialog.message"
-        ).contains(
+        cy.get("main div[class='dialog message']").should(
+            "have.text",
             "Harvester connection was successful for usage data provider " +
                 dataProvider.name
         );
