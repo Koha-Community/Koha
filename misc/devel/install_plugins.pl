@@ -51,7 +51,7 @@ unless (@installed_plugins) {
     my $plugins_dir = C4::Context->config("pluginsdir");
     if ( ref($plugins_dir) eq 'ARRAY' ) {
         print "No plugins found\n";
-        print "pluginsdir contains: \n" . join( '\n', @{$plugins_dir} );
+        print "pluginsdir contains: \n" . join( "\n", @{$plugins_dir} ) . "\n";
     }
     else {
         print "No plugins found at $plugins_dir\n";
