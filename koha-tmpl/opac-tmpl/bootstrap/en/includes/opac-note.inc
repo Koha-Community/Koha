@@ -9,7 +9,6 @@
                 </li>
                 <form id="dismiss-message-form" action="/cgi-bin/koha/opac-dismiss-message.pl" method="post">
                     <input type="hidden" name="message_id" value="[% message.message_id | html %]">
-                    <input type="hidden" name="patron_id" value="[% message.borrowernumber | html %]">
                     <button type="submit" class="dismiss-message-button btn btn-primary"><i class="fa fa-trash" aria-hidden="true"></i> Dismiss</button>
                 </form>
             [% END %]
