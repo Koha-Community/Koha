@@ -2062,7 +2062,11 @@ sub has_valid_userid {
 sub generate_userid {
     my ( $self ) = @_;
     my @responses = Koha::Plugins->call(
-        'patron_generate_userid', { patron => $self },
+        'patron_generate_userid',
+        {
+            patron  => $self,                 #FIXME To be deprecated
+            payload => { patron => $self },
+        },
     );
     unless( @responses ) {
         # Empty list only possible when there are NO enabled plugins for this method.

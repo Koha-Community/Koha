@@ -2175,8 +2175,9 @@ sub _after_item_action_hooks {
         'after_item_action',
         {
             action  => $action,
-            item    => $self,
-            item_id => $self->itemnumber,
+            item    => $self,                                             #FIXME To be deprecated
+            item_id => $self->itemnumber,                                 #FIXME To be deprecated
+            payload => { item => $self, item_id => $self->itemnumber },
         }
     );
 }
