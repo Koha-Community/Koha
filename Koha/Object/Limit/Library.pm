@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Exceptions;
-use Koha::Libraries;
 
 use Try::Tiny qw( catch try );
 
@@ -86,6 +85,8 @@ sub get_library_limits {
         ->get_column( $self->_library_limits->{library} )->all();
 
     return unless @branchcodes;
+
+    require Koha::Libraries;
 
     my $filter = [ map { { branchcode => $_ } } @branchcodes ];
     my $libraries = Koha::Libraries->search( $filter );
