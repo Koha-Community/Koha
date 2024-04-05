@@ -408,7 +408,7 @@ sub home_library {
 =cut
 
 sub holding_branch {
-    return shift->home_library(@_);
+    return shift->holding_library(@_);
 }
 
 =head3 holding_library
