@@ -44,7 +44,6 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Policy::Holds;
@@ -1597,6 +1596,7 @@ sub _FixPriority {
         $hold = Koha::Holds->find( $reserve_id );
         if (!defined $hold){
             # may have already been checked out and hold fulfilled
+            require Koha::Old::Holds;
             $hold = Koha::Old::Holds->find( $reserve_id );
         }
         return unless $hold;
