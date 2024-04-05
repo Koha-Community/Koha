@@ -193,7 +193,7 @@ subtest 'get_items() tests' => sub {
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
-    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items")
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items?_order_by=item_id" )
       ->status_is(200)
       ->json_is( '' => [ $item_1->to_api, $item_2->to_api ], 'The items are returned' );
 
