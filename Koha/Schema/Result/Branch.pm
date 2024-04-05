@@ -815,6 +815,21 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 old_reserves
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::OldReserve>
+
+=cut
+
+__PACKAGE__->has_many(
+  "old_reserves",
+  "Koha::Schema::Result::OldReserve",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 problem_reports
 
 Type: has_many
@@ -951,8 +966,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-19 18:12:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZN7YtRwqkiYZYU1U+Yi+SA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-05 06:44:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hNniM1Slml6YGmpEa3MJ1w
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
