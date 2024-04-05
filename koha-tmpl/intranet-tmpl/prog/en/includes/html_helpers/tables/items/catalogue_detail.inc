@@ -76,7 +76,7 @@
 [% BLOCK build_items_table_js %]
 <script>
 
-    let hide_patron_name = [% !Koha.Preference('HidePatronName') ? 'false' : 'true' %];
+    let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];
     [% IF StaffDetailItemSelection %]
 
         let items_selection = {};
