@@ -27,7 +27,6 @@ use Koha::Account::Offsets;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Account;
-use Koha::Items;
 use Koha::Patron::Debarments;
 
 use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
@@ -80,6 +79,7 @@ sub item {
     my ( $self ) = @_;
     my $rs = $self->_result->itemnumber;
     return unless $rs;
+    require Koha::Item;
     return Koha::Item->_new_from_dbic( $rs );
 }
 
