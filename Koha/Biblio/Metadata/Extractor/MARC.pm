@@ -27,9 +27,6 @@ use Modern::Perl;
 
 use Koha::Exceptions;
 
-use Koha::Biblio::Metadata::Extractor::MARC::MARC21;
-use Koha::Biblio::Metadata::Extractor::MARC::UNIMARC;
-
 =head1 API
 
 =head2 Class methods
@@ -58,6 +55,8 @@ sub new {
         unless $valid_schemas->{$schema};
 
     my $sub_class = "Koha::Biblio::Metadata::Extractor::MARC::$schema";
+    require "Koha/Biblio/Metadata/Extractor/MARC/$schema.pm";
+
     return $sub_class->new($params);
 }
 
