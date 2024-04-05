@@ -36,10 +36,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron_id = $query->param('patron_id');
-my $patron = Koha::Patrons->find( $patron_id );
-my $message_id = $query->param('message_id');
-my $message = $patron->messages->find( $message_id );
+my $logged_in_user = Koha::Patrons->find($borrowernumber);
+my $message_id     = $query->param('message_id');
+my $message        = $logged_in_user->messages->find($message_id);
+
+unless ($message) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 unless ( $op =~ /^cud-/ && $message ) {
     # exit early
