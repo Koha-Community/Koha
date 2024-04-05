@@ -23,7 +23,6 @@ use Test::More tests => 11;
 use Test::Exception;
 
 use Koha::Suggestions;
-use Koha::Config::SysPrefs;
 use Koha::Notice::Messages;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -68,8 +67,7 @@ subtest 'store' => sub {
     $suggestion = Koha::Suggestions->find( $suggestion->suggestionid );
     is( $suggestion->suggesteddate, $two_days_ago_sql, 'If suggestion id modified, suggesteddate should not be modified' );
 
-    my $syspref = Koha::Config::SysPrefs->find('EmailPurchaseSuggestions');
-    $syspref->value(0)->store;
+    t::lib::Mocks::mock_preference( 'EmailPurchaseSuggestions', 0 );
     Koha::Notice::Messages->search->delete;
     $suggestion->STATUS('ASKED')->store;
     my $last_message = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->single;
@@ -81,8 +79,7 @@ subtest 'store' => sub {
         'If EmailPurchaseSuggestions is not enabled, a message should not be sent'
     );
 
-    $syspref = Koha::Config::SysPrefs->find('EmailPurchaseSuggestions');
-    $syspref->value('EmailAddressForSuggestions')->store;
+    t::lib::Mocks::mock_preference( 'EmailPurchaseSuggestions', 'EmailAddressForSuggestions' );
     Koha::Notice::Messages->search->delete;
     $suggestion->STATUS('ASKED')->store;
     $last_message = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->single;
