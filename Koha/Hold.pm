@@ -34,7 +34,6 @@ use Koha::Biblios;
 use Koha::Hold::CancellationRequests;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Old::Holds;
 use Koha::Calendar;
 use Koha::Plugins;
 
@@ -1014,6 +1013,7 @@ Move a hold to the old_reserve table following the same pattern as Koha::Patron-
 sub _move_to_old {
     my ($self) = @_;
     my $hold_infos = $self->unblessed;
+    require Koha::Old::Hold;
     return Koha::Old::Hold->new( $hold_infos )->store;
 }
 
