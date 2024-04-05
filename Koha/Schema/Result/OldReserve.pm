@@ -65,6 +65,7 @@ foreign key from the item_groups table defining if this is an item group level h
 =head2 branchcode
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
   size: 10
 
@@ -237,7 +238,7 @@ __PACKAGE__->add_columns(
   "item_group_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "desk_id",
   { data_type => "integer", is_nullable => 1 },
   "notificationdate",
@@ -346,6 +347,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 branchcode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branchcode",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 item_group
 
 Type: belongs_to
@@ -407,8 +428,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-02-10 14:01:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:evv31XLI36n7e+oYL/hsug
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-05 06:44:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SQp2OEYb3im1x3A+W0h37w
 
 __PACKAGE__->belongs_to(
   "item",
