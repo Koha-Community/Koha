@@ -15,7 +15,7 @@ return {
         }
         );
 
-        say $out "Updated system preference 'SerialsDefaultEMailAddress' -> SerialsDefaultEmailAddress";
+        say $out "Updated system preference 'SerialsDefaultEMailAddress' -> 'SerialsDefaultEmailAddress'";
 
         $dbh->do(
             q{
@@ -25,6 +25,6 @@ return {
         }
         );
 
-        say $out "Updated system preference 'AcquisitionsDefaultEMailAddress' -> AcquisitionsDefaultEmailAddress";
+        say $out "Updated system preference 'AcquisitionsDefaultEMailAddress' -> 'AcquisitionsDefaultEmailAddress'";
     },
 };
