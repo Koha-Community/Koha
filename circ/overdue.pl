@@ -242,6 +242,7 @@ if ($noreport) {
         borrowers.branchcode,
         issues.itemnumber,
         issues.issuedate,
+        items.datelastborrowed,
         items.barcode,
         items.homebranch,
         items.holdingbranch,
@@ -337,6 +338,7 @@ if ($noreport) {
             email                  => $data->{email},
             branchcode             => $data->{branchcode},
             barcode                => $data->{barcode},
+            datelastborrowed       => $data->{datelastborrowed},
             itemnum                => $data->{itemnumber},
             issuedate              => $data->{issuedate},
             biblionumber           => $data->{biblionumber},
@@ -401,7 +403,7 @@ sub build_csv {
     # build header ...
     my @keys =
       qw ( duedate title author borrowertitle firstname surname phone barcode email address address2 zipcode city country
-      branchcode itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice itemnotes_nonpublic streetnumber streettype);
+      branchcode datelastissued itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice itemnotes_nonpublic streetnumber streettype);
     my $csv = Text::CSV_XS->new();
     $csv->combine(@keys);
     push @lines, $csv->string();
