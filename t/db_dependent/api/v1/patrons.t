@@ -707,7 +707,8 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 43;
+
+        plan tests => 44;
 
         $schema->storage->txn_begin;
 
@@ -899,6 +900,127 @@ subtest 'update() tests' => sub {
           ->status_is(200, "Non-superlibrarian user can edit superlibrarian successfully if not changing email")
           ->json_is( '/date_of_birth' => $newpatron->{ date_of_birth }, 'Date field set (Bug 28585)' )
           ->json_is( '/last_seen'     => $newpatron->{ last_seen }, 'Date-time field set (Bug 28585)' );
+
+        subtest "extended_attributes tests" => sub {
+
+            plan tests => 26;
+
+            my $attr_type_repeatable = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => { repeatable => 1, unique_id => 0, mandatory => 0, category_code => undef }
+                }
+            );
+
+            my $attr_type_unique = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => { repeatable => 0, unique_id => 1, mandatory => 0, category_code => undef }
+                }
+            );
+
+            my $attr_type_mandatory = $builder->build_object(
+                {
+                    class => 'Koha::Patron::Attribute::Types',
+                    value => { repeatable => 0, unique_id => 0, mandatory => 1, category_code => undef }
+                }
+            );
+
+            my $deleted_attr_type = $builder->build_object( { class => 'Koha::Patron::Attribute::Types' } );
+            my $deleted_attr_code = $deleted_attr_type->code;
+            $deleted_attr_type->delete;
+
+            # Make the mandatory attribute mandatory for the patron
+            $builder->build(
+                {
+                    source => 'BorrowerAttributeTypesBranch',
+                    value  => {
+                        bat_code     => $attr_type_mandatory->code,
+                        b_branchcode => undef,
+                    }
+                }
+            );
+
+            $newpatron->{extended_attributes} = [
+                { type => $deleted_attr_code, value => 'potato' },
+            ];
+
+            $t->put_ok( "//$userid:$password@/api/v1/patrons/"
+                    . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
+                    $newpatron )->status_is(400)
+                ->json_is( '/error'      => 'Tried to use an invalid attribute type. type=' . $deleted_attr_code )
+                ->json_is( '/error_code' => 'invalid_attribute_type' );
+
+            # Add a 'unique' attribute to force failure
+            my $unique_attr = $builder->build_object(
+                { class => 'Koha::Patron::Attributes', value => { code => $attr_type_unique->code } } );
+
+            $newpatron->{extended_attributes} = [
+                { type => $attr_type_repeatable->code, value => 'a' },
+                { type => $attr_type_repeatable->code, value => 'b' },
+                { type => $attr_type_mandatory->code,  value => 'thing' },
+                { type => $attr_type_unique->code,     value => $unique_attr->attribute }
+            ];
+
+            $t->put_ok( "//$userid:$password@/api/v1/patrons/"
+                    . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
+                    $newpatron )->status_is(400)
+                ->json_is( '/error' => 'Your action breaks a unique constraint on the attribute. type='
+                    . $attr_type_unique->code
+                    . ' value='
+                    . $unique_attr->attribute )->json_is( '/error_code' => 'attribute_not_unique' );
+
+            $newpatron->{extended_attributes} = [
+                { type => $attr_type_repeatable->code, value => 'a' },
+                { type => $attr_type_repeatable->code, value => 'b' },
+                { type => $attr_type_mandatory->code,  value => 'thing' },
+                { type => $attr_type_unique->code,     value => $unique_attr->attribute }
+            ];
+
+            $t->put_ok( "//$userid:$password@/api/v1/patrons/"
+                    . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
+                    $newpatron )->status_is(400)
+                ->json_is( '/error' => 'Your action breaks a unique constraint on the attribute. type='
+                    . $attr_type_unique->code
+                    . ' value='
+                    . $unique_attr->attribute )->json_is( '/error_code' => 'attribute_not_unique' );
+
+            $newpatron->{extended_attributes} = [
+                { type => $attr_type_repeatable->code, value => 'a' },
+                { type => $attr_type_mandatory->code,  value => 'ping' },
+                { type => $attr_type_mandatory->code,  value => 'pong' },
+            ];
+
+            $t->put_ok( "//$userid:$password@/api/v1/patrons/"
+                    . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
+                    $newpatron )->status_is(400)
+                ->json_is( '/error' => 'Tried to add more than one non-repeatable attributes. type='
+                    . $attr_type_mandatory->code
+                    . ' value=pong' )->json_is( '/error_code' => 'non_repeatable_attribute' );
+
+            my $unique_value = $unique_attr->attribute;
+            $unique_attr->delete;
+
+            $newpatron->{extended_attributes} = [
+                { type => $attr_type_repeatable->code, value => 'a' },
+                { type => $attr_type_repeatable->code, value => 'b' },
+                { type => $attr_type_mandatory->code,  value => 'thing' },
+                { type => $attr_type_unique->code,     value => $unique_value }
+            ];
+
+            my $extended_attributes =
+                $t->put_ok( "//$userid:$password@/api/v1/patrons/"
+                    . $superlibrarian->borrowernumber => { 'x-koha-embed' => 'extended_attributes' } => json =>
+                    $newpatron )->status_is(200)->tx->res->json->{extended_attributes};
+
+            my @sorted_extended_attributes =
+                sort { $a->{extended_attribute_id} <=> $b->{extended_attribute_id} } @{$extended_attributes};
+
+            foreach my $i ( 0 .. 3 ) {
+                is( $newpatron->{extended_attributes}->[$i]->{type}, $sorted_extended_attributes[$i]->{type} );
+                is( $newpatron->{extended_attributes}->[$i]->{code}, $sorted_extended_attributes[$i]->{code} );
+            }
+        };
 
         $schema->storage->txn_rollback;
     };
