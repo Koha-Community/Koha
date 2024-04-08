@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 70;
+use Test::More tests => 73;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -5489,6 +5489,233 @@ subtest 'Do not return on renewal (LOST charge)' => sub {
     is( $patron->checkouts->count, 1,
         'Renewal should not return the item even if a LOST payment has been made earlier'
     );
+};
+
+subtest 'Lost status does not change when preferences are set to 0' => sub {
+    plan tests => 2;
+
+    my $library = $builder->build_object( { class => "Koha::Libraries" } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => 99,
+            itype            => $itemtype,
+            itemlost         => 1,
+        }
+    );
+
+    my $debitCharge = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            debit_type_code   => 'LOST',
+            status            => undef,
+            itemnumber        => $item->itemnumber,
+            amount            => 12,
+            amountoutstanding => 12,
+            interface         => 'something',
+        }
+    )->store();
+
+    # Test for UpdateItemLostStatusWhenPaid
+    t::lib::Mocks::mock_preference( 'UpdateItemLostStatusWhenPaid', 0 );
+
+    my $paymentLine = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            credit_type_code  => 'CREDIT',
+            status            => undef,
+            itemnumber        => $item->itemnumber,
+            amountoutstanding => 0 - 12,
+            amount            => 0 - 12,
+            interface         => 'something',
+        }
+    )->store();
+
+    my $offset = Koha::Account::Offset->new(
+        {
+            credit_id => $paymentLine->id,
+            debit_id  => $debitCharge->id,
+            type      => 'APPLY',
+            amount    => 0
+        }
+    )->store();
+
+    $paymentLine->apply( { debits => [$debitCharge] } );
+
+    is(
+        Koha::Items->find( $item->itemnumber )->itemlost, 1,
+        "Payment should not change itemlost status when UpdateItemLostStatusWhenPaid is 0"
+    );
+
+    # Test for UpdateItemLostStatusWhenWriteOff
+    t::lib::Mocks::mock_preference( 'UpdateItemLostStatusWhenWriteOff', 0 );
+
+    my $writeOffLine = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            credit_type_code  => 'WRITEOFF',
+            status            => undef,
+            itemnumber        => $item->itemnumber,
+            amountoutstanding => 0 - 12,
+            amount            => 0 - 12,
+            interface         => 'something',
+        }
+    )->store();
+
+    $offset = Koha::Account::Offset->new(
+        {
+            credit_id => $writeOffLine->id,
+            debit_id  => $debitCharge->id,
+            type      => 'APPLY',
+            amount    => 0
+        }
+    )->store();
+
+    $writeOffLine->apply( { debits => [$debitCharge] } );
+
+    is(
+        Koha::Items->find( $item->itemnumber )->itemlost, 1,
+        "Write-off should not change itemlost status when UpdateItemLostStatusWhenWriteOff is 0"
+    );
+};
+
+# Test for UpdateItemLostStatusWhenPaid
+subtest 'Update lost item to authorized value on payment of balance' => sub {
+    plan tests => 5;
+
+    my $library = $builder->build_object( { class => "Koha::Libraries" } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    for my $status ( 2 .. 6 ) {
+        t::lib::Mocks::mock_preference( 'UpdateItemLostStatusWhenPaid', $status );
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblio->biblionumber,
+                library          => $library->branchcode,
+                replacementprice => 99,
+                itype            => $itemtype,
+                itemlost         => 1,
+            }
+        );
+
+        my $debitCharge = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->borrowernumber,
+                debit_type_code   => 'LOST',
+                status            => undef,
+                itemnumber        => $item->itemnumber,
+                amount            => 12,
+                amountoutstanding => 12,
+                interface         => 'something',
+            }
+        )->store();
+
+        my $paymentLine = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->borrowernumber,
+                credit_type_code  => 'CREDIT',
+                status            => undef,
+                itemnumber        => $item->itemnumber,
+                amountoutstanding => 0 - 12,
+                amount            => 0 - 12,
+                interface         => 'something',
+            }
+        )->store();
+
+        my $offset = Koha::Account::Offset->new(
+            {
+                credit_id => $paymentLine->id,
+                debit_id  => $debitCharge->id,
+                type      => 'APPLY',
+                amount    => 0
+            }
+        )->store();
+
+        $paymentLine->apply( { debits => [$debitCharge] } );
+
+        is(
+            Koha::Items->find( $item->itemnumber )->itemlost, $status,
+            "Payment should set itemlost to status $status"
+        );
+    }
+};
+
+# Test for UpdateItemLostStatusWhenWriteOff
+subtest 'Update lost item to authorized value on write-off of balance' => sub {
+    plan tests => 5;
+
+    my $library = $builder->build_object( { class => "Koha::Libraries" } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $manager, branchcode => $manager->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    for my $status ( 2 .. 6 ) {
+        t::lib::Mocks::mock_preference( 'UpdateItemLostStatusWhenWriteOff', $status );
+
+        my $item = $builder->build_sample_item(
+            {
+                biblionumber     => $biblio->biblionumber,
+                library          => $library->branchcode,
+                replacementprice => 99,
+                itype            => $itemtype,
+                itemlost         => 1,
+            }
+        );
+
+        my $debitCharge = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->borrowernumber,
+                debit_type_code   => 'LOST',
+                status            => undef,
+                itemnumber        => $item->itemnumber,
+                amount            => 12,
+                amountoutstanding => 12,
+                interface         => 'something',
+            }
+        )->store();
+
+        my $writeOffLine = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->borrowernumber,
+                credit_type_code  => 'WRITEOFF',
+                status            => undef,
+                itemnumber        => $item->itemnumber,
+                amountoutstanding => 0 - 12,
+                amount            => 0 - 12,
+                interface         => 'something',
+            }
+        )->store();
+
+        my $offset = Koha::Account::Offset->new(
+            {
+                credit_id => $writeOffLine->id,
+                debit_id  => $debitCharge->id,
+                type      => 'APPLY',
+                amount    => 0
+            }
+        )->store();
+
+        $writeOffLine->apply( { debits => [$debitCharge] } );
+
+        is(
+            Koha::Items->find( $item->itemnumber )->itemlost, $status,
+            "Write-off should set itemlost to status $status"
+        );
+    }
 };
 
 subtest 'Filling a hold should cancel existing transfer' => sub {
