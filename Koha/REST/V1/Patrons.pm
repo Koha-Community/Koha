@@ -273,14 +273,15 @@ sub update {
             and (  exists $body->{email}
                 or exists $body->{secondary_email}
                 or exists $body->{altaddress_email} )
-          )
+            )
         {
-            foreach my $email_field ( qw(email secondary_email altaddress_email) ) {
+            foreach my $email_field (qw(email secondary_email altaddress_email)) {
                 my $exists_email = exists $body->{$email_field};
                 next unless $exists_email;
 
                 # exists, verify if we are asked to change it
-                my $put_email      = $body->{$email_field};
+                my $put_email = $body->{$email_field};
+
                 # As of writing this patch, 'email' is the only unmapped field
                 # (i.e. it preserves its name, hence this fallback)
                 my $db_email_field = $patron->to_api_mapping->{$email_field} // 'email';
@@ -289,28 +290,38 @@ sub update {
                 return $c->render(
                     status  => 403,
                     openapi => { error => "Not enough privileges to change a superlibrarian's email" }
-                  )
-                  unless ( !defined $put_email and !defined $db_email )
-                  or (  defined $put_email
+                    )
+                    unless ( !defined $put_email and !defined $db_email )
+                    or (defined $put_email
                     and defined $db_email
                     and $put_email eq $db_email );
             }
         }
 
-        $patron->set_from_api($body)->store;
-        $patron->discard_changes;
-        return $c->render(
-            status  => 200,
-            openapi => $c->objects->to_api($patron),
+        $patron->_result->result_source->schema->txn_do(
+            sub {
+                # Remove `extended_attributes` before storing
+                my $extended_attributes = delete $body->{extended_attributes};
+
+                if ($extended_attributes) {
+                    my $rs = $patron->extended_attributes(
+                        [ map { { code => $_->{type}, attribute => $_->{value} } } @{$extended_attributes} ] );
+                }
+
+                $patron->set_from_api($body)->store;
+                $patron->discard_changes;
+
+                return $c->render(
+                    status  => 200,
+                    openapi => $c->objects->to_api($patron),
+                );
+            }
         );
-    }
-    catch {
+    } catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
             return $c->render(
                 status  => 500,
-                openapi => {
-                    error => "Something went wrong, check Koha logs for details."
-                }
+                openapi => { error => "Something went wrong, check Koha logs for details." }
             );
         }
         if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
@@ -318,22 +329,17 @@ sub update {
                 status  => 409,
                 openapi => { error => $_->error, conflict => $_->duplicate_id }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Patron::InvalidUserid') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Problem with ". $_->userid }
+                openapi => { error => "Problem with " . $_->userid }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+        } elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Given " .
-                            $patron->to_api_mapping->{$_->broken_fk}
-                            . " does not exist" }
+                openapi => { error => "Given " . $patron->to_api_mapping->{ $_->broken_fk } . " does not exist" }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::MissingParameter') ) {
+        } elsif ( $_->isa('Koha::Exceptions::MissingParameter') ) {
             return $c->render(
                 status  => 400,
                 openapi => {
@@ -341,8 +347,7 @@ sub update {
                     parameters => $_->parameter
                 }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+        } elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
             return $c->render(
                 status  => 400,
                 openapi => {
@@ -350,16 +355,34 @@ sub update {
                     parameters => $_->parameter
                 }
             );
-        }
-        elsif ( $_->isa('Koha::Exceptions::NoChanges') ) {
+        } elsif ( $_->isa('Koha::Exceptions::NoChanges') ) {
             return $c->render(
                 status  => 204,
                 openapi => { error => "No changes have been made" }
             );
+        } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_", error_code => 'invalid_attribute_type' }
+            );
+        } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_", error_code => 'attribute_not_unique' }
+            );
+        } elsif ( $_->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_", error_code => 'non_repeatable_attribute' }
+            );
+        } elsif ( $_->isa('Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_", error_code => 'missing_mandatory_attribute' }
+            );
         }
-        else {
-            $c->unhandled_exception($_);
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 

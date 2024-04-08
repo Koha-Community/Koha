@@ -535,6 +535,16 @@
         required: true
         schema:
           $ref: "../swagger.yaml#/definitions/patron"
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - extended_attributes
+        collectionFormat: csv
     consumes:
       - application/json
     produces:
@@ -546,7 +556,13 @@
           items:
             $ref: "../swagger.yaml#/definitions/patron"
       "400":
-        description: Bad parameter
+        description: |
+          Bad parameter. Possible `error_code` attribute values:
+
+            * `invalid_attribute_type`
+            * `attribute_not_unique`
+            * `non_repeatable_attribute`
+            * `missing_mandatory_attribute`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
