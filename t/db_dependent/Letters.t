@@ -882,7 +882,7 @@ subtest 'GetPreparedLetter' => sub {
 
 
 subtest 'TranslateNotices' => sub {
-    plan tests => 4;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
 
@@ -944,6 +944,70 @@ subtest 'TranslateNotices' => sub {
     is( $letter->{title}, 'a test',
         'GetPreparedLetter should return the default notice if pref disabled but additional language exists' );
 
+    my $amount      = -20;
+    my $accountline = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $borrowernumber,
+                amount            => $amount,
+                amountoutstanding => $amount,
+                credit_type_code  => 'PAYMENT',
+            }
+        }
+    );
+    $dbh->do(
+        q|
+        INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
+        ('test_payment', 'code', '', 'Account payment', 'Account payment', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'default');
+    |
+    );
+
+    $tables = {
+        borrowers => $borrowernumber,
+        credits   => $accountline->{accountlines_id},
+    };
+
+    $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'test_payment',
+        letter_code            => 'code',
+        message_transport_type => 'print',
+        tables                 => $tables,
+        lang                   => 'fr-CA',
+    );
+    like(
+        $letter->{content}, qr/Paiement/,
+        'GetPreparedLetter should return the notice in patron\'s preferred language'
+    );
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'interface', 'intranet' );
+
+    Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
+    t::lib::Mocks::mock_preference( 'language', 'fr-CA,en' );
+
+    $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'test_payment',
+        letter_code            => 'code',
+        message_transport_type => 'print',
+        tables                 => $tables,
+        lang                   => 'default',
+    );
+    like( $letter->{content}, qr/Paiement/, 'GetPreparedLetter should return the notice in the interface language' );
+
+    $context->mock( 'interface', 'cron' );
+
+    $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'test_payment',
+        letter_code            => 'code',
+        message_transport_type => 'print',
+        tables                 => $tables,
+        lang                   => 'default'
+    );
+    like(
+        $letter->{content}, qr/Paiement/,
+        'GetPreparedLetter should return the notice in the first language in language system preference'
+    );
 };
 
 subtest 'Test SMS handling in SendQueuedMessages' => sub {
