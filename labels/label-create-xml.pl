@@ -24,6 +24,7 @@ use CGI qw ( -utf8 );
 use XML::Simple;
 
 use C4::Labels;
+use C4::Auth qw( check_cookie_auth );
 
 my $cgi = CGI->new;
 my ($auth_status) =
