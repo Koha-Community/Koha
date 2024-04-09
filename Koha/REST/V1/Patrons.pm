@@ -212,7 +212,7 @@ sub add {
             {
                 return $c->render(
                     status  => 400,
-                    openapi => { error => "$_" }
+                    openapi => { error => "$_", error_code => 'missing_mandatory_attribute' }
                 );
             }
             elsif (
@@ -221,7 +221,7 @@ sub add {
             {
                 return $c->render(
                     status  => 400,
-                    openapi => { error => "$_" }
+                    openapi => { error => "$_", error_code => 'invalid_attribute_type' }
                 );
             }
             elsif (
@@ -230,7 +230,7 @@ sub add {
             {
                 return $c->render(
                     status  => 400,
-                    openapi => { error => "$_" }
+                    openapi => { error => "$_", error_code => 'non_repeatable_attribute' }
                 );
             }
             elsif (
@@ -239,7 +239,7 @@ sub add {
             {
                 return $c->render(
                     status  => 400,
-                    openapi => { error => "$_" }
+                    openapi => { error => "$_", error_code => 'attribute_not_unique' }
                 );
             }
         }

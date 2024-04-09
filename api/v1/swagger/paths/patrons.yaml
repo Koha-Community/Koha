@@ -434,7 +434,13 @@
           items:
             $ref: "../swagger.yaml#/definitions/patron"
       "400":
-        description: Bad parameter
+        description: |
+          Bad parameter. Possible `error_code` attribute values:
+
+            * `invalid_attribute_type`
+            * `attribute_not_unique`
+            * `non_repeatable_attribute`
+            * `missing_mandatory_attribute`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
