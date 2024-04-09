@@ -35,6 +35,7 @@ use CGI qw ( -utf8 );
 use JSON qw( to_json );
 use C4::Output qw( output_with_http_headers );
 use C4::Items qw( SearchItems );
+use C4::Auth   qw( check_cookie_auth );
 
 my $input = CGI->new;
 my ($auth_status) =
