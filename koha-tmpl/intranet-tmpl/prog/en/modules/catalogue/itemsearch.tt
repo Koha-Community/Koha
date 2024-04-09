@@ -185,28 +185,28 @@
                 </div>
           </div>
           <fieldset>
-            [% INCLUDE form_field_select name="homebranch" options = branches empty_option = "All libraries" %]
-            [% INCLUDE form_field_select name="holdingbranch" options = branches empty_option = "All libraries" %]
+            [% INCLUDE form_field_select name="homebranch" options = branches %]
+            [% INCLUDE form_field_select name="holdingbranch" options = branches %]
             [% IF locations.size %]
-                [% INCLUDE form_field_select name="location" options = locations empty_option = "All locations" %]
+                [% INCLUDE form_field_select name="location" options = locations %]
             [% END %]
           </fieldset>
           <fieldset>
-            [% INCLUDE form_field_select name="itype" options = itemtypes empty_option = "All item types" %]
+            [% INCLUDE form_field_select name="itype" options = itemtypes style="min-width:300px" %]
             [% IF ccodes.size %]
-                [% INCLUDE form_field_select name="ccode" options = ccodes empty_option = "All collection codes" %]
+                [% INCLUDE form_field_select name="ccode" options = ccodes %]
             [% END %]
             [% IF notforloans.size %]
-                [% INCLUDE form_field_select name="notforloan" options = notforloans empty_option = "All statuses" %]
+                [% INCLUDE form_field_select name="notforloan" options = notforloans %]
             [% END %]
             [% IF itemlosts.size %]
-                [% INCLUDE form_field_select name="itemlost" options = itemlosts empty_option = "All statuses" %]
+                [% INCLUDE form_field_select name="itemlost" options = itemlosts %]
             [% END %]
             [% IF withdrawns.size %]
-                [% INCLUDE form_field_select name="withdrawn" options = withdrawns empty_option = "All statuses" %]
+                [% INCLUDE form_field_select name="withdrawn" options = withdrawns %]
             [% END %]
             [% IF damageds.size %]
-                [% INCLUDE form_field_select name="damaged" options = damageds empty_option = "All statuses" %]
+                [% INCLUDE form_field_select name="damaged" options = damageds %]
             [% END %]
             <div class="form-field">
                 <label class="form-field-label">Availability:</label>
@@ -288,6 +288,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
     <script>
         var authorised_values = [% authorised_values_json | $raw %];
 
@@ -721,6 +722,13 @@
                     checkbox.prop('checked', !checkbox.prop("checked"));
                     checkbox.change();
                 }
+            });
+
+            // Apply select2 to all select fields having a "multiple" attribute
+            let selectFields = document.querySelectorAll('select[multiple]');
+            selectFields.forEach((selectField) => {
+                selectField.style.minWidth = '320px';
+                $(selectField).select2();
             });
         });
     </script>
