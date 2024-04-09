@@ -620,7 +620,7 @@ elsif ($op eq 'export'){
     my @sql_params     = $input->multi_param('sql_params');
     my $format         = $input->param('format');
     my $reportname     = $input->param('reportname');
-    my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format";
+    my $reportfilename = $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format" ;
     my $scrubber       = C4::Scrubber->new();
 
     ($sql, undef) = $report->prep_report( \@param_names, \@sql_params );
