@@ -1031,7 +1031,7 @@
 
                                 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
                                     <input type="hidden" name="op" value="run"/>
-                                    <input type="hidden" name="reports" value="[% id | html %]"/>
+                                    <input type="hidden" name="id" value="[% id | html %]"/>
                                     [% FOREACH p IN sql_params %]
                                         <input type="hidden" name="sql_params" value="[% p | html %]"/>
                                     [% END %]
