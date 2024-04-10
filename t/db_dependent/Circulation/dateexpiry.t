@@ -124,7 +124,7 @@ sub calc_date_due {
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry tomorrow" );
 
     # fourth test far future
-    $patron->dateexpiry('9876-12-31')->store;
+    $patron->dateexpiry('4999-12-31')->store;
     my $t1 = time;
     $d = C4::Circulation::CalcDateDue( $today, $item->effective_itemtype, $branch->{branchcode}, $patron );
     my $t2 = time;
