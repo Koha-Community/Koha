@@ -4,7 +4,7 @@
     x-mojo-to: Preservation::WaitingList#list
     operationId: listItemsFromWaitingList
     tags:
-      - waiting_list
+      - preservation
     summary: List items from waiting list
     parameters:
       - name: external_id
@@ -70,7 +70,7 @@
     x-mojo-to: Preservation::WaitingList#add_items
     operationId: addItemsToWaitingList
     tags:
-      - waiting_list
+      - preservation
     summary: Add items to waiting list
     consumes:
       - application/json
@@ -135,7 +135,7 @@
     x-mojo-to: Preservation::WaitingList#remove_item
     operationId: removeItemFromWaitingList
     tags:
-      - waiting_list
+      - preservation
     summary: Remove item from waiting list
     parameters:
       - $ref: "../swagger.yaml#/parameters/item_id_pp"

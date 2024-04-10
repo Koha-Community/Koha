@@ -4,7 +4,7 @@
     x-mojo-to: Preservation::Trains#list
     operationId: listPreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: List trains
     produces:
       - application/json
@@ -88,7 +88,7 @@
     x-mojo-to: Preservation::Trains#add
     operationId: addPreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: Add train
     consumes:
       - application/json
@@ -150,7 +150,7 @@
     x-mojo-to: Preservation::Trains#get
     operationId: getPreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: Get train
     produces:
       - application/json
@@ -208,7 +208,7 @@
     x-mojo-to: Preservation::Trains#update
     operationId: updatePreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: Update train
     consumes:
       - application/json
@@ -266,7 +266,7 @@
     x-mojo-to: Preservation::Trains#delete
     operationId: deletePreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: Delete train
     produces:
       - application/json
@@ -314,7 +314,7 @@
     x-mojo-to: Preservation::Trains#add_item
     operationId: addItemToTrain
     tags:
-      - preservation_train
+      - preservation
     summary: Add item to train
     consumes:
       - application/json
@@ -376,7 +376,7 @@
     x-mojo-to: Preservation::Trains#add_items
     operationId: addItemsToTrain
     tags:
-      - preservation_train
+      - preservation
     summary: Add items to train
     consumes:
       - application/json
@@ -442,7 +442,7 @@
     x-mojo-to: Preservation::Trains#update_item
     operationId: updateItemFromTrain
     tags:
-      - preservation_train
+      - preservation
     summary: Update item from train
     consumes:
       - application/json
@@ -510,7 +510,7 @@
     x-mojo-to: Preservation::Trains#remove_item
     operationId: removeItemFromTrain
     tags:
-      - preservation_train
+      - preservation
     summary: Remove item from train
     parameters:
       - $ref: "../swagger.yaml#/parameters/preservation_train_id_pp"
@@ -554,7 +554,7 @@
     x-mojo-to: Preservation::Trains#get_item
     operationId: getItemFromPreservationTrains
     tags:
-      - preservation_train
+      - preservation
     summary: Get item from train
     produces:
       - application/json
@@ -610,7 +610,7 @@
     x-mojo-to: Preservation::Trains#copy_item
     operationId: copyItemToAnotherTrain
     tags:
-      - preservation_train
+      - preservation
     summary: Copy an item to an other train
     consumes:
       - application/json
