@@ -1,3 +1,4 @@
+/* global __ */
 if (typeof KOHA == "undefined" || !KOHA) {
     var KOHA = {};
 }
@@ -18,7 +19,7 @@ KOHA.OpenLibrary = new function() {
      */
     this.GetCoverFromIsbn = function() {
         var bibkeys = [];
-        $("[id^=openlibrary-thumbnail]").each(function(i) {
+        $("[id^=openlibrary-thumbnail]").each(function() {
             bibkeys.push("ISBN:" + $(this).attr("class")); // id=isbn
         });
         bibkeys = bibkeys.join(',');
@@ -29,30 +30,32 @@ KOHA.OpenLibrary = new function() {
             "&callback=KOHA.OpenLibrary.olCallBack&jscmd=data");
         scriptElement.setAttribute("type", "text/javascript");
         document.documentElement.firstChild.appendChild(scriptElement);
-    }
+    };
 
     /**
      * Add cover pages <div
      * and link to preview if div id is gbs-thumbnail-preview
      */
     this.olCallBack = function(booksInfo) {
-        for (id in booksInfo) {
+        for (var id in booksInfo) {
             var book = booksInfo[id];
             var isbn = id.substring(5);
+            var a;
             $("[id^=openlibrary-thumbnail]."+isbn).each(function() {
-                var a = document.createElement("a");
+                a = document.createElement("a");
                 a.href = booksInfo.url;
                 if (book.cover) {
+                    var img;
                     if ( $(this).data('use-data-link') ) {
-                         var a = document.createElement("a");
-                         a.href = book.cover.large;
-                         var img = document.createElement("img");
-                         img.src = book.cover.medium;
-                         img.setAttribute('data-link', book.cover.large);
-                         a.append(img)
-                         $(this).empty().append(a);
+                        a = document.createElement("a");
+                        a.href = book.cover.large;
+                        img = document.createElement("img");
+                        img.src = book.cover.medium;
+                        img.setAttribute('data-link', book.cover.large);
+                        a.append(img);
+                        $(this).empty().append(a);
                     } else {
-                        var img = document.createElement("img");
+                        img = document.createElement("img");
                         img.src = book.cover.medium;
                         img.height = '110';
                         $(this).append(img);
@@ -66,7 +69,7 @@ KOHA.OpenLibrary = new function() {
             });
         }
         this.done = 1;
-    }
+    };
 
     var search_url = 'https://openlibrary.org/search?';
     this.searchUrl = function( q ) {
@@ -85,7 +88,7 @@ KOHA.OpenLibrary = new function() {
             url: search_url_json,
             dataType: 'json',
             data: params,
-            error: function( xhr, error ) {
+            error: function( xhr ) {
                 try {
                     callback( JSON.parse( xhr.responseText ));
                 } catch ( e ) {
@@ -110,102 +113,94 @@ A demonstration use of this script is available here:
 http://internetarchive.github.com/read_api_extras/readapi_demo.html
 */
 
-var ol_readapi_automator =
 (function () { // open anonymous scope for tidiness
 
-// 'constants'
-var readapi_bibids = ['isbn', 'lccn', 'oclc', 'olid', 'iaid', 'bibkeys'];
-var magic_classname = 'ol_readapi_book';
-var ol_readapi_books = $("." + magic_classname );
-var result;
+    // 'constants'
+    var readapi_bibids = ['isbn', 'lccn', 'oclc', 'olid', 'iaid', 'bibkeys'];
+    var magic_classname = 'ol_readapi_book';
+    var ol_readapi_books = $("." + magic_classname );
+    var result;
 
-// added to book divs to correlate with API results
-var magic_bookid = 'ol_bookid';
-var ol_button_classname = 'ol_readapi_button';
+    // added to book divs to correlate with API results
+    var magic_bookid = 'ol_bookid';
+    var ol_button_classname = 'ol_readapi_button';
 
-// Find all book divs and concatenate ids from them to create a read
-// API query url
-function create_query() {
-    var q = 'https://openlibrary.org/api/volumes/brief/json/';
+    // Find all book divs and concatenate ids from them to create a read
+    // API query url
+    function create_query() {
+        var q = 'https://openlibrary.org/api/volumes/brief/json/';
 
-    function add_el(i, el) {
-        // tag with number found so it's easy to discover later
-        // (necessary?  just go by index?)
-        // (choose better name?)
-        $(el).attr(magic_bookid, i);
+        function add_el(i, el) {
+            // tag with number found so it's easy to discover later
+            // (necessary?  just go by index?)
+            // (choose better name?)
+            $(el).attr(magic_bookid, i);
 
-        if (i > 0) {
-            q += '|';
-        }
-        q += 'id:' + i;
+            if (i > 0) {
+                q += '|';
+            }
+            q += 'id:' + i;
 
-        for (bi in readapi_bibids) {
-            bibid = readapi_bibids[bi];
-            if ($(el).attr(bibid)) {
-                q += ';' + bibid + ':' + $(el).attr(bibid);
+            for (var bi in readapi_bibids) {
+                var bibid = readapi_bibids[bi];
+                if ($(el).attr(bibid)) {
+                    q += ';' + bibid + ':' + $(el).attr(bibid);
+                }
             }
         }
+
+        $('.' + magic_classname).each(add_el);
+        return q;
     }
 
-    $('.' + magic_classname).each(add_el);
-    return q;
-}
-
-function make_read_button(bookdata) {
-    buttons = {
-        'full access':
-        "https://openlibrary.org/images/button-read-open-library.png",
-        'lendable':
-        "https://openlibrary.org/images/button-borrow-open-library.png",
-        'checked out':
-        "https://openlibrary.org/images/button-checked-out-open-library.png"
-    };
-    if (bookdata.items.length == 0) {
-        return false;
+    function make_read_button(bookdata) {
+        var buttons = {
+            'full access':
+            "https://openlibrary.org/images/button-read-open-library.png",
+            'lendable':
+            "https://openlibrary.org/images/button-borrow-open-library.png",
+            'checked out':
+            "https://openlibrary.org/images/button-checked-out-open-library.png"
+        };
+        if (bookdata.items.length == 0) {
+            return false;
+        }
+        var first = bookdata.items[0];
+        if (!(first.status in buttons)) {
+            return false;
+        }
+        result = '<a target="_blank" href="' + first.itemURL + '">' +
+        '<img class="' + ol_button_classname +
+        '" src="' + buttons[first.status] + '"/></a>';
+        return result;
     }
-    first = bookdata.items[0];
-    if (!(first.status in buttons)) {
-        return false;
-    }
-    result = '<a target="_blank" href="' + first.itemURL + '">' +
-      '<img class="' + ol_button_classname +
-      '" src="' + buttons[first.status] + '"/></a>';
-    console.log( result );
-    return result;
-}
 
-// Default function for decorating document elements with read API data
-function default_decorate_el_fn(el, bookdata) {
-    // Note that 'bookdata' may be undefined, if the Read API call
-    // didn't return results for this book
-    var decoration;
-    if (bookdata) {
-        decoration = make_read_button(bookdata);
+    // Default function for decorating document elements with read API data
+    function default_decorate_el_fn(el, bookdata) {
+        // Note that 'bookdata' may be undefined, if the Read API call
+        // didn't return results for this book
+        var decoration;
+        if (bookdata) {
+            decoration = make_read_button(bookdata);
+        }
+        if (decoration) {
+            el.innerHTML += decoration;
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
     }
-    if (decoration) {
-        el.innerHTML += decoration;
-        el.style.display = 'block'
-    } else {
-        el.style.display = 'none';
-    }
-}
 
-function do_query(q, decorate_el_fn) {
-    if (!decorate_el_fn) {
-        decorate_el_fn = default_decorate_el_fn;
-    }
-    var starttime = (new Date()).getTime();
-
-    // Call a function on each <div class="ol_readapi_book"> element
-    // with the target element and the data found for that element.
-    // Use decorate_el_fn if supplied, falling back to
-    // default_decorate_el_fn, above.
-    function query_callback(data, textStatus, jqXHR) {
-        var endtime = (new Date()).getTime();
-        var duration = (endtime - starttime) / 1000;
-        // console.log('took ' + duration + ' seconds');
-
-        $('.' + magic_classname).each(function(i, el) {
+    function do_query(q, decorate_el_fn) {
+        if (!decorate_el_fn) {
+            decorate_el_fn = default_decorate_el_fn;
+        }
+        // Call a function on each <div class="ol_readapi_book"> element
+        // with the target element and the data found for that element.
+        // Use decorate_el_fn if supplied, falling back to
+        // default_decorate_el_fn, above.
+        function query_callback(data) {
+            $('.' + magic_classname).each(function(i, el) {
                 var bookid = $(el).attr(magic_bookid);
                 if (bookid && bookid in data) {
                     decorate_el_fn(el, data[bookid]);
@@ -213,29 +208,29 @@ function do_query(q, decorate_el_fn) {
                     decorate_el_fn(el);
                 }
             });
+        }
+
+        // console.log('calling ' + q);
+        $.ajax({ url: q,
+            data: { 'show_all_items': 'true' },
+            dataType: 'jsonp',
+            success: query_callback
+        });
     }
 
-    // console.log('calling ' + q);
-    $.ajax({ url: q,
-                data: { 'show_all_items': 'true' },
-                dataType: 'jsonp',
-                success: query_callback
-                });
-}
+    if( ol_readapi_books.length > 0 ){
+        // Do stuff
+        var q = create_query();
+        do_query(q);
 
-if( ol_readapi_books.length > 0 ){
-    // Do stuff
-    var q = create_query();
-    do_query(q);
+        result = {
+            do_query: do_query,
+            create_query: create_query,
+            make_read_button: make_read_button
+        };
+    }
 
-    result = {
-        do_query: do_query,
-        create_query: create_query,
-        make_read_button: make_read_button
-    };
-}
-
-return result;
+    return result;
 })(); // close anonymous scope
 
 /*
