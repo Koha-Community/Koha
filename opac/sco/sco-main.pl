@@ -138,9 +138,9 @@ my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
 
-if ( C4::Context->preference('BatchCheckouts') ) {
+if ( C4::Context->preference('BatchCheckouts') and $patron ) {
     my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
-    my $categorycode = $issuer->{categorycode};
+    my $categorycode = $patron->categorycode;
     if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
         # do nothing - logged in patron is allowed to do batch checkouts
     } else {
