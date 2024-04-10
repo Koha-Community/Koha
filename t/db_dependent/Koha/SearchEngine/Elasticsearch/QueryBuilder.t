@@ -219,7 +219,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 57;
+    plan tests => 58;
 
     my $qb;
 
@@ -447,6 +447,14 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         '(onloan:true)',
         "query of boolean type field is not truncated even if QueryAutoTruncate is set"
+    );
+
+    ( undef, $query ) =
+        $qb->build_query_compat( undef, ['First title ; Second title : some & subtitle / Authors Name'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(First* title* Second* title* some* subtitle* Authors* Name*)',
+        "ISBD punctualtion and problematic characters properly removed"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['J.R.R'] );
