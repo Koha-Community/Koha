@@ -1,3 +1,4 @@
+/* global __ */
 if (typeof KOHA == "undefined" || !KOHA) {
     var KOHA = {};
 }
@@ -6,7 +7,6 @@ if (typeof KOHA == "undefined" || !KOHA) {
  * A namespace for Google related functions.
  */
 KOHA.Google = {
-
 
     /**
      * Search all:
@@ -19,7 +19,7 @@ KOHA.Google = {
      */
     GetCoverFromIsbn: function(newWindow) {
         var bibkeys = [];
-        $("[id^=gbs-thumbnail]").each(function(i) {
+        $("[id^=gbs-thumbnail]").each(function() {
             bibkeys.push($(this).attr("class")); // id=isbn
         });
         bibkeys = bibkeys.join(',');
@@ -39,45 +39,46 @@ KOHA.Google = {
      * and link to preview if div id is gbs-thumbnail-preview
      */
     gbsCallBack: function(booksInfo) {
-         var target = '';
-         if (this.openInNewWindow) {
+        var target = '';
+        if (this.openInNewWindow) {
             target = 'target="_blank" rel="noreferrer" ';
-         }
-         for (id in booksInfo) {
-             var book = booksInfo[id];
-             $("[id^=gbs-thumbnail]."+book.bib_key).each(function() {
-                 if (typeof(book.thumbnail_url) != "undefined") {
-                     if ( $(this).data('use-data-link') ) {
-                         var a = document.createElement("a");
-                         a.href = book.thumbnail_url;
-                         var img = document.createElement("img");
-                         img.src = book.thumbnail_url;
-                         img.setAttribute('data-link', book.info_url);
-                         a.append(img)
-                         $(this).empty().append(a);
-                     } else {
-                         var img = document.createElement("img");
-                         img.src = book.thumbnail_url;
-                         $(this).empty().append(img);
-                         var re = /^gbs-thumbnail-preview/;
-                         if ( re.exec($(this).attr("id")) ) {
-                             $(this).append(
-                                 '<div class="google-books-preview">' +
-                                 '<a '+target+'href="' +
-                                 book.info_url +
-                                 '"><img src="' +
-                                 'https://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
-                                 '"></a></div>'
-                                 );
-                         }
-                     }
-                 } else {
-                     var message = document.createElement("span");
-                     $(message).attr("class","no-image");
-                     $(message).html(__("No cover image available"));
-                     $(this).empty().append(message);
-                 }
-             });
+        }
+        for (var id in booksInfo) {
+            var book = booksInfo[id];
+            $("[id^=gbs-thumbnail]."+book.bib_key).each(function() {
+                if (typeof(book.thumbnail_url) != "undefined") {
+                    var img;
+                    if ( $(this).data('use-data-link') ) {
+                        var a = document.createElement("a");
+                        a.href = book.thumbnail_url;
+                        img = document.createElement("img");
+                        img.src = book.thumbnail_url;
+                        img.setAttribute('data-link', book.info_url);
+                        a.append(img);
+                        $(this).empty().append(a);
+                    } else {
+                        img = document.createElement("img");
+                        img.src = book.thumbnail_url;
+                        $(this).empty().append(img);
+                        var re = /^gbs-thumbnail-preview/;
+                        if ( re.exec($(this).attr("id")) ) {
+                            $(this).append(
+                                '<div class="google-books-preview">' +
+                                '<a '+target+'href="' +
+                                book.info_url +
+                                '"><img src="' +
+                                'https://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
+                                '"></a></div>'
+                            );
+                        }
+                    }
+                } else {
+                    var message = document.createElement("span");
+                    $(message).attr("class","no-image");
+                    $(message).html(__("No cover image available"));
+                    $(this).empty().append(message);
+                }
+            });
         }
         this.done = 1;
     }

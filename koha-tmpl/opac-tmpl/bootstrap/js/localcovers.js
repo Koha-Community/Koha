@@ -1,3 +1,4 @@
+/* global __ */
 if (typeof KOHA == "undefined" || !KOHA) {
     var KOHA = {};
 }
@@ -17,8 +18,8 @@ KOHA.LocalCover = {
      * The result is asynchronously returned by OpenLibrary and catched by
      * olCallBack().
      */
-    GetCoverFromBibnumber: function(uselink) {
-        $("div[id^=local-thumbnail],span[id^=local-thumbnail]").each(function(i) {
+    GetCoverFromBibnumber: function() {
+        $("div[id^=local-thumbnail],span[id^=local-thumbnail]").each(function() {
             var mydiv = this;
             var message = document.createElement("span");
             $(message).attr("class","no-image");
@@ -36,16 +37,17 @@ KOHA.LocalCover = {
                             $(mydiv).children('.no-image').remove();
                         }
                         catch(err){
-                        };
+                            // Nothing
+                        }
                     } else if (this.width > 1) { // don't show the silly 1px "no image" img
                         $(mydiv).empty().append(img);
                         $(mydiv).children('.no-image').remove();
                     }
-                })
+                });
         });
     },
     GetCoverFromItemnumber: function(uselink) {
-        $("div[class^=local-thumbnail],span[class^=local-thumbnail]").each(function(i) {
+        $("div[class^=local-thumbnail],span[class^=local-thumbnail]").each(function() {
             var mydiv = this;
             var message = document.createElement("span");
             var imagenumber  = $(mydiv).data("imagenumber");
@@ -65,7 +67,8 @@ KOHA.LocalCover = {
                             $(mydiv).children('.no-image').remove();
                         }
                         catch(err){
-                        };
+                            // Nothing
+                        }
                     } else if (this.width > 1) { // don't show the silly 1px "no image" img
                         if (uselink) {
                             var a = $("<a />").attr('href', '/cgi-bin/koha/opac-imageviewer.pl?imagenumber=' + imagenumber + '&biblionumber=' + biblionumber);
@@ -76,7 +79,7 @@ KOHA.LocalCover = {
                         }
                         $(mydiv).children('.no-image').remove();
                     }
-                })
+                });
         });
     },
 };
