@@ -30,9 +30,9 @@ Koha::OAI::Client::Harvester contains OAI-PMH harvester main functions
 use utf8;
 use open qw( :std :utf8 );
 
-use C4::Biblio qw( AddBiblio GetFrameworkCode ModBiblio DelBiblio );
+use C4::Biblio          qw( AddBiblio GetFrameworkCode ModBiblio DelBiblio );
 use C4::AuthoritiesMarc qw (AddAuthority GuessAuthTypeCode ModAuthority DelAuthority );
-use C4::Log qw( cronlogaction );
+use C4::Log             qw( cronlogaction );
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 use Koha::DateUtils qw( dt_from_string );
@@ -47,7 +47,7 @@ use MARC::Record;
 use Modern::Perl;
 use DateTime;
 use DateTime::Format::Strptime;
-use Try::Tiny qw( catch try );
+use Try::Tiny  qw( catch try );
 use Date::Calc qw(
     Add_Delta_Days
     Today
@@ -58,10 +58,6 @@ my $strp = DateTime::Format::Strptime->new(
     time_zone => 'floating',
 );
 
-our $verbose = 0;
-our $server;
-our $force       = 0;
-our $days        = 0;
 our $xslt_engine = Koha::XSLT::Base->new;
 
 =head2 new
@@ -81,14 +77,8 @@ C<$force> force harvesting (ignore records datestamps)
 =cut
 
 sub new {
-
     my ( $self, $args ) = @_;
-
-    $server  = $args->{'server'};
-    $verbose = $args->{'verbose'};
-    $days    = $args->{'days'};
-    $force   = $args->{'force'};
-    return $self;
+    return bless $args, $self;
 }
 
 =head2 init
@@ -100,7 +90,9 @@ Starts harvesting
 sub init {
     my ( $self, $args ) = @_;
 
-    printlog("Starting OAI Harvest from repository");
+    $self->printlog("Starting OAI Harvest from repository");
+    my $server = $self->{server};
+    my $days   = $self->{days};
 
     my $h = HTTP::OAI::Harvester->new(
         repository => HTTP::OAI::Identify->new(
@@ -109,9 +101,9 @@ sub init {
         )
     );
 
-    printlog( "Using HTTP::OAI::Harvester version " . $HTTP::OAI::Harvester::VERSION );
+    $self->printlog( "Using HTTP::OAI::Harvester version " . $HTTP::OAI::Harvester::VERSION );
 
-    printlog( "Using endpoint "
+    $self->printlog( "Using endpoint "
             . $server->endpoint
             . ", set "
             . $server->oai_set
@@ -126,15 +118,15 @@ sub init {
         for ( $lmdf->metadataFormat ) {
             $lmdflog .= $_->metadataPrefix . " ";
         }
-        printlog("Available metadata formats for this repository: $lmdflog");
+        $self->printlog("Available metadata formats for this repository: $lmdflog");
     } catch {
-        printlog("ListMetadataFormats failed");
+        $self->printlog("ListMetadataFormats failed");
     };
 
     if ( $server->add_xslt ) {
-        printlog( "Using XSLT file " . $server->add_xslt );
+        $self->printlog( "Using XSLT file " . $server->add_xslt );
     } else {
-        printlog("Not using an XSLT file");
+        $self->printlog("Not using an XSLT file");
     }
 
     my $start_date = '';
@@ -143,25 +135,24 @@ sub init {
     if ($days) {
 
         # Change this to yyyy-mm-dd
-        my $dt_today = dt_from_string();
         my ( $nowyear, $nowmonth, $nowday ) = Today();
         my @date     = Add_Delta_Days( $nowyear, $nowmonth, $nowday, -$days );
         my $dt_start = DateTime->new( year => $date[0], month => $date[1], day => $date[2] );
         $start_date = $dt_start->ymd();
-        printlog("Harvesting from $start_date");
+        $self->printlog("Harvesting from $start_date");
     }
 
-    printlog("Asking for records");
+    $self->printlog("Asking for records");
     my $response = $h->ListRecords(
         metadataPrefix => $server->dataformat,
         set            => $server->oai_set,
         from           => $start_date,
     );
     if ( $response->is_error ) {
-        printlog( "Error requesting ListRecords: " . $response->code . " " . $response->message );
+        $self->printlog( "Error requesting ListRecords: " . $response->code . " " . $response->message );
         exit;
     }
-    printlog( "Request URL: " . $response->requestURL );
+    $self->printlog( "Request URL: " . $response->requestURL );
 
     my %stats;
     my @statuses = qw(added updated deleted in_error skipped total);
@@ -169,7 +160,7 @@ sub init {
         $stats{$status} = 0;
     }
 
-    printlog("Starting processing results");
+    $self->printlog("Starting processing results");
     while ( my $oai_record = $response->next ) {
         $stats{'total'}++;
         my $status = $self->processRecord($oai_record);
@@ -180,7 +171,7 @@ sub init {
     foreach my $status (@statuses) {
         $results .= $stats{$status} . " $status\n";
     }
-    printlog( "Harvest results:\n" . $results );
+    $self->printlog( "Harvest results:\n" . $results );
 
     if ( C4::Context->preference("OAI-PMH:HarvestEmailReport") ) {
 
@@ -202,7 +193,7 @@ sub init {
                     total      => $stats{'total'}
                 },
             )
-        ) or printlog("OAI_HARVEST_REPORT letter not found");
+        ) or $self->printlog("OAI_HARVEST_REPORT letter not found");
 
         my $success = C4::Letters::EnqueueLetter(
             {
@@ -211,13 +202,13 @@ sub init {
             }
         );
         if ($success) {
-            printlog("Email report enqueued");
+            $self->printlog("Email report enqueued");
         } else {
-            printlog("Unable to enqueue report email");
+            $self->printlog("Unable to enqueue report email");
         }
     }
 
-    printlog("Ending OAI Harvest from repository");
+    $self->printlog("Ending OAI Harvest from repository");
 }
 
 =head2 processRecord
@@ -230,8 +221,10 @@ sub processRecord {
     my $self       = shift;
     my $oai_record = shift;
     my $status     = '';
+    my $server     = $self->{server};
+    my $force      = $self->{force};
     unless ( $oai_record->identifier ) {
-        printlog("No identifier found");
+        $self->printlog("No identifier found");
         $status = 'skipped';
         return $status;
     }
@@ -246,7 +239,7 @@ sub processRecord {
             $outputUnimarc = $xslt_engine->transform( $oai_record->metadata->dom, $server->add_xslt );
             my $err = $xslt_engine->err;
             if ($err) {
-                printlog("XSLT::Base error: $err");
+                $self->printlog("XSLT::Base error: $err");
                 $status = 'in_error';
                 return $status;
             }
@@ -280,43 +273,42 @@ sub processRecord {
                 my $biblionumber = $imported_record->biblionumber;
                 my $error        = DelBiblio($biblionumber);
                 if ($error) {
-                    printlog(
+                    $self->printlog(
                         "Record " . $oai_record->identifier . " not deleted, biblionumber: $biblionumber ($error)" );
                     $status = 'in_error';
                 } else {
                     $imported_record->delete;
-                    printlog( "Record " . $oai_record->identifier . " deleted, biblionumber: $biblionumber" );
+                    $self->printlog( "Record " . $oai_record->identifier . " deleted, biblionumber: $biblionumber" );
                     $status = 'deleted';
                 }
             } else {
                 my $authid = $imported_record->authid;
                 DelAuthority( { authid => $authid } );
                 $imported_record->delete;
-                printlog( "Record " . $oai_record->identifier . " deleted, authid: $authid" );
+                $self->printlog( "Record " . $oai_record->identifier . " deleted, authid: $authid" );
                 $status = 'deleted';
             }
         } else {
-            my $existing_dt = $strp->parse_datetime( $imported_record->datestamp );
-            my $incoming_dt = $strp->parse_datetime( $oai_record->datestamp );
-
-            if ( $force || !$incoming_dt || !$existing_dt || $incoming_dt > $existing_dt ) {
+            my $existing_dt = dt_from_string( $imported_record->datestamp, 'iso' );
+            my $incoming_dt = $oai_record->datestamp ? dt_from_string( $oai_record->datestamp, 'iso' ) : dt_from_string;
+            if ( $force || $incoming_dt > $existing_dt ) {
                 if ( $server->recordtype eq "biblio" ) {
                     my $biblionumber = $imported_record->biblionumber;
                     my $result       = ModBiblio( $marcrecord, $biblionumber, GetFrameworkCode($biblionumber) );
-                    printlog( "Record " . $oai_record->identifier . " updated, biblionumber: $biblionumber" );
+                    $self->printlog( "Record " . $oai_record->identifier . " updated, biblionumber: $biblionumber" );
                 } else {
                     my $authid = $imported_record->authid;
                     my $result = ModAuthority( $authid, $marcrecord, GuessAuthTypeCode($marcrecord) );
-                    printlog( "Record " . $oai_record->identifier . " updated, authid: $authid" );
+                    $self->printlog( "Record " . $oai_record->identifier . " updated, authid: $authid" );
                 }
                 $imported_record->update(
                     {
-                        datestamp => $imported_record->datestamp,
+                        datestamp => $incoming_dt,
                     }
                 );
                 $status = 'updated';
             } else {
-                printlog( "Record "
+                $self->printlog( "Record "
                         . $oai_record->identifier
                         . " skipped (incoming record was not newer than existing record)" );
                 $status = 'skipped';
@@ -325,7 +317,7 @@ sub processRecord {
     } elsif ( !$to_delete ) {
         if ( $server->recordtype eq "biblio" ) {
             my ( $biblionumber, $biblioitemnumber ) = AddBiblio($marcrecord);
-            printlog( $oai_record->identifier . " added, biblionumber: $biblionumber" );
+            $self->printlog( $oai_record->identifier . " added, biblionumber: $biblionumber" );
             Koha::Import::Oaipmh::Biblio->new(
                 {
                     repository   => $server->endpoint,
@@ -337,7 +329,7 @@ sub processRecord {
             )->store;
         } else {
             my $authid = AddAuthority( $marcrecord, "", GuessAuthTypeCode($marcrecord) );
-            printlog( $oai_record->identifier . " added, authid: $authid" );
+            $self->printlog( $oai_record->identifier . " added, authid: $authid" );
             Koha::Import::Oaipmh::Authority->new(
                 {
                     repository => $server->endpoint,
@@ -350,22 +342,22 @@ sub processRecord {
         }
         $status = 'added';
     } else {
-        printlog( "Record " . $oai_record->identifier . " skipped (record not present or already deleted)" );
+        $self->printlog( "Record " . $oai_record->identifier . " skipped (record not present or already deleted)" );
         $status = 'skipped';
     }
     return $status;
 }
 
-=head2 printlog
+=head2 $self->printlog
 
 This method adds a cronlog and prints to stdout if verbose is enabled
 
 =cut
 
 sub printlog {
-    my $message = shift;
-    $message = $server->servername . ": " . $message;
-    print $message . "\n" if ($verbose);
+    my ( $self, $message ) = @_;
+    $message = $self->{server}->servername . ": " . $message;
+    print $message . "\n" if ( $self->{verbose} );
     cronlogaction( { info => $message } );
 }
 

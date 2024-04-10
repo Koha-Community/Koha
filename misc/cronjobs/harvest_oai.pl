@@ -25,7 +25,7 @@ use Getopt::Long qw( GetOptions );
 use Koha::Script -cron;
 use Koha::OAI::Client::Harvester;
 use Koha::OaiServers;
-use C4::Log qw( cronlogaction );
+use C4::Log   qw( cronlogaction );
 use Try::Tiny qw( catch try );
 
 my $command_line_options = join( " ", @ARGV );
