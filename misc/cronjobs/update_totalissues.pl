@@ -168,10 +168,10 @@ sub process_query {
         if ( not $test_only ) {
             my $ret;
             if ( $incremental && $totalissues > 0 ) {
-                $ret = UpdateTotalIssues( $biblionumber, $totalissues );
+                $ret = UpdateTotalIssues( $biblionumber, $totalissues, undef, 1 );
             }
             else {
-                $ret = UpdateTotalIssues( $biblionumber, 0, $totalissues );
+                $ret = UpdateTotalIssues( $biblionumber, 0, $totalissues, 1 );
             }
             unless ($ret) {
                 print "Error while processing bib $biblionumber\n" if $verbose;
