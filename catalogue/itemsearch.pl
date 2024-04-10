@@ -130,7 +130,7 @@ if ( defined $format ) {
     foreach my $p (
         qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn damaged))
     {
-        if ( my @q = $cgi->multi_param($p) ) {
+        if ( my @q = $cgi->multi_param($p . "[]") ) {
             if ( $q[0] ne '' ) {
                 my $f = {
                     field => $p,
