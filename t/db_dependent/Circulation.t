@@ -2185,8 +2185,8 @@ subtest 'AddIssue & illrequests.due_date' => sub {
 
     set_userenv($library);
 
-    my $custom_date_due = '9999-12-18 12:34:56';
-    my $expected_date_due = '9999-12-18 23:59:00';
+    my $custom_date_due = '4999-12-18 12:34:56';
+    my $expected_date_due = '4999-12-18 23:59:00';
     my $illrequest = Koha::Illrequest->new({
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
@@ -2199,8 +2199,8 @@ subtest 'AddIssue & illrequests.due_date' => sub {
 
     $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     $item = $builder->build_sample_item();
-    $custom_date_due = '9999-12-19';
-    $expected_date_due = '9999-12-19 23:59:00';
+    $custom_date_due = '4999-12-19';
+    $expected_date_due = '4999-12-19 23:59:00';
     $illrequest = Koha::Illrequest->new({
         borrowernumber => $patron->borrowernumber,
         biblio_id => $item->biblionumber,
