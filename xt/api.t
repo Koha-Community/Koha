@@ -14,13 +14,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Test::Mojo;
 use Data::Dumper;
 
 use FindBin();
-use IPC::Cmd qw(can_run);
+use IPC::Cmd        qw(can_run);
+use List::MoreUtils qw(any);
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -39,17 +40,22 @@ foreach my $route ( keys %{$paths} ) {
             if (   exists $parameter->{schema}
                 && exists $parameter->{schema}->{type}
                 && ref( $parameter->{schema}->{type} ) ne 'ARRAY'
-                && $parameter->{schema}->{type} eq 'object' ) {
+                && $parameter->{schema}->{type} eq 'object' )
+            {
 
                 # it is an object type definition
-                if ( $parameter->{name} ne 'query' # our query parameter is under-specified
-                    and not exists $parameter->{schema}->{additionalProperties} ) {
+                if (
+                    $parameter->{name} ne 'query'    # our query parameter is under-specified
+                    and not exists $parameter->{schema}->{additionalProperties}
+                    )
+                {
                     push @missing_additionalProperties,
-                      { type  => 'parameter',
+                        {
+                        type  => 'parameter',
                         route => $route,
                         verb  => $verb,
                         name  => $parameter->{name}
-                      };
+                        };
                 }
             }
         }
@@ -60,16 +66,18 @@ foreach my $route ( keys %{$paths} ) {
             if (   exists $responses->{$response}->{schema}
                 && exists $responses->{$response}->{schema}->{type}
                 && ref( $responses->{$response}->{schema}->{type} ) ne 'ARRAY'
-                && $responses->{$response}->{schema}->{type} eq 'object' ) {
+                && $responses->{$response}->{schema}->{type} eq 'object' )
+            {
 
                 # it is an object type definition
                 if ( not exists $responses->{$response}->{schema}->{additionalProperties} ) {
                     push @missing_additionalProperties,
-                      { type  => 'response',
+                        {
+                        type  => 'response',
                         route => $route,
                         verb  => $verb,
                         name  => $response
-                      };
+                        };
                 }
             }
         }
@@ -77,19 +85,46 @@ foreach my $route ( keys %{$paths} ) {
 }
 
 is( scalar @missing_additionalProperties, 0 )
-  or diag Dumper \@missing_additionalProperties;
+    or diag Dumper \@missing_additionalProperties;
 
 subtest 'The spec passes the swagger-cli validation' => sub {
 
     plan tests => 1;
 
-    SKIP: {
+SKIP: {
         skip "Skipping tests, swagger-cli missing", 1
-          unless can_run('swagger-cli');
+            unless can_run('swagger-cli');
 
         my $spec_dir = "$FindBin::Bin/../api/v1/swagger";
         my $var      = qx{swagger-cli validate $spec_dir/swagger.yaml 2>&1};
         is( $?, 0, 'Validation exit code is 0' )
-          or diag $var;
+            or diag $var;
+    }
+};
+
+subtest 'tags tests' => sub {
+
+    plan tests => 1;
+
+    my @top_level_tags = map { $_->{name} } @{ $spec->{tags} };
+
+    my @errors;
+
+    foreach my $route ( keys %{$paths} ) {
+        foreach my $verb ( keys %{ $paths->{$route} } ) {
+            my @tags = @{ $paths->{$route}->{$verb}->{tags} };
+
+            # Check tag has an entry in the top level tags section
+            foreach my $tag (@tags) {
+                push @errors, "$verb $route -> uses tag '$tag' not present in top level list"
+                    unless any { $_ eq $tag } @top_level_tags;
+            }
+        }
+    }
+
+    is_deeply( \@errors, [], 'No tag errors in the spec' );
+
+    foreach my $error (@errors) {
+        print STDERR "$error\n";
     }
 };
