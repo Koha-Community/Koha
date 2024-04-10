@@ -3019,6 +3019,8 @@ Update the total issue count for a particular bib record.
 
 =item C<$value> is the absolute value that total issues count should be set to. If provided, C<$increase> is ignored.
 
+=item C<$skip_holds_queue> parameter to optionally skip updating the holds queue.
+
 =back
 
 =cut
