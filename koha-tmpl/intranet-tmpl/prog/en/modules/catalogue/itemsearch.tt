@@ -480,10 +480,11 @@
                     type: 'POST',
                     data: function ( d ) {
                         for (i in params) {
-                            if (! d.hasOwnProperty(params[i].name) ) {
-                                d[params[i].name] = [];
+                            if(d[params[i].name]){
+                                d[params[i].name] = [].concat(d[params[i].name], params[i].value);
+                            }else{
+                                d[params[i].name] = params[i].value;
                             }
-                            d[params[i].name].push(params[i].value);
                         }
                         d.format = 'json';
                         d.columns = JSON.stringify( d.columns );
