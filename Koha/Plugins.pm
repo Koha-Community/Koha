@@ -366,16 +366,9 @@ sub _restart_after_change {
 
     return unless ( C4::Context->config('plugins_restart') && C4::Context->psgi_env );
 
-    my $parent_pid = getpid();
-    my $ppid       = getppid();    # Get the parent process ID
+    my $parent_pid = getppid();
 
-    # If the current process is not Plack parent, find the parent process recursively
-    while ( $parent_pid != $ppid ) {
-        $parent_pid = $ppid;
-        $ppid       = getppid();
-    }
-
-    # Send SIGUSR1 signal to Plack parent process for graceful restart
+    # Send HUP signal to Plack parent process for graceful restart
     kill 'HUP', $parent_pid;
 }
 
