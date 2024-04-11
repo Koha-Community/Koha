@@ -68,23 +68,25 @@ if ($do_it) {
                             -filename=>"$basename.csv" );
         my $cols  = @$results[0]->{loopcol};
         my $lines = @$results[0]->{looprow};
-# header top-right
+# header top-left
         print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
+        print "Patron".$sep;
+        print "Total".$sep;
 # Other header
 		print join($sep, map {$_->{coltitle}} @$cols);
-        print $sep . "Total\n";
+        print "\n";
 # Table
         foreach my $line ( @$lines ) {
             my $x = $line->{loopcell};
             print $line->{rowtitle}.$sep;
-			print join($sep, map {$_->{value}} @$x);
-            print $sep,$line->{totalrow};
+            print '"'.$line->{patron}.'"'.$sep;
+			print join($sep, map {$_->{count}} @$x);
             print "\n";
         }
 # footer
         print "TOTAL";
         $cols = @$results[0]->{loopfooter};
-		print join($sep, map {$_->{totalcol}} @$cols);
+		print join($sep, map {$_->{total}} @$cols);
         print $sep.@$results[0]->{total};
     }
     exit;
@@ -148,7 +150,7 @@ sub calculate {
     my $colorder;
     if ($column){
         $column = "old_issues." .$column if (($column=~/branchcode/) or ($column=~/timestamp/));
-        $column = "biblioitems.".$column if $column=~/itemtype/;
+        $column = "items.itype"          if $column=~/itemtype/;
         $column = "borrowers."  .$column if $column=~/categorycode/;
         my @colfilter ;
 		if ($column =~ /timestamp/) {
@@ -245,7 +247,7 @@ sub calculate {
 		'old_issues.returndate >',
 		'old_issues.returndate <',
 		'old_issues.branchcode  like',
-		'biblioitems.itemtype   like',
+		'items.itype            like',
 		'borrowers.categorycode like',
 	);
     foreach ((@$filters)[0..9]) {
@@ -309,24 +311,28 @@ sub calculate {
     foreach my $id (@ranked_ids) {
         my @loopcell;
 
-        foreach my $key (@cols_in_order) {
-			if($column){
-		      push @loopcell, {
-				value => $patrons{$id}->{name},
-				reference => $id,
-				count => $patrons{$id}->{allcols}->{$key},
-			  };
-			}else{
-			  push @loopcell, {
-				value => $patrons{$id}->{name},
-				reference => $id,
-				count => $patrons{$id}->{total},
-			  };  
-			}
+        if($column){
+            #  Total
+            push @loopcell, {
+                count => $patrons{$id}->{total},
+            };
+            foreach my $key (@cols_in_order) {
+                push @loopcell, {
+                    count => $patrons{$id}->{allcols}->{$key},
+                };
+                $grantotal += $patrons{$id}->{allcols}->{$key};
+            }
+        }else{
+            push @loopcell, {
+                count => $patrons{$id}->{total},
+            };
+            $grantotal += $patrons{$id}->{total};
         }
         push @looprow,{ 'rowtitle' => $i++ ,
                         'loopcell' => \@loopcell,
                         'hilighted' => ($i%2),
+                        'patron' => $patrons{$id}->{name},
+                        'reference' => $id,
                     };
         # use a limit, if a limit is defined
         last if $i > $limit and $limit
@@ -336,7 +342,7 @@ sub calculate {
     $globalline{loopfilter}=\@loopfilter;
     # the core of the table
     $globalline{looprow} = \@looprow;
-    $globalline{loopcol} = [ map {{coltitle=>$_}} @cols_in_order ];
+    $globalline{loopcol} = [ map {{coltitle=>$_}} @cols_in_order ] if ($column);
  	# the foot (totals by borrower type)
     $globalline{loopfooter} = [];
     $globalline{total}= $grantotal;		# FIXME: useless

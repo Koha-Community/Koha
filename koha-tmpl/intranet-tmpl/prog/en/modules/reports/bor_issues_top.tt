@@ -87,13 +87,14 @@
 		<table>
 			<tr>
 				<th rowspan="2">Rank</th>
+				<th rowspan="2">Patron</th>
+				<th rowspan="2">Total</th>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th colspan="2">[% loopco.coltitle | html %]</th>
+					<th>[% loopco.coltitle | html %]</th>
 				[% END %]
 			</tr>
 			<tr>
 				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>Patron</th>
 					<th>Checkout count</th>
 				[% END %]
 			</tr>
@@ -101,12 +102,12 @@
 				<tr>
 					[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
 					[% loopro.rowtitle | html %]</td>
+					[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+						[% IF ( loopro.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.reference | uri %]">[% END %]
+						[% IF ( loopro.patron ) %][% loopro.patron | html %][% END %]
+						[% IF ( loopro.reference ) %]</a>[% END %]
+					</td>
 					[% FOREACH loopcel IN loopro.loopcell %]
-						[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-                            [% IF ( loopcel.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopcel.reference | uri %]">[% END %]
-							[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
-							[% IF ( loopcel.reference ) %]</a>[% END %]
-						</td>
 						[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
 						[% IF ( loopcel.count ) %][% loopcel.count | html %][% END %]
 						</td>
