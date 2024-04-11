@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -235,6 +235,65 @@ subtest 'password validation - expired password' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(400)
         ->json_is( '/error' => 'Password expired' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'password validation - users with shared cardnumber / userid' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { }
+        }
+    );
+    my $patron_password_1 = 'thePassword123';
+    $patron_1->set_password( { password => $patron_password_1, skip_validation => 1 } );
+
+    my $patron_2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { userid => $patron_1->cardnumber }
+        }
+    );
+    my $patron_password_2 = 'thePassword345';
+    $patron_2->set_password( { password => $patron_password_2, skip_validation => 1 } );
+
+    my $json = {
+        identifier => $patron_1->cardnumber,
+        password   => $patron_password_1,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+        ->json_is({ cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid} );
+
+    $json = {
+        identifier => $patron_2->userid,
+        password   => $patron_password_2,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+        ->json_is({ cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid} );
+
+    my $json = {
+        userid => $patron_1->cardnumber,
+        password   => $patron_password_1,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+        ->json_is({ cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid} );
+
+    $json = {
+        userid => $patron_2->userid,
+        password   => $patron_password_2,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+        ->json_is({ cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid} );
 
     $schema->storage->txn_rollback;
 };
