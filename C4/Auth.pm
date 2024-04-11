@@ -1945,8 +1945,7 @@ sub checkpw {
         my $ticket = $query->param('ticket');
         $query->delete('ticket');                                         # remove ticket to come back to original URL
         my ( $retval, $retcard, $retuserid, $cas_ticket );
-        ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) =
-            checkpw_cas( $ticket, $query, $type );                        # EXTERNAL AUTH
+        ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) = checkpw_cas( $ticket, $query, $type ); # EXTERNAL AUTH
         if ($retval) {
             @return = ( $retval, $retcard, $retuserid, $patron, $cas_ticket );
         } else {
@@ -1978,22 +1977,22 @@ sub checkpw {
         $check_internal_as_fallback = 1;
     }
 
-    if ( $check_internal_as_fallback ){
-    # INTERNAL AUTH
-        @return = checkpw_internal( $userid, $password, $no_set_userenv );
-        $passwd_ok = 1 if $return[0] > 0;    # 1 or 2
-        $patron = Koha::Patrons->find({ cardnumber => $return[1] }) if $passwd_ok;
+    if ($check_internal_as_fallback) {
+        # INTERNAL AUTH
+        @return    = checkpw_internal( $userid, $password, $no_set_userenv );
+        $passwd_ok = 1                                                   if $return[0] > 0;    # 1 or 2
+        $patron    = Koha::Patrons->find( { cardnumber => $return[1] } ) if $passwd_ok;
         push @return, $patron if $patron;
     }
 
-     if ( defined $userid && !$patron ) {
+    if ( defined $userid && !$patron ) {
         $patron = Koha::Patrons->find( { userid     => $userid } );
         $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
         push @return, $patron if $check_internal_as_fallback;
     }
 
     if ($patron) {
-        if( $patron->account_locked ){
+        if ( $patron->account_locked ) {
             @return = ();
         } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );

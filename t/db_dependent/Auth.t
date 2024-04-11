@@ -1402,23 +1402,23 @@ subtest 'checkpw for users with shared cardnumber / userid ' => sub {
     plan tests => 8;
 
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron_1  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
     $patron_1->set_password( { password => "OnePassword" } );
-    my $patron_2  = $builder->build_object( { class => 'Koha::Patrons', value => { userid => $patron_1->cardnumber } } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { userid => $patron_1->cardnumber } } );
     $patron_2->set_password( { password => "PasswordTwo" } );
 
     my ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_1->cardnumber, "OnePassword", undef, undef, 1 );
     ok( $checkpw, 'checkpw returns true for right password when logging in via cardnumber' );
     is( $cardnumber, $patron_1->cardnumber, 'checkpw returns correct cardnumber' );
-    is( $userid, $patron_1->userid, 'checkpw returns correct userid' );
-    is( $patron->id, $patron_1->id, 'checkpw returns correct patron' );
+    is( $userid,     $patron_1->userid,     'checkpw returns correct userid' );
+    is( $patron->id, $patron_1->id,         'checkpw returns correct patron' );
 
     ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_2->userid, "PasswordTwo", undef, undef, 1 );
     ok( $checkpw, 'checkpw returns true for right password when logging in via userid' );
     is( $cardnumber, $patron_2->cardnumber, 'checkpw returns correct cardnumber' );
-    is( $userid, $patron_2->userid, 'checkpw returns correct userid' );
-    is( $patron->id, $patron_2->id, 'checkpw returns correct patron' );
+    is( $userid,     $patron_2->userid,     'checkpw returns correct userid' );
+    is( $patron->id, $patron_2->id,         'checkpw returns correct patron' );
 
 };
 
