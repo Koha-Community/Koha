@@ -78,6 +78,7 @@
                                 </select></li>
                             </ol>
                         </fieldset>
+                    [% END %]
                     [% IF Koha.Preference('UseCashRegisters') %]
                         <fieldset class="rows">
                             <legend>Set cash register</legend>
@@ -92,21 +93,15 @@
                             </ol>
                         </fieldset>
                     [% END %]
-                    <fieldset class="action">
-                        <input type="submit" class="btn btn-primary" value="Submit" />
-                        <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/mainpage.pl' %]">Cancel</a>
-                    </fieldset>
-                    <div class="noshow">
-                        [% FOREACH recycle_loo IN recycle_loop %]
-                            [% SET param = recycle_loo.param %]
-                            [% IF param == 'op' %][% param = 'original_op' %][% END %]
-                            <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
-                        [% END %]
-                        <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" %]" />
-                    </div>
-                </form>
+                        <fieldset class="action">
+                            <input type="submit" class="btn btn-primary" value="Submit" />
+                            <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/mainpage.pl' %]">Cancel</a>
+                        </fieldset>
+                        <div class="noshow">
+                            <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" %]" />
+                        </div>
+                    </form>
                 <!-- /updated -->
-                [% END %]
                 [% IF Koha.Preference('CircSidebar') %]
                     </div> <!-- /.col-sm-10.col-sm-push-2 -->
                         <div class="col-sm-2 col-sm-pull-10">
