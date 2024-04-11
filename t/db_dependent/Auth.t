@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -490,7 +490,7 @@ subtest 'checkpw lockout tests' => sub {
     ( $checkpw, undef, undef ) = checkpw( $patron->userid, $password, undef, undef, 1 );
     is( $checkpw, undef, 'checkpw returns undef with right password when account locked' );
     ( $checkpw, undef, undef ) = checkpw( $patron->cardnumber, $password, undef, undef, 1 );
-    is( $checkpw, undef, 'checkpw returns undefwith right password when logging in via cardnumber if account locked' );
+    is( $checkpw, undef, 'checkpw returns undef with right password when logging in via cardnumber if account locked' );
 
 };
 
@@ -1394,6 +1394,31 @@ subtest 'AutoLocation' => sub {
     is( $session->param('branch'), $patron->branchcode );
 
     $schema->storage->txn_rollback;
+
+};
+
+subtest 'checkpw for users with shared cardnumber / userid ' => sub {
+
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1  = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron_1->set_password( { password => "OnePassword" } );
+    my $patron_2  = $builder->build_object( { class => 'Koha::Patrons', value => { userid => $patron_1->cardnumber } } );
+    $patron_2->set_password( { password => "PasswordTwo" } );
+
+    my ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_1->cardnumber, "OnePassword", undef, undef, 1 );
+    ok( $checkpw, 'checkpw returns true for right password when logging in via cardnumber' );
+    is( $cardnumber, $patron_1->cardnumber, 'checkpw returns correct cardnumber' );
+    is( $userid, $patron_1->userid, 'checkpw returns correct userid' );
+    is( $patron->id, $patron_1->id, 'checkpw returns correct patron' );
+
+    ( $checkpw, $cardnumber, $userid, $patron ) = checkpw( $patron_2->userid, "PasswordTwo", undef, undef, 1 );
+    ok( $checkpw, 'checkpw returns true for right password when logging in via userid' );
+    is( $cardnumber, $patron_2->cardnumber, 'checkpw returns correct cardnumber' );
+    is( $userid, $patron_2->userid, 'checkpw returns correct userid' );
+    is( $patron->id, $patron_2->id, 'checkpw returns correct patron' );
 
 };
 
