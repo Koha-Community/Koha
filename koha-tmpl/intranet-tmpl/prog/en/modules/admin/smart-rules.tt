@@ -1499,6 +1499,7 @@
                 }
                 $('#default-circulation-rules td').removeClass('highlighted-row');
                 $(this).parent().parent().find("td").each(function (i) {
+
                     $(this).addClass('highlighted-row');
                     itm_code = $(this).data('code');
                     itm_text = $(this).text();
@@ -1538,11 +1539,19 @@
                         });
                         // select the corresponding option
                         $(current_column).find("select option").each(function(){
-                            opt = $(this).attr('value');
-                            if ( opt == itm_code ) {
-                                $(this).attr('selected', 'selected');
+                            // Reset selection status for all options
+                            $(this).prop('selected', false);
+                            // Declare opt here to ensure it is scoped correctly within the loop
+                            let opt = $(this).val();
+
+                            // Select the matching option
+                            if (opt == itm_code) {
+                                $(this).prop('selected', true);
                             }
                         });
+
+                        // After setting the correct option, update the select to reflect the change
+                        $(current_column).find('select').trigger('change');
                         var current_input_id = $(current_column).children('input').first().attr('id');
                         if ( i == 0 || i == 1 ) {
                             // Disable the 2 first columns, we cannot update them.
