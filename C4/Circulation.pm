@@ -378,7 +378,7 @@ sub transferbook {
     # find reserves.....
     # That'll save a database query.
     my ( $resfound, $resrec, undef ) =
-      CheckReserves( $item );
+      C4::Reserves::CheckReserves( $item );
     if ( $resfound ) {
         $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
@@ -1177,7 +1177,7 @@ sub CanBookBeIssued {
 
     unless ( $ignore_reserves || $recall ) {
         # See if the item is on reserve.
-        my ( $restype, $res ) = CheckReserves( $item_object );
+        my ( $restype, $res ) = C4::Reserves::CheckReserves( $item_object );
         if ($restype) {
             my $resbor = $res->{'borrowernumber'};
             if ( $resbor ne $patron->borrowernumber ) {
@@ -1438,7 +1438,7 @@ sub checkHighHolds {
             # Remove any items that are not holdable for this patron
             # We need to ignore hold counts as the borrower's own hold that will be filled by the checkout
             # could prevent them from placing further holds
-            @items = grep { CanItemBeReserved( $patron, $_, undef, { ignore_hold_counts => 1 } )->{status} eq 'OK' } @items;
+            @items = grep { C4::Reserves::CanItemBeReserved( $patron, $_, undef, { ignore_hold_counts => 1 } )->{status} eq 'OK' } @items;
 
             my $items_count = scalar @items;
 
@@ -2434,7 +2434,7 @@ sub AddReturn {
     # launch the Checkreserves routine to find any holds
     my ($resfound, $resrec);
     my $lookahead= C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
-    ($resfound, $resrec, undef) = CheckReserves( $item, $lookahead ) unless ( $item->withdrawn );
+    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item, $lookahead ) unless ( $item->withdrawn );
     # if a hold is found and is waiting at another branch, change the priority back to 1 and trigger the hold (this will trigger a transfer and update the hold status properly)
     if ( $resfound and $resfound eq "Waiting" and $branch ne $resrec->{branchcode} ) {
         my $hold = C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
@@ -3056,7 +3056,7 @@ sub CanBookBeRenewed {
       if ( $item->current_holds->search( { non_priority => 0 } )->count );
 
 
-    my ( $status, $matched_reserve, $possible_holds ) = CheckReserves($item);
+    my ( $status, $matched_reserve, $possible_holds ) = C4::Reserves::CheckReserves($item);
     my @fillable_holds = ();
     foreach my $possible_hold ( @{$possible_holds} ) {
         push @fillable_holds, $possible_hold unless $possible_hold->{non_priority};
