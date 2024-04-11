@@ -41,6 +41,8 @@ search:
       ci_raw:
         type: keyword
         normalizer: icu_folding_normalizer
+  geo_point:
+     type: geo_point
   default:
     type: text
     analyzer: analyzer_standard

@@ -91,6 +91,7 @@ sub search {
         $query->{from} = $page * $query->{size};
     }
     my $elasticsearch = $self->get_elasticsearch();
+
     my $results = eval {
         $elasticsearch->search(
             index => $self->index_name,

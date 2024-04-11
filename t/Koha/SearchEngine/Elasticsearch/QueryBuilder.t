@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use t::lib::Mocks;
 
 use_ok('Koha::SearchEngine::Elasticsearch::QueryBuilder');
@@ -332,5 +332,42 @@ subtest '_join_queries' => sub {
     $query = $qb->_join_queries('homebranch:foo', 'mc-itype:BOOK', 'mc-itype:EBOOK', 'mc-location:SHELF');
     is($query, '(homebranch:foo) AND itype:(BOOK OR EBOOK) AND location:(SHELF)', 'should join "mc-" parts with AND if not the same field');
 };
+
+subtest '_create_query_string' => sub {
+    plan tests => 2;
+
+    my $params = {
+        index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX,
+    };
+    my $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new($params);
+
+    my @queries;
+    my $normal_query = [
+        {
+            'operand'  => 'perl*',
+            'operator' => undef
+        }
+    ];
+
+    @queries = $qb->_create_query_string(@$normal_query);
+    my $expect = ['(perl*)'];
+
+    is( @queries, @$expect, 'expected search structure' );
+
+    my $geo_query = [
+        {
+            'operator' => undef,
+            'field'    => 'geolocation',
+            'type'     => undef,
+            'operand'  => 'lat:48.25* lng:16.35* distance:100km*'
+        }
+    ];
+
+    @queries = $qb->_create_query_string(@$geo_query);
+    my $expect_geo = [];
+    is( @queries, @$expect_geo, 'expected geo search structure => empty normal search string' );
+
+};
+
 
 1;
