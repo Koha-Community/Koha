@@ -119,14 +119,21 @@ if ( defined $format ) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn)) {
-        if (my @q = $cgi->multi_param($p)) {
-            if ($q[0] ne '') {
+    foreach
+        my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn))
+    {
+        my @q;
+        @q = $cgi->multi_param( $p . "[]" );
+        if ( scalar @q == 0 ) {
+            @q = $cgi->multi_param($p);
+        }
+        if (@q) {
+            if ( $q[0] ne '' ) {
                 my $f = {
                     field => $p,
                     query => \@q,
                 };
-                if (my $op = scalar $cgi->param($p . '_op')) {
+                if ( my $op = scalar $cgi->param( $p . '_op' ) ) {
                     $f->{operator} = $op;
                 }
                 push @{ $filter->{filters} }, $f;
