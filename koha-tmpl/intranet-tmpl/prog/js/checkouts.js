@@ -91,6 +91,7 @@ function LoadIssuesTable() {
                           + oObj.biblionumber
                           + "'>"
                           + (oObj.title ? oObj.title.escapeHtml() : '' );
+                    var ymd = flatpickr.formatDate(new Date(), "Y-m-d");
 
                     $.each(oObj.subtitle, function( index, value ) {
                               title += " " + value.escapeHtml();
