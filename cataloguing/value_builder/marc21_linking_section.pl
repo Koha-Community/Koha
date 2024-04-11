@@ -234,8 +234,8 @@ my $launcher = sub {
 
         my @numbers = ();
 
-        if ( $total > $resultsperpage ) {
-            for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
+        if ( $total_hits > $resultsperpage ) {
+            for ( my $i = 1 ; $i < $total_hits / $resultsperpage + 1 ; $i++ ) {
                 if ( $i < 16 ) {
                     my $highlight = 0;
                     ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );

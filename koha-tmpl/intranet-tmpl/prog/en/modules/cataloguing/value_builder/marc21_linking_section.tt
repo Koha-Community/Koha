@@ -21,14 +21,13 @@
     [% IF ( Search ) %]
         <div id="MARC21_Linking_section_search" class="page-section">
             <h2>Search for</h2>
-            <form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form name="f" method="get" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl">
 
                 <p>
                     <input type="hidden" name="plugin_name" value="marc21_linking_section.pl" />
                     <input type="hidden" name="index" value="[% index | html %]" />
                     <input type="hidden" name="result" value="marc12 field 7 [% index | html %]" />
-                    <input type="hidden" name="op" value="cud-do_search" />
+                    <input type="hidden" name="op" value="do_search" />
                     <label class="label100" for="searchbox">Any word</label>
                     <input type="text" name="search" id="searchbox" size="35" /><br />
                     <label for="itypeloop">Item type</label>
@@ -53,7 +52,7 @@
             <p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% startfromprev | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
             [% FOREACH number IN numbers %]
                 [% IF ( number.highlight ) %] <span class="highlight">[% number.number | html %]</span>
-                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
+                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% search |url %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">[% number.number | html %]</a>
                 [% END %]
             [% END %]
             [% IF ( displaynext ) %]
@@ -114,7 +113,7 @@
                             [% number.number | html %]
                         </span>
                     [% ELSE %]
-                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% number.search | html %]&amp;resultsperpage=[% number.resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
+                        <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;startfrom=[% number.startfrom | html %]&amp;search=[% search | html %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=intranet&amp;op=do_search">
                             [% number.number | html %]
                         </a>
                     [% END %]
