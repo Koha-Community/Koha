@@ -1982,23 +1982,17 @@ sub checkpw {
     my $shib_login = $shib ? get_login_shib() : undef;
 
     my @return;
-    my $patron;
-    if ( defined $userid ) {
-        $patron = Koha::Patrons->find( { userid     => $userid } );
-        $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
-    }
     my $check_internal_as_fallback = 0;
     my $passwd_ok                  = 0;
+    my $patron;
+
 
     # Note: checkpw_* routines returns:
     # 1 if auth is ok
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
 
-    if ( $patron and ( $patron->account_locked ) ) {
-
-        # Nothing to check, account is locked
-    } elsif ( $ldap && defined($password) ) {
+    if ( $ldap && defined($password) ) {
         my ( $retval, $retcard, $retuserid );
         ( $retval, $retcard, $retuserid, $patron ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
@@ -2012,7 +2006,8 @@ sub checkpw {
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
         $query->delete('ticket');                                         # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) =
+        my ( $retval, $retcard, $retuserid, $cas_ticket );
+        ( $retval, $retcard, $retuserid, $cas_ticket, $patron ) =
             checkpw_cas( $ticket, $query, $type );                        # EXTERNAL AUTH
         if ($retval) {
             @return = ( $retval, $retcard, $retuserid, $patron, $cas_ticket );
@@ -2033,7 +2028,8 @@ sub checkpw {
 
         # Then, we check if it matches a valid koha user
         if ($shib_login) {
-            my ( $retval, $retcard, $retuserid, $patron ) =
+            my ( $retval, $retcard, $retuserid );
+            ( $retval, $retcard, $retuserid, $patron ) =
                 C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
             if ($retval) {
                 @return = ( $retval, $retcard, $retuserid, $patron );
@@ -2044,20 +2040,29 @@ sub checkpw {
         $check_internal_as_fallback = 1;
     }
 
+    if ( $check_internal_as_fallback ){
     # INTERNAL AUTH
-    if ($check_internal_as_fallback) {
         @return = checkpw_internal( $userid, $password, $no_set_userenv );
-        push( @return, $patron );
         $passwd_ok = 1 if $return[0] > 0;    # 1 or 2
+        $patron = Koha::Patrons->find({ cardnumber => $return[1] }) if $passwd_ok;
+        push @return, $patron if $patron;
+    }
+
+     if ( defined $userid && !$patron ) {
+        $patron = Koha::Patrons->find( { userid     => $userid } );
+        $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
+        push @return, $patron if $check_internal_as_fallback;
     }
 
     if ($patron) {
-        if ($passwd_ok) {
+        if( $patron->account_locked ){
+            @return = ();
+        } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
             if ( $patron->password_expired ) {
                 @return = ( -2, $patron );
             }
-        } elsif ( !$patron->account_locked ) {
+        } else {
             $patron->update( { login_attempts => $patron->login_attempts + 1 } );
         }
     }
