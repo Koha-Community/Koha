@@ -127,50 +127,17 @@ sub import_record_and_create_order_lines {
     };
 }
 
-=head3 _get_MarcFieldsToOrder_syspref_data
+=head3 _get_syspref_mappings
 
-    my $marc_fields_to_order = _get_MarcFieldsToOrder_syspref_data('MarcFieldsToOrder', $marcrecord, $fields);
+    my $syspref_info = _get_syspref_mappings( $marcrecord, $syspref_name );
 
-    Fetches data from a marc record based on the mappings in the syspref MarcFieldsToOrder using the fields selected in $fields (array).
-
-=cut
-
-sub _get_MarcFieldsToOrder_syspref_data {
-    my ( $syspref_name, $record, $field_list ) = @_;
-    my $syspref = C4::Context->preference($syspref_name);
-    $syspref = "$syspref\n\n";
-    my $yaml = eval { YAML::XS::Load( Encode::encode_utf8($syspref) ); };
-    if ($@) {
-        warn "Unable to parse $syspref syspref : $@";
-        return ();
-    }
-    my $r;
-    for my $field_name (@$field_list) {
-        next unless exists $yaml->{$field_name};
-        my @fields = split /\|/, $yaml->{$field_name};
-        for my $field (@fields) {
-            my ( $f, $sf ) = split /\$/, $field;
-            next unless $f and $sf;
-            if ( my $v = $record->subfield( $f, $sf ) ) {
-                $r->{$field_name} = $v;
-            }
-            last if $yaml->{$field};
-        }
-    }
-    return $r;
-}
-
-=head3 _get_MarcItemFieldsToOrder_syspref_data
-
-    my $marc_item_fields_to_order = _get_MarcItemFieldsToOrder_syspref_data('MarcItemFieldsToOrder', $marcrecord, $fields);
-
-    Fetches data from a marc record based on the mappings in the syspref MarcItemFieldsToOrder using the fields selected in $fields (array).
+    Fetches data from a marc record based on the mappings in the syspref MarcFieldsToOrder or MarcItemFieldsToOrder using the fields selected in $fields (array).
 
 =cut
 
-sub _get_MarcItemFieldsToOrder_syspref_data {
-    my ($record) = @_;
-    my $syspref = C4::Context->yaml_preference('MarcItemFieldsToOrder');
+sub _get_syspref_mappings {
+    my ($record, $syspref_to_read) = @_;
+    my $syspref = C4::Context->yaml_preference($syspref_to_read);
     my @result;
     my @tags_list;
 
@@ -216,8 +183,8 @@ sub _get_MarcItemFieldsToOrder_syspref_data {
             push @result, $r;
         }
     }
-
-    return \@result;
+    return \@result if $syspref_to_read eq 'MarcItemFieldsToOrder';
+    return $result[0] if $syspref_to_read eq 'MarcFieldsToOrder';
 }
 
 =head3 _verify_number_of_fields
@@ -365,12 +332,8 @@ sub add_items_from_import_record {
     my $marcrecord         = $record_result->{marcrecord};
 
     if ( $agent eq 'cron' ) {
-        my $marc_fields_to_order = _get_MarcFieldsToOrder_syspref_data(
-            'MarcFieldsToOrder', $marcrecord,
-            [ 'price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2' ]
-        );
-
-        my $marc_item_fields_to_order = _get_MarcItemFieldsToOrder_syspref_data($marcrecord);
+        my $marc_fields_to_order      = _get_syspref_mappings( $marcrecord, 'MarcFieldsToOrder' );
+        my $marc_item_fields_to_order = _get_syspref_mappings( $marcrecord, 'MarcItemFieldsToOrder' );
 
         my $item_fields = {
             homebranch       => $marc_item_fields_to_order->{homebranch},
@@ -598,17 +561,15 @@ sub import_biblios_list {
         );
         my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
 
-        my $infos = _get_MarcFieldsToOrder_syspref_data(
-            'MarcFieldsToOrder', $marcrecord,
-            [ 'price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2', 'replacementprice' ]
-        );
-        my $price            = $infos->{price};
-        my $replacementprice = $infos->{replacementprice};
-        my $quantity         = $infos->{quantity};
-        my $budget_code      = $infos->{budget_code};
-        my $discount         = $infos->{discount};
-        my $sort1            = $infos->{sort1};
-        my $sort2            = $infos->{sort2};
+        my $infos = _get_syspref_mappings( $marcrecord, 'MarcFieldsToOrder' );
+
+        my $price            = $infos->{price} || undef;
+        my $replacementprice = $infos->{replacementprice} || undef;
+        my $quantity         = $infos->{quantity} || undef;
+        my $budget_code      = $infos->{budget_code} || undef;
+        my $discount         = $infos->{discount} || undef;
+        my $sort1            = $infos->{sort1} || undef;
+        my $sort2            = $infos->{sort2} || undef;
         my $budget_id;
 
         if ($budget_code) {
@@ -621,7 +582,8 @@ sub import_biblios_list {
         # Items
         my @itemlist           = ();
         my $all_items_quantity = 0;
-        my $alliteminfos       = _get_MarcItemFieldsToOrder_syspref_data($marcrecord);
+        my $alliteminfos = _get_syspref_mappings( $marcrecord, 'MarcItemFieldsToOrder' );
+
         if ( $alliteminfos != -1 ) {
             foreach my $iteminfos (@$alliteminfos) {
                 # Quantity is required, default to one if not supplied
