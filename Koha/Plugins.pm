@@ -364,19 +364,19 @@ sub RemovePlugins {
 sub _restart_after_change {
     my ( $class, $params ) = @_;
 
-    if ( C4::Context->psgi_env ) {
-        my $parent_pid = getpid();
-        my $ppid       = getppid();    # Get the parent process ID
+    return unless ( C4::Context->config('plugins_restart') && C4::Context->psgi_env );
 
-        # If the current process is not Plack parent, find the parent process recursively
-        while ( $parent_pid != $ppid ) {
-            $parent_pid = $ppid;
-            $ppid       = getppid();
-        }
+    my $parent_pid = getpid();
+    my $ppid       = getppid();    # Get the parent process ID
 
-        # Send SIGUSR1 signal to Plack parent process for graceful restart
-        kill 'HUP', $parent_pid;
+    # If the current process is not Plack parent, find the parent process recursively
+    while ( $parent_pid != $ppid ) {
+        $parent_pid = $ppid;
+        $ppid       = getppid();
     }
+
+    # Send SIGUSR1 signal to Plack parent process for graceful restart
+    kill 'HUP', $parent_pid;
 }
 
 1;

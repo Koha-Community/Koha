@@ -33,6 +33,7 @@ use Koha::Plugins;
 
 my $plugins_enabled    = C4::Context->config("enable_plugins");
 my $plugins_restricted = C4::Context->config("plugins_restricted");
+my $plugins_restart    = C4::Context->config("plugins_restart");
 
 my $input = CGI->new;
 my $uploadlocation = $input->param('uploadlocation');
@@ -47,6 +48,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => { plugins => 'manage' },
     }
 );
+$template->param( plugins_restart => $plugins_restart );
 
 # Early exist if uploads are not enabled direct upload attempted when uploads are restricted
 if (!$plugins_enabled) {

@@ -44,6 +44,11 @@
                     [% END %]
                 </div>
                 [% END %]
+                [% IF ( !plugins_restart ) %]
+                <div class="dialog alert">
+                    <strong>Your system is not configured to automatically refresh on plugin upload, you may need to ask your administrator to complete the plugin installation.</strong>
+                </div>
+                [% END %]
                 <form method="post" action="/cgi-bin/koha/plugins/plugins-upload.pl" enctype="multipart/form-data">
                     [% INCLUDE 'csrf-token.inc' %]
                     <fieldset class="brief">
