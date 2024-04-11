@@ -248,7 +248,7 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
     my $patron_1 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { }
+            value => {}
         }
     );
     my $patron_password_1 = 'thePassword123';
@@ -269,7 +269,8 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
-        ->json_is({ cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid} );
+        ->json_is(
+        { cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid } );
 
     $json = {
         identifier => $patron_2->userid,
@@ -277,23 +278,26 @@ subtest 'password validation - users with shared cardnumber / userid' => sub {
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
-        ->json_is({ cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid} );
-
-    my $json = {
-        userid => $patron_1->cardnumber,
-        password   => $patron_password_1,
-    };
-
-    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
-        ->json_is({ cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid} );
+        ->json_is(
+        { cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid } );
 
     $json = {
-        userid => $patron_2->userid,
-        password   => $patron_password_2,
+        userid   => $patron_1->cardnumber,
+        password => $patron_password_1,
     };
 
     $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
-        ->json_is({ cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid} );
+        ->json_is(
+        { cardnumber => $patron_1->cardnumber, patron_id => $patron_1->borrowernumber, userid => $patron_1->userid } );
+
+    $json = {
+        userid   => $patron_2->userid,
+        password => $patron_password_2,
+    };
+
+    $t->post_ok( "//$userid:$password@/api/v1/auth/password/validation" => json => $json )->status_is(201)
+        ->json_is(
+        { cardnumber => $patron_2->cardnumber, patron_id => $patron_2->borrowernumber, userid => $patron_2->userid } );
 
     $schema->storage->txn_rollback;
 };
