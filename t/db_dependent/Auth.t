@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -501,7 +501,7 @@ subtest 'checkpw lockout tests' => sub {
     ( $checkpw, undef, undef ) = checkpw( $patron->userid, $password, undef, undef, 1 );
     is( $checkpw, undef, 'checkpw returns undef with right password when account locked' );
     ( $checkpw, undef, undef ) = checkpw( $patron->cardnumber, $password, undef, undef, 1 );
-    is( $checkpw, undef, 'checkpw returns undefwith right password when logging in via cardnumber if account locked' );
+    is( $checkpw, undef, 'checkpw returns undef with right password when logging in via cardnumber if account locked' );
 
 };
 
