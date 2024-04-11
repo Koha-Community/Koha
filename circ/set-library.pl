@@ -47,11 +47,10 @@ my $register_id         = $query->param('register_id');
 my $userenv_branch      = C4::Context->userenv->{'branch'} || '';
 my $userenv_desk        = C4::Context->userenv->{'desk_id'} || '';
 my $userenv_register_id = C4::Context->userenv->{'register_id'} || '';
-my @updated;
+my $updated;
 
 my $library = Koha::Libraries->find($branch);
 # $session lines here are doing the updating
-## Please see file perltidy.ERR
 if (
        $op eq 'cud-set-library'
     && $library
@@ -63,76 +62,49 @@ if (
         my $branchname = $library->branchname;
         $session->param( 'branchname', $branchname );    # update sesssion in DB
         $session->param( 'branch',     $branch );        # update sesssion in DB
-        push @updated, {
-            updated_branch => 1,
-            old_branch     => $userenv_branch,
-            new_branch     => $branch,
-        };
-    }    # else branch the same, no update
-} elsif ( $op eq 'cud-set-library' && $library ) {
-    if ( $desk_id && ( !$userenv_desk or $userenv_desk ne $desk_id ) ) {
-        my $desk          = Koha::Desks->find( { desk_id => $desk_id } );
-        my $old_desk_name = '';
-        if ($userenv_desk) {
-            $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk } )->desk_name;
-        }
-        $template->param( LoginDeskname => $desk->desk_name );
-        $template->param( LoginDeskid   => $desk->desk_id );
-        $session->param( desk_name => $desk->desk_name );
-        $session->param( desk_id   => $desk->desk_id );
-        $session->flush();
-        push @updated, {
-            updated_desk => 1,
-            old_desk     => $old_desk_name,
-        };
+        $updated = 1;
     }
-    if ( defined($register_id)
-        && ( $userenv_register_id ne $register_id ) )
-    {
-        my $old_register_name = C4::Context->userenv->{'register_name'} || '';
-        my $register          = Koha::Cash::Registers->find($register_id);
-        $session->param( 'register_id',   $register_id );
-        $session->param( 'register_name', $register ? $register->name : '' );
-        push @updated,
-            {
-            updated_register => 1,
-            old_register     => $old_register_name
-            };
-    }
-    $session->flush();
 } else {
-    $branch  = $userenv_branch;    # fallback value
+    $branch = $userenv_branch;    # fallback value
+}
+
+if ( $desk_id && ( !$userenv_desk or $userenv_desk ne $desk_id ) ) {
+    my $desk          = Koha::Desks->find( { desk_id => $desk_id } );
+    my $old_desk_name = '';
+    if ($userenv_desk) {
+        $old_desk_name = Koha::Desks->find( { desk_id => $userenv_desk } )->desk_name;
+    }
+    $session->param( desk_name => $desk->desk_name );
+    $session->param( desk_id   => $desk->desk_id );
+    $updated = 1;
+} else {
     $desk_id = $userenv_desk;
 }
 
-$template->param(updated => \@updated) if (scalar @updated);
-
-my @recycle_loop;
-foreach my $param ($query->param()) {
-    $param or next;                   # disclude blanks
-    $param eq "branch"     and next;  # disclude branch
-    $param eq "desk_id"    and next;  # disclude desk_id
-    $param eq "register_id" and next;    # disclude register
-    $param eq "oldreferer" and next;  # disclude oldreferer
-    push @recycle_loop, {
-        param => $param,
-        value => scalar $query->param($param),
-      };
+if ( defined($register_id)
+    && ( $userenv_register_id ne $register_id ) )
+{
+    my $old_register_name = C4::Context->userenv->{'register_name'} || '';
+    my $register          = Koha::Cash::Registers->find($register_id);
+    $session->param( 'register_id',   $register_id );
+    $session->param( 'register_name', $register ? $register->name : '' );
+    $updated = 1;
+} else {
+    $register_id = $userenv_register_id;
 }
 
-my $referer =  $query->param('oldreferer') || $ENV{HTTP_REFERER} || '';
-$referer =~ /set-library\.pl/ and undef $referer;   # avoid sending them back to this same page.
+$session->flush();
 
-if (scalar @updated and not scalar @recycle_loop) {
-    # we updated something, and there were no extra params to POST: quick redirect
-    print $query->redirect($referer || '/cgi-bin/koha/circ/circulation.pl');
+
+my $referer =  $query->param('oldreferer') || $ENV{HTTP_REFERER} || '';
+if ( $updated ) {
+    print $query->redirect($referer || '/cgi-bin/koha/mainpage.pl');
 }
 
 $template->param(
     referer     => $referer,
     branch      => $branch,
     desk_id     => $desk_id,
-    recycle_loop=> \@recycle_loop,
 );
 
 # Checking if there is a Fast Cataloging Framework

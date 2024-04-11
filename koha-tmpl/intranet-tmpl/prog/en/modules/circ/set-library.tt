@@ -42,131 +42,83 @@
         <div class="col-sm-12">
             <main>
                 <div class="row">
-
-                [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-sm-10 col-sm-push-2">
-                [% ELSE %]
-                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                [% END %]
-                [% INCLUDE 'messages.inc' %]
-                <h1>Set library</h1>
-
-[% IF ( updated ) %]
-
-<h2>Update succeeded</h2>
-Updated:<ul>
-    [% FOREACH update IN updated %]
-    [% IF ( update.updated_branch || update.updated_desk ||  update.updated_register ) %]
-        [% IF ( update.updated_branch ) %]
-        <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.new_branch or "?" | html %]</li>
-        [% END %]
-        [% IF ( update.updated_desk ) %]
-        <li>Desk: [% update.old_desk or "?" | html %] &rArr; [% LoginDeskname or "?" | html %]</li>
-        [% END %]
-        [% IF ( updated.updated_register ) %]
-        <li>Register: [% updated.old_register or "?" | html %] &rArr; [% Registers.session_register_name or "?" | html %]</li>
-        [% END %]
-    [% ELSE %]
-        <li>ERROR - unknown</li>
-    [% END %]
-    [% END %]
-    </ul>
-<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]">
-    [% INCLUDE 'csrf-token.inc' %]
-    <div class="noshow">
-        [% FOREACH recycle_loo IN recycle_loop %]
-            [% SET param = recycle_loo.param %]
-            [% NEXT IF param == 'op' %]
-            [% NEXT IF param == 'csrf_token' %]
-            [% IF param == 'original_op' %][% param = 'op' %][% END %]
-            <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
-            [% IF param == 'op' %][% SET has_op = 1 %][% END %]
-        [% END %]
-        [% UNLESS has_op %]
-            <input type="hidden" name="op" value="cud-no-op" /> [%# Trick to pass anti-CSRF requirements %]
-        [% END %]
-    </div>
-    <button type="submit">Continue</button>
-</form>
-
-[% ELSE %]
-
-<form method="post" action="set-library.pl">
-    [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="op" value="cud-set-library" />
-[% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
-<fieldset class="rows">
-    <legend>Set library</legend>
-    <ol>
-        <li><label for="branch">Choose library:</label>
-        <select name="branch" id="branch">
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
-        </select></li>
-    </ol>
-</fieldset>
-[% ELSE %]
-<select name="branch" id="branch" style="visibility:hidden;">
-    [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
-</select>
-[% END %]
-
-[% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
-<fieldset class="rows">
-    <legend>Set desk</legend>
-    <ol>
-        <li><label for="desk">Choose desk:</label>
-        <select name="desk_id" id="desk_id">
-            [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id  %]
-        </select></li>
-    </ol>
-</fieldset>
-[% END %]
-
-[% IF Koha.Preference('UseCashRegisters') %]
-<fieldset class="rows">
-    <legend>Set cash register</legend>
-    <ol>
-        <li>
-            <label for="register_id">Choose cash register:</label>
-            <select name="register_id" id="register_id">
-                <option id="noregister" selected="selected" value="">-- None --</option>
-                [% PROCESS options_for_registers registers => Registers.all() %]
-            </select>
-        </li>
-    </ol>
-</fieldset>
-[% END %]
-
-<fieldset class="action">
-    <input type="submit" class="btn btn-primary" value="Submit" />
-    <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/circ/circulation.pl' %]">Cancel</a>
-</fieldset>
-<div class="noshow">
-    [% FOREACH recycle_loo IN recycle_loop %]
-        [% SET param = recycle_loo.param %]
-        [% IF param == 'op' %][% param = 'original_op' %][% END %]
-        <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
-    [% END %]
-    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" %]" />
-</div>
-</form>
-<!-- /updated -->
-[% END %]
-
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                            <div class="col-sm-2 col-sm-pull-10">
-                                <aside>
-                                    [% INCLUDE 'circ-nav.inc' %]
-                                </aside>
-                            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-                        </div> <!-- /.row -->
+                        <div class="col-sm-10 col-sm-push-2">
+                    [% ELSE %]
+                        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                     [% END %]
+                    [% INCLUDE 'messages.inc' %]
+                    <h1>Set library</h1>
+                    <form method="post" action="set-library.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-set-library" />
+                        [% IF ( CAN_user_superlibrarian || CAN_user_loggedinlibrary ) %]
+                            <fieldset class="rows">
+                                <legend>Set library</legend>
+                                <ol>
+                                    <li><label for="branch">Choose library:</label>
+                                    <select name="branch" id="branch">
+                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branch, unfiltered => 1 ) %]
+                                    </select></li>
+                                </ol>
+                            </fieldset>
+                        [% ELSE %]
+                            <select name="branch" id="branch" style="visibility:hidden;">
+                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+                            </select>
+                        [% END %]
 
-            </main>
-        </div> <!-- /.col-sm-12 -->
-    </div> <!-- /.row -->
-
+                    [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
+                        <fieldset class="rows">
+                            <legend>Set desk</legend>
+                            <ol>
+                                <li><label for="desk_id">Choose desk:</label>
+                                <select name="desk_id" id="desk_id">
+                                    [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id  %]
+                                </select></li>
+                            </ol>
+                        </fieldset>
+                    [% IF Koha.Preference('UseCashRegisters') %]
+                        <fieldset class="rows">
+                            <legend>Set cash register</legend>
+                            <ol>
+                                <li>
+                                    <label for="register_id">Choose cash register:</label>
+                                    <select name="register_id" id="register_id">
+                                        <option id="noregister" selected="selected" value="">-- None --</option>
+                                        [% PROCESS options_for_registers registers => Registers.all() %]
+                                    </select>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    [% END %]
+                    <fieldset class="action">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                        <a class="cancel" id="cancel_set_library" href="[% referer or '/cgi-bin/koha/mainpage.pl' %]">Cancel</a>
+                    </fieldset>
+                    <div class="noshow">
+                        [% FOREACH recycle_loo IN recycle_loop %]
+                            [% SET param = recycle_loo.param %]
+                            [% IF param == 'op' %][% param = 'original_op' %][% END %]
+                            <input type="text" name="[% param | html %]" value="[% recycle_loo.value | html %]" />
+                        [% END %]
+                        <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/mainpage.pl" %]" />
+                    </div>
+                </form>
+                <!-- /updated -->
+                [% END %]
+                [% IF Koha.Preference('CircSidebar') %]
+                    </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                        <div class="col-sm-2 col-sm-pull-10">
+                            <aside>
+                                [% INCLUDE 'circ-nav.inc' %]
+                            </aside>
+                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                    </div> <!-- /.row -->
+                [% END %]
+        </main>
+    </div> <!-- /.col-sm-12 -->
+</div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
   [% Asset.js("js/desk_selection.js") | $raw %]
   [% Asset.js("js/register_selection.js") | $raw %]
