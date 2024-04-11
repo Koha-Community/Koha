@@ -156,10 +156,6 @@ tr {
 }
 
 td {
-    img {
-        max-width: none;
-    }
-
     &.bookcover {
         background: #FFF url( "../images/spinner-small.gif" ) center center no-repeat;
         min-width: 120px;
@@ -740,17 +736,12 @@ th {
     }
 }
 
-#biblio-cover-slider {
-    background-color: #FFF;
-    border: 1px solid #B9D8D9;
-    border-radius: 3px;
-    margin: 0 1em .5em 0;
-    min-height: 175px;
-    padding: 10px 5px 5px 5px;
-}
-
 .cover-slider {
     background: #FFF url( "../images/spinner-small.gif" ) center center no-repeat;
+    margin: 0 1em .5em 0;
+    min-height: 175px;
+    min-width: 100px;
+    padding: 10px 15px 5px 5px;
 
     .hint {
         font-size: 80%;
@@ -767,12 +758,21 @@ th {
     }
 }
 
+.covercol {
+    .cover-slider {
+        background: transparent none;
+        margin: 0;
+        padding: 5px;
+    }
+}
+
 .cover-image {
     display: none;
 
     img {
-        height: auto;
+        margin: .2rem;
         max-width: 100%;
+        width: auto;
     }
 }
 
@@ -2908,6 +2908,15 @@ $star-selected: #EDB867;
 
     .chocolat-bottom {
         background: rgba( 0, 0, 0, .7 );
+    }
+
+    .chocolat-description {
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            color: desaturate( lighten( $base-theme-color, 40 ), 30 )
+        }
     }
 }
 

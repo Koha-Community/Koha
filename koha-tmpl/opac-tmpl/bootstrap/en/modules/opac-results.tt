@@ -14,9 +14,20 @@
 [% SET RecallsEnabled = ( Koha.Preference('UseRecalls') == 1 ) && LoginEnabled %]
 [% SET ArticleRequestsEnabled = ( Koha.Preference('ArticleRequests') == 1 ) && LoginEnabled %]
 [% SET MultiHolds = ( Koha.Preference('DisplayMultiPlaceHold') == 1 ) && HoldsEnabled %]
-
-[% IF firstPage %]
-     [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
+[% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
+[% SET OPACLocalCoverImages = Koha.Preference('OPACLocalCoverImages') %]
+[% SET OPACAmazonCoverImages = Koha.Preference('OPACAmazonCoverImages') %]
+[% SET SyndeticsCoverImages = ( Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') ) %]
+[% SET GoogleJackets = Koha.Preference('GoogleJackets') %]
+[% SET OpenLibraryCovers = Koha.Preference('OpenLibraryCovers') %]
+[% SET BakerTaylorEnabled = Koha.Preference('BakerTaylorEnabled') %]
+[% SET OPACCoce = ( Koha.Preference('OPACCoce') && Koha.Preference('CoceProviders') ) %]
+[% IF ( CoverImagePlugins || OPACLocalCoverImages || OPACAmazonCoverImages || SyndeticsCoverImages || GoogleJackets || OpenLibraryCovers || BakerTaylorEnabled || OPACCoce || OPACCustomCoverImages ) %]
+    [% IF firstPage %]
+        [% SET CoverImages = 1 %]
+    [% END %]
+    [% SET OPACCustomCoverImages = ( Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') ) %]
+    [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -38,6 +49,7 @@
 [% BLOCK cssinclude %][% END %]
 
 <link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" />
+[% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -251,95 +263,13 @@
                                                     [% END %]
                                                 </td>
                                             [% END %]
-
+                                            [% IF ( CoverImages) %]
+                                                <td class="covercol">
+                                                    [% INCLUDE 'cover-images.inc' %]
+                                                </td>
+                                            [% END %]
                                             [% # Cell 4: Search result details and controls %]
                                             <td class="bibliocol">
-                                                [% IF ( SEARCH_RESULT.title ) %]
-                                                    [% img_title = SEARCH_RESULT.title %]
-                                                [% ELSE %]
-                                                    [% img_title = SEARCH_RESULT.biblionumber %]
-                                                [% END %]
-                                                <div class="coverimages cover-slides itemtype_[% SEARCH_RESULT.itemtype | html %]" data-isbn="[% To.json(SEARCH_RESULT.normalized_isbn) | $raw %]" data-imgtitle="[% img_title | html %]">
-                                                    <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
-
-                                                        [% IF ( OPACLocalCoverImages && SEARCH_RESULT.has_local_cover_image ) %]
-                                                            <span title="[% img_title | html %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
-                                                        [% END %]
-
-                                                        [% IF ( OPACAmazonCoverImages ) %]
-                                                            [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                                    <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="item-thumbnail" /></span>
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
-
-                                                        [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                            [% IF ( SEARCH_RESULT.normalized_isbn || SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_oclc ) %]
-                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/[% SyndeticsCoverImageSize | uri %].GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="" class="item-thumbnail" /></span>
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
-
-                                                        [% IF ( GoogleJackets ) %]
-                                                            [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                                <span title="[% img_title | html %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></span>
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
-
-                                                        [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
-                                                          [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn | html %]
-                                                          [% IF ( coce_id ) %]
-                                                            <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
-                                                          [% ELSE %]
-                                                            <span class="no-image">No cover image available</span>
-                                                          [% END %]
-                                                        [% END %]
-
-                                                        [% IF OpenLibraryCovers %]
-                                                            [% IF SEARCH_RESULT.normalized_isbn %]
-                                                                <span title="[% img_title | html %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
-
-                                                        [% IF ( BakerTaylorEnabled && !BakerTaylorBookstoreURL ) %]
-                                                            [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-                                                            [% IF ( bt_id ) %]
-                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                            [% ELSE %]
-                                                                <span class="no-image">No cover image available</span>
-                                                            [% END %]
-                                                        [% END %]
-                                                    </a>
-
-                                                    [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
-                                                        [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-                                                        [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL | url %][% bt_id | url %]">
-                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
-                                                            </a>
-                                                        [% ELSE %]
-                                                            <span class="no-image">No cover image available</span>
-                                                        [% END %]
-                                                    [% END %]
-
-                                                    [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                                        [% SET custom_cover_image_url = SEARCH_RESULT.biblio_object.custom_cover_image_url %]
-                                                        [% IF custom_cover_image_url %]
-                                                            [% IF ( OPACURLOpenInNewWindow ) %]
-                                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" target="_blank" rel="noreferrer"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
-                                                            [% ELSE %]
-                                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]"><img alt="Cover image" src="[% custom_cover_image_url | url %]" /></a>
-                                                            [% END %]
-                                                        [% END %]
-                                                    [% END %]
-
-                                                </div>
                                                 [% IF ( COinSinOPACResults && SEARCH_RESULT.coins ) %]
                                                     <!-- COinS / Openurl -->
                                                     <span class="Z3988" title="[% SEARCH_RESULT.coins | html %]"></span>
@@ -499,6 +429,7 @@
     [% IF OpenLibraryCovers || OpenLibrarySearch %]
         [% Asset.js("js/openlibrary.js") | $raw %]
     [% END %]
+    [% Asset.js("lib/Chocolat/js/chocolat.js") | $raw %]
     [% CoverImagePlugins | $raw %]
     <script>
         const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
@@ -529,6 +460,175 @@
                 $(".highlight_toggle").toggle();
             }
         [% END # /IF OpacHighlightedWords %]
+
+        function verify_cover_images() {
+            // Loop over each container in the template which contains covers
+            $(".cover-slider").each(function( index ){
+                let biblionumber = $(this).data("biblionumber");
+                let booktitle = $(this).data("title");
+                var lightbox_descriptions = [];
+                $(this).find(".cover-image").each( function( index ){
+                    var div = $(this);
+                    // Find the image in the container
+                    var img = div.find("img")[0];
+                    if( img && $(img).length > 0 ){
+                        // All slides start hidden. If this is the first one, show it.
+                        // Check if Amazon image is present
+                        if ( div.hasClass("amazon-coverimg") ) {
+                            let w = img.width;
+                            let h = img.height;
+                            if ((w == 1) || (h == 1)) {
+                                // Amazon returned single-pixel placeholder
+                                // Remove the container
+                                div.remove();
+                            } else {
+                                lightbox_descriptions.push(_("Amazon cover image (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            }
+                        } else if( div.hasClass("custom-coverimg") ){
+
+                            if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
+                                // No image was loaded via the CustomCoverImages system preference
+                                // Remove the container
+                                div.remove();
+                            } else {
+                                lightbox_descriptions.push(_("Custom cover image"));
+                            }
+                        } else if( div.hasClass("syndetics-coverimg") ){
+                            lightbox_descriptions.push(_("Image from Syndetics"))
+                        } else if( div.hasClass("googlejacket-coverimg" ) ){
+                            if( img.naturalHeight  ){
+                                lightbox_descriptions.push(_("Image from Google Books (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                            }
+                        } else if( div.hasClass("openlibrary-coverimg") ){
+                            lightbox_descriptions.push(_("Image from OpenLibrary (<a href='%s'>see the original image</a>)").format($(img).data('link')));
+                        } else if( div.hasClass("coce-coverimg" ) ){
+                            // Identify which service's image is being loaded by Coce
+                            var coce_description;
+                            let src = $(img).attr("src");
+                            if( src.indexOf('amazon.com') >= 0 ){
+                                coce_description = _("Coce image from Amazon.com");
+                            } else if( src.indexOf('google.com') >= 0 ){
+                                coce_description = _("Coce image from Google Books");
+                            } else if( src.indexOf('openlibrary.org') >= 0 ){
+                                coce_description = _("Coce image from Open Library");
+                            }
+                            div.find(".hint").html(coce_description);
+                            lightbox_descriptions.push(coce_description);
+                        } else if ( div.hasClass("bakertaylor-coverimg" ) ){
+                            lightbox_descriptions.push(_("Image from Baker &amp; Taylor"));
+                        } else if ( div.hasClass("cover-image local-coverimg" ) ){
+                            lightbox_descriptions.push(_("Local cover image"));
+                        } else {
+                            lightbox_descriptions.push(_("Cover image source unknown"));
+                        }
+                    } else {
+                        div.remove();
+                    }
+                });
+
+                // Lightbox for cover images
+                Chocolat(this.querySelectorAll('.cover-image a'), {
+                    description: function(){
+                        return lightbox_descriptions[this.settings.currentImageIndex];
+                    }
+                });
+
+            });
+
+            $(".cover-slider").each(function(){
+                var coverSlide = this;
+                var coverImages = $(this).find(".cover-image");
+                if( coverImages.length > 1 ){
+                    coverImages.each(function( index ){
+                        // If more that one image is present, add a navigation link
+                        // for activating the slide
+                        var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
+                        if( index == 0 ){
+                            // Set the first navigation link as active
+                            $(covernav).addClass("nav-active");
+                        }
+                        $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                        $(coverSlide).append( covernav );
+                    });
+                }
+
+                $(coverSlide).find(".cover-image").eq(0).show();
+
+                // if( $(coverSlide).find(".cover-image").length < 1 ){
+                //     $(coverSlide).remove();
+                // } else {
+                    // This is a suboptimal workaround; we should do this via load, but
+                    // the image code is scattered all over now. We come here now after
+                    // window load and wait_for_images (so load completed).
+                    var check_complete = 1;
+                    $(coverSlide).find("img").each( function() {
+                        if( !this.complete || this.naturalHeight == 0 ) check_complete = 0;
+                    });
+                    if( check_complete ) $(coverSlide).removeClass('cover-slides');
+                // }
+            });
+
+            $(".cover-slider").on("click",".cover-nav", function(e){
+                e.preventDefault();
+                var cover_slider = $(this).parent();
+                // Adding click handler for cover image navigation links
+                var num = $(this).data("num");
+                $(cover_slider).find(".cover-nav").removeClass("nav-active");
+                $(this).addClass("nav-active");
+                $(cover_slider).find(".cover-image").hide();
+                $(cover_slider).find(".cover-image").eq( num ).show();
+            });
+
+            $("#editions img").each(function(i){
+                if ( this.src.indexOf('amazon.com') >= 0 ) {
+                    let w = this.width;
+                    let h = this.height;
+                    if ((w == 1) || (h == 1)) {
+                        this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                    } else if ( (this.complete != null) && (!this.complete) || this.naturalHeight == 0 ) {
+                        this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                    }
+                }
+            });
+        } /* /verify_images */
+
+
+        let counter_wait = 0;
+        function wait_for_images(cb){
+
+            var loaded = 1;
+            counter_wait++;
+
+            [% IF GoogleJackets %]
+                if ( loaded ) {
+                    loaded = KOHA.Google.done;
+                }
+            [% END %]
+
+            [% IF OpenLibraryCovers %]
+                if ( loaded ) {
+                    loaded = KOHA.OpenLibrary.done;
+                }
+            [% END %]
+
+            [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
+                if ( loaded ) {
+                    loaded = KOHA.coce.done;
+                }
+            [% END %]
+
+            if (!loaded && counter_wait < 50) {// Do not wait more than 5 seconds
+                window.setTimeout(function(){wait_for_images(cb);}, 100);
+            } else {
+                if (counter_wait >= 50 ) {
+                }
+                cb();
+            }
+        }
+
+        $(window).load(function() {
+            wait_for_images(verify_cover_images);
+        });
 
         $(document).ready(function(){
 
