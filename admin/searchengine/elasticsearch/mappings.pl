@@ -90,12 +90,12 @@ if ( $op eq 'cud-edit' ) {
 
     $schema->storage->txn_begin;
 
-    my @field_name = $input->multi_param('search_field_name');
-    my @field_label = $input->multi_param('search_field_label');
-    my @field_type = $input->multi_param('search_field_type');
-    my @field_weight = $input->multi_param('search_field_weight');
+    my @field_name         = $input->multi_param('search_field_name');
+    my @field_label        = $input->multi_param('search_field_label');
+    my @field_type         = $input->multi_param('search_field_type');
+    my @field_weight       = $input->multi_param('search_field_weight');
     my @field_staff_client = $input->multi_param('search_field_staff_client');
-    my @field_opac = $input->multi_param('search_field_opac');
+    my @field_opac         = $input->multi_param('search_field_opac');
 
     my @index_name          = $input->multi_param('mapping_index_name');
     my @search_field_name   = $input->multi_param('mapping_search_field_name');
@@ -112,66 +112,68 @@ if ( $op eq 'cud-edit' ) {
         Koha::SearchFields->search()->delete;
 
         for my $i ( 0 .. scalar(@field_name) - 1 ) {
-            my $field_name = $field_name[$i];
-            my $field_label = $field_label[$i];
-            my $field_type = $field_type[$i];
-            my $field_weight = $field_weight[$i];
+            my $field_name         = $field_name[$i];
+            my $field_label        = $field_label[$i];
+            my $field_type         = $field_type[$i];
+            my $field_weight       = $field_weight[$i];
             my $field_staff_client = $field_staff_client[$i];
-            my $field_opac = $field_opac[$i];
+            my $field_opac         = $field_opac[$i];
 
-            my $search_field = Koha::SearchFields->find_or_create({
-                name => $field_name,
-                label => $field_label,
-                type => $field_type,
-            });
+            my $search_field = Koha::SearchFields->find_or_create(
+                {
+                    name  => $field_name,
+                    label => $field_label,
+                    type  => $field_type,
+                }
+            );
 
-            if (!length($field_weight)) {
+            if ( !length($field_weight) ) {
                 $search_field->weight(undef);
-            }
-            elsif ($field_weight <= 0 || !looks_like_number($field_weight)) {
+            } elsif ( $field_weight <= 0 || !looks_like_number($field_weight) ) {
                 push @errors, { type => 'error', code => 'invalid_field_weight', 'weight' => $field_weight };
-            }
-            else {
+            } else {
                 $search_field->weight($field_weight);
             }
-            $search_field->staff_client($field_staff_client ? 1 : 0);
-            $search_field->opac($field_opac ? 1 : 0);
+            $search_field->staff_client( $field_staff_client ? 1 : 0 );
+            $search_field->opac( $field_opac                 ? 1 : 0 );
 
             my $facet_order = first { $faceted_field_names[$_] eq $field_name } 0 .. $#faceted_field_names;
-            $search_field->facet_order(defined $facet_order ? $facet_order + 1 : undef);
+            $search_field->facet_order( defined $facet_order ? $facet_order + 1 : undef );
             $search_field->store;
         }
 
         Koha::SearchMarcMaps->search( { marc_type => $marc_type, } )->delete;
-        my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+        my @facetable_fields      = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
         my @facetable_field_names = map { $_->name } @facetable_fields;
 
-        my $mandatory_before = Koha::SearchFields->search({mandatory=>1})->count;
+        my $mandatory_before = Koha::SearchFields->search( { mandatory => 1 } )->count;
         my $mandatory_after  = 0;
         my %seen_fields;
         for my $i ( 0 .. scalar(@index_name) - 1 ) {
-            my $index_name          = $index_name[$i];
-            my $search_field_name   = $search_field_name[$i];
-            my $mapping_marc_field  = $mapping_marc_field[$i];
-            my $mapping_facet       = $mapping_facet[$i];
+            my $index_name         = $index_name[$i];
+            my $search_field_name  = $search_field_name[$i];
+            my $mapping_marc_field = $mapping_marc_field[$i];
+            my $mapping_facet      = $mapping_facet[$i];
             $mapping_facet = ( grep { $_ eq $search_field_name } @facetable_field_names ) ? $mapping_facet : 0;
             my $mapping_suggestible = $mapping_suggestible[$i];
             my $mapping_sort        = $mapping_sort[$i];
             my $mapping_search      = $mapping_search[$i];
             my $mapping_filter      = $mapping_filter[$i];
 
-            my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
+            my $search_field = Koha::SearchFields->find( { name => $search_field_name }, { key => 'name' } );
             $mandatory_after++ if $search_field->mandatory && !defined $seen_fields{$search_field_name};
             $seen_fields{$search_field_name} = 1;
 
             # TODO Check mapping format
             $mapping_marc_field =~ s/\s//g;
 
-            my $marc_field = Koha::SearchMarcMaps->find_or_create({
-                index_name => $index_name,
-                marc_type => $marc_type,
-                marc_field => $mapping_marc_field
-            });
+            my $marc_field = Koha::SearchMarcMaps->find_or_create(
+                {
+                    index_name => $index_name,
+                    marc_type  => $marc_type,
+                    marc_field => $mapping_marc_field
+                }
+            );
             $search_field->add_to_search_marc_maps(
                 $marc_field,
                 {
@@ -185,8 +187,9 @@ if ( $op eq 'cud-edit' ) {
         }
         push @errors, { type => 'error', code => 'missing_mandatory_fields' } if $mandatory_after < $mandatory_before;
     };
-    if ($@ || @errors) {
-        push @errors, { type => 'error', code => 'error_on_update', message => $@, }; # FIXME $@ can be empty but @errors
+    if ( $@ || @errors ) {
+        push @errors,
+            { type => 'error', code => 'error_on_update', message => $@, };    # FIXME $@ can be empty but @errors
         $schema->storage->txn_rollback;
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };

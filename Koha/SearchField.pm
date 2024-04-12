@@ -75,7 +75,7 @@ my $is_mapped = $search_field->is_mapped
 =cut
 
 sub is_mapped {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     return $self->search_marc_maps()->count ? 1 : 0;
 }

@@ -39,31 +39,35 @@ my $sf = $builder->build({
     source => 'SearchField',
 });
 
-my $search_field = Koha::SearchFields->find($sf->{id});
-ok(!$search_field->is_mapped, 'Search field 1 is not mapped');
+my $search_field = Koha::SearchFields->find( $sf->{id} );
+ok( !$search_field->is_mapped, 'Search field 1 is not mapped' );
 
-my $auth_smm = $builder->build({
-    source => 'SearchMarcMap',
-    value => {
-        index_name  => 'authorities',
-        marc_type   => 'marc21',
-        marc_field  => '200abde'
+my $auth_smm = $builder->build(
+    {
+        source => 'SearchMarcMap',
+        value  => {
+            index_name => 'authorities',
+            marc_type  => 'marc21',
+            marc_field => '200abde'
+        }
     }
-});
+);
 
-my $auth_smtf = $builder->build({
-    source => 'SearchMarcToField',
-    value => {
-        search_marc_map_id  => $auth_smm->{id},
-        search_field_id     => $sf->{id}
+my $auth_smtf = $builder->build(
+    {
+        source => 'SearchMarcToField',
+        value  => {
+            search_marc_map_id => $auth_smm->{id},
+            search_field_id    => $sf->{id}
+        }
     }
-});
+);
 
-$search_field = Koha::SearchFields->find($sf->{id});
-ok($search_field->is_mapped, 'Search field 1 is mapped');
+$search_field = Koha::SearchFields->find( $sf->{id} );
+ok( $search_field->is_mapped, 'Search field 1 is mapped' );
 
-Koha::SearchMarcMaps->search({})->delete;
-$schema->resultset('SearchMarcToField')->search({})->delete;
+Koha::SearchMarcMaps->search( {} )->delete;
+$schema->resultset('SearchMarcToField')->search( {} )->delete;
 
 my $smm = $builder->build({
     source => 'SearchMarcMap',
