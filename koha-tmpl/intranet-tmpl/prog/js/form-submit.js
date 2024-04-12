@@ -5,12 +5,11 @@ $(document).ready(function(){
         let form_data = $(this).data();
 
         let confirm_msg = form_data.confirmationMsg;
-        let confirmation = 1;
         if( confirm_msg ){
+            let confirmation = confirm( confirm_msg );
+            if( !confirmation ){ return false; }
             delete form_data.confirmationMsg;
-            confirmation = confirm( confirm_msg );
         }
-        if( !confirmation ){ return false }
 
         let the_form = $('<form/>');
         if( form_data.method === 'post' ){
