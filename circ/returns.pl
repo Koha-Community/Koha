@@ -415,16 +415,16 @@ if ($barcode && $op eq 'cud-checkin') {
 
     } elsif ( C4::Context->preference('ShowAllCheckins') and !$messages->{'BadBarcode'} and !$needs_confirm and !$bundle_confirm ) {
         my $duedate = 0;
-        if( $issue ){
+        if ($issue) {
             my $date_due_dt = dt_from_string( $issue->date_due, 'sql' );
-            $duedate = $date_due_dt->strftime('%Y-%m-%d %H:%M');
+            $duedate               = $date_due_dt->strftime('%Y-%m-%d %H:%M');
             $input{borrowernumber} = $issue->borrowernumber;
             $riborrowernumber{0}   = $borrower->{'borrowernumber'};
         }
-        $input{duedate}   = $duedate;
-        $input{not_returned}   = 1;
-        $returneditems{0} = $barcode;
-        $riduedate{0}     = $duedate;
+        $input{duedate}      = $duedate;
+        $input{not_returned} = 1;
+        $returneditems{0}    = $barcode;
+        $riduedate{0}        = $duedate;
         push( @inputloop, \%input );
     }
     $template->param( privacy => $borrower->{privacy} );
