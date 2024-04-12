@@ -55,13 +55,15 @@ if ( ( $patron_id ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
 
 push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
-if ( $op eq 'cud-update' && $newpassword and not @errors ) {
+if ( $op eq 'cud-update' && defined($newpassword) and not @errors ) {
 
     try {
-        $patron->set_password({ password => $newpassword });
+        if ( $newpassword ne '' ) {
+            $patron->set_password({ password => $newpassword });
+            $template->param( newpassword => $newpassword );
+        }
         $patron->userid($new_user_id)->store
             if $new_user_id and $new_user_id ne $patron->userid;
-        $template->param( newpassword => $newpassword );
         if ( $destination eq 'circ' ) {
             print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=" . $patron->cardnumber);
         }
