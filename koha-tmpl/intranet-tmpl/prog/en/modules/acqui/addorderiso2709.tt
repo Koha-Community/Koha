@@ -194,7 +194,7 @@
                                                                 </li>
                                                                 <li class="price">
                                                                     <label for="price_record_[% biblio.import_record_id | html %]">Price: </label>
-                                                                    <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price_[% biblio.import_record_id | html %]" />
+                                                                    <input id="price_record_[% biblio.import_record_id | html %]" class="decimal" type="text" value="[% biblio.price | $Price on_editing => 1 %]" name="price_[% biblio.import_record_id | html %]" onchange="syncReplacementPrice('price_record_[% biblio.import_record_id | html %]', 'replacementprice_record_[% biblio.import_record_id | html %]')" />
                                                                 </li>
                                                                 <li class="replacementprice">
                                                                     <label for="replacementprice_record_[% biblio.import_record_id | html %]">Replacement price: </label>
