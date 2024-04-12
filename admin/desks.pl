@@ -82,7 +82,7 @@ if ( $op eq 'add_form' ) {
     }
     $searchfield = q||;
     $op          = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $desk = Koha::Desks->find($desk_id);
     $template->param( desk => $desk, );
 } elsif ( $op eq 'cud-delete_confirmed' ) {
