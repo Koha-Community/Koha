@@ -23,14 +23,14 @@
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 1 %]
                         Jump to table:
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '_' _ tablename %]
+                            [% SET table_id = pagename _ '#' _ tablename %]
                             <a href="#[% table_id | uri %]">[% tablename | html %]</a>
                             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
                         [% END %]
                     [% END %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '_' _ tablename %]
+                            [% SET table_id = pagename _ '#' _ tablename %]
                             <div class="datatable_config" id="[% table_id | html %]">
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
@@ -385,7 +385,7 @@
                     $("#[% panel | uri %]_panel").on('shown.bs.collapse', function () {
                         $('html, body').animate({
                             [%- IF table.defined -%]
-                                scrollTop: ($("#[% page | uri %]_[% table | uri %]").offset().top)
+                                scrollTop: ($("#[% page | uri %]#[% table | uri %]").offset().top)
                             [%- ELSE -%]
                                 scrollTop: ($("#[% page | uri %]").offset().top)
                             [%- END -%]
