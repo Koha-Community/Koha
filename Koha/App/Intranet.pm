@@ -38,6 +38,8 @@ sub startup {
     # FIXME This generates routes like this: /api/api/v1/...
     $self->plugin('RESTV1');
 
+    $self->plugin('CSRF');
+
     $self->hook(before_dispatch => \&_before_dispatch);
     $self->hook(around_action => \&_around_action);
 
