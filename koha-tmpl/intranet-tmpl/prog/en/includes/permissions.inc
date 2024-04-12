@@ -269,7 +269,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_additional_fields' -%]
         <span class="sub_permission manage_aditional_fields_subpermission">
-            Manage additional fields for baskets or subscriptions (requires edit_subscription or order_manage permissions)
+            Manage additional fields (requires the corresponding permission, one of edit_subscription, order_manage, edit_invoices, or remaining_permissions under updatecharges)
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_sms_providers' -%]
