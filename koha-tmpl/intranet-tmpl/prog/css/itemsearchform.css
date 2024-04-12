@@ -1,15 +1,27 @@
 .form-field {
-  margin: 5px 0;
+    align-items: center;
+    display: flex;
+    gap: .5em;
+    margin: 5px 0;
 }
 
 .form-field > * {
   vertical-align: middle;
 }
 
+#itemsearchform p {
+    margin-left: 6em;
+}
+
+label {
+    margin-bottom: 0;
+}
+
 .form-field-label {
-  display: inline-block;
-  text-align: right;
-  width: 10em;
+    display: inline-block;
+    font-weight: bold;
+    text-align: right;
+    width: 10em;
 }
 
 .form-field-conjunction[disabled] {
@@ -37,4 +49,22 @@ th select {
 
 th#items_title {
   min-width: 12em;
+}
+
+#itemsearchform select,
+input[type="text"] {
+    background-color: #FFF;
+    border: 1px solid #AAAAAA;
+    border-radius: 4px;
+    color: #495057;
+    display: inline-block;
+    font-size: 1.5rem;
+    height: calc( 1.5em + .75rem + 2px );
+    line-height: 1.5;
+    padding: .375rem .75rem;
+}
+
+.select2.select2-container.select2-container--default {
+    flex-grow: 1;
+    max-width: 60%;
 }
