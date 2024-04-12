@@ -16,33 +16,38 @@ return {
             subject        => 'Topics',
             ln             => 'Languages',
         };
+
         # Do not update the label if different from the original one
-        my $sth = $dbh->prepare(q{
+        my $sth = $dbh->prepare(
+            q{
             UPDATE search_field
             SET label = ?
             WHERE name = ? AND label = ?
-        });
+        }
+        );
         while ( my ( $name, $label ) = each %$facets ) {
             $sth->execute( $label, $name, $name );
         }
 
-        $sth->execute( 'Collections', 'ccode', 'collection-code');
+        $sth->execute( 'Collections', 'ccode', 'collection-code' );
 
         # Deal with DisplayLibraryFacets
-        my ($DisplayLibraryFacets) = $dbh->selectrow_array(q{
+        my ($DisplayLibraryFacets) = $dbh->selectrow_array(
+            q{
             SELECT value FROM systempreferences WHERE variable='DisplayLibraryFacets'
-        });
-        my ($homebranch, $holdingbranch);
+        }
+        );
+        my ( $homebranch, $holdingbranch );
         if ( $DisplayLibraryFacets eq 'both' ) {
-            $homebranch = 1;
+            $homebranch    = 1;
             $holdingbranch = 1;
         } elsif ( $DisplayLibraryFacets eq 'holding' ) {
             $holdingbranch = 1;
         } elsif ( $DisplayLibraryFacets eq 'home' ) {
             $homebranch = 1;
         }
-        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary') if $holdingbranch;
-        $sth->execute( 'Home libraries', 'homebranch', 'homelibrary') if $homebranch;
+        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary' ) if $holdingbranch;
+        $sth->execute( 'Home libraries',    'homebranch',    'homelibrary' )    if $homebranch;
 
     },
 };
