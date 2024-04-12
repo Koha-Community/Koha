@@ -35,7 +35,7 @@ return {
                 }
             }
 
-            say $out "Added table `library_hours`";
+            say $out "Added table 'library_hours'";
 
             $dbh->do(
                 q{ INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, type ) VALUES ( 'ConsiderLibraryHoursInCirculation', 'ignore', 'close|open|ignore', "Take library opening hours into consideration to calculate due date when circulating.", 'Choice' ) }
