@@ -29,6 +29,8 @@
 <style>[% FILTER collapse %]
 fieldset legend {
     border: 1px solid #FFF;
+    margin-left: -.5em;
+    margin-top: -.5em;
     padding: .7em;
 }
 fieldset legend:hover {
@@ -40,6 +42,10 @@ fieldset legend i {
     color: #4C7AA8;
     font-size: 80%;
     padding-right: .2rem;
+}
+
+fieldset legend.collapsed {
+    margin-bottom: -.5em;
 }
 
 legend.collapsed i.fa.fa-caret-down::before {
@@ -485,7 +491,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     <div id="memberentry_guarantor_anchor">
                                         <fieldset id="memberentry_guarantor" class="rows">
                                             <legend class="expanded" id="patron_guarantor_lgd">
-                                                <i class="fa fa-caret-down"></i>
+                                                <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 Patron guarantor
                                             </legend>
 
@@ -650,7 +656,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     [% UNLESS nocontactname && nocontactfirstname && norelationship %]
                                         <fieldset class="rows" id="non_patron_guarantor">
                                             <legend class="expanded" id="non_patron_guarantor_lgd">
-                                                <i class="fa fa-caret-down"></i>
+                                                <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 Non-patron guarantor
                                             </legend>
                                             <ol>
@@ -723,7 +729,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
                                     <fieldset class="rows" id="memberentry_contact">
                                         <legend class="expanded" id="contact_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Contact information
                                         </legend>
                                         <ol>
@@ -915,7 +921,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% SET autoMemberNum = Koha.Preference('autoMemberNum') %]
                                 <fieldset class="rows" id="memberentry_library_management">
                                     <legend class="expanded" id="library_management_lgd">
-                                        <i class="fa fa-caret-down"></i>
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
                                         Library management
                                     </legend>
                                     <ol>
@@ -1149,7 +1155,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% UNLESS nodateenrolled &&  noopacnote && noborrowernotes %]
                                     <fieldset class="rows" id="memberentry_subscription">
                                         <legend class="expanded" id="library_setup_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Library setup
                                         </legend>
                                         <ol>
@@ -1239,7 +1245,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% UNLESS nouserid && nopassword && !CanUpdatePasswordExpiration %]
                                     <fieldset class="rows" id="memberentry_userid">
                                         <legend class="expanded" id="opac_staff_login_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             OPAC/Staff interface login
                                         </legend>
                                         <ol>
@@ -1398,7 +1404,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% UNLESS ( op == 'add_form' || op == 'duplicate' || ( nogonenoaddress && nolost ) ) %]
                                     <fieldset class="rows" id="memberentry_account_flags">
                                         <legend class="expanded" id="account_flags_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Patron account flags
                                         </legend>
                                         <p>Setting a value here will prevent patron from circulating materials and placing holds on the OPAC</p>
@@ -1477,7 +1483,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% END %]
                                     <fieldset class="rows" id="memberentry_restrictions">
                                         <legend class="expanded" id="restrictions_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Patron restrictions
                                         </legend>
                                         [% IF ( patron.restrictions.count ) %]
@@ -1569,7 +1575,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% IF Koha.Preference('HouseboundModule') %]
                                     <fieldset class="rows" id="memberentry_housebound_roles">
                                         <legend class="expanded" id="housebound_roles">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Housebound roles
                                         </legend>
                                         <ol class="radio">
@@ -1613,7 +1619,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     [% UNLESS ( no_patron_attribute_types ) %]
                                         <fieldset class="rows" id="memberentry_patron_attributes">
                                             <legend class="expanded" id="patron_attributes_lgd">
-                                                <i class="fa fa-caret-down"></i>
+                                                <i class="fa fa-caret-down" aria-hidden="true"></i>
                                                 Additional attributes and identifiers
                                             </legend>
                                             <input type="hidden" name="setting_extended_patron_attributes" value="1" />
@@ -1676,7 +1682,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 [% IF ( EnhancedMessagingPreferences ) %]
                                     <fieldset class="rows" id="memberentry_messaging_prefs">
                                         <legend class="expanded" id="patron_messaging_prefs_lgd">
-                                            <i class="fa fa-caret-down"></i>
+                                            <i class="fa fa-caret-down" aria-hidden="true"></i>
                                             Patron messaging preferences
                                         </legend>
                                         <div id="messaging_prefs_loading" class="form-message" style="display:none">
