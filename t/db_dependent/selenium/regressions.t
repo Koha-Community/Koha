@@ -60,7 +60,8 @@ subtest 'SCI can load error pages' => sub {
 
     my $builder = t::lib::TestBuilder->new;
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
-    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    my $rsp     = C4::Context->preference('RequireStrongPassword');
+    C4::Context->set_preference( 'RequireStrongPassword', '0' );
     my $password = Koha::AuthUtils::generate_password( $patron->category );
     $patron->set_password( { password => $password } );
 
@@ -86,8 +87,9 @@ subtest 'SCI can load error pages' => sub {
     $s->driver->find_element('//form[@id="scan_form"]//button[@id="sci_checkin_button"]')->click;
     like( $driver->get_title(), qr(Self check-in), );
 
-    C4::Context->set_preference( 'SelfCheckInUserJS', $sci_js );
-    C4::Context->set_preference( 'SelfCheckInModule', $sci_mo );
+    C4::Context->set_preference( 'SelfCheckInUserJS',     $sci_js );
+    C4::Context->set_preference( 'SelfCheckInModule',     $sci_mo );
+    C4::Context->set_preference( 'RequireStrongPassword', $rsp );
     push @cleanup, $patron, $patron->category, $patron->library;
 };
 
