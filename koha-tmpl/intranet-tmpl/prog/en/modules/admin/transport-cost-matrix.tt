@@ -74,9 +74,9 @@
                     </tr>
                 [% FOR bf IN branchfromloop %]
                     <tr>
-                        <th>[% bf.name | html %]</th>
+                        <th title="[% bf.name | html %]">[% bf.name | html %]</th>
                     [% FOR bt IN bf.branchtoloop %]
-                        <td>
+                        <td title="[% bf.name | html %] / [% bt.name | html %]">
                         [% IF bt.skip %]
                             &nbsp;
                         [% ELSE %]
