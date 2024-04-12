@@ -2161,13 +2161,13 @@ sub RevertWaitingStatus {
     ## Fix up the currently waiting reserve
     $hold->set(
         {
-            priority    => 1,
-            found       => undef,
-            waitingdate => undef,
+            priority       => 1,
+            found          => undef,
+            waitingdate    => undef,
             expirationdate => $hold->patron_expiration_date,
-            itemnumber  => $hold->item_level_hold ? $hold->itemnumber : undef,
+            itemnumber     => $hold->item_level_hold ? $hold->itemnumber : undef,
         }
-    )->store({ hold_reverted => 1 });
+    )->store( { hold_reverted => 1 } );
 
     logaction( 'HOLDS', 'MODIFY', $hold->id, $hold )
         if C4::Context->preference('HoldsLog');
