@@ -800,6 +800,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 library_hours
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LibraryHour>
+
+=cut
+
+__PACKAGE__->has_many(
+  "library_hours",
+  "Koha::Schema::Result::LibraryHour",
+  { "foreign.library_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 library_smtp_server
 
 Type: might_have
@@ -966,8 +981,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-05 06:44:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hNniM1Slml6YGmpEa3MJ1w
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-12 08:58:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xp3Kem0f5nkl71jI4sbH3A
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
