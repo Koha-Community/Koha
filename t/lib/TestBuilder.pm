@@ -467,6 +467,7 @@ sub _gen_type {
         decimal          => \&_gen_real,
         double_precision => \&_gen_real,
 
+        time      => \&_gen_time,
         timestamp => \&_gen_datetime,
         datetime  => \&_gen_datetime,
         date      => \&_gen_date,
@@ -534,6 +535,11 @@ sub _gen_date {
 sub _gen_datetime {
     my ($self, $params) = @_;
     return $self->schema->storage->datetime_parser->format_datetime(dt_from_string);
+}
+
+sub _gen_time {
+    my ( $self, $params ) = @_;
+    return $self->schema->storage->datetime_parser->format_time(dt_from_string);
 }
 
 sub _gen_text {
