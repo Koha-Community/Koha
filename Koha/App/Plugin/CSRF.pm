@@ -62,7 +62,12 @@ sub register {
             my ( $next, $c, $action, $last ) = @_;
 
             my $method = $c->req->method;
-            if ( $method eq 'POST' || $method eq 'PUT' || $method eq 'DELETE' || $method eq 'PATCH' ) {
+            if ( $method eq 'GET' || $method eq 'HEAD' || $method eq 'OPTIONS' || $method eq 'TRACE' ) {
+                my $op = $c->req->param('op');
+                if ( $op && $op =~ /^cud-/ ) {
+                    return $c->reply->exception('Wrong HTTP method')->rendered(400);
+                }
+            } else {
                 if ( $c->cookie('CGISESSID') && !$self->is_csrf_valid( $c->req ) ) {
                     return $c->reply->exception('Wrong CSRF token')->rendered(403);
                 }

@@ -8,7 +8,7 @@ use Test::Mojo;
 use Koha::Database;
 
 subtest 'CSRF - Intranet' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $t = Test::Mojo->new('Koha::App::Intranet');
 
@@ -39,10 +39,17 @@ subtest 'CSRF - Intranet' => sub {
         $t->post_ok( '/cgi-bin/koha/mainpage.pl', form => { csrf_token => $csrf_token, op => 'cud-login' } )
             ->status_is(200)->content_like( qr/Please log in again/, 'Login failed but CSRF test passed' );
     };
+
+    subtest 'GETting what should be POSTed should fail' => sub {
+        plan tests => 3;
+
+        $t->get_ok('/cgi-bin/koha/mainpage.pl?op=cud-login')->status_is(400)
+            ->content_like( qr/Wrong HTTP method/, 'Body contains "Wrong HTTP method"' );
+    }
 };
 
 subtest 'CSRF - OPAC' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $t = Test::Mojo->new('Koha::App::Opac');
 
@@ -73,4 +80,11 @@ subtest 'CSRF - OPAC' => sub {
         $t->post_ok( '/cgi-bin/koha/opac-user.pl', form => { csrf_token => $csrf_token, op => 'cud-login' } )
             ->status_is(200)->content_like( qr/Log in to your account/, 'Login failed but CSRF test passed' );
     };
+
+    subtest 'GETting what should be POSTed should fail' => sub {
+        plan tests => 3;
+
+        $t->get_ok('/cgi-bin/koha/opac-user.pl?op=cud-login')->status_is(400)
+            ->content_like( qr/Wrong HTTP method/, 'Body contains "Wrong HTTP method"' );
+    }
 };
