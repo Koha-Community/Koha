@@ -1962,17 +1962,17 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - "You have suggested that the library acquire [% suggestion.title %] by [% suggestion.author %]."
             - ""
             - "The library has reviewed your suggestion today. The item will be ordered as soon as possible. You will be notified by mail when the order is completed, and again when the item arrives at the library."
             - ""
-            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - "If you have any questions, please email us at [% branch.branchemail %]."
             - ""
             - "Thank you,"
             - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: suggestions
           code: AVAILABLE
@@ -2007,26 +2007,30 @@ tables:
             - "<h3>Suggestion pending approval</h3>"
             - "    <p><h4>Suggested by</h4>"
             - "    <ul>"
-            - "    <li><<borrowers.firstname>> <<borrowers.surname>></li>"
-            - "    <li><<borrowers.cardnumber>></li>"
-            - "    <li><<borrowers.phone>></li>"
-            - "    <li><<borrowers.email>></li>"
+            - "    <li>[% borrower.firstname %] [% borrower.surname %]</li>"
+            - "    <li>[% borrower.cardnumber %]</li>"
+            - "    [%- IF borrower.phone -%]"
+            - "        <li>[% borrower.phone %]</li>"
+            - "    [%- END -%]"
+            - "    [%- IF borrower.email -%]"
+            - "        <li>[% borrower.email %]</li>"
+            - "    [%- END -%]"
             - "    </ul>"
             - "    </p>"
             - "    <p><h4>Title suggested</h4>"
             - "    <ul>"
-            - "    <li><b>Library:</b> <<branches.branchname>></li>"
-            - "    <li><b>Title:</b> <<suggestions.title>></li>"
-            - "    <li><b>Author:</b> <<suggestions.author>></li>"
-            - "    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>"
-            - "    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>"
-            - "    <li><b>Publisher:</b> <<suggestions.publishercode>></li>"
-            - "    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>"
-            - "    <li><b>Publication place:</b> <<suggestions.place>></li>"
-            - "    <li><b>Quantity:</b> <<suggestions.quantity>></li>"
-            - "    <li><b>Item type:</b>  <<suggestions.itemtype>></li>"
-            - "    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>"
-            - "    <li><b>Notes:</b> <<suggestions.note>></li>"
+            - "    <li><b>Library:</b> [% branch.branchname %]</li>"
+            - "    <li><b>Title:</b> [% suggestion.title %]</li>"
+            - "    <li><b>Author:</b> [% suggestion.author %]</li>"
+            - "    <li><b>Copyright date:</b> [% suggestion.copyrightdate %]</li>"
+            - "    <li><b>Standard number (ISBN, ISSN or other):</b> [% suggestion.isbn %]</li>"
+            - "    <li><b>Publisher:</b> [% suggestion.publishercode %]</li>"
+            - "    <li><b>Collection title:</b> [% suggestion.collectiontitle %]</li>"
+            - "    <li><b>Publication place:</b> [% suggestion.place %]</li>"
+            - "    <li><b>Quantity:</b> [% suggestion.quantity %]</li>"
+            - "    <li><b>Item type:</b>  [% suggestion.itemtype %]</li>"
+            - "    <li><b>Reason for suggestion:</b> [% suggestion.patronreason %]</li>"
+            - "    <li><b>Notes:</b> [% suggestion.note %]</li>"
             - "    </ul>"
             - "    </p>"
 
@@ -2039,19 +2043,19 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - "You have suggested that the library acquire [% suggestion.title %] by [% suggestion.author %]."
             - ""
             - "We are pleased to inform you that the item you requested has now been ordered. It should arrive soon, at which time it will be processed for addition into the collection."
             - ""
             - "You will be notified again when the book is available."
             - ""
-            - "If you have any questions, please email us at <<branches.branchemail>>"
+            - "If you have any questions, please email us at [% branch.branchemail %]"
             - ""
             - "Thank you,"
             - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: suggestions
           code: REJECTED
@@ -2062,19 +2066,19 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - "You have suggested that the library acquire [% suggestion.title %] by [% suggestion.author %]."
             - ""
             - "The library has reviewed your request today, and has decided not to accept the suggestion at this time."
             - ""
-            - "The reason given is: <<suggestions.reason>>"
+            - "The reason given is: [% suggestion.reason %]"
             - ""
-            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - "If you have any questions, please email us at [% branch.branchemail %]."
             - ""
             - "Thank you,"
             - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: suggestions
           code: TO_PROCESS
