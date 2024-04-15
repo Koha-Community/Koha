@@ -241,6 +241,17 @@
                         </div>
                     [% END %]
 
+                    [% IF ( circ_error_BATCH_CHECKOUT ) %]
+                        <div class="alert alert-warning">
+                            <h3>Item cannot be checked out in a batch</h3>
+                            <p>Check out the following item(s) individually:</p>
+                            <ul>
+                            [% FOREACH barcode IN circ_error_BATCH_CHECKOUT %]
+                                <li><i>[% barcode | html %]</i></li>
+                            [% END %]
+                            </ul>
+                        </div>
+                    [% END %]
 
                     [% UNLESS ( hide_main ) %]
 

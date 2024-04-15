@@ -145,15 +145,27 @@ if ( C4::Context->preference('BatchCheckouts') and $patron ) {
         # do nothing - logged in patron is allowed to do batch checkouts
     } else {
         # patron category not allowed to do batch checkouts, only allow first barcode
+        my @error_barcodes;
         while ( scalar @$barcodes > 1 ) {
-            pop @$barcodes;
+            my $error_barcode = pop @$barcodes;
+            push @error_barcodes, $error_barcode;
         }
+
+        $template->param(
+            "circ_error_BATCH_CHECKOUT" => \@error_barcodes,
+        ) if @$barcodes;
     }
 } else {
     # batch checkouts not enabled, only allow first barcode
+    my @error_barcodes;
     while ( scalar @$barcodes > 1 ) {
-        pop @$barcodes;
+        my $error_barcode = pop @$barcodes;
+        push @error_barcodes, $error_barcode;
     }
+
+    $template->param(
+        "circ_error_BATCH_CHECKOUT" => \@error_barcodes,
+    ) if @$barcodes;
 }
 
 if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
