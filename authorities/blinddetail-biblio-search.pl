@@ -96,6 +96,29 @@ if ($authid) {
 
     push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
 
+    # Copy the ISNI number over (should one exist) to subfield $o when linking
+    # authorities with authorities in UNIMARC instances. This only applies to
+    # the Personal Name, Corporate Body Name, and Family Name authority types.
+    #
+    # It's worth noting that the default MARC Authorities framework that ships
+    # with UNIMARC Koha instances does *not* include a subfield $o for fields
+    # 200 (Authorized Access Point - Personal Name),
+    # 210 (Authorized Access Point - Corporate Body Name), and
+    # 220 (Authorized Access Point - Family Name).
+    # This is per the official IFLA Manual, and effectively means we can save
+    # the ISNI number in the @subfield_loop array without worrying about
+    # overwriting any previous value that may exist.
+    #
+    # For more information, see the official IFLA UNIMARC Authorities Format
+    # Manual (online ed., 1.0.0, 2023), pp. 350, 363, 385.
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        my $isnifield    = $record->field('010');
+        my $isnisubfield = $isnifield->subfield('a') if defined $isnifield;
+        my $isninumber   = $isnisubfield
+            if defined $isnisubfield && ( $auth_type->auth_tag_to_report =~ /^(200|210|220)$/ );
+        push( @subfield_loop, { marc_subfield => 'o', marc_values => $isninumber } ) if defined $isninumber;
+    }
+
     my $controlled_ind = $auth->controlled_indicators({ record => $record, biblio_tag => $tag_number });
     $indicator1 = $controlled_ind->{ind1};
     $indicator2 = $controlled_ind->{ind2};
