@@ -146,7 +146,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -246,6 +246,25 @@ subtest 'add() tests' => sub {
             }
         ]
     );
+
+    subtest 'public add' => sub {
+        plan tests => 7;
+
+        delete $ticket->{ticket_id};
+
+        my $useridp = $patron->userid;
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+
+        $ticket_id =
+            $t->post_ok( "//$useridp:$password@/api/v1/public/tickets" => json => $ticket )
+            ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+            Location => qr|^\/api\/v1\/public\/tickets/\d*|,
+            'SWAGGER3.4.1'
+        )->json_is( '/biblio_id' => $ticket->{biblio_id} )->json_is( '/title' => $ticket->{title} )
+            ->json_is( '/body' => $ticket->{body} )->json_is( '/reporter_id' => $patron->id )
+            ->tx->res->json->{ticket_id};
+
+    };
 
     $schema->storage->txn_rollback;
 };
