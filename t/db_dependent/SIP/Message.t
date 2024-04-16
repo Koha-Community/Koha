@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -196,7 +196,7 @@ subtest 'hold_patron_name() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Lastseen response' => sub {
+subtest 'Lastseen response patron info' => sub {
 
     plan tests => 6;
 
@@ -340,6 +340,72 @@ subtest "Test patron_status_string" => sub {
     is( substr($patron_status_string, 9, 1), q{Y}, "lost_block_checkout = 2, lost_block_checkout_value = 2 does block checkouts with 2 lost checkouts where only 1 has itemlost = 2" );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Lastseen response patron status' => sub {
+
+    plan tests => 6;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks       = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $seen_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                lastseen   => '2001-01-01',
+                password   => hash_password(PATRON_PW),
+                branchcode => $branchcode,
+            },
+        }
+    );
+    my $cardnum    = $seen_patron->{cardnumber};
+    my $sip_patron = C4::SIP::ILS::Patron->new($cardnum);
+    $findpatron = $sip_patron;
+
+    my $siprequest =
+          PATRON_STATUS_REQ
+        . 'engYYYYMMDDZZZZHHMMSS'
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $cardnum . '|'
+        . FID_PATRON_PWD
+        . PATRON_PW . '|';
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    my $server = { ils => $mocks->{ils} };
+    undef $response;
+
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', '' );
+    $msg->handle_patron_status($server);
+
+    isnt( $response, undef, 'At least we got a response.' );
+    my $respcode = substr( $response, 0, 2 );
+    is( $respcode, PATRON_STATUS_RESP, 'Response code fine' );
+    $seen_patron = Koha::Patrons->find( { cardnumber => $seen_patron->{cardnumber} } );
+    is(
+        output_pref( { str => $seen_patron->lastseen(), dateonly => 1 } ),
+        output_pref( { str => '2001-01-01', dateonly => 1 } ), 'Last seen not updated if not tracking patrons'
+    );
+    undef $response;
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'connection' );
+    $msg->handle_patron_status($server);
+
+    isnt( $response, undef, 'At least we got a response.' );
+    $respcode = substr( $response, 0, 2 );
+    is( $respcode, PATRON_STATUS_RESP, 'Response code fine' );
+    $seen_patron = Koha::Patrons->find( { cardnumber => $seen_patron->cardnumber() } );
+    is(
+        output_pref( { str => $seen_patron->lastseen(), dateonly => 1 } ),
+        output_pref( { dt  => dt_from_string(), dateonly => 1 } ), 'Last seen updated if tracking patrons'
+    );
+    $schema->storage->txn_rollback;
+
 };
 
 subtest "Test build_additional_item_fields_string" => sub {
