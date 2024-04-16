@@ -31,9 +31,9 @@ return {
         say $out "Added 'XXX' HTML customization";
 
         # Other information
-        say_failure("Use red for danger/failure");
-        say_success("Use green for success");
-        say_warning("Use yellow for warning/a call to action");
-        say_info("Use blue for further information");
+        say_failure( $out, "Use red for danger/failure" );
+        say_success( $out, "Use green for success" );
+        say_warning( $out, "Use yellow for warning/a call to action" );
+        say_info( $out, "Use blue for further information" );
     },
 };
