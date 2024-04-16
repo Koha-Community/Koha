@@ -2552,6 +2552,27 @@ CREATE TABLE `currency` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `deletedauth_header`
+--
+
+DROP TABLE IF EXISTS `deletedauth_header`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deletedauth_header` (
+  `authid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `authtypecode` varchar(10) NOT NULL DEFAULT '',
+  `datecreated` date DEFAULT NULL,
+  `modification_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `origincode` varchar(20) DEFAULT NULL,
+  `authtrees` longtext DEFAULT NULL,
+  `linkid` bigint(20) DEFAULT NULL,
+  `marcxml` longtext NOT NULL,
+  PRIMARY KEY (`authid`),
+  KEY `origincode` (`origincode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `deletedbiblio`
 --
 
