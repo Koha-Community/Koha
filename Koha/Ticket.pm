@@ -181,6 +181,20 @@ sub store {
 
 =cut
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
+=cut
+
+sub public_read_list {
+    return [
+        'ticket_id',   'title',         'body',
+        'reporter_id', 'reported_date', 'resolved_date',
+        'biblio_id'
+    ];
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Ticket object
