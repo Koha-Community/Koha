@@ -48,6 +48,13 @@ Interlibrary loans:
             - pref: ILLOpacbackends
               class: multi
             - (separated with |). If left empty, all installed backends will be enabled.
+        -
+            - pref: ILLOpacUnauthenticatedRequest
+              default: 0
+              choices:
+                  0: "Don't allow"
+                  1: Allow
+            - OPAC users to place ILL requests without having to be logged in.
     Workflow:
         -
             - pref: ILLCheckAvailability

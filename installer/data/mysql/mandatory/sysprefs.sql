@@ -331,6 +331,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ILLModuleDisclaimerByType','','','YAML defining disclaimer settings for each ILL request type','Textarea'),
 ('ILLModuleUnmediated','0','','If enabled, try to immediately progress newly placed ILL requests.','YesNo'),
 ('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),
+('ILLOpacUnauthenticatedRequest',NULL,NULL,'Can OPAC users place ILL requests without having to be logged in','YesNo'),
 ('ILLPartnerCode','IL','','Patrons from this patron category will be used as partners to place ILL requests with','free'),
 ('ILLSendStaffNotices', NULL, NULL, 'Send these ILL notices to staff', 'multiple'),
 ('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
