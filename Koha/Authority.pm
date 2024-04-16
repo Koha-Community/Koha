@@ -309,6 +309,29 @@ sub to_api_mapping {
     };
 }
 
+=head3 move_to_deleted
+
+    $authority->move_to_deleted;
+
+    This sub actually copies the authority (to be deleted) into the
+    deletedauth_header table. (Just as the other ones.)
+
+=cut
+
+sub move_to_deleted {
+    my ($self) = @_;
+    my $data = $self->unblessed;
+    delete $data->{modification_time};    # trigger new timestamp
+
+    # Set leader 05 (deleted)
+    my $format = C4::Context->preference('marcflavour') eq 'UNIMARC' ? 'UNIMARCAUTH' : 'MARC21';
+    my $record = $self->record;
+    $record->leader( substr( $record->leader, 0, 5 ) . 'd' . substr( $record->leader, 6, 18 ) );
+    $data->{marcxml} = $record->as_xml_record($format);
+
+    return Koha::Database->new->schema->resultset('DeletedauthHeader')->create($data);
+}
+
 =head2 Internal methods
 
 =head3 _type

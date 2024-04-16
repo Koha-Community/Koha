@@ -21,6 +21,8 @@ package C4::AuthoritiesMarc;
 use strict;
 use warnings;
 use MARC::Field;
+use Scalar::Util qw(blessed);
+use Try::Tiny    qw( try catch );
 
 use C4::Context;
 use C4::Biblio qw( ModBiblio );
@@ -34,6 +36,7 @@ use Koha::Authorities;
 use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 use Koha::Authority;
+use Koha::Database;
 use Koha::Libraries;
 use Koha::RecordProcessor;
 use Koha::SearchEngine;
@@ -737,21 +740,35 @@ sub DelAuthority {
     my $skip_merge        = $params->{skip_merge};
     my $skip_record_index = $params->{skip_record_index} || 0;
 
-    my $dbh = C4::Context->dbh;
+    my $schema = Koha::Database->schema;
+    try {
+        # TODO Make following lines part of transaction? Does merge take too long?
+        # Remove older pending merge requests for $authid to itself. (See bug 22437)
+        my $condition = { authid => $authid, authid_new => [ undef, 0, $authid ], done => 0 };
+        Koha::Authority::MergeRequests->search($condition)->delete;
+        merge( { mergefrom => $authid } ) if !$skip_merge;
 
-    # Remove older pending merge requests for $authid to itself. (See bug 22437)
-    my $condition = { authid => $authid, authid_new => [ undef, 0, $authid ], done => 0 };
-    Koha::Authority::MergeRequests->search($condition)->delete;
+        my $authority = Koha::Authorities->find($authid);
+        $schema->txn_do(
+            sub {
+                $authority->move_to_deleted;    #FIXME We should define 'move' ..
+                $authority->delete;
+            }
+        );
 
-    merge( { mergefrom => $authid } ) if !$skip_merge;
-    $dbh->do( "DELETE FROM auth_header WHERE authid=?", undef, $authid );
-    logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
-    unless ($skip_record_index) {
-        my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
-        $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
-    }
-
-    _after_authority_action_hooks( { action => 'delete', authority_id => $authid } );
+        logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
+        unless ($skip_record_index) {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+            $indexer->index_records( $authid, "recordDelete", "authorityserver", undef );
+        }
+        _after_authority_action_hooks( { action => 'delete', authority_id => $authid } );
+    } catch {
+        if ( blessed $_ && $_->can('rethrow') ) {
+            $_->rethrow();
+        } else {
+            die "Deleting authority $authid failed: " . $_;
+        }
+    };
 }
 
 =head2 ModAuthority
