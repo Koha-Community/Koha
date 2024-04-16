@@ -504,6 +504,10 @@ sub handle_patron_status {
 
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_patron_status" );
     $patron = $ils->find_patron( $fields->{ (FID_PATRON_ID) } );
+    if ( C4::Context->preference('TrackLastPatronActivityTriggers') ) {
+        my $koha_patron = Koha::Patrons->find($patron->{borrowernumber});
+        $koha_patron->update_lastseen('connection');
+    }
     $resp = build_patron_status( $patron, $lang, $fields, $server );
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
     return (PATRON_STATUS_REQ);
