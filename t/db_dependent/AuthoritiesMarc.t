@@ -366,7 +366,7 @@ subtest 'ModAuthority() tests' => sub {
 
 subtest 'DelAuthority() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -391,6 +391,9 @@ subtest 'DelAuthority() tests' => sub {
     warning_is { DelAuthority( { authid => $auth_id, skip_merge => 1 } ); }
     undef,
         'skip_merge passed, merge not called';
+
+    # Check if last delete got moved to deletedauth_header
+    isnt( Koha::Database->new->schema->resultset('DeletedauthHeader')->find($auth_id), undef, 'Moved to deleted' );
 
     $schema->storage->txn_rollback;
 };
