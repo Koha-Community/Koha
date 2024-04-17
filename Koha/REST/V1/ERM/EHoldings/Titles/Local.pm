@@ -87,9 +87,11 @@ sub add {
 
                 my $body = $c->req->json;
 
-                my $resources = delete $body->{resources} // [];
+                my $resources            = delete $body->{resources}            // [];
+                my $create_linked_biblio = delete $body->{create_linked_biblio} // 0;
 
-                my $title = Koha::ERM::EHoldings::Title->new_from_api($body)->store;
+                my $title = Koha::ERM::EHoldings::Title->new_from_api($body)
+                    ->store( { create_linked_biblio => $create_linked_biblio } );
 
                 $title->resources($resources);
 
@@ -158,9 +160,10 @@ sub update {
 
                 my $body = $c->req->json;
 
-                my $resources = delete $body->{resources} // [];
+                my $resources            = delete $body->{resources}            // [];
+                my $create_linked_biblio = delete $body->{create_linked_biblio} // 0;
 
-                $title->set_from_api($body)->store;
+                $title->set_from_api($body)->store( { create_linked_biblio => $create_linked_biblio } );
 
                 $title->resources($resources);
 

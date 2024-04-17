@@ -38,30 +38,35 @@ Koha::ERM::EHoldings::Title - Koha ERM Title Object class
 =cut
 
 sub store {
-    my ($self) = @_;
+    my ( $self, $args ) = @_;
+
+    my $create_linked_biblio = $args->{create_linked_biblio} || 0;
 
     # FIXME This is terrible and ugly, we need to:
     # * Provide a mapping for each attribute of title
     # * Create a txn
 
-    # If the 'title' is already linked to a biblio, then we update the title subfield only
-    if ( $self->biblio_id ) {
-        my $biblio = Koha::Biblios->find( $self->biblio_id );
-        my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
-        my $record      = $biblio->metadata->record();
-        my $title_field = $record->field($title_tag);
-        $title_field->update( $title_subfield => $self->publication_title );
-        C4::Biblio::ModBiblio( $record, $self->biblio_id, '' );
-    } else {
+    if ($create_linked_biblio) {
 
-        # If it's not linked, we create a simple biblio and save the biblio id to the 'title'
-        my $marc_record = TransformKohaToMarc(
-            {
-                'biblio.title' => $self->publication_title,
-            }
-        );
-        my ($biblio_id) = C4::Biblio::AddBiblio( $marc_record, '' );
-        $self->biblio_id($biblio_id);
+        # If the 'title' is already linked to a biblio, then we update the title subfield only
+        if ( $self->biblio_id ) {
+            my $biblio = Koha::Biblios->find( $self->biblio_id );
+            my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
+            my $record      = $biblio->metadata->record();
+            my $title_field = $record->field($title_tag);
+            $title_field->update( $title_subfield => $self->publication_title );
+            C4::Biblio::ModBiblio( $record, $self->biblio_id, '' );
+        } else {
+
+            # If it's not linked, we create a simple biblio and save the biblio id to the 'title'
+            my $marc_record = TransformKohaToMarc(
+                {
+                    'biblio.title' => $self->publication_title,
+                }
+            );
+            my ($biblio_id) = C4::Biblio::AddBiblio( $marc_record, '' );
+            $self->biblio_id($biblio_id);
+        }
     }
 
     $self = $self->SUPER::store;

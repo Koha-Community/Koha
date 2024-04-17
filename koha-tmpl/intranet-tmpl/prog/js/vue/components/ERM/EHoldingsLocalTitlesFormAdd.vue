@@ -366,6 +366,27 @@
                         </li>
                     </ol>
                 </fieldset>
+                <fieldset class="rows">
+                    <legend>
+                        {{
+                            $__("%s linked biblio record").format(
+                                title.title_id ? "Update" : "Create"
+                            )
+                        }}:
+                    </legend>
+                    <label for="create_linked_biblio"
+                        >{{
+                            $__("%s record").format(
+                                title.title_id ? "Update" : "Create"
+                            )
+                        }}:</label
+                    >
+                    <input
+                        type="checkbox"
+                        id="create_linked_biblio"
+                        v-model="title.create_linked_biblio"
+                    />
+                </fieldset>
                 <EHoldingsTitlesFormAddResources :resources="title.resources" />
                 <fieldset class="action">
                     <input type="submit" :value="$__('Submit')" />
@@ -429,6 +450,7 @@ export default {
                 preceding_publication_title_id: "",
                 access_type: "",
                 resources: [],
+                create_linked_biblio: false,
             },
             initialized: false,
         }
