@@ -117,8 +117,11 @@ foreach (keys %$suggestion_ref){
 }
 delete $suggestion_only->{branchcode} if $suggestion_only->{branchcode} eq '__ANY__';
 delete $suggestion_only->{budgetid}   if $suggestion_only->{budgetid}   eq '__ANY__';
-while ( my ( $k, $v ) = each %$suggestion_only ) {
-    delete $suggestion_only->{$k} if $v eq '';
+
+unless ( $op eq 'cud-save' ) {
+    while ( my ( $k, $v ) = each %$suggestion_only ) {
+        delete $suggestion_only->{$k} if $v eq '';
+    }
 }
 
 my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
