@@ -194,7 +194,7 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
 };
 
 subtest 'process' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -364,26 +364,12 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
     is( $job4->report->{duplicates_found}, 1, 'One duplicate found' );
     is( $job4->report->{titles_imported},  0, 'No titles were imported' );
     is( $job4->report->{failed_imports},   1, 'One failure found' );
-    is_deeply(
-        $job4->messages,
-        [
-            {
-                'type'          => 'error',
-                'title'         => 'Nature Plants',
-                'error_message' =>
-                    'DBIx::Class::Row::store_column(): No such column \'unknown_field\' on Koha::Schema::Result::ErmEholdingsTitle at /kohadevbox/koha/Koha/Object.pm line 79
-',
-                'code' => 'title_failed'
-            },
-            {
-                'code'          => 'title_already_exists',
-                'error_message' => undef,
-                'title'         => 'Nature Astronomy',
-                'type'          => 'warning'
-            }
-        ],
-        'One duplicate message and one failure message for an incorrect column'
+
+    is(
+        index( @{ $job4->messages }[0]->{error_message}, 'No such column \'unknown_field\'' ) > 0, 1,
+        'Error message for an unknown column'
     );
+    is( @{ $job4->messages }[1]->{code}, 'title_already_exists', 'Error message for a duplicate title' );
 
     $schema->storage->txn_rollback;
-    }
+}

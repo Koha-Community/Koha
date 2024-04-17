@@ -17,46 +17,55 @@
                     </ol>
                 </li>
             </ul>
-            <h3>{{ $__("File") }}:</h3>
-            <div class="file_information">
-                <span v-if="!file.filename">
-                    {{ $__("Select a file") }}
-                    <input
-                        type="file"
-                        @change="selectFile($event)"
-                        :id="`import_file`"
-                        :name="`import_file`"
-                        required
-                    />
-                </span>
+            <fieldset class="rows" id="package_list">
+                <h3>{{ $__("Select file for upload") }}:</h3>
                 <ol>
-                    <li v-show="file.filename">
-                        {{ $__("File name") }}:
-                        <span>{{ file.filename }}</span>
+                    <li>
+                        <label for="import_file">{{ $__("File") }}:</label>
+                        <input
+                            type="file"
+                            @change="selectFile($event)"
+                            :id="`import_file`"
+                            :name="`import_file`"
+                            required
+                        />
+                    </li>
+                    <li>
+                        <label for="package_id"
+                            >{{ $__("To the following local package") }}:</label
+                        >
+                        <v-select
+                            id="package_id"
+                            v-model="package_id"
+                            label="name"
+                            :reduce="p => p.package_id"
+                            :options="packages"
+                            :clearable="false"
+                            :required="!package_id"
+                        >
+                            <template #search="{ attributes, events }">
+                                <input
+                                    :required="!package_id"
+                                    class="vs__search"
+                                    v-bind="attributes"
+                                    v-on="events"
+                                />
+                            </template>
+                        </v-select>
+                        <span class="required">{{ $__("Required") }}</span>
+                    </li>
+                    <li>
+                        <label for="create_linked_biblio"
+                            >{{ $__("Create linked biblio record") }}:</label
+                        >
+                        <input
+                            type="checkbox"
+                            id="create_linked_biblio"
+                            v-model="create_linked_biblio"
+                        />
                     </li>
                 </ol>
-                <fieldset id="package_list">
-                    {{ $__("To the following local package") }}:
-                    <v-select
-                        v-model="package_id"
-                        label="name"
-                        :reduce="p => p.package_id"
-                        :options="packages"
-                        :clearable="false"
-                        :required="!package_id"
-                    >
-                        <template #search="{ attributes, events }">
-                            <input
-                                :required="!package_id"
-                                class="vs__search"
-                                v-bind="attributes"
-                                v-on="events"
-                            />
-                        </template>
-                    </v-select>
-                    <span class="required">{{ $__("Required") }}</span>
-                </fieldset>
-            </div>
+            </fieldset>
             <fieldset class="action">
                 <ButtonSubmit />
                 <a @click="clearForm()" role="button" class="cancel">{{
@@ -81,6 +90,7 @@ export default {
             },
             packages: [],
             package_id: null,
+            create_linked_biblio: false,
         }
     },
     beforeCreate() {
@@ -113,6 +123,7 @@ export default {
             const importData = {
                 file: this.file,
                 package_id: this.package_id,
+                create_linked_biblio: this.create_linked_biblio,
             }
             client.localTitles.import_kbart(importData).then(
                 success => {
@@ -162,6 +173,7 @@ export default {
                 file_content: null,
             }
             this.package_id = null
+            this.create_linked_biblio = false
         },
     },
     components: {

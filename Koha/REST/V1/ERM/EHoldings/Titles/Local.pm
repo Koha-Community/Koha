@@ -272,9 +272,10 @@ sub import_from_list {
 sub import_from_kbart_file {
     my $c = shift or return;
 
-    my $import_data = $c->req->json;
-    my $file        = $import_data->{file};
-    my $package_id  = $import_data->{package_id};
+    my $import_data          = $c->req->json;
+    my $file                 = $import_data->{file};
+    my $package_id           = $import_data->{package_id};
+    my $create_linked_biblio = $import_data->{create_linked_biblio};
 
     return try {
         my @job_ids;
@@ -306,10 +307,11 @@ sub import_from_kbart_file {
         ) if scalar(@invalid_columns) > 0;
 
         my $params = {
-            column_headers => $column_headers,
-            rows           => $rows,
-            package_id     => $package_id,
-            file_name      => $file->{filename}
+            column_headers       => $column_headers,
+            rows                 => $rows,
+            package_id           => $package_id,
+            file_name            => $file->{filename},
+            create_linked_biblio => $create_linked_biblio
         };
         my $outcome = Koha::BackgroundJob::ImportKBARTFile::is_file_too_large( $params, $max_allowed_packet );
 
@@ -346,6 +348,5 @@ sub import_from_kbart_file {
         $c->unhandled_exception($_);
     };
 }
-
 
 1;

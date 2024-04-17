@@ -76,9 +76,10 @@ sub process {
     };
 
     try {
-        my $column_headers = $args->{column_headers};
-        my $rows           = $args->{rows};
-        my $package_id     = $args->{package_id};
+        my $column_headers       = $args->{column_headers};
+        my $rows                 = $args->{rows};
+        my $package_id           = $args->{package_id};
+        my $create_linked_biblio = $args->{create_linked_biblio};
 
         if ( scalar( @{$rows} ) == 0 ) {
             push @messages, {
@@ -118,7 +119,8 @@ sub process {
                         };
                         $failed_imports++;
                     } else {
-                        my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)->store;
+                        my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)
+                            ->store( { create_linked_biblio => $create_linked_biblio } );
                         create_linked_resource(
                             {
                                 title      => $imported_title,
@@ -216,7 +218,7 @@ sub read_file {
 
     my $file_content = defined( $file->{file_content} ) ? decode_base64( $file->{file_content} ) : "";
     my $delimiter    = $file->{filename} =~ /\.tsv$/    ? "\t"                                   : ",";
-    my $quote_char   = $file->{filename} =~ /\.tsv$/    ? ""                                     : '"';
+    my $quote_char   = $file->{filename} =~ /\.tsv$/    ? "\""                                   : "\"";
 
     open my $fh, "<", \$file_content or die;
     my $csv = Text::CSV_XS->new(
@@ -422,10 +424,10 @@ sub is_file_too_large {
     };
 }
 
-=head3
+=head3 rescue_EBSCO_files
 
 EBSCO have an incorrect spelling of "preceding_publication_title_id" in all of their KBART files ("preceeding" instead of "preceding").
-This is very annoying because it means all of their KBART files fail to import using the current methodology.
+This means all of their KBART files fail to import using the current methodology.
 There is no simple way of finding out who the vendor is before importing so all KBART files from any vendor are going to have to be checked for this spelling and corrected.
 
 =cut

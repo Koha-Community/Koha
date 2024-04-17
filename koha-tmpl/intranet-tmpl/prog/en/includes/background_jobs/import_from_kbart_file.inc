@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE raw %]
 
 [% BLOCK report %]
     [% SET report = job.report %]
@@ -90,6 +91,5 @@
                 }
             });
         });
-
 </script>
 [% END %]
