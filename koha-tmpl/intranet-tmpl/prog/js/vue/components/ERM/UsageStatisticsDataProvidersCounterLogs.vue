@@ -138,7 +138,7 @@ export default {
                     title: __("Imported by"),
                     render: function (data, type, row, meta) {
                         const importer = row.borrowernumber
-                            ? `<a href="http://localhost:8081/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.borrowernumber}">Borrowernumber ${row.borrowernumber}</a>`
+                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.borrowernumber}">Borrowernumber ${row.borrowernumber}</a>`
                             : "Cronjob"
                         return importer
                     },
