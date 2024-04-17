@@ -279,9 +279,8 @@
         </div>
       </div>
 
-        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-show" />
+        <form method="GET" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
+            <input type="hidden" name="op" value="show" />
             <input type="hidden" id="batch_mod_del" name="del" value="0" />
         </form>
 
