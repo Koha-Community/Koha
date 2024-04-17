@@ -205,6 +205,8 @@ if ( not $ordernumber ) {    # create order
     # otherwise, retrieve suggestion information.
     elsif ($suggestionid) {
         $data = GetSuggestion($suggestionid);
+        $data->{quantitysugg} = $data->{quantity};
+        undef $data->{quantity};
         $budget_id ||= $data->{'budgetid'} // 0;
     }
 
@@ -486,6 +488,7 @@ $template->param(
     itemtypeloop     => \@itemtypes,
     quantity         => $quantity,
     quantityrec      => $quantity,
+    quantitysugg      => $data->{quantitysugg},
     rrp              => $data->{'rrp'},
     replacementprice => $data->{'replacementprice'},
     gst_values       => \@gst_values,
