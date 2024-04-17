@@ -1981,7 +1981,7 @@
 </script>
 
     <script>
-        table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
+        table_settings = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
     </script>
 
     [% SET search_results_block_id = 'holds_patronsearch_pane_panel' %] [%# adjusting variable for patron-search.inc %]
