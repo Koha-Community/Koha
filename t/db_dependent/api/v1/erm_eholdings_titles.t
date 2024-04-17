@@ -192,7 +192,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 24;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -330,6 +330,22 @@ subtest 'add() tests' => sub {
             }
         ]
           );
+
+    subtest 'add eholdings title linked to biblio tests' => sub {
+
+        plan tests => 4;
+
+        delete $ehtitle->{title_id};
+        my $request_body = {
+            %{$ehtitle},
+        };
+        $request_body->{create_linked_biblio} = 1;
+        my $biblios_count = Koha::Biblios->search()->count;
+        $t->post_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/" => json => $request_body )
+            ->status_is(201)->json_is( '/publication_title' => 'Publication title' );
+        my $new_biblios_count = Koha::Biblios->search()->count;
+        is( $new_biblios_count, $biblios_count + 1, "Biblio was added" );
+    };
 
     $schema->storage->txn_rollback;
 };
@@ -471,9 +487,9 @@ subtest 'update() tests' => sub {
             ->title_id;
         my $ehtitle_updated_title = { publication_title => "The journal of writing unit tests :" };
 
-        $t->put_ok(
-            "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json => $ehtitle_updated_title )
-            ->status_is(200)->json_is( '/publication_title' => 'The journal of writing unit tests :' );
+        $t->put_ok( "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id" => json =>
+                { %$ehtitle_updated_title, create_linked_biblio => 1 } )->status_is(200)
+            ->json_is( '/publication_title' => 'The journal of writing unit tests :' );
 
         $biblio->discard_changes;
 
