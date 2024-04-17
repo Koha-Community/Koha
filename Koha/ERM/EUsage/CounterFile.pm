@@ -35,6 +35,8 @@ use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::ERM::EUsage::SushiCounter;
 use Koha::Exceptions::ERM::EUsage::CounterFile;
 
+use C4::Context;
+
 use base qw(Koha::Object);
 
 use Koha::ERM::EUsage::CounterLogs;
@@ -558,10 +560,11 @@ Adds a erm_counter_logs database entry
 sub _add_counter_log_entry {
     my ($self) = @_;
 
+    my $user = C4::Context->userenv()->{'number'};
     Koha::ERM::EUsage::CounterLog->new(
         {
             #TODO: borrowernumber only required for manual uploads or "harvest now" button clicks
-            borrowernumber   => undef,
+            borrowernumber   => $user,
             counter_files_id => $self->erm_counter_files_id,
             importdate       => $self->date_uploaded,
             filename         => $self->filename,
