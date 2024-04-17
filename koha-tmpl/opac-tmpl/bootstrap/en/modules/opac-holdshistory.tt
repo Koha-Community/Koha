@@ -71,7 +71,7 @@
                         <div id="opac-user-holdsrec">
                             <div id="tabs-container">
                                 <div class="controls">
-                                    <div class="resultscontrol resort">
+                                    <div class="resultscontrol resort d-print-none">
                                         <form id="sortform" action="/cgi-bin/koha/opac-holdshistory.pl" method="get">
                                             [% IF ( unlimit ) %]<input type="hidden" name="unlimit" value="1" />[% END %]
                                             <select name="sort" id="sort">
@@ -84,11 +84,11 @@
                                     </div>
 
                                     [% UNLESS unlimit %]
-                                        <p>
+                                        <p class="d-print-none">
                                             Showing 50 items. <a href="/cgi-bin/koha/opac-holdshistory.pl?unlimit=1[% IF ( sort ) %]&amp;sort=[% sort | url %][% END %]">Show all items</a>
                                         </p>
                                     [% ELSE %]
-                                        <p>
+                                        <p class="d-print-none">
                                             Showing all items. <a href="/cgi-bin/koha/opac-holdshistory.pl[% IF ( sort ) %]?sort=[% sort | url %][% END %]">Show 50 items</a>
                                         </p>
                                     [% END %]

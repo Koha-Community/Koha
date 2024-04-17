@@ -55,7 +55,7 @@
 
                     <p>Hello, [% INCLUDE 'patron-title.inc' patron = logged_in_user %]
                     <br />
-                    <a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here if you're not [% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></p>
+                    <a href="/cgi-bin/koha/opac-main.pl?logout.x=1" class="d-print-none">Click here if you're not [% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></p>
 
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h2>Thank you!</h2><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
@@ -551,9 +551,9 @@
                                             </tbody>
                                         </table>
                                         [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                                            <input type="submit" class="btn btn-primary" value="Renew selected" />
+                                            <input type="submit" class="btn btn-primary d-print-none" value="Renew selected" />
                                             <input type="hidden" name="op" value="cud-renew" />
-                                            <button type="button" id="renewall_js" class="btn btn-primary">Renew all</button>
+                                            <button type="button" id="renewall_js" class="btn btn-primary d-print-none">Renew all</button>
                                         [% END %]
                                     </form>
 

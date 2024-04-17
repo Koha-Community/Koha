@@ -762,7 +762,7 @@
                                                         [% END %]
                                                     </td>
                                                     <td>[% s.lastmodified | $KohaDates %]</td>
-                                                    <td>
+                                                    <td class="d-print-none">
                                                         [% IF s.can_be_managed( loggedinusernumber ) %]
                                                             <form action="/cgi-bin/koha/opac-shelves.pl" method="get" class="d-inline">
                                                                 <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />

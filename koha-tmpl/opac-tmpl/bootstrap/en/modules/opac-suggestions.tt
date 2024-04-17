@@ -340,7 +340,7 @@
 
                             [% IF (Koha.Preference( 'OPACViewOthersSuggestions' ) || loggedinusername) && (suggestions.size > 0 OR title_filter) %]
                                 [% SET can_delete_suggestion = 0 %]
-                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline" id="search_suggestions_form" method="get">
+                                <form action="/cgi-bin/koha/opac-suggestions.pl" class="form-inline d-print-none" id="search_suggestions_form" method="get">
                                     <div class="form-row">
                                         <div class="col-auto my-1">
                                             <label for="title_filter">Search for:</label>

@@ -221,6 +221,7 @@ body#basket p {
 
 #action,
 #addshelf,
+#backtotop,
 #consentMoreInfo,
 #cookieConsentFooter,
 #export,
@@ -251,8 +252,36 @@ fieldset.action,
 h2 span.hint,
 input,
 td.resultscontrol,
-.cart-control {
+.cart-control,
+.table_controls,
+.dtr-control,
+.dtr-hidden,
+.selections-toolbar {
     display: none;
+}
+
+.dtr-hidden {
+    display: table-cell !important;
+}
+
+.nav-tabs {
+    border: 0;
+
+    .nav-link {
+        border: 0;
+        display: none;
+
+        &.active {
+            border: 0;
+            display: block;
+            font-size: 125%;
+            font-weight: bold;
+        }
+    }
+}
+
+.tab-content {
+    border: 0;
 }
 
 .row-fluid {
