@@ -40,7 +40,9 @@ export default {
             building_table: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: {},
+                options: {
+                    embed: "borrowernumber",
+                },
                 url: () => this.table_url(),
                 table_settings: this.counter_log_table_settings,
                 add_filters: true,
@@ -137,9 +139,10 @@ export default {
                 {
                     title: __("Imported by"),
                     render: function (data, type, row, meta) {
-                        const importer = row.borrowernumber
-                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.borrowernumber}">Borrowernumber ${row.borrowernumber}</a>`
-                            : __("Cronjob")
+                        const borrower = row.borrowernumber
+                        const importer = borrower
+                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${borrower.patron_id}">${borrower.firstname} ${borrower.surname}</a>`
+                            : this.$__("Cronjob")
                         return importer
                     },
                     searchable: true,
