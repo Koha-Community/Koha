@@ -10,7 +10,7 @@
 [% PROCESS 'patronfields.inc' %]
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
-[% SET columns = ['cardnumber', 'name-address', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
+[% SET columns = ['cardnumber', 'name-address', 'phone', 'dateofbirth', 'branch', 'category', 'dateexpiry', 'checkouts', 'account_balance', 'borrowernotes', 'action'] %]
 [% SET searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') %]
 [% PROCESS 'patron-search.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
