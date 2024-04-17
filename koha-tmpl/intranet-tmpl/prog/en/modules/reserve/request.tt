@@ -1745,7 +1745,7 @@
     </script>
 
     <script>
-        table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
+        table_settings = [% TablesSettings.GetTableSettings( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
     </script>
 
     [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/reserve/request.pl?' _ url_biblio_params, redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/reserve/request.pl?' _ url_biblio_params, redirect_if_attribute_equal => 'cardnumber' %]
