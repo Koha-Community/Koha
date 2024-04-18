@@ -682,6 +682,11 @@ describe("Data provider tab options", () => {
 
         cy.get("#usage_data_providerstabs").contains("Import logs").click();
         cy.get("#counter_logs_list").contains("Showing 1 to 1 of 1 entries");
+
+        // Check 'Imported by' name
+        cy.get("#counter_logs_list table tbody tr:first td")
+            .eq(2)
+            .contains("koha");
     });
 });
 
