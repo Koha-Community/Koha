@@ -30,6 +30,26 @@ acq_cancel_obsolete_orders.pl - Script for cancelling obsolete orders
     Optionally, you may pass an age in DAYS to limit the
     selected set to records with an older entrydate.
 
+=head1 OPTIONS
+
+=over
+
+=item B<-h|--help>
+
+    Print a brief help message
+
+=item B<-c|--confirm>
+
+    Confirm to cancel obsolete orders. If you do not confirm, the script
+    only counts the number of obsolete orders.
+
+=item B<--age>
+
+    Optional number of days. Only look at orders older than the given
+    number.
+
+=back
+
 =cut
 
 # Copyright 2024 Rijksmuseum
