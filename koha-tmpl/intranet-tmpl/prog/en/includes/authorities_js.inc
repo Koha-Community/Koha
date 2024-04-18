@@ -49,8 +49,7 @@ $(document).ready(function () {
     });
 
     $("#delAuth").click(function(){
-        confirm_deletion();
-        return false;
+        $('.form_delete').submit();
     });
 
     $("#z3950_new").click(function(e){

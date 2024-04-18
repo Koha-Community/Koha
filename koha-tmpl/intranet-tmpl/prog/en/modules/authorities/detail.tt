@@ -48,6 +48,11 @@
             [% INCLUDE 'messages.inc' %]
 
             [% INCLUDE 'authorities-toolbar.inc' %]
+            <form action="/cgi-bin/koha/authorities/authorities-home.pl" class="form_delete" method="post">
+                  [% INCLUDE 'csrf-token.inc' %]
+                  <input type="hidden" name="op" value="cud-delete"/>
+                  <input type="hidden" name="authid" value="[% authid | html %]"/>
+            </form>
 
             [% IF ( displayhierarchy ) %]
                 <div id="hierarchies">
