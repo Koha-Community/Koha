@@ -51,13 +51,31 @@
                             <li id="debarred">
                                 Your account has been frozen.
                                 [% IF debarred_comment %]
-                                    Comment:
+                                    Comment:<br />
                                     <span id="userdebarred_comment">
                                         <strong>
                                             [% IF debarred_comment.search('OVERDUES_PROCESS') %]
                                                 Restriction added by overdues process [% debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                             [% ELSE %]
-                                                [% debarred_comment | html_line_break %]
+                                                [% FOR restriction IN logged_in_user.restrictions %]
+                                                    [% IF restriction.comment %]
+                                                        [% restriction.type.display_text | html %]: [% restriction.comment | html_line_break %], frozen until:
+                                                            [% IF restriction.expiration %]
+                                                                [% restriction.expiration | $KohaDates %]
+                                                            [% ELSE %]
+                                                                <strong>Indefinite</strong>
+                                                            [% END %]
+                                                        <br />
+                                                    [% ELSE %]
+                                                        [% restriction.type.display_text | html %], frozen until:
+                                                            [% IF restriction.expiration %]
+                                                                [% restriction.expiration | $KohaDates %]
+                                                            [% ELSE %]
+                                                                <strong>Indefinite</strong>
+                                                            [% END %]
+                                                        <br />
+                                                    [% END %]
+                                                [% END %]
                                             [% END %]
                                         </strong>
                                     </span>

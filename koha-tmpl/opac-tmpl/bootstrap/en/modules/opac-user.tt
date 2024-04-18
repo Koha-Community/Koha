@@ -168,13 +168,31 @@
                                     [% ELSE %]
                                         <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
                                         [% IF ( borrower.debarredcomment ) %]
-                                            Comment:
+                                            Comment:<br />
                                             <span id="userdebarred_comment">
                                                 <strong>
                                                     [% IF borrower.debarredcomment.search('OVERDUES_PROCESS') %]
                                                         Restriction added by overdues process [% borrower.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                                     [% ELSE %]
-                                                        [% borrower.debarredcomment | html_line_break %]
+                                                        [% FOR restriction IN logged_in_user.restrictions %]
+                                                            [% IF restriction.comment %]
+                                                                [% restriction.type.display_text | html %]: [% restriction.comment | html_line_break %], frozen until:
+                                                                [% IF restriction.expiration %]
+                                                                    [% restriction.expiration | $KohaDates %]
+                                                                [% ELSE %]
+                                                                    <strong>Indefinite</strong>
+                                                                [% END %]
+                                                                <br />
+                                                            [% ELSE %]
+                                                                [% restriction.type.display_text | html %], frozen until:
+                                                                [% IF restriction.expiration %]
+                                                                    [% restriction.expiration | $KohaDates %]
+                                                                [% ELSE %]
+                                                                    <strong>Indefinite</strong>
+                                                                [% END %]
+                                                                <br />
+                                                            [% END %]
+                                                        [% END %]
                                                     [% END %]
                                                 </strong>
                                             </span>
