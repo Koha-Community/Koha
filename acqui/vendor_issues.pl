@@ -53,7 +53,7 @@ unless ($vendor) {
     exit;
 }
 
-if ( $op eq 'add_form' || $op eq 'cud-show' ) {
+if ( $op eq 'add_form' || $op eq 'show' ) {
     $template->param( issue => $issue );
 } elsif ( $op eq 'cud-add_validate' ) {
     my $type       = $input->param('type');
