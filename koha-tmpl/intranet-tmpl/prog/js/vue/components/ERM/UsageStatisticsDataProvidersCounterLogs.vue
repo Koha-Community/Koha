@@ -41,7 +41,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: {
-                    embed: "borrowernumber",
+                    embed: "patron",
                 },
                 url: () => this.table_url(),
                 table_settings: this.counter_log_table_settings,
@@ -139,9 +139,9 @@ export default {
                 {
                     title: __("Imported by"),
                     render: function (data, type, row, meta) {
-                        const borrower = row.borrowernumber
-                        const importer = borrower
-                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${borrower.patron_id}">${borrower.firstname} ${borrower.surname}</a>`
+                        const { patron } = row
+                        const importer = patron
+                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${patron.patron_id}">${patron.firstname} ${patron.surname}</a>`
                             : this.$__("Cronjob")
                         return importer
                     },
