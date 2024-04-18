@@ -179,7 +179,6 @@ function messenger(X,Y,etc){    // FIXME: unused?
 //  NEXT BLOCK IS USED BY NEWORDERBEMPTY
 
 function updateCosts(){
-    console.log("updateCosts");
     var quantity = new Number($("#quantity").val());
     var discount = new Number($("#discount").val());
     var listprice   =  new Number($("#listprice").val());
@@ -204,7 +203,6 @@ function updateCosts(){
 }
 
 function syncReplacementPrice(sourceId, targetId) {
-    console.log("updatePRice");
     var priceValue = $("#" + sourceId).val();
     $("#" + targetId).val(priceValue);
 }
