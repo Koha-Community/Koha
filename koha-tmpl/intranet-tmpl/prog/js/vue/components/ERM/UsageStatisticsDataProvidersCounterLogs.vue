@@ -139,7 +139,7 @@ export default {
                     render: function (data, type, row, meta) {
                         const importer = row.borrowernumber
                             ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${row.borrowernumber}">Borrowernumber ${row.borrowernumber}</a>`
-                            : "Cronjob"
+                            : this.$__("Cronjob")
                         return importer
                     },
                     searchable: true,
