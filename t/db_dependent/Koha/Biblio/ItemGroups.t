@@ -36,7 +36,7 @@ t::lib::Mocks::mock_preference('EnableItemGroups', 1);
 
 subtest 'add_item() and items() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -53,6 +53,14 @@ subtest 'add_item() and items() tests' => sub {
     my @items = $item_group->items->as_list();
     is( scalar(@items), 1, 'Item group has one item');
     is( $items[0]->id, $item_1->id, 'Item 1 is correct' );
+    is(
+        ref( $items[0]->item_group ), 'Koha::Biblio::ItemGroup',
+        '->item_group should return a Koha::Biblio::ItemGroup object'
+    );
+    is(
+        $items[0]->item_group->item_group_id, $item_group->item_group_id,
+        '->item_group should return the correct item group'
+    );
 
     $item_group->add_item({ item_id => $item_2->id });
     @items = $item_group->items->as_list();

@@ -541,7 +541,7 @@ subtest 'SearchItems test' => sub {
 
 subtest 'Koha::Item(s) tests' => sub {
 
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin();
 
@@ -575,10 +575,12 @@ subtest 'Koha::Item(s) tests' => sub {
     my $homebranch = $item->home_branch();
     is( ref($homebranch), 'Koha::Library', "Got Koha::Library from home_branch method" );
     is( $homebranch->branchcode(), $library1->{branchcode}, "Home branch code matches homebranch" );
+    is( ref( $item->home_library ), 'Koha::Library', 'home_library returns a Koha::Library object' );
 
     my $holdingbranch = $item->holding_branch();
     is( ref($holdingbranch), 'Koha::Library', "Got Koha::Library from holding_branch method" );
     is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
+    is( ref( $item->holding_library ), 'Koha::Library', 'holding_library returns a Koha::Library object' );
 
     $biblio = $item->biblio();
     is( ref($item->biblio), 'Koha::Biblio', "Got Koha::Biblio from biblio method" );

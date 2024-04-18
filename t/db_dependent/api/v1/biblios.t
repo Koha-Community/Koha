@@ -35,7 +35,7 @@ use C4::Circulation qw( AddIssue AddReturn );
 
 use Koha::Biblios;
 use Koha::Database;
-use Koha::DateUtils qw (dt_from_string);
+use Koha::DateUtils qw (dt_from_string output_pref);
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
 
@@ -165,7 +165,7 @@ subtest 'get() tests' => sub {
 
 subtest 'get_items() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -201,6 +201,38 @@ subtest 'get_items() tests' => sub {
         "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber . "/items" => { "x-koha-embed" => "+strings" } )
         ->status_is(200)
         ->json_has( '/0/_strings/home_library_id/str' => $item_1->holding_branch->branchname, '_strings are embedded' );
+
+    subtest 'first_hold+strings' => sub {
+
+        plan tests => 6;
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    flags        => 1,
+                }
+            }
+        );
+        $patron->set_password( { password => $password, skip_validation => 1 } );
+        my $userid         = $patron->userid;
+        my $pickup_library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+
+        my $item = $builder->build_sample_item;
+        my $data = {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $item->biblionumber,
+            item_id           => $item->itemnumber,
+            pickup_library_id => $pickup_library->branchcode,
+            expiration_date   => output_pref( { dt => DateTime->now->add(days => "3")->truncate(to => 'day'), dateformat => 'iso', dateonly => 1 } ),
+        };
+        $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $data )->status_is(201)->json_has('/hold_id');
+
+        $t->get_ok( "//$userid:$password@/api/v1/biblios/"
+                . $item->biblionumber
+                . "/items" => { "x-koha-embed" => "first_hold+strings" } )->status_is(200)
+            ->json_is( '/0/first_hold/_strings/pickup_library_id' => { type => 'library', str => $pickup_library->branchname } );
+    };
 
     $schema->storage->txn_rollback;
 };

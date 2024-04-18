@@ -1972,7 +1972,7 @@ Returns the items associated with this bundle that are not lost
 
 sub bundle_items_not_lost {
     my ($self) = @_;
-    return $self->bundle_items->search( { itemlost => { '!=' => 0 } } );
+    return $self->bundle_items->search( { itemlost => 0 } );
 }
 
 =head3 bundle_items_lost
@@ -1985,7 +1985,7 @@ Returns the items associated with this bundle that are lost
 
 sub bundle_items_lost {
     my ($self) = @_;
-    return $self->bundle_items->search( { itemlost => 0 } );
+    return $self->bundle_items->search( { itemlost => { '!=' => 0 } } );
 }
 
 =head3 is_bundle

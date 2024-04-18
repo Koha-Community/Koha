@@ -161,7 +161,7 @@ subtest 'in_bundle tests' => sub {
 };
 
 subtest 'bundle_items tests' => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -188,6 +188,11 @@ subtest 'bundle_items tests' => sub {
     $bundle_items = $host_item->bundle_items;
     is( $bundle_items->count, 3,
         'bundle_items returns all the bundled items in the set' );
+
+    $bundle_item2->itemlost(1)->store;
+    is( $host_item->bundle_items_not_lost->count,        2 );
+    is( $host_item->bundle_items_lost->count,            1 );
+    is( $host_item->bundle_items_lost->next->itemnumber, $bundle_item2->itemnumber );
 
     $schema->storage->txn_rollback;
 };
@@ -1157,18 +1162,20 @@ subtest 'renewal_branchcode' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Tests for itemtype' => sub {
-    plan tests => 2;
+subtest 'Tests for itemtype|item_type' => sub {
+    plan tests => 4;
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio;
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, itype => $itemtype->itemtype });
 
-    t::lib::Mocks::mock_preference('item-level_itypes', 1);
-    is( $item->itemtype->itemtype, $item->itype, 'Pref enabled' );
-    t::lib::Mocks::mock_preference('item-level_itypes', 0);
-    is( $item->itemtype->itemtype, $biblio->biblioitem->itemtype, 'Pref disabled' );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+    is( $item->itemtype->itemtype,  $item->itype, 'Pref enabled' );
+    is( $item->item_type->itemtype, $item->itype, 'Pref enabled' );
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
+    is( $item->itemtype->itemtype,  $biblio->biblioitem->itemtype, 'Pref disabled' );
+    is( $item->item_type->itemtype, $biblio->biblioitem->itemtype, 'Pref disabled' );
 
     $schema->storage->txn_rollback;
 };

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 20;
 
 use Test::MockModule;
 use Test::Exception;
@@ -1382,11 +1382,69 @@ subtest 'store' => sub {
     };
 };
 
-subtest 'get_transfer' => sub {
-    plan tests => 7;
+subtest 'serial_item' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item;
+    my $serial_item =
+        $builder->build_object( { class => 'Koha::Serial::Items', value => { itemnumber => $item->itemnumber } } );
+    is( ref( $item->serial_item ),      'Koha::Serial::Item' );
+    is( $item->serial_item->itemnumber, $item->itemnumber );
+
+    is( ref( $item->serial_item->serial ), 'Koha::Serial', 'Koha::Serial::Item->serial returns a Koha::Serial object' );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'item_group_item' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    my $item_group = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id } )->store();
+    $item_group->add_item( { item_id => $item_1->itemnumber } );
+
+    is(
+        ref( $item_1->item_group_item ), 'Koha::Biblio::ItemGroup::Item',
+        '->item_group_item should return a Koha::Biblio::ItemGroup::Item object'
+    );
+    is( $item_1->item_group_item->item_id, $item_1->itemnumber, '->item_group_item should return the correct item' );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'course_item' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item;
+    my $course_item =
+        $builder->build_object( { class => 'Koha::Course::Items', value => { itemnumber => $item->itemnumber } } );
+    is( ref( $item->course_item ), 'Koha::Course::Item', '->course_item should return a Koha::Course::Item object' );
+    is( $item->course_item->ci_id, $course_item->ci_id,  '->course_item should return the correct object' );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'get_transfer|transfer' => sub {
+    plan tests => 9;
 
     my $transfer = $new_item_1->get_transfer();
     is( $transfer, undef, 'Koha::Item->get_transfer should return undef if the item is not in transit' );
+    is( $new_item_1->transfer, undef );
 
     my $library_to = $builder->build( { source => 'Branch' } );
 
@@ -1408,6 +1466,7 @@ subtest 'get_transfer' => sub {
 
     $transfer = $new_item_1->get_transfer();
     is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfer object' );
+    is( ref($new_item_1->transfer), 'Koha::Item::Transfer' );
 
     my $transfer_2 = $builder->build_object(
         {
@@ -1459,21 +1518,47 @@ subtest 'get_transfer' => sub {
 };
 
 subtest 'holds' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     my $biblio = $builder->build_sample_biblio();
-    my $item   = $builder->build_sample_item({
-        biblionumber => $biblio->biblionumber,
-    });
-    is($item->holds->count, 0, "Nothing returned if no holds");
-    my $hold1 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'T' }});
-    my $hold2 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
-    my $hold3 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+    is( $item->holds->count, 0,     "Nothing returned if no holds" );
+    is( $item->first_hold,   undef, 'No hold yet' );
+    my $yesterday = dt_from_string->subtract( days => 1 )->ymd;
+    my $hold1     = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item->itemnumber, found => 'T', reservedate => $yesterday, suspend => 0, priority => 2
+            }
+        }
+    );
+    my $hold2 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item->itemnumber, found => 'W', reservedate => $yesterday, suspend => 0, priority => 1
+            }
+        }
+    );
+    my $hold3 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item->itemnumber, found => 'W', reservedate => $yesterday, suspend => 0, priority => 3
+            }
+        }
+    );
 
-    is($item->holds()->count,3,"Three holds found");
-    is($item->holds({found => 'W'})->count,2,"Two waiting holds found");
-    is_deeply($item->holds({found => 'T'})->next->unblessed,$hold1,"Found transit holds matches the hold");
-    is($item->holds({found => undef})->count, 0,"Nothing returned if no matching holds");
+    is( $item->holds()->count,                   3, "Three holds found" );
+    is( $item->holds( { found => 'W' } )->count, 2, "Two waiting holds found" );
+    is_deeply( $item->holds( { found => 'T' } )->next->unblessed, $hold1, "Found transit holds matches the hold" );
+    is( $item->holds( { found => undef } )->count, 0,                    "Nothing returned if no matching holds" );
+    is( $item->first_hold->reserve_id,             $hold2->{reserve_id}, '->first_hold returns the correct hold' );
 };
 
 subtest 'biblio' => sub {
