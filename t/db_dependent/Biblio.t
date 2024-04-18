@@ -1029,6 +1029,7 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
     $return_record->mock( 'record', sub { Koha::Exceptions::Metadata::Invalid->throw() } );
 
     my $biblio = $builder->build_sample_biblio;
+    my $biblionumber = $biblio->biblionumber;
 
     my $increase = 1;
 
@@ -1036,7 +1037,7 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
     warning_is {
         $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, '' );
     }
-    "UpdateTotalIssues could not get bibliographic record", "Expected warning found";
+    "UpdateTotalIssues could not get bibliographic record for biblionumber $biblionumber", "Expected warning found";
 
     ok( !$success, 'UpdateTotalIssues fails gracefully for invalid record' );
 
