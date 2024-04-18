@@ -1474,6 +1474,7 @@ subtest 'AutoSelfCheckAllowed' => sub {
     $auth->mock( 'safe_exit', sub { return } );
 
     t::lib::Mocks::mock_preference( 'AutoSelfCheckAllowed', 0 );
+    C4::Context->unset_userenv();
 
     # Pref is off, cannot access sco
     {
@@ -1498,6 +1499,7 @@ subtest 'AutoSelfCheckAllowed' => sub {
 
     t::lib::Mocks::mock_preference( 'AutoSelfCheckID',   '' );
     t::lib::Mocks::mock_preference( 'AutoSelfCheckPass', '' );
+
 
     # Credential prefs are empty, cannot access sco
     {
