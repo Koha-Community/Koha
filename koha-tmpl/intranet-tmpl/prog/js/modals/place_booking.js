@@ -110,68 +110,79 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         placeholder: __("Search for a patron"),
     });
 
-    $("#booking_patron_id").on("select2:select", function (e) {
-        booking_patron = e.params.data;
-        $("#pickup_library_id").prop("disabled", false);
-    });
-
     // Pickup location select2
     let pickup_url = "/api/v1/biblios/" + biblionumber + "/pickup_locations";
-    $("#pickup_library_id").kohaSelect({
+    $("#pickup_library_id").select2({
         dropdownParent: $(".modal-content", "#placeBookingModal"),
         width: "50%",
         dropdownAutoWidth: true,
+        minimumResultsForSearch: 10,
         allowClear: false,
-        ajax: {
+        placeholder: __("Pickup location"),
+    });
+
+    // Item select2
+    $("#booking_item_id").select2({
+        dropdownParent: $(".modal-content", "#placeBookingModal"),
+        width: "50%",
+        dropdownAutoWidth: true,
+        minimumResultsForSearch: 10,
+        allowClear: false,
+    });
+
+    // Patron selection triggers
+    $("#booking_patron_id").on("select2:select", function (e) {
+        booking_patron = e.params.data;
+
+        // Fetch pickup locations and enable picker
+        let $pickupSelect = $("#pickup_library_id");
+        $.ajax({
             url: pickup_url,
-            delay: 300, // wait 300 milliseconds before triggering the request
-            cache: true,
+            type: "GET",
             dataType: "json",
-            data: function (params) {
-                var search_term = params.term === undefined ? "" : params.term;
-                var query = {
-                    q: JSON.stringify({
-                        name: { "-like": "%" + search_term + "%" },
-                    }),
-                    _order_by: "name",
-                    _page: params.page,
-                };
-                query["patron_id"] = booking_patron.patron_id;
-                return query;
+            data: {
+                _order_by: "name",
+                _per_page: "-1",
+                patron_id: booking_patron.patron_id,
             },
-            processResults: function (data) {
-                var results = [];
-                data.results.forEach(function (pickup_location) {
-                    results.push({
-                        id: pickup_location.library_id.escapeHtml(),
-                        text: pickup_location.name.escapeHtml(),
-                        needs_override: pickup_location.needs_override,
-                        pickup_items: pickup_location.pickup_items,
-                    });
+            success: function (response) {
+                $pickupSelect.empty();
+
+                $.each(response, function (index, pickup_location) {
+                    let option = $(
+                        '<option value="' +
+                            pickup_location.library_id +
+                            '">' +
+                            pickup_location.name +
+                            "</option>"
+                    );
+
+                    option.attr(
+                        "data-needs_override",
+                        pickup_location.needs_override
+                    );
+                    option.attr(
+                        "data-pickup_items",
+                        pickup_location.pickup_items.join(",")
+                    );
+
+                    $pickupSelect.append(option);
                 });
-                return {
-                    results: results,
-                    pagination: { more: data.pagination.more },
-                };
+
+                $pickupSelect.prop("disabled", false);
+                $pickupSelect.val(null).trigger("change");
             },
-        },
-        templateResult: function (state) {
-            var $text;
-            if (state.needs_override === true) {
-                $text = $(
-                    "<span>" +
-                        state.text +
-                        '</span> <span style="float:right;" title="' +
-                        __(
-                            "This pickup location is not allowed according to circulation rules"
-                        ) +
-                        '"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>'
-                );
-            } else {
-                $text = $("<span>" + state.text + "</span>");
-            }
-            return $text;
-        },
+            error: function (xhr, status, error) {
+                console.log("Pickup location fetch failed: ", error);
+            },
+        });
+
+        // Enable item selection if item data is also fetched
+        let $bookingItemSelect = $("#booking_item_id");
+        $bookingItemSelect.data("patron", true);
+        if ($bookingItemSelect.data("loaded")) {
+            $bookingItemSelect.prop("disabled", false);
+        }
     });
 
     // Adopt periodPicker
@@ -224,15 +235,6 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     bookings.unshift(booking);
                 }
 
-                // Item select2
-                $("#booking_item_id").select2({
-                    dropdownParent: $(".modal-content", "#placeBookingModal"),
-                    width: "50%",
-                    dropdownAutoWidth: true,
-                    minimumResultsForSearch: 20,
-                    placeholder: __("Select item"),
-                });
-
                 // Update flatpickr mode
                 periodPicker.set("mode", "range");
 
@@ -254,10 +256,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             false,
                             false
                         );
-                        newOption.setAttribute(
-                            "data-available",
-                            true
-                        );
+                        newOption.setAttribute("data-available", true);
 
                         // Append it to the select
                         $("#booking_item_id").append(newOption);
@@ -450,20 +449,46 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         ? e.params.data.id
                         : null;
 
+                    // Disable invalid pickup locations
+                    $("#pickup_library_id > option").each(function () {
+                        let option = $(this);
+                        if (booking_item_id == 0) {
+                            option.prop("disabled", false);
+                        } else {
+                            let valid_items = String(
+                                option.data("pickup_items")
+                            )
+                                .split(",")
+                                .map(Number);
+                            if (
+                                valid_items.includes(parseInt(booking_item_id))
+                            ) {
+                                option.prop("disabled", false);
+                            } else {
+                                option.prop("disabled", true);
+                            }
+                        }
+                    });
+                    $("#pickup_library_id").trigger("change.select2");
+
+                    // Disable patron selection change
+                    $("#booking_patron_id").prop("disabled", true);
+
                     // redraw pariodPicker taking selected item into account
                     periodPicker.redraw();
                 });
 
                 // Setup listener for pickup location select2
                 $("#pickup_library_id").on("select2:select", function (e) {
-                    let valid_items = e.params.data.pickup_items;
-                    valid_items.push(0);
+                    let valid_items =
+                        e.params.data.element.dataset.pickup_items.split(",");
+                    valid_items.push("0");
 
                     // Disable items not available at the pickup location
                     $("#booking_item_id > option").each(function () {
                         let option = $(this);
                         let item_id = option.val();
-                        if (valid_items.includes(parseInt(item_id))) {
+                        if (valid_items.includes(item_id)) {
                             option.attr("data-pickup", true);
                             if (option.data("available")) {
                                 option.prop("disabled", false);
@@ -474,6 +499,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         }
                     });
                     $("#booking_item_id").trigger("change.select2");
+
+                    // Disable patron selection change
+                    $("#booking_patron_id").prop("disabled", true);
                 });
 
                 // Set onChange for flatpickr
@@ -564,8 +592,12 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 $("#period_fields :input").prop("disabled", false);
 
                 // Redraw select with new options and enable
-                $("#booking_item_id").trigger("change");
-                $("#booking_item_id").prop("disabled", false);
+                let $bookingItemSelect = $("#booking_item_id");
+                $bookingItemSelect.trigger("change");
+                $bookingItemSelect.data("loaded", true);
+                if ($bookingItemSelect.data("patron")) {
+                    $bookingItemSelect.prop("disabled", false);
+                }
 
                 // Set the flag to indicate that data has been fetched
                 dataFetched = true;
