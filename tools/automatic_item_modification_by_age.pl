@@ -56,7 +56,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $cgi->param('op') // 'cud-show';
+my $op = $cgi->param('op') // 'show';
 
 my $syspref_name = q|automatic_item_modification_by_age_configuration|;
 if ( $op eq 'cud-update' ) {
@@ -96,7 +96,7 @@ if ( $op eq 'cud-update' ) {
     my $syspref_content = to_json( \@rules );
     C4::Context->set_preference($syspref_name, $syspref_content);
 
-    $op = 'cud-show';
+    $op = 'show';
 }
 
 my @messages;
