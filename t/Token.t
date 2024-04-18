@@ -113,6 +113,7 @@ subtest 'testing _add_default_csrf_params with/without userenv (bug 27849)' => s
     is( $result->{id}, 'anonymous_567', 'Check userid' );
 
     # Clear userenv
+    C4::Context->unset_userenv();
     is( C4::Context::userenv, undef, 'No userenv anymore' );
     $result = Koha::Token::_add_default_csrf_params({}); # pass no session_id
     is( $result->{session_id}, Koha::Token::DEFA_SESSION_ID, 'Check session id' );
