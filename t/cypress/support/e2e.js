@@ -1367,7 +1367,28 @@ cy.get_counter_file = () => {
                     "erm_counter_log_id": 2,
                     "filename": "PTFS Journals_TR_J1",
                     "importdate": "2023-06-19T09:40:46+00:00",
-                    "logdetails": null
+                    "logdetails": null,
+                    "patron": {
+                        "cardnumber": "42",
+                        "category_id": "S",
+                        "check_previous_checkout": "inherit",
+                        "date_enrolled": "2024-04-18",
+                        "expiry_date": "2032-07-18",
+                        "incorrect_address": false,
+                        "lang": "default",
+                        "library_id": "CPL",
+                        "login_attempts": 0,
+                        "patron_card_lost": false,
+                        "patron_id": 51,
+                        "privacy": 1,
+                        "privacy_guarantor_checkouts": 0,
+                        "privacy_guarantor_fines": false,
+                        "protected": false,
+                        "restricted": false,
+                        "surname": "koha",
+                        "updated_on": "2024-04-18T09:42:59+00:00",
+                        "userid": "koha",
+                    },
                 }
             ]
         }
