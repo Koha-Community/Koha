@@ -568,7 +568,6 @@ sub _set_userenv {
         $THE_library = $patron->library;
     }
 
-    C4::Context->new_userenv();
     C4::Context->set_userenv(
         $patron->borrowernumber,  # number,
         $patron->userid,          # userid,
