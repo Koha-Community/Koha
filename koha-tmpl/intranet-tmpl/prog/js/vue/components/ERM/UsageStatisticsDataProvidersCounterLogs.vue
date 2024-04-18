@@ -23,11 +23,13 @@ import KohaTable from "../KohaTable.vue"
 export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
+        const patron_to_html = $patron_to_html
 
         const table = ref()
 
         return {
             table,
+            patron_to_html,
             setConfirmationDialog,
             setMessage,
         }
@@ -141,7 +143,11 @@ export default {
                     render: function (data, type, row, meta) {
                         const { patron } = row
                         const importer = patron
-                            ? `<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=${patron.patron_id}">${patron.firstname} ${patron.surname}</a>`
+                            ? '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' +
+                              patron.patron_id +
+                              '">' +
+                              $patron_to_html(patron) +
+                              "</a>"
                             : this.$__("Cronjob")
                         return importer
                     },
