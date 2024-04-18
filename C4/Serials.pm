@@ -956,7 +956,7 @@ sub GetSeq {
     $newlastvalue3 = _numeration($newlastvalue3, $pattern->{numbering3}, $locale) if ($pattern->{numbering3}); # reset counter if needed.
     $calculated =~ s/\{Z\}/$newlastvalue3/g;
 
-    my $dt = dt_from_string( $subscription->{firstaquidate} );
+    my $dt = dt_from_string( $subscription->{firstacquidate} );
     $calculated =~ s/\{Month\}/$dt->month/eg;
     $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
     $calculated =~ s/\{Year\}/$dt->year/eg;

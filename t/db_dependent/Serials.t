@@ -560,7 +560,7 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
         skip_serialseq => 0,
         irregularity   => '',
         locale         => 'C',            # locale set to 'C' to ensure we'll have english strings
-        firstaquidate  => '1970-11-01',
+        firstacquidate => '1970-11-01',
     };
     $pattern = {
         numberingmethod => '{Year} {Day} {DayName} {Month} {MonthName}',
@@ -568,7 +568,7 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
 
     my $numbering = GetSeq( $subscription, $pattern );
     is( $numbering, '1970 1 Sunday 11 November', 'GetSeq correctly calculates numbering from first aqui date' );
-    $subscription->{firstaquidate} = '2024-02-29';
+    $subscription->{firstacquidate} = '2024-02-29';
 
     $numbering = GetSeq( $subscription, $pattern );
     is(
@@ -587,7 +587,6 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
     );
 
 };
-
 
 subtest "_numeration" => sub {
 
