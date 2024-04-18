@@ -3062,6 +3062,7 @@ sub UpdateTotalIssues {
     if ($@) {
         my $exception = $@;
         $exception->rethrow unless ( $exception->isa('Koha::Exceptions::Metadata::Invalid') );
+        warn $exception;
         warn "UpdateTotalIssues could not get bibliographic record for biblionumber $biblionumber";
         return;
     }

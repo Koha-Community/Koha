@@ -1026,18 +1026,32 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
     plan tests => 2;
 
     my $return_record = Test::MockModule->new('Koha::Biblio::Metadata');
-    $return_record->mock( 'record', sub { Koha::Exceptions::Metadata::Invalid->throw() } );
+    $return_record->mock( 'record', sub {
+        my $self = shift;
+        Koha::Exceptions::Metadata::Invalid->throw(
+            id             => $self->id,
+            biblionumber   => $self->biblionumber,
+            format         => $self->format,
+            schema         => $self->schema,
+            decoding_error => "Error goes here",
+        );
+    } );
 
-    my $biblio = $builder->build_sample_biblio;
-    my $biblionumber = $biblio->biblionumber;
+    my $biblio             = $builder->build_sample_biblio;
+    my $biblionumber       = $biblio->biblionumber;
+    my $biblio_metadata_id = $biblio->metadata->id;
 
     my $increase = 1;
 
     my $success;
-    warning_is {
+    warnings_like {
         $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, '' );
     }
-    "UpdateTotalIssues could not get bibliographic record for biblionumber $biblionumber", "Expected warning found";
+    [
+        qr/Invalid data, cannot decode metadata object/,
+        qr/UpdateTotalIssues could not get bibliographic record for biblionumber $biblionumber/
+    ],
+        "Expected warning found";
 
     ok( !$success, 'UpdateTotalIssues fails gracefully for invalid record' );
 
