@@ -1,0 +1,97 @@
+---
+/circulation_rules:
+  get:
+    x-mojo-to: CirculationRules#list_effective_rules
+    operationId: listCirculationRules
+    tags:
+      - circulation_rules
+    summary: Get circulation rules for this item/library/patron combination
+    produces:
+      - application/json
+    parameters:
+      - name: item_type
+        in: query
+        description: The itemtype
+        required: false
+        type: string
+      - name: library
+        in: query
+        description: The library code
+        required: false
+        type: string
+      - name: patron_category
+        in: query
+        description: The patron category
+        required: false
+        type: string
+      - name: rules
+        in: query
+        description: A comma-separated list of rule kinds
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+    responses:
+      "200":
+        description: A list of rules for this itemtype, library and patron category combination
+        schema:
+          type: object
+          additionalProperties:
+            type: [ 'string', 'integer' ]
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - circulate: circulate_remaining_permissions
+/circulation_rules/kinds:
+  get:
+    x-mojo-to: CirculationRules#get_kinds
+    operationId: getCirculationRuleKinds
+    tags:
+      - circulation_rules
+    summary: Get circulation rules kinds
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A map of rule kind information
+        schema:
+          type: object
+          additionalProperties:
+            $ref: "../swagger.yaml#/definitions/circ-rule-kind"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        - circulate: circulate_remaining_permissions

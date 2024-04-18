@@ -21,7 +21,6 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::CirculationRules;
 
-
 =head1 API
 
 =head2 Methods
@@ -36,8 +35,76 @@ sub get_kinds {
     my $c = shift->openapi->valid_input or return;
 
     return $c->render(
-        status => 200,
+        status  => 200,
         openapi => Koha::CirculationRules->rule_kinds,
+    );
+}
+
+=head3 list_effective_rules
+
+List all effective rules for the requested patron/item/branch combination
+
+=cut
+
+sub list_effective_rules {
+    my $c = shift->openapi->valid_input or return;
+
+    my $item_type       = $c->param('itemtype');
+    my $branchcode      = $c->param('library');
+    my $patron_category = $c->param('category');
+    my $rules           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+
+    if ($item_type) {
+        my $type = Koha::ItemTypes->find($item_type);
+        return $c->render_invalid_parameter_value(
+            {
+                path   => '/query/item_type',
+                values => {
+                    uri   => '/api/v1/item_types',
+                    field => 'item_type_id'
+                }
+            }
+        ) unless $type;
+    }
+
+    if ($branchcode) {
+        my $library = Koha::Libraries->find($branchcode);
+        return $c->render_invalid_parameter_value(
+            {
+                path   => '/query/library',
+                values => {
+                    uri   => '/api/v1/libraries',
+                    field => 'library_id'
+                }
+            }
+        ) unless $library;
+    }
+
+    if ($patron_category) {
+        my $category = Koha::Patron::Categories->find($patron_category);
+        return $c->render_invalid_parameter_value(
+            {
+                path   => '/query/patron_category',
+                values => {
+                    uri   => '/api/v1/patron_categories',
+                    field => 'patron_category_id'
+                }
+            }
+        ) unless $category;
+    }
+
+    my $effective_rules = Koha::CirculationRules->get_effective_rules(
+        {
+            categorycode => $patron_category,
+            itemtype     => $item_type,
+            branchcode   => $branchcode,
+            rules        => $rules
+        }
+    );
+
+    return $c->render(
+        status  => 200,
+        openapi => $effective_rules ? $effective_rules : {}
     );
 }
 
