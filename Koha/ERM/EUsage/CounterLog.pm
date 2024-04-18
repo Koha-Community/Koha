@@ -32,17 +32,17 @@ Koha::ERM::EUsage::CounterLog - Koha ErmCounterLog Object class
 =cut
 
 
-=head3 borrowernumber
+=head3 patron
 
-Return the borrower for this counter_file
+Return the patron for this counter_file
 
 =cut
 
-sub borrowernumber {
+sub patron {
     my ($self) = @_;
-    my $borrowers_rs = $self->_result->borrowernumber;
-    return unless $borrowers_rs;
-    return Koha::Patron->_new_from_dbic($borrowers_rs);
+    my $patrons_rs = $self->_result->patron;
+    return unless $patrons_rs;
+    return Koha::Patron->_new_from_dbic($patrons_rs);
 }
 
 

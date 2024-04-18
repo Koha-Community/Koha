@@ -11,10 +11,9 @@ properties:
     - integer
     - "null"
   borrowernumber:
-    type: object
-    description: patron object
+    description: borrowernumber of the counter log
     type:
-    - object
+    - integer
     - "null"
   importdate:
     type: string
@@ -34,6 +33,11 @@ properties:
     description: logdetails of the counter_log
     type: 
     - integer
+    - "null"
+  patron:
+    description: patron object for the importer
+    type:
+    - object
     - "null"
 
 additionalProperties: false

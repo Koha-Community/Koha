@@ -181,6 +181,17 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-30 17:43:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fEB6HZDsjTTJVWlnW+y/Ng
 
+__PACKAGE__->belongs_to(
+    "patron",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "borrowernumber" },
+    {
+        is_deferrable => 1,
+        join_type     => "LEFT",
+        on_delete     => "CASCADE",
+        on_update     => "CASCADE",
+    },
+);
 
 sub koha_object_class {
     'Koha::ERM::EUsage::CounterLog';
