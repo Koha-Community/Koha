@@ -106,6 +106,7 @@
                         id: booking.booking_id,
                         booking: booking.booking_id,
                         patron: booking.patron_id,
+                        pickup_library: booking.pickup_library_id,
                         start: dayjs(booking.start_date).toDate(),
                         end: dayjs(booking.end_date).toDate(),
                         content: $patron_to_html(booking.patron, {
@@ -167,7 +168,7 @@
                         // set end datetime hours and minutes to the end of the day
                         let endDate = dayjs(data.end).endOf('day');
 
-                        $('#placeBookingModal').modal('show', $('<button data-booking="'+data.id+'"  data-biblionumber="[% biblionumber | uri %]"  data-itemnumber="'+data.group+'" data-patron="'+data.patron+'" data-start_date="'+startDate.toISOString()+'" data-end_date="'+endDate.toISOString()+'">'));
+                        $('#placeBookingModal').modal('show', $('<button data-booking="'+data.id+'"  data-biblionumber="[% biblionumber | uri %]"  data-itemnumber="'+data.group+'" data-patron="'+data.patron+'" data-pickup_library="'+data.pickup_library+'" data-start_date="'+startDate.toISOString()+'" data-end_date="'+endDate.toISOString()+'">'));
                         $('#placeBookingModal').on('hide.bs.modal', function(e) {
                             if (update_success) {
                                 update_success = 0;
@@ -273,7 +274,7 @@
                 "render": function(data, type, row, meta) {
                     let result = "";
                     [% IF CAN_user_circulate_manage_bookings %]
-                    result += '<button type="button" class="btn btn-default btn-xs edit-action" data-toggle="modal" data-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
+                    result += '<button type="button" class="btn btn-default btn-xs edit-action" data-toggle="modal" data-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-pickup_library="'+row.pickup_library_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
                     result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
                     [% END %]
                     return result;

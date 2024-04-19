@@ -31,6 +31,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     $("#booking_biblio_id").val(biblionumber);
 
     let patron_id = button.data("patron") || 0;
+    let pickup_library_id = button.data("pickup_library");
     booking_item_id = button.data("itemnumber");
     let start_date = button.data("start_date");
     let end_date = button.data("end_date");
@@ -139,17 +140,21 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     });
     function setLocationsPicker(response) {
         let $pickupSelect = $("#pickup_library_id");
-        let bookableItemnumbers = bookable_items.map(function(object) { return object.item_id; });
+        let bookableItemnumbers = bookable_items.map(function (object) {
+            return object.item_id;
+        });
         $pickupSelect.empty();
 
-        $.each(response, function(index, pickup_location) {
-            if (containsAny(pickup_location.pickup_items, bookableItemnumbers)) {
+        $.each(response, function (index, pickup_location) {
+            if (
+                containsAny(pickup_location.pickup_items, bookableItemnumbers)
+            ) {
                 let option = $(
                     '<option value="' +
-                    pickup_location.library_id +
-                    '">' +
-                    pickup_location.name +
-                    "</option>"
+                        pickup_location.library_id +
+                        '">' +
+                        pickup_location.name +
+                        "</option>"
                 );
 
                 option.attr(
@@ -166,7 +171,13 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         });
 
         $pickupSelect.prop("disabled", false);
-        $pickupSelect.val(null).trigger("change");
+
+        // If pickup_library alread exists, pre-select
+        if (pickup_library_id) {
+            $pickupSelect.val(pickup_library_id).trigger("change");
+        } else {
+            $pickupSelect.val(null).trigger("change");
+        }
     }
 
     // Item select2
@@ -195,16 +206,15 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
             success: function (response) {
                 if (dataFetched === true) {
                     setLocationsPicker(response);
-
                 } else {
-                    var interval = setInterval(function() {
+                    var interval = setInterval(function () {
                         if (dataFetched === true) {
                             // Data is fetched, execute the callback and stop the interval
                             setLocationsPicker(response);
                             clearInterval(interval);
                         }
                     }, 100);
-                };
+                }
             },
             error: function (xhr, status, error) {
                 console.log("Pickup location fetch failed: ", error);
@@ -854,7 +864,6 @@ $("#placeBookingForm").on("submit", function (e) {
 });
 
 $("#placeBookingModal").on("hidden.bs.modal", function (e) {
-
     // Reset patron select
     $("#booking_patron_id").val(null).trigger("change");
     $("#booking_patron_id").empty();
