@@ -50,8 +50,6 @@ subtest "monthly_report" => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::EUsage::MonthlyUsages->search->delete;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -61,7 +59,6 @@ subtest "monthly_report" => sub {
             {
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
                 filename               => "Test_TR_J1",
             }
         ]
@@ -151,8 +148,6 @@ subtest "yearly_report" => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::EUsage::YearlyUsages->search->delete;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -162,7 +157,6 @@ subtest "yearly_report" => sub {
             {
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
                 filename               => "Test_TR_J1",
             }
         ]
@@ -243,8 +237,6 @@ subtest "metric_types_report" => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::EUsage::MonthlyUsages->search->delete;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -254,7 +246,6 @@ subtest "metric_types_report" => sub {
             {
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
                 filename               => "Test_TR_J1",
             }
         ]
@@ -341,8 +332,6 @@ subtest "provider_rollup_report" => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::ERM::EUsage::MonthlyUsages->search->delete;
-
     # Run a harvest to populate the database with data
     my $usage_data_provider = $builder->build_object( { class => 'Koha::ERM::EUsage::UsageDataProviders' } );
     my $counter_file        = $sushi_counter_TR_J1->get_COUNTER_from_SUSHI;
@@ -352,7 +341,6 @@ subtest "provider_rollup_report" => sub {
             {
                 usage_data_provider_id => $usage_data_provider->erm_usage_data_provider_id,
                 file_content           => $counter_file,
-                date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
                 filename               => "Test_TR_J1",
             }
         ]
