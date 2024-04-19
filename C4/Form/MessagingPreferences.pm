@@ -96,15 +96,6 @@ sub handle_form_action {
         }
 
         C4::Members::Messaging::SetMessagingPreference( $updater );
-
-	if ($query->param( $option->{'message_attribute_id'})){
-	    $prefs_set = 1;
-	}
-    }
-    if (! $prefs_set && $insert){
-        # this is new borrower, and we have no preferences set, use the defaults
-	$target_params->{categorycode} = $categorycode;
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( $target_params );
     }
     # show the success message
     $template->param( settings_updated => 1 );
