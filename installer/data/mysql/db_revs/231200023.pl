@@ -12,6 +12,6 @@ return {
 
         # Print useful stuff here
         # tables
-        say $out "Change aqbudgets.budget_period_id to NOT accept NULL values.";
+        say $out "Updated aqbudgets.budget_period_id to NOT accept NULL values";
     },
 };
