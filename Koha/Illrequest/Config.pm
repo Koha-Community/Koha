@@ -146,11 +146,12 @@ sub available_backends {
     my @backends    = ();
     @backends = glob "$backend_dir/*" if ($backend_dir);
     @backends = map  { basename($_) } @backends;
-    @backends = grep { $_ =~ /$reduce/ } @backends if $reduce;
+
+    my @all_backends = ( @backends, @backend_plugins_names );
+    @all_backends = grep { $_ =~ /$reduce/ } @all_backends if $reduce;
 
     # Return unique list of backend names in the event that the same backend is
     # installed as a plugin AND as the old way through backend_dir
-    my @all_backends      = ( @backends, @backend_plugins_names );
     my @all_uniq_backends = uniq(@all_backends);
 
     return \@all_uniq_backends;
