@@ -51,6 +51,16 @@ __PACKAGE__->table("vendor_edi_accounts");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 upload_port
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 download_port
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 last_activity
 
   data_type: 'date'
@@ -156,6 +166,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 40 },
   "password",
   { data_type => "mediumtext", is_nullable => 1 },
+  "upload_port",
+  { data_type => "integer", is_nullable => 1 },
+  "download_port",
+  { data_type => "integer", is_nullable => 1 },
   "last_activity",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "vendor_id",
@@ -258,8 +272,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-15 18:35:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:06GuQaUKF6/BO/gw3hKLmA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-19 16:25:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jenUF3Wx7J7F5270mLQMbw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
