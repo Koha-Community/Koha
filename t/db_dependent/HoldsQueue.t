@@ -2254,14 +2254,14 @@ subtest "Test unallocated option" => sub {
 
     my $original_timestamp = $hold->timestamp;
 
-    sleep 2; # Allow time to pass after first hold was placed
+    sleep 2;    # Allow time to pass after first hold was placed
     C4::HoldsQueue::CreateQueue();
     $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
     $hold     = $queue_rs->next;
     isnt( $hold->timestamp, $original_timestamp, "Hold was reallocated when queue fully rebuilt" );
     my $after_rebuild_timestamp = $hold->timestamp;
 
-    sleep 2; # Allow time to pass after first full rebuild
+    sleep 2;    # Allow time to pass after first full rebuild
     C4::HoldsQueue::CreateQueue( { unallocated => 1 } );
     $queue_rs = $schema->resultset('TmpHoldsqueue')->search( { biblionumber => $item1->biblionumber } );
     $hold     = $queue_rs->next;

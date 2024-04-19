@@ -59,17 +59,17 @@ This script builds or rebuilds the entire holds queue.
 
 =cut
 
-my $help  = 0;
-my $man   = 0;
-my $force = 0;
+my $help        = 0;
+my $man         = 0;
+my $force       = 0;
 my $unallocated = 0;
 
 my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
-    'h|help'  => \$help,
-    'm|man'   => \$man,
-    'f|force' => \$force,
+    'h|help'        => \$help,
+    'm|man'         => \$man,
+    'f|force'       => \$force,
     'u|unallocated' => \$unallocated
 );
 pod2usage(1)                              if $help;
@@ -85,6 +85,6 @@ if ( $rthq && !$force ) {
 
 cronlogaction( { info => $command_line_options } );
 
-CreateQueue({ unallocated => $unallocated });
+CreateQueue( { unallocated => $unallocated } );
 
 cronlogaction( { action => 'End', info => "COMPLETED" } );
