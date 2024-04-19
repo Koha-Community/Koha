@@ -116,7 +116,7 @@ if ($op eq 'cud-copy_form') {
     $template->param(
         oldbranchcode => $oldbranchcode,
         branchcode => $branchcode,
-        copying => 1,
+        copy_form => 1,
         modify => 0,
     );
 }
