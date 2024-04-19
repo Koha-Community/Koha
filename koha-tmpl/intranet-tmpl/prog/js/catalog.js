@@ -33,7 +33,7 @@ function confirm_deletion(link) {
         is_confirmed = alert(__("%s item(s) are attached to this record. You must delete all items before deleting this record.").format(count));
     } else if (countorders > 0){
         if( order_manage_permission ){
-            is_confirmed = confirm(__("Warning: This record is used in %s order(s). Deleting it could cause serious issues on acquisition module. Are you sure you want to delete this record?").format(countorders));
+            is_confirmed = confirm(__("Warning: This record is used in %s order(s). These orders will be cancelled. Are you sure you want to delete this record?").format(countorders));
         } else {
             is_confirmed = alert(__("%s order(s) are using this record. You need order managing permissions to delete this record.").format(countorders));
         }
