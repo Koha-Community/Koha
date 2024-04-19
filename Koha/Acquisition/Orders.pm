@@ -166,7 +166,7 @@ sub filter_by_active {
                   'orderstatus' => [ 'new', 'ordered', 'partial' ] },
                 { 'orderstatus' => [ 'ordered', 'partial' ] }
             ],
-            quantityreceived => { '<', \['COALESCE(quantity,0)'] },
+            quantityreceived => { '<', \['COALESCE(me.quantity,0)'] },
         },
         { join => 'basket' }
     );
