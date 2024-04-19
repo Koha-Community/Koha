@@ -109,7 +109,7 @@ date and time this fund was last touched (created or modified)
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
 
@@ -188,7 +188,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "budget_period_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "sort1_authcat",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "sort2_authcat",
@@ -300,12 +300,7 @@ __PACKAGE__->belongs_to(
   "budget_period",
   "Koha::Schema::Result::Aqbudgetperiod",
   { budget_period_id => "budget_period_id" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 suggestions
@@ -349,8 +344,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sl+TGQXY85UWwS+Ld/vvyQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-19 17:02:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5solU2GxDRyXxtWgpbcGVQ
 
 __PACKAGE__->belongs_to(
   "budget",
