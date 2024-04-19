@@ -168,12 +168,12 @@ Top level function that turns reserves into tmp_holdsqueue and hold_fill_targets
 =cut
 
 sub CreateQueue {
-    my $params = shift;
+    my $params      = shift;
     my $unallocated = $params->{unallocated};
-    my $dbh   = C4::Context->dbh;
+    my $dbh         = C4::Context->dbh;
 
-    unless( $unallocated ){
-        $dbh->do("DELETE FROM tmp_holdsqueue");  # clear the old table for new info
+    unless ($unallocated) {
+        $dbh->do("DELETE FROM tmp_holdsqueue");    # clear the old table for new info
         $dbh->do("DELETE FROM hold_fill_targets");
     }
 
@@ -202,7 +202,8 @@ sub CreateQueue {
         $total_bibs++;
 
         my $result = update_queue_for_biblio(
-            {   biblio_id             => $biblionumber,
+            {
+                biblio_id             => $biblionumber,
                 branches_to_use       => $branches_to_use,
                 transport_cost_matrix => $transport_cost_matrix,
                 unallocated           => $unallocated
@@ -245,7 +246,7 @@ sub GetBibsWithPendingHoldRequests {
 
 =head2 GetPendingHoldRequestsForBib
 
-  my $requests = GetPendingHoldRequestsForBib({ biblionumber => $biblionumber, unallocated => $unallocated });
+    my $requests = GetPendingHoldRequestsForBib( { biblionumber => $biblionumber, unallocated => $unallocated } );
 
 Returns an arrayref of hashrefs to pending, unfilled hold requests
 on the bib identified by $biblionumber. Optionally returns only unallocated holds.  The following keys
@@ -265,9 +266,9 @@ The arrayref is sorted in order of increasing priority.
 =cut
 
 sub GetPendingHoldRequestsForBib {
-    my $params = shift;
+    my $params       = shift;
     my $biblionumber = $params->{biblionumber};
-    my $unallocated = $params->{unallocated};
+    my $unallocated  = $params->{unallocated};
 
     my $dbh = C4::Context->dbh;
 
@@ -280,8 +281,8 @@ sub GetPendingHoldRequestsForBib {
                          AND priority > 0
                          AND reservedate <= CURRENT_DATE()
                          AND suspend = 0 ";
-    $request_query .=   "AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets) " if $unallocated;
-    $request_query .=   "ORDER BY priority";
+    $request_query .= "AND reserve_id NOT IN (SELECT reserve_id FROM hold_fill_targets) " if $unallocated;
+    $request_query .= "ORDER BY priority";
     my $sth = $dbh->prepare($request_query);
     $sth->execute($biblionumber);
 
@@ -315,17 +316,17 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     my $items_query = "SELECT items.itemnumber, homebranch, holdingbranch, itemtypes.itemtype AS itype
                        FROM items ";
 
-    if (C4::Context->preference('item-level_itypes')) {
-        $items_query .=   "LEFT JOIN itemtypes ON (itemtypes.itemtype = items.itype) ";
+    if ( C4::Context->preference('item-level_itypes') ) {
+        $items_query .= "LEFT JOIN itemtypes ON (itemtypes.itemtype = items.itype) ";
     } else {
-        $items_query .=   "JOIN biblioitems USING (biblioitemnumber)
+        $items_query .= "JOIN biblioitems USING (biblioitemnumber)
                            LEFT JOIN itemtypes USING (itemtype) ";
     }
-    $items_query .=  " LEFT JOIN branchtransfers ON (
+    $items_query .= " LEFT JOIN branchtransfers ON (
                            items.itemnumber = branchtransfers.itemnumber
                            AND branchtransfers.datearrived IS NULL AND branchtransfers.datecancelled IS NULL
                      )";
-    $items_query .=  " WHERE items.notforloan = 0
+    $items_query .= " WHERE items.notforloan = 0
                        AND holdingbranch IS NOT NULL
                        AND itemlost = 0
                        AND withdrawn = 0";
