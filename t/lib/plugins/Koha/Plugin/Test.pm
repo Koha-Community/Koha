@@ -425,6 +425,13 @@ sub ill_backend {
     return 'Test Plugin';
 }
 
+sub new_ill_backend {
+    my ( $self, $params ) = @_;
+
+    require Koha::Plugin::ILL::TestPlugin;
+    return Koha::Plugin::ILL::TestPlugin->new($params);
+}
+
 sub auth_client_get_user {
     my ( $self, $params ) = @_;
 

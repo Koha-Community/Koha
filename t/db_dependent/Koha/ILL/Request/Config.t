@@ -29,7 +29,7 @@ use Test::MockObject;
 use Test::Exception;
 
 use Test::NoWarnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
@@ -82,6 +82,61 @@ subtest 'installed_backends() tests' => sub {
 
     #cleanup
     remove_tree($dir_backend);
+    Koha::Plugins::Methods->delete;
+    $schema->storage->txn_rollback;
+};
+
+subtest 'opac_available_backends() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $logged_in_user = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $plugins        = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    # ILLOpacUnauthenticatedRequest = 0
+    t::lib::Mocks::mock_preference( 'ILLOpacUnauthenticatedRequest', 0 );
+
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends', '' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends($logged_in_user), [ 'Test Plugin', 'Standard' ],
+        'Two backends are available for OPAC, one plugin and the core Standard backend'
+    );
+
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends', 'gibberish' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends($logged_in_user), [],
+        'ILLOpacbackends contains a non-existing backend'
+    );
+
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends', 'Standard' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends($logged_in_user), ['Standard'],
+        'ILLOpacbackends contains Standard. Only the Standard backend should be returned'
+    );
+
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends', 'Standard|Test Plugin' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends($logged_in_user), [ 'Test Plugin', 'Standard' ],
+        'ILLOpacbackends contains both. Both backends should be returned'
+    );
+
+    # ILLOpacUnauthenticatedRequest = 1
+    t::lib::Mocks::mock_preference( 'ILLOpacUnauthenticatedRequest', 1 );
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends',               '' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends(undef), ['Standard'],
+        'Only the standard backend is available for OPAC, the installed plugin does not support unauthenticated requests'
+    );
+
+    t::lib::Mocks::mock_preference( 'ILLOpacbackends', 'Test Plugin' );
+    is_deeply(
+        Koha::ILL::Request::Config->new->opac_available_backends(undef), [],
+        'The only backend for the OPAC is Test Plugin but it does not support unauthenticated requests'
+    );
+
     Koha::Plugins::Methods->delete;
     $schema->storage->txn_rollback;
 };
