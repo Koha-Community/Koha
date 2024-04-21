@@ -18,6 +18,7 @@
     [% FOREACH messaging_preference IN messaging_preferences %]
     [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
     [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
+    [% NEXT IF !Koha.Preference('UseRecalls') && messaging_preference.message_name.match('^Recall_') %]
     <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
       <td>[% IF ( messaging_preference.Item_Due ) %]<span>Item due</span>
           [% ELSIF ( messaging_preference.Advance_Notice ) %]<span>Advance notice</span>
@@ -34,6 +35,8 @@
           [% ELSIF ( messaging_preference.Ill_unavailable ) %]<span>Interlibrary loan unavailable</span>
           [% ELSIF ( messaging_preference.Ill_update ) %]<span>Interlibrary loan updated</span>
           [% ELSIF ( messaging_preference.Auto_Renewals ) %]<span>Auto renewal</span>
+          [% ELSIF ( messaging_preference.Recall_Waiting ) %]<span>Recall awaiting pickup</span>
+          [% ELSIF ( messaging_preference.Recall_Requested ) %]<span>Return recalled item</span>
           [% ELSE %]<span>Unknown</span>
           [% END %]
       </td>

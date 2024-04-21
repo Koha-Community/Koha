@@ -358,7 +358,11 @@ sub set_waiting {
         },
     );
 
-    C4::Message->enqueue($letter, $self->patron, 'email');
+    my $messaging_preferences = C4::Members::Messaging::GetMessagingPreferences(
+        { borrowernumber => $self->patron_id, message_name => 'Recall_Waiting' } );
+    while ( my ( $transport, $letter_code ) = each %{ $messaging_preferences->{transports} } ) {
+        C4::Message->enqueue( $letter, $self->patron, $transport );
+    }
 
     return $self;
 }

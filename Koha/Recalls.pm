@@ -167,7 +167,12 @@ sub add_recall {
             },
         );
 
-        C4::Message->enqueue( $letter, $checkout->patron, 'email' );
+        my $messaging_preferences = C4::Members::Messaging::GetMessagingPreferences(
+            { borrowernumber => $checkout->borrowernumber, message_name => 'Recall_Requested' } );
+
+        while ( my ( $transport, $letter_code ) = each %{ $messaging_preferences->{transports} } ) {
+            C4::Message->enqueue( $letter, $checkout->patron, $transport );
+        }
 
         $item = Koha::Items->find( $itemnumber );
         # add to statistics table
