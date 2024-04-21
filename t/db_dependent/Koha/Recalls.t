@@ -68,6 +68,14 @@ Koha::CirculationRules->set_rules({
 C4::Circulation::AddIssue( $patron3, $item1->barcode );
 C4::Circulation::AddIssue( $patron3, $item2->barcode );
 
+C4::Members::Messaging::SetMessagingPreference(
+    {
+        borrowernumber          => $patron3->borrowernumber,
+        message_attribute_id    => 13,                         # Recall_Requested
+        message_transport_types => [qw( email sms )],
+    }
+);
+
 my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
     patron => undef,
     biblio => $biblio1,
@@ -147,7 +155,7 @@ is(
 is( t::lib::Dates::compare( $due_date, $expected_due_date ), 0, "Due date correctly returned" );
 
 my $messages_count = Koha::Notice::Messages->search({ borrowernumber => $patron3->borrowernumber, letter_code => 'RETURN_RECALLED_ITEM' })->count;
-is( $messages_count, 3, "RETURN_RECALLED_ITEM notice successfully sent to checkout borrower" );
+is( $messages_count, 6, "RETURN_RECALLED_ITEM notice successfully sent to checkout borrower" );
 
 my $message = Koha::Recalls->move_recall;
 is( $message, 'no recall_id provided', "Can't move a recall without specifying which recall" );

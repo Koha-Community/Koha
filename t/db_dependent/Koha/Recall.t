@@ -126,6 +126,14 @@ $expected_expirationdate = dt_from_string->add({ days => 3 });
 $expirationdate = $recall2->calc_expirationdate;
 is( t::lib::Dates::compare( $expirationdate, $expected_expirationdate ), 0, "Expiration date calculated based on circulation rules" );
 
+C4::Members::Messaging::SetMessagingPreference(
+    {
+        borrowernumber          => $patron1->borrowernumber,
+        message_attribute_id    => 12,                         # Recall_Waiting
+        message_transport_types => [qw( email sms )],
+    }
+);
+
 $recall2->set_waiting({ expirationdate => $expirationdate });
 is( $recall2->waiting, 1, "Recall is waiting" );
 
