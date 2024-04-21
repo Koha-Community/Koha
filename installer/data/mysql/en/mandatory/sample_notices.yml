@@ -2284,6 +2284,28 @@ tables:
             - "Thank you!"
 
         - module: circulation
+          code: RETURN_RECALLED_ITEM
+          branchcode: ""
+          name: "Notification to return a recalled item"
+          is_html: 0
+          title: "Return recalled item"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "Your item has been recalled: <<biblio.title>> (<<items.barcode>>). Please return it by <<issues.date_due>."
+
+        - module: circulation
+          code: PICKUP_RECALLED_ITEM
+          branchcode: ""
+          name: "Recalled item awaiting pickup"
+          is_html: 0
+          title: "Recalled item awaiting pickup"
+          message_transport_type: sms
+          lang: default
+          content:
+            - "A recalled item: <<biblio.title>> (<<items.barcode>>) is ready for you to pick up at <<recalls.branchcode>>. Please collect by <<recalls.expirationdate>>."
+
+        - module: circulation
           code: RECALL_REQUESTER_DET
           branchcode: ""
           name: "Details of patron who recalled item"
