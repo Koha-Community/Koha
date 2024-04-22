@@ -739,12 +739,14 @@ my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['des
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
-my @used_categorycodes =
-    Koha::CirculationRules->search( {}, { columns => ['categorycode'], distinct => 1, } )->get_column('categorycode');
-my @used_itemtypes =
-    Koha::CirculationRules->search( {}, { columns => ['itemtype'], distinct => 1, } )->get_column('itemtype');
-
 my $humanbranch = ( $branch ne '*' ? $branch : undef );
+
+my @used_categorycodes =
+    Koha::CirculationRules->search( { branchcode => $humanbranch }, { columns => ['categorycode'], distinct => 1, } )
+    ->get_column('categorycode');
+my @used_itemtypes =
+    Koha::CirculationRules->search( { branchcode => $humanbranch }, { columns => ['itemtype'], distinct => 1, } )
+    ->get_column('itemtype');
 
 my $all_rules = Koha::CirculationRules->search({ branchcode => $humanbranch });
 my $definedbranch = $all_rules->count ? 1 : 0;
