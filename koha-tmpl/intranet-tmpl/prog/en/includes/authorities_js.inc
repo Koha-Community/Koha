@@ -19,7 +19,7 @@ function mergeAuth(authid, summary) {
 
 function showMergingInProgress() {
     var alreadySelected = Cookies.get('auth_to_merge');
-    if (alreadySelected !== undefined) {
+    if (alreadySelected) {
         alreadySelected = JSON.parse(alreadySelected);
         $('#merge_in_progress').show().html(_("Merging with authority: ") + "<a href='detail.pl?authid=" + alreadySelected.authid + "'><span class='authorizedheading'>" + alreadySelected.summary + "</span> (" + alreadySelected.authid + ")</a> <a href='#' id='cancel_merge'>" + _("Cancel merge") + "</a>");
         $('#cancel_merge').click(function(event) {
@@ -64,14 +64,14 @@ $(document).ready(function () {
 
     var searchType = '[% marclist | html %]';
     if (searchType) {
-        if ('mainmainentry' == searchType) {
-            $("#header_search a[href='#mainmain_heading']").tab("show");
-        } else if ('mainentry' == searchType) {
-            $("#header_search a[href='#main_heading']").tab("show");
-        } else if ('match' == searchType) {
-            $("#header_search a[href='#matchheading_search']").tab("show");
-        } else if ('all' == searchType) {
-            $("#header_search a[href='#entire_record']").tab("show");
+        if ('mainmainentry' == searchType.valueOf()) {
+            $("#header_search a[href='#mainmain_heading_panel']").tab("show");
+        } else if ('mainentry' == searchType.valueOf()) {
+            $("#header_search a[href='#main_heading_panel']").tab("show");
+        } else if ('match' == searchType.valueOf()) {
+            $("#header_search a[href='#matchheading_search_panel']").tab("show");
+        } else if ('all' == searchType.valueOf()) {
+            $("#header_search a[href='#entire_record_panel']").tab("show");
         }
     }
 });
