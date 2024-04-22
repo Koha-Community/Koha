@@ -877,5 +877,11 @@
             Manage identity providers
         </span>
         <span class="permissioncode">([% name | html %])</span>
+  [%# record_sources %]
+    [%- CASE 'manage_record_sources' -%]
+        <span class="sub_permission manage_record_sources_subpermission">
+            Manage record sources
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]

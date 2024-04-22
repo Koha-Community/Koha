@@ -104,6 +104,9 @@
             [% IF ( CAN_user_parameters_manage_matching_rules ) %]
                 <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
             [% END %]
+            [% IF ( CAN_user_parameters_manage_record_sources ) %]
+                <li><a href="/cgi-bin/koha/admin/record_sources">Record sources</a></li>
+            [% END %]
             [% IF ( CAN_user_parameters_manage_marc_overlay_rules ) %]
                 <li><a href="/cgi-bin/koha/admin/marc-overlay-rules.pl">Record overlay rules</a></li>
             [% END %]
