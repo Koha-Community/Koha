@@ -4,6 +4,7 @@
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("Transfers") | html %] &rsaquo;
@@ -217,6 +218,7 @@
                                         <th class="tf-ccode">Collection</th>
                                         <th class="tf-origin">Origin</th>
                                         <th class="tf-destination">Destination</th>
+                                        <th class="tf-printslip">Actions</th>
                                     </tr>
                                     [% FOREACH trsfitemloo IN trsfitemloop %]
                                         <tr>
@@ -231,6 +233,9 @@
                                             <td class="tf-ccode">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => trsfitemloo.item.ccode ) | html %]</td>
                                             <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
                                             <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
+                                            <td class="tf-printslip">
+                                                <button type="button" class="btn btn-default btn-sm printtransferslip" data-itemnumber="[% trsfitemloo.item.itemnumber | html %]" data-tobranch="[% trsfitemloo.tobrcd | html %]"><i class="fa fa-print"></i> Print slip</button>
+                                            </td>
                                         </tr>
                                     [% END # /FOREACH trsfitemloo %]
                                 </table>
@@ -248,5 +253,16 @@
                 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
             [% END %]
         </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(".printtransferslip").on("click", function(e){
+            e.preventDefault();
+            var itemnumber = $(this).attr('data-itemnumber');
+            var to_branch = $(this).attr('data-tobranch');
+            window.open("/cgi-bin/koha/circ/transfer-slip.pl?transferitem=" + itemnumber + "&branchcode=" + to_branch);
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
