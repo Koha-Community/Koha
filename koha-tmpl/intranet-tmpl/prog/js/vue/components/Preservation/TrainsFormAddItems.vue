@@ -167,14 +167,12 @@ export default {
         async getItems(item_ids) {
             const client = APIClient.item
             let q = { "me.item_id": item_ids }
-            await client.items
-                .getAll(q, {}, { headers: { "x-koha-embed": "biblio" } })
-                .then(
-                    items => {
-                        this.items = items
-                    },
-                    error => {}
-                )
+            await client.items.getAll(q, {}, { "x-koha-embed": "biblio" }).then(
+                items => {
+                    this.items = items
+                },
+                error => {}
+            )
         },
         columnApiMapping(item, db_column) {
             let table_col = db_column.split(".")
