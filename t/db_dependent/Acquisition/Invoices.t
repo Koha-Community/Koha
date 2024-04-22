@@ -34,10 +34,20 @@ my $booksellerinfo = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $basketno = NewBasket($booksellerid, 1);
 my $basket   = GetBasket($basketno);
 
+my $budget_period_id = C4::Budgets::AddBudgetPeriod(
+    {
+        budget_period_startdate   => '2024-01-01',
+        budget_period_enddate     => '2049-01-01',
+        budget_period_active      => 1,
+        budget_period_description => "TEST PERIOD"
+    }
+);
+
 my $budgetid = C4::Budgets::AddBudget(
     {
-        budget_code => "budget_code_test",
-        budget_name => "budget_name_test",
+        budget_code      => "budget_code_test",
+        budget_name      => "budget_name_test",
+        budget_period_id => $budget_period_id,
     }
 );
 my $budget = C4::Budgets::GetBudget( $budgetid );

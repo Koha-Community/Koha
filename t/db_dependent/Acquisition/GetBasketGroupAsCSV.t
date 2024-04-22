@@ -28,10 +28,22 @@ my $vendor = Koha::Acquisition::Bookseller->new({
     deliverytime => 5,
 })->store;
 
-my $budget_id = C4::Budgets::AddBudget({
-    budget_code => 'my_budget_code',
-    budget_name => 'My budget name',
-});
+my $budget_period_id = C4::Budgets::AddBudgetPeriod(
+    {
+        budget_period_startdate   => '2024-01-01',
+        budget_period_enddate     => '2049-01-01',
+        budget_period_active      => 1,
+        budget_period_description => "TEST PERIOD"
+    }
+);
+
+my $budget_id = C4::Budgets::AddBudget(
+    {
+        budget_code      => 'my_budget_code',
+        budget_name      => 'My budget name',
+        budget_period_id => $budget_period_id,
+    }
+);
 my $budget = C4::Budgets::GetBudget( $budget_id );
 
 my $basketno = C4::Acquisition::NewBasket($vendor->id, 1);

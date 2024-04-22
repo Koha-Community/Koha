@@ -31,10 +31,21 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 my $nb_of_funds = Koha::Acquisition::Funds->search->count;
-my $new_fund = Koha::Acquisition::Fund->new({
-    budget_code => 'my_budget_code_for_test',
-    budget_name => 'my_budget_name_for_test',
-})->store;
+my $budget_period_id = C4::Budgets::AddBudgetPeriod(
+    {
+        budget_period_startdate   => '2024-01-01',
+        budget_period_enddate     => '2049-01-01',
+        budget_period_active      => 1,
+        budget_period_description => "TEST PERIOD"
+    }
+);
+my $new_fund = Koha::Acquisition::Fund->new(
+    {
+        budget_code      => 'my_budget_code_for_test',
+        budget_name      => 'my_budget_name_for_test',
+        budget_period_id => $budget_period_id,
+    }
+)->store;
 
 like( $new_fund->budget_id, qr|^\d+$|, 'Adding a new fund should have set the budget_id');
 is( Koha::Acquisition::Funds->search->count, $nb_of_funds + 1, 'The fund should have been added' );

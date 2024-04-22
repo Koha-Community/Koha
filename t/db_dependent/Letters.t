@@ -464,10 +464,22 @@ Koha::Acquisition::Bookseller::Contact->new( { name => 'John Smith',  phone => '
 Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues      => 1, booksellerid => $booksellerid } )->store;
 my $basketno = NewBasket($booksellerid, 1, 'The basket name');
 
-my $budgetid = C4::Budgets::AddBudget({
-    budget_code => "budget_code_test_letters",
-    budget_name => "budget_name_test_letters",
-});
+my $budget_period_id = C4::Budgets::AddBudgetPeriod(
+    {
+        budget_period_startdate   => '2024-01-01',
+        budget_period_enddate     => '2049-01-01',
+        budget_period_active      => 1,
+        budget_period_description => "TEST PERIOD"
+    }
+);
+
+my $budgetid = C4::Budgets::AddBudget(
+    {
+        budget_code      => "budget_code_test_letters",
+        budget_name      => "budget_name_test_letters",
+        budget_period_id => $budget_period_id,
+    }
+);
 
 my $bib = MARC::Record->new();
 if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
