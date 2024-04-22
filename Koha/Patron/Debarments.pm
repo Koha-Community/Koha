@@ -22,6 +22,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Log qw( logaction );
 
+use Koha::Database;
 use Koha::Patron::Restriction::Types;
 use Koha::Patron::Restrictions;
 
@@ -102,20 +103,24 @@ Deletes a debarment.
 =cut
 
 sub DelDebarment {
-    my ($id) = @_;
+    my ($borrower_debarment_id) = @_;
 
-    my $borrowernumber = _GetBorrowernumberByDebarmentId($id);
+    my $restriction = Koha::Patron::Restrictions->find($borrower_debarment_id);
 
-    my $sql = "DELETE FROM borrower_debarments WHERE borrower_debarment_id = ?";
+    return unless $restriction;
 
-    my $r = C4::Context->dbh->do( $sql, {}, ($id) );
+    Koha::Database->new->schema->txn_do(
+        sub {
+            my $borrowernumber = $restriction->borrowernumber;
+            logaction( "MEMBERS", "DELETE_RESTRICTION", $borrowernumber, $restriction )
+                if C4::Context->preference("BorrowersLog");
 
-    UpdateBorrowerDebarmentFlags($borrowernumber);
+            $restriction->delete;
+            UpdateBorrowerDebarmentFlags($borrowernumber);
+        }
+    );
 
-    logaction( "MEMBERS", "DELETE_RESTRICTION", $borrowernumber, q{} )
-        if C4::Context->preference("BorrowersLog");
-
-    return $r;
+    return 1;
 }
 
 =head2 ModDebarment

@@ -405,8 +405,8 @@ subtest 'BorrowersLog tests' => sub {
     is( $mod_logs->count, 1, 'Restriction modification logged' );
     like( $mod_logs->next->info, qr/$mod_comment/ );
 
-    is( $del_logs->count,      1,   'Restriction deletion logged' );
-    is( $del_logs->next->info, q{}, 'Empty info field on deletion' );
+    is( $del_logs->count, 1, 'Restriction deletion logged' );
+    like( $del_logs->next->info, qr/$mod_comment/, 'Deleted restriction contains last known comment' );
 
     $schema->storage->txn_rollback;
 };
