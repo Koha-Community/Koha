@@ -18,7 +18,7 @@
             <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" >[% d.desk_name | html %]</option>
           [% END %]
         [% ELSE %]
-            <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled hidden>[% d.desk_name | html %]</option>
+            <option class="[% d.branchcode | html %]" value="[% d.desk_id | html %]" disabled style="display: none">[% d.desk_name | html %]</option>
         [% END %]
     [% END %]
 [% END %]
