@@ -29,6 +29,7 @@
             <th id="[% tab | html %]_localuse" data-colname="[% tab | html %]_localuse">Local uses</th>
             <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
             <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
+            <th id="[% tab | html %]_booksellerid" data-colname="[% tab | html %]_booksellerid">Source of acquisition</th>
             <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
             <th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>
             <th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>
@@ -624,6 +625,15 @@
                 orderable: true,
                 render: function (data, type, row, meta) {
                     return $date(row.last_checkout_date);
+                }
+            },
+            {
+                data: "me.acquisition_source",
+                className: "booksellerid",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return escape_str(row.acquisition_source);
                 }
             },
             {
