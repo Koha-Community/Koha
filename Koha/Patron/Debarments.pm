@@ -22,6 +22,7 @@ use Modern::Perl;
 use C4::Context;
 
 use Koha::Patron::Restriction::Types;
+use Koha::Patron::Restrictions;
 
 our ( @ISA, @EXPORT_OK );
 
@@ -73,16 +74,19 @@ sub AddDebarment {
     my $manager_id;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
-    my $sql = "
-        INSERT INTO borrower_debarments ( borrowernumber, expiration, type, comment, manager_id, created )
-        VALUES ( ?, ?, ?, ?, ?, NOW() )
-    ";
-
-    my $r = C4::Context->dbh->do( $sql, {}, ( $borrowernumber, $expiration, $type, $comment, $manager_id ) );
+    my $restriction = Koha::Patron::Restriction->new(
+        {
+            borrowernumber => $borrowernumber,
+            expiration     => $expiration,
+            type           => $type,
+            comment        => $comment,
+            manager_id     => $manager_id,
+        }
+    )->store();
 
     UpdateBorrowerDebarmentFlags($borrowernumber);
 
-    return $r;
+    return $restriction ? 1 : 0;
 }
 
 =head2 DelDebarment
