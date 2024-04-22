@@ -127,7 +127,7 @@
         });
 
         $("#preview").click(function () {
-            var content = "<h3>Authority #: [% authid | html %]</h3><hr>";
+            var content = "<h3>" + _("Authority number") + ": [% authid | html %]</h3><hr>";
             content += "<div style=\"color:#004d99;\">";
             var line = 1;
             var has_input = 0;
@@ -532,7 +532,7 @@
                             </ul> <!-- /#settings-menu -->
                         </div> <!-- /.btn-group -->
                         <div class="btn-group">
-                            <a class="btn btn-default" id="preview" href="#"><i class="fa fa-eye"></i> MARC Preview</a>
+                            <a class="btn btn-default" id="preview" href="#"><i class="fa fa-eye"></i> MARC preview</a>
                         </div>
                         <div class="btn-group">
                             [% IF ( authid ) %]
