@@ -108,7 +108,7 @@
                                             </form>
                                         </td>
                                     </tr>
-                                [% END %]
+                                [% END # /IF reserved  %]
                                 <tr>
                                     <th>Ignore and return to transfers: </th>
                                     <td>
@@ -126,7 +126,7 @@
                                 </tr>
                             </table>
                         </div> <!-- /.page-section -->
-                    [% ELSE %]
+                    [% ELSE # /IF found %]
                         [% IF ( reqmessage ) %]
                             <div class="dialog message">
                                 <ul>
@@ -171,10 +171,10 @@
                                             [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %]
                                             ([% errmsgloo.patron.cardnumber | html %])</a> and has been returned.</li>
                                         [% END %]
-                                    [% END %]
+                                    [% END # /FOREACH errmsgloo %]
                                 </ul>
-                            </div>
-                        [% END %]
+                            </div> <!-- /.dialog.message -->
+                        [% END # /errmsgloop %]
 
                         <div id="branchtransfers">
                             <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
@@ -200,8 +200,8 @@
                                     <input type="hidden" name="tb-[% trsfitemloo.counter | html %]" value="[% trsfitemloo.tobrcd | html %]" />
                                 [% END %]
                                 <input type="hidden" name="op" value="cud-transfer" />
-                            </form>
-                        </div>
+                            </form> <!-- /#mainform -->
+                        </div> <!-- /#branchtransfers -->
 
                         [% IF ( trsfitemloop ) %]
                             <div class="page-section">
@@ -233,11 +233,11 @@
                                             <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
                                             <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
                                         </tr>
-                                    [% END %]
+                                    [% END # /FOREACH trsfitemloo %]
                                 </table>
                             </div> <!-- /.page-section -->
-                        [% END %]
-                    [% END %]
+                        [% END # /IF trsfitemloop%]
+                    [% END # /IF found %]
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
