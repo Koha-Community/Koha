@@ -819,7 +819,9 @@
                 if (!add_filters && settings._iRecordsDisplay == settings._iRecordsTotal && settings._iDisplayLength >= settings._iRecordsDisplay){
                     let container = $(this).parent();
                     container.find(".dt-info").remove();
-                    container.find(".top.pager").remove();
+                    container.find(".table_entries").remove();
+                    container.find(".dataTables_filter").remove();
+                    container.find(".dt_button_clear_filter").remove();
                     container.find(".bottom.pager").remove();
                 }
 
