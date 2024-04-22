@@ -20,6 +20,7 @@ package Koha::Patron::Debarments;
 use Modern::Perl;
 
 use C4::Context;
+use C4::Log qw( logaction );
 
 use Koha::Patron::Restriction::Types;
 use Koha::Patron::Restrictions;
@@ -86,6 +87,9 @@ sub AddDebarment {
 
     UpdateBorrowerDebarmentFlags($borrowernumber);
 
+    logaction( "MEMBERS", "CREATE_RESTRICTION", $borrowernumber, $restriction )
+        if C4::Context->preference("BorrowersLog");
+
     return $restriction ? 1 : 0;
 }
 
@@ -107,6 +111,9 @@ sub DelDebarment {
     my $r = C4::Context->dbh->do( $sql, {}, ($id) );
 
     UpdateBorrowerDebarmentFlags($borrowernumber);
+
+    logaction( "MEMBERS", "DELETE_RESTRICTION", $borrowernumber, q{} )
+        if C4::Context->preference("BorrowersLog");
 
     return $r;
 }
@@ -149,7 +156,13 @@ sub ModDebarment {
 
     my $r = C4::Context->dbh->do( $sql, {}, ( @values, $borrower_debarment_id ) );
 
-    UpdateBorrowerDebarmentFlags( _GetBorrowernumberByDebarmentId($borrower_debarment_id) );
+    my $borrowernumber = _GetBorrowernumberByDebarmentId($borrower_debarment_id);
+    UpdateBorrowerDebarmentFlags($borrowernumber);
+
+    logaction(
+        "MEMBERS", "MODIFY_RESTRICTION", $borrowernumber,
+        Koha::Patron::Restrictions->find($borrower_debarment_id)
+    ) if C4::Context->preference("BorrowersLog");
 
     return $r;
 }
