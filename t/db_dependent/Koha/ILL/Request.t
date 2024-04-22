@@ -55,7 +55,7 @@ subtest 'get_type_disclaimer_value() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $request = $builder->build_object( { class => 'Koha::Illrequests' } );
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
 
     is(
         $request->get_type_disclaimer_value, undef,
@@ -64,7 +64,7 @@ subtest 'get_type_disclaimer_value() tests' => sub {
 
     $builder->build_object(
         {
-            class => 'Koha::Illrequestattributes',
+            class => 'Koha::ILL::Request::Attributes',
             value => {
                 illrequest_id => $request->illrequest_id,
                 type          => 'type_disclaimer_value',
@@ -87,7 +87,7 @@ subtest 'get_type_disclaimer_date() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $request = $builder->build_object( { class => 'Koha::Illrequests' } );
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
 
     is(
         $request->get_type_disclaimer_date, undef,
@@ -96,7 +96,7 @@ subtest 'get_type_disclaimer_date() tests' => sub {
 
     $builder->build_object(
         {
-            class => 'Koha::Illrequestattributes',
+            class => 'Koha::ILL::Request::Attributes',
             value => {
                 illrequest_id => $request->illrequest_id,
                 type          => 'type_disclaimer_date',
