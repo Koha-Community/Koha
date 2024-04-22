@@ -108,7 +108,7 @@ subtest 'Test renew desensitize' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 40;
+    plan tests => 46;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -1460,6 +1460,28 @@ sub test_checkin_v2 {
     );
     $item_object->holdingbranch($branchcode)->store();
     t::lib::Mocks::mock_preference( ' AllowReturnToBranch ', 'anywhere' );
+
+    # Change homebranch to trigger NeedsTransfer response (with and without automatic item return)
+    t::lib::Mocks::mock_preference( 'AutomaticItemReturn', 0 );
+    $item_object->homebranch($branchcode2)->store();
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin($server);
+    check_field( $respcode, $response, FID_ALERT_TYPE, '04', 'Got CV 04' );
+    check_field(
+        $respcode, $response, FID_SCREEN_MSG, 'This item must still be transferred', 'Check screen msg',
+        'regex'
+    );
+    is( $item_object->transfer, undef, 'No transfer was started' );
+    t::lib::Mocks::mock_preference( 'AutomaticItemReturn', 1 );
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin($server);
+    check_field( $respcode, $response, FID_ALERT_TYPE, '04',  'Got CV 04' );
+    check_field( $respcode, $response, FID_SCREEN_MSG, undef, 'No screen msg' );
+    isnt( $item_object->transfer, undef, 'A transfer was started' );
+    $item_object->transfer->delete;
+    $item_object->homebranch($branchcode)->store();
 
     $server->{account}->{cv_send_00_on_success} = 0;
     undef $response;
