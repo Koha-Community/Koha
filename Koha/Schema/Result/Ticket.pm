@@ -31,6 +31,15 @@ __PACKAGE__->table("tickets");
 
 primary key
 
+=head2 source
+
+  data_type: 'enum'
+  default_value: 'catalog'
+  extra: {list => ["catalog"]}
+  is_nullable: 0
+
+source of ticket
+
 =head2 reporter_id
 
   data_type: 'integer'
@@ -92,6 +101,13 @@ id of biblio linked
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "source",
+  {
+    data_type => "enum",
+    default_value => "catalog",
+    extra => { list => ["catalog"] },
+    is_nullable => 0,
+  },
   "reporter_id",
   {
     data_type      => "integer",
@@ -207,8 +223,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-24 21:15:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0Nm+y1BHJicrpeq3kuU1VA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-21 16:39:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A0jSRniIlOf/H5zB6PGH3g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
