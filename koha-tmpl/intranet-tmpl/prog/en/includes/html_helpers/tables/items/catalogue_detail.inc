@@ -26,6 +26,7 @@
             <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen">Last seen</th>
             <th id="[% tab | html %]_issues" data-colname="[% tab | html %]_issues">Checkouts</th>
             <th id="[% tab | html %]_renewals" data-colname="[% tab | html %]_renewals">Renewals</th>
+            <th id="[% tab | html %]_localuse" data-colname="[% tab | html %]_localuse">Local uses</th>
             <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
             <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
             <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
@@ -574,6 +575,15 @@
                 orderable: true,
                 render: function (data, type, row, meta) {
                     return row.renewals_count || 0;
+                }
+            },
+            {
+                data: "me.localuse",
+                className: "localuse",
+                searchable: true,
+                orderable: true,
+                render: function (data, type, row, meta) {
+                    return row.localuse || 0;
                 }
             },
             {
