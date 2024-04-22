@@ -609,7 +609,7 @@ function patron_autocomplete(node, options) {
                     " " +
                     (item.middle_name ? item.middle_name.escapeHtml() : "") +
                     " " +
-                    (item.other_name ? item.other_name.escapeHtml() : "") +
+                    (item.other_name ? "(" + item.other_name.escapeHtml() + ")" : "") +
                     cardnumber.escapeHtml() +
                     " <small>" +
                     (item.date_of_birth
