@@ -3,13 +3,17 @@
 use Modern::Perl;
 
 use C4::Context;
+
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Patrons;
 use Koha::Account;
+use Koha::ActionLogs;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 38;
+use Test::More tests => 39;
 
 use_ok('Koha::Patron::Debarments');
 
@@ -294,3 +298,115 @@ is( $restrictions->next->type->code, "TEST2", "Restriction left has type value '
 $account->pay( { amount => 5 } );
 $restrictions = $patron4->restrictions;
 is( $restrictions->count, 0, "->restrictions returns 0 restrictions after paying all fees" );
+
+$schema->storage->txn_rollback;
+
+subtest 'BorrowersLog tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { debarred => undef, debarredcomment => undef, }
+        }
+    );
+
+    my $type = $builder->build_object( { class => 'Koha::Patron::Restriction::Types' } );
+
+    foreach my $type (qw{CREATE_RESTRICTION MODIFY_RESTRICTION DELETE_RESTRICTION}) {
+        is(
+            Koha::ActionLogs->search( { module => 'MEMBERS', action => $type, object => $patron->id } )->count, 0,
+            "No prior '$type' logs"
+        );
+    }
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
+
+    my $add_comment    = 'AddDebarment comment';
+    my $add_expiration = dt_from_string()->add( days => 1 );
+
+    Koha::Patron::Debarments::AddDebarment(
+        {
+            borrowernumber => $patron->id,
+            expiration     => $add_expiration,
+            type           => $type->code,
+            comment        => $add_comment,
+        }
+    );
+
+    my $restrictions = $patron->restrictions;
+    is( $restrictions->count, 1, 'Only one restriction present' );
+
+    my $restriction = $restrictions->next;
+
+    my $mod_comment    = 'ModDebarment comment';
+    my $mod_expiration = dt_from_string()->add( days => 5 );
+
+    Koha::Patron::Debarments::ModDebarment(
+        {
+            borrower_debarment_id => $restriction->id,
+            comment               => $mod_comment,
+            expiration            => $mod_expiration,
+        }
+    );
+
+    Koha::Patron::Debarments::DelDebarment( $restriction->id );
+
+    is( $patron->restrictions->count, 0, 'No restrictions present' );
+
+    foreach my $type (qw{CREATE_RESTRICTION MODIFY_RESTRICTION DELETE_RESTRICTION}) {
+        is(
+            Koha::ActionLogs->search( { module => 'MEMBERS', action => $type, object => $patron->id } )->count, 0,
+            "No added '$type' logs"
+        );
+    }
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+
+    Koha::Patron::Debarments::AddDebarment(
+        {
+            borrowernumber => $patron->id,
+            expiration     => $add_expiration,
+            type           => $type->code,
+            comment        => $add_comment,
+        }
+    );
+
+    $restrictions = $patron->restrictions;
+    is( $restrictions->count, 1, 'Only one restriction present' );
+
+    $restriction = $restrictions->next;
+
+    Koha::Patron::Debarments::ModDebarment(
+        {
+            borrower_debarment_id => $restriction->id,
+            comment               => $mod_comment,
+            expiration            => $mod_expiration,
+        }
+    );
+
+    Koha::Patron::Debarments::DelDebarment( $restriction->id );
+
+    is( $patron->restrictions->count, 0, 'No restrictions present' );
+
+    my $add_logs =
+        Koha::ActionLogs->search( { module => 'MEMBERS', action => 'CREATE_RESTRICTION', object => $patron->id } );
+    my $mod_logs =
+        Koha::ActionLogs->search( { module => 'MEMBERS', action => 'MODIFY_RESTRICTION', object => $patron->id } );
+    my $del_logs =
+        Koha::ActionLogs->search( { module => 'MEMBERS', action => 'DELETE_RESTRICTION', object => $patron->id } );
+
+    is( $add_logs->count, 1, 'Restriction creation logged' );
+    like( $add_logs->next->info, qr/$add_comment/ );
+
+    is( $mod_logs->count, 1, 'Restriction modification logged' );
+    like( $mod_logs->next->info, qr/$mod_comment/ );
+
+    is( $del_logs->count,      1,   'Restriction deletion logged' );
+    is( $del_logs->next->info, q{}, 'Empty info field on deletion' );
+
+    $schema->storage->txn_rollback;
+};
