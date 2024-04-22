@@ -38,7 +38,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 
 my $today = dt_from_string();
 my $startdate = $today->truncate( to => 'day' );
-my $enddate = $startdate->clone->add( days => 1 );
+my $enddate = $startdate->clone->add( days => 7 );
 
 $template->param(
     todaysdate          => $today,
