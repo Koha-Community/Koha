@@ -95,7 +95,7 @@ else {
         {
             biblio_ids => \@biblio_ids
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 }
 
 my $from=$query->param('from');
