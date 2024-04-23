@@ -129,6 +129,8 @@ Enqueue the new job
 sub enqueue {
     my ( $self, $args ) = @_;
 
+    return if !C4::Context->preference('RealTimeHoldsQueue');    #TODO Remove check from callers
+
     Koha::Exceptions::MissingParameter->throw(
         "Missing biblio_ids parameter is mandatory")
       unless exists $args->{biblio_ids};
