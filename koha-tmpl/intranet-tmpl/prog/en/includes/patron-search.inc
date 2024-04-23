@@ -8,6 +8,8 @@
 [% USE To %]
 [% USE AuthorisedValues %]
 [% SET search_results_block_id = 'searchresults' %]
+[% SET av_bsort1 = AuthorisedValues.Get('Bsort1') %]
+[% SET av_bsort2 = AuthorisedValues.Get('Bsort2') %]
 
 [%# Display a simple form %]
 [% BLOCK patron_search_filters_simple  %]
@@ -178,8 +180,18 @@
                             [% CASE 'phone' %]<th>Phone</th>
                             [% CASE 'checkouts' %]<th>Checkouts</th>
                             [% CASE 'account_balance' %]<th>Fines</th>
-                            [% CASE 'sort1' %]<th>Sort 1</th>
-                            [% CASE 'sort2' %]<th>Sort 2</th>
+                            [% CASE 'sort1' %]
+                                [% IF av_bsort1.size %]
+                                    <th data-filter="av_bsort1">Sort 1</th>
+                                [% ELSE %]
+                                    <th>Sort 1</th>
+                                [% END %]
+                            [% CASE 'sort2' %]
+                                [% IF av_bsort2.size %]
+                                    <th data-filter="av_bsort2">Sort 2</th>
+                                [% ELSE %]
+                                    <th>Sort 2</th>
+                                [% END %]
                             [% CASE 'action' %]<th class="noExport">&nbsp;</th>
                         [% END %]
                     [% END %]
@@ -247,6 +259,26 @@
             return map;
         }, {});
 
+
+        const av_bsort1= [% To.json(av_bsort1) | $raw %].map( e => {
+            e['_id'] = e.authorised_value;
+            e['_str'] = e.lib;
+            return e;
+        });
+        var av_bsort1_map = av_bsort1.reduce((map, e) => {
+            map[e._id] = e;
+            return map;
+        }, {});
+        const av_bsort2= [% To.json(av_bsort2) | $raw %].map( e => {
+            e['_id'] = e.authorised_value;
+            e['_str'] = e.lib;
+            return e;
+        });
+        var av_bsort2_map = av_bsort2.reduce((map, e) => {
+            map[e._id] = e;
+            return map;
+        }, {});
+
         [% IF Koha.Preference('ExtendedPatronAttributes') %]
             [% SET extended_attribute_types = [ ExtendedAttributeTypes.codes( staff_searchable => 1, searched_by_default => 1 ) ] %]
             var extended_attribute_types = [% To.json(extended_attribute_types || []) | $raw %];
@@ -308,9 +340,6 @@
         [% CASE %]
             let patron_search_url = '/api/v1/patrons';
         [% END %]
-
-        const av_bsort1= new Map([% To.json(AuthorisedValues.Get('Bsort1')) | $raw %].map( av => [av.authorised_value, av.lib]));
-        const av_bsort2= new Map([% To.json(AuthorisedValues.Get('Bsort2')) | $raw %].map( av => [av.authorised_value, av.lib]));
 
         $(document).ready(function(){
 
@@ -627,8 +656,8 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    let bsort2_lib = av_bsort2.get( data.toString() ) || data;
-                                    return escape_str( bsort2_lib );
+                                    let bsort1 = av_bsort1_map[data.toString()];
+                                    return escape_str(bsort1 ? bsort1.lib : data);
                                 }
                             }
 
@@ -638,8 +667,8 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    let bsort1_lib = av_bsort1.get( data.toString() ) || data;
-                                    return escape_str( bsort1_lib );
+                                    let bsort2 = av_bsort2_map[data.toString()];
+                                    return escape_str(bsort2 ? bsort2.lib : data);
                                 }
                             }
 

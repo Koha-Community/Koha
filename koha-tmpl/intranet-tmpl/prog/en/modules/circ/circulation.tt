@@ -1071,6 +1071,7 @@
                 [% FOREACH wh IN waiting_holds %]
                     waiting_holds_barcodes.push("[% wh.item.barcode | html %]");
                 [% END %]
+                console.log(waiting_holds_barcodes);
                 $("#mainform").on('submit', function(){
                     if( $("#checkout_confirmed").length > 0 ){
                         return true;
