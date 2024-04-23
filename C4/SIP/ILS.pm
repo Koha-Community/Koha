@@ -324,7 +324,9 @@ sub pay_fee {
     $trans->patron($patron = C4::SIP::ILS::Patron->new($patron_id));
     if (!$patron) {
         $trans->screen_msg('Invalid patron barcode.');
-        return $trans;
+        return {
+            status => $trans
+        };
     }
     my $trans_result = $trans->pay( $patron->{borrowernumber}, $fee_amt, $pay_type, $fee_id, $is_writeoff, $disallow_overpayment, $register_id );
     my $ok = $trans_result->{ok};
