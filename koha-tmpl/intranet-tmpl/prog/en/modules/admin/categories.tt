@@ -341,16 +341,16 @@
                       [% END %]
                     </select>
                 </li>
-                <li><label for="block_expired">Block expired patrons actions:</label>
+                <li><label for="block_expired">Block expired patron OPAC actions:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired" multiple="multiple">
                         <optgroup label="Follow system preference">
-                        [% IF not category or category.BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions') %]
-                            <option value="follow_syspref_BlockExpiredPatronOpacActions" selected="selected"> Follow system preference BlockExpiredPatronOpacActions </option>
+                        [% IF category and category.BlockExpiredPatronOpacActions_contains('follow_syspref_BlockExpiredPatronOpacActions') %]
+                            <option value="follow_syspref_BlockExpiredPatronOpacActions" selected="selected"> Block actions specified in BlockExpiredPatronOpacActions </option>
                         [% ELSE %]
-                            <option value="follow_syspref_BlockExpiredPatronOpacActions"> BlockExpiredPatronOpacActions </option>
+                            <option value="follow_syspref_BlockExpiredPatronOpacActions"> Block actions in BlockExpiredPatronOpacActions </option>
                         [% END %]
                         </optgroup>
-                        <optgroup label="Specific actions">
+                        <optgroup label="Block specific actions">
                         [% IF category and category.BlockExpiredPatronOpacActions_contains('hold') %]
                             <option value="hold" selected="selected"> Placing a hold on an item </option>
                         [% ELSE %]
@@ -364,8 +364,7 @@
                         </optgroup>
                     </select>
                     <div class="hint">
-                        Choose whether patrons of this category be blocked from public catalog actions such as renewing and placing holds when their cards have expired.
-                    </div>
+                        Choose which OPAC actions, if any, are blocked for expired patrons of this category. Alternatively, the system preference <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=BlockExpiredPatronOpacActions">BlockExpiredPatronOpacActions</a> can be used instead.
                 </li>
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' )  %]
                   <li><label for="checkprevcheckout">Check for previous checkouts: </label>
