@@ -578,8 +578,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     # Nonfiling characters for sort fields
     is_deeply(
         $docs->[0]->{uniform_title},
-        ['The uniform title with nonfiling indicator'],
-        'First document uniform_title field should contain the title verbatim'
+        [ 'The uniform title with nonfiling indicator', 'uniform title with nonfiling indicator' ],
+        'First document uniform_title field should contain the title verbatim and with four initial characters removed'
     );
     is_deeply(
         $docs->[0]->{uniform_title__sort},
