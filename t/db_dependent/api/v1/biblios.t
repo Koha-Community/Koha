@@ -210,13 +210,14 @@ subtest 'get_items() tests' => sub {
             {
                 class => 'Koha::Patrons',
                 value => {
-                    flags        => 1,
+                    flags => 1,
                 }
             }
         );
         $patron->set_password( { password => $password, skip_validation => 1 } );
-        my $userid         = $patron->userid;
-        my $pickup_library = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+        my $userid = $patron->userid;
+        my $pickup_library =
+            $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
 
         my $item = $builder->build_sample_item;
         my $data = {
@@ -224,14 +225,20 @@ subtest 'get_items() tests' => sub {
             biblio_id         => $item->biblionumber,
             item_id           => $item->itemnumber,
             pickup_library_id => $pickup_library->branchcode,
-            expiration_date   => output_pref( { dt => DateTime->now->add(days => "3")->truncate(to => 'day'), dateformat => 'iso', dateonly => 1 } ),
+            expiration_date   => output_pref(
+                {
+                    dt       => dt_from_string()->add( days => "3" )->truncate( to => 'day' ), dateformat => 'iso',
+                    dateonly => 1
+                }
+            ),
         };
         $t->post_ok( "//$userid:$password@/api/v1/holds" => json => $data )->status_is(201)->json_has('/hold_id');
 
         $t->get_ok( "//$userid:$password@/api/v1/biblios/"
                 . $item->biblionumber
                 . "/items" => { "x-koha-embed" => "first_hold+strings" } )->status_is(200)
-            ->json_is( '/0/first_hold/_strings/pickup_library_id' => { type => 'library', str => $pickup_library->branchname } );
+            ->json_is(
+            '/0/first_hold/_strings/pickup_library_id' => { type => 'library', str => $pickup_library->branchname } );
     };
 
     $schema->storage->txn_rollback;
