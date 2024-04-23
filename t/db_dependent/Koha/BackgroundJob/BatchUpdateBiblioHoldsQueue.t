@@ -32,11 +32,18 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'enqueue() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
     my $biblio_ids = [ 1, 2 ];
+
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+    is(
+        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => $biblio_ids } ),
+        undef, 'No result when pref is off'
+    );
+    t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 1 );
 
     throws_ok
         { Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue() }
