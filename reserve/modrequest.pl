@@ -98,7 +98,7 @@ if( $op eq 'cud-cancelall' || $op eq 'cud-modifyall' ) {
         {
             biblio_ids => \@biblio_ids
         }
-    );
+    ) if C4::Context->preference('RealTimeHoldsQueue');
 }
 
 my $from=$query->param('from');
