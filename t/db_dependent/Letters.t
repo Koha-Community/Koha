@@ -882,7 +882,7 @@ subtest 'GetPreparedLetter' => sub {
 
 
 subtest 'TranslateNotices' => sub {
-    plan tests => 7;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
 
@@ -905,6 +905,7 @@ subtest 'TranslateNotices' => sub {
         'a test',
         'GetPreparedLetter should return the default one if the lang parameter is not provided'
     );
+    # Note: What about includes, which language should be assumed 'default' here?
 
     $letter = C4::Letters::GetPreparedLetter(
             module                 => 'test',
@@ -944,6 +945,8 @@ subtest 'TranslateNotices' => sub {
     is( $letter->{title}, 'a test',
         'GetPreparedLetter should return the default notice if pref disabled but additional language exists' );
 
+    t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
+
     my $amount      = -20;
     my $accountline = $builder->build(
         {
@@ -959,9 +962,12 @@ subtest 'TranslateNotices' => sub {
     $dbh->do(
         q|
         INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
-        ('test_payment', 'code', '', 'Account payment', 'Account payment', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'default');
+        ('test', 'payment', '', 'Paiement du compte', 'Paiement du compte', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'fr-CA'),
+        ('test', 'payment', '', 'Default payment notice', 'Default payment notice', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'default');
     |
     );
+
+    t::lib::Mocks::mock_config( 'intrahtdocs', '/kohadevbox/koha/t/mock_templates/intranet-tmpl' );
 
     $tables = {
         borrowers => $borrowernumber,
@@ -969,15 +975,17 @@ subtest 'TranslateNotices' => sub {
     };
 
     $letter = C4::Letters::GetPreparedLetter(
-        module                 => 'test_payment',
-        letter_code            => 'code',
+        module                 => 'test',
+        letter_code            => 'payment',
         message_transport_type => 'print',
         tables                 => $tables,
         lang                   => 'fr-CA',
     );
+    is( $letter->{title}, 'Paiement du compte',
+        'GetPreparedLetter should return the notice in patron\'s preferred language' );
     like(
         $letter->{content}, qr/Paiement/,
-        'GetPreparedLetter should return the notice in patron\'s preferred language'
+        'Template includes should use the patron\'s preferred language too'
     );
 
     my $context = Test::MockModule->new('C4::Context');
@@ -987,23 +995,27 @@ subtest 'TranslateNotices' => sub {
     t::lib::Mocks::mock_preference( 'language', 'fr-CA,en' );
 
     $letter = C4::Letters::GetPreparedLetter(
-        module                 => 'test_payment',
-        letter_code            => 'code',
+        module                 => 'test',
+        letter_code            => 'payment',
         message_transport_type => 'print',
         tables                 => $tables,
         lang                   => 'default',
     );
+    is( $letter->{title}, 'Default payment notice',
+        'GetPreparedLetter should return the notice in default language' );
     like( $letter->{content}, qr/Paiement/, 'GetPreparedLetter should return the notice in the interface language' );
 
     $context->mock( 'interface', 'cron' );
 
     $letter = C4::Letters::GetPreparedLetter(
-        module                 => 'test_payment',
-        letter_code            => 'code',
+        module                 => 'test',
+        letter_code            => 'payment',
         message_transport_type => 'print',
         tables                 => $tables,
         lang                   => 'default'
     );
+    is( $letter->{title}, 'Default payment notice',
+        'GetPreparedLetter should return the notice in default language' );
     like(
         $letter->{content}, qr/Paiement/,
         'GetPreparedLetter should return the notice in the first language in language system preference'
