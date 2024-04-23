@@ -38,7 +38,18 @@ function Click$function_name(ev) {
     let window_width = screen.width / 2;
     let window_height = screen.height;
     q = document.getElementById(ev.data.id);
-    window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=\"+window_width+\"\,height=\"+window_height+\"\,toolbar=false,scrollbars=yes\");
+
+    if(Cookies.get(\"popup_window_height\") && Cookies.get(\"popup_window_width\")){
+        window_width = Cookies.get(\"popup_window_width\");
+        window_height = Cookies.get(\"popup_window_height\");
+    }
+
+    var windowref = window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q=\"+encodeURIComponent(q.value),\"cnbrowser\",\"width=\"+window_width+\"\,height=\"+window_height+\"\,toolbar=false,scrollbars=yes\");
+
+    windowref.onresize = function(){
+        Cookies.set(\"popup_window_height\", windowref.innerHeight, { path: '/', sameSite: 'Lax' });
+        Cookies.set(\"popup_window_width\", windowref.innerWidth, { path: '/', sameSite: 'Lax' });
+    }
 }
 
 </script>
