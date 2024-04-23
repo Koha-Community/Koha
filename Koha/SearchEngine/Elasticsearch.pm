@@ -520,7 +520,13 @@ sub _process_mappings {
             $nonfiling_chars = looks_like_number($nonfiling_chars) ? int($nonfiling_chars) : 0;
             # Nonfiling chars does not make sense for multiple values
             # Only apply on first element
-            $values->[0] = substr $values->[0], $nonfiling_chars;
+            if ( $nonfiling_chars > 0 ) {
+                if ($sort) {
+                    $values->[0] = substr $values->[0], $nonfiling_chars;
+                } else {
+                    push @{$values}, substr $values->[0], $nonfiling_chars;
+                }
+            }
         }
 
         $values = [ grep(!/^$/, @{$values}) ];
@@ -1196,12 +1202,10 @@ sub _get_marc_mapping_rules {
         foreach my $indicator (keys %title_fields) {
             foreach my $field_tag (@{$title_fields{$indicator}}) {
                 my $mappings = $rules->{data_fields}->{$field_tag}->{subfields}->{a} // [];
-                foreach my $mapping (@{$mappings}) {
-                    if ($mapping->[0] =~ /__sort$/) {
-                        # Mark this as to be processed for nonfiling characters indicator
-                        # later on in _process_mappings
-                        $mapping->[1]->{nonfiling_characters_indicator} = $indicator;
-                    }
+                foreach my $mapping ( @{$mappings} ) {
+                    # Mark this as to be processed for nonfiling characters indicator
+                    # later on in _process_mappings
+                    $mapping->[1]->{nonfiling_characters_indicator} = $indicator;
                 }
             }
         }
