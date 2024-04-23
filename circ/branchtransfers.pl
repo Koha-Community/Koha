@@ -167,6 +167,8 @@ my $biblionumber;
 #####################
 
 my $hold;
+my $patron;
+my $found_biblio;
 if ($found){
     $hold = Koha::Holds->find(
         { reserve_id => $found->{reserve_id} },
@@ -174,6 +176,8 @@ if ($found){
     );
     $itemnumber = $found->{'itemnumber'};
     $borrowernumber = $found->{'borrowernumber'};
+    $patron         = Koha::Patrons->find($borrowernumber);
+    $found_biblio   = Koha::Biblios->find( $found->{'biblionumber'} );
 
     if ( $found->{'ResFound'} eq "Waiting" ) {
         $waiting = 1;
@@ -238,7 +242,9 @@ $template->param(
     settransit              => $settransit,
     trsfitemloop            => \@trsfitemloop,
     errmsgloop              => \@errmsgloop,
-    PatronAutoComplete    => C4::Context->preference("PatronAutoComplete"),
+    PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
+    patron                  => $patron,
+    found_biblio            => $found_biblio,
 );
 
 # Checking if there is a Fast Cataloging Framework
