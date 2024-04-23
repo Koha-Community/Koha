@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@popperjs/core": "^2.11.2",
+    "@redocly/cli": "^1.11.0",
     "@vue/cli-service": "^5.0.1",
     "babel-core": "^7.0.0-beta.3",
     "bootstrap": "^4.5.2",
@@ -49,10 +50,11 @@
     "js:build": "webpack --mode development",
     "js:watch": "webpack --mode development --watch",
     "js:build:prod": "webpack --mode production",
-    "build": "yarn css:build && yarn js:build",
+    "build": "yarn css:build && yarn js:build && yarn api:bundle",
     "build:prod": "yarn css:build:prod && yarn js:build:prod",
     "cypress": "cypress",
-    "prettier": "prettier"
+    "prettier": "prettier",
+    "api:bundle": "redocly bundle api/v1/swagger/swagger.yaml > api/v1/swagger/swagger_bundle.yaml"
   },
   "repository": {
     "type": "git",
