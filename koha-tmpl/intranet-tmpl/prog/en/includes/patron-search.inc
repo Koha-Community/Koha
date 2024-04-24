@@ -226,7 +226,6 @@
 [%# columns: list of columns that will be displayed. Possible values are: 'checkbox', 'cardnumber', 'dateofbirth', 'address', 'name', 'name-address', 'branch', 'category', 'dateexpiry', 'borrowernotes, 'phone', 'checkouts', 'account_balance', 'sort1', 'sort2', 'action' %]
 [%# preview_on_name_click: Open a modal window with patron's info when the name is clicked %]
 [%# actions: list of buttons to display in the action column. Possible values are: 'select', 'add', 'edit', 'checkout' %]
-[%# sticky_header and sticky_to: If we need a sticky header %]
 [%# callback: name of the JS function that will be called when a patron is selected. Only work with action=select %]
 [%# display_search_description: boolean, default off. Display the description of the search %]
 [%# adjust_history: boolean, default off. Change the current url when a first letter is selected %]
@@ -300,9 +299,6 @@
     [% INCLUDE 'js-patron-get-age.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-patron-format-address.inc' %]
-    [% IF sticky_header %]
-        [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
-    [% END %]
 
     <script>
     {
@@ -315,7 +311,6 @@
         }
         let first_draw = 0;
         let patrons_table;
-        let Sticky;
         let singleBranchMode = '[% singleBranchMode | html %]';
         let logged_in_library_id = "[% Branches.GetLoggedInBranchcode | html %]";
         let defer_loading = Number( '[% defer_loading | html %]' || 1 );
@@ -717,14 +712,9 @@
                 "pagingType": 'full_numbers',
                 "pageLength": [% Koha.Preference('PatronsPerPage') | html %],
                 [% IF sticky_header %]
-                "initComplete": function(settings, json) {
-                    $("#[% sticky_header | html %]").show();
-                    Sticky = $("#[% sticky_header | html %]");
-                    Sticky.hcSticky({
-                        stickTo: "#[% sticky_to | html %]",
-                        stickyClass: "floating"
-                    });
-                },
+                    "initComplete": function(settings, json) {
+                        $("#[% sticky_header | html %]").show();
+                    },
                 [% END %]
                 fixedHeader: false,
             }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters);
