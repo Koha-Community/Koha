@@ -141,7 +141,13 @@ __PACKAGE__->belongs_to(
 
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z5Y6mVTLtrYxmqmyAc/E7A
-
+#
+sub koha_objects_class {
+    'Koha::ILL::Comments';
+}
+sub koha_object_class {
+    'Koha::ILL::Comment';
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
