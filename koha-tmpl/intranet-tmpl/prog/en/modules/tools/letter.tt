@@ -328,7 +328,7 @@
                             <input type="hidden" name="add" value="1" />
                         [% END %]
 
-                        <fieldset class="rows">
+                        <fieldset class="rows page-section">
                             <input type="hidden" name="oldbranchcode" value="[% oldbranchcode | html %]" />
                             [% IF independant_branch %]
                                 <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
@@ -496,6 +496,9 @@
                                 [% WRAPPER tab_panels %]
                                     [% FOREACH lang IN letters.keys %]
                                         [% WRAPPER tab_panel tabname="lang_${lang}" %]
+                                            [% IF lang == 'default' %]
+                                            <p><span class="label">Default language:</span> [% default_language | html %]</p>
+                                            [% END %]
                                             [% PROCESS message_templates %]
                                         [% END # /WRAPPER tab_panel %]
                                     [% END # /FOREACH lang %]
@@ -503,9 +506,14 @@
                             [% END # /WRAPPER tabs#tabs %]
                         [% ELSE %]
                             <div style="clear:both"></div>
+                            <div class="page-section">
                             [% FOREACH lang IN letters.keys %]
+                                [% IF lang == 'default' %]
+                                <p><span class="label">Default language:</span> [% default_language | html %]</p>
+                                [% END %]
                                 [% PROCESS message_templates %]
                             [% END # /FOREACH lang %]
+                            </div>
                         [% END # /IF TranslateNotices %]
 
                         <input type="hidden" id="redirect" name="redirect" value="" />

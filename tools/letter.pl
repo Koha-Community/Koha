@@ -161,33 +161,32 @@ sub add_form {
     my $templates = { map { $_ => { message_transport_type => $_ } } sort @$message_transport_types };
     my %letters = ( default => { templates => $templates } );
 
+    my $translated_languages = C4::Languages::getTranslatedLanguages(
+        'opac',
+        C4::Context->preference('template')
+    );
     if ( C4::Context->preference('TranslateNotices') ) {
-        my $translated_languages =
-          C4::Languages::getTranslatedLanguages( 'opac',
-            C4::Context->preference('template') );
         for my $language (@$translated_languages) {
-            for my $sublanguage( @{ $language->{sublanguages_loop} } ) {
+            for my $sublanguage ( @{ $language->{sublanguages_loop} } ) {
                 if ( $language->{plural} ) {
                     $letters{ $sublanguage->{rfc4646_subtag} } = {
-                        description => $sublanguage->{native_description}
-                          . ' '
-                          . $sublanguage->{region_description} . ' ('
-                          . $sublanguage->{rfc4646_subtag} . ')',
-                        templates => { %$templates },
+                              description => $sublanguage->{native_description} . ' '
+                            . $sublanguage->{region_description} . ' ('
+                            . $sublanguage->{rfc4646_subtag} . ')',
+                        templates => {%$templates},
                     };
-                }
-                else {
+                } else {
                     $letters{ $sublanguage->{rfc4646_subtag} } = {
-                        description => $sublanguage->{native_description}
-                          . ' ('
-                          . $sublanguage->{rfc4646_subtag} . ')',
-                        templates => { %$templates },
+                        description => $sublanguage->{native_description} . ' (' . $sublanguage->{rfc4646_subtag} . ')',
+                        templates   => {%$templates},
                     };
                 }
             }
         }
         $template->param( languages => $translated_languages );
     }
+    my $default_language = @{ @{$translated_languages}[0]->{sublanguages_loop} }[0]->{native_description};
+    $template->param( default_language => $default_language );
     if ($letters) {
         $template->param(
             modify     => 1,
