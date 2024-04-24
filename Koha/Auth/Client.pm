@@ -64,6 +64,10 @@ sub get_user {
 
     my ( $mapped_data, $patron ) = $self->_get_data_and_patron({ provider => $provider, data => $data, config => $config });
 
+    $mapped_data //= {};
+
+    my $domain = $self->has_valid_domain_config({ provider => $provider, email => $mapped_data->{email}, interface => $interface});
+
     # Call the plugin hook "auth_client_get_user" of all plugins in
     # ascending priority.
     if ( C4::Context->config('enable_plugins') ) {
@@ -79,17 +83,15 @@ sub get_user {
             config      => $config,
             mapped_data => $mapped_data,
             patron      => $patron,
+            domain      => $domain,
         };
         foreach my $plugin (@plugins) {
             $plugin->auth_client_get_user($args);
         }
         $mapped_data = $args->{'mapped_data'};
         $patron      = $args->{'patron'};
+        $domain      = $args->{'domain'};
     }
-
-    $mapped_data //= {};
-
-    my $domain = $self->has_valid_domain_config({ provider => $provider, email => $mapped_data->{email}, interface => $interface});
 
     $patron->set($mapped_data)->store if $patron && $domain->update_on_auth;
 
