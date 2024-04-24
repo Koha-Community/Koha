@@ -136,7 +136,7 @@ sub _autocreate {
     my $patron = Koha::Patron->new( \%borrower )->store;
     C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $patron->borrowernumber, categorycode => $patron->categorycode } );
 
-    return ( 1, $patron->cardnumber, $patron->userid );
+    return ( 1, $patron->cardnumber, $patron->userid, $patron );
 }
 
 sub _sync {
