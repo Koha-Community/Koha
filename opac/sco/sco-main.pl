@@ -129,9 +129,16 @@ unless ($patronid) {
 }
 
 my $patron;
+my $anonymous_patron = C4::Context->preference('AnonymousPatron');
 if ($patronid) {
     Koha::Plugins->call( 'patron_barcode_transform', \$patronid );
     $patron = Koha::Patrons->find( { cardnumber => $patronid } );
+
+    # redirect to OPAC home if user is trying to log in as the anonymous patron
+    if ( $patron && ( $patron->borrowernumber eq $anonymous_patron ) ) {
+        print $query->redirect("/cgi-bin/koha/opac-main.pl");
+        exit;
+    }
 }
 
 undef $jwt unless $patron;
