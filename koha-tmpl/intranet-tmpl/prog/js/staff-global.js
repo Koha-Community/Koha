@@ -60,6 +60,16 @@ $.fn.selectTabByID = function (tabID) {
 };
 
 $(document).ready(function () {
+    //check if sticky element is stuck, if so add floating class
+    if ( $('#toolbar.sticky').length ) {
+      const observer = new IntersectionObserver(
+        ([e]) => e.target.classList.toggle('floating', e.intersectionRatio < 1),
+        {threshold: [1]}
+      );
+
+      observer.observe(document.querySelector('.sticky'));
+    }
+
     //check for a hash before setting focus
     let hash = window.location.hash;
     if (!hash) {
