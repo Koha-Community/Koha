@@ -37,27 +37,25 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
-    # delete all patrons
-    Koha::Patrons->search->delete;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    # delete all categories
-    Koha::Patron::Categories->search->delete;
-
-    $builder->build_object(
+    my $category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
             value => { categorycode => 'TEST', description => 'Test' }
         }
     );
 
+    $category->add_library_limit( $library->branchcode );
+
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**3, categorycode => 'TEST' }    # parameters flag = 3
+            value => { flags => 2**3, categorycode => 'TEST', branchcode => $library->branchcode } # parameters flag = 3
         }
     );
 
@@ -67,8 +65,40 @@ subtest 'list() tests' => sub {
 
     $t->get_ok("//$userid:$password@/api/v1/patron_categories")->status_is(200);
 
-    $t->get_ok("//$userid:$password@/api/v1/patron_categories")->status_is(200)->json_has('/0/name')
-        ->json_is( '/0/name' => 'Test' )->json_hasnt('/1');
+    $t->get_ok("//$userid:$password@/api/v1/patron_categories?q={\"me.categorycode\":\"TEST\"}")->status_is(200)
+        ->json_has('/0/name')->json_is( '/0/name' => 'Test' )->json_hasnt('/1');
+
+    # Off limits search
+
+    my $library_2 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $off_limits_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { categorycode => 'CANT', description => 'Cant' }
+        }
+    );
+
+    my $off_limits_librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value =>
+                { flags => 2**3, categorycode => 'CANT', branchcode => $library_2->branchcode }    # parameters flag = 3
+        }
+    );
+    my $off_limits_password = 'thePassword123';
+    $off_limits_librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $off_limits_userid = $off_limits_librarian->userid;
+
+    $t->get_ok("//$off_limits_userid:$off_limits_password@/api/v1/patron_categories?q={\"me.categorycode\":\"TEST\"}")
+        ->status_is(200)->json_hasnt('/0');
+
+    # Off limits librarian category has changed to one within limits
+
+    $off_limits_librarian->branchcode( $library->branchcode )->store;
+
+    $t->get_ok("//$off_limits_userid:$off_limits_password@/api/v1/patron_categories?q={\"me.categorycode\":\"TEST\"}")
+        ->status_is(200)->json_has('/0/name')->json_is( '/0/name' => 'Test' )->json_hasnt('/1');
 
     $schema->storage->txn_rollback;
 
