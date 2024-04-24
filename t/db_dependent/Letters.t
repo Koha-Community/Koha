@@ -879,73 +879,11 @@ subtest 'GetPreparedLetter' => sub {
 
 };
 
-
-
 subtest 'TranslateNotices' => sub {
     plan tests => 10;
 
-    t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
-
-    $dbh->do(
-        q|
-        INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
-        ('test', 'code', '', 'test', 'a test', 'just a test', 'email', 'default'),
-        ('test', 'code', '', 'test', 'una prueba', 'solo una prueba', 'email', 'es-ES');
-    | );
-    my $substitute = {};
-    my $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'test',
-            tables                 => $tables,
-            letter_code            => 'code',
-            message_transport_type => 'email',
-            substitute             => $substitute,
-    );
-    is(
-        $letter->{title},
-        'a test',
-        'GetPreparedLetter should return the default one if the lang parameter is not provided'
-    );
-    # Note: What about includes, which language should be assumed 'default' here?
-
-    $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'test',
-            tables                 => $tables,
-            letter_code            => 'code',
-            message_transport_type => 'email',
-            substitute             => $substitute,
-            lang                   => 'es-ES',
-    );
-    is( $letter->{title}, 'una prueba',
-        'GetPreparedLetter should return the required notice if it exists' );
-
-    $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'test',
-            tables                 => $tables,
-            letter_code            => 'code',
-            message_transport_type => 'email',
-            substitute             => $substitute,
-            lang                   => 'fr-FR',
-    );
-    is(
-        $letter->{title},
-        'a test',
-        'GetPreparedLetter should return the default notice if the one required does not exist'
-    );
-
-    t::lib::Mocks::mock_preference( 'TranslateNotices', '' );
-
-    $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'test',
-            tables                 => $tables,
-            letter_code            => 'code',
-            message_transport_type => 'email',
-            substitute             => $substitute,
-            lang                   => 'es-ES',
-    );
-    is( $letter->{title}, 'a test',
-        'GetPreparedLetter should return the default notice if pref disabled but additional language exists' );
-
-    t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
+    t::lib::Mocks::mock_config( 'intrahtdocs', '/kohadevbox/koha/t/mock_templates/intranet-tmpl' );
+    t::lib::Mocks::mock_preference( 'OPACLanguages', 'fr-CA,en' );
 
     my $amount      = -20;
     my $accountline = $builder->build(
@@ -962,63 +900,105 @@ subtest 'TranslateNotices' => sub {
     $dbh->do(
         q|
         INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
-        ('test', 'payment', '', 'Paiement du compte', 'Paiement du compte', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'fr-CA'),
-        ('test', 'payment', '', 'Default payment notice', 'Default payment notice', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'default');
+        ('test', 'payment', '', 'Default notice', 'Default notice', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'default'),
+        ('test', 'payment', '', 'Default notice', 'English notice', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'en'),
+        ('test', 'payment', '', 'Paiement du compte', 'Paiement du compte', "[% PROCESS 'accounts.inc' %][% PROCESS account_type_description account=credit %][% credit.description %]", 'print', 'fr-CA');
     |
     );
-
-    t::lib::Mocks::mock_config( 'intrahtdocs', '/kohadevbox/koha/t/mock_templates/intranet-tmpl' );
-
     $tables = {
         borrowers => $borrowernumber,
         credits   => $accountline->{accountlines_id},
     };
+    my $substitute = {};
+
+    t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
+
+    my $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'test',
+        tables                 => $tables,
+        letter_code            => 'payment',
+        message_transport_type => 'print',
+        substitute             => $substitute,
+    );
+    is(
+        $letter->{title},
+        'Default notice',
+        'GetPreparedLetter should return the default one if the lang parameter is not provided'
+    );
+    like(
+        $letter->{content}, qr/Paiement/,
+        'Template includes match the default language from OPACLanguages (default = fr-CA)'
+    );
 
     $letter = C4::Letters::GetPreparedLetter(
         module                 => 'test',
+        tables                 => $tables,
         letter_code            => 'payment',
         message_transport_type => 'print',
-        tables                 => $tables,
+        substitute             => $substitute,
         lang                   => 'fr-CA',
     );
-    is( $letter->{title}, 'Paiement du compte',
-        'GetPreparedLetter should return the notice in patron\'s preferred language' );
+    is(
+        $letter->{title}, 'Paiement du compte',
+        'GetPreparedLetter should return the requested language notice if it exists (fr-CA = default)'
+    );
     like(
         $letter->{content}, qr/Paiement/,
-        'Template includes should use the patron\'s preferred language too'
+        'Template includes should use the requested language too (fr-CA = default)'
     );
-
-    my $context = Test::MockModule->new('C4::Context');
-    $context->mock( 'interface', 'intranet' );
-
-    Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
-    t::lib::Mocks::mock_preference( 'language', 'fr-CA,en' );
 
     $letter = C4::Letters::GetPreparedLetter(
         module                 => 'test',
+        tables                 => $tables,
         letter_code            => 'payment',
         message_transport_type => 'print',
-        tables                 => $tables,
-        lang                   => 'default',
+        substitute             => $substitute,
+        lang                   => 'en',
     );
-    is( $letter->{title}, 'Default payment notice',
-        'GetPreparedLetter should return the notice in default language' );
-    like( $letter->{content}, qr/Paiement/, 'GetPreparedLetter should return the notice in the interface language' );
-
-    $context->mock( 'interface', 'cron' );
+    is(
+        $letter->{title}, 'English notice',
+        'GetPreparedLetter should return the requested language notice if it exists (en != default)'
+    );
+    like(
+        $letter->{content}, qr/Payment/,
+        'Template includes should use the requested language too (en != default)'
+    );
 
     $letter = C4::Letters::GetPreparedLetter(
         module                 => 'test',
+        tables                 => $tables,
         letter_code            => 'payment',
         message_transport_type => 'print',
-        tables                 => $tables,
-        lang                   => 'default'
+        substitute             => $substitute,
+        lang                   => 'fr-FR',
     );
-    is( $letter->{title}, 'Default payment notice',
-        'GetPreparedLetter should return the notice in default language' );
+    is(
+        $letter->{title},
+        'Default notice',
+        'GetPreparedLetter should return the default notice if the one requested language notice does not exist (default = fr-CA)'
+    );
     like(
         $letter->{content}, qr/Paiement/,
-        'GetPreparedLetter should return the notice in the first language in language system preference'
+        'Template includes should use the default language too if the requested language notice does not exist (default = fr-CA)'
+    );
+
+    t::lib::Mocks::mock_preference( 'TranslateNotices', '' );
+
+    $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'test',
+        tables                 => $tables,
+        letter_code            => 'payment',
+        message_transport_type => 'print',
+        substitute             => $substitute,
+        lang                   => 'en',
+    );
+    is(
+        $letter->{title}, 'Default notice',
+        'GetPreparedLetter should return the default notice if pref disabled but additional language exists'
+    );
+    like(
+        $letter->{content}, qr/Paiement/,
+        'Template includes should use the default language if pref disabled but additional language exists (default = fr-CA)'
     );
 };
 
