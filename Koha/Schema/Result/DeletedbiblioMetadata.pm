@@ -135,6 +135,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-30 11:34:16
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JCOh+FSSTgPlC8lMJOdOOA
 
+sub koha_objects_class {
+    'Koha::Old::Biblio::Metadatas';
+}
+sub koha_object_class {
+    'Koha::Old::Biblio::Metadata';
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
