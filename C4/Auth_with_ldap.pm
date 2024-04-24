@@ -212,12 +212,13 @@ sub checkpw_ldap {
     }
 
     if ($borrowernumber) {
-        if ($config{update}) { # A1, B1
-            my $c2 = &update_local($local_userid,$password,$borrowernumber,\%borrower) || '';
-            ($cardnumber eq $c2) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
-        } else { # C1, D1
-            # maybe update just the password?
-		return(1, $cardnumber, $local_userid);
+        if ( $config{update} ) {    # A1, B1
+            my $c2 = &update_local( $local_userid, $password, $borrowernumber, \%borrower ) || '';
+            ( $cardnumber eq $c2 ) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
+        } else {                    # C1, D1
+                                    # maybe update just the password?
+            my $patron = Koha::Patrons->find($borrowernumber);
+            return ( 1, $cardnumber, $local_userid, $patron );
         }
     } elsif ($config{replicate}) { # A2, C2
         my @columns = Koha::Patrons->columns;
