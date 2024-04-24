@@ -98,7 +98,7 @@ subtest 'list() tests' => sub {
     $off_limits_librarian->branchcode( $library->branchcode )->store;
 
     $t->get_ok("//$off_limits_userid:$off_limits_password@/api/v1/patron_categories?q={\"me.categorycode\":\"TEST\"}")
-        ->status_is(200)->json_has('/0/name')->json_is( '/0/name' => 'Test' )->json_hasnt('/1');
+        ->status_is(200)->json_has('/0/name')->json_is( [ $category->to_api ] )->json_hasnt('/1');
 
     $schema->storage->txn_rollback;
 

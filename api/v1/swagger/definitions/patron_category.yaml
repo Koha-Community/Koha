@@ -57,8 +57,8 @@ properties:
     type: string
     description: Type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
   block_expired_patron_opac_actions:
-    type: number
-    description: Whether or not a patron of this category can renew books or place holds once their card has expired. 0 means they can, 1 means they cannot, -1 means use syspref BlockExpiredPatronOpacActions
+    type: string
+    description: Specific actions expired patrons of this category are blocked from performing. OPAC actions blocked based on the patron category take priority over this preference
   default_privacy:
     type: string
     enum:
