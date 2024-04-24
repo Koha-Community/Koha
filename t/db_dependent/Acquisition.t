@@ -125,6 +125,8 @@ sub _check_fields_of_orders {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
+my $builder = t::lib::TestBuilder->new;
+
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
@@ -475,12 +477,16 @@ is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for internalno
 $orders = GetHistory( vendornote => 'vendor note foo' );
 is( scalar( @$orders ), 1, 'GetHistory returns correctly a search for vendornote' );
 
-my $budgetid2 = C4::Budgets::AddBudget(
+my $budget2 = $builder->build_object(
     {
-        budget_code => "budget_code_test_modrecv",
-        budget_name => "budget_name_test_modrecv",
+        class => 'Koha::Acquisition::Funds',
+        value => {
+            budget_code => "budget_code_test_modrecv",
+            budget_name => "budget_name_test_modrecv",
+        }
     }
 );
+my $budgetid2 = $budget2->id;
 
 my $order3 = Koha::Acquisition::Orders->find( $ordernumbers[2] )->unblessed;
 $order3->{order_internalnote} = "my other notes";
@@ -708,7 +714,6 @@ sub create_issn_field {
 subtest 'ModReceiveOrder replacementprice tests' => sub {
     plan tests => 2;
     #Let's build an order, we need a couple things though
-    my $builder = t::lib::TestBuilder->new;
     my $order_biblio = $builder->build_sample_biblio;
     my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
     my $order_invoice = $builder->build({ source => 'Aqinvoice'});
@@ -749,7 +754,6 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
 subtest 'ModReceiveOrder and subscription' => sub {
     plan tests => 2;
 
-    my $builder     = t::lib::TestBuilder->new;
     my $first_note  = 'first note';
     my $second_note = 'second note';
     my $subscription = $builder->build_object( { class => 'Koha::Subscriptions' } );
@@ -789,7 +793,6 @@ subtest 'ModReceiveOrder and subscription' => sub {
 subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
     plan tests => 2;
 
-    my $builder = t::lib::TestBuilder->new;
     subtest 'partial order' => sub {
         plan tests => 2;
 
@@ -880,7 +883,6 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
 
         subtest 'no invoice_unitprice' => sub {
             plan tests => 4;
-            my $builder = t::lib::TestBuilder->new;
             my $order   = $builder->build_object(
                 {
                     class => 'Koha::Acquisition::Orders',
@@ -968,7 +970,6 @@ subtest 'ModReceiveOrder invoice_unitprice and invoice_currency' => sub {
 subtest 'GetHistory status search' => sub {
     plan tests => 3;
 
-    my $builder      = t::lib::TestBuilder->new;
     my $order_basket = $builder->build( { source => 'Aqbasket', value => { is_standing => 0 } } );
     my $orderinfo    = {
         basketno                => $order_basket->{basketno},
@@ -1008,7 +1009,6 @@ subtest 'GetHistory status search' => sub {
 
 subtest 'GetHistory with additional fields' => sub {
     plan tests => 3;
-    my $builder = t::lib::TestBuilder->new;
     my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
     my $orderinfo ={
         basketno => $order_basket->{basketno},
@@ -1091,8 +1091,6 @@ subtest 'GetHistory - managing library' => sub {
 
     my $orders = GetHistory(managing_library => 'CPL');
 
-    my $builder = t::lib::TestBuilder->new;
-
     my $order_basket1 = $builder->build({ source => 'Aqbasket', value => { branch => 'CPL' } });
     my $orderinfo1 ={
         basketno => $order_basket1->{basketno},
@@ -1127,8 +1125,6 @@ subtest 'GetHistory - is_standing' => sub {
     plan tests => 1;
 
     my $orders = GetHistory( is_standing => '1' );
-
-    my $builder = t::lib::TestBuilder->new;
 
     my $order_basket1 = $builder->build( { source => 'Aqbasket', value => { is_standing => 0 } } );
     my $orderinfo1 = {
@@ -1207,8 +1203,6 @@ subtest 'GetInvoices() tests with additional fields' => sub {
     plan tests => 7;
 
     $schema->storage->txn_begin;
-
-    my $builder = t::lib::TestBuilder->new;
 
     my $invoice_1 = $builder->build_object(
         {
