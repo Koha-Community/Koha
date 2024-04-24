@@ -1978,17 +1978,17 @@ sub checkpw {
     }
 
     if ($check_internal_as_fallback) {
+
         # INTERNAL AUTH
         @return    = checkpw_internal( $userid, $password, $no_set_userenv );
-        $passwd_ok = 1                                                   if $return[0] > 0;    # 1 or 2
-        $patron    = Koha::Patrons->find( { cardnumber => $return[1] } ) if $passwd_ok;
-        push @return, $patron if $patron;
+        $passwd_ok = 1 if $return[0] > 0;                                       # 1 or 2
+        $patron    = $return[3];
     }
 
     if ( defined $userid && !$patron ) {
         $patron = Koha::Patrons->find( { userid     => $userid } );
         $patron = Koha::Patrons->find( { cardnumber => $userid } ) unless $patron;
-        push @return, $patron if $check_internal_as_fallback;
+        push @return, $patron if $check_internal_as_fallback;    # We pass back the patron if authentication fails
     }
 
     if ($patron) {
@@ -2018,41 +2018,28 @@ sub checkpw_internal {
     my ( $userid, $password, $no_set_userenv ) = @_;
 
     $password = Encode::encode( 'UTF-8', $password )
-      if Encode::is_utf8($password);
+        if Encode::is_utf8($password);
 
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "select password,cardnumber,borrowernumber,userid,firstname,surname,borrowers.branchcode,branches.branchname,flags from borrowers join branches on borrowers.branchcode=branches.branchcode where userid=?"
-      );
-    $sth->execute($userid);
-    if ( $sth->rows ) {
-        my ( $stored_hash, $cardnumber, $borrowernumber, $userid, $firstname,
-            $surname, $branchcode, $branchname, $flags )
-          = $sth->fetchrow;
-
-        if ( checkpw_hash( $password, $stored_hash ) ) {
-
-            C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
-                $firstname, $surname, $branchcode, $branchname, $flags ) unless $no_set_userenv;
-            return 1, $cardnumber, $userid;
+    my $patron = Koha::Patrons->find( { userid => $userid } );
+    if ($patron) {
+        if ( checkpw_hash( $password, $patron->password ) ) {
+            my $borrowernumber = $patron->borrowernumber;
+            C4::Context->set_userenv(
+                "$borrowernumber", $patron->userid, $patron->cardnumber,
+                $patron->firstname, $patron->surname, $patron->branchcode, $patron->library->branchname, $patron->flags
+            ) unless $no_set_userenv;
+            return 1, $patron->cardnumber, $patron->userid, $patron;
         }
     }
-    $sth =
-      $dbh->prepare(
-        "select password,cardnumber,borrowernumber,userid,firstname,surname,borrowers.branchcode,branches.branchname,flags from borrowers join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
-      );
-    $sth->execute($userid);
-    if ( $sth->rows ) {
-        my ( $stored_hash, $cardnumber, $borrowernumber, $userid, $firstname,
-            $surname, $branchcode, $branchname, $flags )
-          = $sth->fetchrow;
-
-        if ( checkpw_hash( $password, $stored_hash ) ) {
-
-            C4::Context->set_userenv( $borrowernumber, $userid, $cardnumber,
-                $firstname, $surname, $branchcode, $branchname, $flags ) unless $no_set_userenv;
-            return 1, $cardnumber, $userid;
+    $patron = Koha::Patrons->find( { cardnumber => $userid } );
+    if ($patron) {
+        if ( checkpw_hash( $password, $patron->password ) ) {
+            my $borrowernumber = $patron->borrowernumber;
+            C4::Context->set_userenv(
+                "$borrowernumber", $patron->userid, $patron->cardnumber,
+                $patron->firstname, $patron->surname, $patron->branchcode, $patron->library->branchname, $patron->flags
+            ) unless $no_set_userenv;
+            return 1, $patron->cardnumber, $patron->userid, $patron;
         }
     }
     return 0;
