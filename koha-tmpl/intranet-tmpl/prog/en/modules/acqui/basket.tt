@@ -81,7 +81,7 @@
                         [% UNLESS ( selectbasketg ) %]
                             [% UNLESS ( closedate ) %]
                                 [% UNLESS ( delete_confirmed ) %]
-                                    <div id="toolbar" class="btn-toolbar fh-fixedHeader">
+                                    <div id="toolbar" class="btn-toolbar sticky fh-fixedHeader">
                                         [% IF active %]
                                             <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                                         [% END %]
@@ -1009,7 +1009,6 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>
@@ -1025,16 +1024,7 @@
             }
         }
 
-        var Sticky;
-
         $(document).ready(function() {
-            if ( $('#toolbar').length ) {
-                Sticky = $("#toolbar");
-                Sticky.hcSticky({
-                    stickTo: "main",
-                    stickyClass: "floating"
-                });
-            }
 
             [% UNLESS ( closedate ) %]
                 $('#addtoBasket').on('show', function () {
