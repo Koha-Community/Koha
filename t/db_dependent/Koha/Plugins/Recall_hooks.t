@@ -81,7 +81,7 @@ subtest 'after_recall_action hook' => sub {
 
     C4::Circulation::AddIssue( $patron2, $item->barcode );
 
-    warning_like {
+    warnings_exist {
       Koha::Recalls->add_recall({
           patron => $patron1,
           biblio => $biblio,
