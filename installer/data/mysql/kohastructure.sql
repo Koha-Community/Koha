@@ -4138,7 +4138,7 @@ CREATE TABLE `itemtypes` (
   `rentalcharge_hourly_calendar` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'controls if the hourly rental fee is calculated directly or using finesCalendar',
   `defaultreplacecost` decimal(28,6) DEFAULT NULL COMMENT 'default replacement cost',
   `processfee` decimal(28,6) DEFAULT NULL COMMENT 'default text be recorded in the column note when the processing fee is applied',
-  `notforloan` smallint(6) DEFAULT NULL COMMENT '1 if the item is not for loan, 0 if the item is available for loan',
+  `notforloan` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 if the item is not for loan, 0 if the item is available for loan',
   `imageurl` varchar(200) DEFAULT NULL COMMENT 'URL for the item type icon',
   `summary` mediumtext DEFAULT NULL COMMENT 'information from the summary field, may include HTML',
   `checkinmsg` varchar(255) DEFAULT NULL COMMENT 'message that is displayed when an item with the given item type is checked in',
