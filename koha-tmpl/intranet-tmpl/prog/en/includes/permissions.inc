@@ -739,7 +739,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'admin' -%]
         <span class="sub_permission admin_subpermission">
-            Use adminitstrative plugins
+            Use administrative plugins
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_public_lists' -%]

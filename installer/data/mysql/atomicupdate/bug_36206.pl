@@ -14,7 +14,7 @@ return {
         );
 
         if ( $permission_added == 1 ) {
-            say $out "Added new permission 'edit_any_item'";
+            say $out "Added new permission 'plugins_admin'";
         }
     },
 };
