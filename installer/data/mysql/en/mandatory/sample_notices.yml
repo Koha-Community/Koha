@@ -617,11 +617,11 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item is now due:"
             - ""
-            - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
+            - "[% biblio.title %], [% biblio.author %] ([% item.barcode %])"
 
         - module: circulation
           code: DUE
@@ -632,11 +632,11 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item is now due:"
             - ""
-            - "<<biblio.title>>"
+            - "[% biblio.title %]"
 
         - module: circulation
           code: DUEDGST
@@ -833,11 +833,11 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item will be due soon:"
             - ""
-            - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
+            - "[% biblio.title %], [% biblio.author %] ([% item.barcode %])"
 
         - module: circulation
           code: PREDUE
@@ -848,11 +848,11 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item will be due soon:"
             - ""
-            - "<<biblio.title>>"
+            - "[% biblio.title %]"
 
         - module: circulation
           code: PREDUEDGST
