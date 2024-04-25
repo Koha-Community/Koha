@@ -521,7 +521,7 @@
         $(".hold-options").hide();
         var OPACMandatoryHoldDates = "[% Koha.Preference('OPACMandatoryHoldDates') | html %]";
         if( OPACMandatoryHoldDates == "start" || OPACMandatoryHoldDates == "both" ) {
-            $(".holddatefrom").prop( 'required', true ).siblings(".required_label").addClass('required').show();
+            $(".holddatefrom").val("").prop( 'required', true ).siblings(".required_label").addClass('required').show();
         }
         if( OPACMandatoryHoldDates == "end"   || OPACMandatoryHoldDates == "both" ) {
             $(".futuredate").prop( 'required', true ).siblings(".required_label").addClass('required').show();
