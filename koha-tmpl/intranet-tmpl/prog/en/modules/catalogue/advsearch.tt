@@ -81,7 +81,7 @@
                         <h1>Advanced search</h1>
 
                         <!-- SEARCH BUTTONS -->
-                        <div id="toolbar" class="btn-toolbar">
+                        <div id="toolbar" class="btn-toolbar sticky">
                             <div class="btn-group">
                                 <button class="btn btn-primary" type="submit" accesskey="s"><i class="fa fa-search"></i> Search</button>
                             </div>
@@ -101,7 +101,7 @@
                             </div>
 
                             [% IF Koha.Preference('EnableSearchHistory') %]
-                                <div class="btn-group">
+                            <div class="btn-group">
                                 <a href="/cgi-bin/koha/catalogue/search-history.pl" class="btn btn-link"><i class="fa fa-history"></i> Search history</a>
                             </div>
                             [% END %]
@@ -209,7 +209,6 @@
                     [% END %]
                     </fieldset>
                 <!-- /BOOLEAN SEARCH OPTIONS -->
-                </div> <!-- /#advanced-search -->
 
                 <!-- MC-TYPE LIMITS -->
                 [% WRAPPER tabs id= "advsearches" %]
@@ -401,12 +400,12 @@
                     </p>
                 </fieldset> <!-- /#sortby -->
                 <!-- /RANK LIMITS -->
+                </div> <!-- /#advanced-search -->
             </form>
         </div>
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.css("css/humanmsg.css") | $raw %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
@@ -423,17 +422,11 @@
             line.removeChild(ButtonPlus);
         }
 
-        var Sticky;
         $(document).ready(function() {
             $("input[name=q]:eq(0)").focus();
             if( $("#advsearches .tab-pane.active").length < 1 ){
                 $("#advsearches a:first").tab("show");
             }
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: ".main",
-                stickyClass: "floating"
-            });
             [% IF search_groups %]
                 function branch_limit() {
                     if( $("#branchloop").val() != "" ){

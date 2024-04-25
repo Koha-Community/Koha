@@ -104,7 +104,6 @@ $(window).load(function() {
     verify_cover_images();
 });
 
-var Sticky;
 var toHighlight = {};
 var q_array;
 
@@ -128,12 +127,6 @@ $(document).ready(function() {
         $(this).siblings(".collapsible-facet").toggle();
         $(this).siblings(".moretoggle").toggle();
         $(this).toggle();
-    });
-
-    Sticky = $("#searchheader");
-    Sticky.hcSticky({
-        stickTo: "main",
-        stickyClass: "floating"
     });
 
     $("#cartsubmit").click(function(e){
