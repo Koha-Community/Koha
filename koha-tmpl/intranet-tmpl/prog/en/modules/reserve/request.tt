@@ -1451,7 +1451,7 @@
 
                 <div class="modal-body">
                     <p>Are you sure you want to cancel this hold?</p>
-                    <div id="cancel_hold_alert" class="alert alert-danger"></div>
+                    <div id="cancel_hold_alert" class="alert alert-danger" style="display:none;"></div>
                     <fieldset class="action">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                         [% IF hold_cancellation.count %]
@@ -1889,6 +1889,7 @@
                 $(this).prop('checked', !count);
                 $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
                 $('#cancel_hold_alert').html( MSG_CANCEL_ALERT.format($('.holds_table .select_hold:checked').length));
+                $('#cancel_hold_alert').show();
                 localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
             });
 
@@ -1898,6 +1899,7 @@
                 $('.select_hold_all', table).prop('checked', !count);
                 $('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format($('.holds_table .select_hold:checked').length));
                 $('#cancel_hold_alert').html( MSG_CANCEL_ALERT.format($('.holds_table .select_hold:checked').length));
+                $('#cancel_hold_alert').show();
                 localStorage.selectedHolds = $('.holds_table .select_hold:checked').toArray().map(el => $(el).data('id'));
             });
 
