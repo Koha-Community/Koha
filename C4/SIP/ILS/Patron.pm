@@ -103,6 +103,9 @@ sub new {
         }
     }
 
+    # Get currency 3 chars max
+    my $currency = substr Koha::Acquisition::Currencies->get_active->currency, 0, 3;
+
     my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
     {
     no warnings;    # any of these $kp->{fields} being concat'd could be undef
@@ -146,6 +149,7 @@ sub new {
         fine_blocked    => $fine_blocked,
         fee_limit       => $fee_limit,
         userid          => $kp->{userid},
+        currency        => $currency,
     );
     }
 
@@ -187,8 +191,16 @@ sub new {
         }
     }
 
-    # FIXME: populate fine_items recall_items
+    # FIXME: populate recall_items
     $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
+
+    # fine items
+    my $debits = $patron->account->outstanding_debits;
+    my @fine_items;
+    while ( my $debit = $debits->next ) {
+        push @fine_items, { account_line => sprintf '%s %.02f', $debit->description, $debit->amountoutstanding };
+    }
+    $ilspatron{fine_items} =\@fine_items;
 
     my $pending_checkouts = $patron->pending_checkouts;
     my @barcodes;
@@ -372,6 +384,7 @@ sub x_items {
 
     my $item_list = [];
     if ($self->{$array_var}) {
+
         if ($start && $start > 1) {
             --$start;
         }
@@ -379,6 +392,7 @@ sub x_items {
             $start = 0;
         }
         if ( $end && $end < @{$self->{$array_var}} ) {
+          --$end;
         }
         else {
             $end = @{$self->{$array_var}};
@@ -412,38 +426,8 @@ sub charged_items {
     return $self->x_items('items', @_);
 }
 sub fine_items {
-    require Koha::Database;
-    require Template;
-
     my $self = shift;
-    my $start = shift;
-    my $end = shift;
-    my $server = shift;
-
-    my @fees = Koha::Database->new()->schema()->resultset('Accountline')->search(
-        {
-            borrowernumber    => $self->{borrowernumber},
-            amountoutstanding => { '>' => '0' },
-        }
-    );
-
-    $start = $start ? $start - 1 : 0;
-    $end   = $end   ? $end - 1   : scalar @fees - 1;
-
-    my $av_field_template = $server ? $server->{account}->{av_field_template} : undef;
-    $av_field_template ||= "[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
-
-    my @return_values;
-    for ( my $i = $start; $i <= $end; $i++ ) {
-        my $fee = $fees[$i];
-
-        next unless $fee;
-
-        my $output = process_tt( $av_field_template, { accountline => $fee } );
-        push( @return_values, { barcode => $output } );
-    }
-
-    return \@return_values;
+    return $self->x_items('fine_items', @_);
 }
 sub recall_items {
     my $self = shift;
