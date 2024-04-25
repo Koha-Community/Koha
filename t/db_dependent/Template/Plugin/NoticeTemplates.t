@@ -27,40 +27,46 @@ BEGIN {
     use_ok('Koha::Template::Plugin::NoticeTemplates');
 }
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 Koha::Notice::Templates->delete();
 
-my $notice_templates = Koha::Notice::Templates->search({ module => 'members'});
+my $notice_templates = Koha::Notice::Templates->search( { module => 'members' } );
 
-$builder->build({
-    source => 'Letter',
-    value => {
-        name => 'Hold cancellation',
-        module => 'reserves'
+$builder->build(
+    {
+        source => 'Letter',
+        value  => {
+            name   => 'Hold cancellation',
+            module => 'reserves'
+        }
     }
-});
+);
 
-$builder->build({
-    source => 'Letter',
-    value => {
-        name => 'Account expiration',
-        module => 'members'
+$builder->build(
+    {
+        source => 'Letter',
+        value  => {
+            name   => 'Account expiration',
+            module => 'members'
+        }
     }
-});
+);
 
-$builder->build({
-    source => 'Letter',
-    value => {
-        name => 'Discharge',
-        module => 'members'
+$builder->build(
+    {
+        source => 'Letter',
+        value  => {
+            name   => 'Discharge',
+            module => 'members'
+        }
     }
-});
+);
 
 my $plugin = Koha::Template::Plugin::NoticeTemplates->new();
-ok($plugin, "initialized notice templates plugin");
+ok( $plugin, "initialized notice templates plugin" );
 
 my $notices = $plugin->GetByModule('members');
 is( $notices->count, 2, 'returns 2 defined members letters' );
