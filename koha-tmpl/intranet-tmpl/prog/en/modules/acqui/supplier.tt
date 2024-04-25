@@ -210,10 +210,10 @@
     [% END %]
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
-    <form action="updatesupplier.pl" name="updatesupplier" style="display:block" class="validated" method="post">
+    <form action="updatesupplier.pl" name="updatesupplier" class="validated" method="post">
         <input type="hidden" name="op" value="cud-add"/>
         [% INCLUDE 'csrf-token.inc' %]
-        <div id="toolbar" class="btn-toolbar">
+        <div id="toolbar" class="btn-toolbar sticky">
             <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
             [% IF ( booksellerid ) %]
                 <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
@@ -532,7 +532,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -695,8 +694,6 @@
             });
         }
 
-        var Sticky;
-
          $(document).ready(function() {
             var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "columnDefs": [
@@ -741,11 +738,6 @@
             refresh_aliases();
             refresh_interfaces();
 
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: "main",
-                stickyClass: "floating"
-            });
         });
     </script>
 [% END %]
