@@ -118,7 +118,7 @@ subtest 'list_updates() tests' => sub {
 
 subtest 'add_update() tests' => sub {
 
-    plan tests => 34;
+    plan tests => 37;
 
     $schema->storage->txn_begin;
 
@@ -145,7 +145,12 @@ subtest 'add_update() tests' => sub {
     my $ticket = $builder->build_object(
         {
             class => 'Koha::Tickets',
-            value => { reporter_id => $patron->id }
+            value => {
+                reporter_id   => $patron->id,
+                resolver_id   => undef,
+                resolved_date => undef,
+                status        => 'new'
+            }
         }
     );
     my $ticket_id = $ticket->id;
@@ -233,7 +238,9 @@ subtest 'add_update() tests' => sub {
     );
     $THE_notice->delete;
 
+    # Check that state change triggers correct notice
     $update->{state} = 'resolved';
+    $update->{status} = 'TEST';
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
@@ -251,6 +258,20 @@ subtest 'add_update() tests' => sub {
     $THE_notice = $notices->next;
     is( $THE_notice->letter_code, 'TICKET_RESOLVE',
         'Notice queued was a TICKET_RESOLVED for status changing update'
+    );
+
+    # Check that state change is carried over to ticket
+    $ticket = $ticket->get_from_storage;
+    is(
+        $ticket->resolver_id, $librarian->id,
+        "Ticket was given resolver_id matching the librarian id of the update when state was changed to 'resolved'"
+    );
+    isnt( $ticket->resolved_date, undef, "Ticket was given resolved_date when state was updated to 'resolved'" );
+
+    # Check that status change is carried over to ticket
+    is(
+        $ticket->status, 'TEST',
+        "Ticket status was updated in line with status change in update"
     );
 
     $schema->storage->txn_rollback;
