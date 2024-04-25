@@ -60,7 +60,7 @@
     <h2>[% TAB.tab_title | html %] preferences</h2>
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
-        [% UNLESS ( searchfield ) %]<div id="toolbar"><button class="save-all btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button></div>[% END %]
+        [% UNLESS ( searchfield ) %]<div id="toolbar" class="sticky"><button class="save-all btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button></div>[% END %]
         <input type="hidden" name="op" value="cud-save" />
         <input type="hidden" name="tab" value="[% TAB.tab_id | html %]" />
 
@@ -277,7 +277,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/css.min.js" ) | $raw %]
@@ -296,16 +295,8 @@
     [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 
     <script>
-        var Sticky;
         var themelang = "[% themelang | html %]";
         $(document).ready(function(){
-            [% UNLESS ( searchfield ) %]
-                Sticky = $("#toolbar");
-                Sticky.hcSticky({
-                    stickTo: "main",
-                    stickyClass: "floating"
-                });
-            [% END %]
             $("select[multiple='multiple']").multipleSelect( {
                 placeholder: _("Please select ..."),
                 selectAllText: _("Select all"),
