@@ -74,7 +74,7 @@ subtest 'user() tests' => sub {
 };
 
 subtest 'strings_map() tests' => sub {
-    plan tests => 8;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -108,6 +108,37 @@ subtest 'strings_map() tests' => sub {
     is( $strings->{status}->{str},      $status_av->lib_opac, "'str' set to av->lib_opac when called in public" );
     is( $strings->{status}->{type},     'av',                 "'type' is 'av'" );
     is( $strings->{status}->{category}, 'TICKET_STATUS',      "'category' exists and set to 'TICKET_STATUS'" );
+
+    my $resolution_av = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'RES_TEST',
+                category         => 'TICKET_RESOLUTION',
+                lib              => 'internal resolution description',
+                lib_opac         => 'public resolution description',
+            }
+        }
+    );
+
+    $ticket_update = $builder->build_object(
+        {
+            class => 'Koha::Ticket::Updates',
+            value => { status => 'RES_TEST' }
+        }
+    );
+
+    $strings = $ticket_update->strings_map();
+    ok( exists $strings->{status}, "'status' entry exists for resolution fallthrough" );
+    is( $strings->{status}->{str},      $resolution_av->lib, "'str' set to av->lib" );
+    is( $strings->{status}->{type},     'av',                "'type' is 'av'" );
+    is( $strings->{status}->{category}, 'TICKET_STATUS',     "'category' exists and set to 'TICKET_STATUS'" );
+
+    $strings = $ticket_update->strings_map( { public => 1 } );
+    ok( exists $strings->{status}, "'status' entry exists for resolution fallthrough when called in public" );
+    is( $strings->{status}->{str},      $resolution_av->lib_opac, "'str' set to av->lib_opac when called in public" );
+    is( $strings->{status}->{type},     'av',                     "'type' is 'av'" );
+    is( $strings->{status}->{category}, 'TICKET_STATUS',          "'category' exists and set to 'TICKET_STATUS'" );
 
     $schema->storage->txn_rollback;
 };
