@@ -1983,17 +1983,17 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - "You have suggested that the library acquire [% suggestion.title %] by [% suggestion.author %]."
             - ""
             - "We are pleased to inform you that the item you requested is now part of the collection."
             - ""
-            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - "If you have any questions, please email us at [% branch.branchemail %]."
             - ""
             - "Thank you,"
             - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: suggestions
           code: NEW_SUGGESTION
@@ -2085,13 +2085,13 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "A new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.author>>."
+            - "A new suggestion is ready to be processed: [% suggestion.title %] by [% suggestion.author %]."
             - ""
             - "Thank you,"
             - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: suggestions
           code: NOTIFY_MANAGER
