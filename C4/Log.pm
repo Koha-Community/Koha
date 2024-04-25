@@ -2,7 +2,6 @@ package C4::Log;
 
 #package to deal with Logging Actions in DB
 
-
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2011 MJ Ray and software.coop
 #
@@ -24,11 +23,11 @@ package C4::Log;
 use strict;
 use warnings;
 
-use Data::Dumper qw( Dumper );
+use Data::Dumper   qw( Dumper );
 use File::Basename qw( basename );
-use JSON qw( to_json encode_json );
-use Scalar::Util qw( blessed );
-use Struct::Diff qw( diff );
+use JSON           qw( to_json encode_json );
+use Scalar::Util   qw( blessed );
+use Struct::Diff   qw( diff );
 
 use C4::Context;
 use Koha::Logger;
@@ -37,9 +36,9 @@ use Koha::ActionLogs;
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
-        require Exporter;
-        @ISA = qw(Exporter);
-        @EXPORT = qw(logaction cronlogaction);
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(logaction cronlogaction);
 }
 
 =head1 NAME
@@ -71,33 +70,34 @@ number is set to 0, which is the same as the superlibrarian's number.
 
 #'
 sub logaction {
-    my ($modulename, $actionname, $objectnumber, $infos, $interface, $original )=@_;
+    my ( $modulename, $actionname, $objectnumber, $infos, $interface, $original ) = @_;
 
     my $updated;
 
     # Get ID of logged in user.  if called from a batch job,
     # no user session exists and C4::Context->userenv() returns
     # the scalar '0'.
-    my $userenv = C4::Context->userenv();
-    my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
+    my $userenv    = C4::Context->userenv();
+    my $usernumber = ( ref($userenv) eq 'HASH' ) ? $userenv->{'number'} : 0;
     $usernumber ||= 0;
     $interface //= C4::Context->interface;
 
-    if( blessed($infos) && $infos->isa('Koha::Object') ) {
-        $infos = $infos->get_from_storage if $infos->in_storage;
+    if ( blessed($infos) && $infos->isa('Koha::Object') ) {
+        $infos   = $infos->get_from_storage if $infos->in_storage;
         $updated = $infos->unblessed;
         local $Data::Dumper::Sortkeys = 1;
 
         if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
-            $infos = "item " . Dumper( $updated );
+            $infos = "item " . Dumper($updated);
         } else {
-            $infos = Dumper( $updated );
+            $infos = Dumper($updated);
         }
     } else {
         $updated = $infos;
     }
 
-    my $script = ( $interface eq 'cron' or $interface eq 'commandline' )
+    my $script =
+        ( $interface eq 'cron' or $interface eq 'commandline' )
         ? basename($0)
         : undef;
 
@@ -172,11 +172,11 @@ Logs the path and name of the calling script plus the information privided by pa
 #'
 sub cronlogaction {
     my $params = shift;
-    my $info = $params->{info};
+    my $info   = $params->{info};
     my $action = $params->{action};
     $action ||= "Run";
-    my $loginfo = (caller(0))[1];
-    $loginfo .= ' ' . $info if $info;
+    my $loginfo = ( caller(0) )[1];
+    $loginfo .= ' ' . $info                        if $info;
     logaction( 'CRONJOBS', $action, $$, $loginfo ) if C4::Context->preference('CronjobLog');
 }
 
