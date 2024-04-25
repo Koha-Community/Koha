@@ -148,7 +148,7 @@
                 </dl>
             [% END %]
 
-            [% IF plugins_enabled %]
+            [% IF plugins_enabled && ( CAN_user_plugins_manage || CAN_user_plugins_configure || ( CAN_user_plugins_admin && admin_plugins)) %]
                 <h3>Plugins</h3>
                 <dl>
                 [% IF CAN_user_plugins_manage || CAN_user_plugins_configure %]
