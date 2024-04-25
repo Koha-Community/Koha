@@ -75,7 +75,7 @@ sub startup {
         $self->secrets([$secret_passphrase]);
     }
 
-    my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.yaml");
+    my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.json");
 
     push @{$self->routes->namespaces}, 'Koha::Plugin';
 

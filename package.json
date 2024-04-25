@@ -54,7 +54,7 @@
     "build:prod": "yarn css:build:prod && yarn js:build:prod",
     "cypress": "cypress",
     "prettier": "prettier",
-    "api:bundle": "redocly bundle api/v1/swagger/swagger.yaml > api/v1/swagger/swagger_bundle.yaml"
+    "api:bundle": "redocly bundle --ext json api/v1/swagger/swagger.yaml --output api/v1/swagger/swagger_bundle.json"
   },
   "repository": {
     "type": "git",
