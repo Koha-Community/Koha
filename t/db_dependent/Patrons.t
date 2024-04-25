@@ -106,7 +106,7 @@ foreach my $b ( $patrons->as_list() ) {
 }
 
 subtest "Update patron categories" => sub {
-    plan tests => 26;
+    plan tests => 29;
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
     my $c_categorycode = $builder->build({ source => 'Category', value => {
             category_type=>'C',
@@ -212,6 +212,19 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category({from=>$p_categorycode})->update_category_to({category=>$a_categorycode}),1,'One professional patron updated to adult category');
     is( Koha::Patrons->find($inst->borrowernumber)->guarantee_relationships->guarantees->count,0,'Guarantee was removed when made adult');
 
+    is(
+        Koha::Patrons->search_patrons_to_update_category( { from => $a_categorycode, fine_max => 5 } )
+            ->search( { "me.borrowernumber" => $adult1->borrowernumber } )->next->borrowernumber,
+        $adult1->borrowernumber, 'Expected patron is in the list of patrons to update'
+    );
+    my $userid_before = $adult1->userid;
+    ok(
+        Koha::Patrons->search_patrons_to_update_category( { from => $a_categorycode, fine_max => 5 } )
+            ->update_category_to( { category => $a_categorycode_2 } ),
+        'Update of patrons is successful including adult1'
+    );
+    $adult1->discard_changes;
+    is( $adult1->userid, $userid_before, "Patron userid not changed by updated" );
 };
 
 
