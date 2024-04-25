@@ -123,65 +123,67 @@
 
 <!-- Modal -->
 <div id="add_message_form" class="modal" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-lg">
             <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-add_message">
                 <div class="modal-header">
-                    <h3>Leave a message</h3>
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4>Leave a message</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="message_type">Add a message for:</label>
-                        <select name="message_type" id="message_type">
-                            <option value="L">Staff - Internal note</option>
-                            <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
-                            [% IF CAN_user_borrowers_send_messages_to_borrowers %]
-                                <option value="E">Email - email addresses of patron</option>
+                    <fieldset id="message_fieldset">
+                        <ol>
+                            <li class="form-group form-row">
+                                <label for="message_type" class="col-form-label">Add a message for:</label>
+                                <select name="message_type" id="message_type" class="form-control">
+                                    <option value="L">Staff - Internal note</option>
+                                    <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
+                                    [% IF CAN_user_borrowers_send_messages_to_borrowers %]
+                                        <option value="E">Email - email addresses of patron</option>
+                                    [% END %]
+                                </select>
+                            </li>
+
+                            [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
+                            [% IF bor_notes %]
+                                <li class="form-group form-row">
+                                    <label for="select_patron_messages" class="col-form-label">Predefined notes: </label>
+                                    <select name="type" id="select_patron_messages" class="form-control">
+                                        <option value="">Select note</option>
+                                        [% FOREACH bor_note IN bor_notes %]
+                                            <option value="[% bor_note.lib | html %]">[% bor_note.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
                             [% END %]
-                        </select>
-                    </div>
-                    [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
-                    [% IF bor_notes %]
-                        <div class="form-group">
-                            <label for="select_patron_messages">Predefined notes: </label>
-                            <select name="type" id="select_patron_messages">
-                                <option value="">Select note</option>
-                                [% FOREACH bor_note IN bor_notes %]
-                                    <option value="[% bor_note.lib | html %]">[% bor_note.lib | html %]</option>
-                                [% END %]
-                            </select>
-                        </div>
-                    [% END %]
 
-                    [% patron_letters = NoticeTemplates.GetByModule( 'add_message' ) %]
-                    [% IF patron_letters %]
-                        <div class="form-group">
-                            <label for="select_patron_notice" style="display:none;">Patron notice: </label>
-                            <select name="select_patron_notice" id="select_patron_notice" style="display:none;">
-                                <option value="">Select notice</option>
-                                [% FOREACH letter IN patron_letters %]
-                                    <option value="[% letter.code | html %]">[% letter.name | html %]</option>
-                                [% END %]
-                            </select>
-                        </div>
-                    [% END %]
+                            [% patron_letters = NoticeTemplates.GetByModule( 'add_message' ) %]
+                            [% IF patron_letters %]
+                                <li class="form-group form-row">
+                                    <label for="select_patron_notice" class="col-form-lable" style="display:none;">Patron notice: </label>
+                                    <select name="select_patron_notice" id="select_patron_notice" class="form-control" style="display:none;">
+                                        <option value="">Select notice</option>
+                                        [% FOREACH letter IN patron_letters %]
+                                            <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                            [% END %]
 
-                    <div class="form-group">
-                        <fieldset class="rows">
-                            <ol>
-                                <li id="subject_form" style="display: none;">
-                                    <label for="borrower_subject">Subject:</label>
-                                    <input type="text" size="60" name="borrower_subject" id="borrower_subject"/>
-                                </li>
-                                <li>
-                                    <label for="borrower_message" style="display: none;">Body:</label>
-                                    <textarea cols="65" rows="5" name="borrower_message" id="borrower_message" ></textarea>
-                                </li>
-                            </ol>
-                        </fieldset>
-                    </div>
+                            <li class="form-group form-row" id="subject_form" style="display: none;">
+                                <label for="borrower_subject" class="col-form-label">Subject:</label>
+                                <input type="text" size="60" name="borrower_subject" class="form-control" id="borrower_subject"/>
+                            </li>
+                            <li class="form-group form-row">
+                                <label for="borrower_message" class="col-form-label" style="display: none;">Body:</label>
+                                <textarea cols="65" rows="5" name="borrower_message" class="form-control" id="borrower_message" ></textarea>
+                            </li>
+                        </ol>
+                    </fieldset>
                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                     <input type="hidden" name="batch" value="[% batch | html %]" />
                     <input type="hidden" name="branchcode" value="[% Branches.GetLoggedInBranchcode | html %]" />
