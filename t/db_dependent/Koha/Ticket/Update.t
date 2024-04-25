@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use t::lib::TestBuilder;
 
 use Koha::Database;
@@ -69,6 +69,45 @@ subtest 'user() tests' => sub {
     my $linked_user = $update->user;
     is( ref($linked_user), 'Koha::Patron', 'Koha::Ticket::Update->user returns a Koha::Patron object' );
     is( $linked_user->id, $user->id, 'Koha::Ticket::Update->user returns the right Koha::Patron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'strings_map() tests' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $status_av = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                authorised_value => 'TEST',
+                category         => 'TICKET_STATUS',
+                lib              => 'internal description',
+                lib_opac         => 'public description',
+            }
+        }
+    );
+
+    my $ticket_update = $builder->build_object(
+        {
+            class => 'Koha::Ticket::Updates',
+            value => { status => 'TEST' }
+        }
+    );
+
+    my $strings = $ticket_update->strings_map();
+    ok( exists $strings->{status}, "'status' entry exists" );
+    is( $strings->{status}->{str},      $status_av->lib, "'str' set to av->lib" );
+    is( $strings->{status}->{type},     'av',            "'type' is 'av'" );
+    is( $strings->{status}->{category}, 'TICKET_STATUS', "'category' exists and set to 'TICKET_STATUS'" );
+
+    $strings = $ticket_update->strings_map( { public => 1 } );
+    ok( exists $strings->{status}, "'status' entry exists when called in public" );
+    is( $strings->{status}->{str},      $status_av->lib_opac, "'str' set to av->lib_opac when called in public" );
+    is( $strings->{status}->{type},     'av',                 "'type' is 'av'" );
+    is( $strings->{status}->{category}, 'TICKET_STATUS',      "'category' exists and set to 'TICKET_STATUS'" );
 
     $schema->storage->txn_rollback;
 };
