@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -47,6 +47,27 @@ subtest 'reporter() tests' => sub {
     my $reporter = $ticket->reporter;
     is( ref($reporter), 'Koha::Patron', 'Koha::Ticket->reporter returns a Koha::Patron object' );
     is( $reporter->id, $patron->id, 'Koha::Ticket->reporter returns the right Koha::Patron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'assignee() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $ticket = $builder->build_object(
+        {
+            class => 'Koha::Tickets',
+            value => { assignee_id => $patron->id }
+        }
+    );
+
+    my $assignee = $ticket->assignee;
+    is( ref($assignee), 'Koha::Patron', 'Koha::Ticket->assignee returns a Koha::Patron object' );
+    is( $assignee->id,  $patron->id,    'Koha::Ticket->assignee returns the right Koha::Patron' );
 
     $schema->storage->txn_rollback;
 };

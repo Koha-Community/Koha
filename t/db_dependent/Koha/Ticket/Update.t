@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 
 use Koha::Database;
@@ -69,6 +69,27 @@ subtest 'user() tests' => sub {
     my $linked_user = $update->user;
     is( ref($linked_user), 'Koha::Patron', 'Koha::Ticket::Update->user returns a Koha::Patron object' );
     is( $linked_user->id, $user->id, 'Koha::Ticket::Update->user returns the right Koha::Patron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'assignee() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $assignee = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $update   = $builder->build_object(
+        {
+            class => 'Koha::Ticket::Updates',
+            value => { assignee_id => $assignee->id }
+        }
+    );
+
+    my $linked_assignee = $update->assignee;
+    is( ref($linked_assignee), 'Koha::Patron', 'Koha::Ticket::Update->assignee returns a Koha::Patron object' );
+    is( $linked_assignee->id,  $assignee->id,  'Koha::Ticket::Update->assignee returns the right Koha::Patron' );
 
     $schema->storage->txn_rollback;
 };
