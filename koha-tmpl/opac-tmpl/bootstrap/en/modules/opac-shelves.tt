@@ -228,7 +228,7 @@
                         [% IF ( itemsloop ) %]
                             [% SET contents = shelf.get_contents %]
                             [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
-                            <div id="floating">
+                            <div id="floating" class="sticky">
                                 <div id="toolbar" class="toolbar clearfix">
                                     <div class="list-actions">
                                         <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus" aria-hidden="true"></i> New list</a> <span class="sep">|</span>
@@ -812,7 +812,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
 [% IF OpenLibraryCovers || OpenLibrarySearch %]
     [% Asset.js("js/openlibrary.js") | $raw %]
 [% END %]

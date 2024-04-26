@@ -252,7 +252,16 @@ function setPlaceholder(){
     $("#translControl1").attr("placeholder", search_placeholder );
 }
 
-$(document).ready(function(){
+$(document).ready(function () {
+    //check if sticky element is stuck, if so add floating class
+    if ( $('.sticky').length ) {
+      const observer = new IntersectionObserver(
+        ([e]) => e.target.classList.toggle('floating', e.intersectionRatio < 1),
+        {threshold: [1]}
+      );
+
+      observer.observe(document.querySelector('.sticky'));
+    }
     $("html").removeClass("no-js").addClass("js");
     $(".close").click(function () {
         window.close();

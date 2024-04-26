@@ -176,7 +176,7 @@
                                     [% END %]
                                 [% END # IF /searchdesc %]
 
-                                <div id="floating">
+                                <div id="floating" class="sticky">
                                     <div id="toolbar" class="toolbar row align-items-center">
                                         <div id="top-pages" class="col">
                                             [% INCLUDE 'page-numbers.inc' %]
@@ -422,7 +422,6 @@
     [% END %]
     [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
     [% Asset.js("js/authtoresults.js") | $raw %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% IF ( OpacHighlightedWords ) %]
         [% Asset.js("lib/jquery/plugins/jquery.highlight-5.js") | $raw %]
     [% END %]
