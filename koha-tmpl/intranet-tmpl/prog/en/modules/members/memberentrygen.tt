@@ -1761,7 +1761,6 @@ legend.collapsed i.fa.fa-caret-down::before {
             [% END %]
         </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
@@ -1774,7 +1773,6 @@ legend.collapsed i.fa.fa-caret-down::before {
                 $("#cn_max").hide();
             }
         }
-        var Sticky;
 
         function toggle_guarantor_field(rel_number){
             $(".relation-"+rel_number).prop('disabled', (i, v) => !v);
@@ -1883,12 +1881,6 @@ legend.collapsed i.fa.fa-caret-down::before {
             });
 
             $("#saverecord").css({ 'margin-left': 0 });
-
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: "main",
-                stickyClass: "floating"
-            });
 
             [% IF borrower_data.categorycode %]
                 update_category_code( "[% borrower_data.categorycode | html %]" );
