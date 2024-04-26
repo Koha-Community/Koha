@@ -914,7 +914,7 @@ subtest 'itemtype group tests' => sub {
     my $issue = C4::Circulation::AddIssue( $patron, $checkout_item->barcode, dt_from_string() );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
 
-    #Patron has 1 checkout of parent itemtype {{{{ child itype1
+    #Patron has 1 checkout of parent itemtype
 
     my $parent_iq_rule = $builder->build_object(
         {
@@ -1051,9 +1051,6 @@ subtest 'itemtype group tests' => sub {
     );
 
     #increase parent type to greater than specific
-#    my $circ_rule_object =
-#      Koha::CirculationRules->find( $parent_iq_rule->{id} );
-#    $circ_rule_object->rule_value(4)->store();
     $parent_iq_rule->rule_value(4)->store();
 
 
