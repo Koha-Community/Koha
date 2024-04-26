@@ -14,15 +14,15 @@ return {
         say $out "Added recalls SMS notices: RETURN_RECALLED_ITEM, PICKUP_RECALLED_ITEM";
 
         $dbh->do(
-            q{ INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code, branchcode) VALUES (12, "email", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (12, "sms", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (12, "phone", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (13, "email", 0, "circulation", "RETURN_RECALLED_ITEM", null), (13, "sms", 0, "circulation", "RETURN_RECALLED_ITEM", null), (13, "phone", 0, "circulation", "RETURN_RECALLED_ITEM", null) }
-        );
-
-        say $out "Added message transports for recalls notices";
-
-        $dbh->do(
             q{ INSERT IGNORE INTO message_attributes (message_attribute_id, message_name, takes_days) VALUES (12, 'Recall_Waiting', 0), (13, 'Recall_Requested', 0) }
         );
 
         say $out "Added message attributes for recalls: Recall_Waiting, Recall_Requested";
+
+        $dbh->do(
+            q{ INSERT IGNORE INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code, branchcode) VALUES (12, "email", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (12, "sms", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (12, "phone", 0, "circulation", "PICKUP_RECALLED_ITEM", null), (13, "email", 0, "circulation", "RETURN_RECALLED_ITEM", null), (13, "sms", 0, "circulation", "RETURN_RECALLED_ITEM", null), (13, "phone", 0, "circulation", "RETURN_RECALLED_ITEM", null) }
+        );
+
+        say $out "Added message transports for recalls notices";
     },
 };
