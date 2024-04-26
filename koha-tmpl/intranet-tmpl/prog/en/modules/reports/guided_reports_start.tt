@@ -876,12 +876,14 @@
                                         [% ELSE %]
                                             <li>
                                                 <label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>
-                                                <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]" [%- sql_param.select_multiple | html -%]>
+                                                [% IF (sql_param.select_multiple) %]
+                                                    <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]" multiple>
+                                                        <option value="null" hidden></option>
+                                                [% ELSE %]
+                                                    <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]">
+                                                [% END %]
                                                     [% IF (sql_param.include_all) %]
                                                         <option value="%">All</option>
-                                                    [% END %]
-                                                    [% IF (sql_param.select_multiple) %]
-                                                        <option value="null" hidden></option>
                                                     [% END %]
                                                     [% FOREACH value IN sql_param.input.values %]
                                                         <option value="[%- value | html -%]">[%- sql_param.input.labels.$value | html -%]</option>
