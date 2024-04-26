@@ -252,7 +252,7 @@ subtest 'add() tests' => sub {
 
 subtest 'update() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
@@ -276,7 +276,8 @@ subtest 'update() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $ticket_id = $builder->build_object( { class => 'Koha::Tickets' } )->id;
+    my $ticket = $builder->build_object( { class => 'Koha::Tickets' } );
+    my $ticket_id = $ticket->id;
 
     # Unauthorized attempt to update
     $t->put_ok(
@@ -304,6 +305,16 @@ subtest 'update() tests' => sub {
     $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
           $ticket_with_updated_field )->status_is(200)
       ->json_is( '/title' => 'Test ticket update' );
+
+    # Set the assignee on PUT
+    $ticket_with_updated_field->{assignee_id} = $librarian->id;
+    $t->put_ok( "//$userid:$password@/api/v1/tickets/$ticket_id" => json =>
+          $ticket_with_updated_field )->status_is(200)
+      ->json_is( '/title' => 'Test ticket update' )
+      ->json_is( '/assignee_id' => $librarian->id );
+
+    my $updates = $ticket->updates;
+    is( $updates->count, 1, "Ticket update added for assignee change" );
 
     # Authorized attempt to write invalid data
     my $ticket_with_invalid_field = {
