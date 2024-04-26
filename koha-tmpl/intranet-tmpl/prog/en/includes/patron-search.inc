@@ -698,7 +698,7 @@
                 var borrowernumber = $(this).data("borrowernumber");
                 var page = "/cgi-bin/koha/members/moremember.pl?print=brief&borrowernumber=" + borrowernumber;
                 $("#patron_preview_modal").load( page + " div.container-fluid", function(){
-                    $("#patron_preview_modal").find(".close").on("click", function(){
+                    $("#patron_preview_modal").find(".close_window").on("click", function(){
                         $('#patron_preview_modal').html(_("Loading...")).removeClass("show");
                     });
                 });
