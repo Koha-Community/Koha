@@ -824,9 +824,10 @@
                             </tr>
                             [% FOREACH c IN categorycodes %]
                                 [% NEXT UNLESS c %]
-                                [% SET patron_maxissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxissueqty' ) %]
-                                [% SET patron_maxonsiteissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
-                                [% SET max_holds = CirculationRules.Search( branchcode, c, undef, 'max_holds' ) %]
+                                [% SET i = undef %]
+                                [% SET patron_maxissueqty = all_rules.$c.$i.patron_maxissueqty %]
+                                [% SET patron_maxonsiteissueqty = all_rules.$c.$i.patron_maxonsiteissueqty %]
+                                [% SET max_holds = all_rules.$c.$i.max_holds %]
 
                                 [% IF  ( patron_maxissueqty.defined && patron_maxissueqty != '' ) || ( patron_maxonsiteissueqty.defined && patron_maxonsiteissueqty != '' ) || ( max_holds.defined && max_holds != '' ) %]
                                 <tr>
@@ -902,11 +903,8 @@
                                 <th>&nbsp;</th>
                             </tr>
                             [% FOREACH c IN categorycodes %]
-                                [% SET c = '*' UNLESS c.defined AND c != '' %]
                                 [% FOREACH i IN itemtypes %]
-                                    [% SET i = '*' UNLESS i.defined AND i != '' %]
-
-                                    [% SET waiting_hold_cancellation = CirculationRules.Search( current_branch, c, i, 'waiting_hold_cancellation' ) %]
+                                    [% SET waiting_hold_cancellation = all_rules.$c.$i.waiting_hold_cancellation %]
 
                                     [% IF ( waiting_hold_cancellation.defined && waiting_hold_cancellation != '' ) %]
                                         <tr>
@@ -932,7 +930,7 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions">
-                                                <a href="#" class="del-waiting-hold-cancellation btn btn-default btn-xs" data-categorycode="[% c | html %]" data-itemtype="[% i | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                <a href="#" class="del-waiting-hold-cancellation btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-itemtype="[% i|| '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         </tr>
                                     [% END %]
@@ -987,7 +985,8 @@
                             </tr>
                             [% FOREACH c IN categorycodes %]
                                 [% NEXT UNLESS c %]
-                                [% SET open_article_requests_limit = CirculationRules.Search( branchcode, c, undef, 'open_article_requests_limit' ) %]
+                                [% SET i = undef %]
+                                [% SET open_article_requests_limit = all_rules.$c.$i.open_article_requests_limit %]
 
                                 [% IF ( open_article_requests_limit.defined && open_article_requests_limit != '' ) %]
                                 <tr>
@@ -1041,9 +1040,8 @@
                                 <th>&nbsp;</th>
                             </tr>
                             [% FOREACH c IN categorycodes %]
-                                [% SET c = '*' UNLESS c.defined AND c != '' %]
-
-                                [% SET article_request_fee = CirculationRules.Search( current_branch, c, undef, 'article_request_fee' ) %]
+                                [% SET i = undef %]
+                                [% SET article_request_fee = all_rules.$c.$i.article_request_fee %]
 
                                 [% IF ( article_request_fee.defined && article_request_fee != '' ) %]
                                 <tr>
@@ -1307,9 +1305,11 @@
                                 <th>&nbsp;</th>
                             </tr>
                             [% FOREACH i IN itemtypeloop %]
-                                [% SET holdallowed = CirculationRules.Search( branchcode, undef, i.itemtype, 'holdallowed' ) %]
-                                [% SET hold_fulfillment_policy = CirculationRules.Search( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
-                                [% SET returnbranch = CirculationRules.Search( branchcode, undef, i.itemtype, 'returnbranch' ) %]
+                                [% SET it = i.itemtype %]
+                                [% SET c = undef %]
+                                [% SET holdallowed = all_rules.$c.$it.holdallowed %]
+                                [% SET hold_fulfillment_policy = all_rules.$c.$it.hold_fulfillment_policy %]
+                                [% SET returnbranch = all_rules.$c.$it.returnbranch %]
 
                                 [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
                                     <tr>
