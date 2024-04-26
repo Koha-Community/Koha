@@ -50,7 +50,7 @@
           <form method="post" id="rules_form" action="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">
               [% INCLUDE 'csrf-token.inc' %]
             <h1>Rules for automatic item modifications by age</h1>
-            <div id="toolbar" class="btn-toolbar">
+            <div id="toolbar" class="btn-toolbar sticky">
                 <div class="btn-group">
                     <button class="btn btn-default add_rule"><i class="fa fa-plus"></i> Add rule</button>
                 </div>
@@ -290,15 +290,7 @@
     [% Asset.js("js/automatic_item_modification_by_age.js") | $raw %]
     [% IF op == 'edit_form' %]
         <script>
-            var Sticky;
             $(document).ready(function() {
-                  [% IF ( op == 'edit_form' ) %]
-                Sticky = $("#toolbar");
-                Sticky.hcSticky({
-                    stickTo: "main",
-                    stickyClass: "floating"
-                });
-                  [% END %]
                   [% IF rules.size > 0 %]
                       $("#norules").hide();
                   [% ELSE %]

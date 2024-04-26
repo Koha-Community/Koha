@@ -203,7 +203,7 @@
 [% BLOCK add_form %]
     <h1>[% PROCESS page_heading %]</h1>
 
-    <div id="toolbar" class="btn-toolbar">
+    <div id="toolbar" class="btn-toolbar sticky">
         <div class="btn-group">
             <button class="btn btn-primary" id="submit_form"><i class="fa fa-save"></i> Save</button>
             <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
@@ -554,7 +554,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     <script>
         $("#saveandcontinue").on("click",function(e){
             e.preventDefault();
@@ -706,11 +705,6 @@
                     $("#add_additional_content").submit();
                 });
 
-                Sticky = $("#toolbar");
-                Sticky.hcSticky({
-                    stickTo: ".main",
-                    stickyClass: "floating"
-                });
                 $("#location").select2({ width: '50%' });
             });
         </script>

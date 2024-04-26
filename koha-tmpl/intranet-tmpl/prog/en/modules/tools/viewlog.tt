@@ -320,7 +320,7 @@
                 [% IF ( do_it ) %]
                     [% IF ( total ) %]
                         <h3>Log entries</h3>
-                        <div id="toolbar" class="btn-toolbar">
+                        <div id="toolbar" class="btn-toolbar sticky">
                             <a href="#" id="select_none" class="btn btn-link disabled"><i class="fa fa-times"></i> Check none</a>
                             <button class="btn btn-link disabled compare_link"><i class="fa fa-columns"></i> Compare selected</button>
                         </div>
@@ -483,7 +483,6 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% IF ( circulation ) %]
         [% INCLUDE 'str/members-menu.inc' %]
         [% Asset.js("js/members-menu.js") | $raw %]

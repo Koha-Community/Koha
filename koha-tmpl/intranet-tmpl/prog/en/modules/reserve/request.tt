@@ -1246,7 +1246,7 @@
                         [% END %]
 
                         <h2>Existing holds</h2>
-                        <div id="toolbar" class="btn-toolbar">
+                        <div id="toolbar" class="btn-toolbar sticky">
                             <div class="btn-group">
                                 <input type="hidden" name="op" value="cud-modifyall">
                                 <input type="submit" class="btn btn-primary" name="submit" value="Update hold(s)" />
@@ -1482,7 +1482,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% Asset.js("js/holds.js") | $raw%]
     [% Asset.js("js/form-submit.js") | $raw%]
@@ -1500,7 +1499,6 @@
                 "bKohaColumnsUseNames": true,
            }, hold_table_settings);
         });
-        var Sticky;
         var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
@@ -1866,12 +1864,6 @@
                     patron_autocomplete($(".search_patron_filter"), { 'link-to': 'reserve', 'url-params': '[% url_biblio_params | url %]' });
                 [% END %]
             [% END %]
-
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: "#existing_holds",
-                stickyClass: "floating"
-            });
 
             [% IF Koha.Preference('EnableItemGroupHolds') %]
                 $(':radio[name="item_group_id"]').change(function(){

@@ -56,17 +56,7 @@ function confirmFormatOverwrite( event ) {
     }
 }
 
-var Sticky;
-
 $(document).ready(function() {
-    if( add_form || copy_form ){
-        Sticky = $("#toolbar");
-        Sticky.hcSticky({
-            stickTo: ".main",
-            stickyClass: "floating"
-        });
-    }
-
     var ntable = KohaTable("lettert", {
         "autoWidth": false,
         "paging": false,
