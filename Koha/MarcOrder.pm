@@ -366,6 +366,7 @@ sub add_items_from_import_record {
                 budget_id    => $budget_id,
                 basket_id    => $basket_id,
                 fields       => $item_fields,
+                marcrecord   => $marcrecord,
             }
         );
 
@@ -389,6 +390,7 @@ sub add_items_from_import_record {
                 budget_id    => $budget_id,
                 basket_id    => $basket_id,
                 fields       => $client_item_fields,
+                marcrecord   => $marcrecord,
             }
         );
 
@@ -403,8 +405,6 @@ sub add_items_from_import_record {
 
         return $order_line_details;
     }
-
-    # return \@order_line_details;
 }
 
 =head3 create_order_lines
@@ -694,6 +694,7 @@ my $order_line_fields = parse_input_into_order_line_fields(
         budget_id    => $budget_id,
         basket_id    => $basket_id,
         fields       => $item_fields,
+        marcrecord   => $marcrecord,
     }
 );
 
@@ -709,6 +710,7 @@ sub parse_input_into_order_line_fields {
     my $budget_id    = $args->{budget_id};
     my $basket_id    = $args->{basket_id};
     my $fields       = $args->{fields};
+    my $marcrecord   = $args->{marcrecord};
 
     my $quantity        = $fields->{quantity} || 1;
     my @homebranches    = $client ? @{ $fields->{homebranches} }    : ( ( $fields->{homebranch} ) x $quantity );
@@ -724,14 +726,18 @@ sub parse_input_into_order_line_fields {
     my @itemprices      = $client ? @{ $fields->{itemprices} }      : ( ( $fields->{price} ) x $quantity );
     my @replacementprices =
         $client ? @{ $fields->{replacementprices} } : ( ( $fields->{replacementprice} ) x $quantity );
-    my @itemcallnumbers     = $client ? @{ $fields->{itemcallnumbers} } : ( ( $fields->{itemcallnumber} ) x $quantity );
-    my $c_quantity          = $client ? $fields->{c_quantity}           : $fields->{c_quantity};
-    my $c_budget_id         = $client ? $fields->{c_budget_id}          : $fields->{c_budget_id};
-    my $c_discount          = $client ? $fields->{c_discount}           : $fields->{c_discount};
-    my $c_sort1             = $client ? $fields->{c_sort1}              : $fields->{c_sort1};
-    my $c_sort2             = $client ? $fields->{c_sort2}              : $fields->{c_sort2};
-    my $c_replacement_price = $client ? $fields->{c_replacement_price}  : $fields->{c_replacement_price};
-    my $c_price             = $client ? $fields->{c_price}              : $fields->{c_price};
+    my @itemcallnumbers = $client ? @{ $fields->{itemcallnumbers} } : ( ( $fields->{itemcallnumber} ) x $quantity );
+    my @coded_location_qualifiers =
+        $client ? @{ $fields->{coded_location_qualifiers} } : ( ( $fields->{coded_location_qualifier} ) x $quantity );
+    my @barcodes            = $client ? @{ $fields->{barcodes} }       : ( ( $fields->{barcode} ) x $quantity );
+    my @enumchrons          = $client ? @{ $fields->{enumchrons} }     : ( ( $fields->{enumchron} ) x $quantity );
+    my $c_quantity          = $client ? $fields->{c_quantity}          : $fields->{c_quantity};
+    my $c_budget_id         = $client ? $fields->{c_budget_id}         : $fields->{c_budget_id};
+    my $c_discount          = $client ? $fields->{c_discount}          : $fields->{c_discount};
+    my $c_sort1             = $client ? $fields->{c_sort1}             : $fields->{c_sort1};
+    my $c_sort2             = $client ? $fields->{c_sort2}             : $fields->{c_sort2};
+    my $c_replacement_price = $client ? $fields->{c_replacement_price} : $fields->{c_replacement_price};
+    my $c_price             = $client ? $fields->{c_price}             : $fields->{c_price};
 
     # If using the cronjob, we want to default to the account budget if not mapped on the record
     my $item_budget_id;
@@ -750,32 +756,46 @@ sub parse_input_into_order_line_fields {
     my $loop_limit   = $client ? scalar(@homebranches)        : $quantity;
 
     my $order_line_fields = {
-        biblionumber        => $biblionumber,
-        homebranch          => \@homebranches,
-        holdingbranch       => \@holdingbranches,
-        itemnotes_nonpublic => \@nonpublic_notes,
-        itemnotes           => \@public_notes,
-        location            => \@locs,
-        ccode               => \@ccodes,
-        itype               => \@itypes,
-        notforloan          => \@notforloans,
-        uri                 => \@uris,
-        copynumber          => \@copynos,
-        price               => \@itemprices,
-        replacementprice    => \@replacementprices,
-        itemcallnumber      => \@itemcallnumbers,
-        budget_code         => \@budget_codes,
-        loop_limit          => $loop_limit,
-        basket_id           => $basket_id,
-        budget_id           => $budget_id,
-        c_quantity          => $c_quantity,
-        c_budget_id         => $c_budget_id,
-        c_discount          => $c_discount,
-        c_sort1             => $c_sort1,
-        c_sort2             => $c_sort2,
-        c_replacement_price => $c_replacement_price,
-        c_price             => $c_price,
+        biblionumber             => $biblionumber,
+        homebranch               => \@homebranches,
+        holdingbranch            => \@holdingbranches,
+        itemnotes_nonpublic      => \@nonpublic_notes,
+        itemnotes                => \@public_notes,
+        location                 => \@locs,
+        ccode                    => \@ccodes,
+        itype                    => \@itypes,
+        notforloan               => \@notforloans,
+        uri                      => \@uris,
+        copynumber               => \@copynos,
+        price                    => \@itemprices,
+        replacementprice         => \@replacementprices,
+        itemcallnumber           => \@itemcallnumbers,
+        coded_location_qualifier => \@coded_location_qualifiers,
+        barcode                  => \@barcodes,
+        enumchron                => \@enumchrons,
+        budget_code              => \@budget_codes,
+        loop_limit               => $loop_limit,
+        basket_id                => $basket_id,
+        budget_id                => $budget_id,
+        c_quantity               => $c_quantity,
+        c_budget_id              => $c_budget_id,
+        c_discount               => $c_discount,
+        c_sort1                  => $c_sort1,
+        c_sort2                  => $c_sort2,
+        c_replacement_price      => $c_replacement_price,
+        c_price                  => $c_price,
+        marcrecord               => $marcrecord,
     };
+
+    if($client) {
+        $order_line_fields->{tags}               = $fields->{tags};
+        $order_line_fields->{subfields}          = $fields->{subfields};
+        $order_line_fields->{field_values}       = $fields->{field_values};
+        $order_line_fields->{serials}            = $fields->{serials};
+        $order_line_fields->{order_vendornote}   = $fields->{order_vendornote};
+        $order_line_fields->{order_internalnote} = $fields->{order_internalnote};
+        $order_line_fields->{all_currency}       = $fields->{all_currency};
+    }
 
     return $order_line_fields;
 }
@@ -807,58 +827,164 @@ sub create_items_and_generate_order_hash {
     my $active_currency = $args->{active_currency};
     my @order_line_details;
     my $itemcreation = 0;
+    my @itemnumbers;
 
     for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
         $itemcreation = 1;
         my $item = Koha::Item->new(
             {
-                biblionumber        => $fields->{biblionumber},
-                homebranch          => @{ $fields->{homebranch} }[$i],
-                holdingbranch       => @{ $fields->{holdingbranch} }[$i],
-                itemnotes_nonpublic => @{ $fields->{itemnotes_nonpublic} }[$i],
-                itemnotes           => @{ $fields->{itemnotes} }[$i],
-                location            => @{ $fields->{location} }[$i],
-                ccode               => @{ $fields->{ccode} }[$i],
-                itype               => @{ $fields->{itype} }[$i],
-                notforloan          => @{ $fields->{notforloan} }[$i],
-                uri                 => @{ $fields->{uri} }[$i],
-                copynumber          => @{ $fields->{copynumber} }[$i],
-                price               => @{ $fields->{price} }[$i],
-                replacementprice    => @{ $fields->{replacementprice} }[$i],
-                itemcallnumber      => @{ $fields->{itemcallnumber} }[$i],
+                biblionumber             => $fields->{biblionumber},
+                homebranch               => @{ $fields->{homebranch} }[$i],
+                holdingbranch            => @{ $fields->{holdingbranch} }[$i],
+                itemnotes_nonpublic      => @{ $fields->{itemnotes_nonpublic} }[$i],
+                itemnotes                => @{ $fields->{itemnotes} }[$i],
+                location                 => @{ $fields->{location} }[$i],
+                ccode                    => @{ $fields->{ccode} }[$i],
+                itype                    => @{ $fields->{itype} }[$i],
+                notforloan               => @{ $fields->{notforloan} }[$i],
+                uri                      => @{ $fields->{uri} }[$i],
+                copynumber               => @{ $fields->{copynumber} }[$i],
+                price                    => @{ $fields->{price} }[$i],
+                replacementprice         => @{ $fields->{replacementprice} }[$i],
+                itemcallnumber           => @{ $fields->{itemcallnumber} }[$i],
+                coded_location_qualifier => @{ $fields->{coded_location_qualifier} }[$i],
+                barcode                  => @{ $fields->{barcode} }[$i],
+                enumchron                => @{ $fields->{enumchron} }[$i],
             }
         )->store;
+        push( @itemnumbers, $item->itemnumber );
+    }
 
-        my %order_detail_hash = (
-            biblionumber => $fields->{biblionumber},
-            itemnumbers  => ( $item->itemnumber ),
-            basketno     => $basket_id,
-            quantity     => 1,
-            budget_id    => @{ $fields->{budget_code} }[$i]
-                || $budget_id,
-            currency => $vendor->listprice,
+    if ( $itemcreation == 1 ) {
+        # Group orderlines from MarcItemFieldsToOrder
+        my $budget_hash;
+        my @budget_ids = @{ $fields->{budget_code} };
+        for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
+            $budget_ids[$i] = $budget_id if !$budget_ids[$i];   # Use default budget if no budget provided
+            $budget_hash->{ $budget_ids[$i] }->{quantity} += 1;
+            $budget_hash->{ $budget_ids[$i] }->{price} = @{ $fields->{price} }[$i];
+            $budget_hash->{ $budget_ids[$i] }->{replacementprice} =
+                @{ $fields->{replacementprice} }[$i];
+            $budget_hash->{ $budget_ids[$i] }->{itemnumbers} //= [];
+            push @{ $budget_hash->{ $budget_ids[$i] }->{itemnumbers} },
+                $itemnumbers[$i];
+        }
+
+        # Create orderlines from MarcItemFieldsToOrder
+        while ( my ( $budget_id, $infos ) = each %$budget_hash ) {
+            if ($budget_id) {
+                my %orderinfo = (
+                    biblionumber => $fields->{biblionumber},
+                    basketno     => $basket_id,
+                    quantity     => $infos->{quantity},
+                    budget_id    => $budget_id,
+                    currency     => $active_currency->currency,
+                );
+
+                my $price = $infos->{price};
+                if ($price) {
+                    $price                            = _format_price_to_CurrencyFormat_syspref($price);
+                    $price                            = Koha::Number::Price->new($price)->unformat;
+                    $orderinfo{tax_rate_on_ordering}  = $vendor->tax_rate;
+                    $orderinfo{tax_rate_on_receiving} = $vendor->tax_rate;
+                    my $order_discount = $fields->{c_discount} ? $fields->{c_discount} : $vendor->discount;
+                    $orderinfo{discount}  = $order_discount;
+                    $orderinfo{rrp}       = $price;
+                    $orderinfo{ecost}     = $order_discount ? $price * ( 1 - $order_discount / 100 ) : $price;
+                    $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
+                    $orderinfo{unitprice} = $orderinfo{ecost};
+                    $orderinfo{sort1}     = $fields->{c_sort1};
+                    $orderinfo{sort2}     = $fields->{c_sort2};
+                } else {
+                    $orderinfo{listprice} = 0;
+                }
+                $orderinfo{replacementprice} = $infos->{replacementprice} || 0;
+
+                # Remove uncertainprice flag if we have found a price in the MARC record
+                $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
+
+                my $order = Koha::Acquisition::Order->new( \%orderinfo );
+                $order->populate_with_prices_for_ordering();
+                $order->populate_with_prices_for_receiving();
+                $order->store;
+                $order->add_item($_) for @{ $budget_hash->{$budget_id}->{itemnumbers} };
+            }
+        }
+    } else {
+        # Add an orderline for each MARC record
+        # Get quantity in the MARC record (1 if none)
+        my $quantity  = GetMarcQuantity( $fields->{marcrecord}, C4::Context->preference('marcflavour') ) || 1;
+        my %orderinfo = (
+            biblionumber       => $fields->{biblionumber},
+            basketno           => $basket_id,
+            quantity           => $fields->{c_quantity},
+            branchcode         => C4::Context->userenv()->{'branch'},
+            budget_id          => $fields->{c_budget_id},
+            uncertainprice     => 1,
+            sort1              => $fields->{c_sort1},
+            sort2              => $fields->{c_sort2},
+            order_internalnote => $fields->{order_internalnote},
+            order_vendornote   => $fields->{order_vendornote},
+            currency           => $fields->{all_currency},
+            replacementprice   => $fields->{c_replacement_price},
         );
 
-        if ( @{ $fields->{price} }[$i] ) {
-            $order_detail_hash{tax_rate_on_ordering}  = $vendor->tax_rate;
-            $order_detail_hash{tax_rate_on_receiving} = $vendor->tax_rate;
+        # Get the price if there is one.
+        if ($fields->{c_price}) {
+            $fields->{c_price} = _format_price_to_CurrencyFormat_syspref($fields->{c_price});
+            $fields->{c_price}                = Koha::Number::Price->new( $fields->{c_price} )->unformat;
+            $orderinfo{tax_rate_on_ordering}  = $vendor->tax_rate;
+            $orderinfo{tax_rate_on_receiving} = $vendor->tax_rate;
             my $order_discount = $fields->{c_discount} ? $fields->{c_discount} : $vendor->discount;
-            $order_detail_hash{discount} = $order_discount;
-            $order_detail_hash{rrp}      = @{ $fields->{price} }[$i];
-            $order_detail_hash{ecost} =
-                $order_discount ? @{ $fields->{price} }[$i] * ( 1 - $order_discount / 100 ) : @{ $fields->{price} }[$i];
-            $order_detail_hash{listprice} = $order_detail_hash{rrp} / $active_currency->rate;
-            $order_detail_hash{unitprice} = $order_detail_hash{ecost};
+            $orderinfo{discount} = $order_discount;
+            $orderinfo{rrp}      = $fields->{c_price};
+            $orderinfo{ecost} =
+                $order_discount ? $fields->{c_price} * ( 1 - $order_discount / 100 ) : $fields->{c_price};
+            $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
+            $orderinfo{unitprice} = $orderinfo{ecost};
         } else {
-            $order_detail_hash{listprice} = 0;
+            $orderinfo{listprice} = 0;
         }
-        $order_detail_hash{replacementprice} = @{ $fields->{replacementprice} }[$i] || 0;
-        $order_detail_hash{uncertainprice}   = 0 if $order_detail_hash{listprice};
 
-        push @order_line_details, \%order_detail_hash;
+        # Remove uncertainprice flag if we have found a price in the MARC record
+        $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
 
+        my $order = Koha::Acquisition::Order->new( \%orderinfo );
+        $order->populate_with_prices_for_ordering();
+        $order->populate_with_prices_for_receiving();
+        $order->store;
+
+        my $basket = Koha::Acquisition::Baskets->find( $basket_id );
+        if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
+            my @tags         = @{ $fields->{tags} };
+            my @subfields    = @{ $fields->{subfields} };
+            my @field_values = @{ $fields->{field_values} };
+            my @serials      = @{ $fields->{serials} };
+            my $xml          = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
+            my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
+            for ( my $qtyloop = 1 ; $qtyloop <= $fields->{c_quantity} ; $qtyloop++ ) {
+                my ( $biblionumber, undef, $itemnumber ) = AddItemFromMarc( $fields->{marcrecord}, $fields->{biblionumber} );
+                $order->add_item($itemnumber);
+            }
+        }
     }
+
     return \@order_line_details;
+}
+
+=head3 _format_price_to_CurrencyFormat_syspref
+
+In France, the cents separator is the ',' but sometimes a '.' is used
+In this case, the price will be x100 when unformatted
+The '.' needs replacing by a ',' to get a proper price calculation
+
+=cut
+
+sub _format_price_to_CurrencyFormat_syspref {
+    my ($price) = @_;
+
+    $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+    return $price;
 }
 
 1;

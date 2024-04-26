@@ -215,6 +215,17 @@ if ( $op eq "" ) {
         my @itemprices        = $input->multi_param( 'itemprice_' . $import_record->import_record_id );
         my @replacementprices = $input->multi_param( 'itemreplacementprice_' . $import_record->import_record_id );
         my @itemcallnumbers   = $input->multi_param( 'itemcallnumber_' . $import_record->import_record_id );
+        my @coded_location_qualifiers =
+            $input->multi_param( 'coded_location_qualifier_' . $import_record->import_record_id );
+        my @barcodes           = $input->multi_param( 'barcode_' . $import_record->import_record_id );
+        my @enumchrons         = $input->multi_param( 'enumchron_' . $import_record->import_record_id );
+        my @tags               = $input->multi_param('tag');
+        my @subfields          = $input->multi_param('subfield');
+        my @field_values       = $input->multi_param('field_value');
+        my @serials            = $input->multi_param('serial');
+        my $order_internalnote = $cgiparams->{'all_order_internalnote'};
+        my $order_vendornote   = $cgiparams->{'all_order_vendornote'};
+        my $all_currency       = $cgiparams->{'all_currency'};
 
         my $client_item_fields = {
             quantity          => scalar(@homebranches),
@@ -232,6 +243,13 @@ if ( $op eq "" ) {
             itemprices        => \@itemprices,
             replacementprices => \@replacementprices,
             itemcallnumbers   => \@itemcallnumbers,
+            coded_location_qualifiers => \@coded_location_qualifiers,
+            barcodes           => \@barcodes,
+            enumchrons         => \@enumchrons,
+            tags               => \@tags,
+            subfields          => \@subfields,
+            field_values       => \@field_values,
+            serials            => \@serials,
             c_quantity =>
                 $input->param( 'quantity_' . $import_record->import_record_id )
                 || GetMarcQuantity( $marcrecord, C4::Context->preference('marcflavour') )
@@ -246,6 +264,9 @@ if ( $op eq "" ) {
             c_replacement_price => $input->param( 'replacementprice_' . $import_record->import_record_id ),
             c_price             => $input->param( 'price_' . $import_record->import_record_id )
                 || GetMarcPrice( $marcrecord, C4::Context->preference('marcflavour') ),
+            order_internalnote => $order_internalnote,
+            order_vendornote   => $order_vendornote,
+            all_currency       => $all_currency,
         };
 
         my $args = {
