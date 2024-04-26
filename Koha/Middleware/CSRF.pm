@@ -50,7 +50,7 @@ sub call {
     } elsif ( $stateful_methods{$request_method} ) {
 
         # Get the CSRF token from the param list or the header
-        my $csrf_token = $req->param('csrf_token') || $req->header('CSRF_TOKEN');
+        my $csrf_token = $req->param('csrf_token') || $req->header('CSRF-TOKEN');
 
         if ( defined $req->param('op') && $original_op !~ m{^cud-} ) {
             $error = sprintf "Programming error - op '%s' must start with 'cud-' for %s %s (referer: %s)", $original_op,

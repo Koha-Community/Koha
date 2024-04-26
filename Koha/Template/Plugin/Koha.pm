@@ -110,7 +110,7 @@ sub GenerateCSRF {
     my ($self) = @_;
 
     my $memory_cache = Koha::Cache::Memory::Lite->get_instance;
-    my $cache_key    = "CSRF_TOKEN";
+    my $cache_key    = "CSRF-TOKEN";
     my $cached       = $memory_cache->get_from_cache($cache_key);
     return $cached if $cached;
 

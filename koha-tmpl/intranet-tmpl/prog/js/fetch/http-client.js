@@ -86,7 +86,7 @@ class HttpClient {
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
-        let csrf_token = { csrf_token: this.csrf_token };
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
         let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,
@@ -107,7 +107,7 @@ class HttpClient {
                 ? params.body
                 : JSON.stringify(params.body)
             : undefined;
-        let csrf_token = { csrf_token: this.csrf_token };
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
         let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,
@@ -123,7 +123,7 @@ class HttpClient {
     }
 
     delete(params = {}) {
-        let csrf_token = { csrf_token: this.csrf_token };
+        let csrf_token = { "CSRF-TOKEN": this.csrf_token };
         let headers = { ...csrf_token, ...params.headers };
         return this._fetchJSON(
             params.endpoint,

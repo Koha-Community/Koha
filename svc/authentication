@@ -62,5 +62,5 @@ if ( $status eq "ok" ) {
     );
     $csrf_token = Koha::Token->new->generate_csrf( { session_id => scalar $sessionID } );
 }
-print $query->header( -type => 'text/xml', cookie => $cookie, -'X-CSRF_TOKEN' => $csrf_token );
+print $query->header( -type => 'text/xml', cookie => $cookie, -'X-CSRF-TOKEN' => $csrf_token );
 print XMLout( { status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1 );
