@@ -520,11 +520,13 @@ subtest 'Search patrons in modal' => sub {
             sprintf(
                 "%s %s %s (%s)", $patron->title, $patron->firstname,
                 $patron->surname,        $patron->cardnumber
-            )
+            ),
+            'Patron preview modal has correct content'
         );
 
         # Close the patron preview modal
-        $driver->find_element('//div[@id="patron_preview_modal"]//input[@class="close"]')->click;
+        $driver->find_element('//*[@id="patron_preview_modal"]/div[2]/fieldset/button')->click;
+
         $s->wait_for_element_hidden('//div[@id="patron_preview_modal"]');
 
         # Select patron 2
@@ -539,7 +541,8 @@ subtest 'Search patrons in modal' => sub {
         # => The guarantor block has the info of the selected patron
         is(
             $driver->find_element('//a[@class="new_guarantor_link"]')->get_text(),
-            sprintf( "%s %s (%s)", $patron->firstname, $patron->surname, $patron->cardnumber )
+            sprintf( "%s %s (%s)", $patron->firstname, $patron->surname, $patron->cardnumber ),
+            'Guarantor block contains info of selected patron'
         );
         is(
             $driver->find_element('//input[@class="new_guarantor_id noEnterSubmit"]')->get_value(),
