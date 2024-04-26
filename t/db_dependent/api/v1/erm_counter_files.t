@@ -153,7 +153,7 @@ subtest 'get() tests' => sub {
     $counter_file_to_delete->delete;
 
     $t->get_ok("//$userid:$password@/api/v1/erm/counter_files/$non_existent_id/file/content")->status_is(404)
-        ->json_is( '/error' => 'Counter file not found' );
+        ->json_is( '/error' => 'COUNTER file not found' );
 
     $schema->storage->txn_rollback;
 };
