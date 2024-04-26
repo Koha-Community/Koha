@@ -207,6 +207,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_parameters_parameters_remaining_permissions'      => 1,
         'CAN_user_parameters'                                       => 1,
         'CAN_user_permissions'                                      => 1,
+        'CAN_user_plugins_admin'                                    => 1,
         'CAN_user_plugins_configure'                                => 1,
         'CAN_user_plugins_manage'                                   => 1,
         'CAN_user_plugins_report'                                   => 1,
