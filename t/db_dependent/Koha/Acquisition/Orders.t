@@ -196,11 +196,11 @@ subtest 'filter_by_obsolete and cancel' => sub {
     $rs = Koha::Acquisition::Orders->filter_by_obsolete->search($limit);
     is( $rs->count, 3, 'Three obsolete' );
     my @results = $rs->cancel;
-    is( $results[0],                            3,           'All should be cancelled' );
+    is( $results[0],                            2,           'Two should be cancelled, one was cancelled already' );
     is( @{ $results[1] },                       0,           'No messages' );
     is( $order_1->discard_changes->orderstatus, 'cancelled', 'Check orderstatus of order_1' );
     isnt( $order_2->discard_changes->datecancellationprinted, undef, 'Cancellation date of order_2 filled' );
-    isnt( $order_3->discard_changes->datecancellationprinted, undef, 'Cancellation date of order_3 filled' );
+    is( $order_3->discard_changes->datecancellationprinted, undef, 'order_3 was skipped, so date not touched' );
 
     $schema->storage->txn_rollback;
 };

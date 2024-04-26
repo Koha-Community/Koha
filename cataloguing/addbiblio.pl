@@ -789,8 +789,8 @@ elsif ( $op eq "cud-delete" ) {
     try {
         my @result = Koha::Acquisition::Orders->search( { biblionumber => $biblionumber } )->cancel;
         my $warns  = @{ $result[1] };
-        if ( $result[0] && $warns ) {    # warnings about order lines not removed
-            warn sprintf( "%d order lines were deleted, but %d lines gave a warning\n", $result[0], $warns );
+        if ($warns) {    # warnings about order lines not cancelled
+            warn sprintf( "%d order lines were cancelled, but %d lines gave a warning\n", $result[0], $warns );
         }
         $error = &DelBiblio($biblionumber);
     } catch {

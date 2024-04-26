@@ -287,6 +287,7 @@ sub cancel {
     my $count         = 0;
     my @messages;
     while ( my $order = $self->next ) {
+        next if $order->orderstatus =~ /complete|cancelled/;
         _correct_quantity($order);                        # historical ballast
         $order->cancel( { delete_biblio => $delete_biblio } );
         if ( @{ $order->object_messages } ) {
