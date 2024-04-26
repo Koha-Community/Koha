@@ -9,7 +9,7 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" href="/intranet-tmpl/lib/datatables/rowReorder.dataTables.min.css">
+[% Asset.css("lib/datatables/rowReorder.dataTables.min.css") | $raw %]
 <style>
 a.add, a.delete {
     cursor: pointer;
