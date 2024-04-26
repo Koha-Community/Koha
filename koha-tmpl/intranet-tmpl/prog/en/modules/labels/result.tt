@@ -1,7 +1,7 @@
 [% USE raw %]
 [% PROCESS 'i18n.inc' %]
 [% BLOCK pagination %]
-    <nav>
+    <nav id="toolbar" class="sticky">
         [% IF ( displayprev || displaynext ) %]
             <ul class="pagination">
                 [% IF ( displayprev ) %]
@@ -124,9 +124,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     <script>
-        var Sticky;
         $(document).ready(function(){
             $("#CheckAll").click(function(e){
                 e.preventDefault();

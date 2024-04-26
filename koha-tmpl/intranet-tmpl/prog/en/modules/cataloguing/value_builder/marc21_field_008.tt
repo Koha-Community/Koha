@@ -25,7 +25,7 @@
 <h4 id="h4_result">&quot;[% result | html %]&quot;</h4>
 
 <form method="get" name="f_pop" id="f_pop" style="display:block" onsubmit="report()" action="">
-    <div id="toolbar">
+    <div id="toolbar" class="sticky">
         <div class="btn-group">
             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
         </div>
@@ -61,16 +61,9 @@
 </form>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
     [% Asset.js("js/xmlControlfield.js") | $raw %]
     <script>
-        var Sticky;
         $(document).ready(function(){
-            Sticky = $("#toolbar");
-            Sticky.hcSticky({
-                stickTo: "#f_pop",
-                stickyClass: "floating"
-            });
             $(".close_window").on("click", function(e){
                 e.preventDefault();
                 window.close();

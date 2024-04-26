@@ -15,7 +15,6 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-[% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
 [% Asset.js( "lib/sortable/Sortable.min.js" ) | $raw %]
 [% INCLUDE 'select2.inc' %]
 <script>
@@ -35,7 +34,6 @@
     $(window).load(function(){
         $("#loading").hide();
     });
-    var Sticky;
 
     function changeEditor() {
 
@@ -85,12 +83,6 @@
             hash = "#[% tab | html %]";
             selectTab( hash );
         [% END %]
-
-        Sticky = $("#toolbar");
-        Sticky.hcSticky({
-            stickTo: "#f",
-            stickyClass: "floating"
-        });
 
         /* check cookie to hide/show marcdocs*/
         if( Cookies.get("marcdocs_[% borrowernumber | html %]") == 'hide'){
@@ -757,7 +749,6 @@ $(document).ready(function(){
             }
             $("#check_errors").html( strAll );
             $('html, body').animate({ scrollTop: 0 }, 'fast');
-            Sticky.hcSticky('refresh');
             return false;
         } else if( !StrAlert && !StrWarning ){
             document.f.submit();
@@ -920,7 +911,7 @@ $(document).ready(function(){
                         <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
                 [% END %]
 
-                <div id="toolbar" class="btn-toolbar">
+                <div id="toolbar" class="btn-toolbar sticky">
                     [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                         [% IF (circborrowernumber) %][%# fast cataloging must lead to items %]
                             <!-- Action is under fast cataloging - Save button redirecting to items -->
