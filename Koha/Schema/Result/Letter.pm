@@ -119,6 +119,13 @@ lang of the notice
 
 last modification
 
+=head2 style
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+custom styles for this notice
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -160,6 +167,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "style",
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -232,8 +241,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-18 12:50:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MA3WvXK/1ZBc407iU7ZcrA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-26 17:01:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UglmO8Xk7xnC09bYETA5+w
 
 sub koha_object_class {
     'Koha::Notice::Template';
