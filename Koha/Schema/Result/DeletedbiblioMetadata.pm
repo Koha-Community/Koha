@@ -59,6 +59,14 @@ __PACKAGE__->table("deletedbiblio_metadata");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 record_source_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+The record source for the metadata
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -79,6 +87,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "record_source_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -131,9 +141,29 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 record_source
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-30 11:34:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JCOh+FSSTgPlC8lMJOdOOA
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::RecordSource>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "record_source",
+  "Koha::Schema::Result::RecordSource",
+  { record_source_id => "record_source_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-26 13:23:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:n/IgiGmKu1znMd78vA+pVw
 
 sub koha_objects_class {
     'Koha::Old::Biblio::Metadatas';

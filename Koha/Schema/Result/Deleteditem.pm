@@ -223,7 +223,7 @@ number of times this item has been renewed
   data_type: 'smallint'
   is_nullable: 1
 
-number of times this item has been recorded for localuse
+number of times this item has been recorded as localuse
 
 =head2 reserves
 
@@ -461,7 +461,7 @@ __PACKAGE__->add_columns(
   "issues",
   { data_type => "smallint", default_value => 0, is_nullable => 1 },
   "renewals",
-  { data_type => "smallint", default_value => 0, is_nullable => 1 },
+  { data_type => "smallint", is_nullable => 1 },
   "localuse",
   { data_type => "smallint", is_nullable => 1 },
   "reserves",
@@ -532,8 +532,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-02 11:06:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Afgr1jl6aeSy/rS9RJGq2g
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-26 13:26:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:13COB8Ty6QDInmxN/zvEig
 
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },
