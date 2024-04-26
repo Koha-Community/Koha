@@ -118,7 +118,7 @@ subtest 'list_updates() tests' => sub {
 
 subtest 'add_update() tests' => sub {
 
-    plan tests => 37;
+    plan tests => 60;
 
     $schema->storage->txn_begin;
 
@@ -174,6 +174,8 @@ subtest 'add_update() tests' => sub {
         'SWAGGER3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/status' => undef )
+      ->json_is( '/assignee_id' => undef )
       ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
 
     # Check that notice trigger didn't fire for non-public update
@@ -226,6 +228,8 @@ subtest 'add_update() tests' => sub {
         'SWAGGER3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/status' => undef )
+      ->json_is( '/assignee_id' => undef )
       ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
 
     $notices =
@@ -240,7 +244,6 @@ subtest 'add_update() tests' => sub {
 
     # Check that state change triggers correct notice
     $update->{state} = 'resolved';
-    $update->{status} = 'TEST';
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
@@ -249,6 +252,8 @@ subtest 'add_update() tests' => sub {
         'SWAGGER3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/status' => undef )
+      ->json_is( '/assignee_id' => undef )
       ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
 
     $notices =
@@ -268,10 +273,49 @@ subtest 'add_update() tests' => sub {
     );
     isnt( $ticket->resolved_date, undef, "Ticket was given resolved_date when state was updated to 'resolved'" );
 
+    $update->{public} = Mojo::JSON->false;
+    $update->{state} = undef;
+
     # Check that status change is carried over to ticket
+    $update->{status} = 'TEST';
+    $update_id =
+      $t->post_ok(
+        "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
+          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        Location => qr|^\/api\/v1\/tickets/\d*|,
+        'SWAGGER3.4.1'
+    )->json_is( '/message' => $update->{message} )
+      ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/status' => $update->{status} )
+      ->json_is( '/assignee_id' => undef )
+      ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+
+    $ticket = $ticket->get_from_storage;
     is(
         $ticket->status, 'TEST',
         "Ticket status was updated in line with status change in update"
+    );
+
+    $update->{status} = undef;
+
+    # Check that assignee is carried over to ticket
+    $update->{assignee_id} = $librarian->id;
+    $update_id =
+      $t->post_ok(
+        "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
+          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        Location => qr|^\/api\/v1\/tickets/\d*|,
+        'SWAGGER3.4.1'
+    )->json_is( '/message' => $update->{message} )
+      ->json_is( '/public'  => $update->{public} )
+      ->json_is( '/status' => $update->{status} )
+      ->json_is( '/assignee_id' => $update->{assignee_id} )
+      ->json_is( '/user_id' => $librarian->id )->tx->res->json->{update_id};
+
+    $ticket = $ticket->get_from_storage;
+    is(
+        $ticket->assignee_id, $update->{assignee_id},
+        "Ticket assignee was updated in line with assignee change in update"
     );
 
     $schema->storage->txn_rollback;
