@@ -57,6 +57,15 @@ function clone_entry(node) {
     $("input#patron_attr_" + newId, clone).attr('value','');
     $("select#patron_attr_" + newId, clone).attr('value','');
     $(original).after(clone);
+
+    // regenerate flatpickr calendars to add event listeners
+    $(`.flatpickr_wrapper`, clone).remove();
+    var date = $("> .flatpickr", original).val();
+    $(".flatpickr", clone).each(function(){
+        apply_flatpickr(this);
+    });
+    $(`.flatpickr_wrapper .flatpickr, #patron_attr_${newId}.flatpickr`, clone).val(date);
+
     return false;
 }
 
