@@ -1773,18 +1773,18 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have a hold available for pickup as of <<reserves.waitingdate>>:"
+            - "You have a hold available for pickup as of [% hold.waitingdate | $KohaDates %]:"
             - ""
-            - "Title: <<biblio.title>>"
-            - "Author: <<biblio.author>>"
-            - "Copy: <<items.copynumber>>"
-            - "Location: <<branches.branchname>>"
-            - "<<branches.branchaddress1>>"
-            - "<<branches.branchaddress2>>"
-            - "<<branches.branchaddress3>>"
-            - "<<branches.branchcity>> <<branches.branchzip>>"
+            - "Title: [% biblio.title %]"
+            - "Author: [% biblio.author %]"
+            - "Copy: [% item.copynumber %]"
+            - "Location: [% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
+            - "[% branch.branchaddress3 %]"
+            - "[% branch.branchcity %] [% branch.branchzip %]"
 
         - module: reserves
           code: HOLDDGST
@@ -1829,13 +1829,13 @@ tables:
           branchcode: ""
           name: "Hold available for pickup"
           is_html: 0
-          title: "Hold available for pickup at <<branches.branchname>>"
+          title: "Hold available for pickup at [% branch.branchname %]"
           message_transport_type: sms
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "Your hold for <<biblio.title>> is available for pickup."
+            - "Your hold for [% biblio.title %] is available for pickup."
 
         - module: reserves
           code: HOLD
@@ -1846,9 +1846,9 @@ tables:
           message_transport_type: print
           lang: default
           content:
-            - "<<branches.branchname>>"
-            - "<<branches.branchaddress1>>"
-            - "<<branches.branchaddress2>>"
+            - "[% branch.branchname %]"
+            - "[% branch.branchaddress1 %]"
+            - "[% branch.branchaddress2 %]"
             - ""
             - ""
             - "Change service requested"
@@ -1859,9 +1859,9 @@ tables:
             - ""
             - ""
             - ""
-            - "<<borrowers.firstname>> <<borrowers.surname>>"
-            - "<<borrowers.address>>"
-            - "<<borrowers.city>> <<borrowers.zipcode>>"
+            - "[% borrower.firstname %] [% borrower.surname %]"
+            - "[% borrower.address %]"
+            - "[% borrower.city %] [% borrower.zipcode %]"
             - ""
             - ""
             - ""
@@ -1872,13 +1872,13 @@ tables:
             - ""
             - ""
             - ""
-            - "<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>"
+            - "[% borrower.firstname %] [% borrower.surname %] [% borrower.cardnumber %]"
             - ""
-            - "You have a hold available for pickup as of <<reserves.waitingdate>>:"
+            - "You have a hold available for pickup as of [% hold.waitingdate | $KohaDates %]:"
             - ""
-            - "Title: <<biblio.title>>"
-            - "Author: <<biblio.author>>"
-            - "Copy: <<items.copynumber>>"
+            - "Title: [% biblio.title %]"
+            - "Author: [% biblio.author %]"
+            - "Copy: [% item.copynumber %]"
             - ""
 
         - module: reserves
