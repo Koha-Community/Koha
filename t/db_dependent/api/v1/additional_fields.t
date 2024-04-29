@@ -99,7 +99,7 @@ subtest 'list() tests' => sub {
     );
 
     # Filtering works, two agreements sharing vendor_id
-    $t->get_ok( "//$userid:$password@/api/v1/additional_fields?tablename=" . $additional_field->tablename )
+    $t->get_ok( "//$userid:$password@/api/v1/additional_fields?table_name=" . $additional_field->tablename )
         ->status_is(200)->json_is( [ $additional_field->to_api, $another_additional_field->to_api ] );
 
     # Warn on unsupported query parameter

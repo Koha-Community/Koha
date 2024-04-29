@@ -34,7 +34,7 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $tablename = $c->param('tablename');
+    my $tablename = $c->param('table_name');
 
     return try {
         my $additional_fields_set = Koha::AdditionalFields->new;
