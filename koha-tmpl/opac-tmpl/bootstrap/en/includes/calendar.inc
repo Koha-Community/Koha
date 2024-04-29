@@ -157,6 +157,28 @@
         }
     }
 
+    function Date_from_syspref(dstring) {
+        var dateX = dstring.split(/[-/.]/);
+        if (debug > 1 && sentmsg < 1) {
+            sentmsg++;
+            alert("Date_from_syspref(" + dstring + ") splits to:\n" + dateX.join("\n"));
+        }
+        if (dateformat_pref === "iso") {
+            return new Date(dateX[0], (dateX[1] - 1), dateX[2]); // YYYY-MM-DD to (YYYY,m(0-11),d)
+        } else if (dateformat_pref === "us") {
+            return new Date(dateX[2], (dateX[0] - 1), dateX[1]); // MM/DD/YYYY to (YYYY,m(0-11),d)
+        } else if (dateformat_pref === "metric") {
+            return new Date(dateX[2], (dateX[1] - 1), dateX[0]); // DD/MM/YYYY to (YYYY,m(0-11),d)
+        } else if (dateformat_pref === "dmydot") {
+            return new Date(dateX[2], (dateX[1] - 1), dateX[0]); // DD.MM.YYYY to (YYYY,m(0-11),d)
+        } else {
+            if (debug > 0) {
+                alert("KOHA ERROR - Unrecognized date format: " + dateformat_pref);
+            }
+            return 0;
+        }
+    }
+
         $(document).ready(function(){
             $(".flatpickr").each(function(){
                 let options = {};
