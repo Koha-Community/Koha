@@ -56,59 +56,59 @@
 
                     <div id="masthead"><h1>[% LibraryName | html %] Self checkout system</h1></div>
 
-                    [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
+                    [% FOREACH item IN impossible %]<!-- We tried to issue, but failed. -->
                         <div class="alert alert-warning">
                             <span class="sco-alert-warning noissue"></span>
                             <h2>Item cannot be checked out.</h2>
                             <p>Sorry, this item cannot be checked out at this station.</p>
-                            [% IF ( title ) %]
-                                <p>Title: <em>[% title | html %]</em> </p>
+                            [% IF ( item.title ) %]
+                                <p>Title: <em>[% item.title | html %]</em> </p>
                             [% END %]
 
                             <p>
-                                [% IF ( circ_error_UNKNOWN_BARCODE ) %]
+                                [% IF ( item.circ_error_UNKNOWN_BARCODE ) %]
                                     <span id="ce_unknown_barcode">The system does not recognize this barcode.</span>
-                                [% ELSIF ( circ_error_max_loans_allowed ) %]
+                                [% ELSIF ( item.circ_error_max_loans_allowed ) %]
                                     <span id="ce_max_loans_allowed">You have reached the maximum limit of items checked out.</span>
-                                [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
+                                [% ELSIF ( item.circ_error_ISSUED_TO_ANOTHER ) %]
                                     <span id="ce_issued_to_another">This item is checked out to someone else.</span>
-                                [% ELSIF ( circ_error_NO_MORE_RENEWALS ) %]
+                                [% ELSIF ( item.circ_error_NO_MORE_RENEWALS ) %]
                                     <span id="ce_no_more_renewals">You cannot renew this item again.</span>
-                                [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
+                                [% ELSIF ( item.circ_error_NOT_FOR_LOAN ) %]
                                     <span id="ce_not_for_loan">This item is not for loan.</span>
-                                [% ELSIF ( circ_error_DEBT ) %]
-                                    <span id="ce_too_much_debt">You owe the library [% DEBT | $Price with_symbol => 1%] and cannot check out.</span>
-                                [% ELSIF ( circ_error_WTHDRAWN ) %]
+                                [% ELSIF ( item.circ_error_DEBT ) %]
+                                    <span id="ce_too_much_debt">You owe the library [% item.DEBT | $Price with_symbol => 1%] and cannot check out.</span>
+                                [% ELSIF ( item.circ_error_WTHDRAWN ) %]
                                     <span id="ce_wthdrawn">This item has been withdrawn from the collection.</span>
-                                [% ELSIF ( circ_error_RESTRICTED ) %]
+                                [% ELSIF ( item.circ_error_RESTRICTED ) %]
                                     <span id="ce_restricted">This item is restricted.</span>
-                                [% ELSIF ( circ_error_RESERVED ) %]
+                                [% ELSIF ( item.circ_error_RESERVED ) %]
                                     <span id="ce_reserved">This item is on hold for another patron.</span>
-                                [% ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) %]
+                                [% ELSIF ( item.circ_error_ITEMNOTSAMEBRANCH ) %]
                                     <span id="ce_itemnotsamebranch">This item belongs to another library.</span>
-                                [% ELSIF ( circ_error_EXPIRED ) %]
+                                [% ELSIF ( item.circ_error_EXPIRED ) %]
                                     <span id="ce_expired">Your account has expired.</span>
-                                [% ELSIF ( circ_error_DEBARRED ) %]
+                                [% ELSIF ( item.circ_error_DEBARRED ) %]
                                     <span id="ce_debarred">Your account has been suspended.</span>
-                                [% ELSIF ( circ_error_CARD_LOST ) %]
+                                [% ELSIF ( item.circ_error_CARD_LOST ) %]
                                     <span id="ce_card_lost">This library card has been declared lost.</span>
-                                [% ELSIF ( circ_error_GNA ) %]
+                                [% ELSIF ( item.circ_error_GNA ) %]
                                     <span id="ce_gna">Your contact information seems to be incomplete.</span>
-                                [% ELSIF ( circ_error_INVALID_DATE ) %]
+                                [% ELSIF ( item.circ_error_INVALID_DATE ) %]
                                     <span id="ce_invalid_date">Due date is not valid.</span>
-                                [% ELSIF ( circ_error_ADDITIONAL_MATERIALS ) %]
+                                [% ELSIF ( item.circ_error_ADDITIONAL_MATERIALS ) %]
                                     <span id="ce_addtional_materials">Item must be checked out at a circulation desk.</span>
                                 [% END %]
                                 <span id ="ce_see_staff">Please see a member of the library staff.</span>
                             </p>
 
-                            [% IF ( returnitem && Koha.Preference('SCOAllowCheckin') ) %]
+                            [% IF ( item.returnitem && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="cud-returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="returnbook" class="btn btn-primary"><i class="fa fa-undo" aria-hidden="true"></i> Return this item</button>
@@ -119,19 +119,19 @@
                                 <legend class="sr-only">Error</legend>
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                <input type="hidden" name="barcode" value="[% item.barcode | html %]" />
                                 <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                 <input type="submit" name= "confirm" value="Return to account summary" class="btn btn-info back focus" />
                             </form>
                         </div> <!-- / .alert -->
-                    [% END # / IF ( impossible %]
+                    [% END # / FOREACH impossible %]
 
-                    [% IF ( confirm ) %]<!-- We need to confirm the issue.. -->
+                    [% FOREACH c IN confirm %]<!-- We need to confirm the issue.. -->
                         <div class="alert alert-warning"><h2>Please confirm the checkout:</h2>
                             <span class="sco-alert-warning confirm"></span>
-                            [% IF ( confirm_renew_issue ) %]
-                                <p>This item is already checked out to you: <b>[% confirm | html %]</b> <i>([% barcode | html %])</i></p>
+                            [% IF ( c.confirm_renew_issue ) %]
+                                <p>This item is already checked out to you: <b>[% c.confirm | html %]</b> <i>([% c.barcode | html %])</i></p>
                             [% END %]
 
                             [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
@@ -140,7 +140,7 @@
                                     <legend class="sr-only">Return</legend>
                                     <input type="hidden" name="op" value="cud-returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="barcode" value="[% c.barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -148,13 +148,13 @@
                                 </form>
                             [% END %]
 
-                            [% UNLESS ( renew ) %]
+                            [% UNLESS ( c.renew ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="cud-renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="barcode" value="[% c.barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -166,7 +166,7 @@
                                     <legend class="sr-only">Renew</legend>
                                     <input type="hidden" name="op" value="cud-renew" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                    <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="barcode" value="[% c.barcode | html %]" />
                                     <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
@@ -183,7 +183,7 @@
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-cancel" aria-hidden="true"></i> Cancel</button>
                             </form>
                         </div>
-                    [% END # / IF confirm %]
+                    [% END # / FOREACH confirm %]
 
                     [% IF ( nopermission ) %]
                         <!-- This is what is displayed if user doesn't have permission -->
@@ -241,18 +241,6 @@
                         </div>
                     [% END %]
 
-                    [% IF ( circ_error_BATCH_CHECKOUT ) %]
-                        <div class="alert alert-warning">
-                            <h3>Item cannot be checked out in a batch</h3>
-                            <p>Check out the following item(s) individually:</p>
-                            <ul>
-                            [% FOREACH barcode IN circ_error_BATCH_CHECKOUT %]
-                                <li><i>[% barcode | html %]</i></li>
-                            [% END %]
-                            </ul>
-                        </div>
-                    [% END %]
-
                     [% UNLESS ( hide_main ) %]
 
                         [% IF ( patronid ) %]
@@ -285,10 +273,10 @@
                                         </h2></legend>
                                     <div class="row">
                                         <div class="col">
-                                            <label for="barcode">Scan a new item or enter its barcode[% IF Koha.Preference('BatchCheckouts') %] (or for <b>multiple checkouts only,</b> enter a barcode list, one barcode per line)[% END %]:</label>
+                                            <label for="barcode">Scan a new item or enter its barcode[% IF batch_checkouts_allowed %] (or for <b>multiple checkouts only,</b> enter a barcode list, one barcode per line)[% END %]:</label>
                                         </div>
                                         <div class="col-3">
-                                            [% IF Koha.Preference('BatchCheckouts') %]
+                                            [% IF batch_checkouts_allowed %]
                                                 <textarea id="barcode" name="barcode" rows="10" cols="30" class="focus form-control"></textarea>
                                             [% ELSE %]
                                                 <input id="barcode" name="barcode" size="20" type="text" class="focus form-control" autocomplete="off" />

@@ -138,34 +138,13 @@ my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
 
+my $batch_checkouts_allowed;
 if ( C4::Context->preference('BatchCheckouts') and $patron ) {
     my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
     my $categorycode = $patron->categorycode;
     if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
-        # do nothing - logged in patron is allowed to do batch checkouts
-    } else {
-        # patron category not allowed to do batch checkouts, only allow first barcode
-        my @error_barcodes;
-        while ( scalar @$barcodes > 1 ) {
-            my $error_barcode = pop @$barcodes;
-            push @error_barcodes, $error_barcode;
-        }
-
-        $template->param(
-            "circ_error_BATCH_CHECKOUT" => \@error_barcodes,
-        ) if @$barcodes;
+        $batch_checkouts_allowed = 1;
     }
-} else {
-    # batch checkouts not enabled, only allow first barcode
-    my @error_barcodes;
-    while ( scalar @$barcodes > 1 ) {
-        my $error_barcode = pop @$barcodes;
-        push @error_barcodes, $error_barcode;
-    }
-
-    $template->param(
-        "circ_error_BATCH_CHECKOUT" => \@error_barcodes,
-    ) if @$barcodes;
 }
 
 if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
@@ -199,6 +178,8 @@ if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
 }
 
 elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
+  my @failed_checkouts;
+  my @confirm_checkouts;
   foreach my $barcode ( @$barcodes ) {
     my $item = Koha::Items->find( { barcode => $barcode } );
     my $impossible  = {};
@@ -222,46 +203,47 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
     }
 
     if (scalar keys %$impossible) {
-
         my $issue_error = (keys %$impossible)[0]; # FIXME This is wrong, we assume only one error and keys are not ordered
         my $title = ( $item ) ? $item->biblio->title : '';
 
-        $template->param(
-            impossible                => $issue_error,
+        my $failed_checkout = {
             "circ_error_$issue_error" => 1,
             title                     => $title,
-            hide_main                 => 1,
-        );
+        };
+
         if ($issue_error eq 'DEBT') {
-            $template->param(DEBT => $impossible->{DEBT});
+            $failed_checkout->{DEBT} = $impossible->{DEBT};
         }
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
-            $template->param(
-                returnitem => 1,
-                barcode    => $barcode,
-            );
+            $failed_checkout->{barcode} = $barcode;
+            $failed_checkout->{returnitem} = 1;
         }
-        last;
-    } elsif ( $needconfirm->{RENEW_ISSUE} ){
+
+        push @failed_checkouts, $failed_checkout;
+
         $template->param(
-                renew               => 1,
-                barcode             => $barcode,
-                confirm             => $item->biblio->title,
-                confirm_renew_issue => 1,
-                hide_main           => 1,
+            hide_main => 1,
         );
-        last;
+    } elsif ( $needconfirm->{RENEW_ISSUE} ) {
+        my $confirm_checkout = {
+            renew               => 1,
+            barcode             => $barcode,
+            confirm             => $item->biblio->title,
+            confirm_renew_issue => 1,
+        };
+        push @confirm_checkouts, $confirm_checkout;
+        $template->param(
+            hide_main => 1,
+        );
     } elsif ( $confirm_required && !$confirmed ) {
-        $template->param(
-            impossible                => 1,
+        my $failed_checkout = {
             "circ_error_$issue_error" => 1,
-            hide_main                 => 1,
-        );
+        };
         if ($issue_error eq 'DEBT') {
-            $template->param(DEBT => $needconfirm->{DEBT});
+            $failed_checkout->{DEBT} = $needconfirm->{DEBT};
         }
-        last;
+        push @failed_checkouts, $failed_checkout;
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
             my ( $hold_existed, $item );
@@ -303,14 +285,22 @@ elsif ( $patron && ( $op eq 'cud-checkout' ) ) {
             }
         } else {
             $confirm_required = 1;
-            $template->param(
+            my $confirm_checkout = {
                 confirm    => "Issuing title: " . $item->biblio->title,
                 barcode    => $barcode,
+            };
+            push @confirm_checkouts, $confirm_checkout;
+            $template->param(
                 hide_main  => 1,
             );
         }
     }
   } # foreach barcode in barcodes
+
+  $template->param(
+    impossible => \@failed_checkouts,
+    confirm    => \@confirm_checkouts,
+  );
 } # $op
 
 if ( $patron && ( $op eq 'cud-renew' ) ) {
@@ -388,6 +378,7 @@ if ( $patron) {
         howpriority   => $show_priority,
         ACCOUNT_LINES => $accountlines,
         total => $total,
+        batch_checkouts_allowed => $batch_checkouts_allowed,
     );
 
     my $patron_messages = Koha::Patron::Messages->search(
