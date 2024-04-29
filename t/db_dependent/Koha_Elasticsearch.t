@@ -28,9 +28,9 @@ use Koha::SearchEngine::Elasticsearch;
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'get_facetable_fields() tests' => sub {
+subtest 'get_facet_fields() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -109,8 +109,8 @@ subtest 'get_facetable_fields() tests' => sub {
         }
     });
 
-    my @faceted_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
-    is(scalar(@faceted_fields), 7);
+    my @faceted_fields = Koha::SearchEngine::Elasticsearch->get_facet_fields();
+    is(scalar(@faceted_fields), 6);
 
     is($faceted_fields[0]->name, 'holdingbranch');
     is($faceted_fields[0]->facet_order, 1);
@@ -124,9 +124,6 @@ subtest 'get_facetable_fields() tests' => sub {
     is($faceted_fields[4]->facet_order, 5);
     is($faceted_fields[5]->name, 'subject');
     is($faceted_fields[5]->facet_order, 6);
-    is($faceted_fields[6]->name, 'author');
-    ok(!$faceted_fields[6]->facet_order);
-
 
     $schema->storage->txn_rollback;
 };
