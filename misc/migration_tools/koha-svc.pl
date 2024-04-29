@@ -106,7 +106,7 @@ sub new {
     $ua->cookie_jar({});
 
     my $get_resp   = $ua->get("$url/authentication");
-    my $csrf_token = $get_resp->header('X-CSRF-TOKEN');
+    my $csrf_token = $get_resp->header('CSRF-TOKEN');
     $self->{csrf_token} = $csrf_token;
 
     my $resp = $ua->post(
