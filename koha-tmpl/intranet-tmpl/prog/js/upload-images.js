@@ -124,7 +124,7 @@ function AjaxUpload ( formData, progressbar, xtra, callback ) {
     progressbar.val( 0 );
     progressbar.next('.fileuploadpercent').text( '0' );
     xhr.open('POST', url, true);
-    xhr.setRequestHeader("csrf_token", $('meta[name="csrf-token"]').attr("content"));
+    xhr.setRequestHeader("CSRF-TOKEN", $('meta[name="csrf-token"]').attr("content"));
     xhr.upload.onprogress = function (e) {
         var p = Math.round( (e.loaded/e.total) * 100 );
         progressbar.val( p );
