@@ -125,6 +125,8 @@ unless ( $logged_in_user->has_permission( { parameters => 'manage_background_job
     $template->param( already_ran_jobs => $already_ran_jobs );
 }
 
+my $holds_with_cancellation_requests = Koha::Holds->waiting->search()->filter_by_has_cancellation_requests->count;
+
 if ( C4::Context->preference('CurbsidePickup') ) {
     $template->param(
         new_curbside_pickups => Koha::CurbsidePickups->search(
@@ -141,7 +143,8 @@ $template->param(
     pending_borrower_modifications => $pending_borrower_modifications,
     pending_discharge_requests     => $pending_discharge_requests,
     pending_article_requests       => $pending_article_requests,
-    pending_problem_reports        => $pending_problem_reports
+    pending_problem_reports        => $pending_problem_reports,
+    holds_with_cancellation_requests => $holds_with_cancellation_requests,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
