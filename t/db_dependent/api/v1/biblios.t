@@ -475,6 +475,10 @@ subtest 'pickup_locations() tests' => sub {
     $library_2_api->{needs_override} = Mojo::JSON->false;
     $library_3_api->{needs_override} = Mojo::JSON->true;
 
+    $library_1_api->{pickup_items} = [];
+    $library_2_api->{pickup_items} = [];
+    $library_3_api->{pickup_items} = [];
+
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -540,6 +544,7 @@ subtest 'pickup_locations() tests' => sub {
 
     my $library_5_api = $library_5->to_api();
     $library_5_api->{needs_override} = Mojo::JSON->true;
+    $library_5_api->{pickup_items}   = [];
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/"
           . $biblio->id
