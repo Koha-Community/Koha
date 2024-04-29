@@ -6,11 +6,17 @@
 [% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Notices management &rsaquo; Tools &rsaquo; Koha</title>
+[% PROCESS 'i18n.inc' %]
 [% PROCESS "patron-search.inc" %]
 [% SET libraries = Branches.all %]
 [% SET categories = Categories.all.unblessed %]
 [% SET columns = ['name', 'cardnumber', 'dateofbirth', 'category', 'branch', 'address', 'phone'] %]
+<title
+    >[% FILTER collapse %]
+        [% t("Notices management") | html %]
+        &rsaquo; [% t("Tools") | html %] &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>
     .notice {
@@ -54,6 +60,8 @@
                     >
 
                     <form id="print_multiple" action="/cgi-bin/koha/tools/print_notice.pl" method="post" target="_blank">
+                        [% INCLUDE 'csrf-token.inc' %]
+
                         <table id="notices">
                             <thead>
                                 <tr>
@@ -97,17 +105,17 @@
                     </form>
                 [% ELSE %]
                     Use the search form on the left to find sent notices, or go directly to a patron's notices.
-                    <div id="notices_patronsearch" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#notices_patronsearch_pane" aria-controls="notices_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div id="notice_patronsearch_pane" role="tabpanel" class="tab-pane active">
+                    [% WRAPPER tabs id= "notices_patronsearch" %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "notices_patronsearch_pane" bt_active= 1 %]<span>Patrons</span>[% END %]
+                        [% END %]
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="notices_patronsearch_pane" bt_active= 1 %]
                                 [% PROCESS patron_search_filters_simple %]
                                 [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
-                            </div>
-                        </div>
-                    </div>
+                            [% END %]
+                        [% END %]
+                    [% END %]
 
                     [% IF notices && notices.count == 0 %]
                         <div class="dialog message"> No sent notices were found with those search parameters. </div>
@@ -121,7 +129,8 @@
             <aside>
                 <fieldset class="sidebar brief">
                     <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="post">
-                        <input type="hidden" name="op" value="search" />
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-search" />
                         <h3>Search filters</h3>
                         <ol>
                             <li>
@@ -244,7 +253,6 @@
         [% Asset.js("js/tools-menu.js") | $raw %]
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
-        [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, extended_attribute_types => attribute_type_codes, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/tools/notices.pl?', redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/tools/notices.pl?', redirect_if_attribute_equal => 'cardnumber' %]
         <script>
             table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
             $(document).ready(function() {
@@ -274,7 +282,7 @@
                 $("#notices_patronsearch").on("submit", filter);
                 [% UNLESS notices %]
                     [% IF ( Koha.Preference('PatronAutoComplete') ) %]
-                        patron_autocomplete($("#search_patron_filter"), { 'link-to': 'notices', 'url-params': '[% url_biblio_params | url %]' });
+                        patron_autocomplete($(".search_patron_filter"), { 'link-to': 'notices' });
                     [% END %]
                 [% END %]
 
@@ -302,6 +310,9 @@
                 });
             });
         </script>
+        [% SET search_results_block_id = 'notices_patronsearch_pane_panel' %]
+        [%# adjusting variable for patron-search.inc %]
+        [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/members/notices.pl?', redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/members/notices.pl?', redirect_if_attribute_equal => 'cardnumber' %]
     [% END %]
 
     [% INCLUDE 'intranet-bottom.inc' %]</div

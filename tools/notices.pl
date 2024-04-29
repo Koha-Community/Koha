@@ -39,7 +39,7 @@ unless ( C4::Context->preference('NoticesManagement') ) {
 
 my $op = $query->param('op');
 
-if ( $op and $op eq 'search' ) {
+if ( $op and $op eq 'cud-search' ) {
     my $letter_code  = $query->param('letter_code')  || undef;
     my $categorycode = $query->param('categorycode') || undef;
     my $branchcode   = $query->param('branchcode')   || undef;
