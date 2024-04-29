@@ -4,8 +4,6 @@ basePath: /api/v1
 definitions:
   account_line:
     $ref: ./definitions/account_line.yaml
-  additional_field:
-    $ref: ./definitions/additional_field.yaml
   advancededitormacro:
     $ref: ./definitions/advancededitormacro.yaml
   allows_renewal:
@@ -86,6 +84,8 @@ definitions:
     $ref: ./definitions/erm_usage_yus.yaml
   error:
     $ref: ./definitions/error.yaml
+  extended_attribute_type:
+    $ref: ./definitions/extended_attribute_type.yaml
   fund:
     $ref: ./definitions/fund.yaml
   hold:
@@ -199,8 +199,6 @@ paths:
     $ref: "./paths/acquisitions_vendors.yaml#/~1acquisitions~1vendors~1{vendor_id}"
   "/acquisitions/vendors/{vendor_id}/issues":
     $ref: "./paths/acquisitions_vendor_issues.yaml#/~1acquisitions~1vendors~1{vendor_id}~1issues"
-  /additional_fields:
-    $ref: ./paths/additional_fields.yaml#/~1additional_fields
   /advanced_editor/macros:
     $ref: ./paths/advancededitormacros.yaml#/~1advanced_editor~1macros
   /advanced_editor/macros/shared:
@@ -375,6 +373,8 @@ paths:
     $ref: ./paths/erm_usage_titles.yaml#/~1erm~1usage_titles
   /erm/users:
     $ref: ./paths/erm_users.yaml#/~1erm~1users
+  /extended_attribute_types:
+    $ref: ./paths/extended_attribute_types.yaml#/~1extended_attribute_types
   /holds:
     $ref: ./paths/holds.yaml#/~1holds
   "/holds/{hold_id}":

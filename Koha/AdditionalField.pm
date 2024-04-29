@@ -42,6 +42,31 @@ sub effective_authorised_value_category {
     return $category;
 }
 
+=head3 to_api
+
+    my $json = $additional_field_type->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::AdditionalField
+object, suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $table_to_resource = {
+        'aqbasket'   => 'basket',
+        'aqinvoices' => 'invoice',
+        'aqorders'   => 'order',
+    };
+
+    my $json = $self->SUPER::to_api($params);
+
+    $json->{resource_type} = $table_to_resource->{ $self->tablename };
+
+    return $json;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing an AdditionalField object
@@ -51,8 +76,8 @@ on the API.
 
 sub to_api_mapping {
     return {
-        id                        => 'additional_field_id',
-        tablename                 => 'table_name',
+        id                        => 'extended_attribute_type_id',
+        tablename                 => 'resource_type',
         authorised_value_category => 'authorised_value_category_name',
         marcfield                 => 'marc_field',
         marcfield_mode            => 'marc_field_mode'

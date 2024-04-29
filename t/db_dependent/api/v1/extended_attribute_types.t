@@ -62,7 +62,7 @@ subtest 'list() tests' => sub {
 
     ## Authorized user tests
     # No additional fields, so empty array should be returned
-    $t->get_ok("//$userid:$password@/api/v1/additional_fields")->status_is(200)->json_is( [] );
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types")->status_is(200)->json_is( [] );
 
     my $additional_field = $builder->build_object(
         {
@@ -72,7 +72,7 @@ subtest 'list() tests' => sub {
     );
 
     # One additional_field created, should get returned
-    $t->get_ok("//$userid:$password@/api/v1/additional_fields")->status_is(200)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types")->status_is(200)
         ->json_is( [ $additional_field->to_api ] );
 
     my $another_additional_field = $builder->build_object(
@@ -90,7 +90,7 @@ subtest 'list() tests' => sub {
     );
 
     # Three additional fields created, they should both be returned
-    $t->get_ok("//$userid:$password@/api/v1/additional_fields")->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types")->status_is(200)->json_is(
         [
             $additional_field->to_api,
             $another_additional_field->to_api,
@@ -99,15 +99,15 @@ subtest 'list() tests' => sub {
     );
 
     # Filtering works, two existing additional fields returned for the queried table name
-    $t->get_ok( "//$userid:$password@/api/v1/additional_fields?table_name=" . $additional_field->tablename )
-        ->status_is(200)->json_is( [ $additional_field->to_api, $another_additional_field->to_api ] );
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?resource_type=invoice")->status_is(200)
+        ->json_is( [ $additional_field->to_api, $another_additional_field->to_api ] );
 
     # Warn on unsupported query parameter
-    $t->get_ok("//$userid:$password@/api/v1/additional_fields?blah=blah")->status_is(400)
+    $t->get_ok("//$userid:$password@/api/v1/extended_attribute_types?blah=blah")->status_is(400)
         ->json_is( [ { path => '/query/blah', message => 'Malformed query string' } ] );
 
     # Unauthorized access
-    $t->get_ok("//$unauth_userid:$password@/api/v1/additional_fields")->status_is(403);
+    $t->get_ok("//$unauth_userid:$password@/api/v1/extended_attribute_types")->status_is(403);
 
     $schema->storage->txn_rollback;
 };

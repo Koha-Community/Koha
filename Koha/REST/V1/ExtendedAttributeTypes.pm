@@ -1,4 +1,4 @@
-package Koha::REST::V1::AdditionalFields;
+package Koha::REST::V1::ExtendedAttributeTypes;
 
 # This file is part of Koha.
 #
@@ -34,19 +34,29 @@ use Try::Tiny qw( catch try );
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $tablename = $c->param('table_name');
+    my $resource_type = $c->param('resource_type');
+
+    # FIXME: Maybe not the best place for this mapping
+    my $resource_to_table = {
+        basket  => 'aqbasket',
+        invoice => 'aqinvoices',
+        order   => 'aqorders',
+    };
 
     return try {
         my $additional_fields_set = Koha::AdditionalFields->new;
-        if ($tablename) {
-            $additional_fields_set = $additional_fields_set->search( { tablename => $tablename } );
+        if ($resource_type) {
+            $additional_fields_set =
+                $additional_fields_set->search( { tablename => $resource_to_table->{$resource_type} } );
         }
-        my $additional_fields = $c->objects->search($additional_fields_set);
-        return $c->render( status => 200, openapi => $additional_fields );
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->search($additional_fields_set)
+        );
     } catch {
         $c->unhandled_exception($_);
     };
-
 }
 
 1;

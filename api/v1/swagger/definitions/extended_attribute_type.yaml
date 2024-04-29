@@ -1,0 +1,35 @@
+---
+type: object
+properties:
+  extended_attribute_type_id:
+    type: integer
+    description: internally assigned extended attribute type identifier
+    readOnly: true
+  resource_type:
+    description: name of the resource type this extended attribute type corresponds to
+    type: string
+  name:
+    description: name of the extended attribute type
+    type: string
+  authorised_value_category_name:
+    description: authorised value category of the extended attribute type values
+    type:
+      - string
+      - "null"
+  marc_field:
+    description: marc field of the extended attribute type
+    type: string
+  marc_field_mode:
+    description: marc field mode of the extended attribute type
+    type: string
+    enum:
+      - get
+      - set
+  searchable:
+    description: is the extended attribute type searchable
+    type: boolean
+
+additionalProperties: false
+required:
+  - extended_attribute_type_id
+  - resource_type
