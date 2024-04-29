@@ -22,7 +22,7 @@ use Koha::Biblios;
 use Koha::Database;
 
 BEGIN {
-        use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority compare_fields DelAuthority ModAuthority ));
+        use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority DelAuthority ModAuthority ));
 }
 
 # Optionally change marc flavour
@@ -636,6 +636,8 @@ sub compare_fields { # mode parameter: order or count
         # By default exclude field 100 from comparison in UNIMARC.
         # Will have been added by ModBiblio in merge.
         $exclude->{100} = 1;
+    } else { #MARC21
+        $exclude->{'005'} = 1;
     }
     my @oldfields = map { $exclude->{$_->tag} ? () : $_->tag } $oldmarc->fields;
     my @newfields = map { $exclude->{$_->tag} ? () : $_->tag } $newmarc->fields;
