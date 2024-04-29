@@ -98,7 +98,7 @@ subtest 'list() tests' => sub {
         ]
     );
 
-    # Filtering works, two agreements sharing vendor_id
+    # Filtering works, two existing additional fields returned for the queried table name
     $t->get_ok( "//$userid:$password@/api/v1/additional_fields?table_name=" . $additional_field->tablename )
         ->status_is(200)->json_is( [ $additional_field->to_api, $another_additional_field->to_api ] );
 
