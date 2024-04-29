@@ -27,7 +27,11 @@ use Koha::Statistics;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 
-sub usage {
+my ($params);
+GetOptions(
+    'confirm' => \$params->{confirm}, 'help' => \$params->{help}, 'age:i' => \$params->{age},
+);
+if ( $params->{help} ) {
     pod2usage( -verbose => 2 );
     exit;
 }
@@ -57,7 +61,9 @@ my $result = GetOptions(
 
 usage() if $help;
 
-update_localuse();
+if ( $params->{confirm} ) {
+    update_localuse();
+}
 
 =head1 NAME
 
@@ -67,16 +73,23 @@ update_local_use_from_statistics.pl
 
   update_localuse_from_statistics.pl
   update_localuse_from_statistics.pl --help
+  update_localuse_from_statistics.pl --confirm
 
 =head1 DESCRIPTION
 
 This script updates the items.localuse column with data from the statistics table to make sure the two tables are congruent.
 
-=over 8
+=head1 OPTIONS
 
-=item B<--help>
+=over
 
-Prints this help
+=item B<-h--help>
+
+Prints this help message
+
+=item B<-c|--confirm>
+
+    Confirm to run the script.
 
 =back
 
