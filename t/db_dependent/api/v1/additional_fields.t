@@ -43,7 +43,7 @@ subtest 'list() tests' => sub {
     my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 2**13 }
+            value => { flags => 2**3 }    # parameters
         }
     );
     my $password = 'thePassword123';
