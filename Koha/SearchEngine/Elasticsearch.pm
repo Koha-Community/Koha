@@ -741,13 +741,13 @@ sub marc_records_to_documents {
             }
         }
 
-        foreach my $field (@{$rules->{geo_point}}) {
+        foreach my $field ( @{ $rules->{geo_point} } ) {
             next unless $record_document->{$field};
             my $geofield = $field;
             $geofield =~ s/_(lat|lon)$//;
             my $axis = $1;
             my $vals = $record_document->{$field};
-            for my $i (0 .. @$vals - 1) {
+            for my $i ( 0 .. @$vals - 1 ) {
                 my $val = $record_document->{$field}[$i];
                 $record_document->{$geofield}[$i]{$axis} = $val;
             }

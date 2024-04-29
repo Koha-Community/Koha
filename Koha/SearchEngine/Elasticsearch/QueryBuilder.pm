@@ -936,10 +936,10 @@ sub _create_query_string {
     $es_advanced_searches = [];
     my @string_queries;
     foreach my $q (@queries) {
-        if ($q->{field} && $q->{field} eq 'geolocation') {
-            push(@$es_advanced_searches, $q);
+        if ( $q->{field} && $q->{field} eq 'geolocation' ) {
+            push( @$es_advanced_searches, $q );
         } else {
-            push(@string_queries, $q)
+            push( @string_queries, $q );
         }
     }
 
@@ -1428,27 +1428,24 @@ sub _rebuild_to_es_advanced_query {
 
     my %filter;
     for my $advanced_query (@$es_advanced_searches) {
-        if ( $advanced_query->{field} eq 'geolocation') {
-            my ($lat, $lon, $distance) = map { $_ =~ /:(.*)\*/ } split('\s+', $advanced_query->{operand});
+        if ( $advanced_query->{field} eq 'geolocation' ) {
+            my ( $lat, $lon, $distance ) = map { $_ =~ /:(.*)\*/ } split( '\s+', $advanced_query->{operand} );
             $filter{geo_distance} = {
-                distance => $distance,
+                distance    => $distance,
                 geolocation => {
                     lat => $lat,
                     lon => $lon,
                 }
             };
-        }
-        else {
-            warn "unknown advanced ElasticSearch query: ".join(', ',%$advanced_query);
+        } else {
+            warn "unknown advanced ElasticSearch query: " . join( ', ', %$advanced_query );
         }
     }
 
     $res->{query} = {
         bool => {
-             must => {
-                 query_string =>  $query_string
-             },
-             filter => \%filter,
+            must   => { query_string => $query_string },
+            filter => \%filter,
         }
     };
 
