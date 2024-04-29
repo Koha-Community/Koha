@@ -177,7 +177,7 @@ $(document).ready(function () {
         if (search_field_name.length > 0) {
             const next_id = Math.max.apply(null, dt_data.map(row => row[0])) + 1;
             const label = selected_option.data('label');
-            new_line = [next_id, search_field_name, '<span>%s</span><input type="hidden" name="facet_name" value="%s" />'.format(label.escapeHtml(), search_field_name.escapeHtml()), build_delete_link()]
+            new_line = [next_id, search_field_name, '<span>%s</span><input type="hidden" name="facet_name" value="%s" />'.format(label.escapeHtml(), search_field_name.escapeHtml()), build_delete_link('delete-facet')]
             dt.row.add(new_line).draw();
 
             clean_line(line);
