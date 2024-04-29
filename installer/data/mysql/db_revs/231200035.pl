@@ -11,6 +11,6 @@ return {
             q{INSERT IGNORE INTO permissions (module_bit, code, description)
             VALUES (4, 'send_messages_to_borrowers', 'Send messages to patrons')}
         );
-        say $out "Update is going well so far";
+        say $out "Added new permission 'send_messages_to_borrowers'";
     },
     }
