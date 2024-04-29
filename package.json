@@ -51,7 +51,7 @@
     "js:watch": "webpack --mode development --watch",
     "js:build:prod": "webpack --mode production",
     "build": "yarn css:build && yarn js:build && yarn api:bundle",
-    "build:prod": "yarn css:build:prod && yarn js:build:prod",
+    "build:prod": "yarn css:build:prod && yarn js:build:prod && yarn api:bundle",
     "cypress": "cypress",
     "prettier": "prettier",
     "api:bundle": "redocly bundle --ext json api/v1/swagger/swagger.yaml --output api/v1/swagger/swagger_bundle.json"
