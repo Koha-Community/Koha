@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     subtest 'repeatable attributes tests' => sub {
 
@@ -102,6 +102,54 @@ subtest 'store() tests' => sub {
         is( $attributes->count, 1, '1 non-repeatable attribute stored' );
         is( $attributes->next->attribute,
             'Foo', 'Non-repeatable attribute remains unchanged' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'is_date attributes tests' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+        my $attribute_type_1 = $builder->build(
+            {   source => 'BorrowerAttributeType',
+                value  => { is_date => 1 }
+            }
+        );
+
+        throws_ok {
+            Koha::Patron::Attribute->new(
+                {   borrowernumber => $patron,
+                    code           => $attribute_type_1->{code},
+                    attribute      => 'not_a_date'
+                }
+            )->store;
+        }
+        'Koha::Exceptions::Patron::Attribute::InvalidAttributeValue',
+            'Exception thrown trying to store a date attribute with non-date value';
+
+        is(
+            "$@",
+            "Tried to use an invalid value for attribute type. type="
+            . $attribute_type_1->{code}
+            . " value=not_a_date",
+            'Exception stringified correctly, attribute passed correctly'
+        );
+
+        Koha::Patron::Attribute->new(
+            {   borrowernumber => $patron,
+                code           => $attribute_type_1->{code},
+                attribute      => '2024-03-04'
+            }
+        )->store;
+
+        my $attr_count
+            = Koha::Patron::Attributes->search(
+            { borrowernumber => $patron, code => $attribute_type_1->{code} } )
+            ->count;
+        is( $attr_count, 1,
+            '1 date attribute stored and retrieved correctly' );
 
         $schema->storage->txn_rollback;
     };

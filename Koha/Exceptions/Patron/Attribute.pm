@@ -23,6 +23,11 @@ use Exception::Class (
         isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "unique_id set for attribute type and tried to add a new with the same code and value",
         fields      => [ "attribute" ]
+    },
+    'Koha::Exceptions::Patron::Attribute::InvalidAttributeValue' => {
+        isa => 'Koha::Exceptions::Patron::Attribute',
+        description => "the passed value is invalid for attribute type",
+        fields      => [ "attribute" ]
     }
 );
 
@@ -50,6 +55,13 @@ sub full_message {
             $msg = sprintf(
                 "Tried to use an invalid attribute type. type=%s",
                 $self->type
+            );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidAttributeValue') ) {
+            $msg = sprintf(
+                "Tried to use an invalid value for attribute type. type=%s value=%s",
+                $self->attribute->code,
+                $self->attribute->attribute
             );
         }
     }

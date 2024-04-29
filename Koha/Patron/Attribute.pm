@@ -21,6 +21,7 @@ use Koha::Database;
 use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attribute::Types;
 use Koha::AuthorisedValues;
+use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
@@ -54,6 +55,9 @@ sub store {
 
     Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw( attribute => $self )
         unless $self->unique_ok();
+
+    Koha::Exceptions::Patron::Attribute::InvalidAttributeValue->throw( attribute => $self )
+        unless $self->value_ok();
 
     return $self->SUPER::store();
 }
@@ -184,6 +188,27 @@ sub unique_ok {
             ->count;
 
         $ok = 0 if $unique_count > 0;
+    }
+
+    return $ok;
+}
+
+=head3 value_ok
+
+Checks if the value of the attribute is valid for the type
+
+=cut
+
+sub value_ok {
+
+    my ( $self ) = @_;
+
+    my $ok = 1;
+    if ( $self->type->is_date ) {
+        eval { dt_from_string($self->attribute); };
+        if ($@) {
+            $ok = 0;
+        }
     }
 
     return $ok;
