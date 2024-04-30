@@ -149,7 +149,7 @@ $(document).ready(function () {
         var search_field_name = $(line).find('input[data-id="search_field_name"]').val();
         let already_exists = dt.data().filter((row, idx) => row[0]['@data-order'] === search_field_name);
         if ( already_exists.length ) {
-            alert(__("SearchField '%s' already exist".format(search_field_name)));
+            alert(__("Search field '%s' already exists".format(search_field_name)));
             return;
         }
         if (search_field_name.length > 0) {
@@ -171,7 +171,7 @@ $(document).ready(function () {
         let dt_data = dt.data();
         let already_exists = dt_data.filter((row, idx) => row[1] === search_field_name);
         if ( already_exists.length ) {
-            alert(__("Facet '%s' already exist".format(search_field_name)));
+            alert(__("Facet '%s' already exists".format(search_field_name)));
             return;
         }
         if (search_field_name.length > 0) {
