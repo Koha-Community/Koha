@@ -13,7 +13,7 @@ return {
 SELECT count(*) FROM aqorders
 WHERE purchaseordernumber IS NOT NULL|
             );
-            if( $cnt ) {
+            if ($cnt) {
                 say $out "We found $cnt order lines where field purchaseordernumber was filled!";
                 $dbh->do(
                     q|
