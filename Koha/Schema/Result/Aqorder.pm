@@ -171,13 +171,6 @@ notes related to this order line, made for staff
 
 notes related to this order line, made for vendor
 
-=head2 purchaseordernumber
-
-  data_type: 'longtext'
-  is_nullable: 1
-
-not used? always NULL
-
 =head2 basketno
 
   data_type: 'integer'
@@ -478,8 +471,6 @@ __PACKAGE__->add_columns(
   "order_internalnote",
   { data_type => "longtext", is_nullable => 1 },
   "order_vendornote",
-  { data_type => "longtext", is_nullable => 1 },
-  "purchaseordernumber",
   { data_type => "longtext", is_nullable => 1 },
   "basketno",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
@@ -814,8 +805,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-09-06 17:56:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aaj6mc1M13YFx5P0aXMiEQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 13:34:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FyRqcj4OmkBR6PpW3tY8bA
 
 __PACKAGE__->belongs_to(
   "basket",
