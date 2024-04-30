@@ -1202,6 +1202,8 @@ my $defaulttab =
         ? 'holdings' :
     $opac_serial_default eq 'subscriptions' && $subscriptionsnumber
         ? 'subscriptions' :
+    $opac_serial_default eq 'titlenotes' && $subscriptionsnumber
+        ? 'descriptions' :
     $opac_serial_default eq 'serialcollection' && @serialcollections > 0
         ? 'serialcollection' :
     $opac_serial_default eq 'holdings' && scalar (@itemloop) > 0
