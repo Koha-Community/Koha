@@ -72,6 +72,14 @@ date and time this update was logged
 
 update message content
 
+=head2 status
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
+status of ticket at this update
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -97,6 +105,8 @@ __PACKAGE__->add_columns(
   },
   "message",
   { data_type => "text", is_nullable => 0 },
+  "status",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -144,8 +154,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-10-24 18:31:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8YG3jhlqbHWptc28pvBmrg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 09:10:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ytO0skgfeeAKxubBk+4wtw
 
 __PACKAGE__->add_columns( '+public' => { is_boolean => 1 }, );
 
