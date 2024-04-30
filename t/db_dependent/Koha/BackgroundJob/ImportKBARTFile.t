@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use Koha::Database;
@@ -128,11 +128,92 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
     };
 
     my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my @invalid_columns;
 
     my $title_from_line1 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers );
+        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers, \@invalid_columns );
     my $title_from_line2 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[1], $column_headers );
+        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[1], $column_headers, \@invalid_columns );
+
+    my $line1_match = {
+        'coverage_depth'                  => 'fulltext',
+        'date_monograph_published_print'  => '',
+        'date_first_issue_online'         => '2015-01',
+        'date_last_issue_online'          => '',
+        'coverage_notes'                  => 'Hybrid (Open Choice)',
+        'first_editor'                    => '',
+        'date_monograph_published_online' => '',
+        'preceding_publication_title_id'  => '',
+        'num_last_issue_online'           => '',
+        'embargo_info'                    => '',
+        'access_type'                     => 'P',
+        'num_first_issue_online'          => '1',
+        'online_identifier'               => '2055-0278',
+        'title_url'                       => 'https://www.nature.com/nplants',
+        'monograph_volume'                => '',
+        'first_author'                    => '',
+        'parent_publication_title_id'     => '',
+        'num_last_vol_online'             => '',
+        'publication_title'               => 'Nature Plants',
+        'num_first_vol_online'            => '1',
+        'print_identifier'                => '',
+        'publisher_name'                  => 'Nature Publishing Group UK',
+        'title_id'                        => '4aaa7',
+        'publication_type'                => 'serial',
+        'monograph_edition'               => ''
+    };
+    my $line2_match = {
+        'date_monograph_published_online' => '',
+        'num_first_vol_online'            => '1',
+        'num_last_issue_online'           => '',
+        'preceding_publication_title_id'  => '',
+        'title_url'                       => 'https://www.nature.com/natastron',
+        'online_identifier'               => '2397-3366',
+        'print_identifier'                => '',
+        'num_last_vol_online'             => '',
+        'embargo_info'                    => '',
+        'parent_publication_title_id'     => '',
+        'publisher_name'                  => 'Nature Publishing Group UK',
+        'date_first_issue_online'         => '2017-01',
+        'monograph_volume'                => '',
+        'monograph_edition'               => '',
+        'access_type'                     => 'P',
+        'first_author'                    => '',
+        'num_first_issue_online'          => '1',
+        'first_editor'                    => '',
+        'publication_title'               => 'Nature Astronomy',
+        'date_monograph_published_print'  => '',
+        'publication_type'                => 'serial',
+        'title_id'                        => '4bbb0',
+        'coverage_depth'                  => 'fulltext',
+        'coverage_notes'                  => 'Hybrid (Open Choice)',
+        'date_last_issue_online'          => ''
+    };
+
+    is_deeply( $title_from_line1, $line1_match, 'Title hash created correctly' );
+    is_deeply( $title_from_line2, $line2_match, 'Title hash created correctly' );
+};
+
+subtest 'create_title_hash_from_line_data with invalid columns using csv' => sub {
+
+    plan tests => 2;
+
+    my $file = {
+        filename     => 'Test_file.csv',
+        file_content => encode_base64(
+            'publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type,invalid_column
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P,invalid_column_data
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P,invalid_column_data'
+        )
+    };
+
+    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my @invalid_columns = ('invalid_column');
+
+    my $title_from_line1 =
+        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers, \@invalid_columns );
+    my $title_from_line2 =
+        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[1], $column_headers, \@invalid_columns );
 
     my $line1_match = {
         'coverage_depth'                  => 'fulltext',

@@ -294,20 +294,19 @@ sub import_from_kbart_file {
 
         # Check that the column headers in the file match the standardised KBART phase II columns
         # If not, return a warning
+        my $warnings = {};
         my @valid_headers = Koha::BackgroundJob::ImportKBARTFile::get_valid_headers();
         foreach my $header (@$column_headers) {
             if ( !grep { $_ eq $header } @valid_headers ) {
-                $header = 'Empty column - please remove' if $header eq '';
+                $header = 'Empty column' if $header eq '';
                 push @invalid_columns, $header;
             }
         }
-        return $c->render(
-            status  => 201,
-            openapi => { invalid_columns => \@invalid_columns, valid_columns => \@valid_headers, invalid_filetype => 0 }
-        ) if scalar(@invalid_columns) > 0;
+        $warnings->{invalid_columns} = \@invalid_columns if scalar(@invalid_columns) > 0;
 
         my $params = {
             column_headers       => $column_headers,
+            invalid_columns      => \@invalid_columns,
             rows                 => $rows,
             package_id           => $package_id,
             file_name            => $file->{filename},
@@ -342,7 +341,7 @@ sub import_from_kbart_file {
 
         return $c->render(
             status  => 201,
-            openapi => { job_ids => \@job_ids }
+            openapi => { job_ids => \@job_ids, warnings => $warnings }
         );
     } catch {
         $c->unhandled_exception($_);

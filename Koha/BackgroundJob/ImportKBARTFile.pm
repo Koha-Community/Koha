@@ -77,6 +77,7 @@ sub process {
 
     try {
         my $column_headers       = $args->{column_headers};
+        my $invalid_columns      = $args->{invalid_columns};
         my $rows                 = $args->{rows};
         my $package_id           = $args->{package_id};
         my $create_linked_biblio = $args->{create_linked_biblio};
@@ -95,7 +96,7 @@ sub process {
 
         foreach my $row ( @{$rows} ) {
             next if !$row;
-            my $new_title   = create_title_hash_from_line_data( $row, $column_headers );
+            my $new_title   = create_title_hash_from_line_data( $row, $column_headers, $invalid_columns );
             my $title_match = check_for_matching_title($new_title);
 
             if ($title_match) {
@@ -245,11 +246,13 @@ sub read_file {
 =head3 create_title_hash_from_line_data
 
 Takes a line and creates a hash of the values mapped to the column headings
+Only accepts fields that are in the list of permitted KBART fields, other fields are ignored
+(This is identified to the user on the background job status page)
 
 =cut
 
 sub create_title_hash_from_line_data {
-    my ( $row, $column_headers ) = @_;
+    my ( $row, $column_headers, $invalid_columns ) = @_;
 
     my %new_title;
 
@@ -260,6 +263,11 @@ sub create_title_hash_from_line_data {
     my $last_char  = substr( $new_title{publication_title}, -1 );
     if ( $first_char eq '"' && $last_char eq '"' ) {
         $new_title{publication_title} =~ s/^"|"$//g;
+    }
+
+    # Remove any additional columns
+    foreach my $invalid_column ( @$invalid_columns ) {
+        delete $new_title{$invalid_column};
     }
 
     return \%new_title;
@@ -280,6 +288,9 @@ sub check_for_matching_title {
 
     # Use external_id in case title exists for a different provider, we want to add it for the new provider
     $match_parameters->{external_id} = $title->{title_id} if $title->{title_id};
+
+    # We should also check the date_first_issue_online for serial publications
+    $match_parameters->{date_first_issue_online} = $title->{date_first_issue_online} if $title->{date_first_issue_online};
 
     # If no match parameters are provided in the file we should add the new title
     return 0 if !%$match_parameters;
@@ -426,7 +437,7 @@ sub is_file_too_large {
 
 =head3 rescue_EBSCO_files
 
-EBSCO have an incorrect spelling of "preceding_publication_title_id" in all of their KBART files ("preceeding" instead of "preceding").
+EBSCO have an incorrect spelling for "preceding_publication_title_id" in all of their KBART files ("preceeding" instead of "preceding").
 This means all of their KBART files fail to import using the current methodology.
 There is no simple way of finding out who the vendor is before importing so all KBART files from any vendor are going to have to be checked for this spelling and corrected.
 

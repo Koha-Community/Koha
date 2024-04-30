@@ -28,6 +28,7 @@
                             :id="`import_file`"
                             :name="`import_file`"
                             required
+                            ref="fileLoader"
                         />
                     </li>
                     <li>
@@ -80,9 +81,11 @@
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import { setMessage, setWarning } from "../../messages"
+import { ref } from "vue"
 
 export default {
     data() {
+        const fileLoader = ref()
         return {
             file: {
                 filename: null,
@@ -91,6 +94,7 @@ export default {
             packages: [],
             package_id: null,
             create_linked_biblio: false,
+            fileLoader,
         }
     },
     beforeCreate() {
@@ -131,29 +135,30 @@ export default {
                     if (success.job_ids) {
                         if (success.job_ids.length > 1) {
                             message += this.$__(
-                                "<li>Your file was too large to process in one job, the file has been split into %s jobs to meet the maximum size limits.</li>"
+                                "<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>Your file was too large to process in one job, the file has been split into %s jobs to meet the maximum size limits.</p>"
                             ).format(success.job_ids.length)
                         }
                         success.job_ids.forEach((job, i) => {
                             message += this.$__(
-                                '<li>Job for uploaded file %s has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
+                                '<li>Job %s for uploaded file has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
                             ).format(i + 1, job)
                         })
                         setMessage(message, true)
                     }
-                    if (success.invalid_columns) {
+                    if (success.warnings.invalid_columns) {
                         message += this.$__(
-                            "<p>Invalid columns were detected in your report, please check the list below:</p>"
+                            "<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>Information:</p>"
                         )
-                        success.invalid_columns.forEach(column => {
-                            message += this.$__(
-                                `<li style="font-weight: normal; font-size: medium;">%s</li>`
-                            ).format(column)
+                        message += this.$__(
+                            "<p>Additional columns were detected in your report, please see the list below:</p>"
+                        )
+                        success.warnings.invalid_columns.forEach(column => {
+                            message += this.$__(`<li>%s</li>`).format(column)
                         })
                         message += this.$__(
-                            '<p style="margin-top: 1em;">For a list of compliant column headers, please click <a target="_blank" href="https://groups.niso.org/higherlogic/ws/public/download/16900/RP-9-2014_KBART.pdf" />here</p>'
+                            "<p style='margin-top: 0.1em;'>The data in these columns will not be imported.</p>"
                         )
-                        setWarning(message)
+                        setMessage(message)
                     }
                     if (success.invalid_filetype) {
                         message += this.$__(
@@ -174,6 +179,8 @@ export default {
             }
             this.package_id = null
             this.create_linked_biblio = false
+            this.$refs.fileLoader.files = null
+            this.$refs.fileLoader.value = null
         },
     },
     components: {
