@@ -55,6 +55,14 @@ defines whether one patron/borrower can have multiple values for this custom fie
 
 defines if this value needs to be unique (1 for yes, 0 for no)
 
+=head2 is_date
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+defines if this field is displayed as a date
+
 =head2 opac_display
 
   data_type: 'tinyint'
@@ -147,6 +155,8 @@ __PACKAGE__->add_columns(
   "repeatable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "unique_id",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "is_date",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "opac_display",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
@@ -250,8 +260,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-09 13:06:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oeyBHoK+4epL1s+IAKNY7w
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 13:44:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:axOBPX4uH+bMVocJK04VXw
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
