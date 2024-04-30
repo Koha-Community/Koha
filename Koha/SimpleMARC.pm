@@ -135,9 +135,9 @@ sub copy_and_replace_field {
 
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
-
-    if ( !defined $fromSubfieldName or $fromSubfieldName eq ''
-      or !defined $toSubfieldName or $toSubfieldName eq ''
+    if (
+        ( !defined $fromSubfieldName or $fromSubfieldName eq '' )
+        and ( !defined $toSubfieldName or $toSubfieldName eq '' )
     ) {
         _copy_move_field(
             {   record        => $record,

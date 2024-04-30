@@ -14,8 +14,11 @@ $(document).ready(function() {
         var action = $("#action").val();
         if ( action == 'move_field' || action == 'copy_field' || action == 'copy_and_replace_field') {
             if ( $("#from_subfield").val().length != $("#to_subfield").val().length ) {
-                alert( __("Both subfield values should be filled or empty.") );
-                return false;
+                if ( ( $("#to_field").val()   >= 10 && $("#to_subfield").val().length   > 0 ) &&
+                     ( $("#from_field").val() >= 10 && $("#from_subfield").val().length > 0 ) ) {
+                    alert( __("Both subfield values should be filled or empty.") );
+                    return false;
+                }
             }
             if ( $("#to_field").val().length <= 0 ) {
                 alert( __("The destination should be filled.") );
@@ -24,11 +27,6 @@ $(document).ready(function() {
             if ( ( $("#to_field").val()   < 10 && $("#to_subfield").val().length   > 0 ) ||
                 ( $("#from_field").val() < 10 && $("#from_subfield").val().length > 0 ) ) {
                 alert( __("If the field is a control field, the subfield should be empty") );
-                return false;
-            }
-            if ( ( $("#from_field").val() < 10 && $("#to_field").val()   >= 10 ) ||
-                 ( $("#to_field").val()   < 10 && $("#from_field").val() >= 10 ) ) {
-                alert( __("A control field cannot be used with a regular field.") );
                 return false;
             }
         }
