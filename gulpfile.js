@@ -385,8 +385,8 @@ function xgettext (cmd, filename) {
                         file.path = path.join(file.base, filename);
                         file.contents = data;
                         callback(null, file);
+                        fs.rmSync(folder, { recursive: true });
                     });
-                    fs.rmSync(folder, { recursive: true });
                 });
             });
         })
