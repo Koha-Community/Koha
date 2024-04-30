@@ -40,7 +40,7 @@ use Koha::Util::OpenDocument qw( generate_ods );
 use Koha::Notice::Templates;
 use Koha::TemplateUtils qw( process_tt );
 use C4::ClassSource qw( GetClassSources );
-use HTML::Restrict;
+use C4::Scrubber;
 
 =head1 NAME
 
@@ -620,8 +620,8 @@ elsif ($op eq 'export'){
     my @sql_params     = $input->multi_param('sql_params');
     my $format         = $input->param('format');
     my $reportname     = $input->param('reportname');
-    my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
-    my $hr             = HTML::Restrict->new();
+    my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format";
+    my $scrubber       = C4::Scrubber->new();
 
     ($sql, undef) = $report->prep_report( \@param_names, \@sql_params );
     my ( $sth, $q_errors ) = execute_query( { sql => $sql, report_id => $report_id } );
@@ -630,9 +630,9 @@ elsif ($op eq 'export'){
         if ($format eq 'tab') {
             $type = 'application/octet-stream';
             $content .= join("\t", header_cell_values($sth)) . "\n";
-            $content = $hr->process(Encode::decode('UTF-8', $content));
-            while (my $row = $sth->fetchrow_arrayref()) {
-                $content .= join("\t", $hr->process(@$row)) . "\n";
+            $content = $scrubber->scrub( Encode::decode( 'UTF-8', $content ) );
+            while ( my $row = $sth->fetchrow_arrayref() ) {
+                $content .= join( "\t", $scrubber->scrub(@$row) ) . "\n";
             }
         } else {
             if ( $format eq 'csv' ) {
@@ -640,18 +640,18 @@ elsif ($op eq 'export'){
                 $type = 'application/csv';
                 my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
                 $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
-                if ($csv->combine(header_cell_values($sth))) {
-                    $content .= $hr->process(Encode::decode('UTF-8', $csv->string())) . "\n";
+                if ( $csv->combine( header_cell_values($sth) ) ) {
+                    $content .= $scrubber->scrub( Encode::decode( 'UTF-8', $csv->string() ) ) . "\n";
 
                 } else {
-                    push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
+                    push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() };
                 }
-                while (my $row = $sth->fetchrow_arrayref()) {
-                    if ($csv->combine(@$row)) {
-                        $content .= $hr->process($csv->string()) . "\n";
+                while ( my $row = $sth->fetchrow_arrayref() ) {
+                    if ( $csv->combine(@$row) ) {
+                        $content .= $scrubber->scrub( $csv->string() ) . "\n";
 
                     } else {
-                        push @$q_errors, { combine => $csv->error_diag() } ;
+                        push @$q_errors, { combine => $csv->error_diag() };
                     }
                 }
             }
@@ -667,10 +667,10 @@ elsif ($op eq 'export'){
 
                 # Other line in Unicode
                 my $sql_rows = $sth->fetchall_arrayref();
-                foreach my $sql_row ( @$sql_rows ) {
+                foreach my $sql_row (@$sql_rows) {
                     my @content_row;
-                    foreach my $sql_cell ( @$sql_row ) {
-                        push @content_row, $hr->process(Encode::encode( 'UTF8', $sql_cell ));
+                    foreach my $sql_cell (@$sql_row) {
+                        push @content_row, $scrubber->scrub( Encode::encode( 'UTF8', $sql_cell ) );
 
                     }
                     push @$ods_content, \@content_row;
