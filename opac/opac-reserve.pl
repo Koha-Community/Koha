@@ -623,7 +623,6 @@ if (   C4::Context->preference('AllowHoldDateInFuture')
 {
     $template->param(
         reserve_in_future => 1,
-        today             => dt_from_string,
     );
 }
 
