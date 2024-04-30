@@ -854,6 +854,7 @@
                                             </tbody>
                                         </table> <!-- /#cancelledorderst -->
                                         <form id="delete_order_form" method="post">
+                                            [% INCLUDE 'csrf-token.inc' %]
                                             <input type="hidden" name="op" value="cud-delete-order"/>
                                             <input type="hidden" name="ordernumber" value=""/>
                                             <input type="hidden" name="basketno" value="[% basketno | html %]"/>
