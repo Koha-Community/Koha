@@ -288,7 +288,7 @@
                                                 [% IF ( reserve_in_future ) %]
                                                     <li>
                                                         <label for="from[% bibitemloo.biblionumber | html %]">Hold starts on date:</label>
-                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" data-flatpickr-futureinclusive="true" size="10" class="flatpickr holddatefrom" value="[% today | $raw %]" />
+                                                        <input type="text" name="reserve_date_[% bibitemloo.biblionumber | html %]" id="from[% bibitemloo.biblionumber | html %]" data-start_for="to[% bibitemloo.biblionumber | html %]" data-flatpickr-futureinclusive="true" size="10" class="flatpickr holddatefrom" value="[% KohaDates.datetime_from_string | $KohaDates dateformat => 'iso' %]" />
                                                         <span class="date-format from" data-biblionumber="[% bibitemloo.biblionumber | html %]">[% INCLUDE 'date-format.inc' %]</span>
                                                         <div class="required_label" style="display:none;">Required</div>
                                                     </li>
