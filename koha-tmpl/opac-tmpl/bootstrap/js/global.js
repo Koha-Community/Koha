@@ -249,7 +249,12 @@ var facetHandler = function (e) {
     $(".menu-collapse").toggle();
 };
 
-$(document).ready(function () {
+function setPlaceholder(){
+    let search_placeholder = $("#masthead_search option:selected").data("placeholder");
+    $("#translControl1").attr("placeholder", search_placeholder );
+}
+
+$(document).ready(function(){
     $("html").removeClass("no-js").addClass("js");
     $(".close").click(function () {
         window.close();
@@ -336,5 +341,10 @@ $(document).ready(function () {
     $("#backtotop").on("click", function (e) {
         e.preventDefault();
         $("html,body").animate({ scrollTop: 0 }, "slow");
+    });
+
+    setPlaceholder();
+    $("#masthead_search").on("change", function(){
+        setPlaceholder();
     });
 });

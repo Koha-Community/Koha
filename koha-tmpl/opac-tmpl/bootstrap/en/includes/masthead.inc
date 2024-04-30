@@ -4,6 +4,7 @@
 [% USE Categories %]
 [% USE AuthClient %]
 [% USE AdditionalContents %]
+[% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% IF Koha.Preference( 'CookieConsent' ) %]
     [% USE JSConsents %]
@@ -192,51 +193,51 @@
                                             <div class="col-sm-auto order-2 order-sm-2">
                                                 <select name="idx" id="masthead_search" class="form-control">
                                                     [% IF ( ms_kw ) %]
-                                                        <option selected="selected" value="">Library catalog</option>
+                                                        <option selected="selected" value="" data-placeholder="[% t("Search the catalog by keyword") | html %]">Library catalog</option>
                                                     [% ELSE %]
-                                                        <option value="">Library catalog</option>
+                                                        <option value="" data-placeholder="[% t("Search the catalog by keyword") | html %]">Library catalog</option>
                                                     [% END # /ms_kw %]
                                                     [% IF ( ms_ti ) %]
-                                                        <option selected="selected" value="ti">Title</option>
+                                                        <option selected="selected" value="ti" data-placeholder="[% t("Search the catalog by title") | html %]">Title</option>
                                                     [% ELSE %]
-                                                        <option value="ti">Title</option>
+                                                        <option value="ti" data-placeholder="[% t("Search the catalog by title") | html %]">Title</option>
                                                     [% END # /ms_ti %]
                                                     [% IF ( ms_au ) %]
-                                                        <option selected="selected" value="au">Author</option>
+                                                        <option selected="selected" value="au" data-placeholder="[% t("Search the catalog by author") | html %]">Author</option>
                                                     [% ELSE %]
-                                                        <option value="au">Author</option>
+                                                        <option value="au" data-placeholder="[% t("Search the catalog by author") | html %]">Author</option>
                                                     [% END # /ms_au%]
                                                     [% IF ( ms_su ) %]
-                                                        <option selected="selected" value="su">Subject</option>
+                                                        <option selected="selected" value="su" data-placeholder="[% t("Search the catalog by subject") | html %]">Subject</option>
                                                     [% ELSE %]
-                                                        <option value="su">Subject</option>
+                                                        <option value="su" data-placeholder="[% t("Search the catalog by subject") | html %]">Subject</option>
                                                     [% END # /ms_su %]
                                                     [% IF ( ms_nb ) %]
-                                                        <option selected="selected" value="nb">ISBN</option>
+                                                        <option selected="selected" value="nb" data-placeholder="[% t("Search the catalog by ISBN") | html %]">ISBN</option>
                                                     [% ELSE %]
-                                                        <option value="nb">ISBN</option>
+                                                        <option value="nb" data-placeholder="[% t("Search the catalog by ISBN") | html %]">ISBN</option>
                                                     [% END # /ms_nb%]
                                                     [% IF ( ms_ns ) %]
-                                                        <option selected="selected" value="ns">ISSN</option>
+                                                        <option selected="selected" value="ns" data-placeholder="[% t("Search the catalog by ISSN") | html %]">ISSN</option>
                                                     [% ELSE %]
-                                                        <option value="ns">ISSN</option>
+                                                        <option value="ns" data-placeholder="[% t("Search the catalog by ISSN") | html %]">ISSN</option>
                                                     [% END # /ms_ns%]
                                                     [% IF ( ms_se ) %]
-                                                        <option selected="selected" value="se">Series</option>
+                                                        <option selected="selected" value="se" data-placeholder="[% t("Search the catalog by series") | html %]">Series</option>
                                                     [% ELSE %]
-                                                        <option value="se">Series</option>
+                                                        <option value="se" data-placeholder="[% t("Search the catalog by series") | html %]">Series</option>
                                                     [% END # /ms_se %]
                                                     [% IF ( Koha.Preference('OPACNumbersPreferPhrase') ) %]
                                                         [% IF ( ms_callnumcommaphr ) %]
-                                                            <option selected="selected" value="callnum,phr">Call number</option>
+                                                            <option selected="selected" value="callnum,phr" data-placeholder="[% t("Search the catalog by call number") | html %]">Call number</option>
                                                         [% ELSE %]
-                                                            <option value="callnum,phr">Call number</option>
+                                                            <option value="callnum,phr" data-placeholder="[% t("Search the catalog by call number") | html %]">Call number</option>
                                                         [% END #/ms_callnumcommaphr %]
                                                     [% ELSE %]
                                                         [% IF ( ms_callnum ) %]
-                                                            <option selected="selected" value="callnum">Call number</option>
+                                                            <option selected="selected" value="callnum" data-placeholder="[% t("Search the catalog by call number") | html %]">Call number</option>
                                                         [% ELSE %]
-                                                            <option value="callnum">Call number</option>
+                                                            <option value="callnum" data-placeholder="[% t("Search the catalog by call number") | html %]">Call number</option>
                                                         [% END # /ms_callnum %]
                                                     [% END # /IF OPACNumbersPreferPhrase %]
                                                 </select>
@@ -244,9 +245,9 @@
 
                                             <div class="col order-4 order-sm-3">
                                                 [% IF ( !Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && mylibraryfirst ) %]
-                                                    <input type="text" class="transl1 form-control form-control-filtered" id="translControl1" name="q" value="[% ms_value | html %]" data-toggle="tooltip" data-placement="top" title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only" /><span id="translControl"></span>
+                                                    <input type="text" class="transl1 form-control form-control-filtered" id="translControl1" name="q" value="[% ms_value | html %]" data-toggle="tooltip" data-placement="top" title="Searching in [% Branches.GetName( mylibraryfirst ) | html %] only" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
                                                 [% ELSE %]
-                                                    <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" /><span id="translControl"></span>
+                                                    <input type="text" class="transl1 form-control" id="translControl1" name="q" value="[% ms_value | html %]" placeholder="Search the catalog by keyword" /><span id="translControl"></span>
                                                 [% END # /ms_value %]
                                             </div> <!-- /.col -->
 
