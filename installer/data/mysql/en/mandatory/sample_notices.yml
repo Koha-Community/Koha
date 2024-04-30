@@ -679,7 +679,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "<h5>Date: [% today | KohaDates %]</h5>"
+            - "<h5>Date: [% today | $KohaDates %]</h5>"
             - "<br>"
             - "<h3> Transfer to/Hold in [% branch.branchname %]</h3>"
             - "<br>"
@@ -701,7 +701,7 @@ tables:
             - "<ul>"
             - "   <li>[% item.barcode %]</li>"
             - "   <li>[% item.itemcallnumber %]</li>"
-            - "   <li>[% reserve.waitingdate %]</li>"
+            - "   <li>[% reserve.waitingdate | $KohaDates %]</li>"
             - "</ul>"
             - "<p>Notes:"
             - "<pre>[% reserve.reservenotes %]</pre>"
