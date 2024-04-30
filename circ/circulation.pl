@@ -522,6 +522,7 @@ if (@$barcodes && $op eq 'cud-checkout') {
             }
         }
     }
+
     if ($needsconfirmation->{RESERVE_WAITING} or $needsconfirmation->{RESERVED} or $needsconfirmation->{TRANSFERRED} or $needsconfirmation->{PROCESSING}){
         $template->param(
             reserveborrowernumber => $needsconfirmation->{'resborrowernumber'},
