@@ -728,9 +728,7 @@
             let selectFields = document.querySelectorAll('select[multiple]');
             selectFields.forEach((selectField) => {
                 selectField.style.minWidth = '320px';
-                $(selectField).select2({
-                    closeOnSelect: false,
-                });
+                $(selectField).select2();
             });
         });
     </script>
