@@ -503,6 +503,7 @@ sub handle_patron_status {
 
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_patron_status" );
     $patron = $ils->find_patron( $fields->{ (FID_PATRON_ID) } );
+    $patron->update_lastseen() if $patron;
     $resp = build_patron_status( $patron, $lang, $fields, $server );
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
     return (PATRON_STATUS_REQ);
