@@ -648,6 +648,7 @@ sub _gen_default_values {
         },
         BorrowerAttributeType => {
             mandatory => 0,
+            is_date   => 0,
         },
         Suggestion => {
             suggesteddate => dt_from_string()->ymd,
