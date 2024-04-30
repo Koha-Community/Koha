@@ -2536,28 +2536,28 @@ sub AddReturn {
 
     if ( C4::Context->preference('ClaimReturnedLostValue') ) {
 
-            my $claim = Koha::Checkouts::ReturnClaims->find(
-                {
-                    itemnumber => $item->id,
-                    resolution => undef,
-                }
-            );
-            if ($claim) {
-                my $autoClaimReturnCheckin = C4::Context->preference('AutoClaimReturnStatusOnCheckin');
-                if ($autoClaimReturnCheckin) {
+        my $claim = Koha::Checkouts::ReturnClaims->find(
+            {
+                itemnumber => $item->id,
+                resolution => undef,
+            }
+        );
+        if ($claim) {
+            my $autoClaimReturnCheckin = C4::Context->preference('AutoClaimReturnStatusOnCheckin');
+            if ($autoClaimReturnCheckin) {
 
-                    my $patron_id  = $patron->borrowernumber;
-                    my $resolution = $autoClaimReturnCheckin;
+                my $patron_id  = $patron->borrowernumber;
+                my $resolution = $autoClaimReturnCheckin;
 
-                    $claim->resolve(
-                        {
-                            resolution  => $resolution,
-                            resolved_by => $patron_id,
-                        }
-                    );
-                    $messages->{ClaimAutoResolved} = $claim;
-                } else {
-                    $messages->{ReturnClaims} = $claim;
+                $claim->resolve(
+                    {
+                        resolution  => $resolution,
+                        resolved_by => $patron_id,
+                    }
+                );
+                $messages->{ClaimAutoResolved} = $claim;
+            } else {
+                $messages->{ReturnClaims} = $claim;
             }
         }
     }
