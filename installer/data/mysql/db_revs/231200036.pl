@@ -2,7 +2,7 @@ use Modern::Perl;
 
 return {
     bug_number  => "35138",
-    description => "Make the elastic facets editable",
+    description => "Make the Elasticsearch facets configurable",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -49,5 +49,6 @@ return {
         $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary' ) if $holdingbranch;
         $sth->execute( 'Home libraries',    'homebranch',    'homelibrary' )    if $homebranch;
 
+        say $out "Updated DisplayLibraryFacets and search field configuration";
     },
 };
