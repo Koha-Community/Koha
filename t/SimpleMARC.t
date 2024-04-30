@@ -924,7 +924,7 @@ subtest 'copy_field' => sub {
 
 # copy_and_replace_field - subfield
 subtest 'copy_and_replace_field' => sub {
-    plan tests              => 2;
+    plan tests              => 3;
     subtest 'copy and replace subfield' => sub {
         plan tests => 20;
         my $record = new_record;
@@ -1514,6 +1514,28 @@ subtest 'copy_and_replace_field' => sub {
             ],
             [],
             'Copy and replace to an existent field should not create a new field'
+        );
+    };
+
+    # Copy and replace with control field
+    subtest 'copy and replace control field' => sub {
+        plan tests => 1;
+        my $record = new_record;
+        $record->append_fields(
+            MARC::Field->new( '001', '4815162342' ),
+        );
+
+        # Copy control field to subfield
+        copy_and_replace_field(
+            { record => $record, from_field => '001', to_field => '099', to_subfield   => 'a' } );
+        is_deeply(
+            [
+                read_field(
+                    { record => $record, field => '099', subfield => 'a' }
+                )
+            ],
+            ['4815162342'],
+            'Copy and replace - Update a subfield with content of control field'
         );
     };
 };
