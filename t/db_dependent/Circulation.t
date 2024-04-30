@@ -2638,30 +2638,30 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
     plan tests => 8;
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
-    t::lib::Mocks::mock_userenv({ branchcode => $library2->{branchcode} });
-    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    t::lib::Mocks::mock_userenv( { branchcode => $library2->{branchcode} } );
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',         1 );
     t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', 1 );
-    my $item = $builder->build_sample_item ({library=>$library2->{branchcode}});
+    my $item     = $builder->build_sample_item( { library => $library2->{branchcode} } );
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $checkout = AddIssue( $patron, $item->barcode );
 
     my $claim = $checkout->claim_returned(
-            {
-              created_by => $patron->id,
-              notes      => "Test note",
-            }
-        );
-    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
-    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
-    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
-    is( $claim->notes, "Test note", "Claim notes match" );
-    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+        {
+            created_by => $patron->id,
+            notes      => "Test note",
+        }
+    );
+    is( $claim->issue_id,       $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber,     $item->id,     "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id,   "Claim borrowernumber matches" );
+    is( $claim->notes,          "Test note",   "Claim notes match" );
+    is( $claim->created_by,     $patron->id,   "Claim created_by matches" );
     ok( $claim->created_on, "Claim created_on is set" );
 
-    my ( $doreturn, $messages) = AddReturn ( $item->barcode, $library->{branchcode} );
-    is (ref $messages->{ClaimAutoResolved}, 'Koha::Checkouts::ReturnClaim', "Claim auto resolved upon checkin");
+    my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode} );
+    is( ref $messages->{ClaimAutoResolved}, 'Koha::Checkouts::ReturnClaim', "Claim auto resolved upon checkin" );
     $claim->discard_changes;
-    ok( $claim->resolved_by, "Claim is resolved");
+    ok( $claim->resolved_by, "Claim is resolved" );
 };
 
 subtest 'MultipleReserves' => sub {
