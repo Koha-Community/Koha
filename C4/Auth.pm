@@ -1981,8 +1981,8 @@ sub checkpw {
 
         # INTERNAL AUTH
         @return    = checkpw_internal( $userid, $password, $no_set_userenv );
-        $passwd_ok = 1 if $return[0] > 0;                                       # 1 or 2
-        $patron    = $return[3];
+        $passwd_ok = $return[0];
+        $patron    = $passwd_ok ? $return[3] : undef;
     }
 
     if ( defined $userid && !$patron ) {
