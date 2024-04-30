@@ -12,22 +12,22 @@ use Exception::Class (
     'Koha::Exceptions::Patron::Attribute::InvalidType' => {
         isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "the passed type is invalid",
-        fields      => [ "type" ]
+        fields      => ["type"]
     },
     'Koha::Exceptions::Patron::Attribute::NonRepeatable' => {
         isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "repeatable not set for attribute type and tried to add a new attribute for the same code",
-        fields      => [ "attribute" ]
+        fields      => ["attribute"]
     },
     'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint' => {
         isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "unique_id set for attribute type and tried to add a new with the same code and value",
-        fields      => [ "attribute" ]
+        fields      => ["attribute"]
     },
     'Koha::Exceptions::Patron::Attribute::InvalidAttributeValue' => {
-        isa => 'Koha::Exceptions::Patron::Attribute',
+        isa         => 'Koha::Exceptions::Patron::Attribute',
         description => "the passed value is invalid for attribute type",
-        fields      => [ "attribute" ]
+        fields      => ["attribute"]
     }
 );
 
@@ -36,28 +36,25 @@ sub full_message {
 
     my $msg = $self->message;
 
-    unless ( $msg) {
+    unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Patron::Attribute::NonRepeatable') ) {
             $msg = sprintf(
                 "Tried to add more than one non-repeatable attributes. type=%s value=%s",
                 $self->attribute->code,
                 $self->attribute->attribute
             );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
+        } elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::UniqueIDConstraint') ) {
             $msg = sprintf(
                 "Your action breaks a unique constraint on the attribute. type=%s value=%s",
                 $self->attribute->code,
                 $self->attribute->attribute
             );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
+        } elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidType') ) {
             $msg = sprintf(
                 "Tried to use an invalid attribute type. type=%s",
                 $self->type
             );
-        }
-        elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidAttributeValue') ) {
+        } elsif ( $self->isa('Koha::Exceptions::Patron::Attribute::InvalidAttributeValue') ) {
             $msg = sprintf(
                 "Tried to use an invalid value for attribute type. type=%s value=%s",
                 $self->attribute->code,
