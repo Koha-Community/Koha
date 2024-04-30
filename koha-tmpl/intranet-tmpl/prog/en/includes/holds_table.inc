@@ -257,7 +257,7 @@
                         [%- END -%]
                     [%- END # IF SuspendHoldsIntranet -%]
                     [%- IF ( hold.found ) -%]
-                        <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?op=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
+                        <a class="btn btn-default  submit-form-link" href="#" id="revert_hold_[% hold.reserve_id | html %]" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | uri %]" data-last_priority="[% last_priority | uri %]" data-prev_priority="0" data-next_priority="1" data-borrowernumber="[% hold.borrowernumber | uri %]" data-biblionumber="[% hold.biblionumber | uri %]" data-itemnumber="[% hold.itemnumber | uri %]" data-reserve_id="[% hold.reserve_id | uri %]" data-date="[% hold.date | uri %]" data-action="request.pl" data-method="post">[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]</a>
                     [%- END -%]
                 </td>
                 [% IF ( hold.intransit || hold.atdestination ) %]
