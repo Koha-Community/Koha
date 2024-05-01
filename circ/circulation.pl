@@ -450,7 +450,7 @@ if (@$barcodes && $op eq 'cud-checkout') {
             if ($autoClaimReturnCheckout) {
                 my $claim = $claims->next;
 
-                my $patron_id  = $patron->borrowernumber;
+                my $patron_id  = $logged_in_user->borrowernumber;
                 my $resolution = $autoClaimReturnCheckout;
 
                 $claim->resolve(

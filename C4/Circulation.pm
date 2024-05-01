@@ -2546,7 +2546,7 @@ sub AddReturn {
             my $autoClaimReturnCheckin = C4::Context->preference('AutoClaimReturnStatusOnCheckin');
             if ($autoClaimReturnCheckin) {
 
-                my $patron_id  = $patron->borrowernumber;
+                my $patron_id  = C4::Context->userenv ? C4::Context->userenv->{'number'} : undef;
                 my $resolution = $autoClaimReturnCheckin;
 
                 $claim->resolve(
