@@ -145,7 +145,7 @@ elsif ( $op eq 'cud-add_validate' ) {
 }
 
 #--------------------------------------------------
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
 ## delete a budget period (preparation)
     my $funds = GetBudgets({ budget_period_id => $budget_period_id });
     my $fund_count = scalar @$funds;
