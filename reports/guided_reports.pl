@@ -613,15 +613,16 @@ elsif ($op eq 'cud-share'){
 elsif ($op eq 'export'){
 
 	# export results to tab separated text or CSV
-    my $report_id      = $input->param('id');
-    my $report         = Koha::Reports->find($report_id);
-    my $sql            = $report->savedsql;
-    my @param_names    = $input->multi_param('param_name');
-    my @sql_params     = $input->multi_param('sql_params');
-    my $format         = $input->param('format');
-    my $reportname     = $input->param('reportname');
-    my $reportfilename = $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format" ;
-    my $scrubber       = C4::Scrubber->new();
+    my $report_id   = $input->param('id');
+    my $report      = Koha::Reports->find($report_id);
+    my $sql         = $report->savedsql;
+    my @param_names = $input->multi_param('param_name');
+    my @sql_params  = $input->multi_param('sql_params');
+    my $format      = $input->param('format');
+    my $reportname  = $input->param('reportname');
+    my $reportfilename =
+        $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format";
+    my $scrubber = C4::Scrubber->new();
 
     ($sql, undef) = $report->prep_report( \@param_names, \@sql_params );
     my ( $sth, $q_errors ) = execute_query( { sql => $sql, report_id => $report_id } );
