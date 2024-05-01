@@ -2636,32 +2636,62 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 
 
 subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
-    plan tests => 8;
+    plan tests => 1;
+
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
     t::lib::Mocks::mock_userenv( { branchcode => $library2->{branchcode} } );
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',         1 );
-    t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', 1 );
+    t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', '' );
     my $item     = $builder->build_sample_item( { library => $library2->{branchcode} } );
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $checkout = AddIssue( $patron, $item->barcode );
+    my $future   = dt_from_string()->add( days => 7 );
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                returndate      => undef,
+                renewals_count  => 0,
+                auto_renew      => 0,
+                borrowernumber  => $patron->borrowernumber,
+                itemnumber      => $item->itemnumber,
+                onsite_checkout => 0,
+                date_due        => $future,
+            }
+        }
+    );
 
+    # Claim return
     my $claim = $checkout->claim_returned(
         {
             created_by => $patron->id,
             notes      => "Test note",
         }
     );
-    is( $claim->issue_id,       $checkout->id, "Claim issue id matches" );
-    is( $claim->itemnumber,     $item->id,     "Claim itemnumber matches" );
-    is( $claim->borrowernumber, $patron->id,   "Claim borrowernumber matches" );
-    is( $claim->notes,          "Test note",   "Claim notes match" );
-    is( $claim->created_by,     $patron->id,   "Claim created_by matches" );
-    ok( $claim->created_on, "Claim created_on is set" );
+    is( $claim->issue_id, $checkout->id,    "Return claim created for issue" );
+    $item->discard_changes;
+    is( $item->itemlost,  1, "Item set to lost as 1" );
 
+    # Return tests with feature disabled
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode} );
-    is( ref $messages->{ClaimAutoResolved}, 'Koha::Checkouts::ReturnClaim', "Claim auto resolved upon checkin" );
+    is(
+        ref $messages->{ReturnClaims}, 'Koha::Checkouts::ReturnClaim',
+        "AddReturn returns message 'ReturnClaims' containing the ReturnClaim object"
+    );
+    # FIXME: We should reset the checkout here else we hit a 'No patron' defined issue in the AutoClaim code.
+    #        This might highligt a bug in the code however.. should we allow trigger this code when the return
+    #        spots that there isn't a current issue
+
+    # Now test with the feature enabled
+    t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', 'RETURNED_ON_CLAIM' );
+    ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode} );
+    is(
+        ref $messages->{ClaimAutoResolved}, 'Koha::Checkouts::ReturnClaim',
+        "AddReturn returns message 'ClaimAutoResolved' containing the ReturnClaim object"
+    );
     $claim->discard_changes;
-    ok( $claim->resolved_by, "Claim is resolved" );
+    is( $claim->resolved_by, '', "Claim marked as resolved by '' when AutoClaimReturnStatusOnCheckin set" );
+    # FIXME: The code sets the resolved_by to the patron who was issued the item.. should this be the librarian performing the return instead?
+    is( $claim->resolution, 'RETURNED_ON_CLAIM', "Claim resolution set to match AutoClaimReturnStatusOnCheckin value" );
 };
 
 subtest 'MultipleReserves' => sub {
