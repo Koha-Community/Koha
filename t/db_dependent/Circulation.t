@@ -2636,14 +2636,16 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 
 
 subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
-    plan tests => 1;
+    plan tests => 8;
 
-    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
-    t::lib::Mocks::mock_userenv( { branchcode => $library2->{branchcode} } );
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch',            'anywhere' );
     t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',         1 );
     t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', '' );
-    my $item     = $builder->build_sample_item( { library => $library2->{branchcode} } );
-    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems',         1 );
+    my $item      = $builder->build_sample_item( { library => $library2->{branchcode} } );
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $librarian = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $librarian, branchcode => $library2->{branchcode} } );
     my $future   = dt_from_string()->add( days => 7 );
     my $checkout = $builder->build_object(
         {
@@ -2667,9 +2669,9 @@ subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
             notes      => "Test note",
         }
     );
-    is( $claim->issue_id, $checkout->id,    "Return claim created for issue" );
+    is( $claim->issue_id, $checkout->id, "Return claim created for issue" );
     $item->discard_changes;
-    is( $item->itemlost,  1, "Item set to lost as 1" );
+    is( $item->itemlost, 1, "Item set to lost as 1" );
 
     # Return tests with feature disabled
     my ( $doreturn, $messages ) = AddReturn( $item->barcode, $library->{branchcode} );
@@ -2677,9 +2679,8 @@ subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
         ref $messages->{ReturnClaims}, 'Koha::Checkouts::ReturnClaim',
         "AddReturn returns message 'ReturnClaims' containing the ReturnClaim object"
     );
-    # FIXME: We should reset the checkout here else we hit a 'No patron' defined issue in the AutoClaim code.
-    #        This might highligt a bug in the code however.. should we allow trigger this code when the return
-    #        spots that there isn't a current issue
+    $item->discard_changes;
+    is( $item->itemlost, 1, "Item lost status follows BlockReturnOfLostItems preference when feature is disabled" );
 
     # Now test with the feature enabled
     t::lib::Mocks::mock_preference( 'AutoClaimReturnStatusOnCheckin', 'RETURNED_ON_CLAIM' );
@@ -2689,9 +2690,10 @@ subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
         "AddReturn returns message 'ClaimAutoResolved' containing the ReturnClaim object"
     );
     $claim->discard_changes;
-    is( $claim->resolved_by, '', "Claim marked as resolved by '' when AutoClaimReturnStatusOnCheckin set" );
-    # FIXME: The code sets the resolved_by to the patron who was issued the item.. should this be the librarian performing the return instead?
+    is( $claim->resolved_by, $librarian->borrowernumber, "Claim marked as resolved by librarian calling AddReturn when AutoClaimReturnStatusOnCheckin set" );
     is( $claim->resolution, 'RETURNED_ON_CLAIM', "Claim resolution set to match AutoClaimReturnStatusOnCheckin value" );
+    $item->discard_changes;
+    is( $item->itemlost, 1, "Item lost status follows BlockReturnOfLostItems when feature is enabled" );
 };
 
 subtest 'MultipleReserves' => sub {
