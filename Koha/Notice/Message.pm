@@ -156,18 +156,17 @@ sub stylesheets {
 
 =head3 patron
 
-    my $patron = $message->patron;
+    my $patron = $checkout->patron
 
-Returns the Koha::Patron object for the recipient of the queued message
+Return the patron by whom the checkout was done
 
 =cut
 
 sub patron {
     my ($self) = @_;
-
-    $self->{_patron} ||= Koha::Patrons->find( $self->borrowernumber );
-
-    return $self->{_patron};
+    my $patron_rs = $self->_result->borrowernumber;
+    return unless $patron_rs;
+    return Koha::Patron->_new_from_dbic($patron_rs);
 }
 
 =head3 _type
