@@ -336,7 +336,7 @@ elsif ( $action eq 'update' ) {
         $borrower_changes{'changed_fields'} = join ',', keys %borrower_changes;
         my $extended_attributes_changes = FilterUnchangedAttributes( $borrowernumber, $attributes );
 
-        if ( %borrower_changes || scalar @{$extended_attributes_changes} > 0 ) {
+        if ( $borrower_changes{'changed_fields'} || scalar @{$extended_attributes_changes} > 0 ) {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
                 {
                     template_name   => "opac-memberentry-update-submitted.tt",
@@ -579,10 +579,8 @@ sub DelUnchangedFields {
 
 
     foreach my $key ( keys %new_data ) {
-        next if defined($new_data{$key}) xor defined($current_data->{$key});
-        if ( !defined($new_data{$key}) || $current_data->{$key} eq $new_data{$key} || $hidden_fields->{$key} ) {
-           delete $new_data{$key};
-        }
+        next if ( ($new_data{$key} || $current_data->{$key}) && ( $new_data{$key} ne $current_data->{$key} ) && !($hidden_fields->{$key}) );
+        delete $new_data{$key};
     }
 
     return %new_data;
