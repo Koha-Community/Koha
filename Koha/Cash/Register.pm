@@ -242,8 +242,9 @@ on the API.
 
 sub to_api_mapping {
     return {
-        branch => 'library_id',
-        id     => 'cash_register_id',
+        branch         => 'library_id',
+        id             => 'cash_register_id',
+        branch_default => 'library_default',
     };
 }
 
