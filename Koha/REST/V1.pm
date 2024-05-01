@@ -76,6 +76,9 @@ sub startup {
     }
 
     my $spec_file = $self->home->rel_file("api/v1/swagger/swagger_bundle.json");
+    if (!-f $spec_file) {
+        $spec_file = $self->home->rel_file("api/v1/swagger/swagger.yaml");
+    }
 
     push @{$self->routes->namespaces}, 'Koha::Plugin';
 
