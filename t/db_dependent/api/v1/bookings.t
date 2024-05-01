@@ -223,15 +223,17 @@ subtest 'add() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
-    my $biblio  = $builder->build_sample_biblio;
-    my $item1   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
-    my $item2   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
-    my $booking = {
-        biblio_id  => $biblio->id,
-        item_id    => undef,
-        patron_id  => $patron->id,
-        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
-        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
+    my $biblio         = $builder->build_sample_biblio;
+    my $item1          = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $item2          = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $booking        = {
+        biblio_id         => $biblio->id,
+        item_id           => undef,
+        pickup_library_id => $pickup_library->branchcode,
+        patron_id         => $patron->id,
+        start_date        => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date          => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     # Unauthorized attempt to write
@@ -314,15 +316,17 @@ subtest 'update() tests' => sub {
         "//$unauth_userid:$password@/api/v1/bookings/$booking_id" => json => { name => 'New unauthorized name change' }
     )->status_is(403);
 
-    my $biblio = $builder->build_sample_biblio;
-    my $item   = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $biblio         = $builder->build_sample_biblio;
+    my $item           = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
 
     # Attempt partial update on a PUT
     my $booking_with_missing_field = {
-        item_id    => undef,
-        patron_id  => $patron->id,
-        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
-        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
+        item_id           => undef,
+        patron_id         => $patron->id,
+        pickup_library_id => $pickup_library->branchcode,
+        start_date        => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date          => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_missing_field )
@@ -330,11 +334,12 @@ subtest 'update() tests' => sub {
 
     # Full object update on PUT
     my $booking_with_updated_field = {
-        biblio_id  => $biblio->id,
-        item_id    => undef,
-        patron_id  => $patron->id,
-        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
-        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
+        biblio_id         => $biblio->id,
+        item_id           => undef,
+        pickup_library_id => $pickup_library->branchcode,
+        patron_id         => $patron->id,
+        start_date        => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date          => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_updated_field )
@@ -342,12 +347,13 @@ subtest 'update() tests' => sub {
 
     # Authorized attempt to write invalid data
     my $booking_with_invalid_field = {
-        blah       => "Booking Blah",
-        biblio_id  => $biblio->id,
-        item_id    => undef,
-        patron_id  => $patron->id,
-        start_date => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
-        end_date   => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
+        blah              => "Booking Blah",
+        biblio_id         => $biblio->id,
+        item_id           => undef,
+        pickup_library_id => $pickup_library->branchcode,
+        patron_id         => $patron->id,
+        start_date        => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 2 ) } ),
+        end_date          => output_pref( { dateformat => "rfc3339", dt => dt_from_string->add( days => 6 ) } ),
     };
 
     $t->put_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_invalid_field )
