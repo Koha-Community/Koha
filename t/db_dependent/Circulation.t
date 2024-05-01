@@ -1763,6 +1763,7 @@ subtest "CanBookBeRenewed | bookings" => sub {
     my $renewing_patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $booked_patron   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item            = $builder->build_sample_item( { bookable => 1 } );
+    my $pickup_library  = $builder->build_object( { class => 'Koha::Libraries' } );
 
     # issue
     my $issue   = AddIssue( $renewing_patron, $item->barcode );
@@ -1772,11 +1773,12 @@ subtest "CanBookBeRenewed | bookings" => sub {
     # item-level booking
     my $booking = Koha::Booking->new(
         {
-            patron_id  => $booked_patron->borrowernumber,
-            item_id    => $item->itemnumber,
-            biblio_id  => $item->biblio->biblionumber,
-            start_date => $datedue->clone()->add( days => 2 ),
-            end_date   => $datedue->clone()->add( days => 10 ),
+            patron_id         => $booked_patron->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => $datedue->clone()->add( days => 2 ),
+            end_date          => $datedue->clone()->add( days => 10 ),
         }
     )->store();
 
@@ -4746,18 +4748,20 @@ subtest 'CanBookBeIssued | bookings' => sub {
     my $schema = Koha::Database->schema;
     $schema->storage->txn_begin;
 
-    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $item    = $builder->build_sample_item( { bookable => 1 } );
+    my $patron1        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item           = $builder->build_sample_item( { bookable => 1 } );
 
     # item-level booking
     my $booking = Koha::Booking->new(
         {
-            patron_id  => $patron1->borrowernumber,
-            item_id    => $item->itemnumber,
-            biblio_id  => $item->biblio->biblionumber,
-            start_date => dt_from_string()->subtract( days => 1 ),
-            end_date   => dt_from_string()->add( days => 6 ),
+            patron_id         => $patron1->borrowernumber,
+            pickup_library_id => $pickup_library->branchcode,
+            item_id           => $item->itemnumber,
+            biblio_id         => $item->biblio->biblionumber,
+            start_date        => dt_from_string()->subtract( days => 1 ),
+            end_date          => dt_from_string()->add( days => 6 ),
         }
     )->store();
 
