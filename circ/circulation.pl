@@ -438,6 +438,32 @@ if (@$barcodes && $op eq 'cud-checkout') {
 
     delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
 
+    if ( $item && C4::Context->preference('ClaimReturnedLostValue') ) {
+        my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
+
+        my $claims = Koha::Checkouts::ReturnClaims->search(
+            {
+                itemnumber => $item->id,
+            }
+        );
+        if ( $claims->count ) {
+            if ($autoClaimReturnCheckout) {
+                my $claim = $claims->next;
+
+                my $patron_id  = $patron->borrowernumber;
+                my $resolution = $autoClaimReturnCheckout;
+
+                $claim->resolve(
+                    {
+                        resolution  => $resolution,
+                        resolved_by => $patron_id,
+                    }
+                );
+                $template_params->{CLAIM_RESOLUTION} = $claim;
+            }
+        }
+    }
+
     if( $item and ( !$blocker or $force_allow_issue ) ){
         my $confirm_required = 0;
         unless($issueconfirmed){
@@ -494,32 +520,6 @@ if (@$barcodes && $op eq 'cud-checkout') {
             $template_params->{issue} = $issue;
             $session->clear('auto_renew');
             $inprocess = 1;
-        }
-    }
-
-    if ( C4::Context->preference('ClaimReturnedLostValue') ) {
-        my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
-
-        my $claims = Koha::Checkouts::ReturnClaims->search(
-            {
-                itemnumber => $item->id,
-            }
-        );
-        if ( $claims->count ) {
-            if ($autoClaimReturnCheckout) {
-                my $claim = $claims->next;
-
-                my $patron_id  = $patron->borrowernumber;
-                my $resolution = $autoClaimReturnCheckout;
-
-                $claim->resolve(
-                    {
-                        resolution  => $resolution,
-                        resolved_by => $patron_id,
-                    }
-                );
-                $template_params->{CLAIM_RESOLUTION} = $claim;
-            }
         }
     }
 
