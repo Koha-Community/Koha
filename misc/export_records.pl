@@ -26,12 +26,14 @@ use Koha::Script;
 use C4::Auth;
 use C4::Context;
 use C4::Record;
+use C4::Reports::Guided qw( execute_query );
 
 use Koha::Biblioitems;
 use Koha::Database;
 use Koha::CsvProfiles;
 use Koha::Exporter::Record;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Reports;
 
 my (
     $output_format,
@@ -55,6 +57,11 @@ my (
     $end_accession,
     $marc_conditions,
     $embed_see_from_headings,
+    $report_id,
+    @report_params,
+    $report,
+    $sql,
+    $params_needed,
     $help
 );
 
@@ -80,6 +87,8 @@ GetOptions(
     'end_accession=s'         => \$end_accession,
     'marc_conditions=s'       => \$marc_conditions,
     'embed_see_from_headings' => \$embed_see_from_headings,
+    'report_id=s'             => \$report_id,
+    'report_param=s'          => \@report_params,
     'h|help|?'                => \$help
 ) || pod2usage(1);
 
@@ -102,13 +111,33 @@ if ( $output_format eq 'csv' and not $csv_profile_id ) {
     pod2usage(q|Define a csv profile to export in CSV|);
 }
 
-
 if ( $record_type ne 'bibs' and $record_type ne 'auths' ) {
     pod2usage(q|--record_type is not valid|);
 }
 
 if ( $deleted_barcodes and $record_type ne 'bibs' ) {
     pod2usage(q|--deleted_barcodes can only be used with biblios|);
+}
+
+if ( $report_id ) {
+
+    # Check report exists
+    $report = Koha::Reports->find( $report_id );
+    unless ( $report ) {
+        pod2usage( sprintf( "No saved report (%s) found", $report_id ) );
+    }
+    $sql = $report->savedsql;
+
+    # Check defined report can be used to export the record_type
+    if ( $sql !~ /biblionumber/ && $record_type eq 'bibs' ) {
+        pod2usage(q|The --report_id you specified does not fetch a biblionumber|);
+    } elsif ( $sql !~ /authid/ && $record_type eq 'auths' ) {
+        pod2usage(q|The --report_id you specified does not fetch an authid|);
+    }
+
+    # convert SQL parameters to placeholders
+    my $params_needed = ( $sql =~ s/(<<[^>]+>>)/\?/g );
+    die("You supplied ". scalar @report_params . " parameter(s) and $params_needed are required by the report") if scalar @report_params != $params_needed;
 }
 
 $start_accession = dt_from_string( $start_accession ) if $start_accession;
@@ -141,7 +170,23 @@ my @record_ids;
 $timestamp = ($timestamp) ? output_pref({ dt => dt_from_string($timestamp), dateformat => 'iso', dateonly => 0, }): '';
 
 if ( $record_type eq 'bibs' ) {
-    if ( $timestamp ) {
+    if ( $report ) {
+        # Run the report and fetch biblionumbers
+        my ($sth) = execute_query(
+            {
+                sql        => $sql,
+                sql_params => \@report_params,
+                report_id  => $report_id,
+            }
+        );
+        while ( my $row = $sth->fetchrow_hashref() ) {
+            if ( $row->{biblionumber} ) {
+                push @record_ids, $row->{biblionumber};
+            } else {
+                pod2usage(q|The --report_id you specified returned no biblionumbers|);
+            }
+        }
+    } elsif ( $timestamp ) {
         if (!$dont_export_items) {
             push @record_ids, $_->{biblionumber} for @{
                 $dbh->selectall_arrayref(q| (
@@ -209,7 +254,23 @@ if ( $record_type eq 'bibs' ) {
     }
 }
 elsif ( $record_type eq 'auths' ) {
-    if ($timestamp) {
+    if ( $report ) {
+        # Run the report and fetch authids
+        my ($sth) = execute_query(
+            {
+                sql        => $sql,
+                sql_params => \@report_params,
+                report_id  => $report_id,
+            }
+        );
+        while ( my $row = $sth->fetchrow_hashref() ) {
+            if ( $row->{authid} ) {
+                push @record_ids, $row->{authid};
+            } else {
+                pod2usage(q|The --report_id you specified returned no authids|);
+            }
+        }
+    } elsif ($timestamp) {
         push @record_ids, $_->{authid} for @{
             $dbh->selectall_arrayref(
                 q| (
@@ -401,6 +462,20 @@ Print a brief help message.
 =item B<--embed_see_from_headings>
 
  --embed_see_from_headings      Embed see from (non-preferred form) headings in bibliographic record.
+
+=item B<--report_id>
+
+--report_id=ID                  Export biblionumbers or authids from a given saved report output.
+                                If you want to export authority records then your report must
+                                select authid and you must define --record-type=auths when
+                                running this script.
+
+=item B<--report_param>
+
+--report_param=PARAM            Repeatable, should provide one param per param requested for the
+                                report.
+                                Report params are not combined as on the staff side, so you may
+                                need to repeat params.
 
 =back
 
