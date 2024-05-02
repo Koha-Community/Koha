@@ -64,7 +64,7 @@
                                 <span id="facet-series">Series</span>
                             [% CASE 'ItemTypes' %]
                                 <span id="facet-itemtypes">Item types</span>
-                            [% CASE 'HomeLibrary' %]
+                            [% CASE 'homelibrary' %]
                                 <span id="facet-home-libraries">Home libraries</span>
                             [% CASE 'HoldingLibrary' %]
                                 <span id="facet-holding-libraries">Holding libraries</span>
