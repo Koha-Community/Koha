@@ -2002,6 +2002,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 ticket_updates_assignees
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::TicketUpdate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "ticket_updates_assignees",
+  "Koha::Schema::Result::TicketUpdate",
+  { "foreign.assignee_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 tickets_assignees
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Ticket>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tickets_assignees",
+  "Koha::Schema::Result::Ticket",
+  { "foreign.assignee_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 tickets_reporters
 
 Type: has_many
@@ -2158,8 +2188,8 @@ Composing rels: L</user_permissions> -> permission
 __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-03 14:18:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PcGXqEI1ULB+Uoclqfbxig
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-02 11:36:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jUOMoSonNmA3KwtZKVxqOA
 
 __PACKAGE__->has_many(
   "restrictions",

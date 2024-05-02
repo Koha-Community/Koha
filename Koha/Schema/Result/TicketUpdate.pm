@@ -48,6 +48,14 @@ id of catalog ticket the update relates to
 
 id of the user who logged the update
 
+=head2 assignee_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+id of the user who this ticket was assigned to at this update
+
 =head2 public
 
   data_type: 'tinyint'
@@ -94,6 +102,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "assignee_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "public",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "date",
@@ -122,6 +132,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
+
+=head2 assignee
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "assignee",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "assignee_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 ticket
 
@@ -154,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 09:10:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ytO0skgfeeAKxubBk+4wtw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-02 11:36:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yfQ97AZ3ZYRI5uUndgLKMA
 
 __PACKAGE__->add_columns( '+public' => { is_boolean => 1 }, );
 
