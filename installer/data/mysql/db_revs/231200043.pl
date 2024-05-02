@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 return {
-    bug_number  => "251159",
+    bug_number  => "25159",
     description => "Add action logs should be stored in JSON ( and as a diff of the change )",
     up          => sub {
         my ($args) = @_;
