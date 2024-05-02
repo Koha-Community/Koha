@@ -420,7 +420,7 @@ $(document).ready(function() {
         </div>\
     ");
 
-    $("#suspend-modal-clear-date").on( "click", function() { $("#suspend-modal-until").val(""); } );
+    $("#suspend-modal-clear-date").on( "click", function() { $(".suspend-until").val(""); } );
 
     $("#suspend-modal-submit").on( "click", function( e ) {
         e.preventDefault();
@@ -440,7 +440,7 @@ $(document).ready(function() {
             }
             holdsTable.api().ajax.reload();
         }).done(function() {
-            $("#suspend-modal-until").val(""); // clean the input
+            $(".suspend-until").val(""); // clean the input
             $('#suspend-modal').modal('hide');
         });
     });
