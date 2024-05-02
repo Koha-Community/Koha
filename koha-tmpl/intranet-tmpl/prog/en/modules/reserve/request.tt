@@ -690,9 +690,9 @@
 
                         <hr/>
 
-                        [% biblio = biblioloop.0 %]
+                        [% biblio_info = biblioloop.0 %]
                         <!-- ItemGroup level holds -->
-                        [% IF Koha.Preference('EnableItemGroupHolds') && biblio.object.item_groups.count %]
+                        [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
                         <fieldset class="rows">
                             <legend>
                                 <label for="requestgrp" class="inline">
@@ -740,7 +740,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                [% FOREACH g IN biblio.object.item_groups.search({}, { order_by => ['display_order'] }) %]
+                                                [% FOREACH g IN biblio_info.object.item_groups.search({}, { order_by => ['display_order'] }) %]
                                                     [% IF g.items.count %]
                                                         <tr>
                                                             <td>
@@ -789,7 +789,6 @@
                         </fieldset>
                         [% END %]
                         <!-- /ItemGroup level holds -->
-
 
                         <fieldset class="rows">
                             <legend>
@@ -1034,6 +1033,17 @@
                                             <a href="request.pl?biblionumber=[% biblio_info.biblionumber | uri %]&amp;borrowernumber=[% borrowernumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
                                         </p>
                                 [% END # /IF hiddencount %]
+                                <fieldset class="action">
+                                    [% IF ( patron.borrowernumber ) %]
+                                        [% IF ( override_required ) %]
+                                            <button type="submit" id="hold_item_btn" class="btn btn-primary warning"><i class="fa fa-exclamation-triangle "></i> Place hold</button>
+                                        [% ELSIF ( none_available ) %]
+                                            <button type="submit" id="hold_item_btn" disabled="disabled" class="btn btn-primary btn-disabled">Place hold</button>
+                                        [% ELSE %]
+                                            <button type="submit" id="hold_item_btn" class="btn btn-primary">Place hold</button>
+                                        [% END %]
+                                    [% END %]
+                                </fieldset>
 
                             [% ELSE # /UNLESS multi_hold %]
                                 <fieldset class="rows">
