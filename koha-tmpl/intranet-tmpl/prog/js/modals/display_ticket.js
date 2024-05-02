@@ -21,7 +21,7 @@ $(document).ready(function () {
         display += '<div class="list-group-item">';
         if (assignee) {
             display +=
-                '<span class="pull-right"><span class="label">' +
+                '<span class="pull-right"><span class="label strong">' +
                 __("Assignee") +
                 "</span>: " +
                 assignee +
