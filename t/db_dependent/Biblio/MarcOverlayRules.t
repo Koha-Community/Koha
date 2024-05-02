@@ -769,9 +769,9 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
             [ '500', 'a', 'One bottle of beer in the fridge' ],       # original
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
     ]);
-    $expected_record->insert_fields_ordered(
-        MARC::Field->new( '005', $saved_record->field('005')->data ),
-    );    # simulate same timestamp
+
+    # Remove timestamp from saved record when comparing
+    $saved_record->delete_fields( $saved_record->field('005') );
 
     # Make sure leader is equal after AddBiblio
     $expected_record->leader($saved_record->leader());
@@ -798,9 +798,9 @@ subtest 'context option in ModBiblio is handled correctly' => sub {
             [ '500', 'a', 'One cold bottle of beer in the fridge' ],
             [ '999', 'c', $biblionumber, 'd', $biblioitemnumber ],    # created by AddBiblio
     ]);
-    $expected_record->insert_fields_ordered(
-        MARC::Field->new( '005', $saved_record->field('005')->data ),
-    );    # simulate same timestamp
+
+    # Remove timestamp from saved record when comparing
+    $updated_record->delete_fields( $updated_record->field('005') );
 
     # Make sure leader is equal after ModBiblio
     $expected_record->leader($updated_record->leader());
