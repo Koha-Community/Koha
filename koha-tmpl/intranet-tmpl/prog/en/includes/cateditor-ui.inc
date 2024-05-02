@@ -445,7 +445,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     function showAdvancedSearch() {
         $('#advanced-search-servers').empty();
         $.each( z3950Servers, function( index, server ) {
-            $('#advanced-search-servers').append( '<li data-server-id="' + index + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</label></li>' );
+            $('#advanced-search-servers').append( '<li data-server-id="' + server.server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + '</label></li>' );
         } );
         $('#advanced-search-ui').modal('show');
     }
@@ -507,7 +507,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 num_fetched += '+';
             }
 
-            $('#search-serversinfo').append( '<li data-server-id="' + index + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</label></li>' );
+            $('#search-serversinfo').append( '<li data-server-id="' + server.server_id + '"><label><input class="search-toggle-server" type="checkbox"' + ( server.checked ? ' checked="checked">' : '>' ) + server.name + ' (' + num_fetched + ')' + '</label></li>' );
         } );
 
         var seenColumns = {};
@@ -1285,7 +1285,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         });
 
         $( document ).on( 'change', 'input.search-toggle-server', function() {
-            var server = z3950Servers[ $( this ).closest('li').data('server-id') ];
+            const id = $( this ).closest('li').data('server-id');
+            const server = z3950Servers.find(server => server.server_id === id);
             server.checked = this.checked;
 
             if ( $('#search-results-ui').is( ':visible' ) && Search.Fetch() ) {
