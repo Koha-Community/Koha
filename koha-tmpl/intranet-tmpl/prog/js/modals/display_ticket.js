@@ -183,7 +183,7 @@ $(document).ready(function () {
                     escape_str(patron.firstname)
                 );
             },
-            placeholder: "Search for a patron",
+            placeholder: __("Search for a patron"),
         });
     });
 
