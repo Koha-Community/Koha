@@ -60,38 +60,30 @@ sub get_user {
     my $interface     = $params->{interface};
     my $config        = $params->{config};
 
-    my $provider = Koha::Auth::Identity::Providers->search({ code => $provider_code })->next;
+    my $provider = Koha::Auth::Identity::Providers->search( { code => $provider_code } )->next;
 
-    my ( $mapped_data, $patron ) = $self->_get_data_and_patron({ provider => $provider, data => $data, config => $config });
+    my ( $mapped_data, $patron ) =
+        $self->_get_data_and_patron( { provider => $provider, data => $data, config => $config } );
 
     $mapped_data //= {};
 
-    my $domain = $self->has_valid_domain_config({ provider => $provider, email => $mapped_data->{email}, interface => $interface});
+    my $domain = $self->has_valid_domain_config(
+        { provider => $provider, email => $mapped_data->{email}, interface => $interface } );
 
-    # Call the plugin hook "auth_client_get_user" of all plugins in
-    # ascending priority.
-    if ( C4::Context->config('enable_plugins') ) {
-        my @plugins = Koha::Plugins->new()->GetPlugins(
-            {
-                method => 'auth_client_get_user',
-            }
-        );
-        @plugins = sort { $a->retrieve_data('priority') <=> $b->retrieve_data('priority') } @plugins;
-        my $args = {
-            provider    => $provider,
-            data        => $data,
-            config      => $config,
-            mapped_data => $mapped_data,
-            patron      => $patron,
-            domain      => $domain,
-        };
-        foreach my $plugin (@plugins) {
-            $plugin->auth_client_get_user($args);
-        }
-        $mapped_data = $args->{'mapped_data'};
-        $patron      = $args->{'patron'};
-        $domain      = $args->{'domain'};
-    }
+    my $args = {
+        provider    => $provider,
+        data        => $data,
+        config      => $config,
+        mapped_data => $mapped_data,
+        patron      => $patron,
+        domain      => $domain,
+    };
+
+    # Call the plugin hook "auth_client_get_user" of all plugins.
+    Koha::Plugins->call( 'auth_client_get_user', $args );
+    $mapped_data = $args->{'mapped_data'};
+    $patron      = $args->{'patron'};
+    $domain      = $args->{'domain'};
 
     $patron->set($mapped_data)->store if $patron && $domain->update_on_auth;
 
