@@ -71,16 +71,18 @@
                             Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
                         [% ELSE %]
                             [% FOREACH restriction IN patron.restrictions %]
+                                <div class="[% restriction.type.code | lower | html %]_restriction">
+                                <span class="restriction_expiration">
                                 [% IF restriction.expiration %]
                                     [% restriction.expiration | $KohaDates %]
                                 [% ELSE %]
                                     <strong>Indefinite</strong>
                                 [% END %]
-                                [% IF restriction.comment %]
-                                [% restriction.type.display_text | html %]: [% restriction.comment | html_line_break %]<br />
-                                [% ELSE %]
-                                [% restriction.type.display_text | html %]<br />
-                                [% END %]
+                                </span>
+                                <span class="restriction_detail">
+                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: [%- restriction.comment | html_line_break -%][%- END -%]
+                                </span>
+                                </div>
                             [% END %]
                         [% END %]
                     </em><br/>

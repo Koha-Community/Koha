@@ -175,23 +175,17 @@
                                                         Restriction added by overdues process [% borrower.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                                     [% ELSE %]
                                                         [% FOR restriction IN logged_in_user.restrictions %]
-                                                            [% IF restriction.comment %]
-                                                                [% restriction.type.display_text | html %]: [% restriction.comment | html_line_break %], frozen until:
-                                                                [% IF restriction.expiration %]
-                                                                    [% restriction.expiration | $KohaDates %]
-                                                                [% ELSE %]
+                                                            <div class="patron_restriction">
+                                                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>, frozen until:
+                                                                <span class="restriction_expiration">
+                                                                [%- IF restriction.expiration -%]
+                                                                    [%- restriction.expiration | $KohaDates -%]
+                                                                [%- ELSE -%]
                                                                     <strong>Indefinite</strong>
-                                                                [% END %]
-                                                                <br />
-                                                            [% ELSE %]
-                                                                [% restriction.type.display_text | html %], frozen until:
-                                                                [% IF restriction.expiration %]
-                                                                    [% restriction.expiration | $KohaDates %]
-                                                                [% ELSE %]
-                                                                    <strong>Indefinite</strong>
-                                                                [% END %]
-                                                                <br />
+                                                                [%- END -%]
+                                                                </span>
                                                             [% END %]
+                                                            </div>
                                                         [% END %]
                                                     [% END %]
                                                 </strong>
