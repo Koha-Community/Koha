@@ -46,7 +46,7 @@
                 [% END %]
                 [% IF status.count %]
                 <div class="btn-group">
-                  <button type="button" class="btn btn-primary" id="updateTicket">Update <i id="comment-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
+                  <button type="button" class="btn btn-primary updateSubmit" id="updateTicket">Update <i id="comment-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i></button>
                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Select status</span>
