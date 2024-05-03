@@ -44,15 +44,12 @@ sub new {
     my ( $class, $params ) = @_;
     my $self = bless $params // {}, $class;
     $self->{filename} = $params->{filename} // './installer/data/mysql/kohastructure.sql';
-    $self->{is_cli}   = $params->{is_cli};
     return $self;
 }
 
 =head3 run
 
-Run the database audit with the given arguments, including the filename
-    and whether it is a command-line interface(CLI).
-Returns $diff only if $is_cli is false. Else it just prints $diff.
+Run the database audit with the given arguments, including the filename.
 
 =cut
 
@@ -60,9 +57,6 @@ sub run {
     my ( $self, $args ) = @_;
 
     if ( !-f $self->{filename} ) {
-        unless ( $self->{is_cli} ) {
-            return 'Database schema file not found';
-        }
         die("Filename '$self->{filename}' does not exist\n");
     }
 
@@ -78,25 +72,8 @@ sub run {
             }
         )->compute_differences->produce_diff_sql;
 
-        return $diff unless $self->{is_cli};
-        print $diff . $self->get_warning;
+        return $diff;
     }
-}
-
-=head3 get_warning
-
-Retrieve a warning message.
-
-=cut
-
-sub get_warning {
-    my ($self) = @_;
-
-    return
-          "\n"
-        . "WARNING!!!\n"
-        . "These commands are only suggestions! They are not a replacement for updatedatabase.pl!\n"
-        . "Review the database, updatedatabase.pl, and kohastructure.sql before making any changes!\n" . "\n";
 }
 
 =head3 _get_db

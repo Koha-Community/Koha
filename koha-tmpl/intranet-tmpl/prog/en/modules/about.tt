@@ -36,24 +36,24 @@
                     [% WRAPPER tab_item linktab = 1 tabname = "about" bt_active = tab == "about" %] <span>Server information</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "perl" bt_active = tab == "perl" %] <span>Perl modules</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "sysinfo" bt_active = tab == "sysinfo" %] <span>System information</span> [% END %]
+                    [% WRAPPER tab_item linktab = 1 tabname = "database" bt_active = tab == "database" %] <span>Database audit</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "team" bt_active = tab == "team" %] <span>Koha team</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "licenses" bt_active = tab == "licenses" %] <span>Licenses</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "translations" bt_active = tab == "translations" %] <span>Translations</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "history" bt_active = tab == "history" %] <span>Timeline</span> [% END %]
                     [% WRAPPER tab_item linktab = 1 tabname = "dedications" bt_active = tab == "dedications" %] <span>Dedications</span> [% END %]
-                    [% WRAPPER tab_item linktab = 1 tabname = "database" bt_active = tab == "database" %] <span>Database audit</span> [% END %]
                 [% END %]
                 [% WRAPPER tab_panels %]
                     [% SWITCH tab %]
                         [% CASE 'about' %] [% PROCESS about_panel %]
                         [% CASE 'perl' %] [% PROCESS perl_panel %]
                         [% CASE 'sysinfo' %] [% PROCESS sysinfo_panel %]
+                        [% CASE 'database' %] [% PROCESS database_panel %]
                         [% CASE 'team' %] [% PROCESS team_panel %]
                         [% CASE 'licenses' %] [% PROCESS licenses_panel %]
                         [% CASE 'translations' %] [% PROCESS translations_panel %]
                         [% CASE 'history' %] [% PROCESS history_panel %]
                         [% CASE 'dedications' %] [% PROCESS dedications_panel %]
-                        [% CASE 'database' %] [% PROCESS database_panel %]
                         [% CASE %] [% PROCESS about_panel %]
                     [% END %]
                 [% END %]
@@ -795,6 +795,25 @@
     [% END # tab=sysinfo %]
 [% END %]
 
+[% BLOCK database_panel %]
+    [% WRAPPER tab_panel tabname= "database" bt_active = 1 %]
+        <h2>Database audit</h2>
+        <div class="alert alert-warning">
+            <h3>WARNING!!!</h3>
+            <p>
+               These commands are only suggestions! They are not a replacement for updatedatabase.pl!<br />
+               Review the database, updatedatabase.pl, and kohastructure.sql before making any changes!<br />
+            </p>
+        </div>
+        <div>
+        <p>Run the following SQL to fix the database:</p>
+        <pre>
+            <code>[% audit_diff | $raw %]</code>
+        </pre>
+        </div>
+    [% END # tab=database %]
+[% END %]
+
 [% BLOCK team_panel %]
     [% WRAPPER tab_panel tabname= "team" bt_active = 1 %]
         <h2>Special thanks to the following organizations</h2>
@@ -1351,15 +1370,4 @@
             mother of Simon and Jeremy, and grandmother of Ben, Toby, Anna, Charlotte and Billy.
         </p>
     [% END # tab=dedications %]
-[% END %]
-
-[% BLOCK database_panel %]
-    [% WRAPPER tab_panel tabname= "database" bt_active = 1 %]
-        <h2>Database audit</h2>
-        <p>Run the following SQL to fix the database:</p>
-        <code>
-            [% audit_diff | html %]
-        </code>
-        <p class="alert alert-warning">[% audit_warning | html %]</p>
-    [% END # tab=database %]
 [% END %]
