@@ -6267,12 +6267,8 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
 
     my $do_transfer = 1;
     ModItemTransfer( $item->itemnumber, $library_1->branchcode,
-        $library_2->branchcode, 'Manual' );
+        $library_2->branchcode, 'Reserve' );
     ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
-    ModItemTransfer(
-        $item->itemnumber,      $library_1->branchcode,
-        $library_2->branchcode, 'Reserve'
-    );    # To put the Reason, it's what does returns.pl...
     my $hold = Koha::Holds->find($reserve_id);
     is( $hold->found, 'T', 'Hold is in transit' );
     my $transfer = $item->get_transfer;
@@ -6285,7 +6281,7 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     $transfer = $transfer->get_from_storage;
     isnt( $transfer->datearrived, undef );
     $hold = $hold->get_from_storage;
-    is( $hold->found, undef, 'Hold is waiting' );
+    is( $hold->found, undef, 'Hold is not waiting or transit' );
     is( $hold->priority, 1, );
 };
 
