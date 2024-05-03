@@ -118,7 +118,7 @@ $(document).ready(function() {
 
         let item_id;
         let items = $.ajax({
-            url: "/api/v1/public/items?external_id=" + external_id,
+            url: "/api/v1/public/items?_match=exact&external_id=" + external_id,
             headers: {
                 "x-koha-embed": "biblio",
             },
