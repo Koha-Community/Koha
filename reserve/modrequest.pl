@@ -29,7 +29,7 @@ use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
 use C4::Output;
-use C4::Reserves qw( ModReserve ModReserveCancelAll );
+use C4::Reserves qw( ModReserve );
 use C4::Auth qw( checkauth );
 use Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue;
 
