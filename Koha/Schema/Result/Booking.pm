@@ -57,6 +57,15 @@ foreign key from the biblio table defining which bib record this booking is on
 
 foreign key from the items table defining the specific item the patron has placed a booking for
 
+=head2 pickup_library_id
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 0
+  size: 10
+
+Identifier for booking pickup library
+
 =head2 start_date
 
   data_type: 'datetime'
@@ -94,6 +103,8 @@ __PACKAGE__->add_columns(
   },
   "item_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "pickup_library_id",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
   "start_date",
   {
     data_type => "datetime",
@@ -172,9 +183,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 pickup_library
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-11-04 10:01:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LoOYu7IflBkC4+VUZLd+Tg
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "pickup_library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "pickup_library_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-03 13:13:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgq1xPy2zo3pdkJb801djA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
