@@ -91,7 +91,7 @@ C<$req> must be a Mojo::Message::Request object
 sub is_csrf_valid {
     my ( $self, $req ) = @_;
 
-    my $csrf_token = $req->param('csrf_token') || $req->headers->header('CSRF_TOKEN');
+    my $csrf_token = $req->param('csrf_token') || $req->headers->header('CSRF-TOKEN');
     my $cookie     = $req->cookie('CGISESSID');
     if ( $csrf_token && $cookie ) {
         my $session_id = $cookie->value;
