@@ -60,17 +60,21 @@
             "firstDayOfWeek": calendarFirstDayOfWeek
         },
         onReady: function( selectedDates, dateStr, instance ){
+
+            /* When onReady is triggered, remove any existing "clear date" link */
+            $(instance.input).parent().find('.flatpickr_wrapper_' + instance.input.id).remove();
+
             /* When flatpickr instance is created, automatically append a "clear date" link */
             $(instance.input).find('~input.flatpickr:first')
                 /* Add a wrapper element so that we can prevent the clear button from wrapping */
-                .wrap("<span class='flatpickr_wrapper'></span>")
+                .wrap("<span class='flatpickr_wrapper flatpickr_wrapper_"+instance.input.id+"'></span>")
                 .attr("autocomplete", "off")
                 .after( $("<a/>")
                     .attr("href","#")
                     .addClass("clear_date")
                     .on("click", function(e){
                         e.preventDefault();
-                        instance.clear();
+                        instance.input.flatpickr().clear();
                     })
                     .addClass("fa fa-fw fa-times")
                     .attr("aria-hidden", true)
