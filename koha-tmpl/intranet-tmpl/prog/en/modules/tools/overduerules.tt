@@ -94,7 +94,7 @@
                                                 [% FOREACH mtt IN message_transport_types %]
                                                     [% NEXT IF mtt == 'itiva' AND !Koha.Preference('TalkingTechItivaPhoneNotification') %]
                                                     [% NEXT IF mtt == 'phone' AND !Koha.Preference('PhoneNotification') %]
-                                                    <th scope="col">
+                                                    <th class="NoSort" scope="col">
                                                         [% SWITCH mtt %]
                                                         [% CASE 'email' %]<span>Email</span>
                                                         [% CASE 'print' %]<span>[% tp('Message transport type', 'Print') | html %]</span>
