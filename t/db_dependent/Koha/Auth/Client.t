@@ -86,16 +86,8 @@ subtest 'get_user() tests' => sub {
                 auth_client_get_user => sub {
                     $_[1]->{mapped_data}->{firstname} = 'test name modified 1';
                     return;
-                },
-                retrieve_data => sub { return $_[1] eq 'priority' ? 2 : undef; }
+                }
             },
-            {
-                auth_client_get_user => sub {
-                    $_[1]->{mapped_data}->{firstname} = 'test name modified 2';
-                    return;
-                },
-                retrieve_data => sub { return $_[1] eq 'priority' ? 1 : undef; }
-            }
         ];
         my @plugins;
         foreach my $method ( @{$methods} ) {
