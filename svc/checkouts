@@ -71,6 +71,7 @@ my $sql = '
         issues.issuedate,
         issues.date_due,
         issues.date_due < now() as date_due_overdue,
+        date(issues.date_due) = date(now()) as date_due_today,
         issues.timestamp,
         issues.auto_renew,
 
@@ -272,6 +273,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         issuedate              => $c->{issuedate},
         date_due               => $c->{date_due},
         date_due_overdue       => $c->{date_due_overdue} ? JSON::true : JSON::false,
+        date_due_today         => $c->{date_due_today} ? JSON::true : JSON::false,
         timestamp              => $c->{timestamp},
         auto_renew             => $c->{auto_renew},
         onsite_checkout        => $c->{onsite_checkout},

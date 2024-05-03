@@ -64,6 +64,8 @@ function LoadIssuesTable() {
                     let date_due_formatted = $datetime(oObj.date_due, { as_due_date: true, no_tz_adjust: true });
                     var due = oObj.date_due_overdue
                         ? "<span class='overdue'>" + date_due_formatted + "</span>"
+                        : oObj.date_due_today
+                        ? "<span class='strong'>" + date_due_formatted + "</span>"
                         : date_due_formatted;
 
                     due = "<span id='date_due_" + oObj.itemnumber + "' class='date_due'>" + due + "</span>";
@@ -332,7 +334,7 @@ function LoadIssuesTable() {
                         content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
                         content += "<span class='" + span_class + "' style='" + span_style + "'>"
                                 +  "<input type='checkbox' ";
-                        if ( oObj.date_due_overdue && can_renew ) {
+                        if ( can_renew && ( oObj.date_due_overdue || oObj.date_due_today )) {
                             content += "checked='checked' ";
                         }
                         if (oObj.can_renew_error == "on_reserve") {
