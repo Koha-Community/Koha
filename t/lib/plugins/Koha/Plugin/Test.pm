@@ -8,6 +8,8 @@ use Koha::Plugins::Tab;
 
 use Mojo::JSON qw( decode_json );
 
+use t::lib::TestBuilder;
+
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
@@ -375,6 +377,34 @@ sub template_include_paths {
     return [
         $self->mbf_path('inc'),
     ];
+}
+
+sub auth_client_get_user {
+    my ( $self, $params ) = @_;
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $new_patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $params->{patron} = $new_patron;
+
+    my $new_domain = $builder->build_object(
+        {
+            class => 'Koha::Auth::Identity::Provider::Domains',
+            value => {
+                domain      => 'changed', update_on_auth => 0, allow_opac => 1,
+                allow_staff => 0
+            }
+        }
+    );
+    $params->{domain} = $new_domain;
+
+    if ( defined $params->{mapped_data}->{'cardnumber'} ) {
+
+        # Split data (e. g. kit.edu:123456789) and set the card number.
+        my ( $card_domain, $cardnumber ) = split( /\:/, $params->{mapped_data}->{'cardnumber'} );
+        $params->{mapped_data}->{'cardnumber'} = $cardnumber;
+    }
+    return;
 }
 
 sub _private_sub {
