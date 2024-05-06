@@ -537,6 +537,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $biblio;
 if ($biblionumber){
     $biblio = Koha::Biblios->find($biblionumber);
+    # just in case $biblionumber obtained from CGI contains weird characters like spaces
+    $biblionumber = $biblio->biblionumber if $biblio;
     unless ( $biblio ) {
         $biblionumber = undef;
         $template->param( bib_doesnt_exist => 1 );
