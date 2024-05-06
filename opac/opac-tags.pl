@@ -332,11 +332,10 @@ if ($add_op) {
 	my $arghash = {approved=>1, limit=>$limit, 'sort'=>'-weight_total'};
     $arghash->{'borrowernumber'} = $loggedinuser if $mine;
 	# ($openadds) or $arghash->{approved} = 1;
-	if ($arg = $query->param('tag')) {
-		$arghash->{term} = $arg;
-	} elsif ($arg = $query->param('biblionumber')) {
-		$arghash->{biblionumber} = $arg;
-	}
+    if ( $arg = $query->param('tag') ) {
+        $arghash->{term} = $arg;
+    }
+    # Bug 36785: Do not pass biblionumber: get_approval_rows does not 'recognize' biblionumber
 	$results = get_approval_rows($arghash);
     stratify_tags(10, $results); # work out the differents sizes for things
 	my $count = scalar @$results;
