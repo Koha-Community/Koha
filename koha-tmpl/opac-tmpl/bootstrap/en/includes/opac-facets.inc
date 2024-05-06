@@ -67,13 +67,13 @@
                                 <h3 id="facet-series">Series</h3>
                             [% CASE 'ItemTypes' %]
                                 <h3 id="facet-itemtypes">Item types</h3>
-                            [% CASE 'homelibrary' %]
+                            [% CASE 'Home libraries' %]
                                 <h3 id="facet-home-libraries">Home libraries</h3>
-                            [% CASE 'HoldingLibrary' %]
+                            [% CASE 'Holding libraries' %]
                                 <h3 id="facet-holding-libraries">Holding libraries</h3>
                             [% CASE 'Location' %]
                                 <h3 id="facet-locations">Locations</h3>
-                            [% CASE 'CollectionCodes' %]
+                            [% CASE 'Collections' %]
                                 <h3 id="facet-collections">Collections</h3>
                             [% CASE 'Languages' %]
                                 <h3 id="facet-languages">Languages</h3>

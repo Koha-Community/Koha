@@ -50,7 +50,6 @@
                 [% FOREACH facets_loo IN facets_loop %]
                     [% IF facets_loo.facets.size > 0 %]
                         <li id="[% facets_loo.type_id | html %]">
-                            [% facets_loo.type_label | html %]
                             [% SWITCH facets_loo.label %]
                             [% CASE 'Authors' %]
                                 <span id="facet-authors">Authors</span>
@@ -62,15 +61,15 @@
                                 <span id="facet-places">Places</span>
                             [% CASE 'Series' %]
                                 <span id="facet-series">Series</span>
-                            [% CASE 'ItemTypes' %]
+                            [% CASE 'Item types' %]
                                 <span id="facet-itemtypes">Item types</span>
-                            [% CASE 'homelibrary' %]
+                            [% CASE 'Home libraries' %]
                                 <span id="facet-home-libraries">Home libraries</span>
-                            [% CASE 'HoldingLibrary' %]
+                            [% CASE 'Holding libraries' %]
                                 <span id="facet-holding-libraries">Holding libraries</span>
                             [% CASE 'Location' %]
                                 <span id="facet-locations">Locations</span>
-                            [% CASE 'CollectionCodes' %]
+                            [% CASE 'Collections' %]
                                 <span id="facet-collections">Collections</span>
                             [% CASE 'Languages' %]
                                 <span id="facet-languages">Languages</span>
