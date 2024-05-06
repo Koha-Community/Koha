@@ -151,7 +151,7 @@ sub get_tag_rows {
 			next;
 		}
 		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
-			carp "get_tag_rows received unreconized argument key '$key'.";
+            carp "get_tag_rows received unrecognized argument key '$key'.";
 			next;
 		}
 		if ($key eq 'limit') {
@@ -189,7 +189,7 @@ sub get_tags {		# i.e., from tags_index
 			next;
 		}
 		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
-			carp "get_tags received unreconized argument key '$key'.";
+            carp "get_tags received unrecognized argument key '$key'.";
 			next;
 		}
 		if ($key eq 'limit') {
@@ -255,7 +255,7 @@ sub get_approval_rows {		# i.e., from tags_approval
 			next;
 		}
 		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
-			carp "get_approval_rows received unreconized argument key '$key'.";
+            carp "get_approval_rows received unrecognized argument key '$key'.";
 			next;
 		}
 		if ($key eq 'limit') {

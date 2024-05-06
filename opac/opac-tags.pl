@@ -79,7 +79,7 @@ sub ajax_auth_cgi {     # returns CGI object
 	return $input;
 }
 
-# The trick here is to support multiple tags added to multiple bilbios in one POST.
+# The trick here is to support multiple tags added to multiple biblios in one POST.
 # The HTML might not use this, but it makes it more web-servicey from the start.
 # So the name of param has to have biblionumber built in.
 # For lack of anything more compelling, we just use "newtag[biblionumber]"
