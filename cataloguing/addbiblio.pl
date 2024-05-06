@@ -547,14 +547,14 @@ if ($biblionumber) {
 
     $biblio = Koha::Biblios->find($biblionumber);
 
-    unless ($biblio) {
+    if ($biblio) {
+        unless ( $biblio->can_be_edited($logged_in_patron) ) {
+            print $input->redirect("/cgi-bin/koha/errors/403.pl");    # escape early
+            exit;
+        }
+    } else {
         $biblionumber = undef;
         $template->param( bib_doesnt_exist => 1 );
-    }
-
-    unless ( $biblio->can_be_edited($logged_in_patron) ) {
-        print $input->redirect("/cgi-bin/koha/errors/403.pl");    # escape early
-        exit;
     }
 }
 
