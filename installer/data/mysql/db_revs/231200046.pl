@@ -1,7 +1,7 @@
 use Modern::Perl;
 
 return {
-    bug_number  => "BUG_27753",
+    bug_number  => "27753",
     description => "Automate resolution of return claim when checking in an item",
     up          => sub {
         my ($args) = @_;
