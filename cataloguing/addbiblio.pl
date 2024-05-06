@@ -547,6 +547,8 @@ if ($biblionumber) {
 
     $biblio = Koha::Biblios->find($biblionumber);
 
+    # just in case $biblionumber obtained from CGI contains weird characters like spaces
+    $biblionumber = $biblio->biblionumber if $biblio;
     if ($biblio) {
         unless ( $biblio->can_be_edited($logged_in_patron) ) {
             print $input->redirect("/cgi-bin/koha/errors/403.pl");    # escape early
