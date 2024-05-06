@@ -547,11 +547,15 @@ my $changed_authtype = $input->param('changed_authtype') // q{};
 
 
 my $dbh = C4::Context->dbh;
+my $authobj = Koha::Authorities->find($authid);
+if ( defined $authid && !$authid || $authid && !$authobj ) {
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
+    exit;
+}
 if(!$authtypecode) {
-    $authtypecode = $authid ? Koha::Authorities->find($authid)->authtypecode : '';
+    $authtypecode = $authid ? $authobj->authtypecode : '';
 }
 
-my $authobj = Koha::Authorities->find($authid);
 my $count = $authobj ? $authobj->get_usage_count : 0;
 
 my ($template, $loggedinuser, $cookie)
