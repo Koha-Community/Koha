@@ -183,7 +183,7 @@
                         <div class="col-lg-6 order-lg-3">
                     [% END %]
                         <div class="author_identifier_info">
-                            <span>Identifiers/information</span>
+                            <span>Author information</span>
                             <ul>
                             [% FOR info IN Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ).split(',') %]
                                 [% NEXT IF author_information.keys.grep(info).size <= 0 %]

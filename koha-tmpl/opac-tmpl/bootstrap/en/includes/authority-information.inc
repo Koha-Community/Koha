@@ -10,13 +10,13 @@
                 <span>ScopusID: </span>
                 <a href="https://www.scopus.com/authid/detail.uri?authorId=[% info.number | url %]">[% info.number | html %]</a>
             [% CASE 'loop' %]
-                <span>loop: </span>
+                <span>Loop ID: </span>
                 <a href="https://loop.frontiersin.org/people/[% info.number | url %]">[% info.number | html %]</a>
             [% CASE 'rid' %]
-                <span>Publons: </span>
+                <span>Publons ID: </span>
                 <a href="https://publons.com/researcher/[% info.number | url %]">[% info.number | html %]</a>
             [% CASE 'viaf' %]
-                <span>VIAF: </span>
+                <span>VIAF ID: </span>
                 <a href="https://viaf.org/viaf/[% info.number | url %]">[% info.number | html %]</a>
             [% END %]
         </li>
