@@ -486,6 +486,7 @@ was no syspref of the name.
 sub delete_preference {
     my ( $self, $var ) = @_;
 
+    $var = lc $var;
     if ( Koha::Config::SysPrefs->find( $var )->delete ) {
         if ( $use_syspref_cache ) {
             my $syspref_cache = Koha::Caches->get_instance('syspref');
