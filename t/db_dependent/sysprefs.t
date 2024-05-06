@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use C4::Context;
 use Koha::Database;
 
@@ -53,9 +53,10 @@ C4::Context->set_preference('testpreference', 'abc');
 C4::Context->delete_preference('testpreference');
 is(C4::Context->preference('testpreference'), undef, 'deleting preferences');
 
-C4::Context->set_preference('testpreference', 'def');
-# Delete from the database, it should still be in cache
-$dbh->do("DELETE FROM systempreferences WHERE variable='testpreference'");
-is(C4::Context->preference('testpreference'), 'def', 'caching preferences');
-C4::Context->clear_syspref_cache();
-is(C4::Context->preference('testpreference'), undef, 'clearing preference cache');
+# Test delete_preference, check cache; we need an example here with MIXED case !
+C4::Context->enable_syspref_cache;
+C4::Context->set_preference( 'TestPreference', 'def' );
+is( C4::Context->preference('testpreference'), 'def', 'lower case, got right value' );
+C4::Context->delete_preference('TestPreference');
+is( C4::Context->preference('TestPreference'), undef, 'mixed case, cache is cleared' );
+is( C4::Context->preference('testpreference'), undef, 'lower case, cache is cleared' );
