@@ -401,6 +401,25 @@
                                 escape_str(row.booking_id),
                                 _("Cancel")
                             );
+                            result += `
+                                <form name="checkout-transform" method="post" action="/cgi-bin/koha/circ/circulation.pl?borrowernumber=%s">
+                                    <input type="hidden" name="op" value="cud-checkout"/>
+                                    <input type="hidden" name="borrowernumber" value="%s"/>
+                                    <input type="hidden" name="barcode" value="%s"/>
+                                    <input type="hidden" name="duedatespec" value="%s"/>
+                                    <input type="hidden" name="booking_id" value="%s"/>
+                                    <button id="checkout_action" class="btn btn-default btn-xs" type="submit">
+                                        %s
+                                    </button>
+                                </form>
+                            `.format(
+                                escape_str(row.patron_id),
+                                escape_str(row.patron_id),
+                                escape_str(row.item.external_id),
+                                escape_str(row.end_date),
+                                escape_str(row.booking_id),
+                                _("Transform to checkout")
+                            );
                         }
                         [% END %]
                         return result;
