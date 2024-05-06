@@ -1,6 +1,10 @@
 [% USE Koha %]
 [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
 [% USE AuthorisedValues %]
+
+[% #This include depends on the asset js/form-submit.js. Any template making use of this include must import form-submit.js as well. %]
+[% #FIXME can form-submit.js be imported into this file directly? %]
+
 <table id="patron_holds_table" class="holds_table">
     <thead>
         <tr>
@@ -257,7 +261,7 @@
                         [%- END -%]
                     [%- END # IF SuspendHoldsIntranet -%]
                     [%- IF ( hold.found ) -%]
-                        <a class="btn btn-default  submit-form-link" href="#" id="revert_hold_[% hold.reserve_id | html %]" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | uri %]" data-last_priority="[% last_priority | uri %]" data-prev_priority="0" data-next_priority="1" data-borrowernumber="[% hold.borrowernumber | uri %]" data-biblionumber="[% hold.biblionumber | uri %]" data-itemnumber="[% hold.itemnumber | uri %]" data-reserve_id="[% hold.reserve_id | uri %]" data-date="[% hold.date | uri %]" data-action="request.pl" data-method="post">[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]</a>
+                        <a class="btn btn-default  submit-form-link" href="#" id="revert_hold_[% hold.reserve_id | html %]" data-op="cud-move" data-where="down" data-first_priority="[% first_priority | html %]" data-last_priority="[% last_priority | html %]" data-prev_priority="0" data-next_priority="1" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-itemnumber="[% hold.itemnumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]" data-action="request.pl" data-method="post">[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]</a>
                     [%- END -%]
                 </td>
                 [% IF ( hold.intransit || hold.atdestination ) %]
