@@ -36,7 +36,7 @@ use C4::Calendar qw();    # don't need any exports from Calendar
 use C4::Log qw( cronlogaction );
 use Getopt::Long qw( GetOptions );
 use List::MoreUtils qw( none );
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 
 my $help    = 0;
