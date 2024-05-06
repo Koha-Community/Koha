@@ -1270,6 +1270,11 @@ Circulation:
             - pref: SelfCheckAllowByIPRanges
               class: short
             - (Leave blank if not used. Use ranges or simple IP addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)
+        -
+            - "Patron categories allowed to check out in a batch while logged into the self checkout system:"
+            - pref: SCOBatchCheckoutsValidCategories
+              choices: patron-categories
+              class: multiple
     Course reserves:
         -
             - pref: UseCourseReserves

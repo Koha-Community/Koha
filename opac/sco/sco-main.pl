@@ -141,8 +141,8 @@ my $confirm_required = 0;
 my $return_only      = 0;
 
 my $batch_checkouts_allowed;
-if ( C4::Context->preference('BatchCheckouts') and $patron ) {
-    my @batch_category_codes = split ',', C4::Context->preference('BatchCheckoutsValidCategories');
+if ( $patron ) {
+    my @batch_category_codes = split ',', C4::Context->preference('SCOBatchCheckoutsValidCategories');
     my $categorycode         = $patron->categorycode;
     if ( $categorycode && grep { $_ eq $categorycode } @batch_category_codes ) {
         $batch_checkouts_allowed = 1;
