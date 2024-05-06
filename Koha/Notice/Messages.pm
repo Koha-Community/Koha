@@ -53,6 +53,30 @@ sub get_failed_notices {
     );
 }
 
+=head3 search_limited
+
+    my $messages = Koha::Notice::Messages->search_limited( $params, $attributes );
+
+Search for generated and queued notices according to logged in patron restrictions
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $userenv = C4::Context->userenv;
+    my @restricted_branchcodes;
+    if ( $userenv and $userenv->{number} ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+    }
+
+    # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
+    $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
+    $attributes->{join}                    = 'borrowernumber';
+    return $self->search( $params, $attributes );
+}
+
 =head3 type
 
 =cut

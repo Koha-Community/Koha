@@ -386,4 +386,44 @@ subtest 'patron() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'search_limited' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    my $message = $builder->build_object(
+        {
+            class => 'Koha::Notice::Messages',
+            value => { borrowernumber => $patron->borrowernumber }
+        }
+    );
+
+    my $message_2 = $builder->build_object(
+        {
+            class => 'Koha::Notice::Messages',
+            value => { borrowernumber => $patron_2->borrowernumber }
+        }
+    );
+
+    my $nb_messages = Koha::Notice::Messages->count;
+
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
+    Koha::Library::Group->new( { parent_id => $group_1->id, branchcode => $patron->branchcode } )->store();
+    Koha::Library::Group->new( { parent_id => $group_2->id, branchcode => $patron_2->branchcode } )->store();
+    t::lib::Mocks::mock_userenv( { patron => $patron } );    # Is superlibrarian
+    is(
+        Koha::Notice::Messages->search_limited->count, $nb_messages,
+        'Koha::Notice::Messages->search_limited should return all generated notices for superlibrarian'
+    );
+    t::lib::Mocks::mock_userenv( { patron => $patron_2 } );    # Is restricted
+    is(
+        Koha::Notice::Messages->search_limited->count, 1,
+        'Koha:Notice::Messages->search_limited should not return all generated notices for restricted patron'
+    );
+};
+
 1;

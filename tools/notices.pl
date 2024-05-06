@@ -65,9 +65,9 @@ if ( $op and $op eq 'cud-search' ) {
     }
     $where{'me.status'} = $status if ($status);
 
-    my $notices = Koha::Notice::Messages->search(
+    my $notices = Koha::Notice::Messages->search_limited(
         {%where},
-        { join => 'borrowernumber', order_by => { -desc => 'time_queued' } }
+        { order_by => { -desc => 'time_queued' } }
     );
 
     $template->param(
