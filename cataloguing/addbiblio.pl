@@ -21,7 +21,7 @@
 
 use Modern::Perl;
 use CGI;
-use POSIX;
+use POSIX     qw( strftime );
 use Try::Tiny qw(catch try);
 
 use C4::Output qw( output_html_with_http_headers );
