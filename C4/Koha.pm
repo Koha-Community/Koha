@@ -347,7 +347,7 @@ sub getFacets {
             },
             {
                 idx => 'ccode',
-                label => 'CollectionCodes',
+                label => 'Collections',
                 tags => [ qw / 099t 955h / ],
             }
             ];
@@ -362,7 +362,7 @@ sub getFacets {
                         @$facets,
                         {
                             idx   => 'holdingbranch',
-                            label => 'HoldingLibrary',
+                            label => 'Holding libraries',
                             tags  => [qw / 995c /],
                         }
                     );
@@ -375,7 +375,7 @@ sub getFacets {
                     @$facets,
                     {
                         idx   => 'homebranch',
-                        label => 'HomeLibrary',
+                        label => 'Home libraries',
                         tags  => [qw / 995b /],
                     }
                 );
@@ -422,7 +422,7 @@ sub getFacets {
             },
             {
                 idx   => 'itype',
-                label => 'ItemTypes',
+                label => 'Item types',
                 tags  => [ qw/ 952y 942c / ],
                 sep   => ', ',
             },
@@ -433,7 +433,7 @@ sub getFacets {
             },
             {
                 idx => 'ccode',
-                label => 'CollectionCodes',
+                label => 'Collections',
                 tags => [ qw / 9528 / ],
             }
             ];
@@ -448,7 +448,7 @@ sub getFacets {
                         @$facets,
                         {
                             idx   => 'holdingbranch',
-                            label => 'HoldingLibrary',
+                            label => 'Holding libraries',
                             tags  => [qw / 952b /],
                         }
                     );
@@ -461,7 +461,7 @@ sub getFacets {
                     @$facets,
                     {
                         idx   => 'homebranch',
-                        label => 'HomeLibrary',
+                        label => 'Home libraries',
                         tags  => [qw / 952a /],
                     }
                 );
