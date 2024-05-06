@@ -825,9 +825,9 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     my $facets_info = C4::Search::_get_facets_info( $facets );
     my $expected_facets_info_marc21 = {
                    'au' => { 'label_value' => "Authors" },
-                'ccode' => { 'label_value' => "CollectionCodes" },
-        'holdingbranch' => { 'label_value' => "HoldingLibrary" },
-                'itype' => { 'label_value' => "ItemTypes" },
+                'ccode' => { 'label_value' => "Collections" },
+        'holdingbranch' => { 'label_value' => "Holding libraries" },
+                'itype' => { 'label_value' => "Item types" },
              'location' => { 'label_value' => "Location" },
                    'se' => { 'label_value' => "Series" },
                'su-geo' => { 'label_value' => "Places" },
@@ -925,8 +925,8 @@ sub run_unimarc_search_tests {
     my $facets_info = C4::Search::_get_facets_info( $facets );
     my $expected_facets_info_unimarc = {
                    'au' => { 'label_value' => "Authors" },
-                'ccode' => { 'label_value' => "CollectionCodes" },
-        'holdingbranch' => { 'label_value' => "HoldingLibrary" },
+                'ccode' => { 'label_value' => "Collections" },
+        'holdingbranch' => { 'label_value' => "Holding libraries" },
              'location' => { 'label_value' => "Location" },
                    'se' => { 'label_value' => "Series" },
                'su-geo' => { 'label_value' => "Places" },
