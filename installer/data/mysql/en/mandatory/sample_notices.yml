@@ -63,6 +63,24 @@ tables:
             - "Thank you"
 
         - module: catalogue
+          code: TICKET_ASSIGNED
+          branchcode: ""
+          name: "Concern assigned notification"
+          is_html: 1
+          title: "Catalog concern assigned"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[%- PROCESS 'html_helpers.inc' -%]"
+            - "[%- USE Koha -%]"
+            - "Dear cataloger,<br>"
+            - "[%- INCLUDE 'patron-title.inc' patron => libraian -%] has assigned the following concern with <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ticket.biblio.biblionumber %]' >[%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%]</a> to you<br>"
+            - "<br>"
+            - "[%- ticket.body -%]<br>"
+            - "<br>"
+            - "You can action this concern from the <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/cataloguing/concerns.pl'>concern management page</a>."
+
+        - module: catalogue
           code: TICKET_RESOLVE
           branchcode: ""
           name: "Concern resolved"
