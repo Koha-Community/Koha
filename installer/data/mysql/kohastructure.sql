@@ -1247,7 +1247,7 @@ DROP TABLE IF EXISTS `borrower_attribute_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `borrower_attribute_types` (
-  `code` varchar(10) NOT NULL COMMENT 'unique key used to identify each custom field',
+  `code` varchar(64) NOT NULL COMMENT 'unique key used to identify each custom field',
   `description` varchar(255) NOT NULL COMMENT 'description for each custom field',
   `repeatable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines whether one patron/borrower can have multiple values for this custom field  (1 for yes, 0 for no)',
   `unique_id` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'defines if this value needs to be unique (1 for yes, 0 for no)',
@@ -1277,7 +1277,7 @@ DROP TABLE IF EXISTS `borrower_attribute_types_branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `borrower_attribute_types_branches` (
-  `bat_code` varchar(10) DEFAULT NULL,
+  `bat_code` varchar(64) DEFAULT NULL,
   `b_branchcode` varchar(10) DEFAULT NULL,
   KEY `bat_code` (`bat_code`),
   KEY `b_branchcode` (`b_branchcode`),
@@ -1296,7 +1296,7 @@ DROP TABLE IF EXISTS `borrower_attributes`;
 CREATE TABLE `borrower_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id field',
   `borrowernumber` int(11) NOT NULL COMMENT 'foreign key from the borrowers table, defines which patron/borrower has this attribute',
-  `code` varchar(10) NOT NULL COMMENT 'foreign key from the borrower_attribute_types table, defines which custom field this value was entered for',
+  `code` varchar(64) NOT NULL COMMENT 'foreign key from the borrower_attribute_types table, defines which custom field this value was entered for',
   `attribute` varchar(255) DEFAULT NULL COMMENT 'custom patron field value',
   PRIMARY KEY (`id`),
   KEY `borrowernumber` (`borrowernumber`),
@@ -5301,7 +5301,7 @@ DROP TABLE IF EXISTS `pseudonymized_borrower_attributes`;
 CREATE TABLE `pseudonymized_borrower_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Row id field',
   `transaction_id` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL COMMENT 'foreign key from the borrower_attribute_types table, defines which custom field this value was entered for',
+  `code` varchar(64) NOT NULL COMMENT 'foreign key from the borrower_attribute_types table, defines which custom field this value was entered for',
   `attribute` varchar(255) DEFAULT NULL COMMENT 'custom patron field value',
   PRIMARY KEY (`id`),
   KEY `pseudonymized_borrower_attributes_ibfk_1` (`transaction_id`),
