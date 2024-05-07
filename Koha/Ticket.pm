@@ -123,10 +123,13 @@ Overloaded I<store> method to trigger notices as required
 sub store {
     my ($self) = @_;
 
-    my $is_new = !$self->in_storage;
-    $self = $self->SUPER::store;
+    my $assignee;
+    if ( !$self->in_storage ) {
 
-    if ($is_new) {
+        # Store
+        $self->SUPER::store;
+        $self->discard_changes;
+        $assignee = $self->assignee;
 
         # Send patron acknowledgement
         my $acknowledgement_letter = C4::Letters::GetPreparedLetter(
@@ -164,13 +167,38 @@ sub store {
                     {
                         letter                 => $notify_letter,
                         message_transport_type => 'email',
-                        to_address             =>
-                          C4::Context->preference('CatalogerEmails'),
-                        reply_address => $self->reporter->notice_email_address,
+                        to_address             => C4::Context->preference('CatalogerEmails'),
+                        reply_address          => $self->reporter->notice_email_address,
                     }
                 );
                 C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
             }
+        }
+    } else {
+        my %updated_columns = $self->_result->get_dirty_columns;
+        return $self->SUPER::store unless %updated_columns;
+
+        $assignee = ( exists $updated_columns{assignee_id} ) ? $self->assignee : undef;
+    }
+
+    # Notify assignee
+    if ( $assignee && ( $assignee->borrowernumber != C4::Context->userenv->{number} ) ) {
+        my $assigned_letter = C4::Letters::GetPreparedLetter(
+            module      => 'catalogue',
+            letter_code => 'TICKET_ASSIGNED',
+            branchcode  => $assignee->branchcode,
+            tables      => { tickets => $self->id }
+        );
+
+        if ($assigned_letter) {
+            my $message_id = C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $assigned_letter,
+                    borrowernumber         => $assignee->borrowernumber,
+                    message_transport_type => 'email',
+                }
+            );
+            C4::Letters::SendQueuedMessages( { message_id => $message_id } ) if $message_id;
         }
     }
 
