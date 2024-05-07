@@ -17,7 +17,7 @@ return {
         my $insert_sth =
             $dbh->prepare("INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) VALUES (?, ?, ?)");
 
-        # Check for 'borrowers' or 'borrowers > edit_borrowers' permission
+        # Check for 'borrowers > edit_borrowers' permission
         my $sth2 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'edit_borrowers'");
         $sth2->execute();
         my @edit_borrowers = map { $_->[0] } @{ $sth2->fetchall_arrayref };
@@ -30,7 +30,11 @@ return {
         my $sth3 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'manage_bookings'");
         $sth3->execute();
         my @manage_bookings = map { $_->[0] } @{ $sth3->fetchall_arrayref };
-        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @manage_bookings, @exclusions ) );
+        my $sth3_1 = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE flags & (1<<1)");
+        $sth3_1->execute();
+        my @circulate = map { $_->[0] } @{ $sth3_1->fetchall_arrayref };
+        my @bookings = (@manage_bookings, @circulate);
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @bookings, @exclusions ) );
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
         say $out "list_borrowers added to all users with manage_bookings";
 
@@ -38,7 +42,11 @@ return {
         my $sth4 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'label_creator'");
         $sth4->execute();
         my @label_creator = map { $_->[0] } @{ $sth4->fetchall_arrayref };
-        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @label_creator, @exclusions ) );
+        my $sth4_1 = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE flags & (1<<13)");
+        $sth4_1->execute();
+        my @tools = map { $_->[0] } @{ $sth4_1->fetchall_arrayref };
+        my @labels = (@label_creator, @tools);
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @labels, @exclusions ) );
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
         say $out "list_borrowers added to all users with label_creator";
 
@@ -46,7 +54,11 @@ return {
         my $sth5 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'routing'");
         $sth5->execute();
         my @routing = map { $_->[0] } @{ $sth5->fetchall_arrayref };
-        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @routing, @exclusions ) );
+        my $sth5_1 = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE flags & (1<<15)");
+        $sth5_1->execute();
+        my @serials = map { $_->[0] } @{ $sth5_1->fetchall_arrayref };
+        my @routing_lists = (@routing, @serials);
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @routing_lists, @exclusions ) );
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
         say $out "list_borrowers added to all users with routing";
 
@@ -54,7 +66,11 @@ return {
         my $sth6 = $dbh->prepare("SELECT borrowernumber FROM user_permissions WHERE code = 'order_manage'");
         $sth6->execute();
         my @order_manage = map { $_->[0] } @{ $sth6->fetchall_arrayref };
-        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @order_manage, @exclusions ) );
+        my $sth6_1 = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE flags & (1<<11)");
+        $sth6_1->execute();
+        my @acquisitions = map { $_->[0] } @{ $sth6_1->fetchall_arrayref };
+        my @orders = (@order_manage, @acquisitions);
+        @rows_to_insert = ( map { [ $_, 4, "list_borrowers" ] } array_minus( @orders, @exclusions ) );
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); }
         say $out "list_borrowers added to all users with order_manage";
     },
