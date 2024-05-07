@@ -386,6 +386,25 @@ subtest 'patron() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'template() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $template = $builder->build_object( { class => 'Koha::Notice::Templates' } );
+    my $message  = $builder->build_object(
+        {
+            class => 'Koha::Notice::Messages',
+            value => { letter_id => $template->id }
+        }
+    );
+
+    is( ref( $message->template ), 'Koha::Notice::Template', 'Object type is correct' );
+    is( $message->template->id,    $template->id,            'Right template linked' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'search_limited' => sub {
     plan tests => 2;
 
