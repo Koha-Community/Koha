@@ -2576,6 +2576,18 @@ sub strings_map {
                 ( $type eq 'av' ? ( category => $code ) : () ),
             };
         }
+
+        if ( $col eq 'booksellerid' ) {
+            my $booksellerid = $self->booksellerid;
+            if ($booksellerid) {
+                my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+
+                $strings->{$col} = {
+                    str => $bookseller->name,
+                    type => 'acquisition_source'
+                } if $bookseller;
+            }
+        }
     }
 
     return $strings;

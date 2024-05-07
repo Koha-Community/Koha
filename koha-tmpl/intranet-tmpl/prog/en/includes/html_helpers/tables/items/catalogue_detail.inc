@@ -633,7 +633,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return escape_str(row.acquisition_source);
+                    return escape_str(row._strings.acquisition_source ? row._strings.acquisition_source.str : row.acquisition_source);
                 }
             },
             {
