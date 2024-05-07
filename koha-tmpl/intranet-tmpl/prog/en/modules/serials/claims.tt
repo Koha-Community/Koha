@@ -288,7 +288,8 @@
             });
             $("#clearfilter").on("click",function(e){
                 e.preventDefault();
-                $("#from,#to").val("");
+                $("#from").flatpickr().clear();
+                $("#to").flatpickr().clear();
                 $("table#claimst tbody tr").show();
             });
             $("#claims_form").on("submit",function(){
