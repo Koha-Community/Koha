@@ -31,17 +31,11 @@
     [%- SET found_holds = 0 -%]
     [%- SET last_priority  = holds.last.priority -%]
 
-    [% BLOCK priority_dropdown %]
-        [%- SET loop_priority = 1 -%]
-        [%- WHILE loop_priority <= last_priority -%]
-            [%- IF this_priority == loop_priority -%]
-                <option value="[% loop_priority | html %]" selected="selected">[% loop_priority | html %]</option>
-            [%- ELSE -%]
-                <option value="[% loop_priority | html %]">[% loop_priority | html %]</option>
-            [%- END -%]
-            [%- loop_priority = loop_priority + 1- %]
-        [%- END -%]
+    [% SET all_priorities = [] %]
+    [% FOREACH hold IN holds %]
+        [% all_priorities.push( hold.priority ) %]
     [% END %]
+
     <tbody>
         [% FOREACH hold IN holds %]
         [%- IF !hold.found && first_priority == 0 -%]
@@ -67,7 +61,13 @@
                         [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
                             <select name="rank-request" class="rank-request" data-hold-id="[% hold.reserve_id | html %]">
                             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                                [% PROCESS priority_dropdown %]
+                                [% FOREACH priority IN all_priorities %]
+                                    [% IF priority == this_priority %]
+                                        <option value="[% priority | html %]" selected="selected">[% priority | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% priority | html %]">[% priority | html %]</option>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <option value="[% hold.priority | html %]" selected="selected">[% this_priority | html %]</option>
                             [% END %]
