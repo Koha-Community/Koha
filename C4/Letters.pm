@@ -625,6 +625,9 @@ sub GetPreparedLetter {
       or carp( "ERROR: nothing to substitute - all of 'objects', 'tables', 'loops' and 'substitute' are empty" ),
          return;
     my $want_librarian = $params{want_librarian};
+    if ($want_librarian) {
+        $objects->{librarian} = Koha::Patrons->find( C4::Context->userenv->{number} );
+    }
 
     # Best guess at language 'default' notice is written for include handling
     if ( $lang eq 'default' ) {
