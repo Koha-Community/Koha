@@ -19,10 +19,11 @@ use Modern::Perl;
 
 use Test::More tests => 14;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 use Koha::SearchEngine::Elasticsearch::Indexer;
-
+use Koha::SearchFields;
 
 my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
 $se->mock( 'get_elasticsearch_mappings', sub {
@@ -125,31 +126,53 @@ SKIP: {
     is ($searcher->max_result_window, 12000, 'max_result_window returns the correct value');
 
     subtest "_convert_facets" => sub {
-        plan tests => 2;
+        plan tests => 5;
+
+        my $schema = Koha::Database->new()->schema();
+        $schema->storage->txn_begin;
+        my $builder = t::lib::TestBuilder->new;
 
         my $es_facets = {
             'ln' => {
-                    'sum_other_doc_count' => 0,
-                    'buckets' => [
-                        {
-                            'doc_count' => 2,
-                            'key' => 'eng'
-                        },
-                        {
-                            'doc_count' => 12,
-                            'key' => ''
-                        }
-                    ],
-                    'doc_count_error_upper_bound' => 0
+                'sum_other_doc_count' => 0,
+                'buckets'             => [
+                    {
+                        'doc_count' => 2,
+                        'key'       => 'eng'
+                    },
+                    {
+                        'doc_count' => 12,
+                        'key'       => ''
+                    }
+                ],
+                'doc_count_error_upper_bound' => 0
             }
         };
 
         my $koha_facets = $searcher->_convert_facets($es_facets);
-        is(@{$koha_facets->[0]->{facets}},1,"We only get one facet, blank is removed");
+        is( @{ $koha_facets->[0]->{facets} }, 1, "We only get one facet, blank is removed" );
 
         $es_facets->{ln}->{buckets}->[1]->{key} = '0';
         $koha_facets = $searcher->_convert_facets($es_facets);
-        is(@{$koha_facets->[0]->{facets}},2,"We get two facets, '0' is not removed");
+        is( @{ $koha_facets->[0]->{facets} }, 2,     "We get two facets, '0' is not removed" );
+        is( $koha_facets->[0]->{av_cat},      undef, "Not linked with an authorised value category" );
+
+        my $av_cat = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
+        Koha::SearchFields->find( { name => 'ln' } )->update( { authorised_value_category => $av_cat->category_name } );
+        $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValues',
+                value => { category => $av_cat->category_name, authorised_value => 'eng', lib_opac => 'English' }
+            }
+        );
+        $koha_facets = $searcher->_convert_facets($es_facets);
+        is( $koha_facets->[0]->{av_cat}, $av_cat->category_name, "Linked with an authorised value category" );
+        is(
+            $koha_facets->[0]->{facets}->[1]->{facet_label_value}, "English",
+            "Value of the facet replaced with AV's description"
+        );
+
+        $schema->storage->txn_rollback;
 
     };
 }
