@@ -613,18 +613,20 @@
                             </fieldset>
                             <fieldset class="rows">
                                 <legend>
-                                    <label for="requestany" class="inline">
-                                        Hold next available item
-                                    </label>
-                                    [% IF force_hold_level == 'item' || force_hold_level == 'item_group' %]
-                                        <input type="radio" id="requestany" name="request" disabled="true" />
-                                    [% ELSIF force_hold_level == 'record' %]
-                                        <input type="radio" id="requestany" checked="checked" value="Any" disabled="true"/>
-                                        <input type="hidden" name="request" value="Any"/>
-                                        <span class="error"><i>(Required)</i></span>
-                                    [% ELSE %]
-                                        <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
-                                    [% END %]
+                                    <button type="button">
+                                        [% IF force_hold_level == 'item' || force_hold_level == 'item_group' %]
+                                            <input type="radio" id="requestany" name="request" disabled="true" />
+                                        [% ELSIF force_hold_level == 'record' %]
+                                            <input type="radio" id="requestany" checked="checked" value="Any" disabled="true"/>
+                                            <input type="hidden" name="request" value="Any"/>
+                                            <span class="error"><i>(Required)</i></span>
+                                        [% ELSE %]
+                                            <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
+                                        [% END %]
+                                        <label for="requestany" class="inline">
+                                            Hold next available item
+                                        </label>
+                                    </button>
                                 </legend>
                                 <input type="hidden" name="alreadyreserved" value="[% alreadyreserved | html %]" />
                                 <fieldset class="enable_request_any disable_request_group disable_request_specific">
@@ -695,17 +697,19 @@
                         [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
                         <fieldset class="rows">
                             <legend>
-                                <label for="requestgrp" class="inline">
-                                    Hold next available item from an item group
-                                </label>
-                                [% IF force_hold_level == 'item_group' %]
-                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" checked="checked" disabled="true" />
-                                    <span class="error"><i>(Required)</i></span>
-                                [% ELSIF force_hold_level == 'item' || force_hold_level == 'record' %]
-                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" disabled="true" />
-                                [% ELSE %]
-                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" />
-                                [% END %]
+                                <button type="button">
+                                    [% IF force_hold_level == 'item_group' %]
+                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" checked="checked" disabled="true" />
+                                        <span class="error"><i>(Required)</i></span>
+                                    [% ELSIF force_hold_level == 'item' || force_hold_level == 'record' %]
+                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" disabled="true" />
+                                    [% ELSE %]
+                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" />
+                                    [% END %]
+                                    <label for="requestgrp" class="inline">
+                                        Hold next available item from an item group
+                                    </label>
+                                </button>
                             </legend>
 
                             <fieldset class="enable_request_group disable_request_any disable_request_specific">
@@ -792,17 +796,19 @@
 
                         <fieldset class="rows">
                             <legend>
-                                <label for="requestspecificitem" class="inline">
-                                    Hold a specific item
-                                </label>
-                                [% IF force_hold_level == 'item' %]
-                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
-                                     <span class="error"><em>(Required)</em></span>
-                                [% ELSIF force_hold_level == 'record' || force_hold_level == 'item_group' %]
-                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" disabled='disabled'/>
-                                [% ELSE %]
-                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific"/>
-                                [% END %]
+                                <button type="button">
+                                    [% IF force_hold_level == 'item' %]
+                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
+                                         <span class="error"><em>(Required)</em></span>
+                                    [% ELSIF force_hold_level == 'record' || force_hold_level == 'item_group' %]
+                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific" disabled='disabled'/>
+                                    [% ELSE %]
+                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific"/>
+                                    [% END %]
+                                    <label for="requestspecificitem" class="inline">
+                                        Hold a specific item
+                                    </label>
+                                </button>
                             </legend>
 
                             <fieldset class="enable_request_specific disable_request_any disable_request_group">
