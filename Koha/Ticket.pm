@@ -191,7 +191,7 @@ sub public_read_list {
     return [
         'ticket_id',   'title',         'body',
         'reporter_id', 'reported_date', 'resolved_date',
-        'biblio_id'
+        'biblio_id',   'source'
     ];
 }
 
