@@ -1049,8 +1049,10 @@
                                 <fieldset class="rows">
                                     <legend>Hold details</legend>
                                     <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
-                                            <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
-                                            <input type="hidden" name="request" value="any"/>
+                                        [% INCLUDE 'csrf-token.inc' %]
+                                        <input type="hidden" name="op" value="cud-placerequest" />
+                                        <input type="hidden" name="multi_holds" id="multi_holds" value="1" />
+                                        <input type="hidden" name="request" value="any"/>
                                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                             [% FOREACH biblioloo IN biblioloop %]
                                                 <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblioloo.biblionumber | html %]"/>
@@ -1061,6 +1063,44 @@
                                                 [% END %]
                                             [% END %]
 
+                                        <ol>
+
+                                            <li>
+                                                <span class="label">Patron:</span>
+                                                [% IF ( patron.borrowernumber ) %]
+                                                    [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 hide_patron_infos_if_needed => 1 %]
+                                                [% ELSE %]
+                                                    Not defined yet
+                                                [% END %]
+                                            </li>
+
+
+                                            <li>
+                                                <label for="holdnotes">Notes:</label>
+                                                <textarea id="holdnotes" name="notes" cols="30" rows="1"></textarea>
+                                            </li>
+                                            <li>
+                                                <label for="pickup">Pickup at:</label>
+                                                <select name="pickup" id="pickup_multi" data-patron-id="[% patron.borrowernumber | html %]">
+                                                    <option value="" selected="selected"></option>
+                                                [% FOREACH pickup_location IN multi_pickup_locations %]
+                                                    <option value="[% pickup_location.branchcode | html %]">[% pickup_location.branchname | html %]</option>
+                                                [% END %]
+                                                </select>
+                                            </li>
+                                            [% IF ( Koha.Preference('AllowHoldDateInFuture') ) %]
+                                                <li>
+                                                    <label for="from">Hold starts on date:</label>
+                                                    <input id="reserve_date" name="reserve_date" id="from" size="10" type="text" data-date_to="expiration_date" class="flatpickr" data-flatpickr-futureinclusive="true" />
+                                                </li>
+                                            [% END %]
+
+                                            <li>
+                                                <label for="to">Hold expires on date:</label>
+                                                <input id="expiration_date" name="expiration_date" id="to" size="10" type="text" class="flatpickr" data-flatpickr-futuredate="true" />
+                                            </li>
+
+                                        </ol>
                                     <table id="requesttitles">
                                         <tr>
                                             <th>&nbsp;</th>
