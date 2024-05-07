@@ -537,7 +537,8 @@ sub build_hidden_data {
 my $input = CGI->new;
 my $z3950 = $input->param('z3950');
 my $error = $input->param('error');
-my $authid=$input->param('authid'); # if authid exists, it's a modif, not a new authority.
+my $authid = $input->param('authid') =~ s/\D//gr
+    ; # if authid exists, it's a modif, not a new authority. We remove from authid all non-digit characters just in case the CGI parameter contains weird characters like spaces
 my $op = $input->param('op');
 my $nonav = $input->param('nonav');
 my $myindex = $input->param('index');
