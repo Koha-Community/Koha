@@ -166,37 +166,33 @@
                                             <strong>Please note:</strong> Your account is frozen because it has been discharged. <a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a>
                                         </li>
                                     [% ELSE %]
-                                        <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
-                                        [% IF ( borrower.debarredcomment ) %]
-                                            Comment:<br />
-                                            <span id="userdebarred_comment">
-                                                <strong>
-                                                    [% IF borrower.debarredcomment.search('OVERDUES_PROCESS') %]
-                                                        Restriction added by overdues process [% borrower.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
-                                                    [% ELSE %]
-                                                        [% FOR restriction IN logged_in_user.restrictions %]
-                                                            <div class="patron_restriction">
-                                                                [%- restriction.type.display_text | html -%][%- IF restriction.comment -%]: <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>, frozen until:
-                                                                <span class="restriction_expiration">
-                                                                [%- IF restriction.expiration -%]
-                                                                    [%- restriction.expiration | $KohaDates -%]
-                                                                [%- ELSE -%]
-                                                                    <strong>Indefinite</strong>
+                                        <li id="userdebarred">
+                                            <strong>Please note:</strong> Your account has been frozen.
+                                            [% IF ( borrower.debarredcomment ) %]
+                                                Comment:<br />
+                                                <ul id="userdebarred_comment">
+                                                    [% FOREACH restriction IN logged_in_user.restrictions %]
+                                                        <li class="patron_restriction">
+                                                            <strong>[%- restriction.type.display_text | html -%]</strong>
+                                                            [% IF restriction.comment.search('OVERDUES_PROCESS') %]
+                                                                Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                                            [% ELSE %]
+                                                                [%- IF restriction.comment -%]:
+                                                                    <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>.
                                                                 [%- END -%]
-                                                                </span>
                                                             [% END %]
-                                                            </div>
-                                                        [% END %]
+                                                            [%- IF restriction.expiration -%]
+                                                                Account frozen until <span class="restriction_expiration">[%- restriction.expiration | $KohaDates -%]</span>
+                                                            [%- ELSE -%]
+                                                                <strong>Account frozen indefinitely</strong>
+                                                            [%- END -%]
+                                                        </li>
                                                     [% END %]
-                                                </strong>
-                                            </span>
-                                        [% END %]
-                                        [% IF ( borrower.userdebarreddate && debarred_date != '9999-12-31' ) %]
-                                            End date:
-                                            <span id="userdebarred_date">[% borrower.userdebarreddate | $KohaDates %]</span>
-                                        [% END %]
+                                                </ul>
+                                            [% END %]
 
-                                        <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
+                                            <p><em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></p>
+                                        </li>
                                     [% END %]
                                 [% END %]
                                 [% IF ( borrower.gonenoaddress ) %]
