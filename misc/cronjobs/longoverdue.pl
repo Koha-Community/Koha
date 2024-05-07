@@ -173,14 +173,14 @@ If not provided, the value of the system preference 'MarkLostItemsAsReturned' wi
 Act on the listed borrower category code (borrowers.categorycode).
 Exclude all others. This may be specified multiple times to include multiple categories.
 May not be used with B<--skip-category>
-If not provided, the value of the system preference 'DefaultLongOverdueBorrowerCategories' will be used.
+If not provided, the value of the system preference 'DefaultLongOverduePatronCategories' will be used.
 
 =item B<--skip-category>
 
 Act on all available borrower category codes, except those listed.
 This may be specified multiple times, to exclude multiple categories.
 May not be used with B<--category>
-If not provided, the value of the system preference 'DefaultLongOverdueSkipBorrowerCategories' will be used.
+If not provided, the value of the system preference 'DefaultLongOverdueSkipPatronCategories' will be used.
 
 =item B<--list-categories>
 
@@ -279,15 +279,15 @@ if ( ! defined($charge) ) {
 }
 
 if ( scalar @$borrower_category == 0 ) {
-    if ( C4::Context->preference('DefaultLongOverdueBorrowerCategories') ) {
-        my $categories = C4::Context->preference('DefaultLongOverdueBorrowerCategories');
+    if ( C4::Context->preference('DefaultLongOverduePatronCategories') ) {
+        my $categories = C4::Context->preference('DefaultLongOverduePatronCategories');
         $borrower_category = [ split( ',', $categories ) ];
     }
 }
 
 if ( scalar @$skip_borrower_category == 0 ) {
-    if ( C4::Context->preference('DefaultLongOverdueSkipBorrowerCategories') ) {
-        my $categories = C4::Context->preference('DefaultLongOverdueSkipBorrowerCategories');
+    if ( C4::Context->preference('DefaultLongOverdueSkipPatronCategories') ) {
+        my $categories = C4::Context->preference('DefaultLongOverdueSkipPatronCategories');
         $skip_borrower_category = [ split( ',', $categories ) ];
     }
 }

@@ -11,13 +11,13 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
-            ('DefaultLongOverdueBorrowerCategories', '', NULL, 'Set the borrower categories that will be listed when longoverdue cronjob is executed', 'choice'),
-            ('DefaultLongOverdueSkipBorrowerCategories', '', NULL, 'Set the borrower categories that will not be listed when longoverdue cronjob is executed', 'choice');
+            ('DefaultLongOverduePatronCategories', '', NULL, 'Set the borrower categories that will be listed when longoverdue cronjob is executed', 'choice'),
+            ('DefaultLongOverdueSkipPatronCategories', '', NULL, 'Set the borrower categories that will not be listed when longoverdue cronjob is executed', 'choice');
         }
         );
 
         # sysprefs
-        say $out "Added new system preference 'DefaultLongOverdueBorrowerCategories'";
-        say $out "Added new system preference 'DefaultLongOverdueSkipBorrowerCategories'";
+        say $out "Added new system preference 'DefaultLongOverduePatronCategories'";
+        say $out "Added new system preference 'DefaultLongOverdueSkipPatronCategories'";
     },
 };

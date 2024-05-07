@@ -452,21 +452,21 @@ Circulation:
             - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
             - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
         -
-            - Set the default patron categories to recieve overdues to
-            - pref: DefaultLongOverdueBorrowerCategories
+            - Set the default patron categories to receive overdues to
+            - pref: DefaultLongOverduePatronCategories
               choices: patron-categories
               class: multiple
             - <br>Leave this field empty if you want to process overdues for all patron categories.
             - <br>(Used when the longoverdue.pl script is called without the --category parameter)
-            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipBorrowerCategories is empty.
+            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipPatronCategories is empty.
             - <br>
-            - Set the default patron categories to <i>not</i> recieve overdues to
-            - pref: DefaultLongOverdueSkipBorrowerCategories
+            - Set the default patron categories to <i>not</i> receive overdues to
+            - pref: DefaultLongOverdueSkipPatronCategories
               choices: patron-categories
               class: multiple
             - <br>Leave this field empty if you want to process overdues for all patron categories.
             - <br>(Used when the longoverdue.pl script is called without the --skip-category parameter)
-            - <br>WARNING - This preference overrides the DefaultLongOverdueBorrowerCategories preference, so the DefaultLongOverdueBorrowerCategories filter will not take effect.
+            - <br>WARNING - This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
 
         -
