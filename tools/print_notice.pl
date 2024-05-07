@@ -37,14 +37,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @message_ids = $input->multi_param('message_ids');
 my @slips;
 foreach my $message_id (@message_ids) {
-    my $message = Koha::Notice::Messages->find($message_id);
-
-    my $template = Koha::Notice::Templates->find( $message->letter_id )->unblessed;
+    my $message  = Koha::Notice::Messages->find($message_id);
+    my $template = $message->template;
 
     push @slips, {
         content => $message->content,
-        is_html => $template->{is_html},
-        style   => $template->{style},
+        is_html => $message->is_html,
+        style   => $template ? $template->{style} : undef,
         id      => $message_id,
     };
 
