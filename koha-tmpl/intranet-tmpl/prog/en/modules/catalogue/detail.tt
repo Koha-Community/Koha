@@ -673,6 +673,7 @@
             <tr>
                 <th>Reported</th>
                 <th>Details</th>
+                <th>Title</th>
                 <th>Status</th>
                 <th data-class-name="actions noExport">Actions</th>
             </tr>
@@ -1024,7 +1025,7 @@
      [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
          <script>
             $(document).ready(function() {
-                var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'concerns', 'table_concerns', 'json' ) | $raw %];
+                var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
 
                 var filtered = false;
                 let additional_filters = {
@@ -1045,13 +1046,16 @@
                         "url": tickets_url
                     },
                     "embed": [
+                        "assignee",
                         "reporter",
                         "resolver",
+                        "biblio",
                         "updates+count",
+                        "+strings"
                     ],
                     'emptyTable': '<div class="dialog message">' + _("Congratulations, there are no catalog concerns.") + '</div>',
                     "columnDefs": [ {
-                        "targets": [0,1,2],
+                        "targets": [0,1,2,3],
                         "render": function (data, type, row, meta) {
                             if ( type == 'display' ) {
                                 if ( data != null ) {
@@ -1093,7 +1097,17 @@
                             "orderable": true
                         },
                         {
-                            "data": "resolved_date",
+                            "data": "biblio.title",
+                            "render": function(data, type, row, meta) {
+                                return $biblio_to_html(row.biblio, {
+                                    link: 1
+                                });
+                            },
+                            "searchable": true,
+                            "orderable": true
+                        },
+                        {
+                            "data": "assignee.firstname:assignee.surname:resolver.firstname:resolver.surname:resolved_date:status",
                             "render": function(data, type, row, meta) {
                                 let result = '';
                                 if (row.resolved_date) {
@@ -1101,9 +1115,23 @@
                                         display_cardnumber: false,
                                         url: true
                                     }) + '</span>';
+                                    if (row.status) {
+                                        result += ' ' + _("as") + ' ';
+                                        result += row._strings.status ? escape_str(row._strings.status.str) : "";
+                                    }
                                     result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
                                 } else {
-                                    result += _("Open");
+                                    if (row.status) {
+                                        result += row._strings.status ? escape_str(row._strings.status.str) : "";
+                                    } else {
+                                        result += _("Open");
+                                    }
+                                    if (row.assignee) {
+                                        result += '<span class="clearfix">' + _("Assigned to: ") + $patron_to_html(row.assignee, {
+                                            display_cardnumber: false,
+                                            url: true
+                                        }) + '</span>';
+                                    }
                                 }
                                 return result;
                             },
@@ -1113,7 +1141,7 @@
                         {
                             "data": function(row, type, val, meta) {
                                 let resolved = ( row.resolved_date ) ? true : false;
-                                let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                                let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="' + resolved + '" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                                 return result;
                             },
                             "searchable": false,
