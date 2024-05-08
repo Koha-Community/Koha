@@ -173,10 +173,14 @@ sub create {
     $email->header( 'Reply-To', $addresses->{reply_to} )
         if $addresses->{reply_to};
 
-    $email->header( 'Sender'       => $addresses->{sender} ) if $addresses->{sender};
+    $email->header( 'Sender'       => $addresses->{sender} )   if $addresses->{sender};
     $email->header( 'Content-Type' => $params->{contenttype} ) if $params->{contenttype};
     $email->header( 'X-Mailer'     => "Koha" );
     $email->header( 'Message-ID'   => Email::MessageID->new->in_brackets );
+
+    # Add Koha message headers to aid later message identification
+    $email->header( 'X-Koha-Template-Id' => $params->{template_id} ) if $params->{template_id};
+    $email->header( 'X-Koha-Message-Id'  => $params->{message_id} )  if $params->{message_id};
 
     if ( $params->{text_body} ) {
         $email->text_body( $params->{text_body}, %{ $params->{body_params} } );

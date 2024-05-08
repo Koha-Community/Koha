@@ -330,11 +330,12 @@ sub SendAlerts {
             # FIXME: This 'default' behaviour should be moved to Koha::Email
             my $mail = Koha::Email->create(
                 {
-                    to       => $email,
-                    from     => $library->branchemail,
-                    reply_to => $library->branchreplyto,
-                    sender   => $library->branchreturnpath,
-                    subject  => "" . $letter->{title},
+                    to          => $email,
+                    from        => $library->branchemail,
+                    reply_to    => $library->branchreplyto,
+                    sender      => $library->branchreturnpath,
+                    subject     => "" . $letter->{title},
+                    template_id => $letter->{id},
                 }
             );
 
@@ -486,8 +487,7 @@ sub SendAlerts {
                 cc => join( ',', @cc ),
                 (
                     (
-                        C4::Context->preference("ClaimsBccCopy")
-                          && ( $type eq 'claimacquisition'
+                        C4::Context->preference("ClaimsBccCopy") && ( $type eq 'claimacquisition'
                             || $type eq 'claimissues' )
                     )
                     ? ( bcc => $userenv->{emailaddress} )
@@ -510,7 +510,8 @@ sub SendAlerts {
                         : ()
                     )
                 ),
-                subject => "" . $letter->{title},
+                subject     => "" . $letter->{title},
+                template_id => $letter->{id},
             }
         );
 
@@ -1453,7 +1454,13 @@ sub _send_message_by_email {
             from     => $from_address,
             reply_to => $message->{'reply_address'} || $branch_replyto,
             sender   => $branch_returnpath,
-            subject  => "" . $message->{subject}
+            subject  => "" . $message->{subject},
+            (
+                $message->{letter_id}
+                ? ( template_id => $message->{letter_id} )
+                : ()
+            ),
+            message_id => $message->{id}
         };
 
         if ( $message->{'content_type'} && $message->{'content_type'} eq SERIALIZED_EMAIL_CONTENT_TYPE ) {
@@ -1464,8 +1471,6 @@ sub _send_message_by_email {
             $email->create($params);
         } else {
             $email = Koha::Email->create($params);
-            $email->header('X-Koha-Letter-Id', $message->{letter_id} );
-            $email->header('X-Koha-Message-Id', $message->{id} );
             if ($is_html) {
                 $email->html_body( _wrap_html( $content, $subject ) );
             } else {
