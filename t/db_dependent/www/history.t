@@ -57,7 +57,7 @@ $agent->field( 'login_password', $password );
 $agent->field( 'login_userid',   $user );
 $agent->field( 'branch',   '' );
 $agent->click( '', 'Login to the intranet' );
-$agent->get_ok( "$intranet/cgi-bin/koha/about.pl", 'Load the about page' );
+$agent->get_ok( "$intranet/cgi-bin/koha/about.pl?tab=team", 'Load the about page' );
 
 # Test about > timeline is correctly encoded
 my $encoded_latin_name    = Encode::encode('UTF-8', 'Frédéric Demians');
