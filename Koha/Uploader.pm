@@ -264,6 +264,7 @@ sub _dir {
 sub _hook {
     my ( $self, $filename, $buffer, $bytes_read, $data ) = @_;
     $filename= Encode::decode_utf8( $filename ); # UTF8 chars in filename
+    $filename =~ s/[^A-Za-z0-9\-\.]//g;
     $self->_compute( $filename, $buffer );
     my $fh = $self->_fh( $filename ) // $self->_create_file( $filename );
     print $fh $buffer if $fh;
