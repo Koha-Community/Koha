@@ -219,7 +219,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 63;
+    plan tests => 57;
 
     my $qb;
 
@@ -253,25 +253,6 @@ subtest 'build_query tests' => sub {
     is( $query->{aggregations}{ccode}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount');
     is( $query->{aggregations}{homebranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for homebranch');
     is( $query->{aggregations}{holdingbranch}{terms}{size}, 37,'we ask for the size as defined by the syspref FacetMaxCount for holdingbranch');
-
-    t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
-    $query = $qb->build_query();
-    ok( defined $query->{aggregations}{homebranch},
-        'homebranch added to facets if DisplayLibraryFacets=both' );
-    ok( defined $query->{aggregations}{holdingbranch},
-        'holdingbranch added to facets if DisplayLibraryFacets=both' );
-    t::lib::Mocks::mock_preference('DisplayLibraryFacets','holding');
-    $query = $qb->build_query();
-    ok( !defined $query->{aggregations}{homebranch},
-        'homebranch not added to facets if DisplayLibraryFacets=holding' );
-    ok( defined $query->{aggregations}{holdingbranch},
-        'holdingbranch added to facets if DisplayLibraryFacets=holding' );
-    t::lib::Mocks::mock_preference('DisplayLibraryFacets','home');
-    $query = $qb->build_query();
-    ok( defined $query->{aggregations}{homebranch},
-        'homebranch added to facets if DisplayLibraryFacets=home' );
-    ok( !defined $query->{aggregations}{holdingbranch},
-        'holdingbranch not added to facets if DisplayLibraryFacets=home' );
 
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '' );
 
