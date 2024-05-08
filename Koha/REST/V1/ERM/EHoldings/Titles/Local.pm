@@ -24,9 +24,9 @@ use Koha::BackgroundJob::CreateEHoldingsFromBiblios;
 use Koha::BackgroundJob::ImportKBARTFile;
 
 use Scalar::Util qw( blessed );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 use MIME::Base64 qw( decode_base64 encode_base64 );
-use POSIX qw( floor );
+use POSIX        qw( floor );
 use Text::CSV_XS;
 
 =head1 API
@@ -294,7 +294,7 @@ sub import_from_kbart_file {
 
         # Check that the column headers in the file match the standardised KBART phase II columns
         # If not, return a warning
-        my $warnings = {};
+        my $warnings      = {};
         my @valid_headers = Koha::BackgroundJob::ImportKBARTFile::get_valid_headers();
         foreach my $header (@$column_headers) {
             if ( !grep { $_ eq $header } @valid_headers ) {
@@ -324,13 +324,7 @@ sub import_from_kbart_file {
             my @chunked_files;
             push @chunked_files, [ splice @$rows, 0, $max_number_of_rows ] while @$rows;
             foreach my $chunk (@chunked_files) {
-                my $params = {
-                    column_headers => $column_headers,
-                    rows           => $chunk,
-                    package_id     => $package_id,
-                    file_name      => $file->{filename}
-                };
-
+                $params->{rows} = $chunk;
                 my $chunked_job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue($params);
                 push @job_ids, $chunked_job_id;
             }

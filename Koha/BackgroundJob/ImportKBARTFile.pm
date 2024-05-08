@@ -24,6 +24,7 @@ use POSIX        qw( floor );
 use C4::Context;
 
 use Koha::ERM::EHoldings::Titles;
+use Koha::SearchEngine::Indexer;
 
 use base 'Koha::BackgroundJob';
 
@@ -94,10 +95,12 @@ sub process {
         $self->size( scalar( @{$rows} ) )->store;
         $total_rows = scalar( @{$rows} );
 
+        my @biblio_ids;
+
         foreach my $row ( @{$rows} ) {
             next if !$row;
             my $new_title   = create_title_hash_from_line_data( $row, $column_headers, $invalid_columns );
-            my $title_match = check_for_matching_title($new_title);
+            my $title_match = check_for_matching_title( $new_title, $package_id );
 
             if ($title_match) {
                 $duplicate_titles++;
@@ -122,6 +125,7 @@ sub process {
                     } else {
                         my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)
                             ->store( { create_linked_biblio => $create_linked_biblio } );
+                        push( @biblio_ids, $imported_title->biblio_id ) if $create_linked_biblio;
                         create_linked_resource(
                             {
                                 title      => $imported_title,
@@ -146,10 +150,16 @@ sub process {
             $self->step;
         }
 
+        if ( scalar(@biblio_ids) > 0 ) {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( \@biblio_ids, "specialUpdate", "biblioserver" );
+        }
+
         $report->{duplicates_found} = $duplicate_titles;
         $report->{titles_imported}  = $titles_imported;
         $report->{total_rows}       = $total_rows;
         $report->{failed_imports}   = $failed_imports;
+        $report->{package_id}       = $package_id;
 
         my $data = $self->decoded_data;
         $data->{messages} = \@messages;
@@ -266,7 +276,7 @@ sub create_title_hash_from_line_data {
     }
 
     # Remove any additional columns
-    foreach my $invalid_column ( @$invalid_columns ) {
+    foreach my $invalid_column (@$invalid_columns) {
         delete $new_title{$invalid_column};
     }
 
@@ -280,7 +290,7 @@ Checks whether this title already exists to avoid duplicates
 =cut
 
 sub check_for_matching_title {
-    my ($title) = @_;
+    my ( $title, $package_id ) = @_;
 
     my $match_parameters = {};
     $match_parameters->{print_identifier}  = $title->{print_identifier}  if $title->{print_identifier};
@@ -290,14 +300,20 @@ sub check_for_matching_title {
     $match_parameters->{external_id} = $title->{title_id} if $title->{title_id};
 
     # We should also check the date_first_issue_online for serial publications
-    $match_parameters->{date_first_issue_online} = $title->{date_first_issue_online} if $title->{date_first_issue_online};
+    $match_parameters->{date_first_issue_online} = $title->{date_first_issue_online}
+        if $title->{date_first_issue_online};
 
     # If no match parameters are provided in the file we should add the new title
     return 0 if !%$match_parameters;
 
-    my $title_match = Koha::ERM::EHoldings::Titles->search($match_parameters)->count;
+    my $matching_title_found;
+    my @title_matches = Koha::ERM::EHoldings::Titles->search($match_parameters)->as_list;
+    foreach my $title_match (@title_matches) {
+        my $resource = Koha::ERM::EHoldings::Resources->find( { title_id => $title_match->title_id } );
+        $matching_title_found = 1 if $resource->package_id == $package_id;
+    }
 
-    return $title_match;
+    return $matching_title_found;
 }
 
 =head3 create_linked_resource
@@ -437,7 +453,7 @@ sub is_file_too_large {
 
 =head3 rescue_EBSCO_files
 
-EBSCO have an incorrect spelling for "preceding_publication_title_id" in all of their KBART files ("preceeding" instead of "preceding").
+EBSCO have an incorrect spelling for "preceding_publication_title_id" in all of their KBART files (preceding is spelled with a double 'e').
 This means all of their KBART files fail to import using the current methodology.
 There is no simple way of finding out who the vendor is before importing so all KBART files from any vendor are going to have to be checked for this spelling and corrected.
 

@@ -80,10 +80,15 @@
 <script>
 import ButtonSubmit from "../ButtonSubmit.vue"
 import { APIClient } from "../../fetch/api-client.js"
-import { setMessage, setWarning } from "../../messages"
-import { ref } from "vue"
+import { ref, inject } from "vue"
 
 export default {
+    setup() {
+        const { setMessage } = inject("mainStore")
+        return {
+            setMessage,
+        }
+    },
     data() {
         const fileLoader = ref()
         return {
@@ -143,7 +148,7 @@ export default {
                                 '<li>Job %s for uploaded file has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
                             ).format(i + 1, job)
                         })
-                        setMessage(message, true)
+                        this.setMessage(message, true)
                     }
                     if (success.warnings.invalid_columns) {
                         message += this.$__(
@@ -158,7 +163,7 @@ export default {
                         message += this.$__(
                             "<p style='margin-top: 0.1em;'>The data in these columns will not be imported.</p>"
                         )
-                        setMessage(message)
+                        this.setMessage(message, true)
                     }
                     if (success.invalid_filetype) {
                         message += this.$__(

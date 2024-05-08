@@ -55,7 +55,7 @@ sub store {
             my $record      = $biblio->metadata->record();
             my $title_field = $record->field($title_tag);
             $title_field->update( $title_subfield => $self->publication_title );
-            C4::Biblio::ModBiblio( $record, $self->biblio_id, '' );
+            C4::Biblio::ModBiblio( $record, $self->biblio_id, '', { skip_record_index => 1 } );
         } else {
 
             # If it's not linked, we create a simple biblio and save the biblio id to the 'title'
@@ -64,7 +64,7 @@ sub store {
                     'biblio.title' => $self->publication_title,
                 }
             );
-            my ($biblio_id) = C4::Biblio::AddBiblio( $marc_record, '' );
+            my ($biblio_id) = C4::Biblio::AddBiblio( $marc_record, '', { skip_record_index => 1 } );
             $self->biblio_id($biblio_id);
         }
     }

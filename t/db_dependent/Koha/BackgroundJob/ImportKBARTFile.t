@@ -79,11 +79,11 @@ subtest 'read_file' => sub {
     plan tests => 6;
 
     my $file = {
-        filename     => 'Test_file.tsv',
+        filename     => 'Test_file.csv',
         file_content => encode_base64(
-            'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
-Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
-Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bbb0		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P'
+            'publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P'
         )
     };
 
@@ -119,21 +119,25 @@ subtest 'create_title_hash_from_line_data' => sub {
     plan tests => 2;
 
     my $file = {
-        filename     => 'Test_file.tsv',
+        filename     => 'Test_file.csv',
         file_content => encode_base64(
-            'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
-Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
-Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bbb0		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P'
+            'publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P'
         )
     };
 
     my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
     my @invalid_columns;
 
-    my $title_from_line1 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers, \@invalid_columns );
-    my $title_from_line2 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[1], $column_headers, \@invalid_columns );
+    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+        @{$lines}[0], $column_headers,
+        \@invalid_columns
+    );
+    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+        @{$lines}[1], $column_headers,
+        \@invalid_columns
+    );
 
     my $line1_match = {
         'coverage_depth'                  => 'fulltext',
@@ -210,10 +214,14 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
     my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
     my @invalid_columns = ('invalid_column');
 
-    my $title_from_line1 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[0], $column_headers, \@invalid_columns );
-    my $title_from_line2 =
-        Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data( @{$lines}[1], $column_headers, \@invalid_columns );
+    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+        @{$lines}[0], $column_headers,
+        \@invalid_columns
+    );
+    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+        @{$lines}[1], $column_headers,
+        \@invalid_columns
+    );
 
     my $line1_match = {
         'coverage_depth'                  => 'fulltext',
@@ -288,11 +296,11 @@ subtest 'process' => sub {
     );
 
     my $file = {
-        filename     => 'Test_file.tsv',
+        filename     => 'Test_file.csv',
         file_content => encode_base64(
-            'publication_title	print_identifier	online_identifier	date_first_issue_online	num_first_vol_online	num_first_issue_online	date_last_issue_online	num_last_vol_online	num_last_issue_online	title_url	first_author	title_id	embargo_info	coverage_depth	coverage_notes	publisher_name	publication_type	date_monograph_published_print	date_monograph_published_online	monograph_volume	monograph_edition	first_editor	parent_publication_title_id	preceding_publication_title_id	access_type
-Nature Plants		2055-0278	2015-01	1	1				https://www.nature.com/nplants		4aaa7		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P
-Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bbb0		fulltext	Hybrid (Open Choice)	Nature Publishing Group UK	serial								P'
+            'publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P'
         )
     };
 
@@ -453,4 +461,4 @@ Nature Astronomy		2397-3366	2017-01	1	1				https://www.nature.com/natastron		4bb
     is( @{ $job4->messages }[1]->{code}, 'title_already_exists', 'Error message for a duplicate title' );
 
     $schema->storage->txn_rollback;
-}
+    }

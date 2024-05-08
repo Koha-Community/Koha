@@ -28,6 +28,7 @@
                         <td>[% report.failed_imports | html %]</td>
                     </tr>
                 </table>
+                <a href="/cgi-bin/koha/erm/eholdings/local/packages/[% report.package_id | $raw %]">Click here to see the package</a>
             [% ELSIF job.status == 'started' %]
                 <p id="jobactionlabel"></p>
             [% END %]
