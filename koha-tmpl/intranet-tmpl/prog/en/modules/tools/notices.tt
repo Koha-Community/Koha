@@ -50,59 +50,60 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% INCLUDE 'messages.inc' %]
+
                 <h1>Notices management</h1>
 
+                <div class="dialog message">Printing a notice will mark it as sent.</div>
+
                 [% IF notices && notices.count > 0 %]
-                    <div class="dialog message">Printing a notice will mark it as sent.</div>
-
-                    <span id="checkbox_actions"
-                        ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
-                    >
-
-                    <form id="print_multiple" action="/cgi-bin/koha/tools/print_notice.pl" method="post" target="_blank">
-                        [% INCLUDE 'csrf-token.inc' %]
-
-                        <table id="notices">
-                            <thead>
-                                <tr>
-                                    <th class="nosort">&nbsp;</th>
-                                    <th>Time created</th>
-                                    <th>Patron</th>
-                                    <th>Notice</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Updated on</th>
-                                    <th class="nosort">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH notice IN notices %]
+                    <div class="page-section">
+                        <span id="checkbox_actions"
+                            ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
+                        >
+                        <form id="print_multiple" action="/cgi-bin/koha/tools/print_notice.pl" method="post" target="_blank">
+                            [% INCLUDE 'csrf-token.inc' %]
+                            <table id="notices">
+                                <thead>
                                     <tr>
-                                        <td><input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" /></td>
-                                        <td>[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
-                                        <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
-                                        <td>
-                                            <a
-                                                class="notice-title"
-                                                data-noticeid="[% notice.message_id | html %]"
-                                                href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
-                                                >[% notice.subject | html %]</a
-                                            >
-                                            <iframe class="notice" id="notice[% notice.message_id | html %]" srcdoc="[% notice.html_content | html %]"></iframe>
-                                        </td>
-                                        <td>[% notice.message_transport_type | html %]</td>
-                                        <td>[% notice.status | html %]</td>
-                                        <td>[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
-                                        <td class="actions"
-                                            ><a target="_blank" class="btn btn-default btn-xs print" href="/cgi-bin/koha/tools/print_notice.pl?message_ids=[% notice.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
-                                        >
+                                        <th class="nosort">&nbsp;</th>
+                                        <th>Time created</th>
+                                        <th>Patron</th>
+                                        <th>Notice</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Updated on</th>
+                                        <th class="nosort">Actions</th>
                                     </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-
-                        <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
-                    </form>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH notice IN notices %]
+                                        <tr>
+                                            <td><input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" /></td>
+                                            <td>[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
+                                            <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
+                                            <td>
+                                                <a
+                                                    class="notice-title"
+                                                    data-noticeid="[% notice.message_id | html %]"
+                                                    href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
+                                                    >[% notice.subject | html %]</a
+                                                >
+                                                <iframe class="notice" id="notice[% notice.message_id | html %]" srcdoc="[% notice.html_content | html %]"></iframe>
+                                            </td>
+                                            <td>[% notice.message_transport_type | html %]</td>
+                                            <td>[% notice.status | html %]</td>
+                                            <td>[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
+                                            <td class="actions"
+                                                ><a target="_blank" class="btn btn-default btn-xs print" href="/cgi-bin/koha/tools/print_notice.pl?message_ids=[% notice.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
+                                            >
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                            <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
+                        </form>
+                    </div>
                 [% ELSE %]
                     Use the search form on the left to find sent notices, or go directly to a patron's notices.
                     [% WRAPPER tabs id= "notices_patronsearch" %]
