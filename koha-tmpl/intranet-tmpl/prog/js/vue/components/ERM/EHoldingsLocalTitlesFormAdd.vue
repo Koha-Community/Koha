@@ -366,7 +366,12 @@
                         </li>
                     </ol>
                 </fieldset>
-                <fieldset class="rows">
+                <fieldset
+                    class="rows"
+                    v-if="
+                        (title.title_id && title.biblio_id) || !title.title_id
+                    "
+                >
                     <legend>
                         {{
                             $__("%s linked biblio record").format(
