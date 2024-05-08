@@ -173,11 +173,11 @@
                                                 <ul id="userdebarred_comment">
                                                     [% FOREACH restriction IN logged_in_user.restrictions %]
                                                         <li class="patron_restriction">
-                                                            <strong>[%- restriction.type.display_text | html -%]</strong>
+                                                            <strong>[%- restriction.type.display_text | html -%]: </strong>
                                                             [% IF restriction.comment.search('OVERDUES_PROCESS') %]
                                                                 Restriction added by overdues process [% restriction.comment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                                             [% ELSE %]
-                                                                [%- IF restriction.comment -%]:
+                                                                [%- IF restriction.comment -%]
                                                                     <span class="restriction_comment">[% restriction.comment | html_line_break %]</span>.
                                                                 [%- END -%]
                                                             [% END %]
