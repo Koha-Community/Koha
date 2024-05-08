@@ -389,7 +389,7 @@
                                         </td>
                                         <td>
                                             <span class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</span></br>
-                                            <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort_1="[% order.sort1 | html %]" data-sort_2="[% order.sort2 | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
+                                            <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
                                         </td>
                                     </tr>
                                 [% END # /FOREACH order %]
@@ -620,16 +620,16 @@
                 $("#update_fund").data('order_id',$(this).data('order_id'));
                 $("#modify_budget_id").html(disabledBudgetsCopy);
                 $("#modify_budget_id").val(selected).find('option[value="'+selected+'"]').removeClass('b_inactive');
-                $("#sort1").val(sort1);
-                $("#sort2").val(sort2);
+                $("#updateFund").find('[name="sort1"]').val(sort1);
+                $("#updateFund").find('[name="sort2"]').val(sort2);
                 $("#modify_budget_id").find('.b_inactive').remove();
                 $("#modify_budget_id").change();
                 $("#updateFund").modal('show');
             });
             $("#update_fund").on('click',function(){
                 var new_fund = $("#modify_budget_id").val();
-                var sort1 = $("#sort1").val();
-                var sort2 = $("#sort2").val();
+                var sort1 = $("#updateFund").find('[name="sort1"]').val();
+                var sort2 = $("#updateFund").find('[name="sort2"]').val();
                 var new_fund_name = $('#modify_budget_id option[value="'+new_fund+'"]').text();
                 var order_id = $(this).data('order_id');
                 let options = {
@@ -647,6 +647,8 @@
                         $("#updateFund").modal('hide');
                         $('#updateFund .showallfunds').prop('checked',false);
                         $('.modify_fund[data-order_id="'+order_id+'"]').data('budget_id',new_fund);
+                        $('.modify_fund[data-order_id="'+order_id+'"]').data('sort1',sort1);
+                        $('.modify_fund[data-order_id="'+order_id+'"]').data('sort2',sort2);
                         $('.order_name[data-order_id="'+order_id+'"]').text(new_fund_name);
                         humanMsg.displayAlert( _("Order updated"), { className: 'humanError' } );
                     })
@@ -657,16 +659,16 @@
             $("#modify_budget_id").change(function(){
                 var destination_sort1 = $(this).parents('.modal-body').find('input[name="sort1"]');
                 var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
-                var sort1 = $(destination_sort1).val() || "";
                 if ( destination_sort1.length < 1 ) {
                     destination_sort1 = $(this).parents('.modal-body').find('select[name="sort1"]');
                 }
+                var sort1 = $(destination_sort1).val() || "";
                 var destination_sort2 = $(this).parents('.modal-body').find('input[name="sort2"]');
                 var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
-                var sort2 = $(destination_sort2).val() || "";
                 if ( destination_sort2.length < 1 ) {
                     destination_sort2 = $(this).parents('.modal-body').find('select[name="sort2"]');
                 }
+                var sort2 = $(destination_sort2).val() || "";
                 getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
                 getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
             });
