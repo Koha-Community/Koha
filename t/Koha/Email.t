@@ -51,20 +51,20 @@ subtest 'create() tests' => sub {
         }
     );
 
-    is( $email->email->header('From'), 'Fróm <from@example.com>', 'Value set correctly' );
-    is( $email->email->header('To'), 'Tö <to@example.com>', 'Value set correctly' );
-    is( $email->email->header('Cc'), 'cc@example.com', 'Value set correctly' );
-    is( $email->email->header('Bcc'), 'bcc@example.com', 'Value set correctly' );
-    is( $email->email->header('Reply-To'), 'reply_to@example.com', 'Value set correctly' );
-    is( $email->email->header('Sender'), 'sender@example.com', 'Value set correctly' );
-    is( $email->email->header('Subject'), 'Some subject', 'Value set correctly' );
-    is( $email->email->header('X-Mailer'), 'Koha', 'Value set correctly' );
-    is( $email->email->header('X-Koha-Template-Id'), 1, 'Value set correctly' );
-    is( $email->email->header('X-Koha-Message-Id'),  1, 'Value set correctly' );
-    is( $email->email->body, $html_body, "Body set correctly" );
-    like( $email->email->content_type, qr|text/html|, "Content type set correctly");
-    like( $email->email->content_type, qr|charset="?iso-8859-1"?|, "Charset set correctly");
-    like( $email->email->header('Message-ID'), qr/\<.*@.*\>/, 'Value set correctly' );
+    is( $email->email->header('From'),               'Fróm <from@example.com>', 'Value set correctly' );
+    is( $email->email->header('To'),                 'Tö <to@example.com>',     'Value set correctly' );
+    is( $email->email->header('Cc'),                 'cc@example.com',          'Value set correctly' );
+    is( $email->email->header('Bcc'),                'bcc@example.com',         'Value set correctly' );
+    is( $email->email->header('Reply-To'),           'reply_to@example.com',    'Value set correctly' );
+    is( $email->email->header('Sender'),             'sender@example.com',      'Value set correctly' );
+    is( $email->email->header('Subject'),            'Some subject',            'Value set correctly' );
+    is( $email->email->header('X-Mailer'),           'Koha',                    'Value set correctly' );
+    is( $email->email->header('X-Koha-Template-Id'), 1,                         'Value set correctly' );
+    is( $email->email->header('X-Koha-Message-Id'),  1,                         'Value set correctly' );
+    is( $email->email->body,                         $html_body,                "Body set correctly" );
+    like( $email->email->content_type,         qr|text/html|,              "Content type set correctly" );
+    like( $email->email->content_type,         qr|charset="?iso-8859-1"?|, "Charset set correctly" );
+    like( $email->email->header('Message-ID'), qr/\<.*@.*\>/,              'Value set correctly' );
 
     $email = Koha::Email->create(
         {
