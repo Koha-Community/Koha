@@ -227,6 +227,10 @@ sub add_form {
                 tt_error   => $letter->{tt_error},
             };
             $letters{ $lang }{params} = $letter;
+
+            my $object = Koha::Notice::Templates->find( { id => $letter->{id} } );
+            $letters{ $lang }{templates}{$mtt}{sample} = $object->get_default;
+            $letters{ $lang }{templates}{$mtt}{id} = $letter->{id};
         }
     }
     else {

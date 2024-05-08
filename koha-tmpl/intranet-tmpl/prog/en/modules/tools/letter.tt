@@ -132,6 +132,27 @@
         </div> <!-- /.modal-dialog -->
     </div> <!-- /#preview_template -->
 
+    <!-- Sample display modal -->
+    <div class="modal" id="noticeSampleModal" tabindex="-1" aria-labelledby="noticeSampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="noticeSampleModalLabel">Default template</h3>
+                </div>
+                <div class="modal-body">
+                    <pre class="template-body"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary copy">Copy to template</button>
+                    <button type="button" class="btn btn-default deny cancel" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal -->
+
     [% IF add_form or copy_form %]
         <div class="main container-fluid">
             <div class="row">
@@ -673,6 +694,12 @@
                                     <a href="/cgi-bin/koha/svc/letters/preview" class="preview_template btn btn-default btn-xs" title="Preview this notice template" data-mtt="[% letter.message_transport_type | html %]" data-lang="[% lang | html %]"><i class="fa-solid fa-eye"></i> Preview</a>
                                 </li>
                             [% END %]
+                            [% IF letter.sample %]
+                            <li>
+                                <button data-noticeid="[% letter.id | html %]" data-replace="content_[% letter.message_transport_type | html %]_[% lang | html %]" class="notice-sample btn btn-default btn-sm"><i class="fa-solid fa-eye"></i> View default</button>
+                                <textarea class="hidden" id="notice[% letter.id | html %]">[% letter.sample | html %]</textarea>
+                            </li>
+                            [% END %]
                         </ol>
                     </fieldset> <!-- /.rows.mtt -->
                 [% END %]
@@ -760,6 +787,29 @@
                     '// insert CSS here\n' +
                     '}';
                 });
+            });
+
+            $(".notice-sample").on("click", function(e){
+                e.preventDefault();
+                var noticeid = $(this).data("noticeid");
+                var replaceid = $(this).data("replace");
+                var body = $("#notice" + noticeid ).val();
+                $("#noticeSampleModal .template-body").text(body);
+                $("#noticeSampleModal").attr("data-replaceid", replaceid);
+                $("#noticeSampleModal").modal("show");
+            });
+
+            $("#noticeSampleModal").on("hide.bs.modal", function(){
+                $("#noticeSampleModalLabel").text("");
+                $("#noticeSampleModal .template-body").text("");
+                $("#noticeSampleModal").attr("data-replaceid", '');
+            });
+
+            $("#noticeSampleModal").on("click", ".copy", function(){
+                var content = $('#noticeSampleModal .template-body').text();
+                var replaceid = $('#noticeSampleModal').data('replaceid');
+                $('#'+replaceid).val(content);
+                $('#noticeSampleModal').modal('hide');
             });
         });
      </script>
