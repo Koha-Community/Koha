@@ -106,8 +106,9 @@ default text be recorded in the column note when the processing fee is applied
 
 =head2 notforloan
 
-  data_type: 'smallint'
-  is_nullable: 1
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
 
 1 if the item is not for loan, 0 if the item is available for loan
 
@@ -199,7 +200,7 @@ __PACKAGE__->add_columns(
   "processfee",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "notforloan",
-  { data_type => "smallint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "imageurl",
   { data_type => "varchar", is_nullable => 1, size => 200 },
   "summary",
@@ -333,8 +334,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-09-22 11:31:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SoRKIMEqXE2+RkGq6zBejA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-08 14:38:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9NChRQA4eBUqHpLXUFmOuw
 
 __PACKAGE__->add_columns(
     '+automatic_checkin'            => { is_boolean => 1 },
