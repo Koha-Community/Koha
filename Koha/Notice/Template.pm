@@ -17,7 +17,9 @@ package Koha::Notice::Template;
 
 use Modern::Perl;
 
+use YAML::XS qw(LoadFile);
 
+use C4::Context;
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -30,7 +32,56 @@ Koha::Notice::Template - Koha notice template Object class, related to the lette
 
 =head2 Class Methods
 
+=head3 get_default
+
+    my $default = $template->get_default;
+
+Returns the default notice template content.
+
 =cut
+
+sub get_default {
+    my $self            = shift;
+    my $lang            = $self->lang;
+    my $defaulted_to_en = 0;
+
+    my $file = C4::Context->config('intranetdir') . "/installer/data/mysql/$lang/mandatory/sample_notices.yml";
+    if ( !-e $file ) {
+        if ( $lang eq 'en' ) {
+            warn "cannot open sample data $file";
+        } else {
+
+            # if no localised sample data is available,
+            # default to English
+            $file = C4::Context->config('intranetdir') . "/installer/data/mysql/en/mandatory/sample_notices.yml";
+            die "cannot open English sample data directory $file" unless ( -e $file );
+            $defaulted_to_en = 1;
+        }
+    }
+
+    my $data = YAML::XS::LoadFile("$file");
+
+    my $module = $self->module;
+    my $code   = $self->code;
+    my $mtt    = $self->message_transport_type;
+
+    my $content;
+    for my $table ( @{ $data->{tables} } ) {
+        if ( $table->{letter}->{rows} ) {
+            for my $template ( @{ $table->{letter}->{rows} } ) {
+                if (   $template->{module} eq $module
+                    && $template->{code} eq $code
+                    && $template->{message_transport_type} eq $mtt )
+                {
+                    $content = join "\r\n", @{ $template->{content} };
+                    last;
+                }
+            }
+        }
+    }
+
+    return $content;
+}
 
 =head3 type
 
