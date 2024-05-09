@@ -142,9 +142,9 @@
                         "data": "title:body",
                         "render": function(data, type, row, meta) {
                             let resolved = ( row.resolved_date ) ? true : false;
-                            let result = '<a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'">' + row.title + '</a>';
+                            let result = '<a role="button" href="#" class="detail-trigger">' + row.title + '</a>';
                             if (row.updates_count) {
-                                result += '<span class="pull-right"><a role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
+                                result += '<span class="pull-right"><a role="button" href="#" class="detail-trigger"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
                             }
                             result += '<div id="detail_' + row.ticket_id + '" class="hidden">' + row.body + '</div>';
                             return result;
@@ -197,7 +197,7 @@
                     {
                         "data": function(row, type, val, meta) {
                             let resolved = ( row.resolved_date ) ? true : false;
-                            let result = '<a class="btn btn-default btn-xs" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
+                            let result = '<a class="btn btn-default btn-xs main-trigger" role="button" href="#" data-toggle="modal" data-target="#ticketDetailsModal" data-concern="' + encodeURIComponent(row.ticket_id) + '" data-resolved="'+resolved+'" data-assignee="'+$patron_to_html(row.assignee, { display_cardnumber: false, url: false })+'"><i class="fa-solid fa-eye" aria-hidden="true"></i> ' + _("Details") + '</a>';
                             return result;
                         },
                         "searchable": false,

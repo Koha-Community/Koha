@@ -1,5 +1,13 @@
 /* keep tidy */
 $(document).ready(function () {
+    $("#table_concerns").on("click", ".detail-trigger", function () {
+        // Find the main trigger anchor within the same table row
+        var $mainTrigger = $(this).closest("tr").find(".main-trigger");
+
+        // Trigger the click event of the main trigger anchor
+        $mainTrigger.trigger("click");
+    });
+
     $("#ticketDetailsModal").on("show.bs.modal", function (event) {
         let modal = $(this);
         let button = $(event.relatedTarget);
