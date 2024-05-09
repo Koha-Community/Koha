@@ -268,7 +268,7 @@ subtest 'store' => sub {
             {
                 class => 'Koha::ItemTypes',
                 value => {
-                    notforloan         => undef,
+                    notforloan         => 0,
                     rentalcharge       => 0,
                     defaultreplacecost => undef,
                     processfee         => $processfee_amount,
@@ -791,7 +791,7 @@ subtest 'store' => sub {
                 {
                     class => 'Koha::ItemTypes',
                     value => {
-                        notforloan         => undef,
+                        notforloan         => 0,
                         rentalcharge       => 0,
                         defaultreplacecost => undef,
                         processfee         => 0,
@@ -915,7 +915,7 @@ subtest 'store' => sub {
                 {
                     class => 'Koha::ItemTypes',
                     value => {
-                        notforloan         => undef,
+                        notforloan         => 0,
                         rentalcharge       => 0,
                         defaultreplacecost => undef,
                         processfee         => 0,
@@ -1290,7 +1290,7 @@ subtest 'store' => sub {
                 {
                     class => 'Koha::ItemTypes',
                     value => {
-                        notforloan         => undef,
+                        notforloan         => 0,
                         rentalcharge       => 0,
                         defaultreplacecost => undef,
                         processfee         => 0,

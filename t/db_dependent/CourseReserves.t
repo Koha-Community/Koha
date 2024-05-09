@@ -35,8 +35,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-my $itemtype = $builder->build(
-    { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
+my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
 
 # Create 10 sample borrowers
 my @borrowers = ();

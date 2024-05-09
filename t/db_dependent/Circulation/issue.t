@@ -73,13 +73,15 @@ $dbh->do(q|DELETE FROM statistics|);
 
 # Generate sample datas
 my $itemtype = $builder->build(
-    {   source => 'Itemtype',
-        value  => { notforloan => undef, rentalcharge => 0 }
+    {
+        source => 'Itemtype',
+        value  => { notforloan => 0, rentalcharge => 0 }
     }
 )->{itemtype};
 my $itemtype2 = $builder->build(
-    {   source => 'Itemtype',
-        value  => { notforloan => undef }
+    {
+        source => 'Itemtype',
+        value  => { notforloan => 0 }
     }
 )->{itemtype};
 my $branchcode_1 = $builder->build({ source => 'Branch' })->{branchcode};

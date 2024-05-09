@@ -32,8 +32,9 @@ my $library2 = $builder->build({ source => 'Branch', });
 my $library3 = $builder->build({ source => 'Branch', });
 my $library4 = $builder->build({ source => 'Branch', });
 my $itemtype = $builder->build(
-    {   source => 'Itemtype',
-        value  => { notforloan => undef, rentalcharge => 0 }
+    {
+        source => 'Itemtype',
+        value  => { notforloan => 0, rentalcharge => 0 }
     }
 )->{itemtype};
 

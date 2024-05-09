@@ -333,7 +333,7 @@ subtest 'get() tests' => sub {
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 2, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1' );
 
-    $itype->notforloan(undef)->store();
+    $itype->notforloan(0)->store();
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'SWAGGER3.2.2' )
         ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
         '/effective_not_for_loan_status' => 0,

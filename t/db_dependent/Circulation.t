@@ -143,11 +143,11 @@ my $itemtype = $builder->build(
     {
         source => 'Itemtype',
         value  => {
-            notforloan          => undef,
-            rentalcharge        => 0,
+            notforloan         => 0,
+            rentalcharge       => 0,
             rentalcharge_daily => 0,
-            defaultreplacecost  => undef,
-            processfee          => undef
+            defaultreplacecost => undef,
+            processfee         => undef
         }
     }
 )->{itemtype};
@@ -4586,7 +4586,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
     my $itemtype = $builder->build(
         {
             source => 'Itemtype',
-            value  => { notforloan => undef, }
+            value  => { notforloan => 0, }
         }
     );
     my $item = $builder->build_sample_item(
@@ -4620,7 +4620,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
         );
 
         # not for loan at item level
-        Koha::ItemTypes->find( $itemtype->{itemtype} )->notforloan(undef)->store;
+        Koha::ItemTypes->find( $itemtype->{itemtype} )->notforloan(0)->store;
         $item->notforloan( 1 )->store;
         ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, undef );
         is_deeply( $needsconfirmation, {}, 'No confirmation needed, AllowNotForLoanOverride=0' );
@@ -4640,7 +4640,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
         my $itemtype = $builder->build(
             {
                 source => 'Itemtype',
-                value  => { notforloan => undef, }
+                value  => { notforloan => 0, }
             }
         );
 
@@ -4662,7 +4662,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
         );
 
         # not for loan at item level
-        Koha::ItemTypes->find( $itemtype->{itemtype} )->notforloan(undef)->store;
+        Koha::ItemTypes->find( $itemtype->{itemtype} )->notforloan(0)->store;
         $item->notforloan( 1 )->store;
         ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, undef );
         is_deeply( $needsconfirmation, {}, 'No confirmation needed, AllowNotForLoanOverride=0' );
@@ -5125,7 +5125,7 @@ subtest 'Incremented fee tests' => sub {
         {
             class => 'Koha::ItemTypes',
             value => {
-                notforloan                   => undef,
+                notforloan                   => 0,
                 rentalcharge                 => 0,
                 rentalcharge_daily           => 1,
                 rentalcharge_daily_calendar  => 0
@@ -5390,8 +5390,8 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
         {
             class => 'Koha::ItemTypes',
             value => {
-                notforloan             => 0,
-                rentalcharge           => 0,
+                notforloan         => 0,
+                rentalcharge       => 0,
                 rentalcharge_daily => 0
             }
         }
