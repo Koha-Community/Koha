@@ -664,7 +664,7 @@
                                                 </select>
                                             </li>
                                         [% END %]
-                                        [% IF remaining_holds_for_record > 1 %]
+                                        [% UNLESS remaining_holds_for_record == 1 %]
                                             <li>
                                                 <label for="holds_to_place_count">Holds to place (count)</label>
                                                 <input type="text" inputmode="numeric" pattern="[0-9]*" id="holds_to_place_count" name="holds_to_place_count" maxlength="[% remaining_holds_for_record | html %]" value="1" />
