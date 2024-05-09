@@ -1005,6 +1005,30 @@ tables:
             - ""
             - "<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received.</order>"
 
+        - module: commandline
+          code: SFTP_FAILURE
+          branchcode: ""
+          name: "File SFTP failed"
+          is_html: 0
+          title: "The SFTP by sftp_file.pl failed"
+          message_transport_type: email
+          lang: default
+          content:
+            - "SFTP upload failed:"
+            - ""
+            - "<<sftp_status>>"
+
+        - module: commandline
+          code: SFTP_SUCCESS
+          branchcode: ""
+          name: "File SFTP success"
+          is_html: 0
+          title: "The SFTP by sftp_file.pl was successful"
+          message_transport_type: email
+          lang: default
+          content:
+            - "SFTP upload succeeded"
+
         - module: ill
           code: ILL_PICKUP_READY
           branchcode: ""

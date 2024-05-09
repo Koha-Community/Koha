@@ -23,6 +23,7 @@ use Koha::Email;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 use Carp qw( carp );
+use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 
 =head1 NAME
 
@@ -178,14 +179,6 @@ if ( $email ) {
     if ( !Koha::Email->is_valid($email) ) {
         return warn "The email address you defined in the --email parameter is invalid\n";
     }
-
-    $status_email = Koha::Email->new(
-        {
-            to        => $email,
-            from      => $admin_address,
-            subject   => '[OCLC] ' . C4::Context->config('database') . ' ' . $sftp_status,
-        }
-    );
 }
 
 # Do the SFTP upload
@@ -196,31 +189,33 @@ if (
             callback => sub { my ( $sftp, $data, $offset, $size ) = @_; warn "$offset of $size bytes transferred\n"; }
         )
 ) {
-    $sftp_status = 'successful';
     # Send success email
-    if ( $email ) {
-        $status_email_message = "OCLC upload was successful";
-    }
+    $sftp_status = 'SUCCESS';
     close $fh;
 } else {
-    $sftp_status = 'failed';
     # Send failure email
-    if ( $email ) {
-        $status_email_message = "OCLC upload failed\nOCLC error: " . $sftp->error;
-    }
+    $sftp_status = 'FAILURE';
 }
 
 # Send email confirming the success or failure of the SFTP
 if ( $email ) {
-    $status_email->text_body($status_email_message);
-    my $smtp_server = Koha::SMTP::Servers->get_default;
-    $email->transport( $smtp_server->transport );
-    try {
-        $email->send_or_die;
-    }
-    catch {
-        carp "Mail not sent: $_";
-    };
+    $status_email =  C4::Letters::GetPreparedLetter (
+        module => 'commandline',
+        letter_code => "SFTP_$sftp_status", #SFTP_SUCCESS, SFTP_FAILURE
+        message_transport_type => 'email',
+        substitute => {
+            sftp_error => $sftp->error
+        }
+    );
+
+    C4::Letters::EnqueueLetter(
+        {
+            letter                  => $status_email,
+            to_address              => $email,
+            from_address            => $admin_address,
+            message_transport_type  => 'email'
+        }
+    ) or warn "can't enqueue letter " . $status_email->{code};
 }
 
 cronlogaction({ action => 'End', info => "COMPLETED" });
