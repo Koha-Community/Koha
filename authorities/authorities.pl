@@ -553,7 +553,7 @@ if ( $op eq 'cud-change-framework' ) {
 
 my $dbh = C4::Context->dbh;
 my $authobj = Koha::Authorities->find($authid);
-if ( defined $authid && !$authid || $authid && !$authobj ) {
+if ( defined $authid && !$authobj ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
     exit;
 }
