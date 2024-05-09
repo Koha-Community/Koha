@@ -54,7 +54,7 @@ my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
 my $category_1 = $builder->build( { source => 'Category' } )->{categorycode};
 
 # Add an item type
-my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
+my $itemtype = $builder->build( { source => 'Itemtype', value => { notforloan => 0 } } )->{itemtype};
 
 t::lib::Mocks::mock_userenv( { branchcode => $branch_1 } );
 
