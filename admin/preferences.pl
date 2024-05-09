@@ -238,7 +238,7 @@ sub TransformPrefsToHTML {
                         if ( $minor % 2 ) {
                             $piece =~ s|__VERSION__|${major}_${minor}|g;
                         } else {
-                            $piece =~ s|__VERSION__|master|g;
+                            $piece =~ s|__VERSION__|main|g;
                         }
                     }
                     push @chunks, { type_text => 1, contents => $piece };
