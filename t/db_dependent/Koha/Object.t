@@ -1001,8 +1001,16 @@ subtest 'store() tests' => sub {
     };
     is( $@, '', 'No error should be raised by ->store if empty strings are passed' );
     is( $itemtype->rentalcharge, undef, 'decimal DEFAULT NULL should default to null');
-    is( $itemtype->notforloan, undef, 'int DEFAULT NULL should default to null');
     is( $itemtype->hideinopac, 0, 'int NOT NULL DEFAULT 0 should default to 0');
+
+    my $currency = eval {
+        Koha::Acquisition::Currency->new(
+            {
+                active        => 'IT4test',
+            }
+        )->store;
+    };
+    is( $currency->active, undef, 'int DEFAULT NULL should default to null');
 
     subtest 'Bad value tests' => sub {
 
