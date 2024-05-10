@@ -50,6 +50,11 @@ __PACKAGE__->table("auth_header");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 heading
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 origincode
 
   data_type: 'varchar'
@@ -97,6 +102,8 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "heading",
+  { data_type => "longtext", is_nullable => 1 },
   "origincode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
@@ -122,8 +129,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("authid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kHEdfMFYFtn3sQ20qsdFyg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gYG6yQ6EC5gVMZHF1h6MJA
 
 sub koha_object_class {
     'Koha::Authority';
