@@ -57,7 +57,9 @@
                     </li>
                     <li>
                         <label for="create_linked_biblio"
-                            >{{ $__("Create linked biblio record") }}:</label
+                            >{{
+                                $__("Create linked bibliographic record")
+                            }}:</label
                         >
                         <input
                             type="checkbox"
