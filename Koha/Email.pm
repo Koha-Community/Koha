@@ -179,8 +179,8 @@ sub create {
     $email->header( 'Message-ID'   => Email::MessageID->new->in_brackets );
 
     # Add Koha message headers to aid later message identification
-    $email->header( 'X-Koha-Template-Id' => $params->{template_id} ) if $params->{template_id};
-    $email->header( 'X-Koha-Message-Id'  => $params->{message_id} )  if $params->{message_id};
+    $email->header( 'X-Koha-Template-ID' => $params->{template_id} ) if $params->{template_id};
+    $email->header( 'X-Koha-Message-ID'  => $params->{message_id} )  if $params->{message_id};
 
     if ( $params->{text_body} ) {
         $email->text_body( $params->{text_body}, %{ $params->{body_params} } );
