@@ -12,8 +12,8 @@
                         )
                     }}
                     <ol>
-                        <li>Column headings row</li>
-                        <li>Title data row</li>
+                        <li>{{ $__("Column headings row") }}</li>
+                        <li>{{ $__("Title data row") }}</li>
                     </ol>
                 </li>
             </ul>
@@ -141,36 +141,41 @@ export default {
                     let message = ""
                     if (success.job_ids) {
                         if (success.job_ids.length > 1) {
-                            message += this.$__(
-                                "<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>Your file was too large to process in one job, the file has been split into %s jobs to meet the maximum size limits.</p>"
-                            ).format(success.job_ids.length)
+                            message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${this.$__(
+                                "Your file was too large to process in one job, the file has been split into %s jobs to meet the maximum size limits."
+                            ).format(success.job_ids.length)}</p>`
                         }
                         success.job_ids.forEach((job, i) => {
-                            message += this.$__(
-                                '<li>Job %s for uploaded file has been queued, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">click here</a> to check its progress.</li>'
-                            ).format(i + 1, job)
+                            message += `<li>${this.$__(
+                                "Job %s for uploaded file has been queued"
+                            ).format(
+                                i + 1,
+                                job
+                            )}, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">${this.$__(
+                                "see progress"
+                            )}</a></li>`
                         })
                         this.setMessage(message, true)
                     }
                     if (success.warnings.invalid_columns) {
-                        message += this.$__(
-                            "<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>Information:</p>"
-                        )
-                        message += this.$__(
-                            "<p>Additional columns were detected in your report, please see the list below:</p>"
-                        )
+                        message += `<p style='font-weight: normal; font-size: medium; margin-top: 1em;'>${this.$__(
+                            "Information:"
+                        )}</p>`
+                        message += `<p>${this.$__(
+                            "Additional columns were detected in your report, please see the list below:"
+                        )}</p>`
                         success.warnings.invalid_columns.forEach(column => {
-                            message += this.$__(`<li>%s</li>`).format(column)
+                            message += `<li>${column}</li>`
                         })
-                        message += this.$__(
-                            "<p style='margin-top: 0.1em;'>The data in these columns will not be imported.</p>"
-                        )
+                        message += `<p style='margin-top: 0.1em;'>${this.$__(
+                            "The data in these columns will not be imported."
+                        )}</p>`
                         this.setMessage(message, true)
                     }
                     if (success.invalid_filetype) {
-                        message += this.$__(
-                            "<p>The file must be in .tsv or .csv format, please convert your file and try again.</p>"
-                        )
+                        message += `<p>${this.$__(
+                            "The file must be in .tsv or .csv format, please convert your file and try again."
+                        )}</p>`
                         setWarning(message)
                     }
                 },

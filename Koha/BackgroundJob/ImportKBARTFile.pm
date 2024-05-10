@@ -85,9 +85,8 @@ sub process {
 
         if ( scalar( @{$rows} ) == 0 ) {
             push @messages, {
-                code          => 'job_failed',
+                code          => 'no_rows',
                 type          => 'error',
-                error_message => 'No valid rows were found in this file. Please check the file formatting.',
             };
             $self->status('failed')->store;
         }
@@ -115,9 +114,8 @@ sub process {
                     my $formatted_title = format_title($new_title);
                     if ( !$formatted_title->{publication_title} ) {
                         push @messages, {
-                            code          => 'title_failed',
+                            code          => 'no_title_found',
                             type          => 'error',
-                            error_message => "No publication_title found for title_id: ",
                             title         => '(Unknown)',
                             title_id      => $formatted_title->{external_id}
                         };

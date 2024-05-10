@@ -28,7 +28,7 @@
                         <td>[% report.failed_imports | html %]</td>
                     </tr>
                 </table>
-                <a href="/cgi-bin/koha/erm/eholdings/local/packages/[% report.package_id | $raw %]">Click here to see the package</a>
+                <a href="/cgi-bin/koha/erm/eholdings/local/packages/[% report.package_id | $raw %]">Package</a>
             [% ELSIF job.status == 'started' %]
                 <p id="jobactionlabel"></p>
             [% END %]
@@ -57,10 +57,12 @@
             [% SWITCH m.code %]
             [% CASE 'title_already_exists' %]
                 <span><strong>[% m.title | html %]</strong> already exists and was not created.</span>
+            [% CASE 'no_title_found' %]
+                <span><strong>Title [% m.title_id | html %]</strong> did not have a publication title and was not imported.</span>
             [% CASE 'title_failed' %]
-                <span><strong>[% m.title | html %]</strong> failed to import - [% m.error_message | html %][% IF m.title_id %][% m.title_id | html %][% END %]</span>
-            [% CASE 'job_failed' %]
-                <span>Job failed - [% m.error_message | html %]</span>
+                <span><strong>Title [% m.title_id | html %]</strong> failed to import with the following error: [% m.error_message | html %]</span>
+            [% CASE 'no_rows' %]
+                <span>No valid rows were found in this file. Please check the file formatting.</span>
             [% END %]
         </div>
     [% END %]
