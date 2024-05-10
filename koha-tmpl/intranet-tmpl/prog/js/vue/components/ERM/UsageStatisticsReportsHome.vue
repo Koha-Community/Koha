@@ -79,9 +79,6 @@ export default {
             vm.getUsageDataProviders()
         })
     },
-    // beforeRouteUpdate(to, from) {
-    //     this.usage_data_provider = this.getUsageDataProviders()
-    // },
     methods: {
         async getUsageDataProviders() {
             const client = APIClient.erm
