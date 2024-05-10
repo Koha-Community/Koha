@@ -268,11 +268,30 @@ sub GetPlugins {
 
 =head2 InstallPlugins
 
-Koha::Plugins::InstallPlugins( [ verbose => 1 ] )
+    my $plugins = Koha::Plugins->new();
+    $plugins->InstallPlugins(
+        {
+          [ verbose => 1,
+            include => ( 'Koha::Plugin::A', ... ),
+            exclude => ( 'Koha::Plugin::X', ... ), ]
+        }
+    );
 
 This method iterates through all plugins physically present on a system.
 For each plugin module found, it will test that the plugin can be loaded,
 and if it can, will store its available methods in the plugin_methods table.
+
+Parameters:
+
+=over 4
+
+=item B<exclude>: A list of class names to exclude from the process.
+
+=item B<include>: A list of class names to limit the process to.
+
+=item B<verbose>: Print useful information.
+
+=back
 
 NOTE: We reload all plugins here as a protective measure in case someone
 has removed a plugin directly from the system without using the UI
