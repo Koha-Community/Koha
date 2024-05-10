@@ -27,7 +27,7 @@ __PACKAGE__->table("borrower_attribute_types");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 10
+  size: 64
 
 unique key used to identify each custom field
 
@@ -149,7 +149,7 @@ defines if the attribute is mandatory or not
 
 __PACKAGE__->add_columns(
   "code",
-  { data_type => "varchar", is_nullable => 0, size => 10 },
+  { data_type => "varchar", is_nullable => 0, size => 64 },
   "description",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "repeatable",
@@ -260,8 +260,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-04-30 13:44:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:axOBPX4uH+bMVocJK04VXw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZmiiXHqRGV2SDb4IgSPvJQ
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },

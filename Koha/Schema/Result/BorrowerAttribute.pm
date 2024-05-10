@@ -44,7 +44,7 @@ foreign key from the borrowers table, defines which patron/borrower has this att
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
-  size: 10
+  size: 64
 
 foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
 
@@ -64,7 +64,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "code",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 64 },
   "attribute",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -114,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:P6K6sqVzIiwOgAAkAjQyiA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TBNaH57NxoyhytT5cXD/WQ
 
 =head2 borrower_attribute_types
 

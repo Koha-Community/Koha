@@ -28,7 +28,7 @@ __PACKAGE__->table("borrower_attribute_types_branches");
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 1
-  size: 10
+  size: 64
 
 =head2 b_branchcode
 
@@ -41,7 +41,7 @@ __PACKAGE__->table("borrower_attribute_types_branches");
 
 __PACKAGE__->add_columns(
   "bat_code",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 64 },
   "b_branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
@@ -89,8 +89,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MA/VDd/K/RTgZ9TLy0K1gw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6bldQj5GKHn+g6WNI/p8FA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
