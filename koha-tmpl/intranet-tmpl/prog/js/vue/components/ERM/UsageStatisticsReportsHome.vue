@@ -114,4 +114,7 @@ export default {
 .rows {
     float: none;
 }
+.toptabs {
+    margin-bottom: 0;
+}
 </style>

@@ -242,4 +242,7 @@ export default {
 .active {
     cursor: pointer;
 }
+.toptabs {
+    margin-bottom: 0;
+}
 </style>
