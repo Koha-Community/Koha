@@ -86,9 +86,15 @@ RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
             my $biblio = Koha::Biblios->find($biblionumber);
             my $record = $biblio->metadata->record;
             C4::MarcModificationTemplates::ModifyRecordWithTemplate( $mmtid, $record );
-            my $frameworkcode    = C4::Biblio::GetFrameworkCode($biblionumber);
-            my $biblioitemnumber = $biblio->biblioitem->biblioitemnumber;
-            C4::Items::AddItemFromMarc( $record, $biblionumber, { biblioitemnumber => $biblioitemnumber } );
+            my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
+
+            if ( marc_record_contains_item_data($record) ) {
+                my ( $can_add_item, $add_item_error_message ) = can_add_item_from_marc_record($record);
+                return $add_item_error_message unless $can_add_item;
+
+                my $biblioitemnumber = $biblio->biblioitem->biblioitemnumber;
+                C4::Items::AddItemFromMarc( $record, $biblionumber, { biblioitemnumber => $biblioitemnumber } );
+            }
 
             C4::Biblio::ModBiblio(
                 $record,
@@ -171,6 +177,61 @@ sub additional_report {
             ]
         ),
     };
+}
+
+=head3 marc_record_contains_item_data
+
+Verify if MARC record contains item data
+
+=cut
+
+sub marc_record_contains_item_data {
+    my ($record) = @_;
+
+    my $itemfield   = C4::Context->preference('marcflavour') eq 'UNIMARC' ? '995' : '952';
+    my @item_fields = $record->field($itemfield);
+    return scalar @item_fields;
+}
+
+=head3 can_add_item_from_marc_record
+
+Checks if adding an item from MARC can be done by checking mandatory fields
+
+=cut
+
+sub can_add_item_from_marc_record {
+    my ($record) = @_;
+
+    # Check that holdingbranch is set
+    my $holdingbranch_mss = Koha::MarcSubfieldStructures->find(
+        {
+            kohafield => 'items.holdingbranch',
+        }
+    );
+    my @holdingbranch_exists =
+        grep { $_->subfield( $holdingbranch_mss->tagsubfield ) } $record->field( $holdingbranch_mss->tagfield );
+    return ( 0, "No holdingbranch subfield found" ) unless ( scalar @holdingbranch_exists );
+
+    # Check that homebranch is set
+    my $homebranch_mss = Koha::MarcSubfieldStructures->find(
+        {
+            kohafield => 'items.homebranch',
+        }
+    );
+    my @homebranch_exists =
+        grep { $_->subfield( $homebranch_mss->tagsubfield ) } $record->field( $homebranch_mss->tagfield );
+    return ( 0, "No homebranch subfield found" ) unless ( scalar @homebranch_exists );
+
+    # Check that itemtype is set
+    my $item_mss = Koha::MarcSubfieldStructures->find(
+        {
+            kohafield => C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype',
+        }
+    );
+    my @itemtype_exists = grep { $_->subfield( $item_mss->tagsubfield ) } $record->field( $item_mss->tagfield );
+    return ( 0, "No itemtype subfield found" ) unless ( scalar @itemtype_exists );
+
+    return 1;
 }
 
 1;
