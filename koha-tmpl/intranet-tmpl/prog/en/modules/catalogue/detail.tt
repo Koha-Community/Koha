@@ -39,14 +39,14 @@
 </head>
 
 [% BLOCK acq_status %]
-    <span title="The status 'Unlinked' means: no linked orders. Cancelled means that all orders are cancelled. Processing implies any active or new order lines. Status 'Acquired' implies any completely received lines (with remaining lines cancelled)."><b>
+    <span title="The status 'Unlinked' means: no linked orders. Cancelled means that all orders are cancelled. Processing implies any active or new order lines. Status 'acquired' implies any completely received lines (with remaining lines cancelled).">
     [% SWITCH myvar %]
-        [% CASE 'unlinked'   %]Unlinked
-        [% CASE 'acquired'   %]Acquired
-        [% CASE 'processing' %]Processing
-        [% CASE 'cancelled'  %]Cancelled
+        [% CASE 'unlinked'   %]<b>Unlinked</b>
+        [% CASE 'acquired'   %]<b>Acquired</b>
+        [% CASE 'processing' %]<b>Processing</b>
+        [% CASE 'cancelled'  %]<b>Cancelled</b>
     [% END %]
-    </b></span>
+    </span>
 [% END %]
 
 <body id="catalog_detail" class="catalog">
@@ -493,7 +493,7 @@
 
 [% IF Koha.Preference('AcquisitionDetails') %]
 <div role="tabpanel" class="tab-pane" id="acq_details">
-    <p>This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
+    <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
     </p>
   [% IF orders.count %]
     <table id="orders">
