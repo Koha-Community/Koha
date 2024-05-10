@@ -999,7 +999,7 @@ subtest '->orders, ->uncancelled_orders and ->acq_status tests' => sub {
     is( $biblio->acq_status, 'processing', 'Still processing for presence of new lines' );
     $orders->filter_out_cancelled->update( { orderstatus => 'complete' } );
     is( $biblio->acq_status, 'acquired', 'Acquired: some complete, rest cancelled' );
-    $orders->cancel;
+    $orders->update( { orderstatus => 'cancelled', datecancellationprinted => dt_from_string() } );
     is( $biblio->acq_status, 'cancelled', 'Cancelled for only cancelled lines' );
 
     $schema->storage->txn_rollback;
