@@ -159,7 +159,7 @@ sub add_form {
 
     my $message_transport_types = GetMessageTransportTypes();
     my $templates = { map { $_ => { message_transport_type => $_ } } sort @$message_transport_types };
-    my %letters = ( default => { templates => $templates } );
+    my %letters = ( default => { templates => {%$templates} } );
 
     my $translated_languages = C4::Languages::getTranslatedLanguages(
         'opac',
@@ -189,19 +189,20 @@ sub add_form {
     $template->param( default_language => $default_language );
     if ($letters) {
         $template->param(
-            modify     => 1,
-            code       => $code,
+            modify => 1,
+            code   => $code,
         );
         my $first_flag_name = 1;
         my $lang;
 
         # The letter name is contained into each mtt row.
         # So we can only sent the first one to the template.
-        for my $letter ( @$letters ) {
+        for my $letter (@$letters) {
+
             # The letter_name
             if ( $first_flag_name and $letter->{name} ) {
                 $template->param(
-                    letter_name=> $letter->{name},
+                    letter_name => $letter->{name},
                 );
                 $first_flag_name = 0;
             }
@@ -217,23 +218,31 @@ sub add_form {
             };
 
             my $lang = $letter->{lang};
-            my $mtt = $letter->{message_transport_type};
-            $letters{ $lang }{templates}{$mtt} = {
+            my $mtt  = $letter->{message_transport_type};
+            $letters{$lang}{templates}{$mtt} = {
                 message_transport_type => $letter->{message_transport_type},
-                is_html    => $letter->{is_html},
-                updated_on => $letter->{updated_on},
-                title      => $letter->{title},
-                content    => $letter->{content} // '',
-                tt_error   => $letter->{tt_error},
+                is_html                => $letter->{is_html},
+                updated_on             => $letter->{updated_on},
+                title                  => $letter->{title},
+                content                => $letter->{content} // '',
+                tt_error               => $letter->{tt_error},
             };
-            $letters{ $lang }{params} = $letter;
-
-            my $object = Koha::Notice::Templates->find( { id => $letter->{id} } );
-            $letters{ $lang }{templates}{$mtt}{sample} = $object->get_default;
-            $letters{ $lang }{templates}{$mtt}{id} = $letter->{id};
+            $letters{$lang}{params} = $letter;
         }
-    }
-    else {
+
+        # Fetch sample notices
+        for my $lang_key ( keys %letters ) {
+            for my $mtt_key ( keys %{ $letters{$lang_key}{templates} } ) {
+                my $object = Koha::Notice::Template->new(
+                    { module => $module, code => $code, message_transport_type => $mtt_key, lang => $lang_key } );
+                my $sample   = $object->get_default;
+                my $template = { %{ $letters{$lang_key}{templates}{$mtt_key} } };
+                $template->{sample} = $sample;
+                $template->{id}     = lc( "$module" . "_" . $code . "_" . $mtt_key . "_" . $lang_key );
+                $letters{$lang_key}{templates}{$mtt_key} = $template;
+            }
+        }
+    } else {
         $template->param( adding => 1 );
     }
 
