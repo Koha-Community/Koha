@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Array::Utils qw( array_minus );
 use Class::Inspector;
-use List::MoreUtils           qw( any );
+use List::MoreUtils           qw( any none );
 use Module::Load::Conditional qw( can_load );
 use Module::Load;
 use Module::Pluggable search_path => ['Koha::Plugin'],
@@ -33,6 +33,7 @@ use C4::Context;
 use C4::Output;
 
 use Koha::Cache::Memory::Lite;
+use Koha::Exceptions;
 use Koha::Exceptions::Plugin;
 use Koha::Plugins::Datas;
 use Koha::Plugins::Methods;
@@ -303,45 +304,42 @@ sub InstallPlugins {
     my $verbose = $params->{verbose} // $self->_verbose;
 
     my @plugin_classes = $self->plugins();
-    my ( @plugins, @classes_filters );
+    my @plugins;
 
-    my $has_filters = defined( $params->{include} ) || defined( $params->{exclude} );
+    Koha::Exceptions::BadParameter->throw("Only one of 'include' and 'exclude' can be passed")
+        if ( $params->{exclude} && $params->{include} );
 
-    # Warn user if the specified classes doesn't exist and return nothing
-    if ($has_filters) {
-        @classes_filters = defined( $params->{include} ) ? @{ $params->{include} } : @{ $params->{exclude} };
+    if ( defined( $params->{include} ) || defined( $params->{exclude} ) ) {
+        my @classes_filters =
+            defined( $params->{include} )
+            ? @{ $params->{include} }
+            : @{ $params->{exclude} };
 
-        foreach my $classes_filter (@classes_filters) {
-            my $is_found = 0;
-
-            foreach my $plugin_class (@plugin_classes) {
-                $is_found = 1
-                    if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$"
-                    || ( $classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$" );
-            }
-            unless ($is_found) {
-                warn "$classes_filter have not been found, try a different name";
+        # Warn user if the specified classes doesn't exist and return nothing
+        foreach my $class_name (@classes_filters) {
+            unless ( any { $class_name eq $_ } @plugin_classes ) {
+                warn "$class_name has not been found, try a different name";
                 return;
             }
+        }
+
+        # filter things
+        if ( $params->{include} ) {
+            @plugin_classes = grep {
+                my $plugin_class = $_;
+                any { $plugin_class eq $_ } @classes_filters
+            } @plugin_classes;
+        } else {    # exclude
+            @plugin_classes = grep {
+                my $plugin_class = $_;
+                none { $plugin_class eq $_ } @classes_filters
+            } @plugin_classes;
         }
     }
 
     foreach my $plugin_class (@plugin_classes) {
         if ( can_load( modules => { $plugin_class => undef }, verbose => $verbose, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
-
-            # Apply the filters
-            if ($has_filters) {
-                my $is_found = 0;
-                foreach my $classes_filter (@classes_filters) {
-                    $is_found = 1
-                        if $plugin_class =~ ":$classes_filter\$|^$classes_filter\$"
-                        || ( $classes_filter =~ "^::" && $plugin_class =~ "$classes_filter\$" );
-                }
-                next
-                    if ( defined( $params->{include} ) && !$is_found )
-                    || ( defined( $params->{exclude} ) && $is_found );
-            }
 
             my $plugin;
             my $failed_instantiation;
