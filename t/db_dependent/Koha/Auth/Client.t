@@ -39,7 +39,8 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'get_user() tests' => sub {
-    plan tests => 5;
+
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
