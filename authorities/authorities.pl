@@ -548,7 +548,7 @@ my $changed_authtype = $input->param('changed_authtype') // q{};
 
 my $dbh = C4::Context->dbh;
 my $authobj = Koha::Authorities->find($authid);
-if ( defined $authid && !$authobj ) {
+if ( $authid && !$authobj ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
     exit;
 }
