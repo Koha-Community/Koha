@@ -335,7 +335,7 @@ subtest 'Encoding in session variables' => sub {
             $s->auth;
             # Switch to the new library
             $driver->get( $base_url . 'circ/set-library.pl' );
-            $s->fill_form( { branch => $branchname } );
+            $s->fill_form( { 'set-library-branch' => $branchname } );
             $s->submit_form;
             # Check an item out
             $driver->get( $base_url
