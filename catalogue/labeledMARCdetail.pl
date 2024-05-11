@@ -56,8 +56,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
-my $record = $biblio_object->metadata->record;
-if ( not defined $record ) {
+unless ($biblio_object) {
     # biblionumber invalid -> report and exit
     $template->param( unknownbiblionumber => 1,
                 biblionumber => $biblionumber
@@ -66,6 +65,7 @@ if ( not defined $record ) {
     exit;
 }
 
+my $record = $biblio_object->metadata->record;
 my $tagslib = GetMarcStructure(1,$frameworkcode);
 my $biblio = GetBiblioData($biblionumber);
 
