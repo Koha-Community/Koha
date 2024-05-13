@@ -401,8 +401,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         [
             {
                 'type'          => 'error',
-                'error_message' => 'No publication_title found for title_id: ',
-                'code'          => 'title_failed',
+                'code'          => 'no_title_found',
                 'title_id'      => '12345',
                 'title'         => '(Unknown)'
             },
