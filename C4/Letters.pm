@@ -1896,6 +1896,7 @@ sub _get_tt_params {
         },
     };
 
+    my $dbh = C4::Context->dbh;
     foreach my $table ( keys %$tables ) {
         next unless $config->{$table};
 
@@ -1916,12 +1917,19 @@ sub _get_tt_params {
                 my $objects = $module->search(
                     { $key => $values },
                     {
-                            # We want to retrieve the data in the same order
-                            # FIXME MySQLism
-                            # field is a MySQLism, but they are no other way to do it
-                            # To be generic we could do it in perl, but we will need to fetch
-                            # all the data then order them
-                        @$values ? ( order_by => \[ "field($key, " . join( ', ', @$values ) . ")" ] ) : ()
+                        # We want to retrieve the data in the same order
+                        # FIXME MySQLism
+                        # field is a MySQLism, but they are no other way to do it
+                        # To be generic we could do it in perl, but we will need to fetch
+                        # all the data then order them
+                        @$values
+                        ? (
+                            order_by => \[
+                                sprintf "field(%s, %s)", $key,
+                                join(',', map { $dbh->quote($_) } @$values )
+                            ]
+                            )
+                        : ()
                     }
                 );
                 $params->{ $config->{$table}->{plural} } = $objects;
