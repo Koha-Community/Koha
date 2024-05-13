@@ -486,6 +486,17 @@ sub add_debit {
     my $item_id          = $params->{item_id};
     my $issue_id         = $params->{issue_id};
 
+    my $old_issue_id;
+    if ( $issue_id ) {
+        my $issue = Koha::Checkouts->find($issue_id);
+        unless ( $issue ) {
+            my $old_issue = Koha::Old::Checkouts->find($issue_id);
+            $issue_id = undef;
+            $old_issue_id = $old_issue->id;
+        }
+    }
+
+
     my $line;
     my $schema = Koha::Database->new->schema;
     try {
@@ -506,9 +517,18 @@ sub add_debit {
                         manager_id        => $user_id,
                         interface         => $interface,
                         itemnumber        => $item_id,
-                        issue_id          => $issue_id,
-                        branchcode        => $library_id,
-                        register_id       => $cash_register,
+                        (
+                            $issue_id
+                            ? ( issue_id => $issue_id )
+                            : ()
+                        ),
+                        (
+                            $old_issue_id
+                            ? ( old_issue_id => $old_issue_id )
+                            : ()
+                        ),
+                        branchcode  => $library_id,
+                        register_id => $cash_register,
                         (
                             $debit_type eq 'OVERDUE'
                             ? ( status => 'UNRETURNED' )
