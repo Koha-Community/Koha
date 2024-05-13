@@ -105,6 +105,7 @@ $(document).ready(function() {
                 data: {
                     tag: $(event.target).attr("title"),
                     op: 'cud-approve',
+                    csrf_token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: count_approve // success_approve
             }));
@@ -127,6 +128,7 @@ $(document).ready(function() {
                 data: {
                     tag: $(event.target).attr("title"),
                     op: 'cud-reject',
+                    csrf_token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: count_reject // success_reject
             }));
