@@ -73,9 +73,10 @@ if ( $email_add ) {
     foreach my $biblionumber (@bibs) {
         $template2->param( biblionumber => $biblionumber );
 
-        my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
-        my $dat              = $biblio->unblessed;
-        my $record = $biblio->metadata->record(
+        $biblionumber = int($biblionumber);
+        my $biblio    = Koha::Biblios->find( $biblionumber ) or next;
+        my $dat       = $biblio->unblessed;
+        my $record    = $biblio->metadata->record(
             {
                 embed_items => 1,
                 opac        => 1,
