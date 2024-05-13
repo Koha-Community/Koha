@@ -52,6 +52,7 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
     my @bibs = split( /\//, $bib_list );
     my $iso2709;
     foreach my $bib (@bibs) {
+        $bib = int($bib);
         my $biblio = Koha::Biblios->find($bib) or next;
         $iso2709 .= $biblio->metadata->record->as_usmarc();
     }
