@@ -70,13 +70,13 @@ subtest 'Compare sysprefs.sql with YAML files' => sub {
     my @missing_yaml = array_minus( @sysprefs_mod, @yaml_mod );
     is( scalar @missing_yaml, 0, "No system preference entries missing from sysprefs.sql" );
     if ( scalar @missing_yaml > 0 ) {
-        print "System preferences missing from YAML:\n  * " . join( "\n  * ", @missing_yaml ) . "\n";
+        diag "System preferences missing from YAML:\n  * " . join( "\n  * ", @missing_yaml ) . "\n";
     }
 
     my @missing_sysprefs = array_minus( @yaml_mod, @sysprefs_mod );
     is( scalar @missing_sysprefs, 0, "No system preference entries missing from YAML files" );
     if ( scalar @missing_sysprefs > 0 ) {
-        print "System preferences missing from sysprefs.sql:\n  * " . join( "\n  * ", @missing_sysprefs ) . "\n";
+        diag "System preferences missing from sysprefs.sql:\n  * " . join( "\n  * ", @missing_sysprefs ) . "\n";
     }
 };
 
