@@ -43,14 +43,18 @@ use Koha::Token;
 
 Called by Mojolicious when the plugin is loaded.
 
-Defines an `around_action` hook that will return a 403 response if CSRF token
-is missing or invalid.
+Defines an `around_action` hook that will prevent CSRF attacks.
 
-This verification occurs only for HTTP methods POST, PUT, DELETE and PATCH.
+If the HTTP request method is safe (GET, HEAD, OPTIONS, TRACE) and the request
+contains an `op` parameter whose value starts with "cud-" (which means it's a
+Create, Update or Delete operation), it will immediately return a 400 response.
 
-If CGISESSID cookie is missing, it means that we are not authenticated or we
-are authenticated to the API by another method (HTTP basic or OAuth2). In this
-case, no verification is done.
+If the HTTP request method is unsafe (POST, PUT, DELETE, PATCH, CONNECT) and
+the CGISESSID cookie is set, the CSRF token is checked. A 403 response is
+immediately returned if the CSRF token is missing or invalid.
+If the CGISESSID cookie is missing, it means that we are not authenticated or
+we are authenticated to the API by another method (HTTP basic or OAuth2). In
+this case, no verification is done.
 
 =cut
 
@@ -65,7 +69,7 @@ sub register {
             if ( $method eq 'GET' || $method eq 'HEAD' || $method eq 'OPTIONS' || $method eq 'TRACE' ) {
                 my $op = $c->req->param('op');
                 if ( $op && $op =~ /^cud-/ ) {
-                    return $c->reply->exception('Wrong HTTP method')->rendered(400);
+                    return $c->reply->exception('Incorrect use of a safe HTTP method with a "cud-" op parameter')->rendered(400);
                 }
             } else {
                 if ( $c->cookie('CGISESSID') && !$self->is_csrf_valid( $c->req ) ) {

@@ -44,7 +44,7 @@ subtest 'CSRF - Intranet' => sub {
         plan tests => 3;
 
         $t->get_ok('/cgi-bin/koha/mainpage.pl?op=cud-login')->status_is(400)
-            ->content_like( qr/Wrong HTTP method/, 'Body contains "Wrong HTTP method"' );
+            ->content_like( qr/Incorrect use of a safe HTTP method with a/, 'Body contains correct error message' );
     }
 };
 
@@ -85,6 +85,6 @@ subtest 'CSRF - OPAC' => sub {
         plan tests => 3;
 
         $t->get_ok('/cgi-bin/koha/opac-user.pl?op=cud-login')->status_is(400)
-            ->content_like( qr/Wrong HTTP method/, 'Body contains "Wrong HTTP method"' );
+            ->content_like( qr/Incorrect use of a safe HTTP method with a/, 'Body contains correct error message' );
     }
 };
