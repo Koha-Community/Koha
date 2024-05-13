@@ -1,7 +1,7 @@
 [% FOREACH info IN information %]
     [% SWITCH info_type %]
     [% CASE 'identifiers' %]
-        <li>
+        <li class="identifier_[% info.source.lower | html %]">
         [% SWITCH info.source.lower %]
             [% CASE 'orcid' %]
                 <span>ORCID: </span>
