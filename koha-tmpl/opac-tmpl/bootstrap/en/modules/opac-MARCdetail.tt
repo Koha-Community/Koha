@@ -169,8 +169,15 @@
     </div>  <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
+[% IF Koha.Preference('OpacCatalogConcerns') %]
+    [% INCLUDE 'modals/catalog_concern.inc' %]
+[% END %]
+
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
+[% IF Koha.Preference('OpacCatalogConcerns') %]
+    [% Asset.js("js/modals/catalog_concern.js") | $raw %]
+[% END %]
 <script>
     $(document).ready(function(){
         var loaded = 0;
