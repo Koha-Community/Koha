@@ -8,7 +8,9 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # Do you stuffs here
-        $dbh->do(q{UPDATE `systempreferences` SET `explanation` = 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window, Do nothing, or Clear the screen.' WHERE `variable` = 'CircAutoPrintQuickSlip'});
+        $dbh->do(
+            q{UPDATE `systempreferences` SET `explanation` = 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window, Do nothing, or Clear the screen.' WHERE `variable` = 'CircAutoPrintQuickSlip'}
+        );
 
         say $out "Updated system preference 'CircAutoPrintQuickSlip'";
     },
