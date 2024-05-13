@@ -191,6 +191,7 @@ $template->param(
     ReservableItems => $can_holds_be_placed,
     ISBD            => $res,
     biblio          => $biblio,
+    borrowernumber  => $loggedinuser,
 );
 
 #Search for title in links

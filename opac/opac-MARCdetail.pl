@@ -382,6 +382,7 @@ $template->param(
     item_subfield_codes => \@item_subfield_codes,
     biblio              => $biblio,
     norequests          => $norequests,
+    borrowernumber      => $loggedinuser,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
