@@ -222,21 +222,41 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/register_selection.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script id="js">
+    [% INCLUDE 'calendar.inc' %]
+    <script>
+        actTotal = "";
         $(document).ready(function() {
             $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "pageLength": 50,
                 "pagingType": "full_numbers"
             }));
-        });
-    </script>
-    [% INCLUDE 'calendar.inc' %]
-    <script>
-        actTotal = "";
 
-        $(document).ready(function() {
+            $("#branch").on("change", function() {
+                var selectedBranch = $("#branch").children(
+                    "option:selected").val();
+
+                $("#registerid").children().each(function() {
+                    // default to no-register
+                    if ($(this).is("#noregister")) {
+                        $(this).prop("selected", true)
+                    }
+                    // display branch registers
+                    else if ($(this).hasClass(selectedBranch)) {
+                        $(this).prop("disabled", false);
+                        $(this).show();
+                        // default to branch default if there is one
+                        if ($(this).hasClass("default")) {
+                            $(this).prop("selected", true)
+                        }
+                    }
+                    // hide non-branch registers
+                    else {
+                        $(this).hide();
+                        $(this).prop("disabled", true);
+                    }
+                });
+            });
 
             $('#frmCashRegister').submit(function() {
                 var isFormValid = true;
