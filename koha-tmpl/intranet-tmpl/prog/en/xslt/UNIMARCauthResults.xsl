@@ -66,10 +66,7 @@
   <!-- ****************** Authority display *************** -->
   <xsl:template match="marc:record">
     <xsl:variable name="authid" select="marc:controlfield[@tag='001']"/>
-    <xsl:element name="div">
-      <xsl:attribute name="class">
-        <xsl:text>authority-summary</xsl:text>
-      </xsl:attribute>
+    <div class="authority-summary">
       <!-- *********** Personal Name 200 ********* -->
       <xsl:if test="marc:datafield[@tag='200']">
         <ul>
@@ -537,8 +534,7 @@
         </ul>
       </xsl:if>
       <!-- *** End Subject **-->
-      <!-- end div class authority-summary-->
-    </xsl:element>
+    </div> <!-- /div.authority-summary -->
     <!-- end template -->
   </xsl:template>
 </xsl:stylesheet>
