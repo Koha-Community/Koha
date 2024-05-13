@@ -643,6 +643,10 @@ subtest 'UNIMARC' => sub {
     # Mock the auth type data for UNIMARC
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
 
+    $dbh->do(
+        "UPDATE marc_subfield_structure SET tagfield = '106' WHERE authtypecode = 'PERSO_NAME' AND frameworkcode='' AND tagfield='100' "
+    ) or die $dbh->errstr;
+
     run_tests('UNIMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;

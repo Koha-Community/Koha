@@ -252,16 +252,30 @@ subtest 'put() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $patron->userid;
 
-    my $authority = $builder->build_object({ 'class' => 'Koha::Authorities', value => {
-      marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
+    my $authority_type = $builder->build_object(
+        {
+            'class' => 'Koha::Authority::Types',
+            value   => {
+                auth_tag_to_report => '110',
+            }
+        }
+    );
+    my $authority = $builder->build_object(
+        {
+            'class' => 'Koha::Authorities',
+            value   => {
+                marcxml => q|<?xml version="1.0" encoding="UTF-8"?>
 <record xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/MARC21/slim" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
     <controlfield tag="001">1001</controlfield>
     <datafield tag="110" ind1=" " ind2=" ">
         <subfield code="9">102</subfield>
         <subfield code="a">My Corporation</subfield>
     </datafield>
-</record>|
-    } });
+</record>|,
+                authtypecode => $authority_type->authtypecode,
+            }
+        }
+    );
 
     my $authid       = $authority->id;
     my $authtypecode = $authority->authtypecode;

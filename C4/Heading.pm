@@ -66,6 +66,7 @@ sub new_from_field {
     my $marcflavour   = C4::Context->preference('marcflavour');
     my $marc_handler = _marc_format_handler($marcflavour);
 
+    return unless $field;
     my $tag = $field->tag();
     return unless $marc_handler->valid_heading_tag( $tag, $frameworkcode, $auth );
     my $self = {};

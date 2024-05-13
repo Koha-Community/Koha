@@ -687,6 +687,8 @@ sub AddAuthority {
     } else {
         $action    = 'modify';
         $authority = Koha::Authorities->find($authid);
+        $authority->authtypecode($authtypecode);
+        # In the case we are changing type we need to set this to ensure heading field is correctly chosen
     }
 
     # Insert/update the recordID in MARC record
@@ -701,7 +703,7 @@ sub AddAuthority {
             authtypecode => $authtypecode,
             marc         => $record->as_usmarc,
             marcxml      => $record->as_xml_record($format),
-            heading      => $heading->display_form,
+            heading      => $heading ? $heading->display_form : '',
         }
     );
 

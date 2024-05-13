@@ -53,11 +53,15 @@ subtest 'after_authority_action hook' => sub {
     my $plugin = Koha::Plugin::Test->new->enable;
     my $id;
 
-    warnings_exist { ( $id ) = C4::AuthoritiesMarc::AddAuthority( MARC::Record->new, undef, 'PERSO_NAME' ); }
+    my $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    my $type = $builder->build( { source => 'AuthType', value => { auth_tag_to_report => '100' } } );
+
+    warnings_exist { ( $id ) = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} ); }
             qr/after_authority_action called with action: create, id: \d+/,
             'AddAuthority calls the hook with action=create, id passed';
 
-    warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, MARC::Record->new, 'PERSO_NAME', { skip_merge => 1 } ); }
+    warnings_exist { C4::AuthoritiesMarc::ModAuthority( $id, $record, $type->{authtypecode}, { skip_merge => 1 } ); }
             qr/after_authority_action called with action: modify, id: $id/,
             'ModAuthority calls the hook with action=modify, id passed';
 

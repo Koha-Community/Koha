@@ -33,6 +33,14 @@ t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour ) if $marcflavour;
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
+my $heading_module = Test::MockModule->new('C4::Heading::MARC21');
+$heading_module->mock(
+    'valid_heading_tag',
+    sub {
+        return 1;
+    }
+);
+
 # Global variables, mocking and framework modifications
 our @linkedrecords;
 my $mocks = set_mocks();
@@ -183,7 +191,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     my $authid1 = AddAuthority( $auth1, undef, $authtype1 );
     my $auth2 = MARC::Record->new;
     $auth2->append_fields( MARC::Field->new( '112', '0', '0', 'a' => 'Batman', c => 'cc' ));
-    my $authid2 = AddAuthority($auth1, undef, $authtype2 );
+    my $authid2 = AddAuthority($auth2, undef, $authtype2 );
 
     # create a biblio with one 109 and two 609s to be touched
     # seems exceptional see bug 13760 comment10

@@ -187,6 +187,12 @@ unimarc,*,ind1:auth2,ind2:auth1|);
     $record = MARC::Record->new;
     $record->append_fields( MARC::Field->new( '210', '1', '2', a => 'Name' ) );
     $type = $builder->build({ source => 'AuthType', value => { auth_tag_to_report => '210'} });
+    my $dbh = C4::Context->dbh;
+    $dbh->do(
+        "INSERT INTO marc_subfield_structure (tagfield,authtypecode,frameworkcode) VALUES ('210',?,'')", undef,
+        $type->{authtypecode}
+    ) or die $dbh->errstr;
+
     $authid = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} );
     $auth = Koha::Authorities->find( $authid );
     is( $auth->controlled_indicators({ biblio_tag => '345' })->{ind1}, '2', 'UNIMARC: Swapped ind2' );
