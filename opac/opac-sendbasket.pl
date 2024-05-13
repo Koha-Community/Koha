@@ -77,6 +77,7 @@ if ( $email_add ) {
     foreach my $biblionumber (@bibs) {
         $template2->param( biblionumber => $biblionumber );
 
+        $biblionumber = int($biblionumber);
         my $biblio           = Koha::Biblios->find( $biblionumber ) or next;
         my $dat              = $biblio->unblessed;
         my $record           = GetMarcBiblio({
