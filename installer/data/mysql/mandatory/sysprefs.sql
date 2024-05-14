@@ -693,6 +693,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SCOLoadCheckoutsByDefault','1','','If enabled, load the list of a patrons checkouts when they log in to the Self Checkout','YesNo'),
 ('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
 ('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
+('SearchCancelledAndInvalidISBNandISSN','0',NULL,'Enable search for cancelled or invalid forms of ISBN/ISSN when performing ISBN/ISSN search (when using ES)','YesNo'),
 ('SearchEngine','Zebra','Elasticsearch|Zebra','Search Engine','Choice'),
 ('SearchLimitLibrary', 'homebranch', 'homebranch|holdingbranch|both', "When limiting search results with a library or library group, use the item's home library, or holding library, or both.", 'Choice'),
 ('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),

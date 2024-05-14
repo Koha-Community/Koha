@@ -107,6 +107,13 @@ Searching:
             - pref: ESPreventAutoTruncate
               class: long
         -
+            - pref: SearchCancelledAndInvalidISBNandISSN
+              default: 0
+              choices:
+                  1: Do
+                  0: "Don't"
+            - "search for cancelled or invalid forms of ISBN/ISSN when performing ISBN/ISSN search (when using Elasticsearch)."
+        -
             - pref: z3950Status
               type: textarea
               syntax: text/x-yaml
