@@ -14,9 +14,16 @@ function RefreshIssuesTable() {
         return this.value;
     }).get();
     table.ajax.reload( function() {
-        CheckRenewCheckinBoxes();
         var checkout_count = table.page.info().recordsTotal;
         $('.checkout_count').text(checkout_count);
+        renewchecked.forEach( function(item) {
+            $('.renew[value="'+item+'"]').prop('checked' , true );
+        });
+
+        checkinchecked.forEach( function(item) {
+            $('.checkin[value="'+item+'"]').prop('checked' , true );
+        });
+        CheckRenewCheckinBoxes();
     });
 }
 
