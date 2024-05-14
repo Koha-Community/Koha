@@ -4803,11 +4803,22 @@ div .suggestion_note {
 
 #circ_request {
     fieldset {
+        position: relative;
         &.disabled {
             pointer-events: none;
         }
         &.rows:has(fieldset.enabled) {
             border: 1px solid #408540;
+
+            &::before {
+                font-family: 'Font Awesome 6 Free';
+                content: "\f058";
+                color: #408540;
+                position: absolute;
+                top: -14px;
+                left: -18px;
+                font-size: 22px;
+            }
         }
     }
 
