@@ -462,7 +462,7 @@
                 <ol>
                     [% FOREACH field IN catalog_details %]
                         <li class="subfield_line">
-                            <label>[% field.lib | html %] ([% field.tag | html %][% field.subfield | html %])</label>
+                            <label>[% field.marc_lib | html %] ([% field.tag | html %][% field.subfield | html %])</label>
                             [% field.value | html %]
                         </li>
                     [% END %]
