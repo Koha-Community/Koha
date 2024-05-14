@@ -356,15 +356,15 @@
                         [% ELSE %]
                             <option value="hold"> Placing a hold on an item </option>
                         [% END %]
-                        [% IF category and category.BlockExpiredPatronOpacActions_contains('renew') %]
-                            <option value="renew" selected="selected"> Renewing an item </option>
-                        [% ELSE %]
-                            <option value="renew"> Renewing an item </option>
-                        [% END %]
                         [% IF category and category.BlockExpiredPatronOpacActions_contains('ill_request') %]
                             <option value="ill_request" selected="selected"> Placing an ILL request </option>
                         [% ELSE %]
                             <option value="ill_request"> Placing an ILL request </option>
+                        [% END %]
+                        [% IF category and category.BlockExpiredPatronOpacActions_contains('renew') %]
+                            <option value="renew" selected="selected"> Renewing an item </option>
+                        [% ELSE %]
+                            <option value="renew"> Renewing an item </option>
                         [% END %]
                         </optgroup>
                     </select>
