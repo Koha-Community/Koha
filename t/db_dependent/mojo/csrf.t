@@ -8,7 +8,7 @@ use Test::Mojo;
 use Koha::Database;
 
 subtest 'CSRF - Intranet' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $t = Test::Mojo->new('Koha::App::Intranet');
 
@@ -44,12 +44,19 @@ subtest 'CSRF - Intranet' => sub {
         plan tests => 3;
 
         $t->get_ok('/cgi-bin/koha/mainpage.pl?op=cud-login')->status_is(400)
-            ->content_like( qr/Incorrect use of a safe HTTP method with a/, 'Body contains correct error message' );
-    }
+            ->content_like( qr/Incorrect use of a safe HTTP method with an `op` parameter that starts with &quot;cud-&quot;/, 'Body contains correct error message' );
+    };
+
+    subtest 'POSTing what should be GET should fail' => sub {
+        plan tests => 3;
+
+        $t->post_ok('/cgi-bin/koha/mainpage.pl?op=login')->status_is(400)
+            ->content_like( qr/Incorrect use of an unsafe HTTP method with an `op` parameter that does not start with &quot;cud-&quot;/, 'Body contains correct error message' );
+    };
 };
 
 subtest 'CSRF - OPAC' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my $t = Test::Mojo->new('Koha::App::Opac');
 
@@ -85,6 +92,13 @@ subtest 'CSRF - OPAC' => sub {
         plan tests => 3;
 
         $t->get_ok('/cgi-bin/koha/opac-user.pl?op=cud-login')->status_is(400)
-            ->content_like( qr/Incorrect use of a safe HTTP method with a/, 'Body contains correct error message' );
-    }
+            ->content_like( qr/Incorrect use of a safe HTTP method with an `op` parameter that starts with &quot;cud-&quot;/, 'Body contains correct error message' );
+    };
+
+    subtest 'POSTing what should be GET should fail' => sub {
+        plan tests => 3;
+
+        $t->post_ok('/cgi-bin/koha/opac-user.pl?op=login')->status_is(400)
+            ->content_like( qr/Incorrect use of an unsafe HTTP method with an `op` parameter that does not start with &quot;cud-&quot;/, 'Body contains correct error message' );
+    };
 };

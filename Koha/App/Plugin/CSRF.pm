@@ -50,6 +50,10 @@ contains an `op` parameter whose value starts with "cud-" (which means it's a
 Create, Update or Delete operation), it will immediately return a 400 response.
 
 If the HTTP request method is unsafe (POST, PUT, DELETE, PATCH, CONNECT) and
+the request contains an `op` parameter whose value does not start with "cud-",
+it will immediately return a 400 response.
+
+If the HTTP request method is unsafe (POST, PUT, DELETE, PATCH, CONNECT) and
 the CGISESSID cookie is set, the CSRF token is checked. A 403 response is
 immediately returned if the CSRF token is missing or invalid.
 If the CGISESSID cookie is missing, it means that we are not authenticated or
@@ -69,9 +73,14 @@ sub register {
             if ( $method eq 'GET' || $method eq 'HEAD' || $method eq 'OPTIONS' || $method eq 'TRACE' ) {
                 my $op = $c->req->param('op');
                 if ( $op && $op =~ /^cud-/ ) {
-                    return $c->reply->exception('Incorrect use of a safe HTTP method with a "cud-" op parameter')->rendered(400);
+                    return $c->reply->exception('Incorrect use of a safe HTTP method with an `op` parameter that starts with "cud-"')->rendered(400);
                 }
             } else {
+                my $op = $c->req->param('op');
+                if ( $op && $op !~ /^cud-/ ) {
+                    return $c->reply->exception('Incorrect use of an unsafe HTTP method with an `op` parameter that does not start with "cud-"')->rendered(400);
+                }
+
                 if ( $c->cookie('CGISESSID') && !$self->is_csrf_valid( $c->req ) ) {
                     return $c->reply->exception('Wrong CSRF token')->rendered(403);
                 }
