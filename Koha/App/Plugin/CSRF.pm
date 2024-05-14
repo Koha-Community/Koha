@@ -75,12 +75,16 @@ sub register {
             if ( $method eq 'GET' || $method eq 'HEAD' || $method eq 'OPTIONS' || $method eq 'TRACE' ) {
                 my $op = $c->req->param('op');
                 if ( $op && $op =~ /^cud-/ ) {
-                    return $c->reply->exception('Incorrect use of a safe HTTP method with an `op` parameter that starts with "cud-"')->rendered(400);
+                    return $c->reply->exception(
+                        'Incorrect use of a safe HTTP method with an `op` parameter that starts with "cud-"')
+                        ->rendered(400);
                 }
             } else {
                 my $op = $c->req->param('op');
                 if ( $op && $op !~ /^cud-/ ) {
-                    return $c->reply->exception('Incorrect use of an unsafe HTTP method with an `op` parameter that does not start with "cud-"')->rendered(400);
+                    return $c->reply->exception(
+                        'Incorrect use of an unsafe HTTP method with an `op` parameter that does not start with "cud-"')
+                        ->rendered(400);
                 }
 
                 if ( $c->cookie('CGISESSID') && !$self->is_csrf_valid( $c->req ) ) {
