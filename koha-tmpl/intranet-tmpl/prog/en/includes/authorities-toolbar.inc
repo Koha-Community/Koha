@@ -1,6 +1,6 @@
 [% IF ( authid || CAN_user_editauthorities) %]
 
-    <div id="toolbar" class="btn-toolbar">
+    <div id="toolbar" class="btn-toolbar sticky">
         [% IF ( CAN_user_editauthorities ) %]
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
