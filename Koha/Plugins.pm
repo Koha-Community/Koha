@@ -318,8 +318,7 @@ sub InstallPlugins {
         # Warn user if the specified classes doesn't exist and return nothing
         foreach my $class_name (@classes_filters) {
             unless ( any { $class_name eq $_ } @plugin_classes ) {
-                warn "$class_name has not been found, try a different name";
-                return;
+                Koha::Exceptions::BadParameter->throw("$class_name has not been found, try a different name");
             }
         }
 
