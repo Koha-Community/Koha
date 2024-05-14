@@ -135,9 +135,10 @@ sub text_extract {
             for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder', 'aria-label') {
                 if ($attr->{$a}) {
                     next if $a eq 'label' && $tag ne 'optgroup';
-                    next if $a eq 'content' && $tag ne 'meta';
+                    next if $a eq 'content';
                     next if $a eq 'value' && ($tag ne 'input'
                         || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
+                    next if $tag eq 'meta';
                     my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
                     $val = TmplTokenizer::trim($val);
                     # for selected attributes replace '[%..%]' with '%s' globally
