@@ -134,6 +134,8 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                 } ).fail( function( data ) {
                     callback( { error: _('Could not fetch frameworkcode for record') } );
                 } );
+            } ).fail( function( data ) {
+                callback( { error: data } )
             } );
         },
 
