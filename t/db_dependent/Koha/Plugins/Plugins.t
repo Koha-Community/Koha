@@ -27,6 +27,7 @@ use Test::MockModule;
 use Test::NoWarnings;
 use Test::More tests => 20;
 use Test::Warn;
+use Test::Exception;
 
 use C4::Context;
 use Koha::Cache::Memory::Lite;
@@ -193,7 +194,7 @@ subtest 'GetPlugins() tests' => sub {
 
 subtest 'InstallPlugins() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -204,7 +205,7 @@ subtest 'InstallPlugins() tests' => sub {
     # Tests for the exclude parameter
     # Test the returned plugins of the InstallPlugins subroutine
     my $plugins           = Koha::Plugins->new( { enable_plugins => 1 } );
-    my @installed_plugins = $plugins->InstallPlugins( { exclude => [ "Test", "Koha::Plugin::MarcFieldValues" ] } );
+    my @installed_plugins = $plugins->InstallPlugins( { exclude => [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ] } );
     my $plugin_classes    = join( " ", map { $_->{class} } @installed_plugins );
 
     my $result = grep { $plugin_classes !~ $_ } [ ":Test |:Test\$", ":MarcFieldValues |:MarcFieldValues\$" ]
@@ -225,7 +226,7 @@ subtest 'InstallPlugins() tests' => sub {
 
     # Tests for the include parameter
     # Test the returned plugins of the InstallPlugins subroutine
-    @installed_plugins = $plugins->InstallPlugins( { include => [ "Test", "Koha::Plugin::MarcFieldValues" ] } );
+    @installed_plugins = $plugins->InstallPlugins( { include => [ "Koha::Plugin::Test", "Koha::Plugin::MarcFieldValues" ] } );
 
     $result = 1;
     foreach my $plugin_class ( map { $_->{class} } @installed_plugins ) {
@@ -241,6 +242,19 @@ subtest 'InstallPlugins() tests' => sub {
         $result = 0 unless ( "$plugin_class" =~ ":Test\$" || "$plugin_class" =~ ":MarcFieldValues\$" );
     }
     ok( $result, "Only included plugins are installed" );
+
+    # Tests when both include and exclude parameter are used simultaneously
+    throws_ok
+        {
+            $plugins->InstallPlugins( { exclude => [ "Koha::Plugin::Test" ], include => [ "Koha::Plugin::Test" ] } );
+        }
+        'Koha::Exceptions::BadParameter';
+    # Tests when the plugin to be installled is not found
+    throws_ok
+        {
+            $plugins->InstallPlugins( { include => [ "Koha::Plugin::NotfoundPlugin" ] } );
+        }
+        'Koha::Exceptions::BadParameter';
 
     $schema->storage->txn_rollback;
 };
