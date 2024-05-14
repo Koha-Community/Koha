@@ -207,7 +207,8 @@ WRAPPED
         }
     );
 
-    $wrapped_compare = "<div style=\"white-space: pre-wrap;\">This is a test template using borrower $borrowernumber</div>";
+    $wrapped_compare =
+        "<div style=\"white-space: pre-wrap;\">This is a test template using borrower $borrowernumber</div>";
 
     $message = Koha::Notice::Messages->find($message_id);
     is(
