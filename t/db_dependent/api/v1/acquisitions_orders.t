@@ -61,9 +61,11 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::Acquisition::Orders',
             value => {
-                basketno     => $basket->basketno,
-                orderstatus  => 'new',
-                biblionumber => $biblio->biblionumber
+                basketno         => $basket->basketno,
+                orderstatus      => 'new',
+                biblionumber     => $biblio->biblionumber,
+                quantityreceived => 0,
+                quantity         => 1,
             }
         }
     );
