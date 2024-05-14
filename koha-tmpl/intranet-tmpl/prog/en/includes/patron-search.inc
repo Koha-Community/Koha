@@ -275,7 +275,7 @@
 
         function get_patron_search_form(){
             let parent_block = $("#[% search_results_block_id | html %]");
-            let patron_search_form = parent_block.siblings(".patron_search_form");
+            let patron_search_form = parent_block.parent().find(".patron_search_form");
             if ( !patron_search_form.length ) patron_search_form = $(".patron_search_form");
             return patron_search_form;
         }
