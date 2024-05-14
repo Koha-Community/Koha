@@ -4801,6 +4801,18 @@ div .suggestion_note {
     }
 }
 
+#circ_request {
+    fieldset {
+        &.disabled {
+            pointer-events: none;
+        }
+        &.rows:has(fieldset.enabled) {
+            border: 1px solid #408540;
+        }
+    }
+
+}
+
 @import "header";
 @import "toolbar";
 @import "forms";

@@ -613,20 +613,18 @@
                             </fieldset>
                             <fieldset class="rows">
                                 <legend>
-                                    <button type="button">
-                                        [% IF force_hold_level == 'item' || force_hold_level == 'item_group' %]
-                                            <input type="radio" id="requestany" name="request" disabled="true" />
-                                        [% ELSIF force_hold_level == 'record' %]
-                                            <input type="radio" id="requestany" checked="checked" value="Any" disabled="true"/>
-                                            <input type="hidden" name="request" value="Any"/>
-                                            <span class="error"><i>(Required)</i></span>
-                                        [% ELSE %]
-                                            <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
-                                        [% END %]
-                                        <label for="requestany" class="inline">
-                                            Hold next available item
-                                        </label>
-                                    </button>
+                                    [% IF force_hold_level == 'item' || force_hold_level == 'item_group' %]
+                                        <input type="radio" id="requestany" name="request" disabled="true" />
+                                    [% ELSIF force_hold_level == 'record' %]
+                                        <input type="radio" id="requestany" checked="checked" value="Any" disabled="true"/>
+                                        <input type="hidden" name="request" value="Any"/>
+                                        <span class="error"><i>(Required)</i></span>
+                                    [% ELSE %]
+                                        <input type="radio" id="requestany" name="request" checked="checked" value="Any" />
+                                    [% END %]
+                                    <label for="requestany" class="inline">
+                                        Hold next available item
+                                    </label>
                                 </legend>
                                 <input type="hidden" name="alreadyreserved" value="[% alreadyreserved | html %]" />
                                 <fieldset class="enable_request_any disable_request_group disable_request_specific">
@@ -796,19 +794,17 @@
 
                         <fieldset class="rows">
                             <legend>
-                                <button type="button">
-                                    [% IF force_hold_level == 'item' %]
-                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
-                                         <span class="error"><em>(Required)</em></span>
-                                    [% ELSIF force_hold_level == 'record' || force_hold_level == 'item_group' %]
-                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific" disabled='disabled'/>
-                                    [% ELSE %]
-                                         <input type="radio" id="requestspecificitem" name="request" class="requestspecific"/>
-                                    [% END %]
-                                    <label for="requestspecificitem" class="inline">
-                                        Hold a specific item
-                                    </label>
-                                </button>
+                                [% IF force_hold_level == 'item' %]
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
+                                     <span class="error"><em>(Required)</em></span>
+                                [% ELSIF force_hold_level == 'record' || force_hold_level == 'item_group' %]
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific" disabled='disabled'/>
+                                [% ELSE %]
+                                     <input type="radio" id="requestspecificitem" name="request" class="requestspecific"/>
+                                [% END %]
+                                <label for="requestspecificitem" class="inline">
+                                    Hold a specific item
+                                </label>
                             </legend>
 
                             <fieldset class="enable_request_specific disable_request_any disable_request_group">
@@ -1681,16 +1677,16 @@
 
         function ToggleHoldsToPlace() {
             if ( $("#requestany").prop('checked') ) {
-                $(".disable_request_any").prop('disabled',true);
-                $(".enable_request_any").prop('disabled',false);
+                $(".disable_request_any").prop('disabled',true).addClass('disabled').removeClass('enabled');
+                $(".enable_request_any").prop('disabled',false).removeClass('disabled').addClass('enabled');
                 $(".requestspecific,.requestgrp").prop('checked', false);
             } else if( $(".requestspecific").prop('checked') ) {
-                $(".disable_request_specific").prop('disabled',true);
-                $(".enable_request_specific").prop('disabled',false);
+                $(".disable_request_specific").prop('disabled',true).addClass('disabled').removeClass('enabled');
+                $(".enable_request_specific").prop('disabled',false).removeClass('disabled').addClass('enabled');
                 $("#requestany,.requestgrp").prop('checked', false);
             } else {
-                $(".disable_request_group").prop('disabled',true);
-                $(".enable_request_group").prop('disabled',false);
+                $(".disable_request_group").prop('disabled',true).addClass('disabled').removeClass('enabled');
+                $(".enable_request_group").prop('disabled',false).removeClass('disabled').addClass('enabled');
                 $("#requestany,.requestspecific").prop('checked', false);
             }
         }
