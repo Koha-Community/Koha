@@ -20,6 +20,8 @@ use Modern::Perl;
 use parent qw(Plack::Middleware);
 use Plack::Response;
 
+# If you need to update the logic here, please also update Koha::App::Plugin::CSRF
+
 sub call {
     my ( $self, $env ) = @_;
     my $req = Plack::Request->new($env);

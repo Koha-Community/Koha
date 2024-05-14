@@ -62,6 +62,8 @@ this case, no verification is done.
 
 =cut
 
+# If you need to update the logic here, please also update Koha::Middleware::CSRF
+
 sub register {
     my ( $self, $app, $conf ) = @_;
 
