@@ -167,17 +167,19 @@ sub search_related {
 =cut
 
 sub delete {
-    my ($self) = @_;
+    my ( $self, $params ) = @_;
 
     if ( Class::Inspector->function_exists( $self->object_class, 'delete' ) ) {
         my $objects_deleted;
-        $self->_resultset->result_source->schema->txn_do( sub {
-            $self->reset; # If we iterated already over the set
-            while ( my $o = $self->next ) {
-                $o->delete;
-                $objects_deleted++;
+        $self->_resultset->result_source->schema->txn_do(
+            sub {
+                $self->reset;    # If we iterated already over the set
+                while ( my $o = $self->next ) {
+                    $o->delete($params);
+                    $objects_deleted++;
+                }
             }
-        });
+        );
         return $objects_deleted;
     }
 
