@@ -739,7 +739,7 @@
                                 </div> <!-- /#hold-found1 -->
                             [% END # /IF waiting %]
 
-                            [% IF transfer || needstransfer %]
+                            [% IF (transfer || needstransfer) && !(reserved and !recalled and !waitingrecall) %]
                                 [% IF Koha.Preference('TransfersBlockCirc') %]
                                     <div id="item-transfer-modal" class="modal fade audio-alert-action block">
                                 [% ELSE %]
