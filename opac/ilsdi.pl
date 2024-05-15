@@ -176,6 +176,19 @@ if (@AuthorizedIPs) {    # If no filter set, allow access to everybody
         $out->{'code'} = "NotAllowed";
         $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
     }
+} else {
+    $out->{'code'}    = "NotAllowed";
+    $out->{'message'} = "Unauthorized IP address: $ENV{REMOTE_ADDR}.";
+
+    print XMLout(
+        $out,
+        noattr        => 1,
+        nosort        => 1,
+        xmldecl       => '<?xml version="1.0" encoding="UTF-8" ?>',
+        RootName      => "ilsdi",
+        SuppressEmpty => 1
+    );
+    exit 0;
 }
 
 my $service = $cgi->param('service') || "ilsdi";
