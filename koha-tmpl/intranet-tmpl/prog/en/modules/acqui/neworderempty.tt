@@ -563,7 +563,7 @@
                     [% ELSE %]
                         <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" />
                         [% IF quantitysugg %]
-                            (suggested: [% quantitysugg %])
+                            (suggested: [% quantitysugg | html %])
                         [% END %]
                     [% END %]
                 [% ELSE %]
@@ -572,7 +572,7 @@
                     [% ELSE %]
                         <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" onchange="updateCosts();" />
                         [% IF quantitysugg %]
-                            (suggested: [% quantitysugg %])
+                            (suggested: [% quantitysugg | html %])
                         [% END %]
                     [% END %]
                 [% END %]
