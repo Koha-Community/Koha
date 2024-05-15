@@ -77,6 +77,9 @@ sub call {
             }
         }
     }
+    elsif ( !exists $stateless_methods{$request_method} && !exists $stateful_methods{$request_method} ) {
+        $error = sprintf "unknown or unsupported method %s", $request_method;
+    }
 
     if ($error) {
 
