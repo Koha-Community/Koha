@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 102;
+use Test::More tests => 103;
+
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -1541,4 +1542,42 @@ subtest 'Template toolkit syntax in parameters' => sub {
         'Dear Robert [% USE Categories %][% Categories.all().search_related("borrowers").count() %]',
         'Template toolkit syntax in parameter was not evaluated.'
     );
+};
+
+subtest 'Quote user params in GetPreparedLetter' => sub {
+    plan tests => 1;
+
+    my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio     = $builder->build_sample_biblio;
+    my %loops      = ( biblio  => [ $biblio->biblionumber . ') AND (SELECT 1 FROM (SELECT(SLEEP(10)))x)-- -' ] );
+    my %substitute = ( comment => 'some comment' );
+
+    Koha::Notice::Template->new(
+        {
+            module                 => 'catalogue',
+            code                   => 'CART',
+            branchcode             => '',
+            message_transport_type => 'email',
+            content                =>
+                'Hello [% borrower.firstname %], Some comments about those biblios [% FOR b IN biblios %][% biblio.title %][% END %]: [% comment %]',
+        }
+    )->store;
+
+    my $t      = time;
+    my $letter = C4::Letters::GetPreparedLetter(
+        module      => 'catalogue',
+        letter_code => 'CART',
+        tables      => {
+            borrowers => $patron->borrowernumber,
+        },
+        message_transport_type => 'email',
+        loops                  => \%loops,
+        substitute             => \%substitute,
+    );
+    my $exec_time = time - $t;
+    ok( $exec_time < 10, "We should not exec the SLEEP" )
+        or diag sprintf(
+        "Spent %ss to run GetPreparredLetter, SLEEP has certainly been executed which could lead to SQL injections",
+        $exec_time
+        );
 };
