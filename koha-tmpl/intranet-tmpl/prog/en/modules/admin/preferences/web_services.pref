@@ -88,10 +88,10 @@ Web services:
                 0: Disable
             - "ILS-DI services for OPAC users (available at: /cgi-bin/koha/ilsdi.pl)"
         -
-            - Allow IP addresses
+            - Allow only IP addresses
             - pref: ILS-DI:AuthorizedIPs
               class: Text
-            - to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Leave the field blank to allow any IP address.
+            - to use the ILS-DI services (when enabled). Separate the IP addresses with commas and without spaces. Enter '0:0:0:0/0' or '::/0' to allow any IP.
     Mana KB:
         -
             - pref: Mana
