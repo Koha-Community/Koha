@@ -305,7 +305,6 @@ $(document).ready(function () {
         $("#set-library-desk_id")
             .children()
             .each(function () {
-                console.log( $(this) );
                 if ($(this).attr("id") === "nodesk") {
                     // set no desk by default, should be first element
                     $(this).prop("selected", true);
@@ -316,7 +315,7 @@ $(document).ready(function () {
                     $("#nodesk").hide();
                     $(this).prop("disabled", false);
                     $(this).show();
-                    if ( selectedBranch == $(".logged-in-branch-code").html() ) {
+                    if ( selectedBranch == $(".logged-in-branch-code").html() && $(".logged-in-desk-id").length ) {
                         $("#set-library-desk_id").val( $(".logged-in-desk-id").html() );
                     } else {
                         $("#nodesk").hide();
@@ -330,6 +329,7 @@ $(document).ready(function () {
                 }
             });
 
+        $("#set-library-register_id").val("");
         $("#set-library-register_id").children().each(function() {
             // default to no-register
             if ($(this).is("#noregister")) {

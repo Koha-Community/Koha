@@ -74,7 +74,7 @@
                             <ol>
                                 <li><label for="set-library-desk_id">Choose desk:</label>
                                 <select name="desk_id" id="set-library-desk_id">
-                                    [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id  %]
+                                    [% PROCESS options_for_desks desks => Desks.all(), selected => desk_id, branch => branch  %]
                                 </select></li>
                             </ol>
                         </fieldset>
