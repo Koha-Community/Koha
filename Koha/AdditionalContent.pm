@@ -134,9 +134,10 @@ Return the translated content for a given language. The default is returned if n
 
 sub translated_content {
     my ( $self, $lang ) = @_;
+    $lang ||= 'default';
     my $content = $self->translated_contents->search(
-        { lang => [ 'default', ( $lang ? $lang : () ) ] },
-        { ( $lang ? ( order_by => \[ "field(lang, '" . $lang . "', 'default')" ] ) : () ) }
+        { lang     => [ 'default', $lang ] },
+        { order_by => { -asc => [ \'lang="default"', 'id' ] } }
     )->next;
     return $content;
 }
