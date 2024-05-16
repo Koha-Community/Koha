@@ -35,7 +35,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $page_id = $query->param('page_id');
-my $lang = $query->param('language');
 
 my $homebranch = $ENV{OPAC_BRANCH_DEFAULT};
 if (C4::Context->userenv) {
@@ -49,7 +48,8 @@ if ( !$page || $page->category ne 'pages' || $page->branchcode && $page->branchc
     exit;
 }
 
-my $content = $page->translated_content( $lang || C4::Languages::getlanguage($query) );
+# Sanitize $query->param('language') via getlanguage
+my $content = $page->translated_content( C4::Languages::getlanguage($query) );
 
 $template->param( page => $content );
 
