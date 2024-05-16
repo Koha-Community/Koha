@@ -1138,9 +1138,11 @@ sub BuildSummary {
 
         my $heading = $field->as_string($subfields_to_report);
 
-        my $subheading = $field->as_string( $subfields_to_subdivision, $delimiter );
-        if ( length $subheading > 0 ) {
-            $heading .= $delimiter . $subheading;
+        if ($subfields_to_subdivision) {
+            my $subheading = $field->as_string( $subfields_to_subdivision, $delimiter );
+            if ( length $subheading > 0 ) {
+                $heading .= $delimiter . $subheading;
+            }
         }
 
         if ($subfields_to_report) {
