@@ -729,7 +729,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div id="requestattributes">
-                                        [% FOREACH attr IN request.illrequestattributes %]
+                                        [% FOREACH attr IN request.extended_attributes %]
                                         <div class="requestattr-[% attr.type | html %]">
                                             <span class="label">[% attr.type | html %]:</span>
                                             [% attr.value | html %]
