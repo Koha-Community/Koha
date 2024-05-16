@@ -45,7 +45,7 @@ my @label_template = ();
 
 my $units = get_unit_values();
 
-if ($op eq 'edit_form') { # FIXME This looks like edit_form ?
+if ($op eq 'edit_form') {
     $profile = C4::Patroncards::Profile->retrieve(profile_id => $profile_id);
     $template_list = get_all_templates({ fields => [ qw( template_id template_code profile_id ) ] });
 }

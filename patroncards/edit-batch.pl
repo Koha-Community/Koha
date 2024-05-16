@@ -123,7 +123,7 @@ elsif ( $op eq 'cud-dedup' ) {
         exit;
     }
 }
-elsif ($op eq 'edit') { #FIXME edit_form actually
+elsif ($op eq 'edit_form') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
     $template->param( description => $batch->{'description'} );
 }
