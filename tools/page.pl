@@ -33,7 +33,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $page_id = $query->param('page_id');
-my $lang = $query->param('language');
 
 my $branch = C4::Context->userenv->{'branch'};
 
@@ -44,7 +43,8 @@ if ( !$page || $page->category ne 'pages' || $page->branchcode && $page->branchc
     exit;
 }
 
-my $content = $page->translated_content( $lang || C4::Languages::getlanguage($query) );
+# Sanitize language via getlanguage
+my $content = $page->translated_content( C4::Languages::getlanguage($query) );
 
 $template->param( page => $content );
 
