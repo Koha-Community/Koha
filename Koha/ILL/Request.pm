@@ -184,7 +184,7 @@ sub statusalias {
     return Koha::AuthorisedValues->search(
         {
             category         => 'ILL_STATUS_ALIAS',
-            authorised_value => $self->SUPER::status_alias
+            authorised_value => $self->get_column('status_alias'),
         },
         {},
         $self->branchcode
@@ -315,7 +315,7 @@ sub status_alias {
         # We need a way of accepting implied undef, so we can nullify
         # the status_alias column, when called from $self->status
         my $val = $new_status_alias eq "-1" ? undef : $new_status_alias;
-        my $ret = $self->SUPER::status_alias($val);
+        my $ret = $self->set( { status_alias => $val } );
         my $val_to_log = $val ? $new_status_alias : scalar $self->status;
         if ($ret) {
             my $logger = Koha::ILL::Request::Logger->new;
@@ -369,7 +369,7 @@ sub status {
         $self->{previous_status} = $current_status_alias ?
             $current_status_alias :
             $current_status;
-        my $ret = $self->SUPER::status($new_status)->store;
+        my $ret = $self->set( { status => $new_status } )->store;
         if ($current_status_alias) {
             # This is hackery to enable us to undefine
             # status_alias, since we need to have an overloaded
@@ -1174,7 +1174,7 @@ sub get_type {
     my $attr = $self->extended_attributes->find({ type => 'type'});
     return if !$attr;
     return $attr->value;
-};
+}
 
 =head3 get_type_disclaimer_value
 
