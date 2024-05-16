@@ -219,7 +219,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 58;
+    plan tests => 61;
 
     my $qb;
 
@@ -521,6 +521,33 @@ subtest 'build_query tests' => sub {
         # are not truncated.
         # Note that (colons/equal signs)/spaces glued to words are not removed by the feature under test but before.
     };
+
+    # Reset SearchCancelledAndInvalidISBNandISSN syspref
+    t::lib::Mocks::mock_preference( 'SearchCancelledAndInvalidISBNandISSN', '0' );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['nb:"9780141930848"'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(isbn:"9780141930848")',
+        "nb query transformed into isbn search field"
+    );
+
+    # Set SearchCancelledAndInvalidISBNandISSN syspref
+    t::lib::Mocks::mock_preference( 'SearchCancelledAndInvalidISBNandISSN', '1' );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['nb:"9780141930848"'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(isbn-all:"9780141930848")',
+        "nb query transformed into isbn-all search field"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['nb:"9780141930848" ns:"1089-6891"'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(isbn-all:"9780141930848" issn-all:"1089-6891")',
+        "nb and ns query transformed into isbn-all and issn-all search field"
+    );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['J.R.R'] );
     is(
