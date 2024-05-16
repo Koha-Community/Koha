@@ -305,6 +305,10 @@
                 clone.find(".select2").remove();
                 original.after( clone );
                 $("#" + appendid ).select2();
+            } else if( clone.find(".flatpickr").length ){
+                clone.attr("id", appendid );
+                original.after( clone );
+                apply_flatpickr(clone.find(".flatpickr"));
             } else {
                 clone.attr("id", appendid );
                 original.after( clone );
