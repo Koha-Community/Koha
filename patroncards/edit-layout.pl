@@ -80,7 +80,7 @@ sub _set_selected {
     return \@select_list;
 }
 
-if ($op eq 'cud-edit') {
+if ($op eq 'edit_form') {
     warn sprintf("Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
     $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
     $layout_xml = XMLin($layout->get_attr('layout_xml'), ForceArray => 1);

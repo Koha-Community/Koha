@@ -45,7 +45,7 @@ my $profile_list = undef;
 
 my $units = get_unit_values();
 
-if ($op eq 'cud-edit') { # FIXME This looks like edit_form
+if ($op eq 'edit_form') { # FIXME This looks like edit_form
     $card_template = C4::Patroncards::Template->retrieve(template_id => $template_id);
     $profile_list = get_all_profiles({ fields => [ qw( profile_id printer_name paper_bin ) ], filters => {template_id => [ $template_id, 0 ], creator => 'Patroncards'} } );
 }
