@@ -753,6 +753,8 @@ sub _convert_index_fields {
             field => exists $index_field_convert{$f} ? $index_field_convert{$f} : $f,
             type  => $index_type_convert{ $t // '__default' }
         };
+        $r->{field} .= '-all'
+            if C4::Context->preference('SearchCancelledAndInvalidISBNandISSN') && $r->{field} =~ /^is[bs]n$/;
         $r->{field} = ($mc . $r->{field}) if $mc && $r->{field};
         $r->{field} || $r->{type} ? $r : undef;
     } @indexes;
@@ -820,6 +822,9 @@ sub _convert_index_strings_freeform {
     $search =~ s/($field_name_pattern)(?:,[\w-]*)?($multi_field_pattern):/\L$1\E$2:/og;
     # Resolve possible field aliases
     $search =~ s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1).($1 eq 'kw' ? "$2" : "$2:")/oge;
+    if ( C4::Context->preference('SearchCancelledAndInvalidISBNandISSN') ) {
+        $search =~ s/\b(is[bs]n)(?=$multi_field_pattern:)/$1-all/g;
+    }
     return $search;
 }
 
