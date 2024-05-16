@@ -328,18 +328,17 @@ use C4::Biblio qw( GetMarcFromKohaField );
 
 {
     my @loop_borrowers_relationships;
-    my $relationships      = Koha::Patron::Relationships->search();
-    my @patrons_guarantors = Koha::Patron::Relationships::guarantors($relationships)->as_list;
-    my @patrons_guarantees = Koha::Patron::Relationships::guarantees($relationships)->as_list;
+    my @guarantor_ids = Koha::Patron::Relationships->_resultset->get_column('guarantor_id')->all();
+    my @guarantee_ids = Koha::Patron::Relationships->_resultset->get_column('guarantee_id')->all();
 
-    foreach my $patron_guarantor (@patrons_guarantors) {
-        foreach my $patron_guarantee (@patrons_guarantees) {
-            if ( $patron_guarantor->borrowernumber == $patron_guarantee->borrowernumber ) {
+    foreach my $guarantor_id (@guarantor_ids) {
+        foreach my $guarantee_id (@guarantee_ids) {
+            if ( $guarantor_id == $guarantee_id ) {
 
-                my $guarantor_id;
-                my $guarantee_id;
+                my $relation_guarantor_id;
+                my $relation_guarantee_id;
                 my $size_list;
-                my $tmp_garantor_id = $patron_guarantor->borrowernumber;
+                my $tmp_garantor_id = $guarantor_id;
                 my @guarantor_ids;
 
                 do {
@@ -353,45 +352,45 @@ use C4::Biblio qw( GetMarcFromKohaField );
                     $size_list = scalar @relationship_for_go;
 
                     foreach my $relation (@relationship_for_go) {
-                        $guarantor_id = $relation->guarantor_id;
-                        unless ( grep { $_ == $guarantor_id } @guarantor_ids ) {
-                            push @guarantor_ids, $guarantor_id;
+                        $relation_guarantor_id = $relation->guarantor_id;
+                        unless ( grep { $_ == $relation_guarantor_id } @guarantor_ids ) {
+                            push @guarantor_ids, $relation_guarantor_id;
                         }
-                        $guarantee_id = $relation->guarantee_id;
+                        $relation_guarantee_id = $relation->guarantee_id;
 
                         my @relationship_for_go = Koha::Patron::Relationships->search(
                             {
                                 -or => [
-                                    'guarantor_id' => { '=', $guarantee_id },
+                                    'guarantor_id' => { '=', $relation_guarantee_id },
                                 ]
                             },
                         )->as_list;
                         $size_list = scalar @relationship_for_go;
 
-                        if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                        if ( $guarantor_id == $relation_guarantee_id ) {
                             last;
                         }
 
                         foreach my $relation (@relationship_for_go) {
-                            $guarantor_id = $relation->guarantor_id;
-                            unless ( grep { $_ == $guarantor_id } @guarantor_ids ) {
-                                push @guarantor_ids, $guarantor_id;
+                            $relation_guarantor_id = $relation->guarantor_id;
+                            unless ( grep { $_ == $relation_guarantor_id } @guarantor_ids ) {
+                                push @guarantor_ids, $relation_guarantor_id;
                             }
-                            $guarantee_id = $relation->guarantee_id;
+                            $relation_guarantee_id = $relation->guarantee_id;
 
-                            if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                            if ( $guarantor_id == $relation_guarantee_id ) {
                                 last;
                             }
                         }
-                        if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                        if ( $guarantor_id == $relation_guarantee_id ) {
                             last;
                         }
                     }
 
-                    $tmp_garantor_id = $guarantee_id;
-                } while ( $patron_guarantor->borrowernumber != $guarantee_id && $size_list > 0 );
+                    $tmp_garantor_id = $relation_guarantee_id;
+                } while ( $guarantor_id != $relation_guarantee_id && $size_list > 0 );
 
-                if ( $patron_guarantor->borrowernumber == $guarantee_id ) {
+                if ( $guarantor_id == $relation_guarantee_id ) {
                     unless ( grep { join( "", sort @$_ ) eq join( "", sort @guarantor_ids ) }
                         @loop_borrowers_relationships )
                     {
