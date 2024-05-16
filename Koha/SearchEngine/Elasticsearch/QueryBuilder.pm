@@ -720,10 +720,12 @@ sub _convert_sort_fields {
     # Convert the fields and orders, drop anything we don't know about.
     grep { $_->{field} } map {
         my ( $f, $d ) = /(.+)_(.+)/;
-        {
+        defined $f && defined $d
+            ? {
             field     => $sort_field_convert{$f},
             direction => $sort_order_convert{$d}
-        }
+            }
+            : { field => undef };
     } @sort_by;
 }
 
