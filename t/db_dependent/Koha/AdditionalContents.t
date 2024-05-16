@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 use Koha::AdditionalContents;
@@ -328,4 +328,35 @@ subtest 'find_best_match' => sub {
     # Note: find_best_match is tested further via $libary->opac_info; see t/db_dependent/Koha/Library.t
 
     $schema->storage->txn_rollback;
-    }
+};
+
+subtest '->translated_content' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $page = $builder->build_object(
+        {
+            class => 'Koha::AdditionalContents',
+            value => { category => 'pages', branchcode => undef },
+        }
+    );
+    $page->translated_contents(
+        [
+            { title => 'T', content => 'C1', lang => 'default' },
+            { title => 'T', content => 'C2', lang => 'nl-NL' },
+            { title => 'T', content => 'C3', lang => 'de' },
+        ]
+    );
+    is( $page->translated_content('nl-NL')->content, 'C2', 'Found translation' );
+    is( $page->translated_content('de')->content,    'C3', 'Found translation' );
+
+    # Passing a sleep with language parameter (executed before 36875)
+    my $hack  = q|de') OR (SELECT 1 FROM (SELECT(SLEEP(10)))x)-- -|;
+    my $time1 = time;
+    is( $page->translated_content($hack)->content, 'C1', 'Hacking language param' );
+    my $time2 = time;
+    ok( $time2 < $time1 + 10, 'The sleep has not been executed' );
+
+    $schema->storage->txn_rollback;
+};
