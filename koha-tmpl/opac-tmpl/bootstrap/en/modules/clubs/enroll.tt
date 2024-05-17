@@ -38,10 +38,12 @@
 <script>
 function addEnrollment() {
     $("body").css("cursor", "progress");
+    let data = $( "#patron-enrollment-form" ).serialize();
+    data += '&csrf_token='+$('meta[name="csrf-token"]').attr('content');
     $.ajax({
         type: "POST",
         url: '/cgi-bin/koha/svc/club/enroll',
-        data: $( "#patron-enrollment-form" ).serialize(),
+        data,
         success: function( data ) {
             if ( data.success ) {
                 $('#opac-user-clubs_panel').load('/cgi-bin/koha/clubs/clubs-tab.pl?borrowernumber=[% borrowernumber | html %]&id=[% club.id | html %]', function() {
