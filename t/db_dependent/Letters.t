@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use File::Basename qw(dirname);
 use Test::More tests => 101;
 use Test::MockModule;
 use Test::Warn;
@@ -870,7 +871,7 @@ subtest 'GetPreparedLetter' => sub {
 subtest 'TranslateNotices' => sub {
     plan tests => 10;
 
-    t::lib::Mocks::mock_config( 'intrahtdocs', '/kohadevbox/koha/t/mock_templates/intranet-tmpl' );
+    t::lib::Mocks::mock_config( 'intrahtdocs', dirname(__FILE__) . '/../mock_templates/intranet-tmpl' );
     t::lib::Mocks::mock_preference( 'OPACLanguages', 'fr-CA,en' );
 
     my $amount      = -20;
