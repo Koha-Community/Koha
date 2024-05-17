@@ -154,6 +154,9 @@
             [% IF Koha.Preference('ForceLibrarySelection') %]
                 <span class="required">Required</span>
             [% END %]
+            [% IF Koha.Preference('StaffLoginBranchBasedOnIP')%]
+                <span class="warning">Note: Your selection may be overridden if your current IP matches a specified IP for a branch in Koha</span>
+            [% END %]
         </p>
 
         [% IF Koha.Preference('UseCirculationDesks') && Desks.all %]
