@@ -294,9 +294,7 @@ sub ModSuggestion {
             ) or warn "can't enqueue letter $letter";
         }
     }
-    if ( C4::Context->preference("SuggestionsLog") ) {
-        logaction( 'SUGGESTION', 'MODIFY', $suggestion->{suggestionid}, $suggestion_object );
-    }
+
     return 1;    # No useful if the exception is raised earlier
 }
 
