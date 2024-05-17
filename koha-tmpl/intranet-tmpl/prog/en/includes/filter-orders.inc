@@ -84,7 +84,7 @@
               <option value="cancelled">Cancelled</option>
             [% END %]
         </select>
-        <label class="yesno" for="search_children_too">
+        <label class="yesno" for="is_standing">
             [% IF filters.is_standing %]
                 <input type="checkbox" name="is_standing" id="is_standing" value="1" checked="checked" />
             [% ELSE %]
