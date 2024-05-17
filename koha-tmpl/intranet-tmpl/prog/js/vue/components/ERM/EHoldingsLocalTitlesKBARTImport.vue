@@ -149,9 +149,8 @@ export default {
                             message += `<li>${this.$__(
                                 "Job %s for uploaded file has been queued"
                             ).format(
-                                i + 1,
-                                job
-                            )}, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=%s" target="_blank">${this.$__(
+                                i + 1
+                            )}, <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=${job}" target="_blank">${this.$__(
                                 "see progress"
                             )}</a></li>`
                         })
