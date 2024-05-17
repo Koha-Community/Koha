@@ -1234,7 +1234,14 @@ sub checkauth {
                         }
                     }
 
-                    if ( C4::Context->preference('AutoLocation') && $auth_state ne 'failed' ) {
+                    if (
+                        (
+                              !C4::Context->preference('AutoLocation')
+                            && C4::Context->preference('StaffLoginBranchBasedOnIP')
+                        )
+                        || ( C4::Context->preference('AutoLocation') && $auth_state ne 'failed' )
+                        )
+                    {
                         foreach my $br ( uniq( $branchcode, keys %$branches ) ) {
 
                             #     now we work with the treatment of ip

@@ -98,6 +98,7 @@ Administration:
                   1: "Yes"
                   0: "No"
             - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
+            - 'This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference.'
         -
             - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
@@ -106,6 +107,15 @@ Administration:
                   1: "Yes"
                   0: "No"
             - (Disable only when remote IP address changes frequently.)
+        -
+            - "Set the logged in branch for staff based on their current branch: "
+            - pref: StaffLoginBranchBasedOnIP
+              default: 0
+              choices:
+                  1: "Yes"
+                  0: "No"
+            - "Note: If IPs overlap, the first found match will be used."
+            - 'This setting will be overridden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoLocation">AutoLocation</a> system preference.'
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
             - "Storage of login session information: "

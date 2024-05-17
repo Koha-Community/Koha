@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -1290,6 +1290,56 @@ subtest 'checkpw() return values tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'StaffLoginBranchBasedOnIP' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'AutoLocation',              0 );
+    t::lib::Mocks::mock_preference( 'StaffLoginBranchBasedOnIP', 0 );
+
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons',   value => { flags    => 1 } } );
+    my $branch   = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => "127.0.0.1" } } );
+    my $password = 'password';
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password( { password => $password } );
+
+    my $cgi_mock = Test::MockModule->new('CGI');
+    $cgi_mock->mock( 'request_method', sub { return 'POST' } );
+    my $cgi  = CGI->new;
+    my $auth = Test::MockModule->new('C4::Auth');
+
+    # Simulating the login form submission
+    $cgi->param( 'login_userid',   $patron->userid );
+    $cgi->param( 'login_password', $password );
+
+    $ENV{REMOTE_ADDR} = '127.0.0.1';
+    my ( $userid, $cookie, $sessionID, $flags ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid, $patron->userid, "User successfully logged in" );
+    my $session = C4::Auth::get_session($sessionID);
+    is( $session->param('branch'), $patron->branchcode, "Logged in branch is set to the patron's branchcode" );
+
+    my $template;
+    t::lib::Mocks::mock_preference( 'StaffLoginBranchBasedOnIP', 1 );
+
+    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid, $patron->userid, "User successfully logged in" );
+    $session = C4::Auth::get_session($sessionID);
+    is( $session->param('branch'), $branch->branchcode, "Logged in branch is set based on the IP from REMOTE_ADDR " );
+
+    # AutoLocation overrides StaffLoginBranchBasedOnIP
+    t::lib::Mocks::mock_preference( 'AutoLocation', 1 );
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    is(
+        $template->{VARS}->{wrongip}, 1,
+        "AutoLocation prevents StaffLoginBranchBasedOnIP from logging user in to another branch"
+    );
+
 };
 
 subtest 'AutoLocation' => sub {
