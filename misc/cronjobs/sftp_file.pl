@@ -24,6 +24,7 @@ use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 use Carp qw( carp );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use File::Basename qw( basename );
 
 =head1 NAME
 
@@ -185,9 +186,8 @@ if ( $email ) {
 open my $fh, '<', $file;
 if (
     $sftp->put(
-        $fh, $file,
-            callback => sub { my ( $sftp, $data, $offset, $size ) = @_; warn "$offset of $size bytes transferred\n"; }
-        )
+        $fh, basename($file)
+    )
 ) {
     # Send success email
     $sftp_status = 'SUCCESS';
