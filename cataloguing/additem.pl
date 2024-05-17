@@ -26,7 +26,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user haspermission );
 use C4::Barcodes::ValueBuilder;
 use C4::Barcodes;
-use C4::Biblio qw( GetFrameworkCode GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal ModBiblio );
+use C4::Biblio      qw( GetFrameworkCode GetMarcFromKohaField GetMarcStructure IsMarcStructureInternal ModBiblio );
 use C4::Circulation qw( barcodedecode LostItem );
 use C4::Context;
 use C4::Members;
@@ -43,13 +43,13 @@ use Koha::SearchEngine::Indexer;
 use Koha::UI::Form::Builder::Item;
 use Koha::Result::Boolean;
 
-use Encode qw( encode_utf8 );
+use Encode          qw( encode_utf8 );
 use List::MoreUtils qw( any uniq );
-use List::Util qw( first min );
+use List::Util      qw( first min );
 use MARC::File::XML;
 use MIME::Base64 qw( decode_base64url encode_base64url );
-use Storable qw( freeze thaw );
-use URI::Escape qw( uri_escape_utf8 );
+use Storable     qw( freeze thaw );
+use URI::Escape  qw( uri_escape_utf8 );
 
 our $dbh = C4::Context->dbh;
 
@@ -62,15 +62,14 @@ sub add_item_to_item_group {
     if ( $item_group eq 'create' ) {
         my $item_group = Koha::Biblio::ItemGroup->new(
             {
-                biblio_id   => $biblionumber,
-                description => $item_group_description,
+                biblio_id     => $biblionumber,
+                description   => $item_group_description,
                 display_order => $display_order,
             }
         )->store();
 
         $item_group_id = $item_group->id;
-    }
-    else {
+    } else {
         $item_group_id = $item_group;
     }
 
@@ -83,7 +82,7 @@ sub add_item_to_item_group {
 }
 
 sub get_item_from_template {
-    my ( $template_id ) = @_;
+    my ($template_id) = @_;
 
     my $template = Koha::Item::Templates->find($template_id);
 
@@ -91,7 +90,7 @@ sub get_item_from_template {
 }
 
 sub get_item_from_cookie {
-    my ( $input ) = @_;
+    my ($input) = @_;
 
     my $item_from_cookie;
     my $lastitemcookie = $input->cookie('LastCreatedItem');
@@ -104,31 +103,34 @@ sub get_item_from_cookie {
         };
         if ($@) {
             $lastitemcookie ||= 'undef';
-            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '".encode_base64url($lastitemcookie)."'. Caught error follows: '$@'";
+            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '"
+                . encode_base64url($lastitemcookie)
+                . "'. Caught error follows: '$@'";
         }
     }
     return $item_from_cookie;
 }
 
-my $input        = CGI->new;
+my $input = CGI->new;
 
 my $biblionumber;
 my $itemnumber;
-if( $input->param('itemnumber') && !$input->param('biblionumber') ){
+if ( $input->param('itemnumber') && !$input->param('biblionumber') ) {
     $itemnumber = $input->param('itemnumber');
-    my $item = Koha::Items->find( $itemnumber );
+    my $item = Koha::Items->find($itemnumber);
     $biblionumber = $item->biblionumber;
 } else {
     $biblionumber = $input->param('biblionumber');
-    $itemnumber = $input->param('itemnumber');
+    $itemnumber   = $input->param('itemnumber');
 }
 
 my $biblio = Koha::Biblios->find($biblionumber);
 
-my $op           = $input->param('op') || q{};
+my $op             = $input->param('op') || q{};
 my $hostitemnumber = $input->param('hostitemnumber');
-my $marcflavour  = C4::Context->preference("marcflavour");
-my $searchid     = $input->param('searchid');
+my $marcflavour    = C4::Context->preference("marcflavour");
+my $searchid       = $input->param('searchid');
+
 # fast cataloguing datas
 my $fa_circborrowernumber  = $input->param('circborrowernumber');
 my $fa_barcode             = $input->param('barcode');
@@ -143,20 +145,22 @@ our $frameworkcode = &GetFrameworkCode($biblionumber);
 
 # Defining which userflag is needing according to the framework currently used
 my $userflags;
-if (defined $input->param('frameworkcode')) {
-    $userflags = ($input->param('frameworkcode') eq 'FA') ? "fast_cataloging" : "edit_items";
+if ( defined $input->param('frameworkcode') ) {
+    $userflags = ( $input->param('frameworkcode') eq 'FA' ) ? "fast_cataloging" : "edit_items";
 }
 
-if (not defined $userflags) {
-    $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_items";
+if ( not defined $userflags ) {
+    $userflags = ( $frameworkcode eq 'FA' ) ? "fast_cataloging" : "edit_items";
 }
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/additem.tt",
-                 query => $input,
-                 type => "intranet",
-                 flagsrequired => {editcatalogue => $userflags},
-                 });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name => "cataloguing/additem.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { editcatalogue => $userflags },
+    }
+);
 
 if ( $op eq 'edititem' || $op eq 'dupeitem' ) {
     my $item = Koha::Items->find($itemnumber);
@@ -167,46 +171,57 @@ if ( $op eq 'edititem' || $op eq 'dupeitem' ) {
 }
 
 # Does the user have a restricted item editing permission?
-my $patron = Koha::Patrons->find( $loggedinuser );
+my $patron = Koha::Patrons->find($loggedinuser);
 
-my $item = $itemnumber ? Koha::Items->find( $itemnumber ) : undef;
+my $item = $itemnumber ? Koha::Items->find($itemnumber) : undef;
 if ( $item && !$patron->can_edit_items_from( $item->homebranch ) ) {
     print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
     exit;
 }
 
-my $uid = $patron->userid;
-my $restrictededition = $uid ? haspermission($uid,  {'editcatalogue' => 'edit_items_restricted'}) : undef;
-# In case user is a superlibrarian, editing is not restricted
-$restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibrarian());
-# In case user has fast cataloging permission (and we're in fast cataloging), editing is not restricted
-$restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
+my $uid               = $patron->userid;
+my $restrictededition = $uid ? haspermission( $uid, { 'editcatalogue' => 'edit_items_restricted' } ) : undef;
 
-our $tagslib = &GetMarcStructure(1,$frameworkcode);
+# In case user is a superlibrarian, editing is not restricted
+$restrictededition = 0 if ( $restrictededition != 0 && C4::Context->IsSuperLibrarian() );
+
+# In case user has fast cataloging permission (and we're in fast cataloging), editing is not restricted
+$restrictededition = 0
+    if ( $restrictededition != 0
+    && $frameworkcode eq 'FA'
+    && haspermission( $uid, { 'editcatalogue' => 'fast_cataloging' } ) );
+
+our $tagslib = &GetMarcStructure( 1, $frameworkcode );
 my $record = $biblio->metadata->record;
 
-output_and_exit_if_error( $input, $cookie, $template,
-    { module => 'cataloguing', record => $record } );
+output_and_exit_if_error(
+    $input, $cookie, $template,
+    { module => 'cataloguing', record => $record }
+);
 
 my $current_item;
-my $nextop="cud-additem";
-my @errors; # store errors found while checking data BEFORE saving item.
+my $nextop = "cud-additem";
+my @errors;    # store errors found while checking data BEFORE saving item.
 
 # Getting last created item cookie
 my $prefillitem = C4::Context->preference('PrefillItem');
 
-my $load_template_submit = $input->param('load_template_submit');
+my $load_template_submit   = $input->param('load_template_submit');
 my $delete_template_submit = $input->param('delete_template_submit');
 my $unload_template_submit = $input->param('unload_template_submit');
-my $use_template_for_session = $input->param('use_template_for_session') || $input->cookie('ItemEditorSessionTemplateId');
+my $use_template_for_session =
+    $input->param('use_template_for_session') || $input->cookie('ItemEditorSessionTemplateId');
 my $template_id = $input->param('template_id') || $input->cookie('ItemEditorSessionTemplateId');
-if ( $delete_template_submit ) {
+if ($delete_template_submit) {
     my $t = Koha::Item::Templates->find($template_id);
-    $t->delete if $t && ( $t->patron_id eq $loggedinuser || haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } ) );
-    $template_id = undef;
+    $t->delete
+        if $t
+        && ( $t->patron_id eq $loggedinuser
+        || haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } ) );
+    $template_id              = undef;
     $use_template_for_session = undef;
 }
-if ($load_template_submit || $unload_template_submit) {
+if ( $load_template_submit || $unload_template_submit ) {
     $op = q{} if $template_id;
 
     $template_id = undef if !$input->param('template_id');
@@ -228,64 +243,64 @@ if ($load_template_submit || $unload_template_submit) {
     $cookie = [ $cookie, $template_cookie ];
 }
 $template->param(
-    template_id    => $template_id,
-    item_templates => Koha::Item::Templates->get_available($loggedinuser),
+    template_id              => $template_id,
+    item_templates           => Koha::Item::Templates->get_available($loggedinuser),
     use_template_for_session => $use_template_for_session,
 );
 
 #-------------------------------------------------------------------------------
-if ($op eq "cud-additem") {
+if ( $op eq "cud-additem" ) {
 
     my $add_submit                 = $input->param('add_submit');
     my $add_duplicate_submit       = $input->param('add_duplicate_submit');
     my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
     my $save_as_template_submit    = $input->param('save_as_template_submit');
-    my $number_of_copies           = min( scalar $input->param('number_of_copies') || 0, 1000 ); # TODO refine hardcoded maximum?
+    my $number_of_copies = min( scalar $input->param('number_of_copies') || 0, 1000 );  # TODO refine hardcoded maximum?
 
     my @columns = Koha::Items->columns;
-    my $item = Koha::Item->new;
-    $item->biblionumber($biblio->biblionumber);
-    for my $c ( @columns ) {
+    my $item    = Koha::Item->new;
+    $item->biblionumber( $biblio->biblionumber );
+    for my $c (@columns) {
         if ( $c eq 'more_subfields_xml' ) {
             my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
             my @unlinked_item_subfields;
-            for my $subfield ( @more_subfields_xml ) {
-                my $v = $input->param('items.more_subfields_xml_' . $subfield);
+            for my $subfield (@more_subfields_xml) {
+                my $v = $input->param( 'items.more_subfields_xml_' . $subfield );
                 push @unlinked_item_subfields, $subfield, $v;
             }
-            if ( @unlinked_item_subfields ) {
+            if (@unlinked_item_subfields) {
                 my $marc = MARC::Record->new();
+
                 # use of tag 999 is arbitrary, and doesn't need to match the item tag
                 # used in the framework
-                $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
+                $marc->append_fields( MARC::Field->new( '999', ' ', ' ', @unlinked_item_subfields ) );
                 $marc->encoding("UTF-8");
-                $item->more_subfields_xml($marc->as_xml("USMARC"));
+                $item->more_subfields_xml( $marc->as_xml("USMARC") );
                 next;
             }
             $item->more_subfields_xml(undef);
         } else {
             next if $c eq 'itemnumber';
-            my @v = grep { $_ ne "" }
-                uniq $input->multi_param( "items." . $c );
+            my @v = grep { $_ ne "" } uniq $input->multi_param( "items." . $c );
 
             next unless @v;
 
-            if ( $c eq 'permanent_location' ) { # See 27837
+            if ( $c eq 'permanent_location' ) {    # See 27837
                 $item->make_column_dirty('permanent_location');
             }
 
-            $item->$c(join ' | ', @v);
+            $item->$c( join ' | ', @v );
         }
     }
 
     # if autoBarcode is set to 'incremental', calculate barcode...
     my $submitted_barcode = $item->barcode;
-    if ( ! defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
-        my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+    if ( !defined $item->barcode && C4::Context->preference('autoBarcode') eq 'incremental' ) {
+        my ($barcode) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $item->barcode($barcode);
     }
 
-    $item->barcode(barcodedecode($item->barcode));
+    $item->barcode( barcodedecode( $item->barcode ) );
 
     if ($save_as_template_submit) {
         my $template_name       = $input->param('template_name');
@@ -293,23 +308,21 @@ if ($op eq "cud-additem") {
         my $replace_template_id = $input->param('replace_template_id');
 
         my $contents = $item->unblessed;
-        $contents->{barcode} = $submitted_barcode; # Don't save the autobarcode in the template
+        $contents->{barcode} = $submitted_barcode;    # Don't save the autobarcode in the template
 
         if ($replace_template_id) {
             my $template = Koha::Item::Templates->find($replace_template_id);
             $template->update(
                 {
-                    id             => $replace_template_id,
-                    is_shared      => $template_is_shared ? 1 : 0,
-                    contents       => $contents,
+                    id        => $replace_template_id,
+                    is_shared => $template_is_shared ? 1 : 0,
+                    contents  => $contents,
                 }
-            ) if $template && (
-                $template->patron_id eq $loggedinuser
-                ||
-                haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } )
-            );
-        }
-        else {
+                )
+                if $template
+                && ( $template->patron_id eq $loggedinuser
+                || haspermission( $uid, { 'editcatalogue' => 'manage_item_editor_templates' } ) );
+        } else {
             my $template = Koha::Item::Template->new(
                 {
                     name      => $template_name,
@@ -320,8 +333,9 @@ if ($op eq "cud-additem") {
             )->store();
         }
     }
+
     # If we have to add or add & duplicate, we add the item
-    elsif ( $add_submit || $add_duplicate_submit || $prefillitem) {
+    elsif ( $add_submit || $add_duplicate_submit || $prefillitem ) {
 
         # check for item barcode # being unique
         if ( defined $item->barcode
@@ -330,11 +344,14 @@ if ($op eq "cud-additem") {
             # if barcode exists, don't create, but report The problem.
             push @errors, "barcode_not_unique";
 
-            $current_item = $item->unblessed; # Restore edit form for the same item
+            $current_item = $item->unblessed;    # Restore edit form for the same item
         }
-        unless ( @errors ) {
+        unless (@errors) {
             $item->store->discard_changes;
-            add_item_to_item_group( $item->biblionumber, $item->itemnumber, $item_group, $item_group_description, $display_order );
+            add_item_to_item_group(
+                $item->biblionumber, $item->itemnumber, $item_group, $item_group_description,
+                $display_order
+            );
 
             # This is a bit tricky : if there is a cookie for the last created item and
             # we just added an item, the cookie value is not correct yet (it will be updated
@@ -343,13 +360,14 @@ if ($op eq "cud-additem") {
             # correct values.
 
             # Pushing the last created item cookie back
-            if ( $prefillitem ) {
+            if ($prefillitem) {
                 my $last_created_item_cookie = $input->cookie(
                     -name => 'LastCreatedItem',
+
                     # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
-                    -value   => encode_base64url( freeze( { %{$item->unblessed}, itemnumber => undef } ) ),
+                    -value    => encode_base64url( freeze( { %{ $item->unblessed }, itemnumber => undef } ) ),
                     -HttpOnly => 1,
-                    -expires => '',
+                    -expires  => '',
                     -sameSite => 'Lax'
                 );
 
@@ -362,17 +380,17 @@ if ($op eq "cud-additem") {
     }
 
     # If we have to add & duplicate
-    if ($prefillitem || $add_duplicate_submit) {
+    if ( $prefillitem || $add_duplicate_submit ) {
 
         $current_item = $item->unblessed;
 
-        if (C4::Context->preference('autoBarcode') eq 'incremental') {
-            my ( $barcode ) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
+        if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
+            my ($barcode) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
             $current_item->{barcode} = $barcode;
-        }
-        else {
+        } else {
+
             # we have to clear the barcode field in the duplicate item record to make way for the new one generated by the javascript plugin
-            $current_item->{barcode} = undef; # FIXME or delete?
+            $current_item->{barcode} = undef;    # FIXME or delete?
         }
 
         # Don't use the "prefill" feature if we want to generate the form with all the info from this item
@@ -396,8 +414,8 @@ if ($op eq "cud-additem") {
 
             push @errors, "no_next_barcode";
 
-        }
-        else {
+        } else {
+
             # We add each item
 
             # For the first iteration
@@ -409,15 +427,14 @@ if ($op eq "cud-additem") {
                 # If there is a barcode
                 if ($barcodevalue) {
 
-# Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
+                    # Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
                     $barcodevalue = $barcodeobj->next_value($oldbarcode)
-                      if ( $i > 0 || $exist_itemnumber );
+                        if ( $i > 0 || $exist_itemnumber );
 
                     # Putting it into the record
                     if ($barcodevalue) {
-                        if ( C4::Context->preference("autoBarcode") eq
-                            'hbyymmincr' && $i > 0 )
-                        { # The first copy already contains the homebranch prefix
+                        if ( C4::Context->preference("autoBarcode") eq 'hbyymmincr' && $i > 0 )
+                        {    # The first copy already contains the homebranch prefix
                              # This is terribly hacky but the easiest way to fix the way hbyymmincr is working
                              # Contrary to what one might think, the barcode plugin does not prefix the returned string with the homebranch
                              # For a single item, it is handled with some JS code (see cataloguing/value_builder/barcode.pl)
@@ -430,7 +447,7 @@ if ($op eq "cud-additem") {
                     }
 
                     # Checking if the barcode already exists
-                    $exist_itemnumber = Koha::Items->search({ barcode => $barcodevalue })->count;
+                    $exist_itemnumber = Koha::Items->search( { barcode => $barcodevalue } )->count;
                 }
 
                 # Updating record with the new copynumber
@@ -441,18 +458,17 @@ if ($op eq "cud-additem") {
                 # Adding the item
                 if ( !$exist_itemnumber ) {
                     delete $current_item->{itemnumber};
-                    $current_item = Koha::Item->new($current_item)->store(
-                        { skip_record_index => 1 } );
-                    $current_item->discard_changes; # Cannot chain discard_changes
+                    $current_item = Koha::Item->new($current_item)->store( { skip_record_index => 1 } );
+                    $current_item->discard_changes;    # Cannot chain discard_changes
                     $current_item = $current_item->unblessed;
                     add_item_to_item_group(
-                        $item->biblionumber, $item->itemnumber, $item_group,
+                        $item->biblionumber,     $item->itemnumber, $item_group,
                         $item_group_description, $display_order
                     );
 
-# We count the item only if it was really added
-# That way, all items are added, even if there was some already existing barcodes
-# FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
+                    # We count the item only if it was really added
+                    # That way, all items are added, even if there was some already existing barcodes
+                    # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
                     $i++;
 
                     # Only increment copynumber if item was really added
@@ -463,117 +479,130 @@ if ($op eq "cud-additem") {
                 $oldbarcode = $barcodevalue;
             }
 
-            my $indexer = Koha::SearchEngine::Indexer->new(
-                { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-            $indexer->index_records( $biblionumber, "specialUpdate",
-                "biblioserver" );
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records(
+                $biblionumber, "specialUpdate",
+                "biblioserver"
+            );
 
             undef($current_item);
         }
     }
-    if ($frameworkcode eq 'FA' && $fa_circborrowernumber){
-        print $input->redirect(
-           '/cgi-bin/koha/circ/circulation.pl?'
-           .'borrowernumber='.$fa_circborrowernumber
-           .'&barcode='.uri_escape_utf8($fa_barcode)
-           .'&duedatespec='.$fa_duedatespec
-           .'&stickyduedate='.$fa_stickyduedate
-        );
+    if ( $frameworkcode eq 'FA' && $fa_circborrowernumber ) {
+        print $input->redirect( '/cgi-bin/koha/circ/circulation.pl?'
+                . 'borrowernumber='
+                . $fa_circborrowernumber
+                . '&barcode='
+                . uri_escape_utf8($fa_barcode)
+                . '&duedatespec='
+                . $fa_duedatespec
+                . '&stickyduedate='
+                . $fa_stickyduedate );
         exit;
     }
 
+    #-------------------------------------------------------------------------------
+} elsif ( $op eq "edititem" ) {
 
-#-------------------------------------------------------------------------------
-} elsif ($op eq "edititem") {
-#-------------------------------------------------------------------------------
-# retrieve item if exist => then, it's a modif
+    #-------------------------------------------------------------------------------
+    # retrieve item if exist => then, it's a modif
     $current_item = Koha::Items->find($itemnumber)->unblessed;
     $nextop       = "cud-saveitem";
-#-------------------------------------------------------------------------------
-} elsif ($op eq "dupeitem") {
-#-------------------------------------------------------------------------------
-# retrieve item if exist => then, it's a modif
+
+    #-------------------------------------------------------------------------------
+} elsif ( $op eq "dupeitem" ) {
+
+    #-------------------------------------------------------------------------------
+    # retrieve item if exist => then, it's a modif
     $current_item = Koha::Items->find($itemnumber)->unblessed;
     if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
         my ($barcode) = C4::Barcodes::ValueBuilder::incremental::get_barcode;
         $current_item->{barcode} = $barcode;
-    }
-    else {
+    } else {
         $current_item->{barcode} = undef;    # Don't save it!
     }
 
     $nextop = "cud-additem";
-#-------------------------------------------------------------------------------
-} elsif ($op eq "cud-delitem") {
-#-------------------------------------------------------------------------------
+
+    #-------------------------------------------------------------------------------
+} elsif ( $op eq "cud-delitem" ) {
+
+    #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
     my $item = Koha::Items->find($itemnumber);
     my $deleted;
-    if( $item ) {
+    if ($item) {
         $deleted = $item->safe_delete;
     } else {
-        $deleted = Koha::Result::Boolean->new(0)->add_message({ message => 'item_not_found' });
+        $deleted = Koha::Result::Boolean->new(0)->add_message( { message => 'item_not_found' } );
     }
-    if ( $deleted ) {
+    if ($deleted) {
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
         exit;
-    }
-    else {
+    } else {
         push @errors, @{ $deleted->messages }[0]->message;
         $nextop = "cud-additem";
     }
-#-------------------------------------------------------------------------------
-} elsif ($op eq "cud-delallitems") {
-#-------------------------------------------------------------------------------
-    my $items = Koha::Items->search({ biblionumber => $biblionumber });
+
+    #-------------------------------------------------------------------------------
+} elsif ( $op eq "cud-delallitems" ) {
+
+    #-------------------------------------------------------------------------------
+    my $items = Koha::Items->search( { biblionumber => $biblionumber } );
     while ( my $item = $items->next ) {
-        my $deleted = $item->safe_delete({ skip_record_index => 1 });
-        push @errors, @{$deleted->messages}[0]->message unless $deleted;
+        my $deleted = $item->safe_delete( { skip_record_index => 1 } );
+        push @errors, @{ $deleted->messages }[0]->message unless $deleted;
     }
-    my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     $indexer->index_records( $biblionumber, "specialUpdate", "biblioserver" );
-    if ( @errors ) {
-        $nextop="cud-additem";
+    if (@errors) {
+        $nextop = "cud-additem";
     } else {
         my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
-        my $views = { C4::Search::enabled_staff_search_views };
-        if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
-            print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
-        } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
-            print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
-        } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
-            print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        my $views       = {C4::Search::enabled_staff_search_views};
+        if ( $defaultview eq 'isbd' && $views->{can_view_ISBD} ) {
+            print $input->redirect(
+                "/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        } elsif ( $defaultview eq 'marc' && $views->{can_view_MARC} ) {
+            print $input->redirect(
+                "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        } elsif ( $defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC} ) {
+            print $input->redirect(
+                "/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
         } else {
             print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
         }
         exit;
     }
-#-------------------------------------------------------------------------------
-} elsif ($op eq "cud-saveitem") {
-#-------------------------------------------------------------------------------
+
+    #-------------------------------------------------------------------------------
+} elsif ( $op eq "cud-saveitem" ) {
+
+    #-------------------------------------------------------------------------------
 
     my $itemnumber = $input->param('itemnumber');
-    my $item = Koha::Items->find($itemnumber);
+    my $item       = Koha::Items->find($itemnumber);
     unless ($item) {
         C4::Output::output_error( $input, '404' );
         exit;
     }
     my $olditemlost = $item->itemlost;
-    my @columns = Koha::Items->columns;
-    my $new_values = $item->unblessed;
-    for my $c ( @columns ) {
+    my @columns     = Koha::Items->columns;
+    my $new_values  = $item->unblessed;
+    for my $c (@columns) {
         if ( $c eq 'more_subfields_xml' ) {
             my @more_subfields_xml = $input->multi_param("items.more_subfields_xml");
             my @unlinked_item_subfields;
             for my $subfield ( uniq @more_subfields_xml ) {
-                my @v = $input->multi_param('items.more_subfields_xml_' . encode_utf8($subfield));
+                my @v = $input->multi_param( 'items.more_subfields_xml_' . encode_utf8($subfield) );
                 push @unlinked_item_subfields, $subfield, $_ for @v;
             }
-            if ( @unlinked_item_subfields ) {
+            if (@unlinked_item_subfields) {
                 my $marc = MARC::Record->new();
+
                 # use of tag 999 is arbitrary, and doesn't need to match the item tag
                 # used in the framework
-                $marc->append_fields(MARC::Field->new('999', ' ', ' ', @unlinked_item_subfields));
+                $marc->append_fields( MARC::Field->new( '999', ' ', ' ', @unlinked_item_subfields ) );
                 $marc->encoding("UTF-8");
                 $new_values->{more_subfields_xml} = $marc->as_xml("USMARC");
                 next;
@@ -583,7 +612,7 @@ if ($op eq "cud-additem") {
             my @v = map { ( defined $_ && $_ eq '' ) ? undef : $_ } $input->multi_param( "items." . $c );
             next unless @v;
 
-            if ( $c eq 'permanent_location' ) { # See 27837
+            if ( $c eq 'permanent_location' ) {    # See 27837
                 $item->make_column_dirty('permanent_location');
             }
 
@@ -605,11 +634,11 @@ if ($op eq "cud-additem") {
                 itemnumber => { '!=' => $item->itemnumber }
             }
         )->count
-      )
+        )
     {
         # FIXME We shouldn't need that, ->store would explode as there is a unique constraint on items.barcode
-        push @errors,"barcode_not_unique";
-        $current_item = $item->unblessed; # Restore edit form for the same item
+        push @errors, "barcode_not_unique";
+        $current_item = $item->unblessed;    # Restore edit form for the same item
     } else {
         my $newitemlost = $item->itemlost;
         if ( $newitemlost && $newitemlost ge '1' && !$olditemlost ) {
@@ -618,28 +647,28 @@ if ($op eq "cud-additem") {
         $item->store;
     }
 
-    $nextop="cud-additem";
-} elsif ($op eq "delinkitem"){
+    $nextop = "cud-additem";
+} elsif ( $op eq "delinkitem" ) {
 
     my $analyticfield = '773';
-    if ($marcflavour  eq 'MARC21'){
+    if ( $marcflavour eq 'MARC21' ) {
         $analyticfield = '773';
-    } elsif ($marcflavour eq 'UNIMARC') {
+    } elsif ( $marcflavour eq 'UNIMARC' ) {
         $analyticfield = '461';
     }
-    foreach my $field ($record->field($analyticfield)){
-        if ($field->subfield('9') eq $hostitemnumber){
+    foreach my $field ( $record->field($analyticfield) ) {
+        if ( $field->subfield('9') eq $hostitemnumber ) {
             $record->delete_field($field);
             last;
         }
     }
-	my $modbibresult = ModBiblio($record, $biblionumber,'');
+    my $modbibresult = ModBiblio( $record, $biblionumber, '' );
 }
 
 # update OAI-PMH sets
 if ($op) {
-    if (C4::Context->preference("OAI-PMH:AutoUpdateSets")) {
-        C4::OAI::Sets::UpdateOAISetsBiblio($biblionumber, $record);
+    if ( C4::Context->preference("OAI-PMH:AutoUpdateSets") ) {
+        C4::OAI::Sets::UpdateOAISetsBiblio( $biblionumber, $record );
     }
 }
 
@@ -653,7 +682,7 @@ if ($op) {
 my @items;
 for my $item ( $biblio->items->as_list, $biblio->host_items->as_list ) {
     my $i = $item->columns_to_str;
-    $i->{nomod} = 1 unless $patron->can_edit_items_from($item->homebranch);
+    $i->{nomod} = 1 unless $patron->can_edit_items_from( $item->homebranch );
     push @items, $i;
 }
 
@@ -669,14 +698,14 @@ for my $subfield_code ( keys %{ $tagslib->{$itemtagfield} } ) {
 
     my $subfield = $tagslib->{$itemtagfield}->{$subfield_code};
 
-    next if IsMarcStructureInternal( $subfield );
-    next unless $subfield->{tab} eq 10; # Is this really needed?
+    next if IsMarcStructureInternal($subfield);
+    next unless $subfield->{tab} eq 10;    # Is this really needed?
 
     my $attribute;
     if ( $subfield->{kohafield} ) {
         ( $attribute = $subfield->{kohafield} ) =~ s|^items\.||;
     } else {
-        $attribute = $subfield_code; # It's in more_subfields_xml
+        $attribute = $subfield_code;       # It's in more_subfields_xml
     }
     next unless grep { $attribute eq $_ } @witness_attributes;
     $subfieldcode_attribute_mappings->{$subfield_code} = $attribute;
@@ -691,24 +720,24 @@ my @header_value_loop = map {
 } sort keys %$subfieldcode_attribute_mappings;
 
 # Using last created item if it exists
-if (
-    $op ne "cud-additem"
+if (   $op ne "cud-additem"
     && $op ne "edititem"
     && $op ne "dupeitem" )
 {
-    if ( $template_id ) {
+    if ($template_id) {
         my $item_from_template = get_item_from_template($template_id);
         $current_item = $item_from_template if $item_from_template;
-    }
-    elsif ( $prefillitem ) {
+    } elsif ($prefillitem) {
         my $item_from_cookie = get_item_from_cookie($input);
         $current_item = $item_from_cookie if $item_from_cookie;
     }
 }
 
 if ( $current_item->{more_subfields_xml} ) {
+
     # FIXME Use Maybe MARC::Record::new_from_xml if encoding issues on subfield (??)
-    $current_item->{marc_more_subfields_xml} = MARC::Record->new_from_xml($current_item->{more_subfields_xml}, 'UTF-8');
+    $current_item->{marc_more_subfields_xml} =
+        MARC::Record->new_from_xml( $current_item->{more_subfields_xml}, 'UTF-8' );
 }
 
 my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
@@ -718,15 +747,17 @@ my $branchcode = $input->param('branch') || C4::Context->userenv->{branch};
 # If the subfield must be prefilled with last catalogued item
 my @subfields_to_prefill;
 if ( $nextop eq 'cud-additem' && $op ne 'dupeitem' && $prefillitem ) {
-    @subfields_to_prefill = split(' ', C4::Context->preference('SubfieldsToUseWhenPrefill'));
+    @subfields_to_prefill = split( ' ', C4::Context->preference('SubfieldsToUseWhenPrefill') );
 }
 
 # Getting list of subfields to keep when restricted editing is enabled
-my @subfields_to_allow = $restrictededition ? split ' ', C4::Context->preference('SubfieldsToAllowForRestrictedEditing') : ();
+my @subfields_to_allow =
+    $restrictededition
+    ? split ' ', C4::Context->preference('SubfieldsToAllowForRestrictedEditing')
+    : ();
 
 my $subfields =
-  Koha::UI::Form::Builder::Item->new(
-    { biblionumber => $biblionumber, item => $current_item } )->edit_form(
+    Koha::UI::Form::Builder::Item->new( { biblionumber => $biblionumber, item => $current_item } )->edit_form(
     {
         branchcode           => $branchcode,
         restricted_editition => $restrictededition,
@@ -741,44 +772,47 @@ my $subfields =
             : ()
         ),
         prefill_with_default_values => 1,
-        branch_limit => C4::Context->userenv->{"branch"},
+        branch_limit                => C4::Context->userenv->{"branch"},
         (
             $op eq 'dupeitem'
             ? ( ignore_invisible_subfields => 1 )
             : ()
         ),
     }
-);
+    );
 
-if (   $frameworkcode eq 'FA' ) {
-    my ( $barcode_field ) = grep {$_->{kohafield} eq 'items.barcode'} @$subfields;
+if ( $frameworkcode eq 'FA' ) {
+    my ($barcode_field) = grep { $_->{kohafield} eq 'items.barcode' } @$subfields;
     $barcode_field->{marc_value}->{value} ||= $input->param('barcode');
 }
 
-if( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) {
-    my ( $location_field ) = grep {$_->{kohafield} eq 'items.location'} @$subfields;
+if ( my $default_location = C4::Context->preference('NewItemsDefaultLocation') ) {
+    my ($location_field) = grep { $_->{kohafield} eq 'items.location' } @$subfields;
     $location_field->{marc_value}->{value} ||= $default_location;
 }
 
-my @ig = Koha::Biblio::ItemGroups->search({ biblio_id => $biblionumber })->as_list();
+my @ig = Koha::Biblio::ItemGroups->search( { biblio_id => $biblionumber } )->as_list();
+
 #sort by display order
 my @sorted_ig = sort { $a->display_order <=> $b->display_order } @ig;
+
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
-    biblio       => $biblio,
-    items        => \@items,
+    biblio           => $biblio,
+    items            => \@items,
     item_groups      => \@sorted_ig,
     item_header_loop => \@header_value_loop,
     subfields        => $subfields,
     itemnumber       => $itemnumber,
     barcode          => $current_item->{barcode},
-    op      => $nextop,
-    popup => scalar $input->param('popup') ? 1: 0,
+    op               => $nextop,
+    popup            => scalar $input->param('popup') ? 1 : 0,
     C4::Search::enabled_staff_search_views,
 );
 $template->{'VARS'}->{'searchid'} = $searchid;
 
-if ($frameworkcode eq 'FA'){
+if ( $frameworkcode eq 'FA' ) {
+
     # fast cataloguing datas
     $template->param(
         'circborrowernumber' => $fa_circborrowernumber,
@@ -790,6 +824,6 @@ if ($frameworkcode eq 'FA'){
 }
 
 foreach my $error (@errors) {
-    $template->param($error => 1);
+    $template->param( $error => 1 );
 }
 output_html_with_http_headers $input, $cookie, $template->output;
