@@ -70,6 +70,8 @@ sub store {
 
     my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
 
+    my $new_suggestion = !$self->in_storage;
+
     my $result = $self->SUPER::store();
     if ( $emailpurchasesuggestions && $self->STATUS eq 'ASKED' ) {
 
@@ -112,8 +114,9 @@ sub store {
             ) or warn "can't enqueue letter $letter";
         }
     }
-    if (C4::Context->preference("NewsLog")) {
-        logaction('SUGGESTION', 'CREATE', $result->suggestionid, '' );
+    my $suggestion_object = Koha::Suggestions->find( $result->suggestionid );
+    if ( $new_suggestion && C4::Context->preference("SuggestionsLog") ) {
+        logaction( 'SUGGESTION', 'CREATE', $result->suggestionid, $suggestion_object );
     }
     return $result;
 }
