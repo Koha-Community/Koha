@@ -36,6 +36,12 @@ __PACKAGE__->table("authorised_value_categories");
   default_value: 0
   is_nullable: 1
 
+=head2 is_integer_only
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -43,6 +49,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 32 },
   "is_system",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "is_integer_only",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -105,11 +113,12 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-28 09:07:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EfBQNJN5wgpFPlWVP4U+qw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-17 07:33:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sDV5yk91mmU5Huaa5QNo6A
 
 __PACKAGE__->add_columns(
-    '+is_system' => { is_boolean => 1 },
+    '+is_system'       => { is_boolean => 1 },
+    '+is_integer_only' => { is_boolean => 1 },
 );
 
 sub koha_objects_class {
