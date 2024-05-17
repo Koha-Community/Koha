@@ -662,7 +662,9 @@ sub get_corrected_marc_record {
             my @filters;
             my @other_headings;
             push @filters, 'EmbedItemsAvailability';
-            if ( C4::Context->preference('IncludeSeeFromInSearches') || C4::Context->preference('IncludeSeeAlsoFromInSearches') ){
+            if (   C4::Context->preference('IncludeSeeFromInSearches')
+                || C4::Context->preference('IncludeSeeAlsoFromInSearches') )
+            {
                 push @filters, 'EmbedSeeFromHeadings';
                 if ( C4::Context->preference('IncludeSeeFromInSearches') ) {
                     push @other_headings, 'see_from';
@@ -675,9 +677,7 @@ sub get_corrected_marc_record {
             my $normalizer = Koha::RecordProcessor->new(
                 {
                     filters => \@filters,
-                    options => {
-                        other_headings => \@other_headings
-                    }
+                    options => { other_headings => \@other_headings }
                 }
             );
             $marc = $normalizer->process($marc);

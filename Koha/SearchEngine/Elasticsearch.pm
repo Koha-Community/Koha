@@ -664,7 +664,12 @@ sub marc_records_to_documents {
             }
         }
 
-        if ( $self->index eq $BIBLIOS_INDEX and ( C4::Context->preference('IncludeSeeFromInSearches') || C4::Context->preference('IncludeSeeAlsoFromInSearches') ) ) {
+        if (
+            $self->index eq $BIBLIOS_INDEX
+            and (  C4::Context->preference('IncludeSeeFromInSearches')
+                || C4::Context->preference('IncludeSeeAlsoFromInSearches') )
+            )
+        {
             my $marc_filter = Koha::Filter::MARC::EmbedSeeFromHeadings->new;
             my @other_headings;
             if ( C4::Context->preference('IncludeSeeFromInSearches') ) {
@@ -673,30 +678,29 @@ sub marc_records_to_documents {
             if ( C4::Context->preference('IncludeSeeAlsoFromInSearches') ) {
                 push @other_headings, 'see_also_from';
             }
-            $marc_filter->initialize(
-                {
-                    options => {
-                        other_headings => \@other_headings
-                    }
-                }
-            );
-            foreach my $field ($marc_filter->fields($record)) {
-                my $data_field_rules = $data_fields_rules->{$field->tag()};
+            $marc_filter->initialize( { options => { other_headings => \@other_headings } } );
+            foreach my $field ( $marc_filter->fields($record) ) {
+                my $data_field_rules = $data_fields_rules->{ $field->tag() };
                 if ($data_field_rules) {
                     my $subfields_mappings = $data_field_rules->{subfields};
-                    my $wildcard_mappings = $subfields_mappings->{'*'};
-                    foreach my $subfield ($field->subfields()) {
-                        my ($code, $data) = @{$subfield};
+                    my $wildcard_mappings  = $subfields_mappings->{'*'};
+                    foreach my $subfield ( $field->subfields() ) {
+                        my ( $code, $data ) = @{$subfield};
                         my @mappings;
                         push @mappings, @{ $subfields_mappings->{$code} } if $subfields_mappings->{$code};
-                        push @mappings, @$wildcard_mappings if $wildcard_mappings;
+                        push @mappings, @$wildcard_mappings               if $wildcard_mappings;
+
                         # Do not include "see from" into these kind of fields
                         @mappings = grep { $_->[0] !~ /__(sort|facet|suggestion)$/ } @mappings;
                         if (@mappings) {
-                            $self->_process_mappings(\@mappings, $data, $record_document, {
+                            $self->_process_mappings(
+                                \@mappings,
+                                $data,
+                                $record_document,
+                                {
                                     data_source => 'subfield',
-                                    code => $code,
-                                    field => $field
+                                    code        => $code,
+                                    field       => $field
                                 }
                             );
                         }
@@ -704,19 +708,25 @@ sub marc_records_to_documents {
 
                     my $subfields_join_mappings = $data_field_rules->{subfields_join};
                     if ($subfields_join_mappings) {
-                        foreach my $subfields_group (keys %{$subfields_join_mappings}) {
+                        foreach my $subfields_group ( keys %{$subfields_join_mappings} ) {
                             my $data_field = $field->clone;
+
                             # remove empty subfields, otherwise they are printed as a space
-                            $data_field->delete_subfield(match => qr/^$/);
-                            my $data = $data_field->as_string( $subfields_group );
+                            $data_field->delete_subfield( match => qr/^$/ );
+                            my $data = $data_field->as_string($subfields_group);
                             if ($data) {
                                 my @mappings = @{ $subfields_join_mappings->{$subfields_group} };
+
                                 # Do not include "see from" into these kind of fields
                                 @mappings = grep { $_->[0] !~ /__(sort|facet|suggestion)$/ } @mappings;
-                                $self->_process_mappings(\@mappings, $data, $record_document, {
+                                $self->_process_mappings(
+                                    \@mappings,
+                                    $data,
+                                    $record_document,
+                                    {
                                         data_source => 'subfields_group',
-                                        codes => $subfields_group,
-                                        field => $field
+                                        codes       => $subfields_group,
+                                        field       => $field
                                     }
                                 );
                             }
