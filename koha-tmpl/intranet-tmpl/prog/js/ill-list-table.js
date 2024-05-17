@@ -247,7 +247,11 @@ $(document).ready(function() {
                 "data": "", // author
                 "orderable": false,
                 "render": function(data, type, row, meta) {
-                    return display_extended_attribute(row, 'author');
+                    const author = display_extended_attribute(row, 'author');
+                    if(author) return author
+                    const articleAuthor = display_extended_attribute(row, 'article_author');
+                    if(articleAuthor) return articleAuthor
+                    return ''
                 }
             },
             {
