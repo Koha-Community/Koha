@@ -24,26 +24,26 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output;
 use C4::Letters;
-use C4::Biblio qw( GetMarcFromKohaField );
+use C4::Biblio      qw( GetMarcFromKohaField );
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Suggestions;
 use C4::Log qw(logaction);
 
 use base qw(Exporter);
 
-our @EXPORT  = qw(
-  ConnectSuggestionAndBiblio
-  DelSuggestion
-  GetSuggestion
-  GetSuggestionByStatus
-  GetSuggestionFromBiblionumber
-  GetSuggestionInfoFromBiblionumber
-  GetSuggestionInfo
-  ModStatus
-  ModSuggestion
-  DelSuggestionsOlderThan
-  GetUnprocessedSuggestions
-  MarcRecordFromNewSuggestion
+our @EXPORT = qw(
+    ConnectSuggestionAndBiblio
+    DelSuggestion
+    GetSuggestion
+    GetSuggestionByStatus
+    GetSuggestionFromBiblionumber
+    GetSuggestionInfoFromBiblionumber
+    GetSuggestionInfo
+    ModStatus
+    ModSuggestion
+    DelSuggestionsOlderThan
+    GetUnprocessedSuggestions
+    MarcRecordFromNewSuggestion
 );
 
 =head1 NAME
@@ -84,8 +84,8 @@ return :
 
 sub GetSuggestion {
     my ($suggestionid) = @_;
-    my $dbh           = C4::Context->dbh;
-    my $query         = q{
+    my $dbh            = C4::Context->dbh;
+    my $query          = q{
         SELECT *
         FROM   suggestions
         WHERE  suggestionid=?
@@ -248,10 +248,10 @@ Note that there is no function to modify a suggestion.
 
 sub ModSuggestion {
     my ($suggestion) = @_;
-    return unless( $suggestion and defined($suggestion->{suggestionid}) );
+    return unless ( $suggestion and defined( $suggestion->{suggestionid} ) );
 
     my $suggestion_object = Koha::Suggestions->find( $suggestion->{suggestionid} );
-    eval { # FIXME Must raise an exception instead
+    eval {    # FIXME Must raise an exception instead
         $suggestion_object->set($suggestion)->store;
     };
     return 0 if $@;
@@ -263,7 +263,10 @@ sub ModSuggestion {
 
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
 
-        my $transport = (C4::Context->preference("FallbackToSMSIfNoEmail")) && ($patron->smsalertnumber) && (!$patron->email) ? 'sms' : 'email';
+        my $transport =
+               ( C4::Context->preference("FallbackToSMSIfNoEmail") )
+            && ( $patron->smsalertnumber )
+            && ( !$patron->email ) ? 'sms' : 'email';
 
         if (
             my $letter = C4::Letters::GetPreparedLetter(
@@ -278,23 +281,23 @@ sub ModSuggestion {
                     'biblio'      => $full_suggestion->{biblionumber},
                 },
             )
-          )
+            )
         {
             C4::Letters::EnqueueLetter(
                 {
-                    letter         => $letter,
-                    borrowernumber => $full_suggestion->{suggestedby},
-                    suggestionid   => $full_suggestion->{suggestionid},
-                    LibraryName    => C4::Context->preference("LibraryName"),
+                    letter                 => $letter,
+                    borrowernumber         => $full_suggestion->{suggestedby},
+                    suggestionid           => $full_suggestion->{suggestionid},
+                    LibraryName            => C4::Context->preference("LibraryName"),
                     message_transport_type => $transport,
                 }
             ) or warn "can't enqueue letter $letter";
         }
     }
-    if (C4::Context->preference("SuggestionsLog")) {
-        logaction('SUGGESTION', 'MODIFY', $suggestion->{suggestionid}, $suggestion_object );
+    if ( C4::Context->preference("SuggestionsLog") ) {
+        logaction( 'SUGGESTION', 'MODIFY', $suggestion->{suggestionid}, $suggestion_object );
     }
-    return 1; # No useful if the exception is raised earlier
+    return 1;    # No useful if the exception is raised earlier
 }
 
 =head2 ConnectSuggestionAndBiblio
@@ -338,8 +341,9 @@ sub DelSuggestion {
     my $sth = $dbh->prepare($query);
     $sth->execute($suggestionid);
     my ($suggestedby) = $sth->fetchrow;
-    $suggestedby //= '';
+    $suggestedby    //= '';
     $borrowernumber //= '';
+
     if ( defined $type && $type eq 'intranet' || $suggestedby eq $borrowernumber ) {
         my $queryDelete = q{
             DELETE FROM suggestions
@@ -347,8 +351,8 @@ sub DelSuggestion {
         };
         $sth = $dbh->prepare($queryDelete);
         my $suggestiondeleted = $sth->execute($suggestionid);
-        if (C4::Context->preference("SuggestionsLog")) {
-            logaction('SUGGESTION', 'DELETE', $suggestionid, '' );
+        if ( C4::Context->preference("SuggestionsLog") ) {
+            logaction( 'SUGGESTION', 'DELETE', $suggestionid, '' );
         }
         return $suggestiondeleted;
     }
@@ -377,19 +381,21 @@ sub DelSuggestionsOlderThan {
 }
 
 sub GetUnprocessedSuggestions {
-    my ( $number_of_days_since_the_last_modification ) = @_;
+    my ($number_of_days_since_the_last_modification) = @_;
 
     $number_of_days_since_the_last_modification ||= 0;
 
     my $dbh = C4::Context->dbh;
 
-    my $s = $dbh->selectall_arrayref(q|
+    my $s = $dbh->selectall_arrayref(
+        q|
         SELECT *
         FROM suggestions
         WHERE STATUS = 'ASKED'
             AND budgetid IS NOT NULL
             AND CAST(NOW() AS DATE) - INTERVAL ? DAY = CAST(suggesteddate AS DATE)
-    |, { Slice => {} }, $number_of_days_since_the_last_modification );
+    |, { Slice => {} }, $number_of_days_since_the_last_modification
+    );
     return $s;
 }
 
@@ -405,39 +411,29 @@ sub MarcRecordFromNewSuggestion {
     my ($suggestion) = @_;
     my $record = MARC::Record->new();
 
-    if (my $isbn = $suggestion->{isbn}) {
+    if ( my $isbn = $suggestion->{isbn} ) {
         for my $field (qw(biblioitems.isbn biblioitems.issn)) {
-            my ($tag, $subfield) = GetMarcFromKohaField($field);
-            $record->append_fields(
-                MARC::Field->new($tag, ' ', ' ', $subfield => $isbn)
-            );
+            my ( $tag, $subfield ) = GetMarcFromKohaField($field);
+            $record->append_fields( MARC::Field->new( $tag, ' ', ' ', $subfield => $isbn ) );
         }
-    }
-    else {
-        my ($title_tag, $title_subfield) = GetMarcFromKohaField('biblio.title');
-        $record->append_fields(
-            MARC::Field->new($title_tag, ' ', ' ', $title_subfield => $suggestion->{title})
-        );
+    } else {
+        my ( $title_tag, $title_subfield ) = GetMarcFromKohaField('biblio.title');
+        $record->append_fields( MARC::Field->new( $title_tag, ' ', ' ', $title_subfield => $suggestion->{title} ) );
 
-        my ($author_tag, $author_subfield) = GetMarcFromKohaField('biblio.author');
-        if ($record->field( $author_tag )) {
-            $record->field( $author_tag )->add_subfields( $author_subfield => $suggestion->{author} );
-        }
-        else {
+        my ( $author_tag, $author_subfield ) = GetMarcFromKohaField('biblio.author');
+        if ( $record->field($author_tag) ) {
+            $record->field($author_tag)->add_subfields( $author_subfield => $suggestion->{author} );
+        } else {
             $record->append_fields(
-                MARC::Field->new($author_tag, ' ', ' ', $author_subfield => $suggestion->{author})
-            );
+                MARC::Field->new( $author_tag, ' ', ' ', $author_subfield => $suggestion->{author} ) );
         }
     }
 
-    my ($it_tag, $it_subfield) = GetMarcFromKohaField('biblioitems.itemtype');
-    if ($record->field( $it_tag )) {
-        $record->field( $it_tag )->add_subfields( $it_subfield => $suggestion->{itemtype} );
-    }
-    else {
-        $record->append_fields(
-            MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $suggestion->{itemtype})
-        );
+    my ( $it_tag, $it_subfield ) = GetMarcFromKohaField('biblioitems.itemtype');
+    if ( $record->field($it_tag) ) {
+        $record->field($it_tag)->add_subfields( $it_subfield => $suggestion->{itemtype} );
+    } else {
+        $record->append_fields( MARC::Field->new( $it_tag, ' ', ' ', $it_subfield => $suggestion->{itemtype} ) );
     }
 
     return $record;
