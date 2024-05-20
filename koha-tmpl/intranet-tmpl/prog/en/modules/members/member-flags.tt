@@ -137,7 +137,6 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        var Sticky;
         $(document).ready(function() {
 
             [% IF disable_superlibrarian_privs && patron.is_superlibrarian %]
@@ -169,12 +168,6 @@
                     }
                 });
             [% END %]
-
-            Sticky = $("#permissions_toolbar");
-            Sticky.hcSticky({
-                stickTo: "#permissionstree",
-                stickyClass: "floating"
-            });
 
             $(".open div").show();
 
