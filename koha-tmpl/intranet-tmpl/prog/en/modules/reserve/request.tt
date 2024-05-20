@@ -611,7 +611,7 @@
                                 </li>
                             </ol>
                             </fieldset>
-                            <fieldset class="rows">
+                            <fieldset class="rows any_specific">
                                 <legend>
                                     [% IF force_hold_level == 'item' || force_hold_level == 'item_group' %]
                                         <input type="radio" id="requestany" name="request" disabled="true" />
@@ -792,7 +792,7 @@
                         [% END %]
                         <!-- /ItemGroup level holds -->
 
-                        <fieldset class="rows">
+                        <fieldset class="rows any_specific">
                             <legend>
                                 [% IF force_hold_level == 'item' %]
                                      <input type="radio" id="requestspecificitem" name="request" class="requestspecific" checked="checked" disabled='disabled'/>
@@ -1690,6 +1690,25 @@
                 $("#requestany,.requestspecific").prop('checked', false);
             }
         }
+
+        $('.any_specific').click(function() {
+            const fieldset = $(this).find('fieldset:first');
+            $('.enable_request_specific, .enable_request_any').removeClass('enabled');
+
+            if ( fieldset.hasClass('disabled') ) {
+                const specific_cb = $(this).find('#requestspecificitem');
+                const any_cb = $(this).find('#requestany');
+
+                if ( specific_cb.length ) {
+                    specific_cb.prop('checked', true);
+                } else {
+                    any_cb.prop('checked', true);
+                }
+
+                fieldset.removeClass('disabled').addClass('enabled');
+                ToggleHoldsToPlace();
+            }
+        });
 
         function check( e, table ) {
 
