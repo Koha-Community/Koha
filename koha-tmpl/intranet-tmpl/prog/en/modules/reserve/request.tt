@@ -1693,9 +1693,9 @@
 
         $('.any_specific').click(function() {
             const fieldset = $(this).find('fieldset:first');
-            $('.enable_request_specific, .enable_request_any').removeClass('enabled');
 
             if ( fieldset.hasClass('disabled') ) {
+                $('.enable_request_specific, .enable_request_any').removeClass('enabled');
                 const specific_cb = $(this).find('#requestspecificitem');
                 const any_cb = $(this).find('#requestany');
 
