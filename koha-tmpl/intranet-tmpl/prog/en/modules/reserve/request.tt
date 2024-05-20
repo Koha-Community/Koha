@@ -693,21 +693,19 @@
                         [% biblio_info = biblioloop.0 %]
                         <!-- ItemGroup level holds -->
                         [% IF Koha.Preference('EnableItemGroupHolds') && biblio_info.object.item_groups.count %]
-                        <fieldset class="rows">
+                        <fieldset class="rows any_specific">
                             <legend>
-                                <button type="button">
-                                    [% IF force_hold_level == 'item_group' %]
-                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" checked="checked" disabled="true" />
-                                        <span class="error"><i>(Required)</i></span>
-                                    [% ELSIF force_hold_level == 'item' || force_hold_level == 'record' %]
-                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" disabled="true" />
-                                    [% ELSE %]
-                                        <input type="radio" class="requestgrp" id="requestgrp" name="request" />
-                                    [% END %]
-                                    <label for="requestgrp" class="inline">
-                                        Hold next available item from an item group
-                                    </label>
-                                </button>
+                                [% IF force_hold_level == 'item_group' %]
+                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" checked="checked" disabled="true" />
+                                    <span class="error"><i>(Required)</i></span>
+                                [% ELSIF force_hold_level == 'item' || force_hold_level == 'record' %]
+                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" disabled="true" />
+                                [% ELSE %]
+                                    <input type="radio" class="requestgrp" id="requestgrp" name="request" />
+                                [% END %]
+                                <label for="requestgrp" class="inline">
+                                    Hold next available item from an item group
+                                </label>
                             </legend>
 
                             <fieldset class="enable_request_group disable_request_any disable_request_specific">
@@ -1695,14 +1693,17 @@
             const fieldset = $(this).find('fieldset:first');
 
             if ( fieldset.hasClass('disabled') ) {
-                $('.enable_request_specific, .enable_request_any').removeClass('enabled');
+                $('.enable_request_specific, .enable_request_any, .enable_request_group').removeClass('enabled');
                 const specific_cb = $(this).find('#requestspecificitem');
                 const any_cb = $(this).find('#requestany');
+                const itemgroup_cb = $(this).find('#requestgrp');
 
                 if ( specific_cb.length ) {
                     specific_cb.prop('checked', true);
-                } else {
+                } else if ( any_cb.length ) {
                     any_cb.prop('checked', true);
+                } else {
+                    itemgroup_cb.prop('checked', true);
                 }
 
                 fieldset.removeClass('disabled').addClass('enabled');
