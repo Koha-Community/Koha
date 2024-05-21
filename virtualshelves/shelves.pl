@@ -54,9 +54,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op       = $query->param('op')      || 'list';
-my $referer  = $query->param('referer') || $op;
-my $public   = $query->param('public') ? 1 : 0;
+my $op      = $query->param('op')                 || 'list';
+my $referer = $query->param('referer')            || $op;
+my $page    = int( $query->param('page') // q{} ) || 1;
+my $public  = $query->param('public') ? 1 : 0;
 my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 
 # PART1: Perform a few actions
@@ -274,10 +275,9 @@ if ( $op eq 'view' ) {
             $sortfield = 'title' unless grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
             my $direction = $query->param('direction') || 'asc';
             $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
-            my ( $rows, $page );
+            my $rows;
             unless ( $query->param('print') ) {
                 $rows = C4::Context->preference('numSearchResults') || 20;
-                $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
 
             my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
