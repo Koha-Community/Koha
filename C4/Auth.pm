@@ -1194,8 +1194,8 @@ sub checkauth {
                         $register_id   = $register->id   if ($register);
                         $register_name = $register->name if ($register);
                     }
-                    my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
                     if ( $type ne 'opac' ) {
+                        my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
                         if ( C4::Context->preference('AutoLocation') ) {
                             # we have to check they are coming from the right ip range
                             my $domain = $branches->{$branchcode}->{'branchip'};
@@ -1228,7 +1228,8 @@ sub checkauth {
                                 && $branches->{$branchcode}->{'branchip'} )
                             )
                         {
-                            foreach my $br ( uniq( $branchcode, keys %$branches ) ) {
+                            my @branchcodes = sort { lc $a cmp lc $b } keys %$branches;
+                            foreach my $br ( uniq( $branchcode, @branchcodes ) ) {
 
                                 #     now we work with the treatment of ip
                                 my $domain = $branches->{$br}->{'branchip'};
