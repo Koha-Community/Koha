@@ -1294,7 +1294,7 @@ subtest 'checkpw() return values tests' => sub {
 
 subtest 'StaffLoginBranchBasedOnIP' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -1340,11 +1340,18 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
         "AutoLocation prevents StaffLoginBranchBasedOnIP from logging user in to another branch"
     );
 
+    t::lib::Mocks::mock_preference( 'AutoLocation', 0 );
+    my $other_branch   = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => "127.0.0.1" } } );
+    ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    is( $userid, $patron->userid, "User successfully logged in" );
+    $session = C4::Auth::get_session($sessionID);
+    is( $session->param('branch'), $branch->branchcode, "Logged in branch is set based which branch when two libraries have same IP?" );
+
 };
 
 subtest 'AutoLocation' => sub {
 
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -1422,6 +1429,19 @@ subtest 'AutoLocation' => sub {
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     $session = C4::Auth::get_session($sessionID);
     is( $session->param('branch'), $noip_library->branchcode, "When a branch with no IP set is chosen, we respect the choice regardless of current IP" );
+
+    $ENV{REMOTE_ADDR} = '129.0.0.1';          # Set current IP to match other_branch
+    $cgi->param( 'branch', undef );           # Do not pass a branch
+    $patron->library->branchip('')->store;    # Unset user branch IP, to allow IP matching on any branch
+    # Add a second branch with same IP
+    my $another_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '129.0.0.1' } } );
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    $session = C4::Auth::get_session($sessionID);
+    is(
+        $session->param('branch'), $other_library->branchcode,
+        "Which branch is chosen when home branch has no IP and more than 1 library matches?"
+    );
 
     $schema->storage->txn_rollback;
 
