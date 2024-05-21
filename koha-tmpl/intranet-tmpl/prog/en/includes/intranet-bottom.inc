@@ -92,7 +92,7 @@
                     [%- END -%]
                 </div>
             [% END %]
-            <div id="consentButtons">
+            <div class="consentButtons">
                 [% IF ( JSConsents.all('staffConsent').size ) %]
                     <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                 [% END %]
@@ -131,7 +131,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div id="consentButtons">
+                        <div class="consentButtons">
                             <button type="button" class="btn btn-primary consentAcceptEssential">Accept essential cookies</button>
                             [% IF ( JSConsents.all('staffConsent').size ) %]
                                 <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
