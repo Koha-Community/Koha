@@ -1387,7 +1387,7 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
 
 subtest 'AutoLocation' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -1409,7 +1409,7 @@ subtest 'AutoLocation' => sub {
 
     $ENV{REMOTE_ADDR} = '127.0.0.1';
     my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
-    is( $userid, $patron->userid );
+    is( $userid, $patron->userid, "Standard login without AutoLocation" );
 
     my $template;
     t::lib::Mocks::mock_preference( 'AutoLocation', 1 );
@@ -1418,33 +1418,53 @@ subtest 'AutoLocation' => sub {
     $patron->library->branchip('')->store;    # There is none, allow access from anywhere
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
-    is( $userid,   $patron->userid );
-    is( $template, undef );
+    is( $userid,   $patron->userid, "Login is successful when patron's branch does not have an IP" );
+    is( $template, undef,           "Template is undef as none passed and not sent to error page" );
 
     $patron->library->branchip('1.2.3.4')->store;
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
-    is( $template->{VARS}->{wrongip}, 1 );
+    is(
+        $template->{VARS}->{wrongip}, 1,
+        "Login denied when no branch specified and IP does not match patron's branch IP"
+    );
 
     $patron->library->branchip('127.0.0.1')->store;
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
-    is( $userid,   $patron->userid );
-    is( $template, undef );
+    is( $userid,   $patron->userid, "Login is successful when patron IP and branch IP match" );
+    is( $template, undef,           "Template is undef as none passed and not sent to error page" );
 
     my $other_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '127.0.0.1' } } );
     $patron->library->branchip('127.0.0.1')->store;
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     my $session = C4::Auth::get_session($sessionID);
-    is( $session->param('branch'), $patron->branchcode );
+    is(
+        $session->param('branch'), $patron->branchcode,
+        "If no branch specified, and IP matches patron branch, login is successful at patron branch even if another branch IP matches"
+    );
+
+    $cgi->param( 'branch', $other_library->branchcode );
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    $session = C4::Auth::get_session($sessionID);
+    is(
+        $session->param('branch'), $other_library->branchcode,
+        "AutoLocation allows specifying a branch as long as the IP matches"
+    );
+
+    $other_library->branchip('129.0.0.1')->store;
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    is( $template->{VARS}->{wrongip}, 1, "Login denied when branch specified and IP does not match branch IP" );
 
     my $noip_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '' } } );
     $cgi->param( 'branch', $noip_library->branchcode );
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     $session = C4::Auth::get_session($sessionID);
-    is( $session->param('branch'), $noip_library->branchcode );
+    is( $session->param('branch'), $noip_library->branchcode, "When a branch with no IP set is chosen, we respect the choice regardless of current IP" );
 
     $schema->storage->txn_rollback;
 
