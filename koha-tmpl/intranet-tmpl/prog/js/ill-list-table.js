@@ -231,7 +231,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "data": "batch.name", // batch
+                "data": "ill_batch.name", // batch
                 "orderable": false,
                 "render": function(data, type, row, meta) {
                     return row.ill_batch ?
