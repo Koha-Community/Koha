@@ -17,7 +17,7 @@
             [%~ IF patron.streettype ~%]
                 [%~ SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', patron.streettype) ~%]
             [%~ END ~%]
-            <li class="patronaddress1">[%~ if (patron.streetnumber) | html ~%][%~ patron.streetnumber |html  ~%][%~ end | html %] [% patron.address | html %] [% IF roadtype_desc ~%][%~ roadtype_desc |html  %] [% END ~%][%~ end | html ~%]</li>
+            <li class="patronaddress1">[%~ if (patron.streetnumber) | html ~%]<span class="streetnumber">[%~ patron.streetnumber |html  ~%]</span>[%~ end | html %] <span class="address1">[% patron.address | html %]</span> [% IF roadtype_desc ~%]<span class="roadtype">[%~ roadtype_desc |html  %]</span> [% END ~%][%~ end | html ~%]</li>
         [%~ END ~%]
         [%~ IF ( patron.address2 ) ~%]
             <li class="patronaddress2">[%~ patron.address2 |html  ~%]</li>
@@ -25,8 +25,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
-            [%~ patron.city |html  ~%][%~ IF ( patron.state ) %][%~ IF ( patron.city ) ~%], [% END ~%][% patron.state |html  ~%][%~ END ~%]
-            [%~ IF ( patron.zipcode ) %][%~ " " _ patron.zipcode |html  ~%][% END %][%~ IF ( patron.country ) %][%~ IF ( patron.zipcode || patron.state || patron.city ) ~%], [% END ~%][% patron.country |html  ~%][%~ END ~%]
+            <span class="city">[%~ patron.city |html  ~%]</span>[%~ IF ( patron.state ) %][%~ IF ( patron.city ) ~%], [% END ~%]<span class="state">[% patron.state |html  ~%]</span>[%~ END ~%]
+            [%~ IF ( patron.zipcode ) %]<span class="zipcode">[%~ " " _ patron.zipcode |html  ~%]</span>[% END %][%~ IF ( patron.country ) %][%~ IF ( patron.zipcode || patron.state || patron.city ) ~%]<span class="comma">,</span> [% END ~%]<span class="country">[% patron.country |html  ~%]</span>[%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
@@ -38,7 +38,7 @@
             [%~ IF patron.streettype ~%]
                 [%~ SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', patron.streettype) ~%]
             [%~ END ~%]
-            <li class="patronaddress1">[%~ patron.address | html ~%][%~IF roadtype_desc %] [% roadtype_desc | html ~%][%~ END ~%][%~ IF patron.streetnumber %] [% patron.streetnumber | html ~%][%~ END ~%]</li>
+            <li class="patronaddress1"><span class="address1">[%~ patron.address | html ~%]</span>[%~IF roadtype_desc %] <span class="roadtype">[% roadtype_desc | html ~%]</span>[%~ END ~%][%~ IF patron.streetnumber %] <span class="streetnumber">[% patron.streetnumber | html ~%]</span>[%~ END ~%]</li>
         [%~ END ~%]
         [%~ IF ( patron.address2 ) ~%]
             <li class="patronaddress2">[%~ patron.address2 | html ~%]</li>
@@ -46,8 +46,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%]<span class="zipcode">[%~ patron.zipcode | html %]</span> [% END ~%]<span class="city">[%~ patron.city | html ~%]</span>[%~ IF ( patron.state ) ~%][% line_break | $raw %]<span class="state">[%~ patron.state | html ~%]</span>[%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break | $raw %]<span class="country">[%~ patron.country | html ~%]</span>[%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
@@ -59,9 +59,9 @@
             [%~ IF patron.streettype ~%]
                 [%~ SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', patron.streettype) ~%]
             [%~ END ~%]
-            <li class="patronaddress1">[%~ IF patron.streetnumber ~%][%~ patron.streetnumber | html %] [% END ~%]
-            [%~IF roadtype_desc ~%][%~ roadtype_desc | html %] [% END ~%]
-                [%~ patron.address | html ~%]
+            <li class="patronaddress1">[%~ IF patron.streetnumber ~%]<span class="streetnumber">[%~ patron.streetnumber | html %]</span> [% END ~%]
+            [%~IF roadtype_desc ~%]<span class="roadtype">[%~ roadtype_desc | html %]</span> [% END ~%]
+                <span class="address1">[%~ patron.address | html ~%]</span>
             </li>
         [%~ END ~%]
         [%~ IF ( patron.address2 ) ~%]
@@ -70,8 +70,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city || patron.zipcode || patron.state || patron.country ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break | $raw %][%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%][% line_break | $raw %][%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%]<span class="zipcode">[%~ patron.zipcode | html %]</span> [% END ~%]<span class="city">[%~ patron.city | html ~%]</span>[%~ IF ( patron.state ) ~%][% line_break | $raw %]<span class="state">[%~ patron.state | html ~%]</span>[%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break | $raw %]<span class="country">[%~ patron.country | html ~%]</span>[%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
