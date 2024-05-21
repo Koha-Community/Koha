@@ -56,10 +56,10 @@
                                 </div>
                             </div>
                         [% END %]
-                    [% END %]
-                </div>
+                    [% END # /IF patron.image %]
+                </div> <!-- /.patronimage-container -->
             </div>
-        [% END %]
+        [% END # /IF patronimages %]
 
         <ul class="patronbriefinfo">
             [% IF patron.pronouns %]
@@ -84,7 +84,7 @@
                             [% END %]
                         [% END %]
                     </li>
-                [% END %]
+                [% END # /IF phones %]
                 [% IF ( patron.email ) %]
                     <li class="email">
                         <a href="mailto:[% patron.email | url %]" title="[% patron.email | html %]">[% patron.email | html %]</a>
@@ -95,7 +95,7 @@
                             <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a>
                         </li>
                     [% END %]
-                [% END %]
+                [% END # /IF emails %]
                 [% IF ( patron.dateofbirth ) %]
                     <li class="patrondateofbirth">
                         <span>Born:</span>
@@ -119,7 +119,7 @@
                     <li> <span class="empty">No date of birth stored.</span></li>
                 [% END %]
 
-            [% END %]
+            [% END # /IF HidePersonalPatronDetailOnCirculation %]
 
             [% IF Koha.Preference('ExtendedPatronAttributes') %]
                 [% FOREACH extendedattribute IN patron.extended_attributes %]
@@ -132,18 +132,24 @@
                                 [% ELSE %]
                                     [% extendedattribute.description | html %]
                                 [% END %]
-                            </li>
+                            </li> <!-- /.patronattribute -->
                         [% END %]
-                    [% END %]
-                [% END %]
-            [% END %]
+                    [% END # /IF display_checkout %]
+                [% END # /FOREACH extendedattribute %]
+            [% END # /IF ExtendedPatronAttributes %]
 
             <li class="patroncategory">
                 Category: <span class="patroncategory_description">[% patron.category.description | html %]</span> <span class="patroncategory_code">([% patron.categorycode | html %])</span>
             </li>
-            <li class="patronlibrary">Home library: [% Branches.GetName( patron.branchcode ) | html %]</li>
-            <li class="patronborrowernumber">Borrowernumber: [% patron.borrowernumber | html %]</li>
-            <li><span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span></li>
+            <li class="patronlibrary">
+                Home library: [% Branches.GetName( patron.branchcode ) | html %]
+            </li>
+            <li class="patronborrowernumber">
+                Borrowernumber: [% patron.borrowernumber | html %]
+            </li>
+            <li>
+                <span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span>
+            </li>
             [% IF patron.account_locked %]
                 [% IF patron.login_attempts < 0 %]
                     <li class="blocker account_admin_locked">Account has been administratively locked</li>
@@ -151,8 +157,8 @@
                     <li class="blocker account_locked">Account has been locked</li>
                 [% END %]
             [% END %]
-        </ul>
-    </div>
+        </ul> <!-- /.patronbriefinfo -->
+    </div> <!-- /.patronifo -->
 
     <div id="menu">
         <ul>
@@ -165,7 +171,7 @@
                         <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;batch=1">Batch check out</a>
                     </li>
                 [% END %]
-            [% END %]
+            [% END # /IF CAN_user_circulate_circulate_remaining_permissions %]
             [% IF CAN_user_borrowers_edit_borrowers %]
                 [% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">Details</a>
@@ -261,7 +267,7 @@
                     <div class="modal-header">
                         <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="patronImageEditLabel">Patron photo</h4>
-                    </div>
+                    </div> <!-- /.modal-header -->
                     <div class="modal-body">
                         [% IF ( patron.cardnumber ) %]
                             <div id="upload-patron-image" class="patroninfo-section">
@@ -277,7 +283,7 @@
                                         <div class="hint">
                                             [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], enter the name of an image file to upload.
                                         </div>
-                                    [% END %]
+                                    [% END # /IF patron.image %]
                                     <p>Only PNG, GIF, JPEG, XPM formats are supported.</p>
                                     <label for="uploadfile">Select the file to upload: </label>
                                     <input type="file" id="uploadfile" name="uploadfile" required="required" />
@@ -290,9 +296,9 @@
                                         [% IF ( patron.image ) %]
                                         <button id="delpicture" type="submit" class="btn btn-default btn-xs delete" name="op" value="cud-Delete"><i class="fa fa-trash-can"></i> Delete</button>
                                         [% END %]
-                                    </div>
-                                </form>
-                            </div>
+                                    </div> <!-- /.action -->
+                                </form> <!-- /#picture-upload -->
+                            </div> <!-- /#upload-patron-image -->
                             <div id="capture-patron-image" class="patroninfo-section">
                                 <h5>Take patron photo</h5>
                                 <form method="post" id="camera-upload" action="/cgi-bin/koha/tools/picture-upload.pl">
@@ -309,7 +315,7 @@
                                         <div class="btn-group">
                                             <button id="savebutton" type="submit" class="btn btn-default" style="display:none;"><i class="fa-solid fa-hard-drive"></i> Upload</button>
                                         </div>
-                                    </div>
+                                    </div> <!-- /.btn-toolbar -->
                                     <div id="camera">
                                         <video id="viewfinder">Video stream not available.</video>
                                     </div>
@@ -324,8 +330,8 @@
                                     <input type="hidden" name="cardnumber" value="[% patron.cardnumber | html %]" />
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input name="op" type="hidden" value="cud-Upload" />
-                                </form>
-                            </div>
+                                </form> <!-- /#camera-upload -->
+                            </div> <!-- /#capture-patron-image -->
                             <div class="dialog message" style="display:none" id="camera-error">
                                 <div>
                                     <span class="fa-stack fa-lg">
@@ -337,19 +343,19 @@
                                     <strong>Cannot take patron photo.</strong>
                                     <span id="camera-error-message"></span>
                                 </div>
-                            </div>
+                            </div> <!-- /.dialog.message -->
                         [% ELSE %]
                             <div id="missing-cardnumber-picture-upload">
                                 <p>The patron must have a card number before a patron photo can be uploaded.</p>
                             </div>
-                        [% END %]
-                    </div>
+                        [% END # /IF patron.cardnumber %]
+                    </div> <!-- /.modal-body -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    [% END %]
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </div> <!-- /#patronImageEdit.modal -->
+    [% END # /IF patronimages %]
 
-[% END %]
+[% END # /IF patron.borrowernumber %]
