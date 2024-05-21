@@ -1341,17 +1341,25 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
     );
 
     t::lib::Mocks::mock_preference( 'AutoLocation', 0 );
-    my $other_branch   = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => "127.0.0.1" } } );
+    my $other_branch = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => { branchip => "127.0.0.1", branchcode => substr( "z" . $branch->branchcode, 0, 10 ) }
+        }
+    );
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     is( $userid, $patron->userid, "User successfully logged in" );
     $session = C4::Auth::get_session($sessionID);
-    is( $session->param('branch'), $branch->branchcode, "Logged in branch is set based which branch when two libraries have same IP?" );
+    is(
+        $session->param('branch'), $branch->branchcode,
+        "Logged in branch is set based which branch when two libraries have same IP?"
+    );
 
 };
 
 subtest 'AutoLocation' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -1428,19 +1436,37 @@ subtest 'AutoLocation' => sub {
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     $session = C4::Auth::get_session($sessionID);
-    is( $session->param('branch'), $noip_library->branchcode, "When a branch with no IP set is chosen, we respect the choice regardless of current IP" );
+    is(
+        $session->param('branch'), $noip_library->branchcode,
+        "When a branch with no IP set is chosen, we respect the choice regardless of current IP"
+    );
 
     $ENV{REMOTE_ADDR} = '129.0.0.1';          # Set current IP to match other_branch
-    $cgi->param( 'branch', undef );           # Do not pass a branch
+    $cgi->param( 'branch', '' );              # Do not pass a branch
     $patron->library->branchip('')->store;    # Unset user branch IP, to allow IP matching on any branch
-    # Add a second branch with same IP
-    my $another_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '129.0.0.1' } } );
+                                              # Add a second branch with same IP
+    my $another_library = $builder->build_object(
+        {
+            class => 'Koha::Libraries',
+            value => { branchip => "129.0.0.1", branchcode => substr( "z" . $other_library->branchcode, 0, 10 ) }
+        }
+    );
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
     $session = C4::Auth::get_session($sessionID);
     is(
-        $session->param('branch'), $other_library->branchcode,
-        "Which branch is chosen when home branch has no IP and more than 1 library matches?"
+        $session->param('branch'), $patron->library->branchcode,
+        "When user branch has no IP, and no branch chosen, user is logged in to their homebranch"
+    );
+
+    $cgi->param( 'branch', $another_library->branchcode )
+        ;    # Choose branch with duplicate IP and alphabetically later branchcode
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
+    $session = C4::Auth::get_session($sessionID);
+    is(
+        $session->param('branch'), $another_library->branchcode,
+        "When there is an IP conflict, we use the chosen branch if it matches"
     );
 
     $schema->storage->txn_rollback;

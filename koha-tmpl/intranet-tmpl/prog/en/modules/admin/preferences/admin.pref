@@ -91,14 +91,14 @@ Administration:
               class: integer
             - Adding d will specify it in days, e.g. 1d is timeout of one day.
         -
-            - "Require staff to log in from a computer in the IP address range specified by their library (if any): "
+            - "Require staff to log in from a computer in the IP address range specified by their library or the branch chosen at login (if any): "
             - pref: AutoLocation
               default: 0
               choices:
                   1: "Yes"
                   0: "No"
             - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
-            - 'This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference.'
+            - 'Staff can only choose thier branch on login if they have "loggedinlibrary" permission. This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference. In the event of multiple branches with matching IPs, branchcode (alphabetically) will be the tie breaker.'
         -
             - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
@@ -115,7 +115,7 @@ Administration:
                   1: "Yes"
                   0: "No"
             - "Note: If IPs overlap, the first found match will be used."
-            - 'This setting will be overridden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoLocation">AutoLocation</a> system preference.'
+            - 'This setting will be overridden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AutoLocation">AutoLocation</a> system preference. In the event of multiple branches with matching IPs, branchcode (alphabetically) will be the tie breaker.'
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
             - "Storage of login session information: "
