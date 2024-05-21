@@ -86,8 +86,9 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
     );
 }
 
-my $referer  = $query->param('referer')  || $op;
-my $public = 0;
+my $referer = $query->param('referer')            || $op;
+my $page    = int( $query->param('page') // q{} ) || 1;
+my $public  = 0;
 $public = 1 if $query->param('public') && $query->param('public') == 1;
 
 my ( $shelf, $shelfnumber, @messages );
@@ -315,10 +316,9 @@ if ( $op eq 'view' ) {
             $direction = 'asc' if !$direction or ( $direction ne 'asc' and $direction ne 'desc' );
             $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
 
-            my ( $page, $rows );
+            my $rows;
             unless ( $query->param('print') or $query->param('rss') ) {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
-                $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
             my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
             my $contents = $shelf->get_contents->search(
@@ -473,7 +473,7 @@ if ( $op eq 'view' ) {
     }
 } elsif ( $op eq 'list' ) {
     my $shelves;
-    my ( $page, $rows ) = ( $query->param('page') || 1, 20 );
+    my ( $rows ) = ( 20 );
     if ( !$public ) {
         $shelves = Koha::Virtualshelves->get_private_shelves({ page => $page, rows => $rows, borrowernumber => $loggedinuser, });
     } else {
