@@ -1215,43 +1215,44 @@ sub checkauth {
                         $register_name = $register->name if ($register);
                     }
                     my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
-                    if ( $type ne 'opac' and C4::Context->preference('AutoLocation') ) {
-
-                        # we have to check they are coming from the right ip range
-                        my $domain = $branches->{$branchcode}->{'branchip'};
-                        $domain =~ s|\.\*||g;
-                        $domain =~ s/\s+//g;
-                        if ( $ip !~ /^$domain/ ) {
-                            $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
-                                -name     => 'CGISESSID',
-                                -value    => '',
-                                -HttpOnly => 1,
-                                -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
-                                -sameSite => 'Lax',
-                            ));
-                            $info{'wrongip'} = 1;
-                            $auth_state = "failed";
+                    if ( $type ne 'opac' ) {
+                        if ( C4::Context->preference('AutoLocation') ) {
+                            # we have to check they are coming from the right ip range
+                            my $domain = $branches->{$branchcode}->{'branchip'};
+                            $domain =~ s|\.\*||g;
+                            $domain =~ s/\s+//g;
+                            if ( $ip !~ /^$domain/ ) {
+                                $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
+                                    -name     => 'CGISESSID',
+                                    -value    => '',
+                                    -HttpOnly => 1,
+                                    -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
+                                    -sameSite => 'Lax',
+                                ));
+                                $info{'wrongip'} = 1;
+                                $auth_state = "failed";
+                            }
                         }
-                    }
 
-                    if (
-                        (
-                              !C4::Context->preference('AutoLocation')
-                            && C4::Context->preference('StaffLoginBranchBasedOnIP')
-                        )
-                        || ( C4::Context->preference('AutoLocation') && $auth_state ne 'failed' )
-                        )
-                    {
-                        foreach my $br ( uniq( $branchcode, keys %$branches ) ) {
+                        if (
+                            (
+                                  !C4::Context->preference('AutoLocation')
+                                && C4::Context->preference('StaffLoginBranchBasedOnIP')
+                            )
+                            || ( C4::Context->preference('AutoLocation') && $auth_state ne 'failed' )
+                            )
+                        {
+                            foreach my $br ( uniq( $branchcode, keys %$branches ) ) {
 
-                            #     now we work with the treatment of ip
-                            my $domain = $branches->{$br}->{'branchip'};
-                            if ( $domain && $ip =~ /^$domain/ ) {
-                                $branchcode = $branches->{$br}->{'branchcode'};
+                                #     now we work with the treatment of ip
+                                my $domain = $branches->{$br}->{'branchip'};
+                                if ( $domain && $ip =~ /^$domain/ ) {
+                                    $branchcode = $branches->{$br}->{'branchcode'};
 
-                                # new op dev : add the branchname to the cookie
-                                $branchname = $branches->{$br}->{'branchname'};
-                                last;
+                                    # new op dev : add the branchname to the cookie
+                                    $branchname = $branches->{$br}->{'branchname'};
+                                    last;
+                                }
                             }
                         }
                     }
