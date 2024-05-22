@@ -86,8 +86,8 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
     );
 }
 
-my $referer = $query->param('referer')            || $op;
-my $page    = int( $query->param('page') // q{} ) || 1;
+my $referer = $query->param('referer') || $op;
+my $page    = int( $query->param('page') || 1 );
 my $public  = 0;
 $public = 1 if $query->param('public') && $query->param('public') == 1;
 
