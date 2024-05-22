@@ -28,6 +28,7 @@ BEGIN {
 # Optionally change marc flavour
 my $marcflavour;
 GetOptions( 'flavour:s' => \$marcflavour );
+$marcflavour //= 'MARC21';
 t::lib::Mocks::mock_preference( 'marcflavour', $marcflavour ) if $marcflavour;
 
 my $schema  = Koha::Database->new->schema;
@@ -38,6 +39,13 @@ $heading_module->mock(
     'valid_heading_tag',
     sub {
         return 1;
+    }
+);
+my $auth_module = Test::MockModule->new('C4::AuthoritiesMarc');
+$auth_module->mock(
+    'GuessAuthTypeCode',
+    sub {
+        $marcflavour eq 'MARC21' ? return 'PERSO_NAME' : return 'NP';
     }
 );
 

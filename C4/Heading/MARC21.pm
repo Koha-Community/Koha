@@ -401,8 +401,9 @@ sub _get_search_heading {
     my $field     = shift;
     my $subfields = shift;
 
-    my $heading   = "";
+    my $heading = "";
     return $heading unless $subfields;
+
     my @subfields = $field->subfields();
     my $first     = 1;
     for ( my $i = 0 ; $i <= $#subfields ; $i++ ) {
@@ -439,8 +440,9 @@ sub _get_display_heading {
     my $field     = shift;
     my $subfields = shift;
 
-    my $heading   = "";
+    my $heading = "";
     return $heading unless $subfields;
+
     my @subfields = $field->subfields();
     my $first     = 1;
     for ( my $i = 0 ; $i <= $#subfields ; $i++ ) {
