@@ -47,6 +47,8 @@ $logger->mock('error', sub {
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
+t::lib::Mocks::mock_preference( 'NotifyPasswordChange', undef );
+
 subtest 'Bad plugins tests' => sub {
 
     plan tests => 3;
