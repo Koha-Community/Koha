@@ -1,4 +1,4 @@
-package Koha::Import::Oaipmh::Authorities;
+package Koha::OAIServer;
 
 # This file is part of Koha.
 #
@@ -13,39 +13,33 @@ package Koha::Import::Oaipmh::Authorities;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
-use Koha::Import::Oaipmh::Authority;
 
-use base qw(Koha::Objects);
+use Koha::Database;
+
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Import::Oaipmh::Authorities
-
-This object represents a collection of OAI-PMH records being imported as authorities
+Koha::OAIServer - Koha OAIServer Object class
 
 =head1 API
 
-=head2 Methods
+=head2 Class Methods
 
+=cut
 
-=head3 type
+=head3 _type
+
+Return type of Object relating to Schema ResultSet
 
 =cut
 
 sub _type {
-    return 'ImportOaipmhAuthority';
+    return 'OaiServer';
 }
 
-=head3 object_class
-
-Koha::Object class
-
-=cut
-
-sub object_class {
-    return 'Koha::Import::Oaipmh::Authority';
-}
 1;

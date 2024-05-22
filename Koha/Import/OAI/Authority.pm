@@ -1,4 +1,4 @@
-package Koha::Import::Oaipmh::Biblio;
+package Koha::Import::OAI::Authority;
 
 # This file is part of Koha.
 #
@@ -20,21 +20,22 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Import::Oaipmh::Biblio
+Koha::Import::OAI::Authority
 
-This object represents an OAI-PMH record being imported as a bibliographic record
+This object represents an OAI-PMH record being imported as an authority
 
 =head1 API
 
-=head2 Methods
+=head2 Class Methods
 
+=cut
 
 =head3 _type
 
 =cut
 
 sub _type {
-    return 'ImportOaipmhBiblio';
+    return 'ImportOAIAuthority';
 }
 
 1;

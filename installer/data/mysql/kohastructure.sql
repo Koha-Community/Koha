@@ -4859,13 +4859,13 @@ CREATE TABLE `oai_sets_mappings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `oaiservers`
+-- Table structure for table `oai_servers`
 --
 
-DROP TABLE IF EXISTS `oaiservers`;
+DROP TABLE IF EXISTS `oai_servers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `oaiservers` (
+CREATE TABLE `oai_servers` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `endpoint` varchar(255) NOT NULL COMMENT 'OAI endpoint (host + port + path)',
   `oai_set` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
@@ -4877,13 +4877,13 @@ CREATE TABLE `oaiservers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `import_oaipmh_biblios`
+-- Table structure for table `import_oai_biblios`
 --
 
-DROP TABLE IF EXISTS `import_oaipmh_biblios`;
+DROP TABLE IF EXISTS `import_oai_biblios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_oaipmh_biblios` (
+CREATE TABLE `import_oai_biblios` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `biblionumber` int(11) NOT NULL COMMENT 'unique identifier assigned to each koha record',
   `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
@@ -4893,17 +4893,17 @@ CREATE TABLE `import_oaipmh_biblios` (
   `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY biblionumber (biblionumber),
-  CONSTRAINT FK_import_oaipmh_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT FK_import_oai_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `import_oaipmh_authorities`
+-- Table structure for table `import_oai_authorities`
 --
 
-DROP TABLE IF EXISTS `import_oaipmh_authorities`;
+DROP TABLE IF EXISTS `import_oai_authorities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_oaipmh_authorities` (
+CREATE TABLE `import_oai_authorities` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
   `authid` bigint(20) unsigned NOT NULL COMMENT 'unique identifier assigned to each koha record',
   `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
@@ -4913,7 +4913,7 @@ CREATE TABLE `import_oaipmh_authorities` (
   `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY authid (authid),
-  CONSTRAINT FK_import_oaipmh_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT FK_import_oai_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

@@ -1,4 +1,4 @@
-package Koha::Import::Oaipmh::Biblios;
+package Koha::Import::OAI::Biblio;
 
 # This file is part of Koha.
 #
@@ -16,36 +16,25 @@ package Koha::Import::Oaipmh::Biblios;
 
 use Modern::Perl;
 
-use Koha::Import::Oaipmh::Biblio;
-
-use base qw(Koha::Objects);
+use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Import::Oaipmh::Biblios
+Koha::Import::OAI::Biblio
 
-This object represents a collection of OAI-PMH records being imported as bibliographic records
+This object represents an OAI-PMH record being imported as a bibliographic record
 
 =head1 API
 
 =head2 Methods
 
 
-=head3 type
+=head3 _type
 
 =cut
 
 sub _type {
-    return 'ImportOaipmhBiblio';
+    return 'ImportOaiBiblio';
 }
 
-=head3 object_class
-
-Koha::Object class
-
-=cut
-
-sub object_class {
-    return 'Koha::Import::Oaipmh::Biblio';
-}
 1;

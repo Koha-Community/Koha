@@ -1,4 +1,4 @@
-package Koha::OaiServer;
+package Koha::OAIServers;
 
 # This file is part of Koha.
 #
@@ -20,11 +20,13 @@ use Modern::Perl;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::OAIServer;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::OaiServer - Koha OaiServer Object class
+Koha::OAIServers - Koha OAIServer Object set class
 
 =head1 API
 
@@ -34,12 +36,22 @@ Koha::OaiServer - Koha OaiServer Object class
 
 =head3 _type
 
-Return type of Object relating to Schema ResultSet
+Return type of object, relating to Schema ResultSet
 
 =cut
 
 sub _type {
-    return 'Oaiserver';
+    return 'OaiServer';
+}
+
+=head3 object_class
+
+Return object class
+
+=cut
+
+sub object_class {
+    return 'Koha::OAIServer';
 }
 
 1;

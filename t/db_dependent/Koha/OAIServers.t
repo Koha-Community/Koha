@@ -23,8 +23,8 @@ use Test::Exception;
 
 use t::lib::TestBuilder;
 use Koha::Database;
-use Koha::OaiServer;
-use Koha::OaiServers;
+use Koha::OAIServer;
+use Koha::OAIServers;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -32,8 +32,8 @@ my $builder = t::lib::TestBuilder->new;
 subtest 'new, find and delete tests' => sub {
     plan tests => 4;
     $schema->storage->txn_begin;
-    my $nb_of_oais = Koha::OaiServers->search->count;
-    my $new_oai_1  = Koha::OaiServer->new(
+    my $nb_of_oais = Koha::OAIServers->search->count;
+    my $new_oai_1  = Koha::OAIServer->new(
         {
             endpoint   => 'my_host1.org',
             oai_set    => 'set1',
@@ -42,7 +42,7 @@ subtest 'new, find and delete tests' => sub {
             recordtype => 'biblio',
         }
     )->store;
-    my $new_oai_2 = Koha::OaiServer->new(
+    my $new_oai_2 = Koha::OAIServer->new(
         {
             endpoint   => 'my_host2.org',
             oai_set    => 'set2',
@@ -53,16 +53,16 @@ subtest 'new, find and delete tests' => sub {
     )->store;
 
     like( $new_oai_1->id, qr|^\d+$|, 'Adding a new oai server should have set the id' );
-    is( Koha::OaiServers->search->count, $nb_of_oais + 2, 'The 2 oai servers should have been added' );
+    is( Koha::OAIServers->search->count, $nb_of_oais + 2, 'The 2 oai servers should have been added' );
 
-    my $retrieved_oai_1 = Koha::OaiServers->find( $new_oai_1->id );
+    my $retrieved_oai_1 = Koha::OAIServers->find( $new_oai_1->id );
     is(
         $retrieved_oai_1->servername, $new_oai_1->servername,
         'Find a oai server by id should return the correct oai server'
     );
 
     $retrieved_oai_1->delete;
-    is( Koha::OaiServers->search->count, $nb_of_oais + 1, 'Delete should have deleted the oai server' );
+    is( Koha::OAIServers->search->count, $nb_of_oais + 1, 'Delete should have deleted the oai server' );
 
     $schema->storage->txn_rollback;
 };
@@ -72,7 +72,7 @@ subtest 'Check NOT NULL without default values' => sub {
     $schema->storage->txn_begin;
     local $SIG{__WARN__} = sub { };    # TODO Needed it for suppressing DBIx warns
 
-    my $server = Koha::OaiServer->new(
+    my $server = Koha::OAIServer->new(
         {
             oai_set    => 'set3',
             dataformat => 'marcxml',

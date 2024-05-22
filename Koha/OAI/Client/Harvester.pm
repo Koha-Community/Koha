@@ -36,11 +36,11 @@ use C4::Log             qw( cronlogaction );
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::OaiServers;
-use Koha::Import::Oaipmh::Biblio;
-use Koha::Import::Oaipmh::Biblios;
-use Koha::Import::Oaipmh::Authority;
-use Koha::Import::Oaipmh::Authorities;
+use Koha::OAIServers;
+use Koha::Import::OAI::Biblio;
+use Koha::Import::OAI::Biblios;
+use Koha::Import::OAI::Authority;
+use Koha::Import::OAI::Authorities;
 use Koha::XSLT::Base;
 use MARC::File::XML;
 use MARC::Record;
@@ -61,18 +61,17 @@ my $strp = DateTime::Format::Strptime->new(
 our $xslt_engine = Koha::XSLT::Base->new;
 
 =head2 new
-
-$harvester = Koha::OAI::Client::Harvester->new( { server => $server, verbose => $verbose, days => $days, force => $force } );
+$harvester = Koha::OAI::Client::Harvester->new( { server => $server, days => $days, force => $force, logger => \&logger } );
 
 New instance of Koha::OAI::Client::Harvester
 
-C<$server> An OAI repository (Koha::OaiServer)
-
-C<$verbose> print log messages to stdout when enabled
+C<$server> An OAI repository (Koha::OAIServer)
 
 C<$days> number of days to harvest from (optional)
 
 C<$force> force harvesting (ignore records datestamps)
+
+C<$logger> a callback function to handle logs (optional)
 
 =cut
 
@@ -250,7 +249,7 @@ sub processRecord {
     }
     my $imported_record;
     if ( $server->recordtype eq "biblio" ) {
-        $imported_record = Koha::Import::Oaipmh::Biblios->find(
+        $imported_record = Koha::Import::OAI::Biblios->find(
             {
                 repository => $server->endpoint,
                 identifier => $oai_record->identifier,
@@ -258,7 +257,7 @@ sub processRecord {
             }
         );
     } else {
-        $imported_record = Koha::Import::Oaipmh::Authorities->find(
+        $imported_record = Koha::Import::OAI::Authorities->find(
             {
                 repository => $server->endpoint,
                 identifier => $oai_record->identifier,
@@ -318,7 +317,7 @@ sub processRecord {
         if ( $server->recordtype eq "biblio" ) {
             my ( $biblionumber, $biblioitemnumber ) = AddBiblio($marcrecord);
             $self->printlog( $oai_record->identifier . " added, biblionumber: $biblionumber" );
-            Koha::Import::Oaipmh::Biblio->new(
+            Koha::Import::OAI::Biblio->new(
                 {
                     repository   => $server->endpoint,
                     identifier   => $oai_record->identifier,
@@ -330,7 +329,7 @@ sub processRecord {
         } else {
             my $authid = AddAuthority( $marcrecord, "", GuessAuthTypeCode($marcrecord) );
             $self->printlog( $oai_record->identifier . " added, authid: $authid" );
-            Koha::Import::Oaipmh::Authority->new(
+            Koha::Import::OAI::Authority->new(
                 {
                     repository => $server->endpoint,
                     identifier => $oai_record->identifier,
@@ -350,15 +349,15 @@ sub processRecord {
 
 =head2 $self->printlog
 
-This method adds a cronlog and prints to stdout if verbose is enabled
+This method gives the caller an opportunity to handle log messages
 
 =cut
 
 sub printlog {
     my ( $self, $message ) = @_;
+    return unless $self->{logger};
     $message = $self->{server}->servername . ": " . $message;
-    print $message . "\n" if ( $self->{verbose} );
-    cronlogaction( { info => $message } );
+    $self->{logger}->($message);
 }
 
 1;

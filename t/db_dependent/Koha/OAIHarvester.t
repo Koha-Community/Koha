@@ -27,8 +27,8 @@ use HTTP::OAI::Metadata::OAI_DC;
 use HTTP::OAI::Record;
 use HTTP::OAI::Encapsulation;
 use Koha::Database;
-use Koha::OaiServer;
-use Koha::OaiServers;
+use Koha::OAIServer;
+use Koha::OAIServers;
 use Koha::OAI::Client::Harvester;
 
 my $schema  = Koha::Database->new->schema;
@@ -36,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 
 $schema->storage->txn_begin;
 
-my $new_oai_1 = Koha::OaiServer->new(
+my $new_oai_1 = Koha::OAIServer->new(
     {
         endpoint   => 'my_host1.org',
         oai_set    => 'set1',
@@ -85,11 +85,11 @@ $r->header->datestamp('2018-05-10T09:18:13Z');
 $status = $harvester->processRecord($r);
 is( $status, 'updated', 'When force is not used, record is updated if newer' );
 
-my $imported_record = Koha::Import::Oaipmh::Biblios->find( { identifier => 'oai:myarchive.org:oid-234' } );
+my $imported_record = Koha::Import::OAI::Biblios->find( { identifier => 'oai:myarchive.org:oid-234' } );
 my $added_datestamp = $imported_record->datestamp;
 $r->header->datestamp(undef);
 $status          = $harvester->processRecord($r);
-$imported_record = Koha::Import::Oaipmh::Biblios->find( { identifier => 'oai:myarchive.org:oid-234' } );
+$imported_record = Koha::Import::OAI::Biblios->find( { identifier => 'oai:myarchive.org:oid-234' } );
 my $updated_datestamp = $imported_record->datestamp;
 isnt(
     $added_datestamp, $updated_datestamp,

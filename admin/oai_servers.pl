@@ -26,7 +26,7 @@ use C4::Context;
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Database;
-use Koha::OaiServers;
+use Koha::OAIServers;
 
 # Initialize CGI, template, database
 
@@ -38,13 +38,13 @@ my $searchfield = '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => "admin/oaiservers.tt",
+        template_name => "admin/oai_servers.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired => { parameters => 'manage_search_targets' },
     }
 );
-my $script_name = "/cgi-bin/koha/admin/oaiservers.pl";
+my $script_name = "/cgi-bin/koha/admin/oai_servers.pl";
 my $path        = C4::Context->config('intrahtdocs') . "/prog/";
 
 $template->param( script_name => $script_name, xslt_path => $path );
@@ -55,7 +55,7 @@ my $schema = Koha::Database->new()->schema();
 # First process a confirmed delete, or save a validated record
 
 if ( $op eq 'cud-delete_confirmed' && $id ) {
-    my $server = Koha::OaiServers->find($id);
+    my $server = Koha::OAIServers->find($id);
     if ($server) {
         $server->delete;
         $template->param( msg_deleted => 1, msg_add => $server->servername );
@@ -69,7 +69,7 @@ if ( $op eq 'cud-delete_confirmed' && $id ) {
         add_xslt/;
     my $formdata = _form_data_hashref( $input, \@fields );
     if ($id) {
-        my $server = Koha::OaiServers->find($id);
+        my $server = Koha::OAIServers->find($id);
         if ($server) {
             $server->set($formdata)->store;
             $template->param( msg_updated => 1, msg_add => $formdata->{servername} );
@@ -78,7 +78,7 @@ if ( $op eq 'cud-delete_confirmed' && $id ) {
         }
         $id = 0;
     } else {
-        Koha::OaiServer->new($formdata)->store;
+        Koha::OAIServer->new($formdata)->store;
         $template->param( msg_added => 1, msg_add => $formdata->{servername} );
     }
 } elsif ( $op eq 'search' ) {
@@ -91,14 +91,14 @@ if ( $op eq 'cud-delete_confirmed' && $id ) {
 
 my $data = [];
 if ( $op eq 'add' || $op eq 'edit' ) {
-    $data = ServerSearch( $schema, $id, $searchfield ) if $searchfield || $id;
-    delete $data->[0]->{id}                            if @$data && $op eq 'add';    #cloning record
+    $data = server_search( $schema, $id, $searchfield ) if $searchfield || $id;
+    delete $data->[0]->{id}                             if @$data && $op eq 'add';    #cloning record
     $template->param(
         add_form => 1, server => @$data ? $data->[0] : undef,
         op => $op, type => $op eq 'add' ? lc $type : ''
     );
 } else {
-    $data = ServerSearch( $schema, $id, $searchfield );
+    $data = server_search( $schema, $id, $searchfield );
     $template->param(
         loop => \@$data, searchfield => $searchfield, id => $id,
         op   => 'list'
@@ -108,10 +108,10 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 # End of main code
 
-sub ServerSearch {    #find server(s) by id or name
+sub server_search {    #find server(s) by id or name
     my ( $schema, $id, $searchstring ) = @_;
 
-    return Koha::OaiServers->search(
+    return Koha::OAIServers->search(
         $id ? { id => $id } : { servername => { like => $searchstring . '%' } },
     )->unblessed;
 }

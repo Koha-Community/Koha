@@ -3,7 +3,7 @@
 <div id="header_search" role="tablist">
     <div class="tab-content">
         <div id="oai_search" role="tabpanel" class="tab-pane active">
-            <form action="/cgi-bin/koha/admin/oaiservers.pl" method="get">
+            <form action="/cgi-bin/koha/admin/oai_servers.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield">Search OAI repositories</label>
                 </div>

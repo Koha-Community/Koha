@@ -24,7 +24,7 @@ use utf8;
 use Getopt::Long qw( GetOptions );
 use Koha::Script -cron;
 use Koha::OAI::Client::Harvester;
-use Koha::OaiServers;
+use Koha::OAIServers;
 use C4::Log   qw( cronlogaction );
 use Try::Tiny qw( catch try );
 
@@ -60,7 +60,7 @@ if ($help) {
 }
 
 if ($list) {
-    my $servers = Koha::OaiServers->search( {}, { order_by => { -asc => 'id' } } )->unblessed;
+    my $servers = Koha::OAIServers->search( {}, { order_by => { -asc => 'id' } } )->unblessed;
     print "The following repositories are available: \n\n";
     foreach my $server (@$servers) {
         print $server->{'id'} . ": "
@@ -81,7 +81,7 @@ if ( !$id ) {
     print $usage . "\n";
 }
 
-my $server = Koha::OaiServers->find($id);
+my $server = Koha::OAIServers->find($id);
 
 unless ($server) {
     print "OAI Server $id unknown\n";
@@ -103,8 +103,15 @@ cronlogaction( { action => 'Start', info => "Starting OAI Harvest" } );
 cronlogaction( { info   => "Command line: $command_line_options" } );
 
 my $harvester =
-    Koha::OAI::Client::Harvester->new( { server => $server, verbose => $verbose, days => $days, force => $force } );
+    Koha::OAI::Client::Harvester->new( { server => $server, days => $days, force => $force, logger => \&logFunction } );
 $harvester->init();
 
 cronlogaction( { action => 'End', info => "Ending OAI Harvest" } );
+
+sub logFunction {
+    my $message = shift;
+    print $message . "\n" if ($verbose);
+    cronlogaction( { info => $message } );
+}
+
 exit(0);

@@ -15,7 +15,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
-<body id="admin_oaiservers" class="admin">
+<body id="admin_oai_servers" class="admin">
 [% WRAPPER 'header.inc' %]
     [% INCLUDE 'oai-admin-search.inc' %]
 [% END %]
@@ -28,7 +28,7 @@
 
         [% IF op == 'edit' || op == 'add' %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/oaiservers.pl">OAI repositories</a>
+                <a href="/cgi-bin/koha/admin/oai_servers.pl">OAI repositories</a>
            [% END %]
         [% END %]
 
@@ -89,7 +89,7 @@
 
         <li><label for="endpoint" class="required">Endpoint: </label> <input type="text" name="endpoint" id="endpoint" size="30" value="[% server.endpoint | html %]" required="required" /> <span class="required">Required</span>
         </li>
-        <li><label for="oai_set">Set: </label> <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" />
+        <li><label for="oai_set">[% I18N.tp('OAI', 'Set:') | html %] </label> <input type="text" name="oai_set" id="oai_set" value="[% server.oai_set | html %]" />
         </li>
         <li>
             <label for="dataformat">Data format: </label>
@@ -115,31 +115,31 @@
         </ol>
         </fieldset>
 
-        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oaiservers.pl">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/oai_servers.pl">Cancel</a></fieldset>
     </form>
 [% END %]
 
 [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
-        <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oaiservers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
+        <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
     </div>
     <h1>OAI repositories administration</h1>
     [% IF id %]
-        You searched for record [% id | html %]
+        <span>You searched for record [% id | html %]</span>
     [% ELSIF searchfield %]
-        You searched for [% searchfield | html %]
+        </span>You searched for [% searchfield | html %]<span>
     [% END %]
 
     <div class="page-section">
     <table id="serverst">
 
-        <thead><tr><th>Id</th><th>Repository name</th><th>Endpoint</th><th>Set</th><th>Data format</th><th>Record type</th><th class="noExport">Actions</th>
+        <thead><tr><th>Id</th><th>Repository name</th><th>Endpoint</th><th>[% tp('OAI', 'Set') | html %]</th><th>Data format</th><th>Record type</th><th class="noExport">Actions</th>
         </tr></thead>
         <tbody>
         [% FOREACH loo IN loop %]
             <tr>
             <td>[% loo.id | html %]</td>
-            <td><a href="/cgi-bin/koha/admin/oaiservers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
+            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
             <td>[% loo.dataformat | html %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]
                 <span>Bibliographic</span>
@@ -153,11 +153,11 @@
                         Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a href="/cgi-bin/koha/admin/oaiservers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a href="/cgi-bin/koha/admin/oaiservers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
                         <li>
                             <a href="#" class="delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/oaiservers.pl" method="post">
+                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_confirmed">
                                 <input type="hidden" name="id" value="[% loo.id | uri %]">

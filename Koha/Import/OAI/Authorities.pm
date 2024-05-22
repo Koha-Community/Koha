@@ -1,4 +1,4 @@
-package Koha::Import::Oaipmh::Authority;
+package Koha::Import::OAI::Authorities;
 
 # This file is part of Koha.
 #
@@ -16,26 +16,36 @@ package Koha::Import::Oaipmh::Authority;
 
 use Modern::Perl;
 
-use base qw(Koha::Object);
+use Koha::Import::OAI::Authority;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Import::Oaipmh::Authority
+Koha::Import::OAI::Authorities
 
-This object represents an OAI-PMH record being imported as an authority
+This object represents a collection of OAI-PMH records being imported as authorities
 
 =head1 API
 
-=head2 Class Methods
+=head2 Methods
 
-=cut
 
-=head3 _type
+=head3 type
 
 =cut
 
 sub _type {
-    return 'ImportOaipmhAuthority';
+    return 'ImportOAIAuthority';
 }
 
+=head3 object_class
+
+Koha::Object class
+
+=cut
+
+sub object_class {
+    return 'Koha::Import::OAI::Authority';
+}
 1;

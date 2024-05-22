@@ -8,8 +8,8 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
         $dbh->do(
             q{
-            CREATE TABLE IF NOT EXISTS `oaiservers` (
-              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+            CREATE TABLE IF NOT EXISTS `oai_servers` (
+              `oai_server_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
               `endpoint` varchar(255) NOT NULL COMMENT 'OAI endpoint (host + port + path)',
               `oai_set` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
               `servername` longtext NOT NULL COMMENT 'name given to the target by the library',
@@ -20,12 +20,12 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
-        say $out "Added new table 'oaiservers'";
+        say $out "Added new table 'oai_servers'";
 
         $dbh->do(
             q{
-            CREATE TABLE IF NOT EXISTS `import_oaipmh_biblios` (
-              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+            CREATE TABLE IF NOT EXISTS `import_oai_biblios` (
+              `import_oai_biblio_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
               `biblionumber` int(11) NOT NULL COMMENT 'unique identifier assigned to each koha record',
               `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
               `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
@@ -34,15 +34,15 @@ return {
               `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
               KEY biblionumber (biblionumber),
-              CONSTRAINT FK_import_oaipmh_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
+              CONSTRAINT FK_import_oai_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
 
         $dbh->do(
             q{
-            CREATE TABLE IF NOT EXISTS `import_oaipmh_authorities` (
-              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+            CREATE TABLE IF NOT EXISTS `import_oai_authorities` (
+              `import_oai_authority_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
               `authid` bigint(20) unsigned NOT NULL COMMENT 'unique identifier assigned to each koha record',
               `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
               `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
@@ -51,11 +51,11 @@ return {
               `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
               PRIMARY KEY (id),
               KEY authid (authid),
-              CONSTRAINT FK_import_oaipmh_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
+              CONSTRAINT FK_import_oai_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
-        say $out "Added new tables 'import_oaipmh_biblios' and import_oaipmh_authorities";
+        say $out "Added new tables 'import_oai_biblios' and import_oai_authorities";
 
         $dbh->do(
             q{

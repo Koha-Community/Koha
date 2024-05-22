@@ -1,4 +1,4 @@
-package Koha::OaiServers;
+package Koha::Import::OAI::Biblios;
 
 # This file is part of Koha.
 #
@@ -13,45 +13,39 @@ package Koha::OaiServers;
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 
-
-use Koha::Database;
-
-use Koha::OaiServer;
+use Koha::Import::OAI::Biblio;
 
 use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::OaiServers - Koha OaiServer Object set class
+Koha::Import::OAI::Biblios
+
+This object represents a collection of OAI-PMH records being imported as bibliographic records
 
 =head1 API
 
-=head2 Class Methods
+=head2 Methods
 
-=cut
 
-=head3 _type
-
-Return type of object, relating to Schema ResultSet
+=head3 type
 
 =cut
 
 sub _type {
-    return 'Oaiserver';
+    return 'ImportOaiBiblio';
 }
 
 =head3 object_class
 
-Return object class
+Koha::Object class
 
 =cut
 
 sub object_class {
-    return 'Koha::OaiServer';
+    return 'Koha::Import::OAI::Biblio';
 }
-
 1;
