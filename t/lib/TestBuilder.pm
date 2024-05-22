@@ -615,6 +615,8 @@ sub _gen_default_values {
         },
         Branch => {
             pickup_location => 0,
+            opacuserjs      => q{},
+            opacusercss     => q{},
         },
         Reserve => {
             non_priority  => 0,
