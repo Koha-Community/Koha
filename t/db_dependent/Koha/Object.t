@@ -1008,6 +1008,7 @@ subtest 'store() tests' => sub {
     my $currency = eval {
         Koha::Acquisition::Currency->new(
             {
+                currency      => 'Cur_test',
                 active        => 'IT4test',
             }
         )->store;
