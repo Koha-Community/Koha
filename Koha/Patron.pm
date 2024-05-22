@@ -443,7 +443,7 @@ sub delete {
     Koha::Exceptions::Patron::FailedDeleteAnonymousPatron->throw() if $anonymous_patron && $self->id eq $anonymous_patron;
 
     # Check if patron is protected
-    Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if $self->protected == 1;
+    Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if defined $self->protected && $self->protected == 1;
 
     $self->_result->result_source->schema->txn_do(
         sub {
