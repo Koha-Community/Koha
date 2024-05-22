@@ -724,7 +724,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaffHighlightedWords','1','','Highlight search terms on staff interface','YesNo'),
 ('StaffLangSelectorMode','footer','top|both|footer','Select the location to display the language selector in staff interface','Choice'),
 ('StaffLoginInstructions', '', NULL, 'HTML to go into the login box for the staff interface','Free'),
-('StaffLoginBranchBasedOnIP', '0','', 'Set the logged in branch for the user based on their current IP','YesNo'),
+('StaffLoginBranchBasedOnIP', '0','', 'Set the logged in library for the user based on their current IP','YesNo'),
 ('StaffSearchResultsDisplayBranch','holdingbranch','holdingbranch|homebranch','Controls the display of the home or holding branch for staff search results','Choice'),
 ('StaffSerialIssueDisplayCount','3','','Number of serial issues to display per subscription in the staff interface','Integer'),
 ('staffShibOnly','0','','If ON enables shibboleth only authentication for the staff client','YesNo'),
