@@ -150,10 +150,11 @@ if ( defined $format ) {
         }
     }
 
-    my @c = $cgi->multi_param('c');
-    my @fields = $cgi->multi_param('f');
-    my @q = $cgi->multi_param('q');
-    my @op = $cgi->multi_param('op');
+    my %param_names = map { $_ => 1 } $cgi->multi_param;
+    my @c           = $param_names{'c[]'}  ? $cgi->multi_param('c[]')  : $cgi->multi_param('c');
+    my @fields      = $param_names{'f[]'}  ? $cgi->multi_param('f[]')  : $cgi->multi_param('f');
+    my @q           = $param_names{'q[]'}  ? $cgi->multi_param('q[]')  : $cgi->multi_param('q');
+    my @op          = $param_names{'op[]'} ? $cgi->multi_param('op[]') : $cgi->multi_param('op');
 
     my $f;
     for (my $i = 0; $i < @fields; $i++) {
