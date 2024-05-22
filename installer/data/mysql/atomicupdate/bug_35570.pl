@@ -1,8 +1,8 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 use C4::Context;
 use Koha::Reports;
-use Term::ANSIColor;
 
 return {
     bug_number  => "35570",
@@ -19,7 +19,10 @@ return {
 
         if ($illbatches) {
             $dbh->do("UPDATE illbatches SET backend = 'Standard' where backend = 'FreeForm'");
-            say $out colored( "Bug 35570: Updated ILL batches from 'FreeForm' to 'Standard'", 'green' );
+            say_success(
+                $out,
+                "Bug 35570: Updated ILL batches from 'FreeForm' to 'Standard'"
+            );
         }
 
         my ($illrequestattributes) = $dbh->selectrow_array(
@@ -30,7 +33,10 @@ return {
 
         if ($illrequestattributes) {
             $dbh->do("UPDATE illrequestattributes SET backend = 'Standard' where backend = 'FreeForm'");
-            say $out colored( "Bug 35570: Updated ILL request attributes from 'FreeForm' to 'Standard'", 'green' );
+            say_success(
+                $out,
+                "Bug 35570: Updated ILL request attributes from 'FreeForm' to 'Standard'"
+            );
         }
 
         my ($illrequests) = $dbh->selectrow_array(
@@ -41,7 +47,10 @@ return {
 
         if ($illrequests) {
             $dbh->do("UPDATE illrequests SET backend = 'Standard' where backend = 'FreeForm'");
-            say $out colored( "Bug 35570: Updated ILL requests from 'FreeForm' to 'Standard'", 'green' );
+            say_success(
+                $out,
+                "Bug 35570: Updated ILL requests from 'FreeForm' to 'Standard'"
+            );
         }
 
         my $reports = join(
@@ -57,13 +66,16 @@ return {
         );
 
         if ($reports) {
-            say $out colored(
-                "Bug 35570: **ACTION REQUIRED**: Saved SQL reports containing occurrences of 'FreeForm' were found. The following reports MUST be updated accordingly ('FreeForm' -> 'Standard'):",
-                'yellow'
+            say_warning(
+                $out,
+                "Bug 35570: **ACTION REQUIRED**: Saved SQL reports containing occurrences of 'FreeForm' were found. The following reports MUST be updated accordingly ('FreeForm' -> 'Standard'):"
             );
-            say $out colored( $reports, 'blue');
+            say_info(
+                $out,
+                $reports
+            );
         } else {
-            say $out "Bug 35570: Finished database update.";
+            say_info( $out, "Bug 35570: Finished database update." );
         }
 
     },
