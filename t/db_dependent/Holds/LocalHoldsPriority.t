@@ -51,7 +51,7 @@ my $item = Koha::Item->new(
         itype         => $itemtype,
         exclude_from_local_holds_priority => 0,
     },
-)->store;
+)->store->get_from_storage;
 
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library3->{branchcode}, $library4->{branchcode} );
 my $patron_category = $builder->build({ source => 'Category', value => {exclude_from_local_holds_priority => 0} });
