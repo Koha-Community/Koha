@@ -167,6 +167,13 @@
      <server>__ELASTICSEARCH_SERVERS__</server>
      <index_name>__ELASTICSEARCH_INDEX_____DB_NAME__</index_name>
 
+     <!-- If you are using authentication, you will also need to use HTTPS. Uncomment and tweak the following for your ES setup. -->
+     <!-- NOTE: instead of userinfo, you can alternatively provide the username and password in URL in the server element -->
+     <!--
+     <userinfo>elastic:CHANGEME</userinfo>
+     <use_https>1</use_https>
+     -->
+
      <!-- See https://metacpan.org/pod/Search::Elasticsearch#cxn_pool -->
      <cxn_pool>Static</cxn_pool>
      <!-- See https://metacpan.org/pod/Search::Elasticsearch#trace_to -->
