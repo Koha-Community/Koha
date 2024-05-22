@@ -54,9 +54,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op      = $query->param('op')                 || 'list';
-my $referer = $query->param('referer')            || $op;
-my $page    = int( $query->param('page') // q{} ) || 1;
+my $op      = $query->param('op')      || 'list';
+my $referer = $query->param('referer') || $op;
+my $page    = int( $query->param('page') || 1 );
 my $public  = $query->param('public') ? 1 : 0;
 my ( $shelf, $shelfnumber, @messages, $allow_transfer );
 
