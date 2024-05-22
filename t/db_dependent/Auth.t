@@ -1344,7 +1344,7 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
 
 subtest 'AutoLocation' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -1395,6 +1395,13 @@ subtest 'AutoLocation' => sub {
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     my $session = C4::Auth::get_session($sessionID);
     is( $session->param('branch'), $patron->branchcode );
+
+    my $noip_library = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => '' } } );
+    $cgi->param( 'branch', $noip_library->branchcode );
+    ( $userid, $cookie, $sessionID, $flags, $template ) =
+        C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
+    $session = C4::Auth::get_session($sessionID);
+    is( $session->param('branch'), $noip_library->branchcode );
 
     $schema->storage->txn_rollback;
 
