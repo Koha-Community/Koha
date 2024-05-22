@@ -609,11 +609,11 @@ sub FilterUnchangedAttributes {
 
     # Loop through the current patron attributes
     foreach my $attribute_type ( keys %{ $patron_attribute_types } ) {
-        if ( $patron_attribute_types->{ $attribute_type } !=  $passed_attribute_types->{ $attribute_type } ) {
+        if ( ( $patron_attribute_types->{$attribute_type} // q{} ) ne ( $passed_attribute_types->{$attribute_type} // q{} ) ) {
             # count differs, overwrite all attributes for given type
-            foreach my $attr (@{ $entered_attributes }) {
+            foreach my $attr ( @{$entered_attributes} ) {
                 push @changed_attributes, $attr
-                    if $attr->{ code } eq $attribute_type;
+                    if $attr->{code} eq $attribute_type;
             }
         } else {
             # count matches, check values
