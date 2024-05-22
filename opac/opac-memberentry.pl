@@ -590,9 +590,11 @@ sub DelUnchangedFields {
     # get the hidden fields so we don't obliterate them should they have data patrons aren't allowed to modify
     my $hidden_fields = GetHiddenFields($mandatory, 'edit');
 
-
     foreach my $key ( keys %new_data ) {
-        next if ( ($new_data{$key} || $current_data->{$key}) && ( $new_data{$key} ne $current_data->{$key} ) && !($hidden_fields->{$key}) );
+        next
+            if ( $new_data{$key} || $current_data->{$key} )
+            && $new_data{$key} ne $current_data->{$key}
+            && !$hidden_fields->{$key};
         delete $new_data{$key};
     }
 
