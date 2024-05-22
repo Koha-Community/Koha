@@ -267,6 +267,8 @@ sub add_form {
             add_fields( 'branches', 'biblio', 'biblioitems', 'borrowers', 'subscription', 'serial' );
     } elsif ( $module eq 'suggestions' ) {
         push @{$field_selection}, add_fields( 'suggestions', 'borrowers', 'biblio' );
+    } elsif ( $module eq 'bookings' ) {
+        push @{$field_selection}, add_fields( 'borrowers', 'bookings', 'biblio', 'biblioitems', 'items' );
     } else {
         push @{$field_selection}, add_fields( 'biblio', 'biblioitems' ),
             add_fields('items'),

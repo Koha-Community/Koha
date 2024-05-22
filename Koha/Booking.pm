@@ -21,6 +21,11 @@ use Modern::Perl;
 
 use Koha::Exceptions::Booking;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Items;
+use Koha::Patrons;
+use Koha::Libraries;
+
+use C4::Letters;
 
 use base qw(Koha::Object);
 
@@ -237,6 +242,48 @@ on the API.
 
 sub to_api_mapping {
     return {};
+}
+
+=head3 delete
+
+$booking->delete();
+
+=cut
+
+sub delete {
+    my ( $self ) = @_;
+
+    my $deleted = $self->SUPER::delete($self);
+    my $patron  = Koha::Patrons->find( $self->patron_id );
+    my $item    = Koha::Items->find( $self->item_id );
+    my $library = Koha::Libraries->find( $self->pickup_library_id );
+
+    my $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'bookings',
+            letter_code            => 'BOOKING_CANCELLATION',
+            message_transport_type => 'email',
+            branchcode             => $patron->branchcode,
+            lang                   => $patron->lang,
+            tables                 => {
+                branches    => $library->branchcode,
+                borrowers   => $patron->borrowernumber,
+                items       => $item->itemnumber,
+                biblio      => $item->biblionumber,
+                biblioitems => $item->biblionumber,
+                bookings    => $self->unblessed,
+            }
+        );
+
+        if ($letter) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'email',
+                }
+            );
+        }
+    return $deleted;
 }
 
 =head2 Internal methods
