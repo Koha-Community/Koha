@@ -1215,11 +1215,17 @@ sub checkauth {
                         }
 
                         if (
+                            # If StaffLoginBranchBasedOnIP is enabled we will try to find a branch
+                            # matching your ip, regardless of the choice you have passed in
                             (
                                   !C4::Context->preference('AutoLocation')
                                 && C4::Context->preference('StaffLoginBranchBasedOnIP')
                             )
-                            || ( C4::Context->preference('AutoLocation') && $auth_state ne 'failed' )
+                            # When AutoLocation is enabled we will not choose a branch matching IP
+                            # if your selected branch has no IP set
+                            || (   C4::Context->preference('AutoLocation')
+                                && $auth_state ne 'failed'
+                                && $branches->{$branchcode}->{'branchip'} )
                             )
                         {
                             foreach my $br ( uniq( $branchcode, keys %$branches ) ) {
