@@ -12,10 +12,10 @@ return {
 
         if ($affected) {
             say_warning(
-                $out, "Changed the barcode width in patron card creator default layout from 8% to 80%";
+                $out, "Changed the barcode width in patron card creator default layout from 8% to 80%."
             );
         } else {
-            say_info( $out, "No patron card creator layouts found with 8% width, no changes required" );
+            say_info( $out, "No patron card creator layouts found with 8% width, no changes required." );
         }
     },
 };
