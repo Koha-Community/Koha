@@ -25,6 +25,8 @@ BEGIN {
         use_ok('C4::AuthoritiesMarc', qw( merge AddAuthority DelAuthority ModAuthority ));
 }
 
+# FIXME These tests fail if you pass this variable because we don't scaffold the authority types for UNIMARC
+# we should rewrite these tests to cover both flavours if we don't believe testing one is sufficient
 # Optionally change marc flavour
 my $marcflavour;
 GetOptions( 'flavour:s' => \$marcflavour );
