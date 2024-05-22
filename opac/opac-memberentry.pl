@@ -750,7 +750,7 @@ sub ParsePatronAttributes {
     }
 
     foreach my $code ( keys %{$delete_candidates} ) {
-        if ( not $borrowernumber # self-registration
+        if ( !$borrowernumber # self-registration
             || Koha::Patron::Attributes->search({
                 borrowernumber => $borrowernumber, code => $code })->count > 0 )
         {
