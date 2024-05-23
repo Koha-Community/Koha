@@ -1199,10 +1199,10 @@ sub checkauth {
                         my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
                         if ( C4::Context->preference('AutoLocation') ) {
                             # we have to check they are coming from the right ip range
-                            my $domain = $branches->{$branchcode}->{'branchip'};
+                            my $domain = $branches->{$branchcode}->{'branchip'} // q{};
                             $domain =~ s|\.\*||g;
                             $domain =~ s/\s+//g;
-                            if ( $ip !~ /^$domain/ ) {
+                            if ( $domain && $ip !~ /^$domain/ ) {
                                 $cookie = $cookie_mgr->replace_in_list( $cookie, $query->cookie(
                                     -name     => 'CGISESSID',
                                     -value    => '',
