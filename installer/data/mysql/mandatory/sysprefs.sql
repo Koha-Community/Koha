@@ -690,7 +690,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaffHighlightedWords','1','','Highlight search terms on staff interface','YesNo'),
 ('StaffLangSelectorMode','footer','top|both|footer','Select the location to display the language selector in staff interface','Choice'),
 ('StaffLoginInstructions', '', NULL, 'HTML to go into the login box for the staff interface','Free'),
-('StaffLoginBranchBasedOnIP', '0','', 'Set the logged in library for the user based on their current IP','YesNo'),
+('StaffLoginBranchBasedOnIP', '1','', 'Set the logged in library for the user based on their current IP','YesNo'),
 ('StaffSearchResultsDisplayBranch','holdingbranch','holdingbranch|homebranch','Controls the display of the home or holding branch for staff search results','Choice'),
 ('StaffSerialIssueDisplayCount','3','','Number of serial issues to display per subscription in the staff interface','Integer'),
 ('StaticHoldsQueueWeight','0',NULL,'Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective','Integer'),
