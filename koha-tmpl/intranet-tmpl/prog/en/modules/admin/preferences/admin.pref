@@ -91,14 +91,14 @@ Administration:
               class: integer
             - Adding d will specify it in days, e.g. 1d is timeout of one day.
         -
-            - "Require staff to log in from a computer in the IP address range specified by their library or the branch chosen at login (if any): "
+            - "Limit the libraries staff can select at login to those where their computer's IP address is within the library's specified range or to libraries without an IP restriction: "
             - pref: AutoLocation
               default: 0
               choices:
                   1: "Yes"
                   0: "No"
             - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
-            - 'Staff can only choose thier branch on login if they have "loggedinlibrary" permission. This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference. In the event of multiple branches with matching IPs, branchcode (alphabetically) will be the tie breaker.'
+            - 'Staff can only choose their library at login if they have the "loggedinlibrary" permission. This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference. In the event of multiple libraries with matching IPs, branchcode (alphabetically) will be the tie breaker.'
         -
             - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
