@@ -480,7 +480,7 @@ sub get_template_and_user {
             advancedMARCEditor           => C4::Context->preference("advancedMARCEditor"),
             AllowMultipleCovers          => C4::Context->preference('AllowMultipleCovers'),
             AmazonCoverImages            => C4::Context->preference("AmazonCoverImages"),
-            StaffLoginRestrictBranchByIP => C4::Context->preference("StaffLoginRestrictBranchByIP"),
+            StaffLoginRestrictLibraryByIP => C4::Context->preference("StaffLoginRestrictLibraryByIP"),
             can_see_cataloguing_module   => haspermission( $user, get_cataloguing_page_permissions() ) ? 1 : 0,
             canreservefromotherbranches  => C4::Context->preference('canreservefromotherbranches'),
             EasyAnalyticalRecords        => C4::Context->preference('EasyAnalyticalRecords'),
@@ -1196,7 +1196,7 @@ sub checkauth {
                     }
                     if ( $type ne 'opac' ) {
                         my $branches = { map { $_->branchcode => $_->unblessed } Koha::Libraries->search->as_list };
-                        if ( C4::Context->preference('StaffLoginRestrictBranchByIP') ) {
+                        if ( C4::Context->preference('StaffLoginRestrictLibraryByIP') ) {
                             # we have to check they are coming from the right ip range
                             my $domain = $branches->{$branchcode}->{'branchip'};
                             $domain =~ s|\.\*||g;
@@ -1218,12 +1218,12 @@ sub checkauth {
                             # If StaffLoginBranchBasedOnIP is enabled we will try to find a branch
                             # matching your ip, regardless of the choice you have passed in
                             (
-                                  !C4::Context->preference('StaffLoginRestrictBranchByIP')
+                                  !C4::Context->preference('StaffLoginRestrictLibraryByIP')
                                 && C4::Context->preference('StaffLoginBranchBasedOnIP')
                             )
-                            # When StaffLoginRestrictBranchByIP is enabled we will not choose a branch matching IP
+                            # When StaffLoginRestrictLibraryByIP is enabled we will not choose a branch matching IP
                             # if your selected branch has no IP set
-                            || (   C4::Context->preference('StaffLoginRestrictBranchByIP')
+                            || (   C4::Context->preference('StaffLoginRestrictLibraryByIP')
                                 && $auth_state ne 'failed'
                                 && $branches->{$branchcode}->{'branchip'} )
                             )
@@ -1410,7 +1410,7 @@ sub checkauth {
         IntranetUserCSS                       => C4::Context->preference("IntranetUserCSS"),
         IntranetUserJS                        => C4::Context->preference("IntranetUserJS"),
         IndependentBranches                   => C4::Context->preference("IndependentBranches"),
-        StaffLoginRestrictBranchByIP          => C4::Context->preference("StaffLoginRestrictBranchByIP"),
+        StaffLoginRestrictLibraryByIP         => C4::Context->preference("StaffLoginRestrictLibraryByIP"),
         wrongip                               => $info{'wrongip'},
         PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),

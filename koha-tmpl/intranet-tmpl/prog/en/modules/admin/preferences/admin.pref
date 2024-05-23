@@ -92,7 +92,7 @@ Administration:
             - Adding d will specify it in days, e.g. 1d is timeout of one day.
         -
             - "Limit the libraries staff can select at login to those where their computer's IP address is within the library's specified range or to libraries without an IP restriction: "
-            - pref: StaffLoginRestrictBranchByIP
+            - pref: StaffLoginRestrictLibraryByIP
               default: 0
               choices:
                   1: "Yes"
@@ -115,7 +115,7 @@ Administration:
                   1: "Yes"
                   0: "No"
             - "Note: If IPs overlap, the first found match will be used."
-            - 'This setting will be overridden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginRestrictBranchByIP">StaffLoginRestrictBranchByIP</a> system preference. In the event of multiple branches with matching IPs, branchcode (alphabetically) will be the tie breaker.'
+            - 'This setting will be overridden by <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginRestrictLibraryByIP">StaffLoginRestrictLibraryByIP</a> system preference. In the event of multiple branches with matching IPs, branchcode (alphabetically) will be the tie breaker.'
         # PostgreSQL is supported by CGI::Session but not by Koha.
         -
             - "Storage of login session information: "
