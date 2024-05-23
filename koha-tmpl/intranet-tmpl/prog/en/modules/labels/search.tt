@@ -19,9 +19,8 @@
             [% END %]
         </h1>
 
-        <form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
-            [% INCLUDE 'csrf-token.inc' %]
-            <input type="hidden" name="op" value="cud-do_search" />
+        <form name="f" method="get" action="/cgi-bin/koha/labels/label-item-search.pl">
+            <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
             <input type="hidden" name="type" value="[% type | html %]" />
 
