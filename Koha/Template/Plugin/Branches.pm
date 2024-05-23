@@ -69,35 +69,51 @@ sub GetURL {
 
 sub all {
     my ( $self, $params ) = @_;
-    my $selected = $params->{selected} // ();
-    my $unfiltered = $params->{unfiltered} || 0;
-    my $search_params = $params->{search_params} || {};
-    my $do_not_select_my_library = $params->{do_not_select_my_library} || 0; # By default we select the library of the logged in user if no selected passed
+    my $selected      = $params->{selected} // ();
+    my $unfiltered    = $params->{unfiltered}                                                           || 0;
+    my $ip_limit      = $params->{ip_limit} && C4::Context->preference('StaffLoginRestrictLibraryByIP') || 0;
+    my $search_params = $params->{search_params}                                                        || {};
+    my $do_not_select_my_library = $params->{do_not_select_my_library}
+        || 0;    # By default we select the library of the logged in user if no selected passed
 
     if ( !$unfiltered ) {
         $search_params->{only_from_group} = $params->{only_from_group} || 0;
     }
 
     my @selected =
-      ref $selected eq 'Koha::Libraries'
-      ? $selected->get_column('branchcode')
-      : ( $selected // () );
+        ref $selected eq 'Koha::Libraries'
+        ? $selected->get_column('branchcode')
+        : ( $selected // () );
 
-    my $libraries = $unfiltered
-      ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed
-      : Koha::Libraries->search_filtered( $search_params, { order_by => ['branchname'] } )->unblessed;
+    my $libraries =
+        $unfiltered
+        ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed
+        : Koha::Libraries->search_filtered( $search_params, { order_by => ['branchname'] } )->unblessed;
+
+    if ($ip_limit) {
+        my $ip           = $ENV{'REMOTE_ADDR'};
+        my @ip_libraries = ();
+        for my $l (@$libraries) {
+            my $domain = $l->{branchip} // '';
+            $domain =~ s|\.\*||g;
+            $domain =~ s/\s+//g;
+            unless ( $domain && $ip !~ /^$domain/ ) {
+                push @ip_libraries, $l;
+            }
+        }
+        $libraries = \@ip_libraries;
+    }
 
     for my $l (@$libraries) {
         if ( grep { $l->{branchcode} eq $_ } @selected
-            or  not @selected
-                and not $do_not_select_my_library
-                and C4::Context->userenv
-                and $l->{branchcode} eq ( C4::Context->userenv->{branch} // q{} ) )
+            or not @selected
+            and not $do_not_select_my_library
+            and C4::Context->userenv
+            and $l->{branchcode} eq ( C4::Context->userenv->{branch} // q{} ) )
         {
-             $l->{selected} = 1;
+            $l->{selected} = 1;
         }
     }
-
 
     return $libraries;
 }

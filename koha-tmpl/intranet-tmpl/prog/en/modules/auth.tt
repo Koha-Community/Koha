@@ -151,7 +151,7 @@
                 <select name="branch" id="set-library-branch" class="input" tabindex="3">
                 <option value="">My library</option>
             [% END %]
-                [% FOREACH l IN Branches.all( unfiltered => 1 ) %]
+                [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
                     <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                  [% END %]
             </select>
