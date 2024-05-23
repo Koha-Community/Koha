@@ -98,7 +98,7 @@ Administration:
                   1: "Yes"
                   0: "No"
             - <a href="/cgi-bin/koha/admin/branches.pl">Link to library administration</a>
-            - 'Staff can only choose their library at login if they have the "loggedinlibrary" permission. This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginBranchBasedOnIP">StaffLoginBranchBasedOnIP</a> system preference. In the event of multiple libraries with matching IPs, branchcode (alphabetically) will be the tie breaker.'
+            - 'Staff can only choose their library at login if they have the "loggedinlibrary" permission. This setting will override the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=StaffLoginLibraryBasedOnIP">StaffLoginLibraryBasedOnIP</a> system preference. In the event of multiple libraries with matching IPs, branchcode (alphabetically) will be the tie breaker.'
         -
             - "Enable check for change in remote IP address for session security: "
             - pref: SessionRestrictionByIP
@@ -109,7 +109,7 @@ Administration:
             - (Disable only when remote IP address changes frequently.)
         -
             - "Set logged in library for staff by matching their current IP to the library configuration: "
-            - pref: StaffLoginBranchBasedOnIP
+            - pref: StaffLoginLibraryBasedOnIP
               default: 0
               choices:
                   1: "Yes"

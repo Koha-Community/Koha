@@ -495,35 +495,35 @@ sub get_template_and_user {
     if ( $in->{'type'} eq "intranet" ) {
 
         $template->param(
-            advancedMARCEditor           => C4::Context->preference("advancedMARCEditor"),
-            AllowMultipleCovers          => C4::Context->preference('AllowMultipleCovers'),
-            AmazonCoverImages            => C4::Context->preference("AmazonCoverImages"),
+            advancedMARCEditor            => C4::Context->preference("advancedMARCEditor"),
+            AllowMultipleCovers           => C4::Context->preference('AllowMultipleCovers'),
+            AmazonCoverImages             => C4::Context->preference("AmazonCoverImages"),
             StaffLoginRestrictLibraryByIP => C4::Context->preference("StaffLoginRestrictLibraryByIP"),
-            can_see_cataloguing_module   => haspermission( $user, get_cataloguing_page_permissions() ) ? 1 : 0,
-            canreservefromotherbranches  => C4::Context->preference('canreservefromotherbranches'),
-            EasyAnalyticalRecords        => C4::Context->preference('EasyAnalyticalRecords'),
-            EnableBorrowerFiles          => C4::Context->preference('EnableBorrowerFiles'),
-            FRBRizeEditions              => C4::Context->preference("FRBRizeEditions"),
-            IndependentBranches          => C4::Context->preference("IndependentBranches"),
-            intranetcolorstylesheet      => C4::Context->preference("intranetcolorstylesheet"),
-            IntranetFavicon              => C4::Context->preference("IntranetFavicon"),
-            IntranetmainUserblock        => C4::Context->preference("IntranetmainUserblock"),
-            IntranetNav                  => C4::Context->preference("IntranetNav"),
-            intranetreadinghistory       => C4::Context->preference("intranetreadinghistory"),
-            IntranetReadingHistoryHolds  => C4::Context->preference("IntranetReadingHistoryHolds"),
-            intranetstylesheet           => C4::Context->preference("intranetstylesheet"),
-            IntranetUserCSS              => C4::Context->preference("IntranetUserCSS"),
-            IntranetUserJS               => C4::Context->preference("IntranetUserJS"),
-            LibraryName                  => C4::Context->preference("LibraryName"),
-            LocalCoverImages             => C4::Context->preference('LocalCoverImages'),
-            OPACLocalCoverImages         => C4::Context->preference('OPACLocalCoverImages'),
-            PatronAutoComplete           => C4::Context->preference("PatronAutoComplete"),
-            pending_checkout_notes       => Koha::Checkouts->search( { noteseen => 0 } ),
-            plugins_enabled              => C4::Context->config("enable_plugins"),
-            StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
-            UseCourseReserves            => C4::Context->preference("UseCourseReserves"),
-            useDischarge                 => C4::Context->preference('useDischarge'),
-            virtualshelves               => C4::Context->preference("virtualshelves"),
+            can_see_cataloguing_module    => haspermission( $user, get_cataloguing_page_permissions() ) ? 1 : 0,
+            canreservefromotherbranches   => C4::Context->preference('canreservefromotherbranches'),
+            EasyAnalyticalRecords         => C4::Context->preference('EasyAnalyticalRecords'),
+            EnableBorrowerFiles           => C4::Context->preference('EnableBorrowerFiles'),
+            FRBRizeEditions               => C4::Context->preference("FRBRizeEditions"),
+            IndependentBranches           => C4::Context->preference("IndependentBranches"),
+            intranetcolorstylesheet       => C4::Context->preference("intranetcolorstylesheet"),
+            IntranetFavicon               => C4::Context->preference("IntranetFavicon"),
+            IntranetmainUserblock         => C4::Context->preference("IntranetmainUserblock"),
+            IntranetNav                   => C4::Context->preference("IntranetNav"),
+            intranetreadinghistory        => C4::Context->preference("intranetreadinghistory"),
+            IntranetReadingHistoryHolds   => C4::Context->preference("IntranetReadingHistoryHolds"),
+            intranetstylesheet            => C4::Context->preference("intranetstylesheet"),
+            IntranetUserCSS               => C4::Context->preference("IntranetUserCSS"),
+            IntranetUserJS                => C4::Context->preference("IntranetUserJS"),
+            LibraryName                   => C4::Context->preference("LibraryName"),
+            LocalCoverImages              => C4::Context->preference('LocalCoverImages'),
+            OPACLocalCoverImages          => C4::Context->preference('OPACLocalCoverImages'),
+            PatronAutoComplete            => C4::Context->preference("PatronAutoComplete"),
+            pending_checkout_notes        => Koha::Checkouts->search( { noteseen => 0 } ),
+            plugins_enabled               => C4::Context->config("enable_plugins"),
+            StaffSerialIssueDisplayCount  => C4::Context->preference("StaffSerialIssueDisplayCount"),
+            UseCourseReserves             => C4::Context->preference("UseCourseReserves"),
+            useDischarge                  => C4::Context->preference('useDischarge'),
+            virtualshelves                => C4::Context->preference("virtualshelves"),
         );
     }
     else {
@@ -1235,12 +1235,13 @@ sub checkauth {
                         }
 
                         if (
-                            # If StaffLoginBranchBasedOnIP is enabled we will try to find a branch
+                            # If StaffLoginLibraryBasedOnIP is enabled we will try to find a branch
                             # matching your ip, regardless of the choice you have passed in
                             (
                                   !C4::Context->preference('StaffLoginRestrictLibraryByIP')
-                                && C4::Context->preference('StaffLoginBranchBasedOnIP')
+                                && C4::Context->preference('StaffLoginLibraryBasedOnIP')
                             )
+
                             # When StaffLoginRestrictLibraryByIP is enabled we will not choose a branch matching IP
                             # if your selected branch has no IP set
                             || (   C4::Context->preference('StaffLoginRestrictLibraryByIP')
