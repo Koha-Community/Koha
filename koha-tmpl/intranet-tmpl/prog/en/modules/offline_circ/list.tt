@@ -137,9 +137,14 @@
                     var cb = $(this);
                     $.ajax({
                         url: "process.pl",
-                        data: { 'op': 'cud-' + op, 'operationid': this.value },
+                        data: {
+                            'op': 'cud-' + op,
+                            'operationid': this.value,
+                            'csrf_token': $('meta[name="csrf-token"]').attr('content')
+                        },
                         async: false,
                         dataType: "text",
+                        type: "POST",
                         success: function(data) {
                             if( data == "Added." ){
                                 cb.replaceWith(_("Added."));
