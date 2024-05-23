@@ -2222,6 +2222,7 @@ tables:
             - "There were [% success %] items that were renewed."
             - "[% END %]"
             - "[% FOREACH checkout IN checkouts %]"
+            - "[% NEXT IF (checkout.auto_renew_error == 'auto_too_soon') %]"
             - "[% checkout.item.biblio.title %] : [% checkout.item.barcode %]"
             - "[% IF !checkout.auto_renew_error %]"
             - "was renewed until [% checkout.date_due | $KohaDates as_due_date => 1%]"
