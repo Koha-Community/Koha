@@ -35,6 +35,10 @@ sub PRINT {
     $Log::Log4perl::caller_depth--;
 }
 
+sub OPEN {
+    return 1;
+}
+
 =head2 BINMODE
 
     Suppress errors from Log::Log4perl::Appender::Screen
