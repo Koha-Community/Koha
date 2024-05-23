@@ -10,7 +10,7 @@
   <server-params
     min_servers='1'
     min_spare_servers='0'
-    log_file='Sys::Syslog'
+    log_file='/var/log/koha/__KOHASITE__/sip.log'
     syslog_ident='koha_sip'
     syslog_facility='local6'
   />
@@ -23,7 +23,7 @@
       protocol="NCIP/1.0" />
 -->
     <service
-      port="8023/tcp"
+      port="127.0.0.1:8023/tcp"
       transport="telnet"
       protocol="SIP/2.00"
       timeout="60" />
