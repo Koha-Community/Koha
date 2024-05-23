@@ -1964,8 +1964,8 @@ sub addroutingmember {
     my $sth = $dbh->prepare( "SELECT max(ranking) rank FROM subscriptionroutinglist WHERE subscriptionid = ?" );
     $sth->execute($subscriptionid);
     while ( my $line = $sth->fetchrow_hashref ) {
-        if ( $line->{'rank'} > 0 ) {
-            $rank = $line->{'rank'} + 1;
+        if ( defined $line->{rank} && $line->{rank} > 0 ) {
+            $rank = $line->{rank} + 1;
         } else {
             $rank = 1;
         }
