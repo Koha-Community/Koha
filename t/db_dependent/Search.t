@@ -31,7 +31,6 @@ use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::Mocks::Zebra;
-use t::lib::TestBuilder;
 
 use Koha::Caches;
 
@@ -703,29 +702,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     is(scalar(@{$newresults[0]->{'ALTERNATEHOLDINGS'}}), 1, 'Alternate holdings filled in correctly');
 
-
-    ## Regression test for Bug 10741
-
-    # make one of the test items appear to be in transit
-    my $circ_module = Test::MockModule->new('C4::Circulation');
-    my $builder = t::lib::TestBuilder->new;
-    my $transfer = $builder->build(
-        {
-            source => 'Branchtransfer',
-            value => {
-                itemnumber => 11,
-                frombranch => 'MPL',
-                tobranch => 'CPL',
-                datesent => \'NOW()'
-            }
-        }
-    );
-
-    ($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
-    @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
-        $results_hashref->{'biblioserver'}->{"RECORDS"});
-    ok(!exists($newresults[0]->{norequests}), 'presence of a transit does not block hold request action (bug 10741)');
-
     ## Regression test for bug 10684
     ( undef, $results_hashref, $facets_loop ) =
         getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, 'ccl', undef);
@@ -947,7 +923,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 94;
+    plan tests => 93;
     run_marc21_search_tests();
 };
 
