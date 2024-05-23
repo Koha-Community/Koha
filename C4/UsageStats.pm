@@ -146,7 +146,7 @@ sub _shared_preferences {
         noItemTypeImages
         OpacNoItemTypeImages
         virtualshelves
-        StaffLoginRestrictBranchByIP
+        StaffLoginRestrictLibraryByIP
         IndependentBranches
         SessionStorage
         Persona
