@@ -274,6 +274,8 @@ subtest 'checkauth() tests' => sub {
     subtest 'Two-factor authentication' => sub {
         plan tests => 18;
 
+        t::lib::Mocks::mock_preference( 'AutoLocation', 0 );
+
         my $patron = $builder->build_object(
             { class => 'Koha::Patrons', value => { flags => 1 } } );
         my $password = 'password';
