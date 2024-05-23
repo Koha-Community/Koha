@@ -98,7 +98,7 @@
                             <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
                             [% END %]
                         [% END %]
-                        
+
                         [% FOREACH credit_type IN credit_types %]
                             [% IF transaction_type == credit_type.code %]
                             <option value="[% credit_type.code | html %]" selected="selected">[% credit_type.description | html %]</option>

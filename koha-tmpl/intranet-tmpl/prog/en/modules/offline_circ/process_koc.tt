@@ -17,34 +17,25 @@
 [% END %]
 
 [% WRAPPER 'sub-header.inc' %]
-<nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-    <ol>
-        <li>
-            <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-        </li>
-        <li>
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-        </li>
+        [% END %]
 
         [% IF ( transactions_loaded ) %]
-            <li>
+            [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline circulation file upload</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                    Results
-                </a>
-            </li>
+            [% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Results</span>
+            [% END %]
         [% ELSE %]
-            <li>
-                <a href="#" aria-current="page">
-                    Offline circulation file upload
-                </a>
-            </li>
-        [% END %]
-    </ol>
-</nav>
-[% END %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>Offline circulation file upload</span>
+            [% END %]
+        [% END # /IF transactions_loaded %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
     <div class="row">
