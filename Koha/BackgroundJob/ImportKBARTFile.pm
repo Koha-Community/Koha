@@ -241,14 +241,16 @@ sub read_file {
     my $headers_to_check = $csv->getline($fh);
     my $column_headers   = rescue_EBSCO_files($headers_to_check);
     my $lines            = $csv->getline_all( $fh, 0 );
-
-    my ( $cde, $str, $pos ) = $csv->error_diag();
-    my $error = $cde ? "$cde, $str, $pos" : "";
-    warn $error if $error;
-
     close($fh);
 
-    return ( $column_headers, $lines, $error );
+    unless($csv->eof()) {
+        my ( $cde, $str, $pos ) = $csv->error_diag();
+        my $error = $cde ? "$cde, $str, $pos" : "";
+        warn $error if $error;
+        return ( $column_headers, $lines, $error );
+    }
+
+    return ( $column_headers, $lines );
 }
 
 =head3 create_title_hash_from_line_data
