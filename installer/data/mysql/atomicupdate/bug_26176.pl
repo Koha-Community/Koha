@@ -13,21 +13,19 @@ return {
             UPDATE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
             WHERE variable = "AutoLocation"
         }
-        );
-
-        say_success( $out, "Renamed system preference 'AutoLocation' to 'StaffLoginRestrictLibraryByIP'" );
+            ) == 1
+            && say_success( $out, "Renamed system preference 'AutoLocation' to 'StaffLoginRestrictLibraryByIP'" );
 
         $dbh->do(
             q{
             UPDATE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
             WHERE variable = "StaffLoginLibraryBasedOnIP"
         }
-        );
-
-        say_success(
+            ) == 1
+            && say_success(
             $out,
             "Renamed system preference 'StaffLoginLibraryBasedOnIP' to 'StaffLoginRestrictLibraryByIP'"
-        );
+            );
 
     },
 };
