@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "26176",
-    description => "Rename AutoLocation and StaffLoginBranchBasedOnIP",
+    description => "Rename AutoLocation and StaffLoginBranchBasedOnIP system preferences",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
