@@ -374,16 +374,16 @@
                 >
                     <legend>
                         {{
-                            $__("%s linked biblio record").format(
-                                title.title_id ? "Update" : "Create"
-                            )
+                            title.title_id
+                                ? $__("Update linked bibliographic record")
+                                : $__("Create linked bibliographic record")
                         }}:
                     </legend>
                     <label for="create_linked_biblio"
                         >{{
-                            $__("%s record").format(
-                                title.title_id ? "Update" : "Create"
-                            )
+                            title.title_id
+                                ? $__("Update record")
+                                : $__("Create record")
                         }}:</label
                     >
                     <input
