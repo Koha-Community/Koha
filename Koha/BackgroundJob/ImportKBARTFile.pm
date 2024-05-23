@@ -229,7 +229,7 @@ sub read_file {
     my $delimiter    = $file->{filename} =~ /\.tsv$/    ? "\t"                                   : ",";
     my $quote_char   = $file->{filename} =~ /\.tsv$/    ? "\""                                   : "\"";
 
-    open my $fh, "<", \$file_content or die;
+    open my $fh, "<", \$file_content or die "Could not open file $file->{filename}: $!";
     my $csv = Text::CSV_XS->new(
         {
             sep_char           => $delimiter,
