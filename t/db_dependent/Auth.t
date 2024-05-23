@@ -1292,14 +1292,14 @@ subtest 'checkpw() return values tests' => sub {
     };
 };
 
-subtest 'StaffLoginBranchBasedOnIP' => sub {
+subtest 'StaffLoginLibraryBasedOnIP' => sub {
 
     plan tests => 7;
 
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference( 'StaffLoginRestrictLibraryByIP', 0 );
-    t::lib::Mocks::mock_preference( 'StaffLoginBranchBasedOnIP',     0 );
+    t::lib::Mocks::mock_preference( 'StaffLoginLibraryBasedOnIP',    0 );
 
     my $patron   = $builder->build_object( { class => 'Koha::Patrons',   value => { flags    => 1 } } );
     my $branch   = $builder->build_object( { class => 'Koha::Libraries', value => { branchip => "127.0.0.1" } } );
@@ -1324,20 +1324,20 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
     is( $session->param('branch'), $patron->branchcode, "Logged in branch is set to the patron's branchcode" );
 
     my $template;
-    t::lib::Mocks::mock_preference( 'StaffLoginBranchBasedOnIP', 1 );
+    t::lib::Mocks::mock_preference( 'StaffLoginLibraryBasedOnIP', 1 );
 
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet' );
     is( $userid, $patron->userid, "User successfully logged in" );
     $session = C4::Auth::get_session($sessionID);
     is( $session->param('branch'), $branch->branchcode, "Logged in branch is set based on the IP from REMOTE_ADDR " );
 
-    # StaffLoginRestrictLibraryByIP overrides StaffLoginBranchBasedOnIP
+    # StaffLoginRestrictLibraryByIP overrides StaffLoginLibraryBasedOnIP
     t::lib::Mocks::mock_preference( 'StaffLoginRestrictLibraryByIP', 1 );
     ( $userid, $cookie, $sessionID, $flags, $template ) =
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 }, 'intranet', undef, undef, { do_not_print => 1 } );
     is(
         $template->{VARS}->{wrongip}, 1,
-        "StaffLoginRestrictLibraryByIP prevents StaffLoginBranchBasedOnIP from logging user in to another branch"
+        "StaffLoginRestrictLibraryByIP prevents StaffLoginLibraryBasedOnIP from logging user in to another branch"
     );
 
     t::lib::Mocks::mock_preference( 'StaffLoginRestrictLibraryByIP', 0 );
