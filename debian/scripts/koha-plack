@@ -43,7 +43,7 @@ $scriptname
 This script lets you manage the plack daemons for your Koha instances.
 
 Usage:
-$scriptname --start|--stop|--restart|--reload|--status [--quiet|-q] instancename1 [instancename2...]
+$scriptname --start|--stop|--restart|--reload|--status|--development [--quiet|-q] instancename1 [instancename2...]
 $scriptname --enable|--disable instancename1 [instancename2]
 $scriptname -h|--help
 
@@ -61,6 +61,7 @@ $scriptname -h|--help
     --debugger-location   Specify the host:port for your debugger tool (defaults
                           to localhost:9000)
     --debugger-path       Specify the path for the debugger library
+    --development|-dev    Enable development environment
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
     --help|-h             Display this help message
@@ -91,19 +92,14 @@ start_plack()
 
     instance_user="${instancename}-koha"
 
-    environment="deployment"
+    if [ -z "$development_environment" ]; then environment="deployment"; else environment="development"; fi
     daemonize="--daemonize"
     logging="--access-log /var/log/koha/${instancename}/plack.log \
              --error-log /var/log/koha/${instancename}/plack-error.log"
     max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
 
-    if [ "$DEV_INSTALL" = "1" ]; then
-        # Maybe we should switch off debug_mode if DEV_INSTALL is not set?
-        environment="development"
-    fi
-
     if [ "$debug_mode" = "yes" ]; then
-        environment="development"
+        # Maybe we should switch off debug_mode if DEV_INSTALL is not set?
         daemonize=""
         logging="" # remote debugger takes care
         max_requests_and_workers="--workers 1"
@@ -465,6 +461,9 @@ while [ $# -gt 0 ]; do
         --debugger-path)
             debugger_path="$2"
             shift 2 ;;
+        -dev|--development)
+            development_environment=1
+            shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
