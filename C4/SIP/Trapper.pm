@@ -27,13 +27,20 @@ sub TIEHANDLE {
 
 sub PRINT {
     my $self = shift;
-    $Log::Log4perl::caller_depth++;
+    $Log::Log4perl::caller_depth += 3;
     my $logger =
       Koha::Logger->get( { interface => 'sip', category => 'STDERR' } );
     warn @_;
     $logger->warn(@_);
-    $Log::Log4perl::caller_depth--;
+    $Log::Log4perl::caller_depth -= 3;
 }
+
+=head2 OPEN
+
+    We need OPEN in case Net::Server tries to redirect STDERR. This will
+    be tried when param log_file or setsid is passed.
+
+=cut
 
 sub OPEN {
     return 1;
