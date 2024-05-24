@@ -39,8 +39,8 @@ sub new {
     my %listeners;
 
     # The key to the listeners hash is the 'port' component of the
-    # configuration, which is of the form '[host]:[port]/proto', and
-    # the 'proto' component could be upper-, lower-, or mixed-cased.
+    # configuration, which is of the form '[host]:[port]/proto[/IPv[46]]'
+    # The 'proto' component could be upper-, lower-, or mixed-cased.
     # Regularize it here to lower-case, and then do the same below in
     # find_server() when building the keys to search the hash.
 
@@ -75,6 +75,10 @@ sub find_service {
         $portstr = sprintf( "%s%s/%s", $addr, $port, lc $proto );
         siplog( "LOG_DEBUG",
             "Configuration::find_service: Trying $portstr" );
+        last if ( exists( ( $self->{listeners} )->{$portstr} ) );
+        $portstr .= '/ipv4';    # lc, see ->new
+        last if ( exists( ( $self->{listeners} )->{$portstr} ) );
+        $portstr .= '/ipv6';    # lc, see ->new
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );
     }
     return $self->{listeners}->{$portstr};
