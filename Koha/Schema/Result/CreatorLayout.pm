@@ -84,7 +84,7 @@ __PACKAGE__->table("creator_layouts");
 =head2 scale_width
 
   data_type: 'decimal'
-  default_value: 0.080000
+  default_value: 0.800000
   is_nullable: 0
   size: [28,6]
 
@@ -168,7 +168,7 @@ __PACKAGE__->add_columns(
   "scale_width",
   {
     data_type => "decimal",
-    default_value => "0.080000",
+    default_value => "0.800000",
     is_nullable => 0,
     size => [28, 6],
   },
@@ -216,8 +216,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("layout_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-25 14:33:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L7tcMDvHqODxCgENIubFTQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-24 13:05:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:W/ICw+9yY7wxZ0IgqqXcFg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
