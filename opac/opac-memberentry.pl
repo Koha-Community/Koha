@@ -671,7 +671,7 @@ sub GeneratePatronAttributesForm {
     # or taken from the patron itself
     if ( defined $entered_attributes ) {
         foreach my $attr (@$entered_attributes) {
-            push @{ $attr_values{ $attr->{code} } }, $attr->{value};
+            push @{ $attr_values{ $attr->{code} } }, $attr->{attribute};
         }
     }
     elsif ( defined $borrowernumber ) {
