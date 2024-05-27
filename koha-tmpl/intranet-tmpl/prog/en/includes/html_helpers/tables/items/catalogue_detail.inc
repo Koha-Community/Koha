@@ -326,8 +326,8 @@
                     node += '<div class="cover-slider">';
                     row.cover_image_ids.forEach(id => {
                         node += '<div class="cover-image local-coverimg">';
-                        node += '<a href="/cgi-bin/koha/catalogue/image.pl?itemnumber=%s&amp;imagenumber=%s" title="%s">'.format(id, id, _("Local cover image"));
-                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=%s" alt="%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=[% item.itemnumber | uri %]&amp;imagenumber=%s" />'.format(id, id, _("Local cover image"));
+                        node += '<a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=%s" title="%s">'.format(id, _("Local cover image"));
+                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=%s" alt="%s" />'.format(id, _("Local cover image"));
                         node += '</a>';
                         node += '</div>';
                     });
