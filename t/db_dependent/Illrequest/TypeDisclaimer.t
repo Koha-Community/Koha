@@ -37,7 +37,8 @@ use_ok('Koha::Illrequest::Workflow::TypeDisclaimer');
 
 my $metadata = {
     title  => 'This is a title',
-    author => 'This is an author'
+    author => 'This is an author',
+    type   => 'journal'
 };
 
 # Because hashes can reorder themselves, we need to make sure ours is in a
@@ -54,7 +55,7 @@ isa_ok( $type_disclaimer, 'Koha::Illrequest::Workflow::TypeDisclaimer' );
 
 is(
     $type_disclaimer->prep_metadata($sorted),
-'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIn0%3D%0A',
+'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsInRpdGxlIjoiVGhpcyBpcyBhIHRpdGxlIiwi%0AdHlwZSI6ImpvdXJuYWwifQ%3D%3D%0A',
     'prep_metadata works'
 );
 
