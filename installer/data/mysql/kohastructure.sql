@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.5.21-MariaDB, for debian-linux-gnu (aarch64)
+-- MariaDB dump 10.19  Distrib 10.11.6-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	11.2.2-MariaDB-1:11.2.2+maria~ubu2204
+-- Server version	11.3.2-MariaDB-1:11.3.2+maria~ubu2204
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -173,7 +173,7 @@ CREATE TABLE `action_logs` (
   `interface` varchar(30) DEFAULT NULL COMMENT 'the context this action was taken in',
   `script` varchar(255) DEFAULT NULL COMMENT 'the name of the cron script that caused this change',
   `trace` text DEFAULT NULL COMMENT 'An optional stack trace enabled by ActionLogsTraceDepth',
-  `diff` LONGTEXT NULL DEFAULT NULL COMMENT 'Stores a diff of the changed object',
+  `diff` longtext DEFAULT NULL COMMENT 'Stores a diff of the changed object',
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
   KEY `user_idx` (`user`),
@@ -1125,21 +1125,6 @@ CREATE TABLE `biblio_framework` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `record_sources`
---
-
-DROP TABLE IF EXISTS `record_sources`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `record_sources` (
-  `record_source_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the `record_sources` table',
-  `name` text NOT NULL COMMENT 'User defined name for the record source',
-  `can_be_edited` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If records from this source can be edited',
-  PRIMARY KEY (`record_source_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `biblio_metadata`
 --
 
@@ -1153,10 +1138,11 @@ CREATE TABLE `biblio_metadata` (
   `schema` varchar(16) NOT NULL,
   `metadata` longtext NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `record_source_id` int(11) NULL DEFAULT NULL COMMENT 'The record source for the metadata',
+  `record_source_id` int(11) DEFAULT NULL COMMENT 'The record source for the metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `biblio_metadata_uniq_key` (`biblionumber`,`format`,`schema`),
   KEY `timestamp` (`timestamp`),
+  KEY `record_metadata_fk_2` (`record_source_id`),
   CONSTRAINT `record_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `record_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1234,6 +1220,7 @@ CREATE TABLE `bookings` (
   KEY `patron_id` (`patron_id`),
   KEY `biblio_id` (`biblio_id`),
   KEY `item_id` (`item_id`),
+  KEY `bookings_ibfk_4` (`pickup_library_id`),
   CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`patron_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`biblio_id`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -2593,10 +2580,11 @@ CREATE TABLE `deletedbiblio_metadata` (
   `schema` varchar(16) NOT NULL,
   `metadata` longtext NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `record_source_id` int(11) NULL DEFAULT NULL COMMENT 'The record source for the metadata',
+  `record_source_id` int(11) DEFAULT NULL COMMENT 'The record source for the metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `deletedbiblio_metadata_uniq_key` (`biblionumber`,`format`,`schema`),
   KEY `timestamp` (`timestamp`),
+  KEY `deletedrecord_metadata_fk_2` (`record_source_id`),
   CONSTRAINT `deletedrecord_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `deletedbiblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `deletedrecord_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -4298,19 +4286,6 @@ CREATE TABLE `letter` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `library_hours`
---
-DROP TABLE IF EXISTS library_hours;
-CREATE TABLE library_hours (
-    library_id varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-    day enum('0','1','2','3','4','5','6') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-    open_time time COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    close_time time COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (library_id, day),
-    CONSTRAINT library_hours_ibfk_1 FOREIGN KEY (library_id) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `library_groups`
 --
 
@@ -4337,6 +4312,23 @@ CREATE TABLE `library_groups` (
   KEY `branchcode` (`branchcode`),
   CONSTRAINT `library_groups_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `library_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `library_groups_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `library_hours`
+--
+
+DROP TABLE IF EXISTS `library_hours`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `library_hours` (
+  `library_id` varchar(10) NOT NULL,
+  `day` enum('0','1','2','3','4','5','6') NOT NULL DEFAULT '0',
+  `open_time` time DEFAULT NULL,
+  `close_time` time DEFAULT NULL,
+  PRIMARY KEY (`library_id`,`day`),
+  CONSTRAINT `library_hours_ibfk_1` FOREIGN KEY (`library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4956,8 +4948,8 @@ CREATE TABLE `old_reserves` (
   CONSTRAINT `old_reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_reserves_ibfk_4` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `old_reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `old_reserves_ibfk_branchcode` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `old_reserves_ibfk_branchcode` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `old_reserves_ibfk_ig` FOREIGN KEY (`item_group_id`) REFERENCES `item_groups` (`item_group_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5423,6 +5415,21 @@ CREATE TABLE `recalls` (
   CONSTRAINT `recalls_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `recalls_ibfk_4` FOREIGN KEY (`pickup_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Information related to recalls in Koha';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `record_sources`
+--
+
+DROP TABLE IF EXISTS `record_sources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `record_sources` (
+  `record_source_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primary key for the `record_sources` table',
+  `name` text NOT NULL COMMENT 'User defined name for the record source',
+  `can_be_edited` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'If records from this source can be edited',
+  PRIMARY KEY (`record_source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6631,4 +6638,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-30 17:38:08
+-- Dump completed on 2024-05-27 12:58:11
