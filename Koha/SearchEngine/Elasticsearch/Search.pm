@@ -54,6 +54,9 @@ use MARC::File::XML;
 use MIME::Base64 qw( decode_base64 );
 use JSON;
 
+use POSIX qw(setlocale LC_COLLATE);
+use Unicode::Collate::Locale;
+
 Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 
 =head2 search
@@ -453,6 +456,37 @@ sub max_result_window {
     return $max_result_window;
 }
 
+
+=head2 _sort_facets
+
+    my $facets = _sort_facets($facets);
+
+Sorts facets using a locale.
+
+=cut
+
+sub _sort_facets {
+    my ( $self, $args ) = @_;
+    my $facets = $args->{facets};
+    my $locale = $args->{locale};
+    if ( !$locale ) {
+
+        #NOTE: When setlocale is run with only the 1st parameter, it is a "get" not a "set" function.
+        $locale = setlocale(LC_COLLATE);
+    }
+    my $collator = Unicode::Collate::Locale->new( locale => $locale );
+    if ( $collator && $facets ) {
+        my @sorted_facets = sort { $collator->cmp( $a->{facet_label_value}, $b->{facet_label_value} ) } @{$facets};
+        if (@sorted_facets) {
+            return \@sorted_facets;
+        }
+    }
+
+    #NOTE: If there was a problem, at least return the not sorted facets
+    return $facets;
+}
+
+
 =head2 _convert_facets
 
     my $koha_facets = _convert_facets($es_facets);
@@ -532,8 +566,10 @@ sub _convert_facets {
             };
         }
         if ( C4::Context->preference('FacetOrder') eq 'Alphabetical' ) {
-            @{ $facet->{facets} } =
-                sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @{ $facet->{facets} };
+            my $sorted_facets = $self->_sort_facets( { facets => $facet->{facets} } );
+            if ($sorted_facets) {
+                $facet->{facets} = $sorted_facets;
+            }
         }
         push @facets, $facet if exists $facet->{facets};
     }

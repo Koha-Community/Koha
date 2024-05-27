@@ -18,13 +18,80 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use t::lib::Mocks;
 use Encode       qw( encode );
 use MIME::Base64 qw( encode_base64 );
 
+use utf8;
+
 use_ok('Koha::SearchEngine::Elasticsearch::Search');
+
+subtest '_sort_facets' => sub {
+    plan tests => 2;
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
+    my $facets = [
+        { facet_label_value => 'Mary' },
+        { facet_label_value => 'Harry' },
+        { facet_label_value => 'Fairy' },
+        { facet_label_value => 'Ari' },
+        { facet_label_value => 'mary' },
+        { facet_label_value => 'harry' },
+        { facet_label_value => 'fairy' },
+        { facet_label_value => 'ari' },
+        { facet_label_value => 'étienne' },
+        { facet_label_value => 'Åuthor' },
+    ];
+
+    my @normal_sort_facets     = sort { $a->{facet_label_value} cmp $b->{facet_label_value} } @$facets;
+    my @normal_expected_facets = (
+        { facet_label_value => 'Ari' },
+        { facet_label_value => 'Fairy' },
+        { facet_label_value => 'Harry' },
+        { facet_label_value => 'Mary' },
+        { facet_label_value => 'ari' },
+        { facet_label_value => 'fairy' },
+        { facet_label_value => 'harry' },
+        { facet_label_value => 'mary' },
+        { facet_label_value => 'Åuthor' },
+        { facet_label_value => 'étienne' },
+    );
+
+    #NOTE: stringwise/bytewise is not UTF-8 friendly
+    is_deeply( \@normal_sort_facets, \@normal_expected_facets, "Perl's built-in sort is stringwise/bytewise." );
+
+    my $search = Koha::SearchEngine::Elasticsearch::Search->new(
+        { index => $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX } );
+
+    #NOTE: The 'default' locale uses the Default Unicode Collation Element Table, which
+    #is used for the locales of English (en) and French (fr).
+    my $sorted_facets = $search->_sort_facets( { facets => $facets, locale => 'default' } );
+    my $expected      = [
+        { facet_label_value => 'ari' },
+        { facet_label_value => 'Ari' },
+        { facet_label_value => 'Åuthor' },
+        { facet_label_value => 'étienne' },
+        { facet_label_value => 'fairy' },
+        { facet_label_value => 'Fairy' },
+        { facet_label_value => 'harry' },
+        { facet_label_value => 'Harry' },
+        { facet_label_value => 'mary' },
+        { facet_label_value => 'Mary' },
+    ];
+    is_deeply( $sorted_facets, $expected, "Facets sorted correctly with default locale" );
+
+    #NOTE: If "locale" is not provided to _sort_facets, it will look up the LC_COLLATE
+    #for the local system. This is what allows this function to work well in production.
+    #However, since LC_COLLATE could vary from system to system running these unit tests,
+    #we can't test arbitrary locales here.
+
+    #TODO: It would be great to explicitly use a fi_FI locale for another test, but we cannot guarantee
+    #that every system has that locale. That said, perhaps we could do some conditional unit
+    #testing if certain locales are available when running tests. This could allow for the Koha community
+    #to thoroughly test this functionality, while letting anyone run the unit tests regardless of their
+    #installed locales.
+};
 
 subtest 'search_auth_compat' => sub {
     plan tests => 7;
