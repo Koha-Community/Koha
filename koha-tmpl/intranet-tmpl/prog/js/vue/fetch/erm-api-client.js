@@ -263,7 +263,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "usage_data_providers/" + id,
                 }),
             getAll: query =>
-                this.get({
+                this.getAll({
                     endpoint: "usage_data_providers",
                     query,
                     query,
