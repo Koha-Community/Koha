@@ -72,7 +72,7 @@ sub write {
     if ( $self->current == $MAX ) {
         $self->_writer_end();
         $self->count( $self->count + 1 );
-        my $w = $self->_writer_create( sprintf("sitemap%04d.xml", $self->count) );
+        my $w = $self->_writer_create( sprintf("sitemap_%04d.xml", $self->count) );
         $w->startTag(
             'urlset',
             'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
@@ -110,7 +110,7 @@ sub end {
     for my $i ( 1..$self->count ) {
         $w->startTag('sitemap');
             $w->startTag('loc');
-                my $name = sprintf("sitemap%04d.xml", $i);
+                my $name = sprintf("sitemap_%04d.xml", $i);
                 $w->characters($self->sitemapper->url . "/$name");
             $w->endTag();
             $w->startTag('lastmod');
