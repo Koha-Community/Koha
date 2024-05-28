@@ -82,7 +82,7 @@ sub createMergeHash {
                 (
                     !defined($tagslib) || ( defined $tagslib->{$fieldtag}
                         && defined $tagslib->{$fieldtag}->{'tab'}
-                        && $tagslib->{$fieldtag}->{'tab'} >= 0 )
+                        && ( $tagslib->{$fieldtag}->{'tab'} ? $tagslib->{$fieldtag}->{'tab'} : 0 ) >= 0 )
                 )
                 && @subfield_array
               )
