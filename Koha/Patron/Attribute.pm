@@ -58,6 +58,7 @@ sub store {
 
     Koha::Exceptions::Patron::Attribute::InvalidAttributeValue->throw( attribute => $self )
         unless $self->value_ok();
+
     C4::Context->dbh->do(
         "UPDATE borrowers SET updated_on = NOW() WHERE borrowernumber = ?", undef,
         $self->borrowernumber
