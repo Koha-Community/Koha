@@ -258,7 +258,7 @@ sub claim_returned {
                 )->store();
 
                 my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
-                $self->item->itemlost($ClaimReturnedLostValue)->store;
+                $self->item->itemlost($ClaimReturnedLostValue)->store unless $self->item->itemlost;
 
                 my $ClaimReturnedChargeFee = C4::Context->preference('ClaimReturnedChargeFee');
                 $charge_lost_fee =
