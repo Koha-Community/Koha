@@ -41,8 +41,10 @@ $module->mock('GetAuthority', sub {
         $record->add_fields(
             [ '001', '2' ],
             [ '151', ' ', ' ', a => 'New York (State)' ],
-            [ '551', ' ', ' ', a => 'United States', w => 'g', 9 => '1' ]
-            );
+            [ '551', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
+            [ '751', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
+            [ '781', ' ', ' ', a => 'New York',      x => 'General subdivision', 9 => '1' ]
+        );
     } elsif ($authid eq '3') {
         $record->add_fields(
             [ '001', '3' ],
@@ -151,14 +153,25 @@ my $expected_marc21_summary = {
             'type'    => 'broader'
         }
     ],
-    'seefrom'   => [],
-    'label'     => 'Geographic Name',
-    'type'      => 'Geographic Name',
-    'equalterm' => []
+    'equalterm' => [
+        {
+            'field'   => '751',
+            'hemain'  => 'United States',
+            'heading' => 'United States'
+        },
+        {
+            'hemain'  => undef,
+            'field'   => '781',
+            'heading' => 'General subdivision'
+        }
+    ],
+    'seefrom' => [],
+    'label'   => 'Geographic Name',
+    'type'    => 'Geographic Name',
 };
 
 is_deeply(
-    BuildSummary(C4::AuthoritiesMarc::GetAuthority(2), 2, 'GEOGR_NAME'),
+    BuildSummary( C4::AuthoritiesMarc::GetAuthority(2), 2, 'GEOGR_NAME' ),
     $expected_marc21_summary,
     'test BuildSummary for MARC21'
 );
