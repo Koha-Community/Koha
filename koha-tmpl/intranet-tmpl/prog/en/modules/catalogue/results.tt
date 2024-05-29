@@ -418,6 +418,8 @@
                                 [% ELSE %]<option value="sn">ISBN</option>[% END %]
                                 [% IF ( header_pulldown ==  "ms_ss" ) %]<option selected="selected" value="ss">ISSN</option>
                                 [% ELSE %]<option value="ss">ISSN</option>[% END %]
+                                [% IF ( header_pulldown ==  "ms_callnum" ) %]<option selected="selected" value="callnum">Call number</option>
+                                [% ELSE %]<option value="callnum">Call number</option>[% END %]
                             </select>
                             [% IF ( scan_search_term_to_use ) %]
                                  <input type="text" name="q" id="scan-index-term" size="35" value="[% scan_search_term_to_use | html %]" />

@@ -635,11 +635,12 @@ the provided string input.
 =cut
 
 our %scan_field_convert = (
-    'ti' => 'title',
-    'au' => 'author',
-    'su' => 'subject',
-    'se' => 'title-series',
-    'pb' => 'publisher',
+    'ti'      => 'title',
+    'au'      => 'author',
+    'su'      => 'subject',
+    'se'      => 'title-series',
+    'pb'      => 'publisher',
+    'callnum' => 'local-classification',
 );
 
 sub _build_scan_query {
