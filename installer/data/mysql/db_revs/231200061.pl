@@ -18,13 +18,13 @@ return {
 
         $dbh->do(
             q{
-            UPDATE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
-            WHERE variable = "StaffLoginLibraryBasedOnIP"
+            UPDATE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
+            WHERE variable = "StaffLoginBranchBasedOnIP"
         }
             ) == 1
             && say_success(
             $out,
-            "Renamed system preference 'StaffLoginLibraryBasedOnIP' to 'StaffLoginRestrictLibraryByIP'"
+            "Renamed system preference 'StaffLoginBranchBasedOnIP' to 'StaffLoginLibraryBasedOnIP'"
             );
 
     },
