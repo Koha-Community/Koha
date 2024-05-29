@@ -469,10 +469,12 @@ sub _convert_facets {
     my @libraries = Koha::Libraries->search->as_list;
     my $library_names = { map { $_->branchcode => $_->branchname } @libraries };
     my @locations = Koha::AuthorisedValues->search( { category => 'LOC' } )->as_list;
+    my @collections = Koha::AuthorisedValues->search( { category => 'CCODE' } )->as_list;
     my $opac = C4::Context->interface eq 'opac' ;
     my %special = (
         itype    => { map { $_->itemtype         => $_->description } @itypes },
         location => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @locations },
+        ccode => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @collections },
         holdingbranch => $library_names,
         homebranch => $library_names
     );
