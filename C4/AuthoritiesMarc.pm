@@ -1015,8 +1015,7 @@ sub BuildSummary {
         use C4::Heading::MARC21;
         my $handler = C4::Heading::MARC21->new();
         my $subfields_to_report;
-        my $subfields_to_subdivision = "";
-        my $delimiter                = C4::Context->preference('AuthoritySeparator');
+        my $delimiter = C4::Context->preference('AuthoritySeparator');
 
         foreach my $field ($record->field('1..')) {
             my $tag = $field->tag();
@@ -1095,7 +1094,8 @@ sub BuildSummary {
             push @notes, { note => $field->as_string(), field => $field->tag() };
         }
 
-     foreach my $field ( $record->field('7..') ) {
+    foreach my $field ( $record->field('7..') ) {
+        my $subfields_to_subdivision;
         my $tag = $field->tag();
 
         if ( $tag eq '700' ) {
