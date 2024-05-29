@@ -1356,8 +1356,8 @@ subtest 'StaffLoginBranchBasedOnIP' => sub {
     my $auth = Test::MockModule->new('C4::Auth');
 
     # Simulating the login form submission
-    $cgi->param( 'login_userid',   $patron->userid );
-    $cgi->param( 'login_password', $password );
+    $cgi->param( 'userid',   $patron->userid );
+    $cgi->param( 'password', $password );
 
     $ENV{REMOTE_ADDR} = '127.0.0.1';
     my ( $userid, $cookie, $sessionID, $flags ) =
