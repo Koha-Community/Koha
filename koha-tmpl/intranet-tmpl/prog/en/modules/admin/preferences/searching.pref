@@ -106,6 +106,16 @@ Searching:
             - "List of search fields (separated by | or ,) that should not be autotruncated by Elasticsearch even if <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=QueryAutoTruncate'>QueryAutoTruncate</a> is set to 'Yes':"
             - pref: ESPreventAutoTruncate
               class: long
+        -
+            - pref: z3950Status
+              type: textarea
+              syntax: text/x-yaml
+              class: code
+            - "Define custom rules to show specific items as not available in Z3950. Rules are defined with item database fields as keys and an array of values.<br/>"
+            - "Examples:<br/><br/>"
+            - "<pre>ccode: [REF,ARC]</pre><br/>  - would mark all REF and ARC collections (Reference and Archives) items as unavailable in Z3950 results.<br/><br/>"
+            - "You can define multiple keys and values, items meeting ANY of the criteria will be marked unavailable:<br/><br/>"
+            - "<pre>itype: [REF]<br/>holdingbranch: [REPAIR]</pre><br/>  - would mark all reference items AND items at the REPAIR branch as unavailable."
     Search form:
         -
             - pref: LoadSearchHistoryToTheFirstLoggedUser

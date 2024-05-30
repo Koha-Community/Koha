@@ -20,7 +20,6 @@ package Koha::Z3950Responder::Session;
 use Modern::Perl;
 
 use C4::Context;
-use C4::Reserves qw( GetReserveStatus );
 use C4::Search qw( new_record_from_zebra );
 
 use Koha::Items;
@@ -263,40 +262,12 @@ sub add_item_status {
     my $item = Koha::Items->find( $itemnumber );
     return unless $item;
 
-    my @statuses;
-
-    if ( $item->onloan() ) {
-        push @statuses, $status_strings->{CHECKED_OUT};
-    }
-
-    if ( $item->itemlost() ) {
-        push @statuses, $status_strings->{LOST};
-    }
-
-    if ( $item->notforloan() ) {
-        push @statuses, $status_strings->{NOT_FOR_LOAN};
-    }
-
-    if ( $item->damaged() ) {
-        push @statuses, $status_strings->{DAMAGED};
-    }
-
-    if ( $item->withdrawn() ) {
-        push @statuses, $status_strings->{WITHDRAWN};
-    }
-
-    if ( my $transfer = $item->get_transfer ) {
-        push @statuses, $status_strings->{IN_TRANSIT} if $transfer->in_transit;
-    }
-
-    if ( GetReserveStatus( $itemnumber ) ne '' ) {
-        push @statuses, $status_strings->{ON_HOLD};
-    }
+    my $statuses = $item->z3950_status($status_strings);
 
     if ( $server->{add_status_multi_subfield} ) {
-        $field->add_subfields( map { ( $add_subfield, $_ ) } ( @statuses ? @statuses : $status_strings->{AVAILABLE} ) );
+        $field->add_subfields( map { ( $add_subfield, $_ ) } ( @$statuses ? @$statuses : $status_strings->{AVAILABLE} ) );
     } else {
-        $field->add_subfields( $add_subfield, @statuses ? join( ', ', @statuses ) : $status_strings->{AVAILABLE} );
+        $field->add_subfields( $add_subfield, @$statuses ? join( ', ', @$statuses ) : $status_strings->{AVAILABLE} );
     }
 }
 

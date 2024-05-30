@@ -2590,6 +2590,66 @@ sub location_update_trigger {
     return $messages;
 }
 
+
+=head3 z3950_status
+
+    my $statuses = $item->z3950_statuses( $status_strings );
+
+Returns an array of statuses for use in z3950 results. Takes a hashref listing the display strings for the
+various statuses. Availability is determined by item statuses and the system preference z3950Status.
+
+Status strings are defined in authorised values in the Z3950_STATUS category.
+
+=cut
+
+sub z3950_status {
+    my ( $self, $status_strings ) = @_;
+
+    my @statuses;
+
+    if ( $self->onloan() ) {
+        push @statuses, $status_strings->{CHECKED_OUT} // "CHECKED_OUT";
+    }
+
+    if ( $self->itemlost() ) {
+        push @statuses, $status_strings->{LOST} // "LOST";
+    }
+
+    if ( $self->is_notforloan() ) {
+        push @statuses, $status_strings->{NOT_FOR_LOAN} // "NOT_FOR_LOAN";
+    }
+
+    if ( $self->damaged() ) {
+        push @statuses, $status_strings->{DAMAGED} // "DAMAGED";
+    }
+
+    if ( $self->withdrawn() ) {
+        push @statuses, $status_strings->{WITHDRAWN} // "WITHDRAWN";
+    }
+
+    if ( my $transfer = $self->get_transfer ) {
+        push @statuses, $status_strings->{IN_TRANSIT} // "IN_TRANSIT" if $transfer->in_transit;
+    }
+
+    if ( C4::Reserves::GetReserveStatus( $self->itemnumber ) ne '' ) {
+        push @statuses, $status_strings->{ON_HOLD} // "ON_HOLD";
+    }
+    my $rules = C4::Context->yaml_preference('Z3950Status');
+    if ($rules) {
+        foreach my $field ( keys %$rules ) {
+            foreach my $value ( @{ $rules->{$field} } ) {
+                if ( defined $self->$field && $self->$field eq $value ) {
+                    push @statuses, $status_strings->{"SYSPREF"} // "SYSPREF";
+                    last;
+                }
+            }
+        }
+    }
+
+    return \@statuses;
+
+}
+
 =head3 _type
 
 =cut

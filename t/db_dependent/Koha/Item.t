@@ -44,6 +44,90 @@ use t::lib::Dates;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
+subtest 'z3950_status' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+    t::lib::Mocks::mock_preference( 'z3950Status', '' );
+
+    my $itemtype = $builder->build_object( { class => "Koha::ItemTypes" } );
+    my $item     = $builder->build_sample_item(
+        {
+            itype => $itemtype->itemtype,
+        }
+    );
+
+    my $statuses = $item->z3950_status();
+    is( scalar @{$statuses}, 0, "No statuses set when pref blank and item has no status" );
+
+    $item->onloan('2001-01-01')->store();
+    $statuses = $item->z3950_status();
+    is_deeply( $statuses, ['CHECKED_OUT'], "Item status is checked out when onloan is set" );
+
+    $item->damaged(1)->withdrawn(1)->itemlost(1)->store();
+    $statuses = $item->z3950_status();
+    is_deeply(
+        $statuses, [ 'CHECKED_OUT', 'LOST', 'DAMAGED', 'WITHDRAWN' ],
+        "Multiple item statuses set from other fields"
+    );
+
+    $itemtype->notforloan(1)->store();
+    $statuses = $item->z3950_status();
+    is_deeply(
+        $statuses, [ 'CHECKED_OUT', 'LOST', 'NOT_FOR_LOAN', 'DAMAGED', 'WITHDRAWN' ],
+        "Not for loan status correctly added from itemtype"
+    );
+
+    $statuses = $item->z3950_status( { LOST => 'Gone', 'WITHDRAWN' => 'Weeded' } );
+    is_deeply(
+        $statuses, [ 'CHECKED_OUT', 'Gone', 'NOT_FOR_LOAN', 'DAMAGED', 'Weeded' ],
+        "Lost items correctly substituted when values passed"
+    );
+
+    $builder->build_object(
+        { class => 'Koha::Item::Transfers', value => { itemnumber => $item->itemnumber, datesent => '1999-12-31' } } );
+    $builder->build_object( { class => 'Koha::Holds', value => { itemnumber => $item->itemnumber, found => 'W' } } );
+
+    $statuses = $item->z3950_status( { LOST => 'Gone', 'WITHDRAWN' => 'Weeded', 'ON_HOLD' => 'Patron awaits' } );
+    is_deeply(
+        $statuses, [ 'CHECKED_OUT', 'Gone', 'NOT_FOR_LOAN', 'DAMAGED', 'Weeded', 'IN_TRANSIT', 'Patron awaits' ],
+        "Hold and transit statuses applied correctly"
+    );
+
+    t::lib::Mocks::mock_preference( 'z3950Status', "homebranch: [" . $item->homebranch . "]" );
+    $statuses = $item->z3950_status( { LOST => 'Gone', 'WITHDRAWN' => 'Weeded', 'ON_HOLD' => 'Patron awaits' } );
+    is_deeply(
+        $statuses,
+        [ 'CHECKED_OUT', 'Gone', 'NOT_FOR_LOAN', 'DAMAGED', 'Weeded', 'IN_TRANSIT', 'Patron awaits', 'SYSPREF' ],
+        "System preference statuses applied correctly"
+    );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            homebranch => $item->homebranch,
+        }
+    );
+
+    $statuses = $item_2->z3950_status(
+        {
+            LOST      => 'Gone', 'WITHDRAWN' => 'Weeded', 'ON_HOLD' => 'Patron awaits',
+            'SYSPREF' => 'Library policy forbids'
+        }
+    );
+    is_deeply( $statuses, ['Library policy forbids'], "system preference statuses substituted correctly" );
+
+    t::lib::Mocks::mock_preference( 'z3950Status', "ccode: [FAKE]\r\n\nhomebranch: [" . $item->homebranch . "]" );
+    $statuses = $item_2->z3950_status(
+        {
+            LOST      => 'Gone', 'WITHDRAWN' => 'Weeded', 'ON_HOLD' => 'Patron awaits',
+            'SYSPREF' => 'Library policy forbids'
+        }
+    );
+    is_deeply( $statuses, ['Library policy forbids'], "Status applied when any field matches" );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'return_claims relationship' => sub {
     plan tests => 3;
 
