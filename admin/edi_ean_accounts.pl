@@ -54,7 +54,7 @@ if ( $op eq 'ean_form' ) {
         ean      => $e,
     );
 }
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
     my $e = $schema->resultset('EdifactEan')->find($id);
     $template->param(
         delete_confirm => 1,
