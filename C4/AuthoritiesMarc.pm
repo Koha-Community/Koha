@@ -1009,9 +1009,9 @@ sub BuildSummary {
         } } $record->field('7..');
 
     } else {
-# construct MARC21 summary
-# FIXME - looping over 1XX is questionable
-# since MARC21 authority should have only one 1XX
+        # construct MARC21 summary
+        # FIXME - looping over 1XX is questionable
+        # since MARC21 authority should have only one 1XX
         use C4::Heading::MARC21;
         my $handler = C4::Heading::MARC21->new();
         my $subfields_to_report;
