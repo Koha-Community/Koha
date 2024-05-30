@@ -138,7 +138,7 @@ can_ok(
 
 subtest 'checkpw_ldap tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     ## Connection fail tests
     $desired_connection_result = 'error';
@@ -430,6 +430,41 @@ qr/LDAP Auth rejected : invalid password for user 'hola'./,
 
         $patron->discard_changes;
         is( $patron->cardnumber, $cardnumber, 'The cardnumber is not mistakenly changed to userid when not mapped' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest "!update && !replica return values" => sub {
+
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+        # avoid noise
+        t::lib::Mocks::mock_preference( 'ExtendedPatronAttributes', 0 );
+        $welcome = 0;
+
+        # the scenario
+        $replicate = 0;
+        $update    = 0;
+
+        $anonymous_bind                = 0;
+        $desired_count_result          = 1;
+        $desired_authentication_result = 'success';
+        $desired_admin_bind_result     = 'success';
+        $desired_search_result         = 'success';
+        $desired_bind_result           = 'success';
+        reload_ldap_module();
+
+        my ( $ret_val, $ret_cardnumber, $ret_userid, $ret_patron ) =
+            C4::Auth_with_ldap::checkpw_ldap( $patron->userid, password => 'hey' );
+
+        is( $ret_val,        1 );
+        is( $ret_cardnumber, $patron->cardnumber );
+        is( $ret_userid,     $patron->userid );
+        is( $ret_patron->id, $patron->id );
 
         $schema->storage->txn_rollback;
     };
