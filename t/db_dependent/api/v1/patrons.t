@@ -1015,9 +1015,29 @@ subtest 'update() tests' => sub {
         my $authorized_patron = $builder->build_object(
             {
                 class => 'Koha::Patrons',
-                value => { flags => 1 }
+                value => { flags => 2**2 }    # catalog only, no additional permissions
             }
         );
+
+        my $superlibrarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 1 }       # superlibrarian
+            }
+        );
+
+        # Ensure our librarian can see users from all branches (once list_borrowers is added)
+        $builder->build(
+            {
+                source => 'UserPermission',
+                value  => {
+                    borrowernumber => $authorized_patron->borrowernumber,
+                    module_bit     => 4,
+                    code           => 'edit_borrowers',
+                },
+            }
+        );
+
         my $password = 'thePassword123';
         $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
         my $userid = $authorized_patron->userid;
@@ -1033,7 +1053,10 @@ subtest 'update() tests' => sub {
 
         my $patron_1  = $authorized_patron;
         my $patron_2  = $unauthorized_patron;
-        my $newpatron = $unauthorized_patron->to_api( { user => $authorized_patron } );
+        my $newpatron = $unauthorized_patron->to_api( { user => $superlibrarian } )
+            ;    # Need to use a patron with ability to view the patron
+        my $blanked_patron = $unauthorized_patron->to_api( { user => $authorized_patron } )
+            ;    # The api return will blank since we can't see, only update
 
         # delete RO attributes
         delete $newpatron->{patron_id};
@@ -1126,8 +1149,8 @@ subtest 'update() tests' => sub {
 
         my $got                 = $result->tx->res->json;
         my $updated_on_got      = delete $got->{updated_on};
-        my $updated_on_expected = delete $newpatron->{updated_on};
-        is_deeply( $got, $newpatron, 'Returned patron from update matches expected' );
+        my $updated_on_expected = delete $blanked_patron->{updated_on};
+        is_deeply( $got, $blanked_patron, 'Returned patron from update matches expected' );
         is(
             t::lib::Dates::compare(
                 dt_from_string( $updated_on_got,      'rfc3339' ),
@@ -1140,13 +1163,6 @@ subtest 'update() tests' => sub {
         is(
             Koha::Patrons->find( $patron_2->id )->cardnumber,
             $newpatron->{cardnumber}, 'Patron is really updated!'
-        );
-
-        my $superlibrarian = $builder->build_object(
-            {
-                class => 'Koha::Patrons',
-                value => { flags => 1 }
-            }
         );
 
         $newpatron->{cardnumber} = $superlibrarian->cardnumber;
