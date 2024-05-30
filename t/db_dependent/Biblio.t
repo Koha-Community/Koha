@@ -98,6 +98,7 @@ subtest 'AddBiblio' => sub {
     });
     warning_like { $builder->build_sample_biblio(); }
         qr/My biblionumber is \d+ and my frameworkcode is /, "The biblionumber is correctly passed to BiblioAutoLink";
+    $mock_biblio->unmock('BiblioAutoLink');
 
     subtest 'record_source_id param tests' => sub {
 
@@ -861,7 +862,7 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
     # Set up mocks to ensure authorities are generated
     my $biblio_mod = Test::MockModule->new( 'C4::Linker::Default' );
     $biblio_mod->mock( 'get_link', sub {
-        return (undef,undef);
+        return (undef,undef,0);
     });
     # UNIMARC valid headings are built from the marc_subfield_structure for bibs and
     # include all subfields as valid, testing with MARC21 should be sufficient for now
