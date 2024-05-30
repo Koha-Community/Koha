@@ -29,44 +29,48 @@ $module->mock('GetHeaderAuthority', sub {
 $module->mock('AddAuthorityTrees', sub {
     return;
 });
-$module->mock('GetAuthority', sub {
-    my ($authid) = @_;
-    my $record = MARC::Record->new();
-    if ($authid eq '1') {
-        $record->add_fields(
-            [ '001', '1' ],
-            [ '151', ' ', ' ', a => 'United States' ]
+$module->mock(
+    'GetAuthority',
+    sub {
+        my ($authid) = @_;
+        my $record = MARC::Record->new();
+        if ( $authid eq '1' ) {
+            $record->add_fields(
+                [ '001', '1' ],
+                [ '151', ' ', ' ', a => 'United States' ]
             );
-    } elsif ($authid eq '2') {
-        $record->add_fields(
-            [ '001', '2' ],
-            [ '151', ' ', ' ', a => 'New York (State)' ],
-            [ '551', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
-            [ '751', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
-            [ '781', ' ', ' ', a => 'New York',      x => 'General subdivision', 9 => '1' ]
-        );
-    } elsif ($authid eq '3') {
-        $record->add_fields(
-            [ '001', '3' ],
-            [ '151', ' ', ' ', a => 'New York (City)' ],
-            [ '551', ' ', ' ', a => 'New York (State)', w => 'g', 9 => '2' ]
+        } elsif ( $authid eq '2' ) {
+            $record->add_fields(
+                [ '001', '2' ],
+                [ '151', ' ', ' ', a => 'New York (State)' ],
+                [ '551', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
+                [ '751', ' ', ' ', a => 'United States', w => 'g',                   9 => '1' ],
+                [ '781', ' ', ' ', a => 'New York',      x => 'General subdivision', 9 => '1' ]
             );
-    } elsif ($authid eq '4') {
-        $record->add_fields(
-            [ '001', '4' ],
-            [ '151', ' ', ' ', a => 'New York (City)' ],
-            [ '551', ' ', ' ', a => 'New York (State)', w => 'g' ]
+        } elsif ( $authid eq '3' ) {
+            $record->add_fields(
+                [ '001', '3' ],
+                [ '151', ' ', ' ', a => 'New York (City)' ],
+                [ '551', ' ', ' ', a => 'New York (State)', w => 'g', 9 => '2' ]
             );
-    } elsif ($authid eq '5') {
-        $record->add_fields(
-            [ '001', '5' ],
-            [ '100', ' ', ' ', a => 'Lastname, Firstname', b => 'b', c => 'c', i => 'i' ]
+        } elsif ( $authid eq '4' ) {
+            $record->add_fields(
+                [ '001', '4' ],
+                [ '151', ' ', ' ', a => 'New York (City)' ],
+                [ '551', ' ', ' ', a => 'New York (State)', w => 'g' ]
             );
-    } else {
-        undef $record;
+        } elsif ( $authid eq '5' ) {
+            $record->add_fields(
+                [ '001', '5' ],
+                [ '100', ' ', ' ', a => 'Lastname, Firstname', b => 'b', c => 'c', i => 'i' ]
+            );
+        } else {
+            undef $record;
+        }
+        return $record;
     }
-    return $record;
-});
+);
+
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
