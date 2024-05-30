@@ -155,7 +155,8 @@ subtest "get_login_shib tests" => sub {
 };
 
 subtest "checkpw_shib tests" => sub {
-    plan tests => 33;
+
+    plan tests => 52;
 
     # Test borrower data
     my $test_borrowers = [
@@ -169,19 +170,24 @@ subtest "checkpw_shib tests" => sub {
 
     # good user
     my $shib_login = "test1234";
-    my ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-    is( $logger->count(), 2,          "Two debugging entries");
-    is( $retval,    "1",              "user authenticated" );
-    is( $retcard,   "testcardnumber", "expected cardnumber returned" );
-    is( $retuserid, "test1234",       "expected userid returned" );
+    my ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $logger->count(), 2,                "Two debugging entries" );
+    is( $retval,          1,                "user authenticated" );
+    is( $retcard,         "testcardnumber", "expected cardnumber returned" );
+    is( $retuserid,       "test1234",       "expected userid returned" );
+    is( ref($retpatron),  'Koha::Patron',   "expected Koha::Patron object returned" );
+
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
 
     # bad user
     $shib_login = 'martin';
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-    is( $retval, "0", "user not authenticated" );
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,    0, "user not authenticated" );
+    is( $retcard,   undef );
+    is( $retuserid, undef );
+    is( $retpatron, undef );
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
@@ -189,13 +195,20 @@ subtest "checkpw_shib tests" => sub {
     # duplicated matchpoint
     change_config({ matchpoint => 'email', mapping => { email => { is => 'email' }} });
     $shib_login = 'kid@clamp.io';
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-    is( $retval, "0", "user not authenticated if duplicated matchpoint" );
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,    0, "user not authenticated if duplicated matchpoint" );
+    is( $retcard,   undef );
+    is( $retuserid, undef );
+    is( $retpatron, undef );
     $logger->debug_is("koha borrower field to match: email",  "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: email", "shib match attribute debug info")
            ->clear();
 
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,    0 );
+    is( $retcard,   undef );
+    is( $retuserid, undef );
+    is( $retpatron, undef );
     $logger->debug_is("koha borrower field to match: email",  "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: email", "shib match attribute debug info")
            ->warn_is('There are several users with email of kid@clamp.io, matchpoints must be unique', "duplicated matchpoint warned with debug")
@@ -214,7 +227,7 @@ subtest "checkpw_shib tests" => sub {
     $ENV{branchcode} = $library->branchcode; # needed since T::D::C does no longer hides the FK constraint
 
     warnings_are {
-        ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+        ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
     }
     [
         'GetPreparedLetter called',
@@ -222,8 +235,9 @@ subtest "checkpw_shib tests" => sub {
         'SendQueuedMessages called with message_id: 42'
     ],
       "WELCOME notice Prepared, Enqueued and Send";
-    is( $retval,    "1",        "user authenticated" );
-    is( $retuserid, "test4321", "expected userid returned" );
+    is( $retval,         "1",            "user authenticated" );
+    is( $retuserid,      "test4321",     "expected userid returned" );
+    is( ref($retpatron), 'Koha::Patron', "expected Koha::Patron object returned" );
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
@@ -238,7 +252,10 @@ subtest "checkpw_shib tests" => sub {
     # sync user
     $shibboleth->{sync} = 1;
     $ENV{'city'} = 'AnotherCity';
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,         1,              "user authenticated" );
+    is( $retuserid,      $shib_login,    "expected userid returned" );
+    is( ref($retpatron), 'Koha::Patron', "expected Koha::Patron object returned" );
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
@@ -254,18 +271,22 @@ subtest "checkpw_shib tests" => sub {
 
     # good user
     $shib_login = "test1234";
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-    is( $retval,    "1",              "user authenticated" );
-    is( $retcard,   "testcardnumber", "expected cardnumber returned" );
-    is( $retuserid, "test1234",       "expected userid returned" );
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,         "1",              "user authenticated" );
+    is( $retcard,        "testcardnumber", "expected cardnumber returned" );
+    is( $retuserid,      "test1234",       "expected userid returned" );
+    is( ref($retpatron), 'Koha::Patron',   "expected Koha::Patron object returned" );
     $logger->debug_is("koha borrower field to match: userid", "borrower match field debug info")
            ->debug_is("shibboleth attribute to match: uid",   "shib match attribute debug info")
            ->clear();
 
     # bad user
     $shib_login = "martin";
-    ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
-    is( $retval, "0", "user not authenticated" );
+    ( $retval, $retcard, $retuserid, $retpatron ) = checkpw_shib($shib_login);
+    is( $retval,    0, "user not authenticated" );
+    is( $retcard,   undef );
+    is( $retuserid, undef );
+    is( $retpatron, undef );
     $logger->info_is("No users with userid of martin found and autocreate is disabled", "Missing matchpoint warned to info");
 };
 
