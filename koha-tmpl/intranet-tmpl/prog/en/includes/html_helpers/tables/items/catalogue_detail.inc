@@ -327,7 +327,7 @@
                     row.cover_image_ids.forEach(id => {
                         node += '<div class="cover-image local-coverimg">';
                         node += '<a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=%s" title="%s">'.format(id, _("Local cover image"));
-                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=%s&imagenumber=%s" alt="%s" />'.format(id, row.biblio_id, id, _("Local cover image"));
+                        node += '<img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&imagenumber=%s" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?itemnumber=%s&imagenumber=%s" alt="%s" />'.format(id, row.item_id, id, _("Local cover image"));
                         node += '</a>';
                         node += '</div>';
                     });
