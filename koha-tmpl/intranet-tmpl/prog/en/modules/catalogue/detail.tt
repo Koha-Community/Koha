@@ -34,6 +34,7 @@
     [% t("Catalog") | html %] &rsaquo;
     [% t("Koha") | html %]
 [% END %]</title>
+
 [% Asset.css("lib/Chocolat/css/chocolat.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -51,972 +52,1078 @@
 
 <body id="catalog_detail" class="catalog">
 
-[% WRAPPER 'header.inc' %]
-    [% INCLUDE 'cat-search.inc' %]
-[% END %]
+    [% WRAPPER 'header.inc' %]
+        [% INCLUDE 'cat-search.inc' %]
+    [% END %]
 
-[% WRAPPER 'sub-header.inc' %]
-    [% WRAPPER breadcrumbs %]
-        [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
-        [% END %]
-
-        [% IF ( unknownbiblionumber ) %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Unknown record</span>
-            [% END %]
-        [% ELSE %]
+    [% WRAPPER 'sub-header.inc' %]
+        [% WRAPPER breadcrumbs %]
             [% WRAPPER breadcrumb_item %]
-                [% INCLUDE 'biblio-title.inc' link = 1 %]
+                <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
             [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Details</span>
+
+            [% IF ( unknownbiblionumber ) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Unknown record</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item %]
+                    [% INCLUDE 'biblio-title.inc' link = 1 %]
+                [% END %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Details</span>
+                [% END %]
             [% END %]
-        [% END %]
-    [% END #/ WRAPPER breadcrumbs %]
-[% END #/ WRAPPER sub-header.inc %]
+        [% END #/ WRAPPER breadcrumbs %]
+    [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
-            <main>
-                <div class="row">
-                [% INCLUDE 'messages.inc' %]
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+                    <div class="row">
+                        <div class="col">
+                            [% INCLUDE 'messages.inc' %]
 
-[% IF ( unknownbiblionumber ) %]
-  <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
-[% ELSE %]
+                            [% IF ( unknownbiblionumber ) %]
+                                <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
+                                    </div> <!-- /.col -->
+                            [% ELSE %]
+                                    [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
+                                    [% CoceProviders   = Koha.Preference('CoceProviders') %]
+                                    [% CoceHost        = Koha.Preference('CoceHost') %]
+                                    [% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
 
-[% IntranetCoce    = Koha.Preference('IntranetCoce') %]
-[% CoceProviders   = Koha.Preference('CoceProviders') %]
-[% CoceHost        = Koha.Preference('CoceHost') %]
-[% SyndeticsCovers = Koha.Preference('SyndeticsEnabled') && Koha.Preference('SyndeticsCoverImages') %]
+                                    [% INCLUDE 'cat-toolbar.inc' %]
+                                    [% IF ( ocoins ) %]
+                                        <!-- COinS / OpenURL -->
+                                        <span class="Z3988" title="[% ocoins | html %]"></span>
+                                    [% END %]
+                                </div> <!-- /.col -->
 
-[% INCLUDE 'cat-toolbar.inc' %]
-    [% IF ( ocoins ) %]
-        <!-- COinS / OpenURL -->
-        <span class="Z3988" title="[% ocoins | html %]"></span>
-    [% END %]
-
-    [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-        <div id="catalogue_detail_biblio" class="col-xs-9">
-    [% ELSE %]
-        <div id="catalogue_detail_biblio" class="col-xs-12">
-    [% END %]
-        [% IF decoding_error || analytics_error %]
-            <div class="page-section bg-danger">
-               <h1>Errors found</h1>
-               [% IF decoding_error %]
-                   <h2>Encoding errors</h2>
-                   <p class="biberror">There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
-                   <pre class="error">[% decoding_error | html %]</pre>
-               [% END %]
-               [% IF analytics_error %]
-                   <h2>Analytics errors</h2>
-                   <p class="analytics_error">There was an error searching for analytic records, please see the logs for details.</p>
-               [% END %]
-            </div>
-        [% END %]
-
-        <div class="page-section">
-
-        [% XSLTBloc | $raw %]
-
-        [% IF shelves.count %]
-            <span class="results_summary"><span class="label">Lists that include this title: </span>
-            [% FOREACH s IN shelves %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
-                [% IF ( loop.last ) %][% ELSE %]|[% END %]
-            [% END %]
-            </span>
-        [% END %]
-        [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
-                <span class="results_summary"><span class="label">Tags:</span>
-                    [% FOREACH TagLoo IN TagLoop %]
-                        [% IF ( CAN_user_tools_moderate_tags ) %]
-                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |uri %]">[% TagLoo.term | html %]</a>
+                        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                            <div id="catalogue_detail_biblio" class="col-xs-9">
                         [% ELSE %]
-                        [% TagLoo.term | html %]
+                            <div id="catalogue_detail_biblio" class="col-xs-12">
                         [% END %]
-                        <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
-                    [% END %]
-                    </span>
-        [% END %]
-        <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
-        <span id="catalogue_detail_framework" class="results_summary">
-            <span class="label">MARC framework:</span>
-            <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
-        </span>
-        [% IF !item_level_itypes ||  Koha.Preference("BiblioItemtypeInfo") %]
-           <span class="results_summary itemtype"><span class="label">Itemtype:</span>
-          [% IF ( !noItemTypeImages && imageurl ) %]
-              <img src="[% imageurl | html %]" alt="" />
-          [% END %]
-          [% IF ( description ) %]
-              <span class="itypetext">[% description | html %]</span>
-          [% ELSE %]
-              <span class="itypetext">[% itemtype | html %]</span>
-          [% END %]
-          </span>
-        [% END %]
 
-        [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
-            <span id="catalogue_detail_elastic_record" class="results_summary"><span class="label">Elasticsearch record:</span> <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a></span>
-        [% END %]
-
-        [% SET record_source = biblio.metadata.record_source %]
-        [% IF ( record_source ) %]
-            <span id="catalogue_detail_record_source" class="results_summary">
-                <span class="label">Record source:</span>
-                [% IF record_source.can_be_edited %]
-                    [% record_source.name | html %]
-                [% ELSE %]
-                    [% record_source.name | html %] <i class="fa fa-lock"></i>
-                [% END %]
-            </span>
-        [% END %]
-
-        [% IF ( holdcount ) %]
-            <span class="results_summary">
-                <span class="label">Holds:</span>
-                <span class="number_box">
-                    [% IF CAN_user_reserveforothers_place_holds %]
-                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
-                    [% ELSE %]
-                        <span>[% holdcount | html %]</span>
-                    [% END %]
-                </span>
-            </span>
-        [% END %]
-
-        [% IF illrequests.count %]
-            <span class="results_summary">
-                <span class="label">ILL requests:</span>
-                [% IF CAN_user_ill %]
-                    [% FOREACH ill IN illrequests %]
-                        <a href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=[% ill.illrequest_id | uri %]">Request [% ill.illrequest_id | html %]</a>[% IF ! loop.last %], [% END %]
-                    [% END %]
-                [% ELSE %]
-                    [% FOREACH ill IN illrequests %]
-                        <span>Request [% ill.illrequest_id | html %]</span>[% IF ! loop.last %], [% END %]
-                    [% END %]
-                [% END %]
-            </span>
-        [% END %]
-
-        [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
-            <span class="results_summary">
-                <span class="label">Article requests:</span>
-                <span class="number_box">
-                    <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
-                </span>
-            </span>
-        [% END %]
-
-        [% IF course_reserves %]
-            <span class="results_summary"><span class="label">Courses that have reserved this title: </span>
-            [% FOREACH c IN course_reserves %]
-                <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% c.course_id | uri %]">[% c.course.course_name | html %]</a>
-                [% IF ( loop.last ) %][% ELSE %]|[% END %]
-            [% END %]
-            </span>
-        [% END %]
-        </div> [%# .page-section %]
-
-        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-        </div>
-            <div class="col-xs-3 bookcoverimg">
-                <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
-                    [% IF ( LocalCoverImages ) %]
-                        [% IF localimages.count %]
-                            [% FOREACH image IN localimages %]
-                                <div class="cover-image local-coverimg">
-                                    <a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
-                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
-                                    </a>
-                                    <div class="hint">Local cover image</div>
-                                </div>
-                            [% END %]
-                        [% END %]
-                    [% END %]
-
-                    [% IF ( AmazonCoverImages && normalized_isbn) %]
-                        <div class="cover-image" id="amazon-bookcoverimg">
-                            <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
-                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"/>
-                            </a>
-                            <div class="hint">Image from Amazon.com</div>
-                        </div>
-                    [% END %]
-
-                    [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
-                        [% coce_id = normalized_ean || normalized_isbn %]
-                        <div class="cover-image coce-coverimg">
-                            [% IF ( coce_id ) %]
-                                <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
-                            [% ELSE %]
-                                <span class="no-image">No cover image available</span>
-                            [% END %]
-                            <div class="hint">Image from Coce</div>
-                        </div>
-                    [% END %]
-
-                    [% IF ( SyndeticsCovers ) %]
-                        [% IF ( content_identifier_exists ) %]
-                        <div class="cover-image" id="syndetics-bookcoverimg">
-                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" title="Syndetics cover image">
-                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/[% Koha.Preference('SyndeticsCoverImageSize') | url %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" alt="" class="thumbnail" />
-                            </a>
-                            <div class="hint">Image from Syndetics</div>
-                        </div>
-                            [% ELSE %]
-                                <span class="no-image">No cover image available</span>
-                            [% END %]
-                    [% END %]
-
-                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-                        [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
-                        [% IF custom_cover_image_url %]
-                            <div class="cover-image" id="custom-coverimg">
-                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
-                                    <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
-                                </a>
-                                <div class="hint">Custom cover image</div>
+                        [% IF decoding_error || analytics_error %]
+                            <div class="page-section bg-danger">
+                                <h1>Errors found</h1>
+                                [% IF decoding_error %]
+                                    <h2>Encoding errors</h2>
+                                    <p class="biberror">There is at least one encoding error with this bibliographic record, the view may be degraded.</p>
+                                    <pre class="error">[% decoding_error | html %]</pre>
+                                [% END %]
+                                [% IF analytics_error %]
+                                    <h2>Analytics errors</h2>
+                                    <p class="analytics_error">There was an error searching for analytic records, please see the logs for details.</p>
+                                [% END %]
                             </div>
                         [% END %]
-                    [% END %]
-                </div> <!-- /.cover-slider -->
-            </div> <!-- /.bookcoverimg.col-xs-3 -->
-        [% ELSE %]
-        </div> <!-- /.col-xs-* -->
-        [% END # /IF ( AmazonCoverImages, etc ) %]
-</div>
 
-<div id="bibliodetails" class="toptabs">
+                        <div class="page-section">
 
-<ul class="nav nav-tabs" role="tablist">
-    [% IF Koha.Preference('SeparateHoldings') %]
-        [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
-            <li role="presentation">
-                [%# FIXME We could build the numbers from DataTable's info %]
-                <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</a>
-            </li>
-        [% END %]
-        [% IF other_holdings_count %]
-            <li role="presentation">
-                <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% other_holdings_count || 0 | html %])</a>
-            </li>
-        [% END %]
-    [% ELSE %]
-        <li role="presentation">
-            <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% items_to_display_count || 0 | html %])</a>
-        </li>
-    [% END %]
-    [% IF Koha.Preference('EnableItemGroups') %]
-        <li role="presentation">
-            <a href="#item_groups" aria-controls="item_groups" role="tab" data-toggle="tab">Item groups</a>
-        </li>
-    [% END %]
-[% IF ( MARCNOTES || notes ) %]<li role="presentation"><a href="#description" aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
-[% IF ComponentParts && ComponentParts.size %]<li id="components_tab" role="presentation"><a href="#components"  aria-controls="components" role="tab" data-toggle="tab">Components ([% ComponentParts.size | html %])</a></li>[% END %]
-[% IF ( subscriptionsnumber ) %]<li role="presentation"><a href="#subscriptions"  aria-controls="subscriptions" role="tab" data-toggle="tab">Subscriptions</a></li>[% END %]
-[% IF Koha.Preference('AcquisitionDetails') %]<li role="presentation"><a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a></li>[% END %]
-[% IF suggestions.count %]<li role="presentation"><a href="#suggestion_details"  aria-controls="suggestion_details" role="tab" data-toggle="tab">Suggestion details</a></li>[% END %]
-[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li role="presentation"><a href="#editions"  aria-controls="editions" role="tab" data-toggle="tab">Editions</a></li>[% END %][% END %]
-[% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]<li role="presentation"><a href="#concerns" aria-controls="concerns" role="tab" data-toggle="tab">Concerns ([% biblio.tickets.count | html %])</a></li>[% END %]
-[% IF ( LocalCoverImages ) %]
-    <li role="presentation">
-        <a href="#images"  aria-controls="images" role="tab" data-toggle="tab">Images ([% localimages.count || 0 | html %])</a>
-    </li>
-[% END %]
-[% IF HTML5MediaEnabled && HTML5MediaSets.size %]
-    <li id="media_tab" role="presentation"><a href="#html5media"  aria-controls="html5media" role="tab" data-toggle="tab">Play media</a></li>
-[% END %]
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-    <li class="NovelistSelect" style="display:none;" role="presentation"><a href="#NovelistSelect"  aria-controls="NovelistSelect" role="tab" data-toggle="tab">NoveList Select</a></li>
-[% END %]
-[% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-    <li role="presentation"><a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]"  aria-controls="[% plugins_intranet_catalog_biblio_tab.id | uri %]" role="tab" data-toggle="tab">[% plugins_intranet_catalog_biblio_tab.title | html %]</a></li>
-[% END %]
-</ul>
+                            [% XSLTBloc | $raw %]
 
-<div class="tab-content">
-[% IF Koha.Preference('EnableItemGroups') %]
-    <div role="tabpanel" class="tab-pane" id="item_groups">
-        [% IF CAN_user_editcatalogue_manage_item_groups %]
-            <div class="item_groups_table_table_controls">
-                <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
-            </div>
-        [% END %]
-        <table class="items-group-table" id="items-group-table">
-            <thead>
-                <tr>
-                    <th>Display order</th>
-                    <th>Description</th>
-                    <th class="NoSort">&nbsp;</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-[% END %]
-
-
-<div role="tabpanel" class="tab-pane" id="holdings">
-
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
-    <span class="results_summary NovelistSelect" style="display:none;">
-        <span class="label">Novelist Select: </span>
-        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-    </span>
-[% END %]
-
-[% SET hidden_count = all_items_count - items_to_display_count %]
-[% IF all_items_count %]
-    [% PROCESS items_table tab="holdings" %]
-
-    [% IF hidden_count %]
-        [%# FIXME We could deal with that in JS and prevent a full refresh %]
-        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hidden_count | html %] hidden)</a>
-    [% END %]
-[% ELSE %]
-    [% IF ( ALTERNATEHOLDINGS ) %]
-    [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
-        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
-    [% END %]
-    [% ELSE %]
-    <div id="noitems">No physical items for this record</div>
-    [% END %]
-[% END %]
-
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
-    <span class="results_summary NovelistSelect" style="display:none;">
-        <span class="label">Novelist Select: </span>
-        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-    </span>
-[% END %]
-    </div>
-
-[% IF Koha.Preference('SeparateHoldings') %]
-    <div role="tabpanel" class="tab-pane" id="otherholdings">
-        [% PROCESS items_table tab="otherholdings" %]
-    </div>
-[% END %]
-
-[% IF ( MARCNOTES ) %]
-
-<div role="tabpanel" class="tab-pane" id="description">
-<div class="content_set">
-
-    [% FOREACH MARCNOTE IN MARCNOTES %]
-        <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
-            [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
-            [% ELSE %]
-                [% MARCNOTE.marcnote | html | html_line_break %]
-            [% END %]
-        </p>
-[% END %]
-</div>
-</div>
-
-[% END %]
-
-[% IF ComponentParts && ComponentParts.size %]
-<div role="tabpanel" class="tab-pane" id="components">
-    <div class="content_set">
-        <table>
-            [% FOR PART IN ComponentParts %]
-            <tr>
-                <td>
-                    [% PART | $raw %]
-                </td>
-            </tr>
-            [% END %]
-        </table>
-        [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
-        <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | url %]"/>show all component parts</a></p>
-        [% END %]
-    </div> <!-- /.content_set -->
-</div> <!-- /#components -->
-
-[% END %]
-
-[% IF ( subscriptionsnumber ) %]
-<div role="tabpanel" class="tab-pane" id="subscriptions">
-<div id="catalogue_detail_subscriptions">
-    <h2>This is a serial subscription</h2>
-    <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p> 
-    [% FOREACH subscription IN subscriptions %]
-            [% IF subscription.branchcode %]
-                <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode | html %]</h3>
-            [% END %]
-            [% IF ( subscription.closed ) %]<p>This subscription is closed.</p>[% END %]
-            [% IF ( subscription.location ) %]<p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</p>[% END %]
-            [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber | html %] </p>[% END %]
-            [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes | html | html_line_break %] </p>[% END %]
-            [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist | html %] </p>[% END %]
-            [% IF ( subscription.librariannote ) %]<p>([% subscription.librariannote | html %])</p>[% END %]
-            [% IF ( subscription.latestserials ) %]
-            <p> The [% subscription.staffdisplaycount | html %] latest issues related to this subscription:</p>
-            <table>
-                <tr>
-                    <th>Issue #</th>
-                    <th>Date arrived</th>
-                    <th>Date published</th>
-                    <th>Date published (text)</th>
-                    <th>Status</th>
-                    <th>Note</th>
-                </tr>
-            [% FOREACH latestserial IN subscription.latestserials %]
-                <tr>
-                    <td>[% latestserial.serialseq | html %]</td>
-                    <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
-                    <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
-                    <td>[% latestserial.publisheddatetext | html %]</td>
-                    <td>
-                        [% INCLUDE 'serial-status.inc' serial = latestserial %]
-                    </td>
-                    <td>[% latestserial.notes | html %]</td>
-                </tr>
-            [% END %]
-            </table>
-            [% END %]
-            [% IF ( CAN_user_serials ) %]
-                <p>
-                    <a class="btn btn-link" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list" aria-hidden="true"></i> Subscription details</a>
-                </p>
-            [% END %]
-    [% END %]
-</div>
-</div>
-[% END %]
-
-[% IF Koha.Preference('AcquisitionDetails') %]
-<div role="tabpanel" class="tab-pane" id="acq_details">
-    <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
-    </p>
-  [% IF orders.count %]
-    <table id="orders">
-      <thead>
-        <tr>
-          <th>Vendor</th>
-          <th>Invoice</th>
-          <th>Basket group</th>
-          <th>Basket</th>
-          <th>Order number</th>
-          <th>Creation date</th>
-          <th>Receive date</th>
-          <th>Status</th>
-          <th>Quantity</th>
-          <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
-          <th>Internal note</th>
-          <th>Subscription</th>
-          <th>Subscription call number</th>
-        </tr>
-      </thead>
-      <tbody>
-      [% FOR order IN orders %]
-        [% SET basket = order.basket %]
-        [% SET vendor = basket.bookseller %]
-          <tr>
-            <td>
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
-            </td>
-            <td>
-            [% IF order.invoiceid %]
-                [% IF CAN_user_acquisition %]
-                    <div><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
-                       title="Invoice detail page">
-                       [% order.invoice.invoicenumber | html %]</a></div>
-                [% ELSE %]
-                    <div>[% order.invoice.invoicenumber | html %]</div>
-                [% END %]
-
-                [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage && order.invoice.message_id ) %]
-                    <div><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></div>
-                [% END %]
-            [% END %]
-            </td>
-            <td>
-            [% IF basket.basketgroupid %]
-                [% SET basket_group = basket.basket_group %]
-                [% IF CAN_user_acquisition_group_manage %]
-                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% vendor.id | uri %]&basketgroupid=[% basket_group.id | uri %]">[% basket_group.name | html%] ([% basket_group.id | html %])</a>
-                [% ELSE %]
-                    [% basket_group.name | html %] ([% basket_group.id | html %])
-                [% END %]
-            [% END %]
-            </td>
-            <td>[% IF CAN_user_acquisition_order_manage %]
-                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %] ([% basket.basketno | html %])</a>
-            [% ELSE %]
-                [% basket.basketname | html %] ([% basket.basketno | html %])
-            [% END %]</td>
-            <td>[% order.ordernumber | html %]</td>
-            <td data-order="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</td>
-            <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</td>
-            <td>
-              [% SWITCH order.orderstatus %]
-                [% CASE 'new' %]<span>New</span>
-                [% CASE 'ordered' %]<span>Ordered</span>
-                [% CASE 'partial' %]<span>Partial</span>
-                [% CASE 'complete' %]<span>Complete</span>
-                [% CASE 'cancelled' %]<span>Cancelled</span>
-              [% END %]
-            </td>
-            <td>[% order.quantity | html %]</td>
-            <td>[% IF ( order.orderstatus == "complete" ) %][% order.unitprice_tax_included | $Price %][% ELSE %][% order.ecost_tax_included | $Price %][% END %]
-            <td>[% order.order_internalnote | html %]</td>
-            <td>
-                [% IF order.subscriptionid %]
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
-                [% END %]
-            </td>
-            <td>
-                [% IF order.subscriptionid %]
-                    [% order.subscription.callnumber | html %]
-                [% END %]
-            </td>
-          </tr>
-      [% END %]
-      </tbody>
-    </table>
-  [% ELSE %]
-    <span class="noorder">There is no order for this bibliographic record.</span>
-  [% END %]
-</div>
-[% END %]
-
-[% IF suggestions.count %]
-    <div role="tabpanel" class="tab-pane" id="suggestion_details">
-        [% IF nb_archived_suggestions > 0 %]
-            <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
-        [% END %]
-        <table id="suggestions" class="sorted">
-            <thead>
-                <tr>
-                    <th class="NoSort">&nbsp;</th>
-                    <th class="anti-the">Suggestion</th>
-                    <th>Suggested by - on</th>
-                    <th>Managed by - on</th>
-                    <th>Last modification by - on</th>
-                    <th>Library</th>
-                    <th>Fund</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-            [% FOREACH suggestion IN suggestions %]
-                <tr>
-                    <td>[% suggestion.suggestionid | html %]</td>
-                    <td>
-                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show" title="suggestion" >
-                            [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a>
-                        <br />
-                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
-                        [% IF ( suggestion.volumedesc ) %]; Volume:<em>[% suggestion.volumedesc | html %]</em> [% END %]
-                        [% IF ( suggestion.isbn ) %]; ISBN:<em>[% suggestion.isbn | html %]</em> [% END %][% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %][% IF ( suggestion.publicationyear ) %] in <em>[% suggestion.publicationyear | html %]</em> [% END %][% IF ( suggestion.place ) %] in <em>[% suggestion.place | html %]</em> [% END %][% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %][% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
-                    </td>
-                    <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
-                        [% IF suggestion.suggesteddate %] - [% suggestion.suggesteddate | $KohaDates %][% END %]
-                    </td>
-                    <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.managedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</a>
-                        [% IF suggestion.manageddate %] - [% suggestion.manageddate | $KohaDates %][% END %]
-                    </td>
-                    <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.lastmodificationby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.last_modifier %]</a>
-                        [% IF suggestion.lastmodificationdate %] - [% suggestion.lastmodificationdate | $KohaDates %][% END %]
-                    </td>
-                    <td>
-                        [% Branches.GetName( suggestion.branchcode ) | html %]
-                    </td>
-                    <td>
-                        [% suggestion.fund.budget_name | html %]
-                    </td>
-                    <td>
-                        [% IF    suggestion.STATUS == 'ASKED'     %]<span>Pending</span>
-                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]<span>Accepted</span>
-                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]<span>Ordered</span>
-                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]<span>Rejected</span>
-                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]<span>Checked</span>
-                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]<span>Available</span>
-                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
-                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
-                        [% ELSE %]<span>Status unknown</span>
-                        [% END %]
-                        [% IF suggestion.reason %]
-                            <br />([% suggestion.reason | html %])
-                        [% END %]
-                    </td>
-                </tr>
-                [% END %]
-            </tbody>
-        </table>
-    </div>
-[% END %]
-
-[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
-<div role="tabpanel" class="tab-pane" id="editions"><h4>Editions</h4>
-<table>
-[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
-[% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %]<span class="itypetext">[% XISBN.description | html %]</span>[% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
-<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
-  [% IF ( XISBN.publishercode ) %]
-[% XISBN.publishercode | html %] [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
-    [% END %]
-                [% IF ( XISBN.pages ) %] [% END %][% XISBN.pages | html %] [% IF ( XISBN.illus ) %][% XISBN.illus | html %][% END %]
-                [% IF ( XISBN.size ) %], [% END %][% XISBN.size | html %]
-</td>
-
-[% END %]
-</table></div>[% END %]
-[% END %]
-
-[% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-<div role="tabpanel" class="tab-pane" id="concerns">
-    <fieldset class="action" style="cursor:pointer;">
-        <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
-        | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
-    </fieldset>
-
-    <table id="table_concerns" width="100%">
-        <thead>
-            <tr>
-                <th>Reported</th>
-                <th>Details</th>
-                <th>Title</th>
-                <th>Status</th>
-                <th data-class-name="actions noExport">Actions</th>
-            </tr>
-        </thead>
-    </table>
-</div>
-[% END %]
-
-[% IF ( LocalCoverImages ) %]
-    <div role="tabpanel" class="tab-pane" id="images">
-        [% IF localimages.count %]
-            <p>Click on an image to view it in the image viewer</p>
-            <ul class="thumbnails">
-                [% FOREACH image IN localimages %]
-                    [% IF image %]
-                        <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
-                            <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
-                                <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" />
-                            </a>
-                            [% IF CAN_user_tools_upload_local_cover_images %]
-                                <a href="#" class="remove"><i class="fa fa-trash-can"></i> Delete image</a>
-                            [% END %]
-                        </li>
-                    [% END %]
-                [% END %]
-            </ul>
-        [% ELSE # - No image passed JavaScript takes care %]
-            <span class="noimagesuploaded">No images have been uploaded for this bibliographic record yet.</span>
-        [% END %]
-        [% IF ( CAN_user_tools_upload_local_cover_images ) %]
-            <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
-            </p>
-        [% END %]
-    </div>
-[% END %]
-
-[% IF ( HTML5MediaEnabled ) %]
-<div role="tabpanel" class="tab-pane" id="html5media">
-          [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
-            <p>
-                [% IF HTML5MediaSet.is_youtube %]
-                    <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
-                [% ELSE %]
-                  <[% HTML5MediaParent | html %] controls preload=none>
-                    <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
-                    [[% HTML5MediaParent | html %] tag not supported by your browser.]
-                  </[% HTML5MediaParent | html %]>
-                [% END %]
-            </p>
-          [% END %]
-</div>
-[% END %]
-
-
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-    <div role="tabpanel" class="tab-pane novelistSelect" id="NovelistSelect">
-        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-    </div>
-[% END %]
-
-[% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-    <div role="tabpanel" class="tab-pane" id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
-        [% plugins_intranet_catalog_biblio_tab.content | $raw %]
-    </div>
-[% END %]
-
-</div><!-- /tab-content -->
-</div><!-- /bibliodetails -->
-
-<div id="export" style="margin-top: 1em;">
-<form method="get" action="/cgi-bin/koha/catalogue/export.pl">
-<table>  <tr>
-      <th>Save record</th>   </tr>
-    <tr><td> Select download format:    <select name="format">
-        <option value="mods">MODS (XML)</option>
-        <option data-toggle="modal" data-target="#exportModal_">Dublin Core</option>
-        <option value="marcxml">MARCXML</option>
-        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
-        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
-        <input type="submit" name="save" class="btn btn-primary" value="Download record" /></td>
-  </tr>
-  <tr><td>
-    <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber | html %]" />
-  </td></tr>
-</table>
-</form>
-</div>
-
-<div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="marcPreviewLabel">MARC preview</h3>
-    </div>
-    <div class="modal-body">
-        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-    </div>
-    </div>
-    </div>
-</div>
-
-<div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="elasticPreviewLabel">Elasticsearch record</h3>
-    </div>
-    <div class="modal-body">
-        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-    </div>
-    </div>
-    </div>
-</div>
-
-            </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
-
-        <div class="col-sm-2 col-sm-pull-10">
-            <aside>
-                [% INCLUDE 'biblio-view-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
-
-[% END %]
-
-<div class="modal fade" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-create-label"><i class="fa fa-plus"></i> Create a new item group</h3>
-            </div>
-            <form method="get" id="modal-item-group-create-form" class="validated">
-                <div class="modal-body">
-                    <fieldset>
-                        <p>
-                            <label for="modal-item-group-create-form-description" class="required">Name: </label>
-                            <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
-                            <span class="required">Required</span>
-                        </p>
-                        <p>
-                            <label for="modal-item-group-create-form-display_order" class="required">Display order: </label>
-                            <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
-                            <span class="required">Required</span>
-                            <br/>
-                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
-                        </p>
-                    </fieldset>
-                </div>
-                <div class="modal-footer">
-                    <button id="modal-item-group-create-submit" class="btn btn-default"><i class="fa fa-plus"></i> Submit</button>
-                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-edit-label"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item group</h3>
-            </div>
-            <form method="get" id="modal-item-group-edit-form" class="validated">
-                <div class="modal-body">
-                    <fieldset>
-                        <p>
-                            <label for="modal-item-group-edit-form-description" class="required">Name: </label>
-                            <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
-                            <span class="required">Required</span>
-                        </p>
-                        <p>
-                            <label for="modal-item-group-edit-form-display_order" class="required">Sort order: </label>
-                            <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
-                            <span class="hint">Numbers only, item groups will be displayed in counting order</span>
-                        </p>
-                    </fieldset>
-                </div>
-                <div class="modal-footer">
-                    <button id="modal-item-group-edit-submit" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Submit</button>
-                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-delete-label"><i class='fa fa-trash-can'></i> Delete item group</h3>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this item group?
-            </div>
-            <div class="modal-footer">
-                <button id="modal-item-group-delete-submit" class="btn btn-danger"><i class='fa fa-trash-can'></i> Delete</button>
-                <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-set-label"><i class='fa fa-book'></i> Set item group for items</h3>
-            </div>
-            <form method="get" id="modal-item-group-set-form" class="validated">
-                <div class="modal-body">
-                    <fieldset>
-                        <p>
-                            <label for="item-group-add-form-select" class="required">Item group: </label>
-                            <select name="item_group" id="item-group-add-form-select">
-                                [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
-                                    <option value="[% ig.id | html %]">[% ig.description | html %]</option>
+                            [% IF shelves.count %]
+                                <span class="results_summary"><span class="label">Lists that include this title: </span>
+                                [% FOREACH s IN shelves %]
+                                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
+                                    [% IF ( loop.last ) %][% ELSE %]|[% END %]
                                 [% END %]
-                            </select>
-                            <span class="required">Required</span>
-                        </p>
-                    </fieldset>
+                                </span>
+                            [% END %]
+
+                            [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
+                                <span class="results_summary"><span class="label">Tags:</span>
+                                    [% FOREACH TagLoo IN TagLoop %]
+                                        [% IF ( CAN_user_tools_moderate_tags ) %]
+                                            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |uri %]">[% TagLoo.term | html %]</a>
+                                        [% ELSE %]
+                                            [% TagLoo.term | html %]
+                                        [% END %]
+                                        <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
+                                    [% END %]
+                                </span>
+                            [% END %]
+
+                            <span id="catalogue_detail_marc_preview" class="results_summary">
+                                <span class="label">MARC preview:</span>
+                                <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a>
+                            </span>
+                            <span id="catalogue_detail_framework" class="results_summary">
+                                <span class="label">MARC framework:</span>
+                                <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
+                            </span>
+                            [% IF !item_level_itypes ||  Koha.Preference("BiblioItemtypeInfo") %]
+                                <span class="results_summary itemtype">
+                                    <span class="label">Itemtype:</span>
+                                    [% IF ( !noItemTypeImages && imageurl ) %]
+                                        <img src="[% imageurl | html %]" alt="" />
+                                    [% END %]
+                                    [% IF ( description ) %]
+                                        <span class="itypetext">[% description | html %]</span>
+                                    [% ELSE %]
+                                        <span class="itypetext">[% itemtype | html %]</span>
+                                    [% END %]
+                                </span>
+                            [% END %]
+
+                            [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+                                <span id="catalogue_detail_elastic_record" class="results_summary">
+                                    <span class="label">Elasticsearch record:</span>
+                                    <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="Elasticsearch record" class="previewElastic">Show</a>
+                                </span>
+                            [% END %]
+
+                            [% SET record_source = biblio.metadata.record_source %]
+                            [% IF ( record_source ) %]
+                                <span id="catalogue_detail_record_source" class="results_summary">
+                                    <span class="label">Record source:</span>
+                                    [% IF record_source.can_be_edited %]
+                                        [% record_source.name | html %]
+                                    [% ELSE %]
+                                        [% record_source.name | html %] <i class="fa fa-lock"></i>
+                                    [% END %]
+                                </span>
+                            [% END %]
+
+                            [% IF ( holdcount ) %]
+                                <span class="results_summary">
+                                    <span class="label">Holds:</span>
+                                    <span class="number_box">
+                                        [% IF CAN_user_reserveforothers_place_holds %]
+                                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
+                                        [% ELSE %]
+                                            <span>[% holdcount | html %]</span>
+                                        [% END %]
+                                    </span>
+                                </span>
+                            [% END %]
+
+                            [% IF illrequests.count %]
+                                <span class="results_summary">
+                                    <span class="label">ILL requests:</span>
+                                    [% IF CAN_user_ill %]
+                                        [% FOREACH ill IN illrequests %]
+                                            <a href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=[% ill.illrequest_id | uri %]">Request [% ill.illrequest_id | html %]</a>[% IF ! loop.last %], [% END %]
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% FOREACH ill IN illrequests %]
+                                            <span>Request [% ill.illrequest_id | html %]</span>[% IF ! loop.last %], [% END %]
+                                        [% END %]
+                                    [% END %]
+                                </span>
+                            [% END %]
+
+                            [% IF ( article_requests_count = biblio.article_requests.filter_by_current.count ) %]
+                                <span class="results_summary">
+                                    <span class="label">Article requests:</span>
+                                    <span class="number_box">
+                                        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
+                                    </span>
+                                </span>
+                            [% END %]
+
+                            [% IF course_reserves %]
+                                <span class="results_summary"><span class="label">Courses that have reserved this title: </span>
+                                [% FOREACH c IN course_reserves %]
+                                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% c.course_id | uri %]">[% c.course.course_name | html %]</a>
+                                    [% IF ( loop.last ) %][% ELSE %]|[% END %]
+                                [% END %]
+                                </span>
+                            [% END %]
+                        </div> [%# .page-section %]
+
+                        [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+                            </div>
+                            <div class="col-xs-3 bookcoverimg">
+                                <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
+                                    [% IF ( LocalCoverImages ) %]
+                                        [% IF localimages.count %]
+                                            [% FOREACH image IN localimages %]
+                                                <div class="cover-image local-coverimg">
+                                                    <a href="/cgi-bin/koha/catalogue/image.pl?imagenumber=[% image.imagenumber | uri %]" title="Local cover image">
+                                                        <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" alt="Local cover image" data-link="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]" />
+                                                    </a>
+                                                    <div class="hint">Local cover image</div>
+                                                </div>
+                                            [% END %]
+                                        [% END %]
+                                    [% END %]
+
+                                    [% IF ( AmazonCoverImages && normalized_isbn) %]
+                                        <div class="cover-image" id="amazon-bookcoverimg">
+                                            <a href="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.LZZZZZZZ.jpg" title="Amazon cover image">
+                                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | uri %].01.MZZZZZZZ.jpg" alt="Amazon cover image" data-link="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"/>
+                                            </a>
+                                            <div class="hint">Image from Amazon.com</div>
+                                        </div>
+                                    [% END %]
+
+                                    [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
+                                        [% coce_id = normalized_ean || normalized_isbn %]
+                                        <div class="cover-image coce-coverimg">
+                                            [% IF ( coce_id ) %]
+                                                <a title="Image from Coce" class="[% coce_id | html %]" id="coce-thumbnail-preview"></a>
+                                            [% ELSE %]
+                                                <span class="no-image">No cover image available</span>
+                                            [% END %]
+                                            <div class="hint">Image from Coce</div>
+                                        </div>
+                                    [% END %]
+
+                                    [% IF ( SyndeticsCovers ) %]
+                                        [% IF ( content_identifier_exists ) %]
+                                        <div class="cover-image" id="syndetics-bookcoverimg">
+                                            <a href="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/LC.GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" title="Syndetics cover image">
+                                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% normalized_isbn | url %]/[% Koha.Preference('SyndeticsCoverImageSize') | url %].GIF&amp;client=[% Koha.Preference('SyndeticsClientCode') | url %]&amp;type=xw10&amp;upc=[% normalized_upc | url %]&amp;oclc=[% normalized_oclc | url %]" alt="" class="thumbnail" />
+                                            </a>
+                                            <div class="hint">Image from Syndetics</div>
+                                        </div>
+                                            [% ELSE %]
+                                                <span class="no-image">No cover image available</span>
+                                            [% END %]
+                                    [% END %]
+
+                                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+                                        [% SET custom_cover_image_url = biblio.custom_cover_image_url %]
+                                        [% IF custom_cover_image_url %]
+                                            <div class="cover-image" id="custom-coverimg">
+                                                <a class="custom_cover_image" href="[% custom_cover_image_url | url %]" title="Custom cover image">
+                                                    <img id="custom-img" alt="Custom cover image" src="[% custom_cover_image_url | url %]" />
+                                                </a>
+                                                <div class="hint">Custom cover image</div>
+                                            </div>
+                                        [% END %]
+                                    [% END %]
+                                </div> <!-- /.cover-slider -->
+                            </div> <!-- /.bookcoverimg.col-xs-3 -->
+                        [% ELSE %]
+                            </div> <!-- /.col-xs-* -->
+                        [% END # /IF ( AmazonCoverImages, etc ) %]
+                    </div>
+
+                    <div id="bibliodetails" class="toptabs">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                            [% IF Koha.Preference('SeparateHoldings') %]
+                                [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
+                                    <li role="presentation">
+                                        [%# FIXME We could build the numbers from DataTable's info %]
+                                        <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</a>
+                                    </li>
+                                [% END %]
+                                [% IF other_holdings_count %]
+                                    <li role="presentation">
+                                        <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% other_holdings_count || 0 | html %])</a>
+                                    </li>
+                                [% END %]
+                            [% ELSE %]
+                                <li role="presentation">
+                                    <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% items_to_display_count || 0 | html %])</a>
+                                </li>
+                            [% END %]
+                            [% IF Koha.Preference('EnableItemGroups') %]
+                                <li role="presentation">
+                                    <a href="#item_groups" aria-controls="item_groups" role="tab" data-toggle="tab">Item groups</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( MARCNOTES || notes ) %]
+                                <li role="presentation">
+                                    <a href="#description" aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a>
+                                </li>
+                            [% END %]
+                            [% IF ComponentParts && ComponentParts.size %]
+                                <li id="components_tab" role="presentation">
+                                    <a href="#components"  aria-controls="components" role="tab" data-toggle="tab">Components ([% ComponentParts.size | html %])</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( subscriptionsnumber ) %]
+                                <li role="presentation">
+                                    <a href="#subscriptions"  aria-controls="subscriptions" role="tab" data-toggle="tab">Subscriptions</a>
+                                </li>
+                            [% END %]
+
+                            [% IF Koha.Preference('AcquisitionDetails') %]
+                                <li role="presentation">
+                                    <a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a>
+                                </li>
+                            [% END %]
+
+                            [% IF suggestions.count %]
+                                <li role="presentation">
+                                    <a href="#suggestion_details"  aria-controls="suggestion_details" role="tab" data-toggle="tab">Suggestion details</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( FRBRizeEditions ) %]
+                                [% IF ( XISBNS ) %]
+                                    <li role="presentation">
+                                        <a href="#editions"  aria-controls="editions" role="tab" data-toggle="tab">Editions</a>
+                                    </li>
+                                [% END %]
+                            [% END %]
+
+                            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+                                <li role="presentation">
+                                    <a href="#concerns" aria-controls="concerns" role="tab" data-toggle="tab">Concerns ([% biblio.tickets.count | html %])</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( LocalCoverImages ) %]
+                                <li role="presentation">
+                                    <a href="#images"  aria-controls="images" role="tab" data-toggle="tab">Images ([% localimages.count || 0 | html %])</a>
+                                </li>
+                            [% END %]
+
+                            [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
+                                <li id="media_tab" role="presentation">
+                                    <a href="#html5media"  aria-controls="html5media" role="tab" data-toggle="tab">Play media</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+                                <li class="NovelistSelect" style="display:none;" role="presentation">
+                                    <a href="#NovelistSelect"  aria-controls="NovelistSelect" role="tab" data-toggle="tab">NoveList Select</a>
+                                </li>
+                            [% END %]
+
+                            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+                                <li role="presentation">
+                                    <a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]"  aria-controls="[% plugins_intranet_catalog_biblio_tab.id | uri %]" role="tab" data-toggle="tab">[% plugins_intranet_catalog_biblio_tab.title | html %]</a>
+                                </li>
+                            [% END %]
+                        </ul>
+
+                        <div class="tab-content">
+                            [% IF Koha.Preference('EnableItemGroups') %]
+                                <div role="tabpanel" class="tab-pane" id="item_groups">
+                                    [% IF CAN_user_editcatalogue_manage_item_groups %]
+                                        <div class="item_groups_table_table_controls">
+                                            <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
+                                        </div>
+                                    [% END %]
+                                    <table class="items-group-table" id="items-group-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Display order</th>
+                                                <th>Description</th>
+                                                <th class="NoSort">&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            [% END %]
+
+                            <div role="tabpanel" class="tab-pane" id="holdings">
+                                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
+                                    <span class="results_summary NovelistSelect" style="display:none;">
+                                        <span class="label">Novelist Select: </span>
+                                        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
+                                    </span>
+                                [% END %]
+
+                                [% SET hidden_count = all_items_count - items_to_display_count %]
+                                [% IF all_items_count %]
+                                    [% PROCESS items_table tab="holdings" %]
+
+                                    [% IF hidden_count %]
+                                        [%# FIXME We could deal with that in JS and prevent a full refresh %]
+                                        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hidden_count | html %] hidden)</a></p>
+                                    [% END %]
+                                [% ELSE %]
+                                    [% IF ( ALTERNATEHOLDINGS ) %]
+                                        [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+                                            <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding | html %]</div>
+                                        [% END %]
+                                    [% ELSE %]
+                                        <div id="noitems">No physical items for this record</div>
+                                    [% END %]
+                                [% END %]
+
+                                [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
+                                    <span class="results_summary NovelistSelect" style="display:none;">
+                                        <span class="label">Novelist Select: </span>
+                                        <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
+                                    </span>
+                                [% END %]
+                            </div>
+
+                            [% IF Koha.Preference('SeparateHoldings') %]
+                                <div role="tabpanel" class="tab-pane" id="otherholdings">
+                                    [% PROCESS items_table tab="otherholdings" %]
+                                </div>
+                            [% END %]
+
+                            [% IF ( MARCNOTES ) %]
+                                <div role="tabpanel" class="tab-pane" id="description">
+                                    <div class="content_set">
+                                        [% FOREACH MARCNOTE IN MARCNOTES %]
+                                            <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
+                                                [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
+                                                    <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
+                                                [% ELSE %]
+                                                    [% MARCNOTE.marcnote | html | html_line_break %]
+                                                [% END %]
+                                            </p>
+                                        [% END %]
+                                    </div>
+                                </div>
+                            [% END %]
+
+                            [% IF ComponentParts && ComponentParts.size %]
+                                <div role="tabpanel" class="tab-pane" id="components">
+                                    <div class="content_set">
+                                        <table>
+                                            [% FOR PART IN ComponentParts %]
+                                            <tr>
+                                                <td>
+                                                    [% PART | $raw %]
+                                                </td>
+                                            </tr>
+                                            [% END %]
+                                        </table>
+                                        [% IF ComponentParts.size == Koha.Preference('MaxComponentRecords')%]
+                                            <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | url %]"/>show all component parts</a></p>
+                                        [% END %]
+                                    </div> <!-- /.content_set -->
+                                </div> <!-- /#components -->
+                            [% END %]
+
+                            [% IF ( subscriptionsnumber ) %]
+                                <div role="tabpanel" class="tab-pane" id="subscriptions">
+                                    <div id="catalogue_detail_subscriptions">
+                                        <h2>This is a serial subscription</h2>
+                                        <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p>
+                                        [% FOREACH subscription IN subscriptions %]
+                                            [% IF subscription.branchcode %]
+                                                <h3>At library: [% Branches.GetName(subscription.branchcode) || subscription.branchcode | html %]</h3>
+                                            [% END %]
+                                            [% IF ( subscription.closed ) %]
+                                                <p>This subscription is closed.</p>
+                                            [% END %]
+                                            [% IF ( subscription.location ) %]
+                                                <p class="subscription_location">Location: [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</p>
+                                            [% END %]
+                                            [% IF ( subscription.callnumber ) %]
+                                                <p>Callnumber: [% subscription.callnumber | html %] </p>
+                                            [% END %]
+                                            [% IF ( subscription.subscriptionnotes ) %]
+                                                <p>[% subscription.subscriptionnotes | html | html_line_break %] </p>
+                                            [% END %]
+                                            [% IF ( subscription.missinglist ) %]
+                                                <p>Missing issues: [% subscription.missinglist | html %] </p>
+                                            [% END %]
+                                            [% IF ( subscription.librariannote ) %]
+                                                <p>([% subscription.librariannote | html %])</p>
+                                            [% END %]
+                                            [% IF ( subscription.latestserials ) %]
+                                                <p> The [% subscription.staffdisplaycount | html %] latest issues related to this subscription:</p>
+                                                <table>
+                                                    <tr>
+                                                        <th>Issue #</th>
+                                                        <th>Date arrived</th>
+                                                        <th>Date published</th>
+                                                        <th>Date published (text)</th>
+                                                        <th>Status</th>
+                                                        <th>Note</th>
+                                                    </tr>
+                                                    [% FOREACH latestserial IN subscription.latestserials %]
+                                                        <tr>
+                                                            <td>[% latestserial.serialseq | html %]</td>
+                                                            <td data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
+                                                            <td data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                                            <td>[% latestserial.publisheddatetext | html %]</td>
+                                                            <td>
+                                                                [% INCLUDE 'serial-status.inc' serial = latestserial %]
+                                                            </td>
+                                                            <td>[% latestserial.notes | html %]</td>
+                                                        </tr>
+                                                    [% END %]
+                                                </table>
+                                            [% END %]
+                                            [% IF ( CAN_user_serials ) %]
+                                                <p>
+                                                    <a class="btn btn-link" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list" aria-hidden="true"></i> Subscription details</a>
+                                                </p>
+                                            [% END %]
+                                        [% END %]
+                                    </div>
+                                </div>
+                            [% END %]
+
+                            [% IF Koha.Preference('AcquisitionDetails') %]
+                                <div role="tabpanel" class="tab-pane" id="acq_details">
+                                    <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
+                                    </p>
+                                    [% IF orders.count %]
+                                        <table id="orders">
+                                            <thead>
+                                                <tr>
+                                                    <th>Vendor</th>
+                                                    <th>Invoice</th>
+                                                    <th>Basket group</th>
+                                                    <th>Basket</th>
+                                                    <th>Order number</th>
+                                                    <th>Creation date</th>
+                                                    <th>Receive date</th>
+                                                    <th>Status</th>
+                                                    <th>Quantity</th>
+                                                    <th title="Estimated cost tax incl. while pending, actual cost tax incl. once received">Price</th>
+                                                    <th>Internal note</th>
+                                                    <th>Subscription</th>
+                                                    <th>Subscription call number</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                [% FOR order IN orders %]
+                                                    [% SET basket = order.basket %]
+                                                    [% SET vendor = basket.bookseller %]
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
+                                                        </td>
+                                                        <td>
+                                                            [% IF order.invoiceid %]
+                                                                [% IF CAN_user_acquisition %]
+                                                                    <div><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
+                                                                    title="Invoice detail page">
+                                                                    [% order.invoice.invoicenumber | html %]</a></div>
+                                                                [% ELSE %]
+                                                                    <div>[% order.invoice.invoicenumber | html %]</div>
+                                                                [% END %]
+
+                                                                [% IF ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage && order.invoice.message_id ) %]
+                                                                    <div><a href="/cgi-bin/koha/acqui/edimsg.pl?id=[% order.invoice.message_id | uri %]" title="EDI INVOICE message">EDI message</a></div>
+                                                                [% END %]
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF basket.basketgroupid %]
+                                                                [% SET basket_group = basket.basket_group %]
+                                                                [% IF CAN_user_acquisition_group_manage %]
+                                                                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% vendor.id | uri %]&basketgroupid=[% basket_group.id | uri %]">[% basket_group.name | html%] ([% basket_group.id | html %])</a>
+                                                                [% ELSE %]
+                                                                    [% basket_group.name | html %] ([% basket_group.id | html %])
+                                                                [% END %]
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF CAN_user_acquisition_order_manage %]
+                                                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %] ([% basket.basketno | html %])</a>
+                                                            [% ELSE %]
+                                                                [% basket.basketname | html %] ([% basket.basketno | html %])
+                                                            [% END %]
+                                                        </td>
+                                                        <td>[% order.ordernumber | html %]</td>
+                                                        <td data-order="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</td>
+                                                        <td data-order="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</td>
+                                                        <td>
+                                                            [% SWITCH order.orderstatus %]
+                                                                [% CASE 'new' %]<span>New</span>
+                                                                [% CASE 'ordered' %]<span>Ordered</span>
+                                                                [% CASE 'partial' %]<span>Partial</span>
+                                                                [% CASE 'complete' %]<span>Complete</span>
+                                                                [% CASE 'cancelled' %]<span>Cancelled</span>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>[% order.quantity | html %]</td>
+                                                        <td>
+                                                            [% IF ( order.orderstatus == "complete" ) %]
+                                                                [% order.unitprice_tax_included | $Price %]
+                                                            [% ELSE %]
+                                                                [% order.ecost_tax_included | $Price %]
+                                                            [% END %]
+                                                        <td>[% order.order_internalnote | html %]</td>
+                                                        <td>
+                                                            [% IF order.subscriptionid %]
+                                                                <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF order.subscriptionid %]
+                                                                [% order.subscription.callnumber | html %]
+                                                            [% END %]
+                                                        </td>
+                                                    </tr>
+                                                [% END %]
+                                            </tbody>
+                                        </table>
+                                    [% ELSE %]
+                                        <span class="noorder">There is no order for this bibliographic record.</span>
+                                    [% END %]
+                                </div>
+                            [% END %]
+
+                            [% IF suggestions.count %]
+                                <div role="tabpanel" class="tab-pane" id="suggestion_details">
+                                    [% IF nb_archived_suggestions > 0 %]
+                                        <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
+                                    [% END %]
+                                    <table id="suggestions" class="sorted">
+                                        <thead>
+                                            <tr>
+                                                <th class="NoSort">&nbsp;</th>
+                                                <th class="anti-the">Suggestion</th>
+                                                <th>Suggested by - on</th>
+                                                <th>Managed by - on</th>
+                                                <th>Last modification by - on</th>
+                                                <th>Library</th>
+                                                <th>Fund</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            [% FOREACH suggestion IN suggestions %]
+                                                <tr>
+                                                    <td>[% suggestion.suggestionid | html %]</td>
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show" title="suggestion" >
+                                                            [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a>
+                                                        <br />
+                                                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
+                                                        [% IF ( suggestion.volumedesc ) %]; Volume:<em>[% suggestion.volumedesc | html %]</em> [% END %]
+                                                        [% IF ( suggestion.isbn ) %]; ISBN:<em>[% suggestion.isbn | html %]</em> [% END %]
+                                                        [% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %]
+                                                        [% IF ( suggestion.publicationyear ) %] in <em>[% suggestion.publicationyear | html %]</em> [% END %]
+                                                        [% IF ( suggestion.place ) %] in <em>[% suggestion.place | html %]</em> [% END %]
+                                                        [% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %]
+                                                        [% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />
+                                                        [% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
+                                                    </td>
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
+                                                        [% IF suggestion.suggesteddate %] - [% suggestion.suggesteddate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.managedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</a>
+                                                        [% IF suggestion.manageddate %] - [% suggestion.manageddate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.lastmodificationby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.last_modifier %]</a>
+                                                        [% IF suggestion.lastmodificationdate %] - [% suggestion.lastmodificationdate | $KohaDates %][% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% Branches.GetName( suggestion.branchcode ) | html %]
+                                                    </td>
+                                                    <td>
+                                                        [% suggestion.fund.budget_name | html %]
+                                                    </td>
+                                                    <td>
+                                                        [% IF    suggestion.STATUS == 'ASKED'     %]<span>Pending</span>
+                                                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]<span>Accepted</span>
+                                                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]<span>Ordered</span>
+                                                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]<span>Rejected</span>
+                                                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]<span>Checked</span>
+                                                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]<span>Available</span>
+                                                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
+                                                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
+                                                        [% ELSE %]<span>Status unknown</span>
+                                                        [% END %]
+                                                        [% IF suggestion.reason %]
+                                                            <br />([% suggestion.reason | html %])
+                                                        [% END %]
+                                                    </td>
+                                                </tr>
+                                            [% END %]
+                                        </tbody>
+                                    </table>
+                                </div>
+                            [% END %]
+
+                            [% IF ( FRBRizeEditions ) %]
+                                [% IF ( XISBNS ) %]
+                                    <div role="tabpanel" class="tab-pane" id="editions">
+                                        <h4>Editions</h4>
+                                        <table>
+                                            [% FOREACH XISBN IN XISBNS %]
+                                                <tr>
+                                                    [% IF ( AmazonCoverImages ) %]
+                                                        <td>
+                                                            <a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a>
+                                                        </td>
+                                                    [% END %]
+                                                    [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
+                                                        <td>
+                                                            [% IF ( noItemTypeImages ) %]
+                                                                <span class="itypetext">[% XISBN.description | html %]</span>
+                                                            [% ELSE %]
+                                                                <img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">
+                                                            [% END %]
+                                                        </td>
+                                                    [% END %]
+                                                    <td>
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
+                                                        [% IF ( XISBN.publishercode ) %]
+                                                            [% XISBN.publishercode | html %]
+                                                            [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %]
+                                                            [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %]
+                                                            [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %]
+                                                            [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
+                                                        [% END %]
+                                                        [% IF ( XISBN.pages ) %] [% END %][% XISBN.pages | html %]
+                                                        [% IF ( XISBN.illus ) %][% XISBN.illus | html %][% END %]
+                                                        [% IF ( XISBN.size ) %], [% END %][% XISBN.size | html %]
+                                                    </td>
+
+                                            [% END %]
+                                        </table>
+                                    </div>
+                                [% END %]
+                            [% END %]
+
+                            [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
+                                <div role="tabpanel" class="tab-pane" id="concerns">
+                                    <fieldset class="action" style="cursor:pointer;">
+                                        <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
+                                        | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
+                                    </fieldset>
+
+                                    <table id="table_concerns" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Reported</th>
+                                                <th>Details</th>
+                                                <th>Title</th>
+                                                <th>Status</th>
+                                                <th data-class-name="actions noExport">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            [% END %]
+
+                            [% IF ( LocalCoverImages ) %]
+                                <div role="tabpanel" class="tab-pane" id="images">
+                                    [% IF localimages.count %]
+                                        <p>Click on an image to view it in the image viewer</p>
+                                        <ul class="thumbnails">
+                                            [% FOREACH image IN localimages %]
+                                                [% IF image %]
+                                                    <li id="imagenumber-[% image.imagenumber | html %]" class="thumbnail">
+                                                        <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image.imagenumber | uri %]">
+                                                            <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image.imagenumber | uri %]" />
+                                                        </a>
+                                                        [% IF CAN_user_tools_upload_local_cover_images %]
+                                                            <a href="#" class="remove"><i class="fa fa-trash-can"></i> Delete image</a>
+                                                        [% END %]
+                                                    </li>
+                                                [% END %]
+                                            [% END %]
+                                        </ul>
+                                    [% ELSE # - No image passed JavaScript takes care %]
+                                        <span class="noimagesuploaded">No images have been uploaded for this bibliographic record yet.</span>
+                                    [% END %]
+                                    [% IF ( CAN_user_tools_upload_local_cover_images ) %]
+                                        <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
+                                        </p>
+                                    [% END %]
+                                </div>
+                            [% END %]
+
+                            [% IF ( HTML5MediaEnabled ) %]
+                                <div role="tabpanel" class="tab-pane" id="html5media">
+                                    [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
+                                        <p>
+                                            [% IF HTML5MediaSet.is_youtube %]
+                                                <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
+                                            [% ELSE %]
+                                                <[% HTML5MediaParent | html %] controls preload=none>
+                                                    <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
+                                                    [[% HTML5MediaParent | html %] tag not supported by your browser.]
+                                                </[% HTML5MediaParent | html %]>
+                                            [% END %]
+                                        </p>
+                                    [% END %]
+                                </div>
+                            [% END %]
+
+                            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+                                <div role="tabpanel" class="tab-pane novelistSelect" id="NovelistSelect">
+                                    <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
+                                </div>
+                            [% END %]
+
+                            [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
+                                <div role="tabpanel" class="tab-pane" id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
+                                    [% plugins_intranet_catalog_biblio_tab.content | $raw %]
+                                </div>
+                            [% END %]
+                        </div><!-- /tab-content -->
+                    </div><!-- /bibliodetails -->
+
+                    <div id="export" style="margin-top: 1em;">
+                        <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
+                            <table>
+                                <tr>
+                                    <th>Save record</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Select download format:
+                                        <select name="format">
+                                            <option value="mods">MODS (XML)</option>
+                                            <option data-toggle="modal" data-target="#exportModal_">Dublin Core</option>
+                                            <option value="marcxml">MARCXML</option>
+                                            <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+                                            <option value="utf8">MARC (Unicode/UTF-8)</option>
+                                        </select>
+                                        <input type="submit" name="save" class="btn btn-primary" value="Download record" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber | html %]" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+
+                    <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="marcPreviewLabel">MARC preview</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="elasticPreviewLabel">Elasticsearch record</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    [% INCLUDE 'biblio-view-menu.inc' %]
+                </aside>
+            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.row -->
+    [% END %]
+
+    <div class="modal fade" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="modal-item-group-create-label"><i class="fa fa-plus"></i> Create a new item group</h3>
+                </div>
+                <form method="get" id="modal-item-group-create-form" class="validated">
+                    <div class="modal-body">
+                        <fieldset>
+                            <p>
+                                <label for="modal-item-group-create-form-description" class="required">Name: </label>
+                                <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
+                                <span class="required">Required</span>
+                            </p>
+                            <p>
+                                <label for="modal-item-group-create-form-display_order" class="required">Display order: </label>
+                                <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
+                                <span class="required">Required</span>
+                                <br/>
+                                <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                            </p>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-item-group-create-submit" class="btn btn-default"><i class="fa fa-plus"></i> Submit</button>
+                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="modal-item-group-edit-label"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit item group</h3>
+                </div>
+                <form method="get" id="modal-item-group-edit-form" class="validated">
+                    <div class="modal-body">
+                        <fieldset>
+                            <p>
+                                <label for="modal-item-group-edit-form-description" class="required">Name: </label>
+                                <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
+                                <span class="required">Required</span>
+                            </p>
+                            <p>
+                                <label for="modal-item-group-edit-form-display_order" class="required">Sort order: </label>
+                                <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
+                                <span class="hint">Numbers only, item groups will be displayed in counting order</span>
+                            </p>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-item-group-edit-submit" class="btn btn-default"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Submit</button>
+                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="modal-item-group-delete-label"><i class='fa fa-trash-can'></i> Delete item group</h3>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item group?
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-item-group-set-submit" class="btn btn-default"><i class='fa fa-book'></i> Set item group</button>
+                    <button id="modal-item-group-delete-submit" class="btn btn-danger"><i class='fa fa-trash-can'></i> Delete</button>
                     <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="modal-item-group-unset-label"><i class='fa fa-unlink'></i> Remove item from item group</h3>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to remove these item(s) from their item group(s)?
-            </div>
-            <div class="modal-footer">
-                <button id="modal-item-group-unset-submit" class="btn btn-danger"><i class='fa fa-unlink'></i> Remove</button>
-                <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <div class="modal fade" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="modal-item-group-set-label"><i class='fa fa-book'></i> Set item group for items</h3>
+                </div>
+                <form method="get" id="modal-item-group-set-form" class="validated">
+                    <div class="modal-body">
+                        <fieldset>
+                            <p>
+                                <label for="item-group-add-form-select" class="required">Item group: </label>
+                                <select name="item_group" id="item-group-add-form-select">
+                                    [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
+                                        <option value="[% ig.id | html %]">[% ig.description | html %]</option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span>
+                            </p>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modal-item-group-set-submit" class="btn btn-default"><i class='fa fa-book'></i> Set item group</button>
+                        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="modal-item-group-unset-label"><i class='fa fa-unlink'></i> Remove item from item group</h3>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove these item(s) from their item group(s)?
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-item-group-unset-submit" class="btn btn-danger"><i class='fa fa-unlink'></i> Remove</button>
+                    <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     [% IF bundlesEnabled %]
-    <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
-        <form method="get" id="addToBundleForm" action="">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="addToBundleLabel">Add to bundle</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="addResult"></div>
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label class="required" for="external_id">Item barcode: </label>
-                                    <input type="text" id="external_id" name="external_id" required="required">
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-default">Submit</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+        <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
+            <form method="get" id="addToBundleForm" action="">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="addToBundleLabel">Add to bundle</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="addResult"></div>
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <label class="required" for="external_id">Item barcode: </label>
+                                        <input type="text" id="external_id" name="external_id" required="required">
+                                        <span class="required">Required</span>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 
-    <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
-        <form method="get" id="removeFromBundleForm" action="">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="removeFromBundleLabel">Remove from bundle</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div id="removeResult"></div>
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    <label class="required" for="external_id">Item barcode: </label>
-                                    <input type="text" id="rm_external_id" name="external_id" required="required">
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-default">Submit</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+        <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
+            <form method="get" id="removeFromBundleForm" action="">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 id="removeFromBundleLabel">Remove from bundle</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="removeResult"></div>
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <label class="required" for="external_id">Item barcode: </label>
+                                        <input type="text" id="rm_external_id" name="external_id" required="required">
+                                        <span class="required">Required</span>
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
     [% END %]
 
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
-    [% INCLUDE 'modals/add_catalog_concern.inc' %]
+        [% INCLUDE 'modals/add_catalog_concern.inc' %]
     [% END %]
 
     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-    [% INCLUDE 'modals/display_ticket.inc' %]
+        [% INCLUDE 'modals/display_ticket.inc' %]
     [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -1372,18 +1479,18 @@
 
             });
 
-           [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
-            $("body").on("click",".previewElastic", function(e){
-                e.preventDefault();
-                var pageElastic = $(this).attr("href");
-                $("#elasticPreview .modal-body").load(pageElastic, function( response, status, xhr ) {
-                    if( status == 'error' ){
-                        $("#elasticPreview .modal-body").html("<h1>"+_("An error has occurred!")+"</h1><h2><em>"+_("Error 404")+"</em></h2><ul><li>"+_("An internal link in the staff interface is broken and the page does not exist")+"</li></ul><h3>"+_("What's next?")+"</h3><ul style='margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;'><li>"+_("Use top menu bar to navigate to another part of Koha.")+"</li><li>"+_("To report a broken link or any other issue, please contact the Koha administrator.")+" <a href='mailto:[% Koha.Preference("KohaAdminEmailAddress") | uri %]'>"+_("Send email")+"</a></li></ul>");
-                    }
+            [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+                $("body").on("click",".previewElastic", function(e){
+                    e.preventDefault();
+                    var pageElastic = $(this).attr("href");
+                    $("#elasticPreview .modal-body").load(pageElastic, function( response, status, xhr ) {
+                        if( status == 'error' ){
+                            $("#elasticPreview .modal-body").html("<h1>"+_("An error has occurred!")+"</h1><h2><em>"+_("Error 404")+"</em></h2><ul><li>"+_("An internal link in the staff interface is broken and the page does not exist")+"</li></ul><h3>"+_("What's next?")+"</h3><ul style='margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;'><li>"+_("Use top menu bar to navigate to another part of Koha.")+"</li><li>"+_("To report a broken link or any other issue, please contact the Koha administrator.")+" <a href='mailto:[% Koha.Preference("KohaAdminEmailAddress") | uri %]'>"+_("Send email")+"</a></li></ul>");
+                        }
+                    });
+                    $('#elasticPreview').modal({show:true});
                 });
-                $('#elasticPreview').modal({show:true});
-            });
-           [% END %]
+            [% END %]
 
             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
                 novSelect.loadContentForQuery({
@@ -1398,9 +1505,9 @@
                         $(".NovelistSelect").show();
                     }
                  });
-             [% END %]
-             $(".cover-slider").on("click",".cover-nav", function(e){
-                 e.preventDefault();
+            [% END %]
+            $(".cover-slider").on("click",".cover-nav", function(e){
+                e.preventDefault();
                 var cover_slider = $(this).parent();
                 // Adding click handler for cover image navigation links
                 var num = $(this).data("num");
@@ -1408,7 +1515,7 @@
                 $(this).addClass("nav-active");
                 $(cover_slider).find(".cover-image").hide();
                 $(cover_slider).find(".cover-image").eq( num ).show();
-             });
+            });
         });
 
 
@@ -1460,315 +1567,314 @@
         browser.show();
 
         [% IF bundlesEnabled %]
-        var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
-        var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
+            var bundle_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail','bundle_tables','json') | $raw %];
+            var bundle_lost_value = [% Koha.Preference('BundleLostValue') | html %];
         [% END %]
 
         $(document).ready(function() {
 
             [% IF bundlesEnabled %] // Bundle handling
-            function createChild ( row, itemnumber, duedate ) {
+                function createChild ( row, itemnumber, duedate ) {
+                    // Toolbar
+                    var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
+                    bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
+                    bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
 
-                // Toolbar
-                var bundle_toolbar = $('<div id="toolbar" class="btn-toolbar"></div>');
-                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#addToBundleModal" data-item="' + itemnumber + '"><i class="fa fa-plus"></i> ' + _("Add to bundle") + '</a>');
-                bundle_toolbar.append('<a class="btn btn-default" data-toggle="modal" data-target="#removeFromBundleModal" data-item="' + itemnumber + '"><i class="fa fa-minus"></i> ' + _("Remove from bundle") + '</a>');
+                    // Disable management if there's a duedate
+                    if(duedate) {
+                        bundle_toolbar.children('.btn').addClass("disabled");
+                        bundle_toolbar.attr("title", _("This bundle is checked out, it cannot be modified"));
+                    }
 
-                // Disable management if there's a duedate
-                if(duedate) {
-                    bundle_toolbar.children('.btn').addClass("disabled");
-                    bundle_toolbar.attr("title", _("This bundle is checked out, it cannot be modified"));
+                    // This is the table we'll convert into a DataTable
+                    var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
+
+                    // Display it the child row
+                    row.child( bundle_toolbar.add(bundles_table), 'bundle' ).show();
+
+                    // Initialise as a DataTable
+                    var bundle_table_url = "/api/v1/items/" + itemnumber + "/bundled_items?";
+                    var bundle_table = bundles_table.kohaTable({
+                        "ajax": {
+                            "url": bundle_table_url
+                        },
+                        "embed": [
+                            "biblio",
+                            "return_claim.patron"
+                        ],
+                        "order": [[ 1, "asc" ]],
+                        "columnDefs": [ {
+                            "targets": [0,1,2,3],
+                            "render": function (data, type, row, meta) {
+                                if ( data && type == 'display' ) {
+                                    return data.escapeHtml();
+                                }
+                                return data;
+                            }
+                        } ],
+                        "columns": [
+                            {
+                                "data": "biblio.title:biblio.subtitle:biblio.medium",
+                                "title": _("Title"),
+                                "searchable": true,
+                                "orderable": true,
+                                "render": function(data, type, row, meta) {
+                                    return $biblio_to_html(row.biblio, { link: 1 });
+                                }
+                            },
+                            {
+                                "data": "biblio.author",
+                                "title": _("Author"),
+                                "searchable": true,
+                                "orderable": true,
+                            },
+                            {
+                                "data": "callnumber",
+                                "title": _("Callnumber"),
+                                "searchable": true,
+                                "orderable": true,
+                            },
+                            {
+                                "data": "external_id",
+                                "title": _("Barcode"),
+                                "searchable": true,
+                                "orderable": true,
+                            },
+                            {
+                                "data": "lost_status:last_seen_date:return_claim.patron",
+                                "title": _("Status"),
+                                "searchable": false,
+                                "orderable": false,
+                                "render": function(data, type, row, meta) {
+                                    if ( row.lost_status == bundle_lost_value ) {
+                                        let out = '<span class="lost">' + _("Last seen") + ': ' + $date(row.last_seen_date) + '</span>';
+                                        if ( row.return_claim ) {
+                                            out = out + '<span class="claims_return">' + _("Claims returned by") + ': ' + $patron_to_html( row.return_claim.patron, { display_cardnumber: false, url: true } ) + '</span>';
+                                        }
+                                        return out;
+                                    }
+                                    else if ( row.lost_status !== 0 ) {
+                                        return '<span class="lost">' + _("Lost") + ': ' + row.lost_status + '</span>';
+                                    }
+                                    return '<span class="available">' + _("Present") + '</span>';
+                                }
+                            },
+                            {
+                                "data": function( row, type, val, meta ) {
+                                    var result;
+                                    if (duedate) {
+                                        result = '<button class="btn btn-default btn-xs remove disabled" role="button" data-itemnumber="'+row.item_id+'" title="%s"><i class="fa fa-minus" aria-hidden="true"></i> %s</button>\n'.format(_("This bundle is checked out, it cannot be modified"), _("Remove"));
+                                    } else {
+                                        result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                    }
+                                    return result;
+                                },
+                                "title": _("Actions"),
+                                "searchable": false,
+                                "orderable": false,
+                                "class": "noExport"
+                            }
+                        ]
+                    }, bundle_settings, 1);
+                    $(".tbundle").on("click", ".remove:not(.disabled)", function(){
+                        var bundle_table = $(this).closest('table');
+                        var host_itemnumber = bundle_table.data('itemnumber');
+                        var component_itemnumber = $(this).data('itemnumber');
+                        var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/" + component_itemnumber;
+                        $.ajax({
+                            type: "DELETE",
+                            url: unlink_item_url,
+                            success: function(){
+                                bundle_table.DataTable({ 'retrieve': true }).draw(false);
+                            }
+                        });
+                    });
+
+                    return;
                 }
 
-                // This is the table we'll convert into a DataTable
-                var bundles_table = $('<table class="display tbundle" data-itemnumber="'+itemnumber+'" id="bundle_table_'+itemnumber+'" width="100%"/>');
+                var bundle_changed;
+                var bundle_form_active;
+                $("#addToBundleModal").on("shown.bs.modal", function(e){
+                    var button = $(e.relatedTarget);
+                    var item_id = button.data('item');
+                    $("#addResult").replaceWith('<div id="addResult"></div>');
+                    $("#addToBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items');
+                    $("#external_id").focus();
+                    bundle_changed = 0;
+                    bundle_form_active = item_id;
+                });
 
-                // Display it the child row
-                row.child( bundle_toolbar.add(bundles_table), 'bundle' ).show();
+                function addToBundle (url, data) {
+                    /* Send the data using post with external_id */
+                    var posting = $.post({
+                        url: url,
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json"
+                    });
 
-                // Initialise as a DataTable
-                var bundle_table_url = "/api/v1/items/" + itemnumber + "/bundled_items?";
-                var bundle_table = bundles_table.kohaTable({
-                    "ajax": {
-                        "url": bundle_table_url
-                    },
-                    "embed": [
-                        "biblio",
-                        "return_claim.patron"
-                    ],
-                    "order": [[ 1, "asc" ]],
-                    "columnDefs": [ {
-                        "targets": [0,1,2,3],
-                        "render": function (data, type, row, meta) {
-                            if ( data && type == 'display' ) {
-                                return data.escapeHtml();
+                    const barcode = data.external_id;
+
+                    /* Report the results */
+                    posting.done(function(data) {
+                        $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">'+_("Success: Added '%s'").format(barcode)+'</div>');
+                        $('#external_id').val('').focus();
+                        bundle_changed = 1;
+                    });
+                    posting.fail(function(data) {
+                        if ( data.status === 409 ) {
+                            var response = data.responseJSON;
+                            if ( response.error_code === 'already_bundled' ) {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
+                            } else if (response.error_code === 'bundle_checkout_out') {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
+                            } else if (response.error_code === 'checked_out') {
+                                const button = $('<button type="button">')
+                                    .addClass('btn btn-xs')
+                                    .text(_("Check in and add to bundle"))
+                                    .on('click', function () {
+                                        addToBundle(url, { external_id: barcode, force_checkin: true });
+                                    });
+                                $('#addResult')
+                                    .empty()
+                                    .attr('class', 'alert alert-warning')
+                                    .append(__x('Warning: Item {barcode} is checked out', { barcode }))
+                                    .append(' ', button);
+                            } else if (response.error_code === 'failed_checkin') {
+                                $('#addResult')
+                                    .empty()
+                                    .attr('class', 'alert alert-danger')
+                                    .append(__x('Failure: Item {barcode} cannot be checked in', { barcode }))
+                            } else if (response.error_code === 'reserved') {
+                                const button = $('<button type="button">')
+                                    .addClass('btn btn-xs')
+                                    .text(_("Ignore holds and add to bundle"))
+                                    .on('click', function () {
+                                        addToBundle(url, { external_id: barcode, ignore_holds: true });
+                                    });
+                                $('#addResult')
+                                    .empty()
+                                    .attr('class', 'alert alert-warning')
+                                    .append(__x('Warning: Item {barcode} is on hold', { barcode }))
+                                    .append(' ', button);
+                            } else {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                             }
-                            return data;
+                        } else if ( data.status === 404 ) {
+                            $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
+                        } else if ( data.status === 400 ) {
+                            var response = data.responseJSON;
+                            if ( response.error_code === "failed_nesting" ) {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode)+'</div>');
+                            } else {
+                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details.")+'</div>');
+                            }
+                        } else {
+                            $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details.")+'</div>');
                         }
-                    } ],
-                    "columns": [
-                        {
-                            "data": "biblio.title:biblio.subtitle:biblio.medium",
-                            "title": _("Title"),
-                            "searchable": true,
-                            "orderable": true,
-                            "render": function(data, type, row, meta) {
-                                return $biblio_to_html(row.biblio, { link: 1 });
-                            }
-                        },
-                        {
-                            "data": "biblio.author",
-                            "title": _("Author"),
-                            "searchable": true,
-                            "orderable": true,
-                        },
-                        {
-                            "data": "callnumber",
-                            "title": _("Callnumber"),
-                            "searchable": true,
-                            "orderable": true,
-                        },
-                        {
-                            "data": "external_id",
-                            "title": _("Barcode"),
-                            "searchable": true,
-                            "orderable": true,
-                        },
-                        {
-                            "data": "lost_status:last_seen_date:return_claim.patron",
-                            "title": _("Status"),
-                            "searchable": false,
-                            "orderable": false,
-                            "render": function(data, type, row, meta) {
-                                if ( row.lost_status == bundle_lost_value ) {
-                                    let out = '<span class="lost">' + _("Last seen") + ': ' + $date(row.last_seen_date) + '</span>';
-                                    if ( row.return_claim ) {
-                                        out = out + '<span class="claims_return">' + _("Claims returned by") + ': ' + $patron_to_html( row.return_claim.patron, { display_cardnumber: false, url: true } ) + '</span>';
+                        $('#external_id').val('').focus();
+                    });
+                }
+
+                $("#addToBundleForm").submit(function(event) {
+                    /* stop form from submitting normally */
+                    event.preventDefault();
+
+                    const url = this.action;
+                    const data = { external_id: this.elements.external_id.value };
+
+                    addToBundle(url, data);
+                });
+
+                $("#addToBundleModal").on("hidden.bs.modal", function(e){
+                    if ( bundle_changed ) {
+                        $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
+                    }
+                    bundle_form_active = 0;
+                    bundle_changed = 0;
+                });
+
+                $("#removeFromBundleModal").on("shown.bs.modal", function(e){
+                    var button = $(e.relatedTarget);
+                    var item_id = button.data('item');
+                    $("#removeResult").replaceWith('<div id="removeResult"></div>');
+                    $("#removeFromBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items/');
+                    $("#rm_external_id").focus();
+                    bundle_changed = 0;
+                    bundle_form_active = item_id;
+                });
+
+                $("#removeFromBundleForm").submit(function(event) {
+
+                    /* stop form from submitting normally */
+                    event.preventDefault();
+
+                    /* get the action attribute from the <form action=""> element */
+                    var $form = $(this),
+                    url = $form.attr('action');
+
+                    var barcode = $('#rm_external_id').val();
+
+                    /* Fetch itemnumber using rm_external_id */
+                    var itemReq = $.get('/api/v1/items', { q: JSON.stringify({
+                        external_id: barcode
+                    }) }, null, "json");
+
+                    var itemnumber;
+                    itemReq.done(function(data) {
+                        if (data.length === 1) {
+                            itemnumber = data[0].item_id;
+
+                            /* Remove link using fetch itemnumber */
+                            var deleteReq = $.ajax( url + itemnumber, {
+                                type : 'DELETE'
+                            });
+
+                            /* Report the results */
+                            deleteReq.done(function(data) {
+                                var barcode = $('#rm_external_id').val();
+                                $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-success">'+_("Success: Removed '%s'").format(barcode)+'</div>');
+                                $('#rm_external_id').val('').focus();
+                                bundle_changed = 1;
+                            });
+                            deleteReq.fail(function(data) {
+                                var barcode = $('#rm_external_id').val();
+                                if ( data.status === 409 ) {
+                                    var response = data.responseJSON;
+                                    if (response.error_code === 'bundle_checkout_out') {
+                                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
+                                    } else if ( response.key === "PRIMARY" ) {
+                                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
+                                    } else {
+                                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
                                     }
-                                    return out;
-                                }
-                                else if ( row.lost_status !== 0 ) {
-                                    return '<span class="lost">' + _("Lost") + ': ' + row.lost_status + '</span>';
-                                }
-                                return '<span class="available">' + _("Present") + '</span>';
-                            }
-                        },
-                        {
-                            "data": function( row, type, val, meta ) {
-                                var result;
-                                if (duedate) {
-                                    result = '<button class="btn btn-default btn-xs remove disabled" role="button" data-itemnumber="'+row.item_id+'" title="%s"><i class="fa fa-minus" aria-hidden="true"></i> %s</button>\n'.format(_("This bundle is checked out, it cannot be modified"), _("Remove"));
+                                } else if ( data.status === 404 ) {
+                                    $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
                                 } else {
-                                    result = '<button class="btn btn-default btn-xs remove" role="button" data-itemnumber="'+row.item_id+'"><i class="fa fa-minus" aria-hidden="true"></i> '+_("Remove")+'</button>\n';
+                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
                                 }
-                                return result;
-                            },
-                            "title": _("Actions"),
-                            "searchable": false,
-                            "orderable": false,
-                            "class": "noExport"
+                                $('#rm_external_id').val('').focus();
+                            });
+                        } else {
+                            $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Barcode matched more than one item '%s'").format(barcode)+'</div>');
                         }
-                    ]
-                }, bundle_settings, 1);
-                $(".tbundle").on("click", ".remove:not(.disabled)", function(){
-                    var bundle_table = $(this).closest('table');
-                    var host_itemnumber = bundle_table.data('itemnumber');
-                    var component_itemnumber = $(this).data('itemnumber');
-                    var unlink_item_url = "/api/v1/items/" + host_itemnumber + "/bundled_items/" + component_itemnumber;
-                    $.ajax({
-                        type: "DELETE",
-                        url: unlink_item_url,
-                        success: function(){
-                            bundle_table.DataTable({ 'retrieve': true }).draw(false);
-                        }
+                    });
+                    itemReq.fail(function(data) {
+                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Item not found '%s'").format(barcode)+'</div>');
+                        $('#rm_external_id').val('').focus();
+
                     });
                 });
 
-                return;
-            }
-
-            var bundle_changed;
-            var bundle_form_active;
-            $("#addToBundleModal").on("shown.bs.modal", function(e){
-                var button = $(e.relatedTarget);
-                var item_id = button.data('item');
-                $("#addResult").replaceWith('<div id="addResult"></div>');
-                $("#addToBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items');
-                $("#external_id").focus();
-                bundle_changed = 0;
-                bundle_form_active = item_id;
-            });
-
-            function addToBundle (url, data) {
-                  /* Send the data using post with external_id */
-                  var posting = $.post({
-                      url: url,
-                      data: JSON.stringify(data),
-                      contentType: "application/json; charset=utf-8",
-                      dataType: "json"
-                  });
-
-                  const barcode = data.external_id;
-
-                  /* Report the results */
-                  posting.done(function(data) {
-                      $('#addResult').replaceWith('<div id="addResult" class="alert alert-success">'+_("Success: Added '%s'").format(barcode)+'</div>');
-                      $('#external_id').val('').focus();
-                      bundle_changed = 1;
-                  });
-                  posting.fail(function(data) {
-                      if ( data.status === 409 ) {
-                          var response = data.responseJSON;
-                          if ( response.error_code === 'already_bundled' ) {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
-                          } else if (response.error_code === 'bundle_checkout_out') {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
-                          } else if (response.error_code === 'checked_out') {
-                              const button = $('<button type="button">')
-                                .addClass('btn btn-xs')
-                                .text(_("Check in and add to bundle"))
-                                .on('click', function () {
-                                    addToBundle(url, { external_id: barcode, force_checkin: true });
-                                });
-                              $('#addResult')
-                                .empty()
-                                .attr('class', 'alert alert-warning')
-                                .append(__x('Warning: Item {barcode} is checked out', { barcode }))
-                                .append(' ', button);
-                          } else if (response.error_code === 'failed_checkin') {
-                              $('#addResult')
-                                .empty()
-                                .attr('class', 'alert alert-danger')
-                                .append(__x('Failure: Item {barcode} cannot be checked in', { barcode }))
-                          } else if (response.error_code === 'reserved') {
-                              const button = $('<button type="button">')
-                                .addClass('btn btn-xs')
-                                .text(_("Ignore holds and add to bundle"))
-                                .on('click', function () {
-                                    addToBundle(url, { external_id: barcode, ignore_holds: true });
-                                });
-                              $('#addResult')
-                                .empty()
-                                .attr('class', 'alert alert-warning')
-                                .append(__x('Warning: Item {barcode} is on hold', { barcode }))
-                                .append(' ', button);
-                          } else {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
-                          }
-                      } else if ( data.status === 404 ) {
-                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
-                      } else if ( data.status === 400 ) {
-                          var response = data.responseJSON;
-                          if ( response.error_code === "failed_nesting" ) {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' is a bundle and bundles cannot be nested").format(barcode)+'</div>');
-                          } else {
-                              $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details.")+'</div>');
-                          }
-                      } else {
-                          $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Check the logs for details.")+'</div>');
-                      }
-                      $('#external_id').val('').focus();
-                  });
-            }
-
-            $("#addToBundleForm").submit(function(event) {
-                  /* stop form from submitting normally */
-                  event.preventDefault();
-
-                  const url = this.action;
-                  const data = { external_id: this.elements.external_id.value };
-
-                  addToBundle(url, data);
-            });
-
-            $("#addToBundleModal").on("hidden.bs.modal", function(e){
-                if ( bundle_changed ) {
-                    $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
-                }
-                bundle_form_active = 0;
-                bundle_changed = 0;
-            });
-
-            $("#removeFromBundleModal").on("shown.bs.modal", function(e){
-                var button = $(e.relatedTarget);
-                var item_id = button.data('item');
-                $("#removeResult").replaceWith('<div id="removeResult"></div>');
-                $("#removeFromBundleForm").attr('action', '/api/v1/items/' + item_id + '/bundled_items/');
-                $("#rm_external_id").focus();
-                bundle_changed = 0;
-                bundle_form_active = item_id;
-            });
-
-            $("#removeFromBundleForm").submit(function(event) {
-
-                /* stop form from submitting normally */
-                event.preventDefault();
-
-                /* get the action attribute from the <form action=""> element */
-                var $form = $(this),
-                url = $form.attr('action');
-
-                var barcode = $('#rm_external_id').val();
-
-                /* Fetch itemnumber using rm_external_id */
-                var itemReq = $.get('/api/v1/items', { q: JSON.stringify({
-                    external_id: barcode
-                }) }, null, "json");
-
-                var itemnumber;
-                itemReq.done(function(data) {
-                    if (data.length === 1) {
-                        itemnumber = data[0].item_id;
-
-                        /* Remove link using fetch itemnumber */
-                        var deleteReq = $.ajax( url + itemnumber, {
-                            type : 'DELETE'
-                        });
-
-                        /* Report the results */
-                        deleteReq.done(function(data) {
-                            var barcode = $('#rm_external_id').val();
-                            $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-success">'+_("Success: Removed '%s'").format(barcode)+'</div>');
-                            $('#rm_external_id').val('').focus();
-                            bundle_changed = 1;
-                        });
-                        deleteReq.fail(function(data) {
-                            var barcode = $('#rm_external_id').val();
-                            if ( data.status === 409 ) {
-                                var response = data.responseJSON;
-                                if (response.error_code === 'bundle_checkout_out') {
-                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Bundle is currently checked out")+'</div>');
-                                } else if ( response.key === "PRIMARY" ) {
-                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-warning">'+_("Warning: Item '%s' already attached").format(barcode)+'</div>');
-                                } else {
-                                    $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Item '%s' belongs to another bundle").format(barcode)+'</div>');
-                                }
-                            } else if ( data.status === 404 ) {
-                                $('#addResult').replaceWith('<div id="addResult" class="alert alert-danger">'+_("Failure: Item '%s' not found").format(barcode)+'</div>');
-                            } else {
-                                $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failure: Check the logs for details")+'</div>');
-                            }
-                            $('#rm_external_id').val('').focus();
-                        });
-                    } else {
-                        $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Barcode matched more than one item '%s'").format(barcode)+'</div>');
+                $("#removeFromBundleModal").on("hidden.bs.modal", function(e){
+                    if ( bundle_changed ) {
+                        $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
                     }
+                    bundle_form_active = 0;
+                    bundle_changed = 0;
                 });
-                itemReq.fail(function(data) {
-                     $('#removeResult').replaceWith('<div id="removeResult" class="alert alert-danger">'+_("Failed: Item not found '%s'").format(barcode)+'</div>');
-                    $('#rm_external_id').val('').focus();
-
-                });
-            });
-
-            $("#removeFromBundleModal").on("hidden.bs.modal", function(e){
-                if ( bundle_changed ) {
-                    $('#bundle_table_'+bundle_form_active).DataTable({ 'retrieve': true }).ajax.reload();
-                }
-                bundle_form_active = 0;
-                bundle_changed = 0;
-            });
-            // End bundle handling
+                // End bundle handling
             [% END %]
 
             let items_tab_ids = [ 'holdings', 'otherholdings' ];
@@ -1776,30 +1882,29 @@
                 build_items_table(tab_id, false, {}, build_items_table_drawncallback);
 
                 [% IF bundlesEnabled %]
-                // Add event listener for opening and closing bundle details
-                $('#' + tab_id + '_table tbody').on('click', 'button.details-control', function () {
-                    var button = $(this);
-                    var tr = button.closest('tr');
-                    var dTable = button.closest('table').DataTable({ 'retrieve': true });
+                    // Add event listener for opening and closing bundle details
+                    $('#' + tab_id + '_table tbody').on('click', 'button.details-control', function () {
+                        var button = $(this);
+                        var tr = button.closest('tr');
+                        var dTable = button.closest('table').DataTable({ 'retrieve': true });
 
-                    let row = dTable.row( tr );
-                    let data = row.data();
-                    let itemnumber = data.item_id;
-                    let duedate = (data.checkout&&data.checkout.due_date) || null;
+                        let row = dTable.row( tr );
+                        let data = row.data();
+                        let itemnumber = data.item_id;
+                        let duedate = (data.checkout&&data.checkout.due_date) || null;
 
-                    if ( row.child.isShown() ) {
-                        // This row is already open - close it
-                        row.child.hide();
-                        tr.removeClass('shown');
-                        button.removeClass('active');
-                    }
-                    else {
-                        // Open this row
-                        createChild(row, itemnumber, duedate);
-                        tr.addClass('shown');
-                        button.addClass('active');
-                    }
-                } );
+                        if ( row.child.isShown() ) {
+                            // This row is already open - close it
+                            row.child.hide();
+                            tr.removeClass('shown');
+                            button.removeClass('active');
+                        } else {
+                            // Open this row
+                            createChild(row, itemnumber, duedate);
+                            tr.addClass('shown');
+                            button.addClass('active');
+                        }
+                    });
                 [% END %]
             });
 
@@ -1930,7 +2035,7 @@
 
             $('#modal-item-group-create').on('shown.bs.modal', function () {
                 $('#modal-item-group-create-form-description').focus();
-            })
+            });
 
             // Edit existing item groups
             $('body').on( 'click', '.item-group-edit', function(){
@@ -2071,7 +2176,6 @@
                 }
 
                 $('#modal-item-group-unset').modal('hide');
-
             });
         [% END %]
 
