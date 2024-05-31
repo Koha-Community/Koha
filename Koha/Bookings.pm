@@ -45,6 +45,19 @@ sub filter_by_future {
     return $self->search( { start_date => { '>' => \'NOW()' } } );
 }
 
+=head3 filter_by_active
+
+    $bookings->filter_by_active;
+
+Will return the bookings that have not ended.
+
+=cut
+
+sub filter_by_active {
+    my ($self) = @_;
+    return $self->search( { end_date => { '>=' => \'NOW()' } } );
+}
+
 =head2 Internal Methods
 
 =head3 _type
