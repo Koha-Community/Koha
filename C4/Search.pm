@@ -1842,13 +1842,14 @@ sub searchResults {
 
             my $hbranch     = C4::Context->preference('StaffSearchResultsDisplayBranch');
             my $otherbranch = $hbranch eq 'homebranch' ? 'holdingbranch' : 'homebranch';
-
             # set item's branch name, use HomeOrHoldingBranch syspref first, fall back to the other one
             if ($item->{$hbranch}) {
                 $item->{'branchname'} = $branches{$item->{$hbranch}};
+                $item->{'branchcode'} = $item->{$hbranch};
             }
             elsif ($item->{$otherbranch}) {	# Last resort
                 $item->{'branchname'} = $branches{$item->{$otherbranch}};
+                $item->{'branchcode'} = $item->{$otherbranch};
             }
 
             my $prefix =
@@ -1867,6 +1868,7 @@ sub searchResults {
                 $onloan_items->{$key}->{due_date} = $item->{onloan};
                 $onloan_items->{$key}->{count}++ if $item->{$hbranch};
                 $onloan_items->{$key}->{branchname}     = $item->{branchname};
+                $onloan_items->{$key}->{branchcode}     = $item->{branchcode};
                 $onloan_items->{$key}->{location}       = $shelflocations->{ $item->{location} } if $item->{location};
                 $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
                 $onloan_items->{$key}->{description}    = $item->{description};
@@ -1964,6 +1966,7 @@ sub searchResults {
                     foreach (qw(withdrawn itemlost damaged branchname itemcallnumber)) {
                         $other_items->{$key}->{$_} = $item->{$_};
                     }
+                    $other_items->{$key}->{branchcode}     = $item->{branchcode};
                     $other_items->{$key}->{intransit} = ( $transfertwhen ne '' ) ? 1 : 0;
                     $other_items->{$key}->{recalled} = ($recallstatus) ? 1 : 0;
                     $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
@@ -1981,6 +1984,7 @@ sub searchResults {
                     foreach (qw(branchname itemcallnumber description)) {
                         $available_items->{$prefix}->{$_} = $item->{$_};
                     }
+                    $available_items->{$prefix}->{branchcode} = $item->{branchcode};
                     $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} } if $item->{location};
                     $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype}//q{} }->{imageurl} );
                     $available_items->{$prefix}->{collectioncode} = GetAuthorisedValueDesc('','',$item->{ccode},'','','CCODE');
