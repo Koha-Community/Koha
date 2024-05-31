@@ -351,8 +351,8 @@
                         node += image_location
                             ? '<img src="%s" alt="%s" title="%s" /> '.format(escape_str(image_location), escape_str(item_type_description), escape_str(item_type_description))
                             : '';
+                        node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));
                     [% END %]
-                    node += '<span class="itypedesc itypetext">%s</span>'.format(escape_str(item_type_description));
                     return node;
                 }
             },
