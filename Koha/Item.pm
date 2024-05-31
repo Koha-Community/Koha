@@ -264,13 +264,23 @@ sub delete {
     my $self   = shift;
     my $params = @_ ? shift : {};
 
-    # FIXME check the item has no current issues
-    # i.e. raise the appropriate exception
-
     # Get the item group so we can delete it later if it has no items left
     my $item_group = C4::Context->preference('EnableItemGroups') ? $self->item_group : undef;
 
+    my $serial_item = $self->serial_item;
+
     my $result = $self->SUPER::delete;
+
+    # Delete the serial linked to the item if required
+    if ( $result && $params->{delete_serial_issues} ) {
+        if ($serial_item) {
+            my $serial = Koha::Serials->find( $serial_item->serialid );
+
+            # The serial_item is deleted by cascade when the item is deleted
+            # so we don't need to delete it here
+            $serial->delete;
+        }
+    }
 
     # Delete the item group if it has no items left
     $item_group->delete if ( $item_group && $item_group->items->count == 0 );
