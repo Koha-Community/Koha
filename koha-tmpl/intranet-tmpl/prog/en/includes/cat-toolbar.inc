@@ -54,7 +54,7 @@
                         <input type="hidden" name="recordtype" value="biblio" />
                         <input type="hidden" name="op" value="cud-list" />
                         <input type="hidden" name="bib_list" value="[% biblionumber | html %]" />
-                        <button type="submit" class="btn btn-default" id="modifybiblio">Modify record using template</a>
+                        <button type="submit" class="btn btn-default" id="modifybiblio">Modify record using template</button>
                     </form>
                 </li>
             [% END %]
@@ -71,7 +71,7 @@
                             <input type="hidden" name="op" value="cud-show" />
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="src" value="CATALOGUING" />
-                            <button id="batchedit" type="submit" class="btn btn-default" id="modifybiblio">Edit items in a batch</a>
+                            <button id="batchedit" type="submit" class="btn btn-default" id="modifybiblio">Edit items in a batch</button>
                         </form>
                     </li>
                 [% ELSE %]
@@ -88,7 +88,7 @@
                             <input type="hidden" name="del" value="1" />
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="src" value="CATALOGUING" />
-                            <button id="batchdelete" type="submit" class="btn btn-default" id="modifybiblio">Delete items in a batch</a>
+                            <button id="batchdelete" type="submit" class="btn btn-default" id="modifybiblio">Delete items in a batch</button>
                         </form>
                     </li>
                 [% ELSE %]

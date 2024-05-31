@@ -742,7 +742,7 @@
 
 
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-    <div role="tabpanel" class="tab-pane" id="NovelistSelect" class="novelistSelect">
+    <div role="tabpanel" class="tab-pane novelistSelect" id="NovelistSelect">
         <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
     </div>
 [% END %]
@@ -832,12 +832,12 @@
                 <div class="modal-body">
                     <fieldset>
                         <p>
-                            <label for="item_group_description" class="required">Name: </label>
+                            <label for="modal-item-group-create-form-description" class="required">Name: </label>
                             <input name="description" id="modal-item-group-create-form-description" type="text" size="30" required="required" class="required" />
                             <span class="required">Required</span>
                         </p>
                         <p>
-                            <label for="item_group_display_order" class="required">Display order: </label>
+                            <label for="modal-item-group-create-form-display_order" class="required">Display order: </label>
                             <input name="display_order" id="modal-item-group-create-form-display_order" value="0" size="5" required="required" class="required" />
                             <span class="required">Required</span>
                             <br/>
@@ -865,12 +865,12 @@
                 <div class="modal-body">
                     <fieldset>
                         <p>
-                            <label for="item_group_description" class="required">Name: </label>
+                            <label for="modal-item-group-edit-form-description" class="required">Name: </label>
                             <input name="description" id="modal-item-group-edit-form-description" type="text" size="30" required="required" class="required" />
                             <span class="required">Required</span>
                         </p>
                         <p>
-                            <label for="item_group_display_order" class="required">Sort order: </label>
+                            <label for="modal-item-group-edit-form-display_order" class="required">Sort order: </label>
                             <input name="display_order" id="modal-item-group-edit-form-display_order" size="5" />
                             <span class="hint">Numbers only, item groups will be displayed in counting order</span>
                         </p>
@@ -914,7 +914,7 @@
                 <div class="modal-body">
                     <fieldset>
                         <p>
-                            <label for="item_group" class="required">Item group: </label>
+                            <label for="item-group-add-form-select" class="required">Item group: </label>
                             <select name="item_group" id="item-group-add-form-select">
                                 [% FOREACH ig IN biblio.item_groups.search({}, {order_by => 'display_order'}) %]
                                     <option value="[% ig.id | html %]">[% ig.description | html %]</option>

@@ -26,20 +26,20 @@
                                 <div class="hint">Enter patron card number or partial name</div>
                             </li>
                             <li>
-                                <label class="required" for="booking_pickup">Pickup at:</label>
-                                <select name="booking_pickup" id="pickup_library_id" required="required" disabled="true"></select>
+                                <label class="required" for="pickup_library_id">Pickup at:</label>
+                                <select name="booking_pickup" id="pickup_library_id" required="required" disabled="disabled"></select>
                                 <span class="required">Required</span>
                             </li>
                             <li>
                             <label for="booking_item_id">Item: </label>
-                                <select name="booking_item_id" id="booking_item_id" disabled="true">
+                                <select name="booking_item_id" id="booking_item_id" disabled="disabled">
                                     <option value="0">Any item</option>
                                 </select>
                             </li>
                             <li>
                                 <div id="period_fields">
                                     <label class="required" for="period">Booking dates: </label>
-                                    <input type="text" id="period" name="period" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-disable-shortcuts="true" required="required" disabled="true" autocomplete="off">
+                                    <input type="text" id="period" name="period" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-disable-shortcuts="true" required="required" disabled="disabled" autocomplete="off">
                                     <span class="required">Required</span>
                                 </div>
                                 <div class="hint">Select the booking start and end date</div>
