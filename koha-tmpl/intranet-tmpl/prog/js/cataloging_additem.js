@@ -154,8 +154,31 @@ $(document).ready(function () {
     $(document).on("click", ".delete", function (e) {
         e.preventDefault();
         if (confirmDelete(MSG_CONFIRM_DELETE_ITEM)) {
-            return $("#" + $(this).data("item") + "-delete-item-form").submit();
+            var itemnumber = $(this).data("itemnumber");
+            var hasSerialItem = $(this).data("has-serial-item");
+
+            $("#delete-item-itemnumber").val(itemnumber);
+            $("#delete_associated_serial_issues").attr("checked", false);
+            $("#delete-item-modal-btn-submit").data("item", itemnumber);
+            if (!hasSerialItem) {
+                $(".form-group").hide();
+            }
+            $("#delete-item-modal").modal("show");
         }
+    });
+    $(document).on("click", "#delete-item-modal-btn-submit", function (e) {
+        e.preventDefault();
+        var itemnumber = $("#delete-item-itemnumber").val();
+        var deleteSerialIssues = $("#delete_associated_serial_issues").prop(
+            "checked"
+        )
+            ? true
+            : false;
+        $("#delete-item-modal").modal("hide");
+        if (deleteSerialIssues) {
+            $("#" + itemnumber + "-delete-serial-issues").val("1");
+        }
+        return $("#" + $(this).data("item") + "-delete-item-form").submit();
     });
 
     /* On page load, check for location.hash in the page URL */

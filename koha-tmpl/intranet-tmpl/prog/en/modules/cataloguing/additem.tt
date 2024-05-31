@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
+[% USE Item %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -184,8 +185,9 @@
                                                                 <input type="hidden" name="biblionumber" value="[% item.biblionumber | html %]" />
                                                                 <input type="hidden" name="itemnumber" value="[% item.itemnumber | html %]" />
                                                                 <input type="hidden" name="searchid" value="[% searchid | html %]" />
+                                                                <input type="hidden" name="delete-serial-issues" id="[% item.itemnumber | html %]-delete-serial-issues" value="" />
                                                             </form>
-                                                            <a class="dropdown-item delete" data-item="[% item.itemnumber | html %]" href="#">Delete</a>
+                                                            <a class="dropdown-item delete" data-itemnumber="[% item.itemnumber | html %]" data-has-serial-item="[% Item.HasSerialItem(item.itemnumber) | html %]" href="#">Delete</a>
                                                         </li>
                                                     [% END %]
                                                 [% END %]
@@ -424,6 +426,7 @@
                     </form>
 
                     [% INCLUDE 'modals/cataloguing_create_av.inc' %]
+                    [% INCLUDE 'modals/delete_item_confirmation.inc' %]
                 </div>
                 <!-- /#cataloguing_additem_newitem -->
             </div>
