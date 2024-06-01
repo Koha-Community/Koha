@@ -170,7 +170,6 @@ Circulation:
                   1: "Use"
                   0: "Don't use"
             - circulation desks.
-
     Checkout policy:
         -
             - Delay the automatic loading of the checkouts table on the checkouts page by
@@ -426,33 +425,6 @@ Circulation:
                   0: "don't ask"
             - "for confirmation."
         -
-            - By default, set the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> value of an item to
-            - pref: DefaultLongOverdueLostValue
-              choices: authval
-              source: LOST
-            - when the item has been overdue for more than
-            - pref: DefaultLongOverdueDays
-              class: integer
-            - days.
-            - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
-            - "<br>Example: [1] [30] Sets an item to the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value 1 when it has been overdue for more than 30 days."
-            - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
-        -
-            - "Charge a lost item to the patron's account when the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value of the item changes to:"
-            - pref: DefaultLongOverdueChargeValue
-              choices: authval
-              source: LOST
-            - <br>Leave this field empty if you don't want to charge the patron for lost items.
-            - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
-        -
-            - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
-            - pref: DefaultLongOverdueSkipLostStatuses
-            - "."
-            - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
-            - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
-        -
             - Set the default patron categories to receive overdues to
             - pref: DefaultLongOverduePatronCategories
               choices: patron-categories
@@ -469,15 +441,6 @@ Circulation:
             - <br>(Used when the longoverdue.pl script is called without the --skip-category parameter)
             - <br>WARNING - This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
-
-        -
-            - "When issuing an item that has been marked as lost, "
-            - pref: IssueLostItem
-              choices:
-                  confirm: "require confirmation"
-                  alert: "display a message"
-                  nothing : "do nothing"
-            - .
         -
             - "When checking out an item, "
             - pref: RecordStaffUserOnCheckout
@@ -485,30 +448,6 @@ Circulation:
                   1: "record"
                   0: "don't record"
             - "the user who checked out the item."
-        -
-            - "Mark items as returned when flagged as lost "
-            - pref: MarkLostItemsAsReturned
-              multiple:
-                cronjob: "from the longoverdue cronjob"
-                batchmod: "from the batch item modification tool"
-                additem: "when cataloguing an item"
-                moredetail: "from the items tab of the catalog module"
-                pendingreserves: "from the 'Holds to pull' list"
-                onpayment: "when receiving payment for the item"
-                claim_returned: "when marking an item as a return claim"
-            - .
-        -
-            - "Update item status to"
-            - pref: UpdateItemLostStatusWhenPaid
-              choices: authval
-              source: LOST
-            - "when the outstanding balance is paid."
-        -
-            - "Update item status to"
-            - pref: UpdateItemLostStatusWhenWriteoff
-              choices: authval
-              source: LOST
-            - "when the outstanding balance is written off."
         -
             - pref: AllowMultipleIssuesOnABiblio
               choices:
@@ -615,6 +554,66 @@ Circulation:
                   open: "extend the loan period and set the checkout to be due at the library's open time."
                   close: "shorten the loan period and set the checkout to be due at the library's close time."
                   ignore: "do not consider the library's opening hours."
+    Lost item policy:
+        -
+            - By default, set the <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> value of an item to
+            - pref: DefaultLongOverdueLostValue
+              choices: authval
+              source: LOST
+            - when the item has been overdue for more than
+            - pref: DefaultLongOverdueDays
+              class: integer
+            - days.
+            - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
+            - "<br>Example: [1] [30] Sets an item to the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value 1 when it has been overdue for more than 30 days."
+            - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+        -
+            - "Charge a lost item to the patron's account when the <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST'>LOST</a> value of the item changes to:"
+            - pref: DefaultLongOverdueChargeValue
+              choices: authval
+              source: LOST
+            - <br>Leave this field empty if you don't want to charge the patron for lost items.
+            - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+        -
+            - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
+            - pref: DefaultLongOverdueSkipLostStatuses
+            - "."
+            - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
+            - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
+        -
+            - "When issuing an item that has been marked as lost, "
+            - pref: IssueLostItem
+              choices:
+                  confirm: "require confirmation"
+                  alert: "display a message"
+                  nothing : "do nothing"
+            - .
+        -
+            - "Mark items as returned when flagged as lost "
+            - pref: MarkLostItemsAsReturned
+              multiple:
+                cronjob: "from the longoverdue cronjob"
+                batchmod: "from the batch item modification tool"
+                additem: "when cataloguing an item"
+                moredetail: "from the items tab of the catalog module"
+                pendingreserves: "from the 'Holds to pull' list"
+                onpayment: "when receiving payment for the item"
+                claim_returned: "when marking an item as a return claim"
+            - .
+        -
+            - "Update item status to"
+            - pref: UpdateItemLostStatusWhenPaid
+              choices: authval
+              source: LOST
+            - "when the outstanding balance is paid."
+        -
+            - "Update item status to"
+            - pref: UpdateItemLostStatusWhenWriteoff
+              choices: authval
+              source: LOST
+            - "when the outstanding balance is written off."
     Checkin policy:
         -
             - pref: TrapHoldsOnOrder
@@ -1104,7 +1103,7 @@ Circulation:
                   1: Email
                   0:  "Don't email"
             - a patron when they have placed a hold.
-    Fines Policy:
+    Fines policy:
         -
             - pref: finesCalendar
               type: choice
