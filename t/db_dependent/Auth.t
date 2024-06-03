@@ -7,7 +7,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 23;
+use Test::More tests => 22;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
