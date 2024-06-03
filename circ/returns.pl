@@ -103,6 +103,7 @@ my $returned_counter = C4::Context->preference('numReturnedItemsToShow') || 8;
 my %returneditems;
 my %riduedate;
 my %riborrowernumber;
+my %rinot_returned;
 my @inputloop;
 foreach ( $query->param ) {
     my $counter;
@@ -120,6 +121,7 @@ foreach ( $query->param ) {
     my $barcode        = $query->param("ri-$counter");
     my $duedate        = $query->param("dd-$counter");
     my $borrowernumber = $query->param("bn-$counter");
+    my $not_returned   = $query->param("nr-$counter");
     $counter++;
 
     # decode barcode    ## Didn't we already decode them before passing them back last time??
@@ -130,12 +132,14 @@ foreach ( $query->param ) {
     $returneditems{$counter}    = $barcode;
     $riduedate{$counter}        = $duedate;
     $riborrowernumber{$counter} = $borrowernumber;
+    $rinot_returned{$counter}   = $not_returned;
 
     #######################
     $input{counter}        = $counter;
     $input{barcode}        = $barcode;
     $input{duedate}        = $duedate;
     $input{borrowernumber} = $borrowernumber;
+    $input{not_returned}   = $not_returned;
     push( @inputloop, \%input );
 }
 
@@ -385,6 +389,7 @@ if ($barcode) {
         $returneditems{0}      = $barcode;
         $riborrowernumber{0}   = $borrower->{'borrowernumber'};
         $riduedate{0}          = $duedate;
+        $rinot_returned{0}     = 0;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
         unless ( $dropboxmode ) {
@@ -428,6 +433,7 @@ if ($barcode) {
         }
         $input{duedate}      = $duedate;
         $input{not_returned} = 1;
+        $rinot_returned{0}   = 1;
         $returneditems{0}    = $barcode;
         $riduedate{0}        = $duedate;
         push( @inputloop, \%input );
@@ -807,7 +813,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
                            # we could handle that better displaying a message in the template
 
 
-        $ri{not_returned} = 1 unless $returned;
+        $ri{not_returned} = $rinot_returned{$_};
         my $biblio = $item->biblio;
         # FIXME pass $item to the template and we are done here...
         $ri{itembiblionumber}    = $biblio->biblionumber;
