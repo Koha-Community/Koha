@@ -76,8 +76,7 @@ sub call {
                 $error = "wrong_csrf_token";
             }
         }
-    }
-    elsif ( !exists $stateless_methods{$request_method} && !exists $stateful_methods{$request_method} ) {
+    } elsif ( !exists $stateless_methods{$request_method} && !exists $stateful_methods{$request_method} ) {
         $error = sprintf "unknown or unsupported method %s", $request_method;
     }
 
