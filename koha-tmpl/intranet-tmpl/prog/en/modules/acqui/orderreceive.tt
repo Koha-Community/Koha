@@ -1180,7 +1180,7 @@
                 if (row.fund_id != row.fund.fund_id) {
                     $("#bookfund").val(row.fund_id);
                 }
-                $("#bookfund").select2({ width: '50%' });
+                $("#bookfund").select2({ width: '50%', dropdownParent: $('#order_edit') });
                 $("#current-fund").html(FUNC_CUR.format(row.fund.budget.budget_period_description, row.fund.name));
                 if( row.creator ) {
                     $("#creator").html([row.creator.surname, row.creator.firstname].filter(function(name){return name}).join(', ')+" ("+row.creator.patron_id+')')
