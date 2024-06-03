@@ -112,7 +112,7 @@
         function itemSelectionBuildActionLinks(tab_id) {
             var delete_link_ok = itemSelectionBuildDeleteLink(tab_id);
             var modify_link_ok = itemSelectionBuildModifyLink(tab_id);
-            var tab = $("#" + tab_id);
+            var tab = $("#" + tab_id + "_panel" );
             if (modify_link_ok || delete_link_ok) {
                 $('.itemselection_actions', tab).show();
             } else {
@@ -125,7 +125,7 @@
             $(".SelectAll").on("click",function(e){
                 e.preventDefault();
                 let tab_id = $(this).data("tab");
-                let tab = $("#"+tab_id);
+                let tab = $("#" + tab_id + "_panel" );
                 tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
                     let itemnumber = parseInt($(input).val());
                     items_selection[tab_id].push(itemnumber);
@@ -137,7 +137,7 @@
             $(".ClearAll").on("click",function(e){
                 e.preventDefault();
                 let tab_id = $(this).data("tab");
-                let tab = $("#"+tab_id);
+                let tab = $("#" + tab_id + "_panel" );
                 items_selection[tab_id] = [];
                 $("input[name='itemnumber'][type='checkbox']", tab).prop('checked', false);
                 itemSelectionBuildActionLinks(tab_id);
@@ -151,7 +151,7 @@
         $(".show_filters").on("click",function(e){
             e.preventDefault();
             let tab_id = $(this).data("tab");
-            let tab = $("#"+tab_id);
+            let tab = $("#" + tab_id + "_panel" );
             tab.find(".show_filters").hide();
             tab.find(".hide_filters").show();
             $("#"+tab_id+"_table thead tr:eq(1)").remove();
@@ -164,7 +164,7 @@
         $(".hide_filters").on("click",function(e){
             e.preventDefault();
             let tab_id = $(this).data("tab");
-            let tab = $("#"+tab_id);
+            let tab = $("#" + tab_id + "_panel" );
             tab.find(".hide_filters").hide();
             tab.find(".show_filters").show();
             $("#"+tab_id+"_table thead tr:eq(1)").remove();

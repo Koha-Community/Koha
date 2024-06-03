@@ -305,103 +305,101 @@
                         [% END # /IF ( AmazonCoverImages, etc ) %]
                     </div>
 
-                    <div id="bibliodetails" class="toptabs">
-
-                        <ul class="nav nav-tabs" role="tablist">
+                    [% WRAPPER tabs id= "bibliodetails" %]
+                        [% WRAPPER tabs_nav %]
                             [% IF Koha.Preference('SeparateHoldings') %]
                                 [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
-                                    <li role="presentation">
-                                        [%# FIXME We could build the numbers from DataTable's info %]
-                                        <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "holdings" %]
+                                        <span>[% Branches.GetLoggedInBranchname | html %] holdings ([% items_to_display_count - ( other_holdings_count || 0 ) - ( hidden_count || 0 ) || 0 | html %])</span>
+                                    [% END %]
                                 [% END %]
                                 [% IF other_holdings_count %]
-                                    <li role="presentation">
-                                        <a href="#otherholdings"  aria-controls="otherholdings" role="tab" data-toggle="tab">Other holdings ([% other_holdings_count || 0 | html %])</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "otherholdings" %]
+                                        <span>Other holdings ([% other_holdings_count || 0 | html %])</span>
+                                    [% END %]
                                 [% END %]
                             [% ELSE %]
-                                <li role="presentation">
-                                    <a href="#holdings" aria-controls="holdings" role="tab" data-toggle="tab">Holdings ([% items_to_display_count || 0 | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "holdings" %]
+                                    <span>Holdings ([% items_to_display_count || 0 | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF Koha.Preference('EnableItemGroups') %]
-                                <li role="presentation">
-                                    <a href="#item_groups" aria-controls="item_groups" role="tab" data-toggle="tab">Item groups</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "item_groups" %]
+                                    <span>Item groups</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( MARCNOTES || notes ) %]
-                                <li role="presentation">
-                                    <a href="#description" aria-controls="description" role="tab" data-toggle="tab">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "description" %]
+                                    <span>Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</span>
+                                [% END %]
                             [% END %]
                             [% IF ComponentParts && ComponentParts.size %]
-                                <li id="components_tab" role="presentation">
-                                    <a href="#components"  aria-controls="components" role="tab" data-toggle="tab">Components ([% ComponentParts.size | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "components" %]
+                                    <span>Components ([% ComponentParts.size | html %])</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( subscriptionsnumber ) %]
-                                <li role="presentation">
-                                    <a href="#subscriptions"  aria-controls="subscriptions" role="tab" data-toggle="tab">Subscriptions</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "subscriptions" %]
+                                    <span>Subscriptions</span>
+                                [% END %]
                             [% END %]
 
                             [% IF Koha.Preference('AcquisitionDetails') %]
-                                <li role="presentation">
-                                    <a href="#acq_details"  aria-controls="acq_details" role="tab" data-toggle="tab">Acquisition details</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "acq_details" %]
+                                    <span>Acquisition details</span>
+                                [% END %]
                             [% END %]
 
                             [% IF suggestions.count %]
-                                <li role="presentation">
-                                    <a href="#suggestion_details"  aria-controls="suggestion_details" role="tab" data-toggle="tab">Suggestion details</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "suggestion_details" %]
+                                    <span>Suggestion details</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( FRBRizeEditions ) %]
                                 [% IF ( XISBNS ) %]
-                                    <li role="presentation">
-                                        <a href="#editions"  aria-controls="editions" role="tab" data-toggle="tab">Editions</a>
-                                    </li>
+                                    [% WRAPPER tab_item tabname= "editions" %]
+                                        <span>Editions</span>
+                                    [% END %]
                                 [% END %]
                             [% END %]
 
                             [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-                                <li role="presentation">
-                                    <a href="#concerns" aria-controls="concerns" role="tab" data-toggle="tab">Concerns ([% biblio.tickets.count | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "concerns" %]
+                                    <span>Concerns ([% biblio.tickets.count | html %])</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( LocalCoverImages ) %]
-                                <li role="presentation">
-                                    <a href="#images"  aria-controls="images" role="tab" data-toggle="tab">Images ([% localimages.count || 0 | html %])</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "images" %]
+                                    <span>Images ([% localimages.count || 0 | html %])</span>
+                                [% END %]
                             [% END %]
 
                             [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
-                                <li id="media_tab" role="presentation">
-                                    <a href="#html5media"  aria-controls="html5media" role="tab" data-toggle="tab">Play media</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "html5media" %]
+                                    <span>Play media</span>
+                                [% END %]
                             [% END %]
 
                             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-                                <li class="NovelistSelect" style="display:none;" role="presentation">
-                                    <a href="#NovelistSelect"  aria-controls="NovelistSelect" role="tab" data-toggle="tab">NoveList Select</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "NovelistSelect" %]
+                                    <span>NoveList Select</span>
+                                [% END %]
                             [% END %]
 
                             [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-                                <li role="presentation">
-                                    <a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]"  aria-controls="[% plugins_intranet_catalog_biblio_tab.id | uri %]" role="tab" data-toggle="tab">[% plugins_intranet_catalog_biblio_tab.title | html %]</a>
-                                </li>
+                                [% WRAPPER tab_item tabname= "${ plugins_intranet_catalog_biblio_tab.id }" %]
+                                   <span>[% plugins_intranet_catalog_biblio_tab.title | html %]</span>
+                               [% END %]
                             [% END %]
-                        </ul> <!-- /.nav-tabs -->
+                        [% END # /WRAPPER tabs_nav %]
 
-                        <div class="tab-content">
-                            [% IF Koha.Preference('EnableItemGroups') %]
-                                <div role="tabpanel" class="tab-pane" id="item_groups">
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="item_groups" %]
+                                [% IF Koha.Preference('EnableItemGroups') %]
                                     [% IF CAN_user_editcatalogue_manage_item_groups %]
                                         <div class="item_groups_table_table_controls">
                                             <a href="#" class="item-group-create btn btn-default btn-xs"><i class="fa fa-plus"></i> New item group</a>
@@ -416,10 +414,10 @@
                                             </tr>
                                         </thead>
                                     </table>
-                                </div>
-                            [% END # /IF EnableItemGroups %]
+                                [% END # /IF EnableItemGroups %]
+                            [% END # /tab_panel %]
 
-                            <div role="tabpanel" class="tab-pane" id="holdings">
+                            [% WRAPPER tab_panel tabname="holdings" %]
                                 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
                                     <span class="results_summary NovelistSelect" style="display:none;">
                                         <span class="label">Novelist Select: </span>
@@ -451,16 +449,16 @@
                                         <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
                                     </span>
                                 [% END %]
-                            </div> <!-- #holdings.tabpanel -->
+                            [% END # /tab_panel %]
 
                             [% IF Koha.Preference('SeparateHoldings') %]
-                                <div role="tabpanel" class="tab-pane" id="otherholdings">
+                                [% WRAPPER tab_panel tabname="otherholdings" %]
                                     [% PROCESS items_table tab="otherholdings" %]
-                                </div>
+                                [% END # /tab_panel %]
                             [% END %]
 
                             [% IF ( MARCNOTES ) %]
-                                <div role="tabpanel" class="tab-pane" id="description">
+                                [% WRAPPER tab_panel tabname="description" %]
                                     <div class="content_set">
                                         [% FOREACH MARCNOTE IN MARCNOTES %]
                                             <p class="marcnote marcnote-[% MARCNOTE.tag | html %]" id="marcnote-[% MARCNOTE.tag | html %]-[% loop.count | html %]">
@@ -472,11 +470,11 @@
                                             </p>
                                         [% END %]
                                     </div>
-                                </div>
+                                [% END # /tab_panel %]
                             [% END %]
 
                             [% IF ComponentParts && ComponentParts.size %]
-                                <div role="tabpanel" class="tab-pane" id="components">
+                                [% WRAPPER tab_panel tabname="components" %]
                                     <div class="content_set">
                                         <table>
                                             [% FOR PART IN ComponentParts %]
@@ -491,11 +489,11 @@
                                             <p>Only [% ComponentParts.size | html %] results are shown: <a href="/cgi-bin/koha/catalogue/search.pl?q=[% ComponentPartsQuery | url %]"/>show all component parts</a></p>
                                         [% END %]
                                     </div> <!-- /.content_set -->
-                                </div> <!-- /#components -->
+                                [% END # /tab_panel %]
                             [% END %]
 
                             [% IF ( subscriptionsnumber ) %]
-                                <div role="tabpanel" class="tab-pane" id="subscriptions">
+                                [% WRAPPER tab_panel tabname="subscriptions" %]
                                     <div id="catalogue_detail_subscriptions">
                                         <h2>This is a serial subscription</h2>
                                         <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p>
@@ -553,11 +551,11 @@
                                             [% END %]
                                         [% END # /FOREACH subscription %]
                                     </div> <!-- /#catalogue_detail_subscriptions -->
-                                </div> <!-- #subscriptions.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # IF subscriptionsnumber %]
 
                             [% IF Koha.Preference('AcquisitionDetails') %]
-                                <div role="tabpanel" class="tab-pane" id="acq_details">
+                                [% WRAPPER tab_panel tabname="acq_details" %]
                                     <p class="acqstatus_[% acq_status | html %]">This bibliographic record has acquisition status: [% PROCESS acq_status myvar=acq_status %]
                                     </p>
                                     [% IF orders.count %]
@@ -656,11 +654,11 @@
                                     [% ELSE %]
                                         <span class="noorder">There is no order for this bibliographic record.</span>
                                     [% END # /IF orders.count %]
-                                </div> <!-- /#acq_details.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # /IF AcquisitionDetails %]
 
                             [% IF suggestions.count %]
-                                <div role="tabpanel" class="tab-pane" id="suggestion_details">
+                                [% WRAPPER tab_panel tabname="suggestion_details" %]
                                     [% IF nb_archived_suggestions > 0 %]
                                         <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
                                     [% END %]
@@ -732,12 +730,12 @@
                                             [% END # /FOREACH suggestion %]
                                         </tbody>
                                     </table> <!-- /#suggestions -->
-                                </div> <!-- /#suggestion_details.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # /IF suggestions.count %]
 
                             [% IF ( FRBRizeEditions ) %]
                                 [% IF ( XISBNS ) %]
-                                    <div role="tabpanel" class="tab-pane" id="editions">
+                                    [% WRAPPER tab_panel tabname="editions" %]
                                         <h4>Editions</h4>
                                         <table>
                                             [% FOREACH XISBN IN XISBNS %]
@@ -772,12 +770,12 @@
 
                                             [% END # /FOREACH XISBN %]
                                         </table>
-                                    </div> <!-- /#editions.tab-pane -->
+                                    [% END # /tab_panel %]
                                 [% END # /IF XISBNS %]
                             [% END # /IF FRBRizeEditions %]
 
                             [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
-                                <div role="tabpanel" class="tab-pane" id="concerns">
+                                [% WRAPPER tab_panel tabname="concerns" %]
                                     <fieldset class="action" style="cursor:pointer;">
                                         <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
                                         | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
@@ -794,11 +792,11 @@
                                             </tr>
                                         </thead>
                                     </table>
-                                </div> <!-- /#concerns.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # /IF CatalogConcerns %]
 
                             [% IF ( LocalCoverImages ) %]
-                                <div role="tabpanel" class="tab-pane" id="images">
+                                [% WRAPPER tab_panel tabname="images" %]
                                     [% IF localimages.count %]
                                         <p>Click on an image to view it in the image viewer</p>
                                         <ul class="thumbnails">
@@ -822,11 +820,11 @@
                                         <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
                                         </p>
                                     [% END %]
-                                </div> <!-- /#images.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # /IF LocalCoverImages %]
 
                             [% IF ( HTML5MediaEnabled ) %]
-                                <div role="tabpanel" class="tab-pane" id="html5media">
+                                [% WRAPPER tab_panel tabname="html5media" %]
                                     [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
                                         <p>
                                             [% IF HTML5MediaSet.is_youtube %]
@@ -839,22 +837,22 @@
                                             [% END %]
                                         </p>
                                     [% END %]
-                                </div> <!-- /#html5media.tab-pane -->
+                                [% END # /tab_panel %]
                             [% END # /IF HTML5MediaEnabled %]
 
                             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
-                                <div role="tabpanel" class="tab-pane novelistSelect" id="NovelistSelect">
+                                [% WRAPPER tab_panel tabname="NovelistSelect" %]
                                     <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
-                                </div>
+                                [% END # /tab_panel %]
                             [% END %]
 
                             [% FOREACH plugins_intranet_catalog_biblio_tab IN plugins_intranet_catalog_biblio_tabs %]
-                                <div role="tabpanel" class="tab-pane" id="[% plugins_intranet_catalog_biblio_tab.id | html %]">
+                                [% WRAPPER tab_panel tabname="${ plugins_intranet_catalog_biblio_tab.id }" %]
                                     [% plugins_intranet_catalog_biblio_tab.content | $raw %]
-                                </div>
+                                [% END # /tab_panel %]
                             [% END %]
-                        </div><!-- /tab-content -->
-                    </div><!-- /bibliodetails -->
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs %]
 
                     <div id="export" style="margin-top: 1em;">
                         <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
@@ -1145,6 +1143,7 @@
      [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
          <script>
             $(document).ready(function() {
+                $("#bibliodetails a:first").tab("show");
                 var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
 
                 var filtered = false;
@@ -1438,22 +1437,21 @@
             $('#images').html(no_images_msg);
         }
 
-
         $(document).ready(function() {
             // Pick details tab to display by default
             [% IF count == 0 %]
                 [% IF ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) && HTML5MediaSets.size %]
-                    $(".nav-tabs a[href='#html5media']").tab("show");
+                    $("#bibliodetails a[href='#html5media_panel']").tab("show");
                 [% ELSIF ComponentParts && ComponentParts.size %]
-                    $(".nav-tabs a[href='#components']").tab("show");
+                    $("#bibliodetails a[href='#components_panel']").tab("show");
                 [% ELSE %]
-                    $(".nav-tabs a[href='#holdings']").tab("show");
+                    $("#bibliodetails a[href='#holdings_panel']").tab("show");
                 [% END %]
             [% ELSE %]
                 [% IF items_to_display_count - ( other_holdings_count || 0 ) %]
-                    $(".nav-tabs a[href='#holdings']").tab("show");
+                    $("#bibliodetails a[href='#holdings_panel']").tab("show");
                 [% ELSE %]
-                    $(".nav-tabs a[href='#otherholdings']").tab("show");
+                    $("#bibliodetails a[href='#otherholdings_panel']").tab("show");
                 [% END %]
             [% END %]
             $('#search-form').focus();
@@ -1572,7 +1570,6 @@
         [% END %]
 
         $(document).ready(function() {
-
             [% IF bundlesEnabled %] // Bundle handling
                 function createChild ( row, itemnumber, duedate ) {
                     // Toolbar
