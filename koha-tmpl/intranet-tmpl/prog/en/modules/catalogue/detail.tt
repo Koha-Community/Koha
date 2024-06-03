@@ -237,7 +237,7 @@
                         </div> [%# .page-section %]
 
                         [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                            </div>
+                            </div> <!-- #catalogue_detail_biblio.col-xs-... -->
                             <div class="col-xs-3 bookcoverimg">
                                 <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
                                     [% IF ( LocalCoverImages ) %]
@@ -397,7 +397,7 @@
                                     <a href="#[% plugins_intranet_catalog_biblio_tab.id | uri %]"  aria-controls="[% plugins_intranet_catalog_biblio_tab.id | uri %]" role="tab" data-toggle="tab">[% plugins_intranet_catalog_biblio_tab.title | html %]</a>
                                 </li>
                             [% END %]
-                        </ul>
+                        </ul> <!-- /.nav-tabs -->
 
                         <div class="tab-content">
                             [% IF Koha.Preference('EnableItemGroups') %]
@@ -417,7 +417,7 @@
                                         </thead>
                                     </table>
                                 </div>
-                            [% END %]
+                            [% END # /IF EnableItemGroups %]
 
                             <div role="tabpanel" class="tab-pane" id="holdings">
                                 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
@@ -443,7 +443,7 @@
                                     [% ELSE %]
                                         <div id="noitems">No physical items for this record</div>
                                     [% END %]
-                                [% END %]
+                                [% END # /IF all_items_count %]
 
                                 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
                                     <span class="results_summary NovelistSelect" style="display:none;">
@@ -451,7 +451,7 @@
                                         <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
                                     </span>
                                 [% END %]
-                            </div>
+                            </div> <!-- #holdings.tabpanel -->
 
                             [% IF Koha.Preference('SeparateHoldings') %]
                                 <div role="tabpanel" class="tab-pane" id="otherholdings">
@@ -545,16 +545,16 @@
                                                         </tr>
                                                     [% END %]
                                                 </table>
-                                            [% END %]
+                                            [% END # /IF subscription.latestserials %]
                                             [% IF ( CAN_user_serials ) %]
                                                 <p>
                                                     <a class="btn btn-link" href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"><i class="fa fa-list" aria-hidden="true"></i> Subscription details</a>
                                                 </p>
                                             [% END %]
-                                        [% END %]
-                                    </div>
-                                </div>
-                            [% END %]
+                                        [% END # /FOREACH subscription %]
+                                    </div> <!-- /#catalogue_detail_subscriptions -->
+                                </div> <!-- #subscriptions.tab-pane -->
+                            [% END # IF subscriptionsnumber %]
 
                             [% IF Koha.Preference('AcquisitionDetails') %]
                                 <div role="tabpanel" class="tab-pane" id="acq_details">
@@ -652,12 +652,12 @@
                                                     </tr>
                                                 [% END %]
                                             </tbody>
-                                        </table>
+                                        </table> <!-- /#orders -->
                                     [% ELSE %]
                                         <span class="noorder">There is no order for this bibliographic record.</span>
-                                    [% END %]
-                                </div>
-                            [% END %]
+                                    [% END # /IF orders.count %]
+                                </div> <!-- /#acq_details.tab-pane -->
+                            [% END # /IF AcquisitionDetails %]
 
                             [% IF suggestions.count %]
                                 <div role="tabpanel" class="tab-pane" id="suggestion_details">
@@ -729,11 +729,11 @@
                                                         [% END %]
                                                     </td>
                                                 </tr>
-                                            [% END %]
+                                            [% END # /FOREACH suggestion %]
                                         </tbody>
-                                    </table>
-                                </div>
-                            [% END %]
+                                    </table> <!-- /#suggestions -->
+                                </div> <!-- /#suggestion_details.tab-pane -->
+                            [% END # /IF suggestions.count %]
 
                             [% IF ( FRBRizeEditions ) %]
                                 [% IF ( XISBNS ) %]
@@ -770,11 +770,11 @@
                                                         [% IF ( XISBN.size ) %], [% END %][% XISBN.size | html %]
                                                     </td>
 
-                                            [% END %]
+                                            [% END # /FOREACH XISBN %]
                                         </table>
-                                    </div>
-                                [% END %]
-                            [% END %]
+                                    </div> <!-- /#editions.tab-pane -->
+                                [% END # /IF XISBNS %]
+                            [% END # /IF FRBRizeEditions %]
 
                             [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
                                 <div role="tabpanel" class="tab-pane" id="concerns">
@@ -794,8 +794,8 @@
                                             </tr>
                                         </thead>
                                     </table>
-                                </div>
-                            [% END %]
+                                </div> <!-- /#concerns.tab-pane -->
+                            [% END # /IF CatalogConcerns %]
 
                             [% IF ( LocalCoverImages ) %]
                                 <div role="tabpanel" class="tab-pane" id="images">
@@ -812,9 +812,9 @@
                                                             <a href="#" class="remove"><i class="fa fa-trash-can"></i> Delete image</a>
                                                         [% END %]
                                                     </li>
-                                                [% END %]
-                                            [% END %]
-                                        </ul>
+                                                [% END # /IF image %]
+                                            [% END # /FOREACH image %]
+                                        </ul> <!-- /.thumbnails -->
                                     [% ELSE # - No image passed JavaScript takes care %]
                                         <span class="noimagesuploaded">No images have been uploaded for this bibliographic record yet.</span>
                                     [% END %]
@@ -822,8 +822,8 @@
                                         <p>Upload an image file: <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image"><i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
                                         </p>
                                     [% END %]
-                                </div>
-                            [% END %]
+                                </div> <!-- /#images.tab-pane -->
+                            [% END # /IF LocalCoverImages %]
 
                             [% IF ( HTML5MediaEnabled ) %]
                                 <div role="tabpanel" class="tab-pane" id="html5media">
@@ -839,8 +839,8 @@
                                             [% END %]
                                         </p>
                                     [% END %]
-                                </div>
-                            [% END %]
+                                </div> <!-- /#html5media.tab-pane -->
+                            [% END # /IF HTML5MediaEnabled %]
 
                             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
                                 <div role="tabpanel" class="tab-pane novelistSelect" id="NovelistSelect">
@@ -882,7 +882,7 @@
                                 </tr>
                             </table>
                         </form>
-                    </div>
+                    </div> <!-- /#export -->
 
                     <div id="marcPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
@@ -899,7 +899,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- /#marcPreview.modal -->
 
                     <div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
@@ -916,7 +916,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- /#elasticPreview.modal -->
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -956,10 +956,10 @@
                         <button id="modal-item-group-create-submit" class="btn btn-default"><i class="fa fa-plus"></i> Submit</button>
                         <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </form> <!-- /#modal-item-group-create-form -->
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#modal-item-group-create.modal -->
 
     <div class="modal fade" id="modal-item-group-edit" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-edit-label">
         <div class="modal-dialog">
@@ -988,9 +988,9 @@
                         <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#modal-item-group-edit.modal -->
 
     <div class="modal fade" id="modal-item-group-delete" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-delete-label">
         <div class="modal-dialog">
@@ -1006,9 +1006,9 @@
                     <button id="modal-item-group-delete-submit" class="btn btn-danger"><i class='fa fa-trash-can'></i> Delete</button>
                     <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#modal-item-group-delete.modal -->
 
     <div class="modal fade" id="modal-item-group-set" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-set-label">
         <div class="modal-dialog">
@@ -1036,9 +1036,9 @@
                         <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#modal-item-group-set.modal -->
 
     <div class="modal fade" id="modal-item-group-unset" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-unset-label">
         <div class="modal-dialog">
@@ -1054,15 +1054,15 @@
                     <button id="modal-item-group-unset-submit" class="btn btn-danger"><i class='fa fa-unlink'></i> Remove</button>
                     <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#.modal -->
 
     [% IF bundlesEnabled %]
         <div class="modal" id="addToBundleModal" tabindex="-1" role="dialog" aria-labelledby="addToBundleLabel">
-            <form method="get" id="addToBundleForm" action="">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form method="get" id="addToBundleForm" action="">
                         <div class="modal-header">
                             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                             <h3 id="addToBundleLabel">Add to bundle</h3>
@@ -1083,15 +1083,15 @@
                             <button type="submit" class="btn btn-default">Submit</button>
                             <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                         </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+                    </form>
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </div> <!-- /#addToBundleModal.modal -->
 
         <div class="modal" id="removeFromBundleModal" tabindex="-1" role="dialog" aria-labelledby="removeFromBundleLabel">
-            <form method="get" id="removeFromBundleForm" action="">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form method="get" id="removeFromBundleForm" action="">
                         <div class="modal-header">
                             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
                             <h3 id="removeFromBundleLabel">Remove from bundle</h3>
@@ -1112,10 +1112,10 @@
                             <button type="submit" class="btn btn-default">Submit</button>
                             <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                         </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+                    </form>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#removeFromBundleModal.modal -->
     [% END %]
 
     [% IF ( Koha.Preference('CatalogConcerns') ) %]
@@ -1282,7 +1282,7 @@
             });
         </script>
         [% Asset.js("js/modals/display_ticket.js") | $raw %]
-    [% END %]
+    [% END # /IF CatalogConcerns %]
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
@@ -1547,7 +1547,7 @@
             $(window).load(function() {
                 verify_cover_images();
             });
-        [% END %]
+        [% END # /IF IntranetCoce %]
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
         <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
@@ -1875,7 +1875,7 @@
                     bundle_changed = 0;
                 });
                 // End bundle handling
-            [% END %]
+            [% END # /IF bundlesEnabled %]
 
             let items_tab_ids = [ 'holdings', 'otherholdings' ];
             items_tab_ids.forEach( function( tab_id, index ) {
@@ -1905,7 +1905,7 @@
                             button.addClass('active');
                         }
                     });
-                [% END %]
+                [% END # /IF bundlesEnabled %]
             });
 
             [% IF Koha.Preference('AcquisitionDetails') %]
@@ -2177,7 +2177,7 @@
 
                 $('#modal-item-group-unset').modal('hide');
             });
-        [% END %]
+        [% END # /IF EnableItemGroups %]
 
     </script>
 
@@ -2186,5 +2186,5 @@
     [% PROCESS build_items_table_js biblio => biblio %]
 
     [% CoverImagePlugins | $raw %]
-[% END %]
+[% END # /jsinclude %]
 [% INCLUDE 'intranet-bottom.inc' %]
