@@ -21,13 +21,10 @@ return {
         );
         say $out "Updated deletedbiblioitems.place to text";
 
-        $dbh->do(
-            q{
-            ALTER TABLE `biblioitems`
-            DROP INDEX `publishercode`
+        if ( index_exists( 'biblioitems', 'publishercode' ) ) {
+            $dbh->do(q{ALTER TABLE `biblioitems` DROP INDEX `publishercode`});
+            say $out "Remove index on biblioitems.publishercode";
         }
-        );
-        say $out "Remove index on biblioitems.publishercode";
         $dbh->do(
             q{
             ALTER TABLE `biblioitems`
@@ -35,20 +32,14 @@ return {
         }
         );
         say $out "Updated biblioitems.publishercode to text";
-        $dbh->do(
-            q{
-            ALTER TABLE `biblioitems`
-            ADD INDEX `publishercode` (`publishercode`(191))
-        }
-        );
+
+        $dbh->do(q{ALTER TABLE `biblioitems` ADD INDEX `publishercode` (`publishercode`(191))});
         say $out "Create index on biblioitems.publishercode";
-        $dbh->do(
-            q{
-            ALTER TABLE `deletedbiblioitems`
-            DROP INDEX `publishercode`
+
+        if ( index_exists( 'deletedbiblioitems', 'publishercode' ) ) {
+            $dbh->do(q{ALTER TABLE `deletedbiblioitems` DROP INDEX `publishercode`});
+            say $out "Remove index on deletedbiblioitems.publishercode";
         }
-        );
-        say $out "Remove index on deletedbiblioitems.publishercode";
         $dbh->do(
             q{
             ALTER TABLE `deletedbiblioitems`
