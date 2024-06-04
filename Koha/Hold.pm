@@ -847,6 +847,7 @@ sub fill {
                 {
                     found    => 'F',
                     priority => 0,
+                    timestamp => dt_from_string->strftime( '%Y-%m-%d %H:%M:%S' ),
                     $params->{item_id} ? ( itemnumber => $params->{item_id} ) : (),
                 }
             );
