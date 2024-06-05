@@ -10,7 +10,7 @@ return {
 
         $dbh->do(
             q{
-            UPDATE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
+            UPDATE IGNORE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
             WHERE variable = "AutoLocation"
         }
             ) == 1
@@ -18,7 +18,7 @@ return {
 
         $dbh->do(
             q{
-            UPDATE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
+            UPDATE IGNORE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
             WHERE variable = "StaffLoginBranchBasedOnIP"
         }
             ) == 1
