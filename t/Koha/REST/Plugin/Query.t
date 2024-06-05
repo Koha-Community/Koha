@@ -206,6 +206,19 @@ get '/build_query' => sub {
     };
 };
 
+get '/dbic_validate_operators' => sub {
+    my ( $c, $args ) = @_;
+
+    my $query = $c->req->json->{q};
+
+    return try {
+        $c->dbic_validate_operators( { filtered_params => $query } );
+        $c->render( json => { filtered_params => $query }, status => 200 );
+    } catch {
+        return $c->render( json => { filtered_params => $query }, status => 400 );
+    };
+};
+
 get '/stash_embed' => sub {
     my $c = shift;
 
@@ -294,7 +307,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -541,5 +554,44 @@ subtest 'stash_overrides() tests' => sub {
 
     $t->get_ok( '/stash_overrides' => { } )
       ->json_is( {} ); # x-koha-ovverride not passed is skipped
+
+};
+
+subtest 'dbic_validate_operators' => sub {
+    plan tests => 16;
+
+    my $t = Test::Mojo->new;
+
+    # Valid queries
+    my $q = {};
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = [];
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = {
+        firstname => 'Bilbo',
+        lastname  => 'Baggins'
+    };
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = {
+        firstname => undef,
+        lastname  => 'Baggins'
+    };
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = { lastname => [ 'Gaggins', 'Gamgee' ] };
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = { lastname => { '!=' => [ 'Gaggins', 'Gamgee' ] } };
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    $q = { status => { '!=', 'completed', -not_like => 'pending%' } };
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(200);
+
+    # Invalid queries
+    $q = [ { "-and" => [ [ { "biblio_id" => { "like(sleep(1/100000))or" => "%a%" } } ] ] } ];
+    $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(400);
 
 };
