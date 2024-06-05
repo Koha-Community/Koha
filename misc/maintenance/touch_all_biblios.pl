@@ -79,7 +79,7 @@ while (my ($biblionumber, $frameworkcode) = $sth1->fetchrow_array){
   my $biblio = Koha::Biblios->find($biblionumber);
   my $record = $biblio->metadata->record;
 
-  my $modok = ModBiblio($record, $biblionumber, $frameworkcode);
+my $modok = ModBiblio( $record, $biblionumber, $frameworkcode, { skip_holds_queue => 1 } );
 
   if ($modok) {
      $goodcount++;
