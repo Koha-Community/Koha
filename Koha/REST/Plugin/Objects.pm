@@ -295,6 +295,8 @@ controller, and thus shouldn't be called twice in it.
                 }
             );
 
+            $c->dbic_validate_operators( { filtered_params => $filtered_params } );
+
             # Generate the resultset
             my $objects_rs = $result_set->search( $filtered_params, $attributes );
             # Stash the page total if requires, total otherwise
