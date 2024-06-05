@@ -116,6 +116,7 @@ sub add_update_attribute_type {
     my $searched_by_default       = $input->param('searched_by_default')       ? 1 : 0;
     my $keep_for_pseudonymization = $input->param('keep_for_pseudonymization') ? 1 : 0;
     my $mandatory                 = $input->param('mandatory')                 ? 1 : 0;
+    my $opac_mandatory            = $input->param('opac_mandatory')            ? 1 : 0;
     my $authorised_value_category = $input->param('authorised_value_category');
     my $display_checkout          = $input->param('display_checkout') ? 1 : 0;
     my $category_code             = $input->param('category_code') || undef;
@@ -152,6 +153,7 @@ sub add_update_attribute_type {
             searched_by_default       => $searched_by_default,
             keep_for_pseudonymization => $keep_for_pseudonymization,
             mandatory                 => $mandatory,
+            opac_mandatory            => $opac_mandatory,
             authorised_value_category => $authorised_value_category,
             display_checkout          => $display_checkout,
             category_code             => $category_code,

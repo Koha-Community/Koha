@@ -185,13 +185,22 @@
                         <span class="hint"> If checked, this field will be included in 'Standard' patron searches. Requires field to be marked as searchable above </span>
                     </li>
                     <li
-                        ><label for="mandatory">Mandatory: </label>
+                        ><label for="mandatory">Staff interface mandatory: </label>
                         [% IF attribute_type AND attribute_type.mandatory %]
                             <input type="checkbox" id="mandatory" name="mandatory" checked="checked" />
                         [% ELSE %]
                             <input type="checkbox" id="mandatory" name="mandatory" />
                         [% END %]
-                        <span class="hint">Check to make this attribute mandatory when creating or editing a patron.</span>
+                        <span class="hint">Check to make this attribute mandatory when creating or editing a patron from the staff interface.</span>
+                    </li>
+                    <li
+                        ><label for="opac_mandatory">OPAC mandatory: </label>
+                        [% IF attribute_type AND attribute_type.opac_mandatory %]
+                            <input type="checkbox" id="opac_mandatory" name="opac_mandatory" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" id="opac_mandatory" name="opac_mandatory" />
+                        [% END %]
+                        <span class="hint">Check to make this attribute mandatory when creating or editing a patron from the OPAC.</span>
                     </li>
                     <li
                         ><label for="display_checkout">Display in patron's brief information: </label>

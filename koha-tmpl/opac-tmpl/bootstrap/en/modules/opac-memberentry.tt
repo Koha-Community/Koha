@@ -1060,7 +1060,7 @@
                                                         [% IF loop.first %]<a id="patron-attr-start-[% pa.type.code | html %]"></a>[% END %]
                                                         [% form_id = 'patron-attr-' _ Math.int( Math.rand(1000000) ) %]
                                                         <li data-category_code="[% pa.type.category_code | html %]">
-                                                            [% IF pa.type.mandatory && pa.type.opac_editable %]
+                                                            [% IF pa.type.opac_mandatory && pa.type.opac_editable %]
                                                                 <label for="[% form_id | html %]" class="required">[% pa.type.description | html %]: </label>
                                                             [% ELSE %]
                                                                 <label for="[% form_id | html %]">[% pa.type.description | html %]: </label>
@@ -1079,9 +1079,9 @@
                                                                         [% END %]
                                                                     </select>
                                                                 [% ELSE %]
-                                                                    [% IF ( pa.type.is_date && pa.type.mandatory ) %]
+                                                                    [% IF ( pa.type.is_date && pa.type.opac_mandatory ) %]
                                                                         <input type="text" id="[% form_id | html %]" name="patron_attribute_value" value="[% pa_value | html %]" size="10" required="required" class="flatpickr" />
-                                                                    [% ELSIF ( pa.type.is_date && !pa.type.mandatory ) %]
+                                                                    [% ELSIF ( pa.type.is_date && !pa.type.opac_mandatory ) %]
                                                                         <input type="text" id="[% form_id | html %]" name="patron_attribute_value" value="[% pa_value | html %]" size="10" class="flatpickr" />
                                                                     [% ELSE %]
                                                                         <textarea rows="2" cols="30" id="[% form_id | html %]" name="patron_attribute_value">[% pa_value | html %]</textarea>
@@ -1094,7 +1094,7 @@
                                                                     [% IF ( pa.type.repeatable ) %]
                                                                         <a href="#" class="btn btn-sm btn-link clone-attribute"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
                                                                     [% END %]
-                                                                    [% IF pa.type.mandatory %]
+                                                                    [% IF pa.type.opac_mandatory %]
                                                                         <span class="required_label required">Required</span>
                                                                     [% END %]
                                                                 </div>
