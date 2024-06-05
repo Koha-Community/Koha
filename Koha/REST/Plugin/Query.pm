@@ -23,6 +23,7 @@ use Scalar::Util qw( reftype );
 use JSON qw( decode_json );
 
 use Koha::Exceptions;
+use Koha::Exceptions::REST;
 
 =head1 NAME
 
@@ -184,6 +185,21 @@ Generates the DBIC join attribute based on extended_attributes query entries, an
                     $ea_entries--;
                 }
             }
+        }
+    );
+
+=head3 dbic_validate_operators
+
+    $attributes = $c->dbic_validate_operators( { filtered_params => $filtered_params } );
+
+Validate operators in the passed query.
+
+=cut
+
+    $app->helper(
+        'dbic_validate_operators' => sub {
+            my ( $c, $args ) = @_;
+            _validate_query( $args->{filtered_params} );
         }
     );
 
@@ -639,6 +655,57 @@ sub _rewrite_related_metadata_query {
     }
 
     return $extended_attributes_entries;
+}
+
+=head3 _validate_operator
+
+=cut
+
+sub _validate_operator {
+    my ($operator) = @_;
+    my %allowed_operators = map { $_ => 1 } qw(= != < > <= >= like -not_like -in -ident -bool -not_bool -or);
+    Koha::Exceptions::REST::Query::InvalidOperator->throw( operator => $operator )
+        unless exists $allowed_operators{$operator};
+    return;
+}
+
+=head3 _validate_query
+
+=cut
+
+sub _validate_query {
+    my ($query) = @_;
+
+    if ( ref $query eq 'HASH' ) {
+        for my $field ( keys %$query ) {
+            my $value = $query->{$field};
+
+            if ( ref $value eq 'HASH' ) {
+
+                # Hash reference with operators
+                for my $operator ( keys %$value ) {
+                    _validate_operator($operator);
+                }
+            } elsif ( ref $value eq 'ARRAY' ) {
+
+                # Array reference with operator as the first element
+                _validate_query($value);
+            } else {
+
+                # Simple key-value pairs (no operator to validate)
+            }
+        }
+    } elsif ( ref $query eq 'ARRAY' ) {
+
+        # Top-level OR combination or nested AND combination
+        for my $element (@$query) {
+            if ( ref $element eq 'ARRAY' && $element->[0] eq '-and' ) {
+                _validate_query( $element->[1] );
+            } else {
+                _validate_query($element);
+            }
+        }
+    }
 }
 
 1;
