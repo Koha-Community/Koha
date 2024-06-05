@@ -52,7 +52,11 @@
                         [% IF has_checkouts %]
                             <div class="alert alert-info">You cannot be discharged, you have checked out items. Please return items before asking for a discharge.</div>
                         [% ELSE %]
-                            <a class="btn btn-primary" href="/cgi-bin/koha/opac-discharge.pl?op=request">Ask for a discharge</a>
+                            <form action="/cgi-bin/koha/opac-discharge.pl" method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-request" />
+                                <button class="btn btn-primary" type="submit">Ask for a discharge</button>
+                            </form>
                         [% END %]
 
                     [% END %]
