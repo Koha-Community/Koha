@@ -257,6 +257,7 @@ if ( $send_notices && $confirm ) {
                         issues    => $issue->itemnumber,
                         items     => $issue->itemnumber,
                         biblio    => $item->biblionumber,
+                        branches  => $issue->branchcode,
                     },
                     lang => $patron->lang,
                     message_transport_type => $transport,
@@ -348,7 +349,6 @@ sub send_digests {
         }
         my $library = Koha::Libraries->find( $branchcode );
         my $from_address = $library->from_email_address;
-
         foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
             my $letter = C4::Letters::GetPreparedLetter (
                 module => 'circulation',
@@ -363,6 +363,7 @@ sub send_digests {
                 loops => { issues => \@{$digest->{issues}} },
                 tables      => {
                     borrowers => $patron->borrowernumber,
+                    branches  => $branchcode,
                 },
                 message_transport_type => $transport,
             );
