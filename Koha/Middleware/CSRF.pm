@@ -43,6 +43,11 @@ sub call {
     my $uri            = $req->uri     // q{};
     my $referer        = $req->referer // q{No referer};
 
+    #NOTE: Ignore ErrorDocument requests for CSRF
+    if ( $env->{'psgix.errordocument.SCRIPT_NAME'} ) {
+        return $self->app->($env);
+    }
+
     my ($error);
     if ( $stateless_methods{$request_method} && defined $original_op && $original_op =~ m{^cud-} ) {
         $error = sprintf "Programming error - op '%s' must not start with 'cud-' for %s %s (referer: %s)", $original_op,
@@ -73,14 +78,9 @@ sub call {
         }
     }
 
-    #NOTE: It is essential to check for this environmental variable.
-    #NOTE: If we don't check for it, then we'll also throw an error for the "subrequest" that ErrorDocument uses to
-    #fetch the error page document. Then we'll wind up with a very ugly error page and not our pretty one.
-    if ( $error && !$env->{'plack.middleware.Koha.CSRF'} ) {
-
+    if ( $error ) {
         #NOTE: Other Middleware will take care of logging to correct place, as Koha::Logger doesn't know where to go here
         warn $error;
-        $env->{'plack.middleware.Koha.CSRF'} = $error;
         my $res = Plack::Response->new( 403, [ 'Content-Type' => 'text/plain' ], ["Wrong CSRF token"] );
         return $res->finalize;
     }
