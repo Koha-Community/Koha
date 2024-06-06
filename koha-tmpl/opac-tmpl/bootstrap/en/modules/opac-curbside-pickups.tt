@@ -138,33 +138,31 @@
                         </div>
                     [% END %]
 
-                    <div id="opac-pickups-views" class="toptabs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item" role="presentation" id="tab-user-pickups">
-                            [% IF patron_curbside_pickups.count %]
-                                <a href="#user-pickups" class="nav-link active" aria-controls="user-pickups" aria-selected="true" role="tab" data-bs-toggle="tab">Your pickups</a>
-                            [% ELSE %]
-                                <a href="#user-pickups" class="nav-link" aria-controls="user-pickups" role="tab" data-bs-toggle="tab">Your pickups</a>
+                    [% WRAPPER tabs id= "opac-pickups-views" %]
+                        [% WRAPPER tabs_nav %]
+                            [% IF patron_curbside_pickups.count || !policies.count %]
+                                [% SET pickups_active = 1 %]
                             [% END %]
-                            </li>
-
+                            [% WRAPPER tab_item tabname= "user-pickups" bt_active= pickups_active %]
+                                <span>Your pickups</span>
+                            [% END %]
                             [% IF policies.count %]
-                                <li class="nav-item" role="presentation" id="tab-user-schedule-pickup">
                                 [% IF patron_curbside_pickups.count %]
-                                    <a href="#user-schedule-pickup" class="nav-link" aria-controls="user-schedule-pickup" role="tab" data-bs-toggle="tab">Schedule a pickup</a>
+                                    [% SET scheduled_active = "" %]
                                 [% ELSE %]
-                                    <a href="#user-schedule-pickup" class="nav-link active" aria-controls="user-schedule-pickup" aria-selected="true" role="tab" data-bs-toggle="tab">Schedule a pickup</a>
+                                    [% SET scheduled_active = 1 %]
                                 [% END %]
-                                </li>
+                                [% WRAPPER tab_item tabname= "user-schedule-pickup" bt_active= scheduled_active %]
+                                    <span>Schedule a pickup</span>
+                                [% END %]
                             [% END %]
-                        </ul>
+                        [% END # /WRAPPER tabs_nav %]
 
-                        <div class="tab-content">
+                        [% WRAPPER tab_panels %]
                             [% IF patron_curbside_pickups.count %]
-                            <div role="tabpanel" class="tab-pane active" id="user-pickups" aria-labelledby="tab-user-pickups">
-                            [% ELSE %]
-                            <div role="tabpanel" class="tab-pane" id="user-pickups" aria-labelledby="tab-user-pickups">
+                                [% SET pickups_active = 1 %]
                             [% END %]
+                            [% WRAPPER tab_panel tabname="user-pickups" bt_active= pickups_active %]
                                 [% IF patron_curbside_pickups.count %]
                                     <table id="pickups-table" class="table table-striped">
                                         <thead>
@@ -216,14 +214,13 @@
                                 [% ELSE %]
                                     <div>No curbside pickups.</div>
                                 [% END %]
-                            </div>
+                            [% END # /tab_panel %]
 
                             [% IF policies.count %]
                                 [% IF patron_curbside_pickups.count %]
-                                <div role="tabpanel" class="tab-pane" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
-                                [% ELSE %]
-                                <div role="tabpanel" class="tab-pane active" id="user-schedule-pickup" aria-labelledby="tab-user-schedule-pickup">
+                                    [% SET scheduled_active = "" %]
                                 [% END %]
+                                [% WRAPPER tab_panel tabname="user-schedule-pickup" bt_active= scheduled_active %]
                                     <form id="create-pickup" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <fieldset class="rows">
@@ -260,11 +257,11 @@
                                             <input type="submit" id="schedule-pickup-button" class="btn btn-default" disabled value="Schedule pickup" />
                                         </fieldset>
                                     </form>
-                                </div>
-                            [% END %]
-                        </div>
-                    </div>
-                </div>
+                                [% END # /tab_panel %]
+                            [% END # /IF policies.count %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs %]
+                </div> <!-- /#pickupdetails -->
             </div> <!-- / .col-lg-10 -->
         </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
