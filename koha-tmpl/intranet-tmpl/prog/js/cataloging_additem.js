@@ -181,6 +181,26 @@ $(document).ready(function () {
         return $("#" + $(this).data("item") + "-delete-item-form").submit();
     });
 
+    $(document).on(
+        "click",
+        "#edit-serial-issues-modal-btn-submit",
+        function (e) {
+            e.preventDefault();
+            $("#edit-serial-issues-modal").modal("hide");
+            $("#edit-serial-issue").val("1");
+            return $("#f").submit();
+        }
+    );
+    $(document).on(
+        "click",
+        "#no-edit-serial-issues-modal-btn-submit",
+        function (e) {
+            e.preventDefault();
+            $("#edit-serial-issues-modal").modal("hide");
+            return $("#f").submit();
+        }
+    );
+
     /* On page load, check for location.hash in the page URL */
     /* If present the location hash will be used to scroll to the relevant anchor */
     var hash = location.hash;
@@ -266,4 +286,9 @@ function Dopop(link, i) {
         "valuebuilder",
         "width=500,height=400,toolbar=false,scrollbars=yes"
     );
+}
+
+function ShowSerialEditingConfirmation(form) {
+    $("#edit-serial-issues-modal").modal("show");
+    return false;
 }

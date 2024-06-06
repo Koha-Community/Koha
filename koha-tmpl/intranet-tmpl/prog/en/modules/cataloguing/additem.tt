@@ -411,7 +411,12 @@
                                 [% IF op != 'add_item' %]
                                     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
                                 [% END %]
-                                <input type="submit" value="Save changes" onclick="return Check(this.form)" />
+                                [% IF Item.HasSerialItem(itemnumber) == 0 %]
+                                    <input type="submit" value="Save changes" onclick="return Check(this.form)" />
+                                [% ELSE %]
+                                    <input type="button" class="submit" value="Save changes" onclick="return ShowSerialEditingConfirmation(this.form)" />
+                                    <input type="hidden" name="edit-serial-issue" id="edit-serial-issue" value />
+                                [% END %]
                                 <input type="button" id="addnewitem" value="Add a new item" />
                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Cancel</a>
                             [% END %]</fieldset
@@ -423,6 +428,8 @@
                         <input type="hidden" name="barcode" value="[% barcode | html %]" />
                         <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                         [%# End fields for fast cataloging %]
+
+                        [% INCLUDE 'modals/edit_serial_issues.inc' %]
                     </form>
 
                     [% INCLUDE 'modals/cataloguing_create_av.inc' %]
