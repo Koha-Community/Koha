@@ -147,7 +147,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% IF ( enter ) %]
-        [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
+        [% IF ( booksellerid ) %]
+            [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
+        [% ELSE %]
+            [% t("Add vendor") | html %]
+        [% END %]
     [% ELSE %]
         [% tx("Vendor '{vendor}'", { vendor = name }) | html %]
     [% END %] &rsaquo;
@@ -173,7 +177,7 @@
                     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
-                    <span>Modify vendor '[% name | html %]'</span>
+                    [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
                 [% END %]
             [% ELSE %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -196,7 +200,7 @@
 
     [% IF ( enter ) %]
         [% IF ( booksellerid ) %]
-        <h1>Modify vendor '[% name | html %]'</h1>
+        <h1>[% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]</h1>
     [% ELSE %]
         <h1>Add vendor</h1>
     [% END %]
