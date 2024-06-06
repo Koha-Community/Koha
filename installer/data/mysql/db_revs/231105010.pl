@@ -10,7 +10,7 @@ return {
 
         $dbh->do(
             q{
-            UPDATE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
+            UPDATE IGNORE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
             WHERE variable = "StaffLoginBranchBasedOnIP"
         }
             ) == 1
