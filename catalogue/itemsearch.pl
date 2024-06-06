@@ -51,7 +51,7 @@ if (defined $format and $format eq 'json') {
     my @f = $cgi->multi_param('f');
     my @q = $cgi->multi_param('q');
 
-    # If index indicates the value is a barcode, we need to preproccess it before searching
+    # If index indicates the value is a barcode, we need to preprocess it before searching
     for ( my $i = 0; $i < @q; $i++ ) {
         $q[$i] = barcodedecode($q[$i]) if $f[$i] eq 'barcode';
     }
