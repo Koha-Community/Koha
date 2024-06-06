@@ -338,7 +338,7 @@
                         </li>
                         <span
                             >{{ $__("Please refer to the ") }}
-                            <a href="https://registry.projectcounter.org/">{{
+                            <a href="https://registry.countermetrics.org/">{{
                                 $__("COUNTER registry")
                             }}</a>
                             {{ $__("for more information.") }}</span

@@ -42,7 +42,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 subtest 'get() tests' => sub {
     plan tests => 5;
 
-    my $service_url = "https://registry.projectcounter.org/api/v1/sushi-service/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b/";
+    my $service_url = "https://registry.countermetrics.org/api/v1/sushi-service/b94bc981-fa16-4bf6-ba5f-6c113f7ffa0b/";
     my @expected_fields = (
         "api_key_info",
         "api_key_required",
