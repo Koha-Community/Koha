@@ -308,152 +308,157 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col order-first order-md-first order-lg-2">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" href="#checkouts-tab" id="checkouts" aria-controls="home" aria-selected="true" data-bs-toggle="tab">Checkouts ([% issues_count | html %])</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="#holds-tab" id="holds" aria-controls="home" aria-selected="false" data-bs-toggle="tab">
+                    [% WRAPPER tabs %]
+                        [% WRAPPER tabs_nav %]
+                            [% WRAPPER tab_item tabname= "checkouts" bt_active= 1 %]
+                                <span>Checkouts ([% issues_count | html %])</span>
+                            [% END %]
+                            [% WRAPPER tab_item tabname= "holds" %]
                                 [% IF waiting_holds_count %]
                                     <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 [% END %]
-                                Holds ([% HOLDS.count | html %])
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="#account-tab" id="account" aria-controls="home" aria-selected="false" data-bs-toggle="tab">Charges ([% total | $Price %])</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="checkouts-tab" class="tab-pane show active" aria-labelledby="checkouts">
-                            <div id="borrowerdetails">
-                                [% IF ( new_issue ) %]
-                                    <div class="lastchecked">
-                                        <p>
-                                            <strong>Checked out: </strong>
-                                            [% new_issue.item.biblio.title | html %] ([% new_issue.item.barcode | html %]).
-
-                                            [% IF new_issue.item.is_bundle %]
-                                                [% SET bundle_items_count = new_issue.item.bundle_items.count %]
-                                                [% tnx('Bundle of {count} item', 'Bundle of {count} items', bundle_items_count, { count = bundle_items_count }) | html %].
-                                            [% END %]
-
-                                            Due on [% new_issue.date_due | $KohaDates as_due_date => 1 %]
-                                        </p>
-                                    </div>
-                                [% END %]
-                                [% IF ( issues_count ) %]
-                                    [% IF ( Koha.Preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
-                                    <table id="loanTable" class="table table-bordered table-striped">
-                                        <caption>Checkouts for [% borrowername | html %] <span class="count">([% issues_count | html %] total)</span></caption>
-                                        <!-- ISSUES TABLE ROWS -->
-                                        <thead>
-                                            <tr>
-                                                <th class="noshow">Checked out on</th>
-                                                <th class="all anti-the">Title</th>
-                                                <th>Call number</th>
-                                                <th class="psort">Due</th>
-                                                <th class="all nosort">Renew</th>
-                                                [% UNLESS ( nofines ) %]
-                                                    <th>Fines</th>
-                                                [% END %]
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            [% FOREACH ISSUE IN ISSUES %]
-                                                <tr>
-                                                    <td>[% ISSUE.issuedate | html %]</td>
-                                                    <td>
-                                                        [% UNLESS ( noitemlinks ) %]
-                                                            <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | uri %]">[% ISSUE.title | html %]</a>
-                                                        [% ELSE %]
-                                                            <strong>[% ISSUE.title | html %]</strong>
-                                                        [% END %]
-                                                        [% IF ( newissues.match(ISSUE.barcode)) %]
-                                                            <span class="badge text-bg-info">NEW</span>
-                                                        [% END %]
-                                                        <span class="item-details">[% ISSUE.author | html %]</span>
-                                                        ([% ISSUE.barcode | html %])
-                                                    </td>
-                                                    <td>[% ISSUE.itemcallnumber | html %]</td>
-                                                    [% IF ( ISSUE.overdue ) %]
-                                                        <td class="overdue" data-order="[% ISSUE.date_due | html %]">
-                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
-                                                        </td>
-                                                    [% ELSE   %]
-                                                        <td data-order="[% ISSUE.date_due | html %]">
-                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
-                                                        </td>
-                                                    [% END %]
-                                                    <td>
-                                                        <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
-                                                            [% INCLUDE 'csrf-token.inc' %]
-                                                            <legend class="sr-only">Issue renews</legend>
-                                                            <input type="hidden" name="patronid" value="[% patronid | html %]" />
-                                                            <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
-                                                            <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
-                                                            <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                                            [% IF ISSUE.can_be_renewed %]
-                                                                <input type="hidden" name="op" value="cud-renew" />
-                                                                <input type="hidden" name="confirmed" value="1" />
-                                                                [% UNLESS ( ISSUE.renew ) %]
-                                                                    <input type="submit" value="Renew item"  name="confirm  " class="btn btn-primary btn-sm renew" />
-                                                                [% ELSE %]
-                                                                    <input type="submit" value="Renew item" class="btn btn-primary btn-sm renew" />
-                                                                [% END %]
-                                                            [% ELSE %]
-                                                                [% IF ISSUE.renew_error == 'onsite_checkout' %]
-                                                                    <span>This is a on-site checkout, it cannot be renewed.</span>
-                                                                [% ELSIF ISSUE.renew_error == 'too_unseen' %]
-                                                                    <span>You have renewed this item the maximum number of consecutive times without it being seen by the library.</span>
-                                                                [% ELSIF ISSUE.renew_error == 'too_soon' %]
-                                                                    <span>This item cannot yet be renewed.</span>
-                                                                [% ELSE %]
-                                                                    <span>No renewals allowed</span>
-                                                                [% END %]
-                                                                [% IF Koha.Preference('SCOAllowCheckin') %]
-                                                                    <div>
-                                                                        <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
-                                                                        <input type="hidden" name="op" value="cud-returnbook" />
-                                                                        <input type="hidden" name="confirmed" value=""  />
-                                                                    </div>
-                                                                [% END %]
-                                                            [% END %]
-                                                            [% IF ISSUE.auto_renew %]
-                                                                <br><span>This item is scheduled for automatic renewal</span>
-                                                            [% END %]
-                                                        </form>
-                                                    </td>
-                                                    [% UNLESS ( nofines ) %]
-                                                        <td>
-                                                            [% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]
-                                                        </td>
-                                                    [% END %]
-                                                    <td></td>
-                                                </tr>
-                                            [% END # / FOREACH ISSUE %]
-                                        </tbody>
-                                    </table>
-                                    [% ELSE %]
-                                        <a class="btn btn-secondary" href="?load_checkouts=1#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your checkouts</a>
-                                    [% END # / IF ( Koha.preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
-                                [% ELSE %]
-                                    <h3>You currently have nothing checked out.</h3>
-                                [% END # / IF issues_count %]
-                            </div> <!-- / #borrowerdetails -->
-                        </div>
-                        <div id="holds-tab" class="tab-pane" role="tabpanel" aria-labelledby="holds">
-                            [% IF HOLDS.count > 0 %]
-                                [% PROCESS 'holds-table.inc' HOLDS = HOLDS, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds, onlyinfo = 'true' %]
-                            [% ELSE %]
-                                <h3>You currently have no pending holds.</h3>
+                                <span>Holds</span> ([% HOLDS.count | html %])
                             [% END %]
-                        </div>
-                        <div id="account-tab" class="tab-pane" role="tabpanel" aria-labelledby="account">
-                            [% PROCESS 'account-table.inc' %]
-                        </div>
-                    </div>
+                            [% WRAPPER tab_item tabname= "account" %]
+                                <span>Charges ([% total | $Price %])</span>
+                            [% END %]
+                        [% END # /WRAPPER tabs_nav %]
+
+                        [% WRAPPER tab_panels %]
+                            [% WRAPPER tab_panel tabname="checkouts" bt_active= 1 %]
+                                <div id="checkouts-tab" class="tab-pane show active" aria-labelledby="checkouts">
+                                    <div id="borrowerdetails">
+                                        [% IF ( new_issue ) %]
+                                            <div class="lastchecked">
+                                                <p>
+                                                    <strong>Checked out: </strong>
+                                                    [% new_issue.item.biblio.title | html %] ([% new_issue.item.barcode | html %]).
+
+                                                    [% IF new_issue.item.is_bundle %]
+                                                        [% SET bundle_items_count = new_issue.item.bundle_items.count %]
+                                                        [% tnx('Bundle of {count} item', 'Bundle of {count} items', bundle_items_count, { count = bundle_items_count }) | html %].
+                                                    [% END %]
+
+                                                    Due on [% new_issue.date_due | $KohaDates as_due_date => 1 %]
+                                                </p>
+                                            </div>
+                                        [% END %]
+                                        [% IF ( issues_count ) %]
+                                            [% IF ( Koha.Preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
+                                            <table id="loanTable" class="table table-bordered table-striped">
+                                                <caption>Checkouts for [% borrowername | html %] <span class="count">([% issues_count | html %] total)</span></caption>
+                                                <!-- ISSUES TABLE ROWS -->
+                                                <thead>
+                                                    <tr>
+                                                        <th class="noshow">Checked out on</th>
+                                                        <th class="all anti-the">Title</th>
+                                                        <th>Call number</th>
+                                                        <th class="psort">Due</th>
+                                                        <th class="all nosort">Renew</th>
+                                                        [% UNLESS ( nofines ) %]
+                                                            <th>Fines</th>
+                                                        [% END %]
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    [% FOREACH ISSUE IN ISSUES %]
+                                                        <tr>
+                                                            <td>[% ISSUE.issuedate | html %]</td>
+                                                            <td>
+                                                                [% UNLESS ( noitemlinks ) %]
+                                                                    <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | uri %]">[% ISSUE.title | html %]</a>
+                                                                [% ELSE %]
+                                                                    <strong>[% ISSUE.title | html %]</strong>
+                                                                [% END %]
+                                                                [% IF ( newissues.match(ISSUE.barcode)) %]
+                                                                    <span class="badge text-bg-info">NEW</span>
+                                                                [% END %]
+                                                                <span class="item-details">[% ISSUE.author | html %]</span>
+                                                                ([% ISSUE.barcode | html %])
+                                                            </td>
+                                                            <td>[% ISSUE.itemcallnumber | html %]</td>
+                                                            [% IF ( ISSUE.overdue ) %]
+                                                                <td class="overdue" data-order="[% ISSUE.date_due | html %]">
+                                                                    [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
+                                                                </td>
+                                                            [% ELSE   %]
+                                                                <td data-order="[% ISSUE.date_due | html %]">
+                                                                    [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
+                                                                </td>
+                                                            [% END %]
+                                                            <td>
+                                                                <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
+                                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                                    <legend class="sr-only">Issue renews</legend>
+                                                                    <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                                                    <input type="hidden" name="load_checkouts" value="[% load_checkouts | html %]" />
+                                                                    <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
+                                                                    <input type="hidden" name="newissues" value="[% newissues | html %]" />
+                                                                    [% IF ISSUE.can_be_renewed %]
+                                                                        <input type="hidden" name="op" value="cud-renew" />
+                                                                        <input type="hidden" name="confirmed" value="1" />
+                                                                        [% UNLESS ( ISSUE.renew ) %]
+                                                                            <input type="submit" value="Renew item"  name="confirm  " class="btn btn-primary btn-sm renew" />
+                                                                        [% ELSE %]
+                                                                            <input type="submit" value="Renew item" class="btn btn-primary btn-sm renew" />
+                                                                        [% END %]
+                                                                    [% ELSE %]
+                                                                        [% IF ISSUE.renew_error == 'onsite_checkout' %]
+                                                                            <span>This is a on-site checkout, it cannot be renewed.</span>
+                                                                        [% ELSIF ISSUE.renew_error == 'too_unseen' %]
+                                                                            <span>You have renewed this item the maximum number of consecutive times without it being seen by the library.</span>
+                                                                        [% ELSIF ISSUE.renew_error == 'too_soon' %]
+                                                                            <span>This item cannot yet be renewed.</span>
+                                                                        [% ELSE %]
+                                                                            <span>No renewals allowed</span>
+                                                                        [% END %]
+                                                                        [% IF Koha.Preference('SCOAllowCheckin') %]
+                                                                            <div>
+                                                                                <input type="submit" value="Check in item" name="confirm" class="btn btn-info btn-sm return" />
+                                                                                <input type="hidden" name="op" value="cud-returnbook" />
+                                                                                <input type="hidden" name="confirmed" value=""  />
+                                                                            </div>
+                                                                        [% END %]
+                                                                    [% END %]
+                                                                    [% IF ISSUE.auto_renew %]
+                                                                        <br><span>This item is scheduled for automatic renewal</span>
+                                                                    [% END %]
+                                                                </form>
+                                                            </td>
+                                                            [% UNLESS ( nofines ) %]
+                                                                <td>
+                                                                    [% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]
+                                                                </td>
+                                                            [% END %]
+                                                            <td></td>
+                                                        </tr>
+                                                    [% END # / FOREACH ISSUE %]
+                                                </tbody>
+                                            </table>
+                                            [% ELSE %]
+                                                <a class="btn btn-secondary" href="?load_checkouts=1#scan_form"><i class="fa fa-book" aria-hidden="true"></i> Show your checkouts</a>
+                                            [% END # / IF ( Koha.preference('SCOLoadCheckoutsByDefault') || load_checkouts ) %]
+                                        [% ELSE %]
+                                            <h3>You currently have nothing checked out.</h3>
+                                        [% END # / IF issues_count %]
+                                    </div> <!-- / #borrowerdetails -->
+                                </div>
+                            [% END # /tab_panel %]
+                            [% WRAPPER tab_panel tabname="holds" %]
+                                [% IF HOLDS.count > 0 %]
+                                    [% PROCESS 'holds-table.inc' HOLDS = HOLDS, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds, onlyinfo = 'true' %]
+                                [% ELSE %]
+                                    <h3>You currently have no pending holds.</h3>
+                                [% END %]
+                            [% END # /tab_panel %]
+                            [% WRAPPER tab_panel tabname="account" %]
+                                [% PROCESS 'account-table.inc' %]
+                            [% END # /tab_panel %]
+                        [% END # /WRAPPER tab_panels %]
+                    [% END # /WRAPPER tabs %]
+
+
                         [% ELSE # IF validuser %]
                             <div class="sco_entry" >
                                 <form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
