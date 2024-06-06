@@ -388,7 +388,11 @@
 [% END %]
 
 [% BLOCK tab_item %]
-    <li class="nav-item" role="presentation">
+    [% IF ( id ) %]
+        <li id="[% id | html %]" class="nav-item" role="presentation">
+    [% ELSE %]
+        <li class="nav-item" role="presentation">
+    [% END %]
     [% IF ( bt_active ) %]
         [% IF (linktab) %]
             <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">

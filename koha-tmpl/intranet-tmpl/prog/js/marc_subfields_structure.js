@@ -1,9 +1,9 @@
 /* global dataTablesDefaults tagsubfield selectBsTabByHash */
 $(document).ready(function() {
     if( tagsubfield && tagsubfield == "@"){
-        $("#subfieldtabs a[href='#subATfield']").tab("show");
+        $("#subfieldtabs a[href='#AT_panel']").tab("show");
     } else if ( tagsubfield && tagsubfield != "@"){
-        $("#subfieldtabs a[href='#sub" + tagsubfield + "field'").tab("show");
+        $("#subfieldtabs a[href='#" + tagsubfield + "_panel'").tab("show");
     } else {
         $("#subfieldtabs a:first").tab("show");
     }
@@ -15,7 +15,7 @@ $(document).ready(function() {
             var new_index = e.newIndex;
             if (old_index < new_index) new_index++;
             var subfield_code = e.item.id.replace( /^tab_subfield_/, '');
-            var content = $('#sub' + subfield_code + 'field');
+            var content = $( '#' + subfield_code + '_panel');
             var panels = $("#subfieldtabs .tab-pane");
             if ( new_index < $(panels).size() ){
                 $(content).insertBefore( panels[new_index]);

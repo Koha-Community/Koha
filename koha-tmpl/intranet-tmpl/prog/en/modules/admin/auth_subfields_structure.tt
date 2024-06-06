@@ -115,21 +115,24 @@
             [% END %]
         [% END %][% END %]
 
-        <div id="subfieldtabs" class="toptabs numbered">
-            <ul class="nav nav-tabs" role="tablist">
+        [% WRAPPER tabs id= "subfieldtabs" %]
+            [% WRAPPER tabs_nav %]
                 [% FOREACH loo IN loop %]
-                    <li role="presentation" id="tab_subfield_[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]">
+                    [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
+                    [% WRAPPER tab_item tabname= outputsubfield id= "tab_subfield_${outputsubfield}" %]
                         [% IF ( loo.new_subfield ) %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" class="nav-link" aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">New</a>
+                            <span>New</span>
                         [% ELSE %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" class="nav-link"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">[% loo.tagsubfield | html %]</a>
-                        [% END %]
-                    </li>
-                [% END %]
-            </ul>
-            <div class="tab-content">
+                            [% loo.tagsubfield | html %]
+                        [% END # IF loo.new_subfield%]
+                    [% END # WRAPPER tab_item %]
+                [% END # FOREACH loo %]
+            [% END # /WRAPPER tabs_nav %]
+
+            [% WRAPPER tab_panels %]
                 [% FOREACH loo IN loop %]
-                    <div role="tabpanel" class="tab-pane" id="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field">
+                    [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.tagsubfield %]
+                    [% WRAPPER tab_panel tabname=outputsubfield %]
                         <fieldset class="rows"><ol>
 
                             [% IF ( loo.new_subfield ) %]
@@ -289,10 +292,10 @@
                                 </fieldset>
                             </li>
                         </ol></fieldset><br class="clear" />
-                    </div>
-                [% END %]
-            </div> <!-- /.tab-content -->
-        </div>
+                    [% END # /WRAPPER   tab_panel %]
+                [% END # /FOREACH loo %]
+            [% END # /WRAPPER tab_panels %]
+        [% END # /WRAPPER tabs %]
     </form>
 [% END %]
 
@@ -415,30 +418,32 @@
                 paginate: false
             }));
 
-            [% IF ( tagsubfield && tagsubfield == "@") %]
-                $("#subfieldtabs a[href='#subATfield']").tab("show");
-            [% ELSIF ( tagsubfield && tagsubfield != "@") %]
-                $("#subfieldtabs a[href='#sub[% tagsubfield | html %]field']").tab("show");
-            [% ELSE  %]
-                $("#subfieldtabs a:first").tab("show");
-            [% END %]
+            if( $("#subfieldtabs").length > 0 ){
+                [% IF ( tagsubfield && tagsubfield == "@") %]
+                    $("#subfieldtabs a[href='#AT_panel']").tab("show");
+                [% ELSIF ( tagsubfield && tagsubfield != "@") %]
+                    $("#subfieldtabs a[href='#[% tagsubfield | html %]_panel']").tab("show");
+                [% ELSE  %]
+                    $("#subfieldtabs a:first").tab("show");
+                [% END %]
 
-            var subfields_list = $("#subfieldtabs > ul");
-            var sortable_subfields = new Sortable( subfields_list[0], {
-                onEnd: function( e ){
-                    var old_index = e.oldIndex;
-                    var new_index = e.newIndex;
-                    if (old_index < new_index) new_index++;
-                    var subfield_code = e.item.id.replace( /^tab_subfield_/, '');
-                    var content = $('#sub' + subfield_code + 'field');
-                    var panels = $("#subfieldtabs .tab-pane");
-                    if ( new_index < $(panels).size() ){
-                        $(content).insertBefore( panels[new_index]);
-                    } else {
-                        $(content).insertAfter( panels[new_index-1]);
+                var subfields_list = $("#subfieldtabs > ul");
+                var sortable_subfields = new Sortable( subfields_list[0], {
+                    onEnd: function( e ){
+                        var old_index = e.oldIndex;
+                        var new_index = e.newIndex;
+                        if (old_index < new_index) new_index++;
+                        var subfield_code = e.item.id.replace( /^tab_subfield_/, '');
+                        var content = $( '#' + subfield_code + '_panel');
+                        var panels = $("#subfieldtabs .tab-pane");
+                        if ( new_index < $(panels).size() ){
+                            $(content).insertBefore( panels[new_index]);
+                        } else {
+                            $(content).insertAfter( panels[new_index-1]);
+                        }
                     }
-                }
-            });
+                });
+            }
 
         });
     </script>

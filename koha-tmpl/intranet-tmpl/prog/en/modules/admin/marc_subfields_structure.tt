@@ -110,27 +110,26 @@
                                 [% END %]
                             [% END %][% END %]
 
-                            <div id="subfieldtabs" class="toptabs numbered">
-                                 <ul class="nav nav-tabs" role="tablist">
+                            [% WRAPPER tabs id= "subfieldtabs" %]
+                                [% WRAPPER tabs_nav %]
                                     [% FOREACH loo IN loop %]
-                                        <li id="tab_subfield_[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]" class="tab-item" role="presentation">
+                                        [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.subfieldcode %]
+                                        [% WRAPPER tab_item tabname= outputsubfield id= "tab_subfield_${outputsubfield}" %]
                                             [% IF ( loo.new_subfield ) %]
-                                                <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field" class="nav-link" aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html_entity %]">New</a>
+                                                <span>New</span>
                                             [% ELSE %]
-                                                <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field" class="nav-link" aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html_entity %]">
-                                                    [% loo.subfieldcode | html %]
-                                                </a>
-                                            [% END %]
-                                        </li>
-                                    [% END %]
-                                </ul>
+                                                [% loo.subfieldcode | html %]
+                                            [% END # IF loo.new_subfield%]
+                                        [% END # WRAPPER tab_item %]
+                                    [% END # FOREACH loo %]
+                                [% END # /WRAPPER tabs_nav %]
 
-                                <div class="tab-content">
-
+                                [% WRAPPER tab_panels %]
                                     [% FOREACH loo IN loop %]
-                                        <div class="constraints tab-pane" role="tabpanel" id="sub[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]field">
+                                        [% outputsubfield = PROCESS outputsubfield subfieldanchor = loo.subfieldcode %]
+                                        [% WRAPPER tab_panel tabname=outputsubfield %]
                                             <input type="hidden" name="tab_id" value="[% loo.row | html %]" />
-                                            <div id="basic[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]" class="contraints">
+                                            <div id="basic[%- outputsubfield | html -%]" class="contraints">
                                                 <fieldset class="rows">
                                                     <legend>Basic constraints</legend>
                                                     <ol>
@@ -204,7 +203,7 @@
                                                 </fieldset> <!-- /.rows -->
                                             </div> <!-- /#basic[%- PROCESS outputsubfield subfieldanchor = subfieldcode -%] -->
 
-                                            <div id="advanced[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]" class="contraints">
+                                            <div id="advanced[%- outputsubfield | html -%]" class="contraints">
                                                 <fieldset class="rows">
                                                     <legend>Advanced constraints</legend>
                                                     <ol>
@@ -260,7 +259,7 @@
                                                 </fieldset> <!-- /.rows -->
                                             </div> <!-- /#advanced[%- PROCESS outputsubfield subfieldanchor = subfieldcode -%] -->
 
-                                            <div id="oth[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%]" class="constraints">
+                                            <div id="oth[%- outputsubfield | html -%]" class="constraints">
                                                 <fieldset class="rows">
                                                     <legend>Other options (choose one)</legend>
                                                     <ol>
@@ -303,11 +302,11 @@
                                                         </li>
                                                     </ol>
                                                 </fieldset> <!-- /.rows -->
-                                            </div> <!-- /#oth[%- PROCESS outputsubfield subfieldanchor = loo.subfieldcode -%] -->
-                                        </div><!-- /constraints -->
+                                            </div> <!-- /#oth_outputsubfield -->
+                                        [% END # /WRAPPER   tab_panel %]
                                     [% END # /FOREACH loo %]
-                                </div> <!-- /.tab-content -->
-                            </div><!-- /subfieldtabs -->
+                                [% END # /WRAPPER tab_panels %]
+                            [% END # /WRAPPER tabs %]
 
                             <fieldset class="action">
                                 <input type="submit" class="btn btn-primary" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="cancel">Cancel</a>
