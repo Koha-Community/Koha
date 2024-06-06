@@ -47,7 +47,7 @@ sub list {
 
     my $search_string = $query_params_array[0]->{name};
 
-    my $url     = 'https://registry.projectcounter.org/api/v1/platform/';
+    my $url     = 'https://registry.countermetrics.org/api/v1/platform/';
     my $request = HTTP::Request->new(
         GET => $url,
     );
