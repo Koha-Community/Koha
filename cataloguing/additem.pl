@@ -650,6 +650,18 @@ if ( $op eq "cud-additem" ) {
         }
     }
 
+    if ( $input->param('edit-serial-issue') ) {
+        my $serialid = $item->serial_item->serialid;
+        my $serial   = Koha::Serials->find($serialid);
+
+        my $redirect = "/cgi-bin/koha/serials/serials-edit.pl?serialid=$serialid";
+        if ($serial) {
+            $redirect .= "&subscriptionid=" . $serial->subscriptionid;
+        }
+        print $input->redirect($redirect);
+        exit;
+    }
+
     $nextop = "cud-additem";
 } elsif ( $op eq "delinkitem" ) {
 
