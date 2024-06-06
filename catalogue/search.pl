@@ -459,7 +459,7 @@ my $builder = Koha::SearchEngine::QueryBuilder->new(
 my $searcher = Koha::SearchEngine::Search->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
-# If index indicates the value is a barocode, we need to preproccess it before searching
+# If index indicates the value is a barcode, we need to preprocess it before searching
 for ( my $i = 0; $i < @operands; $i++ ) {
     $operands[$i] = barcodedecode($operands[$i]) if (defined($indexes[$i]) && $indexes[$i] eq 'bc');
 }
