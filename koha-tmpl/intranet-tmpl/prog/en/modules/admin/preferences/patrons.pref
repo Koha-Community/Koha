@@ -1,4 +1,4 @@
-Patrons:
+fPatrons:
     General:
      -
          - pref: CheckPrevCheckout
@@ -479,6 +479,12 @@ Patrons:
          - pref: FailedLoginAttempts
            class: integer
          - failed login attempts.
+     -
+         - pref: ForcePasswordResetWhenSetByStaff
+           choices:
+               1: "Force"
+               0: "Don't force"
+         - a staff created patron account to reset its password after its first OPAC login.
      -
          - pref: Pseudonymization
            choices:
