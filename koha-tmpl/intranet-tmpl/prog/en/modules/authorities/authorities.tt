@@ -106,7 +106,6 @@
 
         $("body").on("click", ".show-errors", function(e){
             document.getElementById("form-errors").scrollIntoView();
-            Sticky.hcSticky('refresh');
         });
 
         $("#preview").click(function () {
@@ -371,7 +370,6 @@
         } else {
             $("#check_errors").html( StrAlert );
             $('html, body').animate({ scrollTop: 0 }, 'fast');
-            Sticky.hcSticky('refresh');
             return false;
         }
     }

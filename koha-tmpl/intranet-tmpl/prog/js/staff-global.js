@@ -1,4 +1,4 @@
-/* global shortcut delBasket Sticky AUDIO_ALERT_PATH Cookies */
+/* global shortcut delBasket AUDIO_ALERT_PATH Cookies */
 /* exported addBibToContext delBibToContext escape_str escape_price openWindow _ removeFocus toUC confirmDelete confirmClone playSound */
 if (KOHA === undefined) var KOHA = {};
 
@@ -177,9 +177,6 @@ $(document).ready(function () {
     $(".toggle_element").on("click", function (e) {
         e.preventDefault();
         $($(this).data("element")).toggle();
-        if (typeof Sticky !== "undefined" && typeof hcSticky === "function") {
-            Sticky.hcSticky("update");
-        }
     });
 
     var navmenulist = $("#navmenulist");
