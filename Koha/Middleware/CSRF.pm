@@ -78,7 +78,8 @@ sub call {
         }
     }
 
-    if ( $error ) {
+    if ($error) {
+
         #NOTE: Other Middleware will take care of logging to correct place, as Koha::Logger doesn't know where to go here
         warn $error;
         my $res = Plack::Response->new( 403, [ 'Content-Type' => 'text/plain' ], ["Wrong CSRF token"] );
