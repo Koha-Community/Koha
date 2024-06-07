@@ -12,9 +12,8 @@ return {
             $dbh->do(
                 q{
               ALTER TABLE bookings
-              ADD COLUMN `pickup_library_id` varchar(10) DEFAULT NULL COMMENT 'Identifier for booking pickup library' AFTER `item_id`,
-              ADD CONSTRAINT `bookings_ibfk_4` FOREIGN KEY (`pickup_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
-          }
+              ADD COLUMN `pickup_library_id` varchar(10) DEFAULT NULL COMMENT 'Identifier for booking pickup library' AFTER `item_id`
+                }
                 ) == 1
                 && say_success( $out, "Added column 'bookings.pickup_library_id'" );
 
@@ -58,6 +57,16 @@ return {
               MODIFY pickup_library_id varchar(10) NOT NULL COMMENT 'Identifier for booking pickup library'
           }
             ) == 1 && say_success( $out, "Updated column 'bookings.pickup_library_id' to NOT NULL" );
+        }
+
+        unless ( foreign_key_exists( 'bookings', 'bookings_ibfk_4' ) ) {
+            $dbh->do(
+                q{
+                    ALTER TABLE bookings
+                    ADD CONSTRAINT `bookings_ibfk_4` FOREIGN KEY (`pickup_library_id`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+                }
+                ) == 1
+                && say_success( $out, "Added foreign key 'bookings_ibfk_4' to column 'bookings.pickup_library_id'" );
         }
     },
 };
