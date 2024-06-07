@@ -52,8 +52,7 @@ if ( $op eq 'add_form' ) {
     );
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
-        C4::Form::MessagingPreferences::set_form_values(
-            { categorycode => $categorycode }, $template );
+        C4::Form::MessagingPreferences::set_form_values( { categorycode => $categorycode }, $template );
     }
 }
 elsif ( $op eq 'cud-add_validate' ) {
@@ -86,16 +85,16 @@ elsif ( $op eq 'cud-add_validate' ) {
     my $can_be_guarantee = $input->param('can_be_guarantee');
     my $force_password_reset_when_set_by_staff = $input->param('force_password_reset_when_set_by_staff');
 
-    $reset_password = undef if $reset_password eq -1;
-    $change_password = undef if $change_password eq -1;
-    $min_password_length = undef unless length($min_password_length);
-    $require_strong_password = undef if $require_strong_password eq -1;
+    $reset_password                         = undef if $reset_password eq -1;
+    $change_password                        = undef if $change_password eq -1;
+    $min_password_length                    = undef unless length($min_password_length);
+    $require_strong_password                = undef if $require_strong_password eq -1;
     $force_password_reset_when_set_by_staff = undef if $force_password_reset_when_set_by_staff eq -1;
 
     my $is_a_modif = $input->param("is_a_modif");
 
     if ($is_a_modif) {
-        my $category = Koha::Patron::Categories->find( $categorycode );
+        my $category = Koha::Patron::Categories->find($categorycode);
         $category->categorycode($categorycode);
         $category->description($description);
         $category->enrolmentperiod($enrolmentperiod);
@@ -126,13 +125,12 @@ elsif ( $op eq 'cud-add_validate' ) {
             $category->store;
             $category->replace_library_limits( \@branches );
         };
-        if ( $@ ) {
-            push @messages, {type => 'error', code => 'error_on_update' };
+        if ($@) {
+            push @messages, { type => 'error', code => 'error_on_update' };
         } else {
             push @messages, { type => 'message', code => 'success_on_update' };
         }
-    }
-    else {
+    } else {
         my $category = Koha::Patron::Category->new(
             {
                 categorycode                           => $categorycode,
@@ -168,7 +166,7 @@ elsif ( $op eq 'cud-add_validate' ) {
             $category->replace_library_limits( \@branches );
         };
 
-        if ( $@ ) {
+        if ($@) {
             push @messages, { type => 'error', code => 'error_on_insert' };
         } else {
             push @messages, { type => 'message', code => 'success_on_insert' };
@@ -176,12 +174,14 @@ elsif ( $op eq 'cud-add_validate' ) {
     }
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
-        C4::Form::MessagingPreferences::handle_form_action( $input,
-            { categorycode => scalar $input->param('categorycode') }, $template );
+        C4::Form::MessagingPreferences::handle_form_action(
+            $input,
+            { categorycode => scalar $input->param('categorycode') }, $template
+        );
     }
 
     $searchfield = q||;
-    $op = 'list';
+    $op          = 'list';
 }
 elsif ( $op eq 'delete_confirm' ) {
 

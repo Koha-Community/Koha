@@ -291,10 +291,11 @@ sub store {
                 # Make a copy of the plain text password for later use
                 $self->plain_text_password( $self->password );
 
-                if($self->category->effective_force_password_reset_when_set_by_staff and ($self->categorycode ne C4::Context->preference("PatronSelfRegistrationDefaultCategory"))){
+                if ( $self->category->effective_force_password_reset_when_set_by_staff
+                    and ( $self->categorycode ne C4::Context->preference("PatronSelfRegistrationDefaultCategory") ) )
+                {
                     $self->password_expiration_date(dt_from_string);
-                }
-                else {
+                } else {
                     $self->password_expiration_date(
                           $self->password
                         ? $self->category->get_password_expiry_date || undef
