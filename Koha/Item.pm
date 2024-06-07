@@ -1517,6 +1517,29 @@ sub _set_found_trigger {
                     # will be credited which settles the debt without
                     # creating extra credits
 
+                    if ( $lost_charge->amountoutstanding == 0 ) {
+                        my $no_refund_if_lost_fee_paid_age = C4::Context->preference('NoRefundOnLostFinesPaidAge');
+                        if ($no_refund_if_lost_fee_paid_age) {
+                            my $lost_fee_payment = $lost_charge->debit_offsets( { type => 'APPLY' } )->last;
+                            if ($lost_fee_payment) {
+                                my $today = dt_from_string();
+                                my $payment_age_in_days =
+                                    dt_from_string( $lost_fee_payment->created_on )->delta_days($today)
+                                    ->in_units('days');
+                                if ( $payment_age_in_days > $no_refund_if_lost_fee_paid_age ) {
+                                    $self->add_message(
+                                        {
+                                            type    => 'info',
+                                            message => 'payment_not_refunded',
+                                            payload => undef
+                                        }
+                                    );
+                                    return $self;
+                                }
+                            }
+                        }
+                    }
+
                     my $credit_offsets = $lost_charge->debit_offsets(
                         {
                             'credit_id'               => { '!=' => undef },
