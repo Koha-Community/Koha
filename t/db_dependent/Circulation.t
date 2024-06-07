@@ -6809,6 +6809,158 @@ subtest 'Test CanBookBeIssued param ignore_reserves (Bug 35322)' => sub {
 
 };
 
+subtest 'NoRefundOnLostFinesPaidAge' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'BlockReturnOfLostItems', 0 );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+
+    my $biblionumber = $builder->build_sample_biblio(
+        {
+            branchcode => $library->branchcode,
+        }
+    )->biblionumber;
+
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                issuelength => 14,
+                lengthunit  => 'days',
+            }
+        }
+    );
+    $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => undef,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'lostreturn',
+                rule_value   => 'refund'
+            }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+    my $lost_on = dt_from_string->subtract( days => 5 )->date;
+    my $issue   = AddIssue( $patron, $item->barcode );
+    LostItem( $item->itemnumber, 'cli', 0 );
+    $item->_result->itemlost(1);
+    $item->_result->itemlost_on($lost_on);
+    $item->_result->update();
+
+    my $debit = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->id,
+            date              => '1970-01-01 14:00:01',
+            amount            => 5,
+            amountoutstanding => 0,
+            interface         => 'commandline',
+            debit_type_code   => 'LOST',
+            itemnumber        => $item->itemnumber
+        }
+    )->store();
+    my $credit = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->id,
+            date              => '1970-01-01 14:00:01',
+            amountoutstanding => 0,
+            amount            => -5,
+
+            interface        => 'commandline',
+            credit_type_code => 'PAYMENT'
+        }
+    )->store();
+    my $offset = Koha::Account::Offset->new(
+        {
+            credit_id  => $credit->id,
+            debit_id   => $debit->id,
+            type       => 'APPLY',
+            amount     => -5,
+            created_on => '1971-01-01 14:00:01'
+        }
+    )->store();
+
+    t::lib::Mocks::mock_preference( 'NoRefundOnLostFinesPaidAge', undef );
+    my ( $return, $messages ) = AddReturn( $item->barcode, $library->branchcode, undef, dt_from_string );
+
+    is( $patron->account->balance, -5, 'Lost fine has been refunded' );
+
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+    my $lost_on2 = dt_from_string->subtract( days => 5 )->date;
+    my $issue2   = AddIssue( $patron2, $item2->barcode );
+    LostItem( $item2->itemnumber, 'cli', 0 );
+    $item2->_result->itemlost(1);
+    $item2->_result->itemlost_on($lost_on2);
+    $item2->_result->update();
+
+    my $debit2 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron2->id,
+            date              => '1970-01-01 14:00:01',
+            amount            => 5,
+            amountoutstanding => 0,
+            interface         => 'commandline',
+            debit_type_code   => 'LOST',
+            itemnumber        => $item2->itemnumber
+        }
+    )->store();
+    my $credit2 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron2->id,
+            date              => '1970-01-01 14:00:01',
+            amount            => -5,
+            amountoutstanding => 0,
+            interface         => 'commandline',
+            credit_type_code  => 'PAYMENT'
+        }
+    )->store();
+    my $offset2 = Koha::Account::Offset->new(
+        {
+            credit_id  => $credit2->id,
+            debit_id   => $debit2->id,
+            type       => 'APPLY',
+            amount     => -5,
+            created_on => '1971-01-01 14:00:01'
+        }
+    )->store();
+
+    t::lib::Mocks::mock_preference( 'NoRefundOnLostFinesPaidAge', 5 );
+    my ( $return2, $messages2 ) = AddReturn( $item2->barcode, $library->branchcode, undef, dt_from_string );
+
+    is(
+        $patron2->account->balance, 0,
+        'Lost fine has not been refunded as it is older than NoRefundOnLostFinesPaidAge'
+    );
+};
+
 
 $schema->storage->txn_rollback;
 C4::Context->clear_syspref_cache();
