@@ -1445,6 +1445,7 @@ subtest 'password expiration tests' => sub {
     my $category = $builder->build_object({ class => 'Koha::Patron::Categories', value => {
             password_expiry_days => 10,
             require_strong_password => 0,
+            force_password_reset_when_set_by_staff => 0,
         }
     });
     my $patron = $builder->build_object({ class=> 'Koha::Patrons', value => {
@@ -1529,6 +1530,42 @@ subtest 'password expiration tests' => sub {
         $schema->storage->txn_rollback;
     };
 
+};
+
+subtest 'force_password_reset_when_set_by_staff tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object({
+        class => 'Koha::Patron::Categories',
+        value => {
+            force_password_reset_when_set_by_staff => 1,
+            require_strong_password => 0,
+        }
+    });
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $category->categorycode,
+            password => 'hats'
+        }
+    });
+
+    $patron->delete()->store()->discard_changes();
+    is($patron->password_expired, 1, "Patron forced into changing password, password expired.");
+
+    $patron->category->force_password_reset_when_set_by_staff(0)->store();
+    $patron->delete()->store()->discard_changes();
+    is($patron->password_expired, 0, "Patron not forced into changing password, password not expired.");
+
+    $patron->category->force_password_reset_when_set_by_staff(1)->store();
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $patron->categorycode);
+    $patron->delete()->store()->discard_changes();
+    is($patron->password_expired, 0, "Patron forced into changing password but patron is self registered, password not expired.");
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'safe_to_delete() tests' => sub {

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -203,6 +203,62 @@ subtest 'effective_require_strong_password' => sub {
 
   $schema->storage->txn_rollback;
 };
+
+subtest 'effective_force_password_reset_when_set_by_staff() tests' => sub {
+    plan tests => 2;
+
+    subtest 'specific overrides global' => sub {
+        plan tests => 4;
+
+        $schema->storage->txn_begin;
+
+        my $category = $builder->build_object({
+            class => 'Koha::Patron::Categories',
+            value => {
+                force_password_reset_when_set_by_staff => 1
+            }
+        });
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 0);
+        ok($category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff unset, but category has the flag set to 1');
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 1);
+        ok($category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff set and category has the flag set to 1');
+
+        # disable
+        $category->force_password_reset_when_set_by_staff(0)->store->discard_changes;
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 0);
+        ok(!$category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff unset, but category has the flag set to 0');
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 1);
+        ok(!$category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff set and category has the flag set to 0');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'no specific rule, global applies' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $category = $builder->build_object({
+            class => 'Koha::Patron::Categories',
+            value => {
+                force_password_reset_when_set_by_staff => undef
+            }
+        });
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 0);
+        ok(!$category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff set to 0 used');
+
+        t::lib::Mocks::mock_preference('ForcePasswordResetWhenSetByStaff', 1);
+        ok($category->effective_force_password_reset_when_set_by_staff, 'ForcePasswordResetWhenSetByStaff set to 1 used');
+
+        $schema->storage->txn_rollback;
+    };
+};
+
 
 subtest 'get_password_expiry_date() tests' => sub {
 
