@@ -229,6 +229,22 @@ sub effective_require_strong_password {
     return $self->require_strong_password // C4::Context->preference('RequireStrongPassword');
 }
 
+=head3 effective_force_password_reset_when_set_by_staff
+
+    $category->effective_force_password_reset_when_set_by_staff()
+
+Returns if new staff created patrons in this category are forced to reset their password. If set in $self->force_password_reset_when_set_by_staff
+or, if undef, falls back to the ForcePasswordResetWhenSetByStaff system preference.
+
+=cut
+
+sub effective_force_password_reset_when_set_by_staff {
+    my ($self) = @_;
+
+    return $self->force_password_reset_when_set_by_staff // C4::Context->preference('ForcePasswordResetWhenSetByStaff');
+}
+
+
 =head3 override_hidden_items
 
     if ( $patron->category->override_hidden_items ) {

@@ -84,11 +84,13 @@ elsif ( $op eq 'cud-add_validate' ) {
 
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
     my $can_be_guarantee = $input->param('can_be_guarantee');
+    my $force_password_reset_when_set_by_staff = $input->param('force_password_reset_when_set_by_staff');
 
     $reset_password = undef if $reset_password eq -1;
     $change_password = undef if $change_password eq -1;
     $min_password_length = undef unless length($min_password_length);
     $require_strong_password = undef if $require_strong_password eq -1;
+    $force_password_reset_when_set_by_staff = undef if $force_password_reset_when_set_by_staff eq -1;
 
     my $is_a_modif = $input->param("is_a_modif");
 
@@ -119,6 +121,7 @@ elsif ( $op eq 'cud-add_validate' ) {
         $category->noissuescharge($noissuescharge);
         $category->noissueschargeguarantees($noissueschargeguarantees);
         $category->noissueschargeguarantorswithguarantees($noissueschargeguarantorswithguarantees);
+        $category->force_password_reset_when_set_by_staff($force_password_reset_when_set_by_staff);
         eval {
             $category->store;
             $category->replace_library_limits( \@branches );
@@ -157,6 +160,7 @@ elsif ( $op eq 'cud-add_validate' ) {
                 noissuescharge                         => $noissuescharge,
                 noissueschargeguarantees               => $noissueschargeguarantees,
                 noissueschargeguarantorswithguarantees => $noissueschargeguarantorswithguarantees,
+                force_password_reset_when_set_by_staff => $force_password_reset_when_set_by_staff,
             }
         );
         eval {

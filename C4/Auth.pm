@@ -1457,6 +1457,8 @@ sub checkauth {
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
         password_has_expired                  => ( $patron and $patron->password_expired ),
         is_anonymous_patron                   => ( $is_anonymous_patron ),
+        password_expiration_date              => ( $patron and $patron->password_expiration_date ),
+        date_enrolled                         => ( $patron and $patron->dateenrolled ),
         auth_error                            => $auth_error,
     );
 

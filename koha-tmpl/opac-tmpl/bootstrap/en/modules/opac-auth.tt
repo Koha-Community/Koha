@@ -202,9 +202,15 @@
                         [% END %]
 
                         [% IF !(invalid_username_or_password || too_many_login_attempts) and password_has_expired %]
-                            <div class="alert alert-info">
-                                <p><strong>Error: </strong>Your password has expired!</p>
-                            </div>
+                            [% IF date_enrolled == password_expiration_date %]
+                                <div class="alert alert-info">
+                                    <p><strong>Error: </strong>It's your first login! You need to reset your password.</p>
+                                </div>
+                            [% ELSE %]
+                                <div class="alert alert-info">
+                                    <p><strong>Error: </strong>Your password has expired!</p>
+                                </div>
+                            [% END %]
                             [% IF Koha.Preference('EnableExpiredPasswordReset') %]
                                 <a href="/cgi-bin/koha/opac-reset-password.pl">Reset your password</a>.
                             [% ELSIF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]

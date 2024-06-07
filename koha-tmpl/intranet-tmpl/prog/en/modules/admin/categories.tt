@@ -341,6 +341,41 @@
                       [% END %]
                     </select>
                 </li>
+                <li>
+                    <label for="force_password_reset_when_set_by_staff">Force new patron password reset: </label>
+                    <select name="force_password_reset_when_set_by_staff" id="force_password_reset_when_set_by_staff">
+                        [% IF category.force_password_reset_when_set_by_staff.defined %]
+                            [% IF category.force_password_reset_when_set_by_staff %]
+                                [% IF Koha.Preference('ForcePasswordResetWhenSetByStaff') %]
+                                    <option value="-1">Follow system preference ForcePasswordResetWhenSetByStaff (Force)</option>
+                                [% ELSE %]
+                                    <option value="-1">Follow system preference ForcePasswordResetWhenSetByStaff (Don't force)</option>
+                                [% END %]
+                                    <option value="1" selected="selected">Force</option>
+                                    <option value="0">Don't force</option>
+                            [% ELSE %]
+                                [% IF Koha.Preference('ForcePasswordResetWhenSetByStaff') %]
+                                    <option value="-1">Follow system preference ForcePasswordResetWhenSetByStaff (Force)</option>
+                                [% ELSE %]
+                                    <option value="-1">Follow system preference ForcePasswordResetWhenSetByStaff (Don't force)</option>
+                                [% END %]
+                                    <option value="1">Force</option>
+                                    <option value="0" selected="selected">Don't force</option>
+                            [% END %]
+                        [% ELSE %]
+                            [% IF Koha.Preference('ForcePasswordResetWhenSetByStaff') %]
+                                <option value="-1" selected="selected">Follow system preference ForcePasswordResetWhenSetByStaff (Force)</option>
+                            [% ELSE %]
+                                <option value="-1" selected="selected">Follow system preference ForcePasswordResetWhenSetByStaff (Don't force)</option>
+                            [% END %]
+                                <option value="1">Force</option>
+                                <option value="0">Don't force</option>
+                        [% END %]
+                    </select>
+                    <div class="hint">
+                        Choose whether staff created patrons of this category be forced into resetting their password after their first OPAC login.
+                    </div>
+                </li>
                 <li><label for="block_expired">Block expired patron OPAC actions:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired" multiple="multiple">
                         <optgroup label="Follow system preference">
