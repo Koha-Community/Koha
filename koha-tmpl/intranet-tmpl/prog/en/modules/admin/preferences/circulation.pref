@@ -1167,6 +1167,11 @@ Circulation:
               class: integer
             - days after it was marked lost.
         -
+            - "Don't refund lost fees if the fee was paid in full or if the balance of the fee was paid more than"
+            - pref: NoRefundOnLostFinesPaidAge
+              class: integer
+            - days ago.
+        -
             - pref: WhenLostChargeReplacementFee
               choices:
                   1: Charge

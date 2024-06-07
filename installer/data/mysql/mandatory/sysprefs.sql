@@ -420,6 +420,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before checkouts are blocked','Integer'),
 ('NoIssuesChargeGuarantorsWithGuarantees','','','Define maximum amount withstanding before checkouts are blocked including guarantors and their other guarantees','Integer'),
 ('noItemTypeImages','0',NULL,'If ON, disables itemtype images in the staff interface','YesNo'),
+('NoRefundOnLostFinesPaidAge','','','Do not refund lost item fees if the fee was paid off more than this number of days ago','Integer'),
 ('NoRefundOnLostReturnedItemsAge','','','Do not refund lost item fees if item is lost for more than this number of days','Integer'),
 ('NoRenewalBeforePrecision','exact_time','date|exact_time','Calculate "No renewal before" based on date only or exact time of due date','Choice'),
 ('NotesToHide','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
