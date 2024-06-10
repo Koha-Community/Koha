@@ -403,6 +403,7 @@
                             );
                             result += `
                                 <form name="checkout-transform" method="post" action="/cgi-bin/koha/circ/circulation.pl?borrowernumber=%s">
+                                    [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-checkout"/>
                                     <input type="hidden" name="borrowernumber" value="%s"/>
                                     <input type="hidden" name="barcode" value="%s"/>
