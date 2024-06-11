@@ -2424,7 +2424,7 @@ VALUES ('et', 'est');
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('lv', 'language', 'en', 'Latvian');
 
-INSERT INTO language_descriptionsn (subtag, type, lang, description)
+INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ( 'lv', 'language', 'lv', 'Latviešu valoda');
 
 INSERT INTO language_descriptions (subtag, type, lang, description)
