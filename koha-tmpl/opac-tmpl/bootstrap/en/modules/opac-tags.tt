@@ -127,7 +127,9 @@
                         [% END # /add_op %]
 
                         [% IF ( MY_TAGS ) %]
-                            <form method="post" action="opac-tags.pl">
+                            <form id="deletetags" name="deletetags" method="post" action="opac-tags.pl">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-del" />
                                 <table id="mytagst" class="table table-bordered table-striped">
                                     <caption>Your tags</caption>
                                     <thead>
@@ -182,10 +184,6 @@
                                     </tbody>
                                 </table>
                                 <input type="submit" value="Remove selected tags" class="btn btn-danger remove">
-                            </form>
-                            <form id="deletetags" name="deletetags" method="post" action="/cgi-bin/koha/opac-tags.pl">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-del" />
                             </form>
                         [% END # /MY_TAGS %]
                     </div> <!-- / .usertags -->
