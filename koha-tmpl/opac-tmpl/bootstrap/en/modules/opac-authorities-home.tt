@@ -32,9 +32,9 @@
                     <div class="col order-first order-md-first order-lg-2">
                 [% END %]
                     <div id="userauthhome" class="maincontent">
-                        <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+                        <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="get">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-do_search" />
+                            <input type="hidden" name="op" value="do_search" />
                             <input type="hidden" name="type" value="opac" />
                             <fieldset class="rows">
                                 <legend><h1>Authority search</h1></legend>
