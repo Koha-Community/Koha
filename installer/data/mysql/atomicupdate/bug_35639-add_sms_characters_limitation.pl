@@ -7,13 +7,11 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
             VALUES ('SMSSendMaxChar','','NULL','Add a limit for the number of characters in SMS messages','Integer');
-        });
-
-        # sysprefs
-        say $out "Added new system preference 'SMSSendMaxChar'";
+        }
+        ) == 1 and say_success( $out, "Added new system preference 'SMSSendMaxChar'" );
     },
 };
