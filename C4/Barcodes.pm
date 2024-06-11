@@ -95,7 +95,7 @@ sub max {
 }
 sub db_max {
 	my $self = shift;
-	my $query = "SELECT max(abs(barcode)) FROM items LIMIT 1"; # Possible problem if multiple barcode types populated
+	my $query = "SELECT max(abs(CAST(barcode AS UNSIGNED))) FROM items LIMIT 1"; # Possible problem if multiple barcode types populated
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute();
 	return $sth->fetchrow_array || $self->initial;
