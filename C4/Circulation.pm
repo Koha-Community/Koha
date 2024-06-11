@@ -2318,6 +2318,8 @@ sub AddReturn {
                   if $message->message eq 'processing_refunded';
                 $messages->{'LostItemFeeRestored'} = 1
                   if $message->message eq 'lost_restored';
+                $messages->{'LostItemPaymentNotRefunded'} = 1
+                  if $message->message eq 'payment_not_refunded';
 
                 if ( $message->message eq 'lost_charge' ) {
                     $issue //= Koha::Old::Checkouts->search(

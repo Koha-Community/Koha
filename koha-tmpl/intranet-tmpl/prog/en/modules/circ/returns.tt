@@ -347,6 +347,8 @@
                                                 <p class="problem ret_charged">A refund for the lost item charge has been applied to the borrowing patron's account, and new overdue charge has been calculated and applied.</p>
                                             [% ELSIF LostItemFeeRestored and not Koha.Preference('BlockReturnOfLostItems') %]
                                                 <p class="problem ret_restored">A refund for the lost item charge has been applied to the borrowing patron's account and if an overdue fine was forgiven when the item was marked as lost, it has been reverted.</p>
+                                            [% ELSIF LostItemPaymentNotRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
+                                                <p class="problem ret_restored">No refund was applied to the patron's account for the previously paid lost item charge as the payment was made more than [% Koha.Preference('NoRefundOnLostFinesPaidAge') | html%] days ago.</p>
                                             [% ELSIF Koha.Preference('BlockReturnOfLostItems') %]
                                                <h5>Cannot check in</h5>
                                                <p><strong>NOT CHECKED IN</strong></p>

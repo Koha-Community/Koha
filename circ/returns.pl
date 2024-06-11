@@ -703,6 +703,12 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'LostItemFeeRefunded' ) {
         $template->param( LostItemFeeRefunded => 1 );
     }
+    elsif (
+        $code eq 'LostItemPaymentNotRefunded'
+        )
+    {
+        $template->param( LostItemPaymentNotRefunded => 1 );
+    }
     elsif ( $code eq 'LostItemFeeCharged' ) {
         $template->param( LostItemFeeCharged => 1 );
     }
