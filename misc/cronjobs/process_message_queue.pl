@@ -89,6 +89,9 @@ catch {
 
 cronlogaction({ info => $command_line_options });
 
+# Remove empty elements, see bug 37075
+@letter_code = grep { $_ ne q{} } @letter_code;
+
 if ( C4::Context->config("enable_plugins") ) {
     my @plugins = Koha::Plugins->new->GetPlugins({
         method => 'before_send_messages',
