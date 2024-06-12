@@ -15,6 +15,14 @@ package Koha::REST::V1::ExtendedAttributeTypes;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+# IMPORTANT NOTE
+#
+# Whilst this class is named ExtendedAttributeTypes, it currently
+# allows for querying the Koha::AdditionalFields objects only.
+#
+# The longer term goal is to merge the additional fields, patron
+# attributes and ill request attributes features into one system.
+
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
