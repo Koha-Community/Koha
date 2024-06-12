@@ -51,7 +51,6 @@
 [% END %]
 
 <body id="catalog_detail" class="catalog">
-
     [% WRAPPER 'header.inc' %]
         [% INCLUDE 'cat-search.inc' %]
     [% END %]
@@ -378,6 +377,12 @@
                             [% IF HTML5MediaEnabled && HTML5MediaSets.size %]
                                 [% WRAPPER tab_item tabname= "html5media" %]
                                     <span>Play media</span>
+                                [% END %]
+                            [% END %]
+
+                            [% IF ( reviews ) %]
+                                [% WRAPPER tab_item tabname= "comments" %]
+                                    <span>Comments [% ' ( ' _ ( reviews.size ) _ ' )' | html %]</span>
                                 [% END %]
                             [% END %]
 
@@ -837,6 +842,82 @@
                                 [% END # /tab_panel %]
                             [% END # /IF HTML5MediaEnabled %]
 
+                            [% IF ( reviews ) %]
+                                [% WRAPPER tab_panel tabname="comments" %]
+                                    [% SET ShowReviewerPhoto = Koha.Preference( "ShowReviewerPhoto" ) %]
+                                    <table id="comments_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Commenter</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Comment</th>
+                                                <th class="NoSort">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            [% FOREACH review IN reviews %]
+                                                <tr id="comment[% review.reviewid | html %]">
+                                                    <td>
+                                                        [% IF ( review.patron ) %]
+                                                            [% IF ( review.avatarurl ) %]
+                                                                <img class="avatar" src="[% review.avatarurl | html %]" height="80" width="80" alt="" />
+                                                            [% END %]
+                                                            [% INCLUDE 'patron-title.inc' patron=review.patron hide_patron_infos_if_needed=1 %]
+                                                        [% ELSE %]
+                                                            <em>Patron deleted<em>
+                                                        [% END %]
+                                                    </td>
+                                                    <td data-order="[% review.datereviewed | html %]">
+                                                        [% review.datereviewed | $KohaDates %]
+                                                    </td>
+                                                    <td>
+                                                        [% IF ( review.approved ) %]
+                                                            <em>Approved</em>
+                                                        [% ELSE %]
+                                                            <em>Unapproved</em>
+                                                        [% END %]
+                                                    </td>
+                                                    <td>
+                                                        [% FILTER html_break %]
+                                                            [% review.review | html %]
+                                                        [% END %]
+                                                    </td>
+                                                    [% IF ( CAN_user_tools_moderate_comments ) %]
+                                                        <td class="actions">
+                                                            [% IF ( review.approved ) %]
+                                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                                    <input type="hidden" name="op" value="cud-unapprove" />
+                                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
+                                                                </form>
+                                                            [% ELSE %]
+                                                                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                                    [% INCLUDE 'csrf-token.inc' %]
+                                                                    <input type="hidden" name="op" value="cud-approve" />
+                                                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+                                                                </form>
+                                                            [% END %]
+                                                            <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                                                                [% INCLUDE 'csrf-token.inc' %]
+                                                                <input type="hidden" name="op" value="cud-delete" />
+                                                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                                                <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                                                                <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    [% END # /IF CAN_user_tools_moderate_comments %]
+                                                </tr>
+                                            [% END # / FOREACH reviews %]
+                                        </tbody>
+                                    </table>
+                                [% END %]
+                            [% END # /IF reviews %]
+
                             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
                                 [% WRAPPER tab_panel tabname="NovelistSelect" %]
                                     <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
@@ -847,7 +928,7 @@
                                 [% WRAPPER tab_panel tabname="${ plugins_intranet_catalog_biblio_tab.id }" %]
                                     [% plugins_intranet_catalog_biblio_tab.content | $raw %]
                                 [% END # /tab_panel %]
-                            [% END %]
+                            [% END # /WRAPPER comments %]
                         [% END # /WRAPPER tab_panels %]
                     [% END # /WRAPPER tabs %]
 
@@ -1441,7 +1522,9 @@
 
         $(document).ready(function() {
             // Pick details tab to display by default
-            [% IF count == 0 %]
+            [% IF activetab == "comments" %]
+                $("#bibliodetails a[href='#comments_panel']").tab("show");
+            [% ELSIF count == 0 %]
                 [% IF ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) && HTML5MediaSets.size %]
                     $("#bibliodetails a[href='#html5media_panel']").tab("show");
                 [% ELSIF ComponentParts && ComponentParts.size %]
@@ -1927,6 +2010,14 @@
                 }));
             [% END %]
 
+            [% IF ( reviews ) %]
+                var comment_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'comments-table', 'json') | $raw %];
+                var comments_table = KohaTable("comments_table", {
+                    "paginate": false,
+                    "autoWidth": false,
+                    "order": [[ 2, "desc" ]],
+                }, comment_table_settings);
+            [% END %]
         });
 
         [% IF found1 && Koha.Preference('RetainCatalogSearchTerms') %]
@@ -2176,7 +2267,12 @@
 
                 $('#modal-item-group-unset').modal('hide');
             });
+
         [% END # /IF EnableItemGroups %]
+
+        $(".delete-comment").on("click", function(){
+            return confirm( _("Are you sure you want to delete this comment?") );
+        });
 
     </script>
 

@@ -57,6 +57,7 @@ use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Plugins;
 use Koha::Recalls;
+use Koha::Reviews;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Serial::Items;
@@ -85,10 +86,15 @@ if ( C4::Context->config('enable_plugins') ) {
     );
 }
 
+my $activetab    = $query->param('activetab');
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
 my $biblio = Koha::Biblios->find( $biblionumber );
-$template->param( 'biblio', $biblio );
+
+$template->param(
+    biblio    => $biblio,
+    activetab => $activetab,
+);
 
 unless ( $biblio ) {
     # biblionumber invalid -> report and exit
@@ -380,6 +386,37 @@ if (C4::Context->preference("AlternateHoldingsField") && $items_to_display->coun
     $template->param(
         ALTERNATEHOLDINGS   => \@alternateholdingsinfo,
         );
+}
+
+if ( C4::Context->preference('OPACComments') ) {
+    my $reviews = Koha::Reviews->search(
+        { biblionumber => $biblionumber },
+        { order_by     => { -desc => 'datereviewed' } }
+    )->unblessed;
+    my $libravatar_enabled = 0;
+    if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto') ) {
+        eval {
+            require Libravatar::URL;
+            Libravatar::URL->import();
+        };
+        if ( !$@ ) {
+            $libravatar_enabled = 1;
+        }
+    }
+    for my $review (@$reviews) {
+        my $review_patron =
+            Koha::Patrons->find( $review->{borrowernumber} );    # FIXME Should be Koha::Review->reviewer or similar
+
+        # setting some borrower info into this hash
+        if ($review_patron) {
+            $review->{patron} = $review_patron;
+            if ( $libravatar_enabled and $review_patron->email ) {
+                $review->{avatarurl} = libravatar_url( email => $review_patron->email, https => $ENV{HTTPS} );
+            }
+        }
+    }
+    $template->param( 'reviews' => $reviews );
+
 }
 
 my @results = ( $dat, );

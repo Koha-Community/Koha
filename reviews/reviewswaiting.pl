@@ -41,6 +41,7 @@ my $reviewid = $query->param('reviewid');
 my $page     = $query->param('page') || 1;
 my $count    = C4::Context->preference('numSearchResults') || 20;
 my $total    = Koha::Reviews->search_limited({ approved => $status })->count;
+my $biblionumber = $query->param('biblionumber');
 
 if ( $op eq 'cud-approve' ) {
     my $review = Koha::Reviews->find( $reviewid );
@@ -53,6 +54,11 @@ elsif ( $op eq 'cud-unapprove' ) {
 elsif ( $op eq 'cud-delete' ) {
     my $review = Koha::Reviews->find( $reviewid );
     $review->delete if $review;
+}
+
+if ( $op && $biblionumber ) {
+    print scalar $query->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&activetab=comments");
+    exit;    # You can only send 1 redirect!  After that, content or other headers don't matter.
 }
 
 my $reviews = Koha::Reviews->search_limited(
