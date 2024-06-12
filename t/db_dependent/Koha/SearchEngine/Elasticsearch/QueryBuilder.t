@@ -449,13 +449,78 @@ subtest 'build_query tests' => sub {
         "query of boolean type field is not truncated even if QueryAutoTruncate is set"
     );
 
-    ( undef, $query ) =
-        $qb->build_query_compat( undef, ['First title ; Second title : some & subtitle / Authors Name'] );
-    is(
-        $query->{query}{query_string}{query},
-        '(First* title* Second* title* some* subtitle* Authors* Name*)',
-        "ISBD punctualtion and problematic characters properly removed"
-    );
+    subtest 'removal of punctuation surrounded by spaces when autotruncate enabled' => sub {
+        plan tests => 7;
+        t::lib::Mocks::mock_preference( 'QueryAutoTruncate',       '1' );
+        t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'escape' );
+        ( undef, $query ) = $qb->build_query_compat(
+            undef,
+            ['First title ; subtitle : some & subtitle / Authors Name. Second title ; Third title / Second Author']
+        );
+        is(
+            $query->{query}{query_string}{query},
+            '(First* title* subtitle* some* subtitle* Authors* Name. Second* title* Third* title* Second* Author*)',
+            "ISBD punctuation and problematic characters surrounded by spaces properly removed"
+        );
+
+        t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'dont_escape' );
+        ( undef, $query ) = $qb->build_query_compat(
+            undef,
+            ['First title ; subtitle : some & subtitle / Authors Name. Second title ; Third title / Second Author']
+        );
+        is(
+            $query->{query}{query_string}{query},
+            '(First* title* subtitle* some* subtitle* / Authors* Name. Second* title* ; Third* title* / Second* Author*)',
+            "ISBD punctuation and problematic characters surrounded by spaces properly removed, RE saved"
+        );
+        ( undef, $query ) =
+            $qb->build_query_compat( undef, ['Lorem / ipsum dolor / sit ; / amet'] );
+        is(
+            $query->{query}{query_string}{query},
+            '(Lorem* / ipsum* dolor* / sit* amet*)',
+            "RE saved, last odd unescaped slash preceded by a semicolon removed"
+        );
+
+        t::lib::Mocks::mock_preference( 'QueryRegexEscapeOptions', 'escape' );
+        ( undef, $query ) =
+            $qb->build_query_compat( undef, ['Lorem \/ ipsum dolor \/ sit ; \/ amet'] );
+        is(
+            $query->{query}{query_string}{query},
+            '(Lorem* ipsum* dolor* sit* amet*)',
+            "Escaped slashes (also preceded by another punctuation followed by a space) removed"
+        );
+        ( undef, $query ) =
+            $qb->build_query_compat( undef, ['comma , period . equal = hyphen - slash / escaped_slash \/'] );
+        is(
+            $query->{query}{query_string}{query},
+            '(comma* period* equal* hyphen* slash* escaped_slash* \/)',
+            "Other problematic characters surrounded by spaces properly removed"
+        );
+
+        ( undef, $query ) =
+            $qb->build_query_compat( undef, [' &;,:=-/ // \/\/ /&&&==&&  ::-:: '] );
+        is(
+            $query->{query}{query_string}{query},
+            '()',
+            "Repeated problematic characters surrounded by spaces removed"
+        );
+
+        ( undef, $query ) = $qb->build_query_compat(
+            undef,
+            [
+                '&amp amp& semicolon; ;colonsemi full: :full comma, ,comma dot. .dot =equal equal= hyphen- -hypen slash\/ \/slash'
+            ]
+        );
+        is(
+            $query->{query}{query_string}{query},
+            '(&amp* amp& semicolon; ;colonsemi* full* full* comma, ,comma* dot. .dot* equal* equal* hyphen- -hypen* slash\/ \/slash*)',
+            "ISBD punctuation and problematic characters not removed when not surrounded by spaces."
+        );
+
+        # Note above: semicolons and equals removed asthose are search field indicators - terms ending in punctuation
+        # are not truncated.
+        # Note that (colons/equal signs)/spaces glued to words are not removed by the feature under test but before.
+    };
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['J.R.R'] );
     is(
