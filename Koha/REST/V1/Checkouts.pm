@@ -120,7 +120,7 @@ sub _check_availability {
 
         # Upgrade some confirmations to blockers
         my @should_block =
-          qw/TOO_MANY ISSUED_TO_ANOTHER RESERVED RESERVED_WAITING TRANSFERRED PROCESSING AGE_RESTRICTION/;
+          qw/TOO_MANY ISSUED_TO_ANOTHER RESERVED RESERVE_WAITING TRANSFERRED PROCESSING AGE_RESTRICTION/;
         for my $block (@should_block) {
             if ( exists( $confirmation->{$block} ) ) {
                 $impossible->{$block} = $confirmation->{$block};
