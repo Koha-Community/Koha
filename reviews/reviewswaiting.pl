@@ -42,11 +42,11 @@ my $page     = $query->param('page') || 1;
 my $count    = C4::Context->preference('numSearchResults') || 20;
 my $total    = Koha::Reviews->search_limited({ approved => $status })->count;
 
-if ( $op eq 'approve' ) {
+if ( $op eq 'cud-approve' ) {
     my $review = Koha::Reviews->find( $reviewid );
     $review->approve if $review;
 }
-elsif ( $op eq 'unapprove' ) {
+elsif ( $op eq 'cud-unapprove' ) {
     my $review = Koha::Reviews->find( $reviewid );
     $review->unapprove if $review;
 }

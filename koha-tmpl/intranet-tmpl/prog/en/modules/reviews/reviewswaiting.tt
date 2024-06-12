@@ -97,10 +97,27 @@
             [% review.review | html %]
         </td>
         <td class="actions">
-            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-check"></i> Approve</a>[% END %]
+            [% IF ( review.approved ) %]
+                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-unapprove" />
+                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Unapprove</button>
+                </form>
+            [% ELSE %]
+                <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-approve" />
+                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                    <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
+                    <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-check" aria-hidden="true"></i> Approve</button>
+                </form>
+            [% END %]
             <form action="/cgi-bin/koha/reviews/reviewswaiting.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-delete" />
+                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                 <input type="hidden" name="reviewid" value="[% review.reviewid | html %]" />
                 <button type="submit" class="btn btn-default btn-xs delete-comment"><i class="fa fa-trash-can" aria-hidden="true"></i> Delete</button>
             </form>
