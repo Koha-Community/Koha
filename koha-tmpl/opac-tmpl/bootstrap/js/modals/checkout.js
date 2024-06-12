@@ -25,7 +25,7 @@ $(document).ready(function() {
             result += _("Your account is currently in debt by '%s'").format(data);
         } else if (code == 'ISSUED_TO_ANOTHER') {
             result += _("This item appears to be checked out to another patron, please return it to the desk");
-        } else if (code == 'RESERVED' || code == 'RESERVED_WAITING') {
+        } else if (code == 'RESERVED' || code == 'RESERVE_WAITING') {
             result += _("This item appears to be reserved for another patron, please return it to the desk");
         } else if (code == 'TOO_MANY') {
             result += _("You have reached the maximum number of checkouts allowed on your account");
