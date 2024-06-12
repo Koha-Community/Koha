@@ -277,11 +277,14 @@
                             </ul>
 
                             [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
-                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off" class="confirmation-required-form">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
                                     <input type="hidden" name="restoreduedatespec" />
                                     <input type="hidden" name="op" value="cud-checkout" />
+                                    [% FOREACH conf IN sessionConfirmationKeys %]
+                                        <input type="hidden" name="session_confirmations" id="session_confirmations" value="[% conf | html %]" />
+                                    [% END %]
 
                                     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
@@ -376,6 +379,10 @@
                                     [% IF ( RENEW_ISSUE ) %]
                                         <button type="submit" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes, renew (Y)</button>
                                     [% ELSE %]
+                                        <p>
+                                            <label for="patron_session_confirmation">Remember for the session for this patron</label>
+                                            <input type="checkbox" id="patron_session_confirmation" name="patron_session_confirmation" />
+                                        </p>
                                         <button type="submit" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes, check out (Y)</button>
                                     [% END %]
 
@@ -386,10 +393,13 @@
                             [% END # /IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 
                             [% IF ADDITIONAL_MATERIALS && !CAN_user_circulate_force_checkout %]
-                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off" class="confirmation-required-form">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-checkout" />
                                     <input type="hidden" name="restoreduedatespec" />
+                                    [% FOREACH conf IN sessionConfirmationKeys %]
+                                        <input type="hidden" name="session_confirmations" id="session_confirmations" value="[% conf | html %]" />
+                                    [% END %]
 
                                     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
@@ -403,6 +413,10 @@
                                     [% IF ( RENEW_ISSUE ) %]
                                         <button type="submit" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes, renew (Y)</button>
                                     [% ELSE %]
+                                        <p>
+                                            <label for="patron_session_confirmation">Remember for the session for this patron</label>
+                                            <input type="checkbox" id="patron_session_confirmation" name="patron_session_confirmation" />
+                                        </p>
                                         <button type="submit" class="btn btn-default approve" accesskey="y"><i class="fa fa-check"></i> Yes, check out (Y)</button>
                                     [% END %]
 

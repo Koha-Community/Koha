@@ -463,53 +463,65 @@ if (@$barcodes && $op eq 'cud-checkout') {
             }
         }
 
-        if( $item and ( !$blocker or $force_allow_issue ) ){
-            my $confirm_required = 0;
-            unless($issueconfirmed){
-                #  Get the item title for more information
-                my $materials = $item->materials;
-                my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
-                $materials = $descriptions->{lib} // $materials;
-                $template_params->{ADDITIONAL_MATERIALS} = $materials;
-                $template_params->{itemhomebranch} = $item->homebranch;
+    if( $item and ( !$blocker or $force_allow_issue ) ){
+        my $confirm_required = 0;
+        unless($issueconfirmed){
+            #  Get the item title for more information
+            my $materials = $item->materials;
+            my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
+            $materials = $descriptions->{lib} // $materials;
+            $template_params->{ADDITIONAL_MATERIALS} = $materials;
+            $template_params->{itemhomebranch} = $item->homebranch;
 
-                # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
-                foreach my $needsconfirmation_key ( keys %$needsconfirmation ) {
-                    $template_params->{$needsconfirmation_key} = $needsconfirmation->{$needsconfirmation_key};
-                    $template_params->{getTitleMessageIteminfo} = $biblio->title;
-                    $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
-                    $template_params->{NEEDSCONFIRMATION} = 1;
-                    $confirm_required = 1;
-                    if ( $needsconfirmation_key eq 'BOOKED_TO_ANOTHER' ) {
-                        my $rule = Koha::CirculationRules->get_effective_rule(
-                            {
-                                rule_name  => 'bookings_lead_period',
-                                itemtype   => $item->effective_itemtype,
-                                branchcode => "*"
-                            }
-                        );
-                        my $preparation_period = $rule ? $rule->rule_value : 1;
-                        my $reduceddue =
-                            dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )
-                            ->subtract( days => $preparation_period );
-                        $template_params->{reduceddue} = $reduceddue;
-                    }
-                }
-            }
-            unless ($confirm_required) {
-                my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-                if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
-                    my $recall = Koha::Recalls->find(
+            my $patron_session_confirmation = $query->cookie('patronSessionConfirmation') || undef;
+            my ( $patron_for_session, $session_confirmations ) = split( /:/, $patron_session_confirmation, 2 );
+            my $patron_match = $borrowernumber == $patron_for_session;
+            my @conf_keys    = split( /\|/, $session_confirmations );
+            $template_params->{sessionConfirmationKeys} = ();
+
+            # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
+            foreach my $needsconfirmation_key ( keys %$needsconfirmation ) {
+                if ( $needsconfirmation_key eq 'BOOKED_TO_ANOTHER' ) {
+                    my $rule = Koha::CirculationRules->get_effective_rule(
                         {
-                            biblio_id => $item->biblionumber,
-                            item_id   => [ undef,       $item->itemnumber ],
-                            status    => [ 'requested', 'waiting' ],
-                            completed => 0,
-                            patron_id => $patron->borrowernumber,
+                            rule_name  => 'bookings_lead_period',
+                            itemtype   => $item->effective_itemtype,
+                            branchcode => "*"
                         }
                     );
-                    $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
+                    my $preparation_period = $rule ? $rule->rule_value : 1;
+                    my $reduceddue =
+                        dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )
+                        ->subtract( days => $preparation_period );
+                    $template_params->{reduceddue} = $reduceddue;
                 }
+                next
+                    if $patron_match
+                    && scalar(@conf_keys) > 0
+                    && grep( { $needsconfirmation_key eq $_ } @conf_keys );
+
+                $template_params->{$needsconfirmation_key}    = $needsconfirmation->{$needsconfirmation_key};
+                $template_params->{getTitleMessageIteminfo}   = $biblio->title;
+                $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
+                $template_params->{NEEDSCONFIRMATION}         = 1;
+                $confirm_required                             = 1;
+                push( @{ $template_params->{sessionConfirmationKeys} }, $needsconfirmation_key );
+            }
+        }
+        unless ($confirm_required) {
+            my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
+            if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
+                my $recall = Koha::Recalls->find(
+                    {
+                        biblio_id => $item->biblionumber,
+                        item_id   => [ undef,       $item->itemnumber ],
+                        status    => [ 'requested', 'waiting' ],
+                        completed => 0,
+                        patron_id => $patron->borrowernumber,
+                    }
+                );
+                $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
+            }
 
                 # If booked (alerts or confirmation) update datedue to end of booking
                 if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {

@@ -1308,4 +1308,38 @@ $(document).ready(function() {
         $("#return-claims-table").DataTable().search("is_unresolved").draw();
     });
 
+    $(".confirmation-required-form").on("submit", function (e) {
+
+        var currentCookieValue = Cookies.get("patronSessionConfirmation") || '';
+        var currentPatron = currentCookieValue.split(':')[0] || null;
+
+        var rememberForSession = $('#patron_session_confirmation').is(":checked");
+        var sessionConfirmations = []
+        $('input[name^=session_confirmations]').each(function() {
+            sessionConfirmations.push($(this).val());
+        });
+
+        if(currentPatron != borrowernumber && !rememberForSession) {
+            Cookies.set("patronSessionConfirmation", borrowernumber + ':', { sameSite: 'Lax' });
+            return true
+        }
+
+        if(currentPatron == borrowernumber && rememberForSession) {
+            sessionConfirmations.forEach(function(sessionConfirmation) {
+                currentCookieValue += sessionConfirmation + '|';
+            })
+            Cookies.set("patronSessionConfirmation", currentCookieValue, { sameSite: 'Lax' });
+            return true
+        }
+
+        if(currentPatron != borrowernumber && rememberForSession) {
+            var newCookieValue = borrowernumber + ':';
+            sessionConfirmations.forEach(function(sessionConfirmation) {
+                newCookieValue += sessionConfirmation + '|';
+            })
+            Cookies.set("patronSessionConfirmation", newCookieValue, { sameSite: 'Lax' });
+            return true
+        }
+        return true
+    });
  });
