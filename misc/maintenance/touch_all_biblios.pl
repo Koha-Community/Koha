@@ -102,6 +102,7 @@ my $averagetime = 0;
 $averagetime = $time / $totalcount if $totalcount;
 print "Good: $goodcount, Bad: $badcount (of $totalcount) in $time seconds\n";
 printf "Accuracy: %.2f%%\nAverage time per record: %.6f seconds\n", $accuracy, $averagetime if (defined $verbose);
+print "You may wish to run the build_holds_queue.pl script now if you are using RealTimeHoldsQueue\n" if $goodcount;
 
 =head1 NAME
 
