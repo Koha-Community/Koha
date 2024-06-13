@@ -81,7 +81,7 @@ if ( $op eq 'add_form' ) {
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
     $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
     $op = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $framework = Koha::BiblioFrameworks->find($frameworkcode);
     my $count = Koha::Biblios->search( { frameworkcode => $frameworkcode, } )->count;
 
