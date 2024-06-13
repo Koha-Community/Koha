@@ -90,7 +90,7 @@ if( C4::Context->only_my_library ){
     my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'} })->count();
     $template->param( pendingsuggestions => $local_pendingsuggestions_count );
 } else {
-    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED" });
+    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED", archived => 0 });
     my $local_pendingsuggestions_count = $pendingsuggestions->search({ 'me.branchcode' => C4::Context->userenv()->{'branch'} })->count();
     my $pendingsuggestions_count = $pendingsuggestions->count();
     $template->param(
