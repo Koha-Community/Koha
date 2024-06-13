@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "35597",
@@ -13,7 +14,6 @@ return {
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
             VALUES ('SuggestionsLog', '0', 'If enabled, log purchase suggestion changes', '' , 'YesNo')
         }
-        );
-        say $out "Added new system preference 'SuggestionsLog'";
+        ) == 1 and say_success( $out, "Added new system preference 'SuggestionsLog'" );
     },
 };
