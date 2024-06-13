@@ -82,7 +82,7 @@ if ( $op eq 'add_form' ) {
     }
     $op = 'list';
 
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $authority_type = Koha::Authority::Types->find($authtypecode);
     my $authorities_using_it = Koha::Authorities->search( { authtypecode => $authtypecode } )->count;
     $template->param(
