@@ -8,7 +8,7 @@ use FindBin qw($Bin);
 use lib "$Bin";
 use Net::Server::PreFork;
 use IO::Socket::INET;
-use Socket qw(:DEFAULT :crlf);
+use Socket qw(:DEFAULT :crlf TCP_KEEPIDLE TCP_KEEPINTVL IPPROTO_TCP);
 use Scalar::Util qw(blessed);
 require UNIVERSAL::require;
 
@@ -89,6 +89,126 @@ push @parms, 'group=' . $>;
 #
 # This is the main event.
 __PACKAGE__ ->run(@parms);
+
+#
+# Server
+#
+
+=head3 options
+
+As per Net::Server documentation, override "options" to provide your own
+custom options to the Net::Server* object. This allows us to use the Net::Server
+infrastructure for configuration rather than hacking our own configuration into the
+object.
+
+=cut
+
+sub options {
+    my $self     = shift;
+    my $prop     = $self->{'server'};
+    my $template = shift;
+
+    # setup options in the parent classes
+    $self->SUPER::options($template);
+
+    $prop->{'custom_tcp_keepalive'} ||= undef;
+    $template->{'custom_tcp_keepalive'} = \$prop->{'custom_tcp_keepalive'};
+
+    $prop->{'custom_tcp_keepalive_time'} ||= undef;
+    $template->{'custom_tcp_keepalive_time'} = \$prop->{'custom_tcp_keepalive_time'};
+
+    $prop->{'custom_tcp_keepalive_intvl'} ||= undef;
+    $template->{'custom_tcp_keepalive_intvl'} = \$prop->{'custom_tcp_keepalive_intvl'};
+}
+
+=head3 post_configure_hook
+
+As per Net::Server documentation, this method validates our custom configuration.
+
+=cut
+
+sub post_configure_hook {
+    my $self = shift;
+    my $prop = $self->{'server'};
+    if ( defined $prop->{'custom_tcp_keepalive'} && $prop->{'custom_tcp_keepalive'} ) {
+
+        #NOTE: Any true value defined is forced to 1 just for the sake of predictability
+        $prop->{'custom_tcp_keepalive'} = 1;
+    }
+
+    foreach my $key ( 'custom_tcp_keepalive_time', 'custom_tcp_keepalive_intvl' ) {
+        my $value = $prop->{$key};
+
+        #NOTE: A regex is used here to detect a positive integer, as int() returns integers but does not validate them
+        #NOTE: We do not allow zero as it can lead to problematic behaviour
+        if ( $value && $value =~ /^\d+$/ ) {
+
+            #NOTE: Strictly, you must convert into an integer as a string will cause setsockopt to fail
+            $prop->{$key} = int($value);
+        }
+    }
+}
+
+=head3 post_accept_hook
+
+This hook occurs after the client connection socket is created, which gives
+us an opportunity to enable support for TCP keepalives using the SO_KEEPALIVE
+socket option.
+
+By default, the kernel-level defaults (in seconds) are used. You can view these in the output of "sysctl -a":
+net.ipv4.tcp_keepalive_intvl = 75
+net.ipv4.tcp_keepalive_time = 7200
+
+Alternatively, you can use "custom_tcp_keepalive_time" and "custom_tcp_keepalive_intvl" to define
+your own custom values for the socket. Note that these parameters are defined at the top server-level
+and not on the listener-level.
+
+If you lower "custom_tcp_keepalive_time" below 75, you will also need to set "custom_tcp_keepalive_intvl".
+The "tcp_keepalive_time" is the initial time used for the keepalive timer, and the "tcp_keepalive_intvl"
+is the time used for subsequent keepalive timers. However, timers only send keepalive ACKs if the idle time
+elapsed is greater than "tcp_keepalive_time".
+
+Thus, if "tcp_keepalive_time = 10" and "tcp_keepalive_intvl = 5", a keepalive ACK will be sent every 10 seconds
+of idle time. If "tcp_keepalive_intvl = 10" and "tcp_keepalive_time = 5", a keepalive ACK will be sent after 5
+seconds of idle time, and the next keepalive ACK will be sent after 10 seconds of idle time. Generally speaking,
+it's best to set "tcp_keepalive_time" to be higher than "tcp_keepalive_intvl".
+
+Reminder: once these settings are set on the socket, they are handled by the operating system kernel, and not
+by the SIP server application. If you are having trouble with your settings, monitor your TCP traffic using
+a tool such as "tcpdump" to review and refine how they work.
+
+=cut
+
+sub post_accept_hook {
+    my $self   = shift;
+    my $prop   = $self->{'server'};
+    my $client = shift || $prop->{'client'};
+
+    my $tcp_keepalive       = $prop->{custom_tcp_keepalive};
+    my $tcp_keepalive_time  = $prop->{custom_tcp_keepalive_time};
+    my $tcp_keepalive_intvl = $prop->{custom_tcp_keepalive_intvl};
+
+    if ($tcp_keepalive) {
+
+        #NOTE: set the SO_KEEPALIVE option to enable TCP keepalives
+        setsockopt( $client, SOL_SOCKET, SO_KEEPALIVE, 1 )
+            or die "Unable to set SO_KEEPALIVE: $!";
+
+        if ($tcp_keepalive_time) {
+
+            #NOTE: override "net.ipv4.tcp_keepalive_time" kernel parameter for this socket
+            setsockopt( $client, IPPROTO_TCP, TCP_KEEPIDLE, $tcp_keepalive_time )
+                or die "Unable to set TCP_KEEPIDLE: $!";
+        }
+
+        if ($tcp_keepalive_intvl) {
+
+            #NOTE: override "net.ipv4.tcp_keepalive_intvl" kernel parameter for this socket
+            setsockopt( $client, IPPROTO_TCP, TCP_KEEPINTVL, $tcp_keepalive_intvl )
+                or die "Unable to set TCP_KEEPINTVL: $!";
+        }
+    }
+}
 
 #
 # Child
