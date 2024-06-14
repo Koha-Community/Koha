@@ -88,7 +88,7 @@ my $pendingtags        = get_count_by_tag_status(0);
 # both to template
 
 if( C4::Context->only_my_library ){
-    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'} })->count();
+    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'}, archived => 0 })->count();
     $template->param( pendingsuggestions => $local_pendingsuggestions_count );
 } else {
     my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED", archived => 0 });
