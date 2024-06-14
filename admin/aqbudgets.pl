@@ -185,7 +185,7 @@ if ($op eq 'add_form') {
 #---------------------- DEFAULT DISPLAY BELOW ---------------------
 
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'cud-delete_confirm') {
+} elsif ($op eq 'delete_confirm') {
 
     my $budget = GetBudget($budget_id);
     $template->param(

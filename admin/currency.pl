@@ -91,7 +91,7 @@ if ( $op eq 'add_form' ) {
     }
     $searchfield = q||;
     $op          = 'list';
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
 
     my $nb_of_orders = Koha::Acquisition::Orders->search( { currency => $currency->currency } )->count;
