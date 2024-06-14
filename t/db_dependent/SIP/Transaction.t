@@ -659,7 +659,7 @@ subtest do_checkout_with_sysprefs_override => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                branchcode => $library->branchcode,
+                branchcode   => $library->branchcode,
                 categorycode => $patron_category->{categorycode},
             }
         }
@@ -681,7 +681,7 @@ subtest do_checkout_with_sysprefs_override => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                branchcode => $library->branchcode,
+                branchcode   => $library->branchcode,
                 categorycode => $patron_category->{categorycode},
             }
         }
@@ -797,7 +797,7 @@ subtest do_checkout_with_patron_blocked => sub {
             source => 'Category',
             value  => {
                 categorycode   => 'NOT_X2', category_type => 'P', enrolmentfee => 0, noissueschargeguarantees => 0,
-                noissuescharge => 0,       noissueschargeguarantorswithguarantees => 0
+                noissuescharge => 0,        noissueschargeguarantorswithguarantees => 0
             }
         }
     );
@@ -818,7 +818,7 @@ subtest do_checkout_with_patron_blocked => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                branchcode => $library->branchcode,
+                branchcode   => $library->branchcode,
                 categorycode => $patron_category->{categorycode},
             }
         }

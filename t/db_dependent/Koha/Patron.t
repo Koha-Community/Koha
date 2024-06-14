@@ -2412,14 +2412,14 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     )->store;
 
     my $patron_borrowing_status;
-    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
 
     is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Only patron's fines are reported in total" );
     is( $patron_borrowing_status->{noissuescharge}->{limit},     10, "Limit correctly identified at category level" );
     is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 1,  "Patron is over the charge limit" );
 
     $patron->category->noissuescharge(undef);
-    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
     is( $patron_borrowing_status->{noissuescharge}->{limit}, 50, "Limit correctly identified at global syspref level" );
     is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Charges correctly identified" );
     is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 0,  "Patron is within the charge limit" );
@@ -2432,7 +2432,7 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 1,     "Patron is over the charge limit" );
 
     $patron->category->noissueschargeguarantees(12);
-    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit}, 12,
         "Limit correctly identified at patron category level"
@@ -2441,12 +2441,12 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     is( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit}, 0,     "Patron is inside the charge limit" );
 
     is(
-        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 0,
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, undef,
         "Limit correctly identified as not set at either patron category or global syspref level"
     );
     is(
-        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 22.22,
-        "Charges correctly identified"
+        $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}, 0,
+        "Charges ignored as there is no limit set at either patron category or global syspref level"
     );
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 0,
@@ -2455,7 +2455,7 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
 
     $patron->category->noissueschargeguarantorswithguarantees(23);
     t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 20 );
-    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 23,
         "Limit correctly identified at patron category level"
@@ -2470,8 +2470,7 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     );
 
     $patron->category->noissueschargeguarantorswithguarantees(undef);
-    t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantorsWithGuarantees', 20 );
-    $patron_borrowing_status = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    $patron_borrowing_status = $patron->is_patron_inside_charge_limits();
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit}, 20,
         "Limit correctly defaults to global syspref"
@@ -2482,7 +2481,7 @@ subtest 'is_patron_inside_charge_limits() tests' => sub {
     );
     is(
         $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}, 1,
-        "Patron is inside the charge limit"
+        "Patron is over the charge limit"
     );
 
     $schema->storage->txn_rollback;
