@@ -116,7 +116,8 @@
                             [% END %]</tbody
                         >
                     </table>
-                    <div class="pages">[% pagination_bar | $raw %]</div>
+
+                    <nav class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </nav>
                 [% ELSE %]
                     [% IF ( status ) %]<p><strong>No comments have been approved.</strong></p>[% ELSE %]<p><strong>No comments to moderate.</strong></p>[% END %]
                 [% END %]

@@ -1246,7 +1246,7 @@
                                     <!-- /#toolbar.btn-toolbar -->
                                 [% END # /IF batch operations || ( unlimited_total > 10 && limit <= 1000 ) %]
 
-                                <div class="pages"> [% pagination_bar | $raw %] </div>
+                                <nav id="pagination_top" class="pages"> [% pagination_bar | $raw %] </nav>
                             [% END # UNLESS ( errors ) %]
                         [% END # IF ( execute ) %]
 
@@ -1357,7 +1357,7 @@
                                 </tbody>
                             </table>
                         [% END %]
-                        <div class="pages">[% pagination_bar | $raw %]</div>
+                        <nav class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </nav>
                     </div>
                     [% INCLUDE 'chart.inc' %]
                 [% END #/IF ( execute ) %]

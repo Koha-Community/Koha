@@ -242,7 +242,9 @@
         [% IF itemsloop %]
             [% SET contents = shelf.get_contents %]
             [% IF ( contents.count ) %]<p>This list contains [% contents.count | html %] titles</p>[% END %]
-            <div class="pages">[% pagination_bar | $raw %]</div>
+
+            <nav class="pages" id="pagination_top"> [% pagination_bar | $raw %] </nav>
+
             <form action="/cgi-bin/koha/virtualshelves/shelves.pl" id="listform" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-remove_biblios" />
@@ -410,7 +412,7 @@
                 </div>
                 <!-- /.page-section -->
 
-                <div class="pages">[% pagination_bar | $raw %]</div>
+                <nav class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </nav>
             </form>
         [% END # /IF itemsloop %]
     [% END # /IF op == 'view' %]

@@ -102,7 +102,7 @@
                 [% total | html %] result(s) found in catalog,
                 <a href="#searchresult-breeding">[% breeding_count | html %] result(s) found in reservoir</a>
             </div>
-            <div class="pages">[% pagination_bar | $raw %]</div>
+            <nav class="pages" id="pagination_top"> [% pagination_bar | $raw %] </nav>
             <div class="searchresults">
                 <table>
                     <tr>
@@ -196,7 +196,7 @@
                         </tr>
                     [% END # /FOREACH resultsloo %]
                 </table>
-                <div class="pages">[% pagination_bar | $raw %]</div>
+                <nav class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </nav>
             </div>
             <!-- /.searchresults -->
         </div>

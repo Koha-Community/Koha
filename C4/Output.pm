@@ -109,13 +109,19 @@ sub pagination_bar {
 
     # navigation bar useful only if more than one page to display !
     if ( $nb_pages > 1 ) {
+        $pagination_bar = '<ul class="pagination">';
 
         # link to first page?
         if ( $current_page > 1 ) {
             $pagination_bar .=
-                "\n" . '&nbsp;' . '<a href="' . $url . '1' . $url_suffix . '"rel="start">' . '&lt;&lt;' . '</a>';
-        } else {
-            $pagination_bar .= "\n" . '&nbsp;<span class="inactive">&lt;&lt;</span>';
+                  "\n"
+                . ''
+                . '<li class="page-item"><a class="page-link output first" href="'
+                . $url . '1'
+                . $url_suffix
+                . '"rel="start">'
+                . '<i class="fa fa-fw fa-angle-double-left"></i> First'
+                . '</a></li>';
         }
 
         # link on previous page ?
@@ -123,9 +129,15 @@ sub pagination_bar {
             my $previous = $current_page - 1;
 
             $pagination_bar .=
-                "\n" . '&nbsp;' . '<a href="' . $url . $previous . $url_suffix . '" rel="prev">' . '&lt;' . '</a>';
-        } else {
-            $pagination_bar .= "\n" . '&nbsp;<span class="inactive">&lt;</span>';
+                  "\n"
+                . ''
+                . '<li class="page-item"><a class="page-link output previous" href="'
+                . $url
+                . $previous
+                . $url_suffix
+                . '" rel="prev">'
+                . '<i class="fa fa-fw fa-angle-left"></i> Previous'
+                . '</a></li>';
         }
 
         my $min_to_display      = $current_page - $pages_around;
@@ -143,20 +155,26 @@ sub pagination_bar {
                 if ( defined $last_displayed_page
                     and $last_displayed_page != $page_number - 1 )
                 {
-                    $pagination_bar .= "\n" . '&nbsp;<span class="inactive">...</span>';
+                    $pagination_bar .= "\n" . '<li class="page-item disabled"><a class="page-link">...</a></li>';
                 }
 
                 if ( $page_number == $current_page ) {
-                    $pagination_bar .= "\n" . '&nbsp;' . '<span class="currentPage">' . $page_number . '</span>';
+                    $pagination_bar .=
+                          "\n"
+                        . ''
+                        . '<li class="page-item active" aria-current="page"><a class="page-link" href="#">'
+                        . $page_number
+                        . '</a></li>';
                 } else {
                     $pagination_bar .=
                           "\n"
-                        . '&nbsp;'
-                        . '<a href="'
+                        . ''
+                        . '<li class="page-item"><a class="page-link" href="'
                         . $url
                         . $page_number
                         . $url_suffix . '">'
-                        . $page_number . '</a>';
+                        . $page_number
+                        . '</a></li>';
                 }
                 $last_displayed_page = $page_number;
             }
@@ -166,19 +184,29 @@ sub pagination_bar {
         if ( $current_page < $nb_pages ) {
             my $next = $current_page + 1;
 
-            $pagination_bar .=
-                "\n" . '&nbsp;<a href="' . $url . $next . $url_suffix . '" rel="next">' . '&gt;' . '</a>';
-        } else {
-            $pagination_bar .= "\n" . '&nbsp;<span class="inactive">&gt;</span>';
+            $pagination_bar .= "\n"
+                . '<li class="page-item"><a class="page-link output next" href="'
+                . $url
+                . $next
+                . $url_suffix
+                . '" rel="next">'
+                . 'Next <i class="fa fa-fw fa-angle-right"></i>'
+                . '</a></li>';
         }
 
         # link to last page?
         if ( $current_page != $nb_pages ) {
-            $pagination_bar .=
-                "\n" . '&nbsp;<a href="' . $url . $nb_pages . $url_suffix . '" rel="last">' . '&gt;&gt;' . '</a>';
-        } else {
-            $pagination_bar .= "\n" . '&nbsp;<span class="inactive">&gt;&gt;</span>';
+            $pagination_bar .= "\n"
+                . '<li class="page-item"><a class="page-link output last" href="'
+                . $url
+                . $nb_pages
+                . $url_suffix
+                . '" rel="last">'
+                . 'Last <i class="fa fa-fw fa-angle-double-right"></i>'
+                . '</a></li>';
         }
+
+        $pagination_bar .= "\n" . '</ul>';
     }
 
     return $pagination_bar;

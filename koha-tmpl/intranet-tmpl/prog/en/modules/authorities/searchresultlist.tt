@@ -54,7 +54,7 @@
         [% END %]
 
         [% IF ( total ) %]
-            <div class="pages">[% pagination_bar | $raw %]</div>
+            <nav class="pages" id="pagination_top"> [% pagination_bar | $raw %] </nav>
 
             <p id="authorities_searchresultlist_current_page_info"> Results [% from | html %] to [% to | html %] of [% total | html %] </p>
 
@@ -146,7 +146,7 @@
 
             [% INCLUDE 'authority-detail-modal.inc' %]
 
-            <div class="pages">[% pagination_bar | $raw %]</div>
+            <nav class="pages" id="pagination_bottom"> [% pagination_bar | $raw %] </nav>
         [% ELSE %]
             No results found
         [% END %]
