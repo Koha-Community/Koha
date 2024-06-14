@@ -870,7 +870,6 @@ sub CanBookBeIssued {
 
     # Check the debt of this patrons guarantees
     my $no_issues_charge_guarantees = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{limit};
-    $no_issues_charge_guarantees = undef unless looks_like_number($no_issues_charge_guarantees);
     if ( defined $no_issues_charge_guarantees ) {
         if ( $patron_borrowing_status->{NoIssuesChargeGuarantees}->{overlimit} && !$inprocess && !$allowfineoverride ) {
             $issuingimpossible{DEBT_GUARANTEES} = $patron_borrowing_status->{NoIssuesChargeGuarantees}->{charge};
@@ -889,7 +888,6 @@ sub CanBookBeIssued {
 
     # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
     my $no_issues_charge_guarantors = $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
-    $no_issues_charge_guarantors = undef unless looks_like_number($no_issues_charge_guarantors);
     if ( defined $no_issues_charge_guarantors ) {
         if (   $patron_borrowing_status->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit}
             && !$inprocess

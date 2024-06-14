@@ -614,7 +614,6 @@ if ( $patron ) {
     if ($no_issues_charge_guarantors) {
         if ( $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit} ) {
             $template->param(
-                noissues                      => 1,
                 charges_guarantors_guarantees => $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{charge}
             );
             $noissues = 1 unless C4::Context->preference("allowfineoverride");
@@ -622,7 +621,6 @@ if ( $patron ) {
     }
 
     my $no_issues_charge_guarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
-    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
         if ( $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit} ) {
             $template->param(

@@ -2916,7 +2916,7 @@ If any blockers are found, these are returned in a hash
 =cut
 
 sub can_borrow {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $status = { can_borrow => 1 };
 
@@ -2948,17 +2948,15 @@ sub is_patron_inside_charge_limits {
     my ( $self, $args ) = @_;
 
     my $borrowernumber       = $args->{borrowernumber};
-    my $patron               = $args->{patron} || Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+    my $patron               = $self || Koha::Patrons->find( { borrowernumber => $borrowernumber } );
     my $patron_category      = $patron->category;
     my $patron_charge_limits = {};
 
-    my $no_issues_charge = $patron_category->noissuescharge || C4::Context->preference('noissuescharge') || 0;
+    my $no_issues_charge = $patron_category->noissuescharge || C4::Context->preference('noissuescharge');
     my $no_issues_charge_guarantees =
-        $patron_category->noissueschargeguarantees || C4::Context->preference('NoIssuesChargeGuarantees') || 0;
-    my $no_issues_charge_guarantors_with_guarantees =
-           $patron_category->noissueschargeguarantorswithguarantees
-        || C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees')
-        || 0;
+        $patron_category->noissueschargeguarantees || C4::Context->preference('NoIssuesChargeGuarantees');
+    my $no_issues_charge_guarantors_with_guarantees = $patron_category->noissueschargeguarantorswithguarantees
+        || C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees');
 
     my $non_issues_charges            = $patron->account->non_issues_charges;
     my $guarantees_non_issues_charges = 0;
