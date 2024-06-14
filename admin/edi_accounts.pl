@@ -63,7 +63,7 @@ if ( $op eq 'acct_form' ) {
         $template->param( plugins => \@plugins );
     }
 }
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
     show_account($crypt);
     $template->param( delete_confirm => 1 );
 }
