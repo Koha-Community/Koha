@@ -339,7 +339,7 @@ if ( $op eq 'add_form' ) {
     exit;
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'delete_confirm' ) {
     my $value = C4::Context->preference($searchfield);
     $template->param(
         searchfield => $searchfield,
