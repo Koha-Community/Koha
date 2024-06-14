@@ -804,8 +804,33 @@
                }
             }
         }
+
+        $(document).ready(function () {
+            $("#info_digests").tooltip();
+
+            $("#finesholdsissues a[data-toggle='tab']").on(
+                "shown.bs.tab",
+                function (e) {
+                    var oTable = $(
+                        "div.dataTables_wrapper > table",
+                        $(e.target.hash)
+                    ).dataTable();
+                    if (oTable.length > 0) {
+                        oTable.fnAdjustColumnSizing();
+                    }
+                }
+            );
+
+            $("#view_restrictions").on("click", function () {
+                $("#reldebarments-tab").click();
+            });
+
+            $("#view_guarantees_finesandcharges").on("click", function () {
+                $("#guarantees_finesandcharges-tab").click();
+            });
+        });
     </script>
-    [% Asset.js("js/bookings-table.js") | $raw %]
+    [% Asset.js("js/tables/bookings.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,30 +1,9 @@
+/* keep tidy */
+// Bookings
 $(document).ready(function () {
     var bookings_table;
     $(document).ready(function () {
-        $("#info_digests").tooltip();
 
-        $("#finesholdsissues a[data-toggle='tab']").on(
-            "shown.bs.tab",
-            function (e) {
-                var oTable = $(
-                    "div.dataTables_wrapper > table",
-                    $(e.target.hash)
-                ).dataTable();
-                if (oTable.length > 0) {
-                    oTable.fnAdjustColumnSizing();
-                }
-            }
-        );
-
-        $("#view_restrictions").on("click", function () {
-            $("#reldebarments-tab").click();
-        });
-
-        $("#view_guarantees_finesandcharges").on("click", function () {
-            $("#guarantees_finesandcharges-tab").click();
-        });
-
-        // Bookings
         // Load bookings table on tab selection
         $("#bookings-tab").on("click", function () {
             if (!bookings_table) {
