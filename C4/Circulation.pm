@@ -819,9 +819,9 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    my $patron_borrowing_status = $patron->can_borrow({ patron => $patron });
+    my $patron_borrowing_status = $patron->can_borrow();
     if ( $patron->category->category_type eq 'X' && (  $item_object->barcode  )) {
-	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
+        # stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         C4::Stats::UpdateStats(
             {
                 branch         => C4::Context->userenv->{'branch'},

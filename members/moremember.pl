@@ -242,7 +242,7 @@ my $issues = $patron->checkouts;
 my $balance = 0;
 $balance = $patron->account->balance;
 
-my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+my $patron_charge_limits = $patron->is_patron_inside_charge_limits();
 if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
     $template->param(
         charges       => 1,

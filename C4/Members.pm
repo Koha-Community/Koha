@@ -135,7 +135,7 @@ sub patronflags {
     my $dbh=C4::Context->dbh;
     my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
     my $account = $patron->account;
-    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits();
     if ( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
         my %flaginfo;
         my $noissuescharge = $patron_charge_limits->{noissuescharge}->{limit} || 5;

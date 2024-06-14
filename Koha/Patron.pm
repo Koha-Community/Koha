@@ -2916,17 +2916,16 @@ If any blockers are found, these are returned in a hash
 =cut
 
 sub can_borrow {
-    my ( $self, $args ) = @_;
+    my ( $self ) = @_;
 
-    my $patron = $args->{patron};
     my $status = { can_borrow => 1 };
 
-    $status->{debarred}   = 1 if $patron->debarred;
-    $status->{expired}    = 1 if $patron->is_expired;
+    $status->{debarred}   = 1 if $self->debarred;
+    $status->{expired}    = 1 if $self->is_expired;
     $status->{can_borrow} = 0 if $status->{debarred} || $status->{expired};
 
     # Patron charges
-    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    my $patron_charge_limits = $self->is_patron_inside_charge_limits();
     %$status = ( %$status, %$patron_charge_limits );
     $status->{can_borrow} = 0
         if $patron_charge_limits->{noissuescharge}->{overlimit}

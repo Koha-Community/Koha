@@ -99,23 +99,25 @@ sub new {
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
-    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
-    my $fines_amount = $patron_charge_limits->{noissuescharge}->{charge};
+    my $patron_charge_limits  = $patron->is_patron_inside_charge_limits();
+    my $fines_amount          = $patron_charge_limits->{noissuescharge}->{charge};
     my $personal_fines_amount = $fines_amount;
-    my $fee_limit = $patron_charge_limits->{noissuescharge}->{limit} || 5;
-    my $noissueschargeguarantorswithguarantees = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
+    my $fee_limit             = $patron_charge_limits->{noissuescharge}->{limit} || 5;
+    my $noissueschargeguarantorswithguarantees =
+        $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{limit};
     my $noissueschargeguarantees = $patron_charge_limits->{NoIssuesChargeGuarantees}->{limit};
+
     my $fines_msg = "";
     my $fine_blocked = 0;
-    if( $patron_charge_limits->{noissuescharge}->{overlimit} ){
+    if ( $patron_charge_limits->{noissuescharge}->{overlimit} ) {
         $fine_blocked = 1;
         $fines_msg .= " -- " . "Patron blocked by fines" if $fine_blocked;
-    } elsif ( $noissueschargeguarantorswithguarantees ) {
+    } elsif ($noissueschargeguarantorswithguarantees) {
         $fines_amount = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{charge};
         $fine_blocked = $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit};
         $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on related accounts" if $fine_blocked;
-    } elsif ( $noissueschargeguarantees ) {
-        if( $patron->guarantee_relationships->count ){
+    } elsif ($noissueschargeguarantees) {
+        if ( $patron->guarantee_relationships->count ) {
             $fines_amount += $patron_charge_limits->{NoIssuesChargeGuarantees}->{charge};
             $fine_blocked = $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit};
             $fines_msg .= " -- " . "Patron blocked by fines ($fines_amount) on guaranteed accounts" if $fine_blocked;

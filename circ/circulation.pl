@@ -594,7 +594,7 @@ if ( $patron ) {
         $template->param( is_anonymous => 1 );
         $noissues = 1;
     }
-    my $patron_charge_limits = $patron->is_patron_inside_charge_limits( { patron => $patron } );
+    my $patron_charge_limits = $patron->is_patron_inside_charge_limits();
     if( $patron_charge_limits->{noissuescharge}->{charge} > 0 ) {
         my $noissuescharge = $patron_charge_limits->{noissuescharge}->{limit} || 5; # FIXME If noissuescharge == 0 then 5, why??
         $noissues ||= ( not C4::Context->preference("AllowFineOverride") and $patron_charge_limits->{noissuescharge}->{overlimit} );
