@@ -523,3 +523,21 @@
         </div> <!-- /.panel-body -->
     </div> <!-- /.panel-collapse -->
 [% END %]
+
+[% BLOCK acquisitions_filter_form %]
+    <form action="/cgi-bin/koha/acqui/histsearch.pl" method="get">
+        [% IF ( context == "sidebar" ) %]
+            <fieldset class="brief">
+                <h4>Search orders</h4>
+        [% ELSE %]
+            <fieldset class="rows">
+                <legend>Search orders</legend>
+        [% END %]
+            [% INCLUDE 'filter-orders.inc' context == context %]
+            <input type="hidden" name="do_search" value="1" />
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="Search" />
+        </fieldset>
+    </form>
+[% END %]

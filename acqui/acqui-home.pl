@@ -36,6 +36,7 @@ use C4::Members;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
 use Koha::Suggestions;
+use Koha::DateUtils qw( dt_from_string );
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -117,18 +118,24 @@ foreach my $budget ( @{$budget_arr} ) {
     push @budget_loop, $budget;
 }
 
+my $filters;
+$filters->{from_placed_on} = my $from_placed_on = dt_from_string;
+$filters->{to_placed_on}   = my $to_placed_on   = dt_from_string;
+$filters->{from_placed_on}->set_time_zone('floating')->subtract( years => 1 );
+
 $template->param(
-    type          => 'intranet',
-    loop_budget   => \@budget_loop,
-    total         => $total,
-    totspent      => $totspent,
-    totordered    => $totordered,
-    totcomtd      => $totcomtd,
-    totavail      => $totavail,
-    total_active  => $total_active,
-    totspent_active     => $totspent_active,
-    totordered_active   => $totordered_active,
-    totavail_active     => $totavail_active,
+    type              => 'intranet',
+    loop_budget       => \@budget_loop,
+    total             => $total,
+    totspent          => $totspent,
+    totordered        => $totordered,
+    totcomtd          => $totcomtd,
+    totavail          => $totavail,
+    total_active      => $total_active,
+    totspent_active   => $totspent_active,
+    totordered_active => $totordered_active,
+    totavail_active   => $totavail_active,
+    filters           => $filters,
 );
 
 my $cur = Koha::Acquisition::Currencies->get_active;

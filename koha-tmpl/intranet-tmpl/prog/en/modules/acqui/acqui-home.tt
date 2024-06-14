@@ -49,7 +49,7 @@
     <div class="col">
 <div id="acqui_acqui_home_order">
     <fieldset>
-        <legend>Manage orders</legend>
+        <legend>Search vendors</legend>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="get">
             <p><label for="supplierpage">Vendor: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" class="btn btn-primary" value="Search" />
@@ -82,6 +82,8 @@
 [% END %]
 
 </div>
+
+[% PROCESS acquisitions_filter_form context => "main" %]
 
 [% IF ( loop_budget ) %]
 
@@ -218,6 +220,7 @@
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]

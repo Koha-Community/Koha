@@ -59,7 +59,7 @@
                 [% END %]
 
                 [% UNLESS ( order_loop ) %]
-                    [% PROCESS filter_form context => "main" %]
+                    [% PROCESS acquisitions_filter_form context => "main" %]
                 [% END %]
 
 
@@ -149,7 +149,7 @@
 <div class="col-md-2 order-sm-2 order-md-1">
     <aside>
         [% IF ( order_loop ) %]
-            [% PROCESS filter_form context => "sidebar" %]
+            [% PROCESS acquisitions_filter_form context => "sidebar" %]
         [% END %]
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
@@ -199,24 +199,6 @@
 
         });
     </script>
-[% END %]
-
-[% BLOCK filter_form %]
-    <form action="/cgi-bin/koha/acqui/histsearch.pl" method="get">
-        [% IF ( context == "sidebar" ) %]
-            <fieldset class="brief">
-                <h4>Search orders</h4>
-        [% ELSE %]
-            <fieldset class="rows">
-                <legend>Search orders</legend>
-        [% END %]
-            [% INCLUDE 'filter-orders.inc' search_form=1 %]
-            <input type="hidden" name="do_search" value="1" />
-        </fieldset>
-        <fieldset class="action">
-            <input type="submit" class="btn btn-primary" value="Search" />
-        </fieldset>
-    </form>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
