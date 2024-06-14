@@ -45,12 +45,6 @@ sub can_any_reset_password {
         : 0;
 }
 
-sub GetPatronCharges {
-    my ( $self, $params ) = @_;
-    my $charges = Koha::Patron->is_patron_inside_charge_limits({ borrowernumber => $params });
-    return $charges->{noissuescharge};
-}
-
 1;
 
 =head1 NAME

@@ -1,10 +1,9 @@
 [% USE Price %]
 [% USE Categories %]
-[% SET NoIssuesCharge = Categories.GetPatronCharges(borrowernumber) %]
-[% IF NoIssuesCharge.charge and NoIssuesCharge.charge > 0 %]
+[% IF NoIssuesCharge and NoIssuesCharge > 0 %]
     <li>
         <span class="circ-hlt">Charges:</span>
-        <span>Patron has outstanding charges of [% NoIssuesCharge.charge | $Price %].</span>
+        <span>Patron has outstanding charges of [% NoIssuesCharge | $Price %].</span>
         [% IF !Koha.Preference('AllowFineOverride') && NoIssuesCharge.limit && NoIssuesCharge.overlimit %]
            <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
         [% END %]
