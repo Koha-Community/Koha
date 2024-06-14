@@ -965,7 +965,7 @@
     </div> <!-- /.modal-dialog -->
 </div> <!-- /#barcodeSubmittedModal -->
 
-[% IF waiting_holds %]
+[% IF waiting_holds.count > 0 %]
     <div id="circ-warnwaitingholds-modal" class="modal fade audio-alert-action block">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1064,7 +1064,7 @@
             var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
         }
         $(document).ready(function() {
-            [% IF waiting_holds %]
+            [% IF waiting_holds.count > 0 %]
                 $('#circ-warnwaitingholds-modal .btn-primary').on('click',function() {
                     $('#mainform').submit();
                 });
