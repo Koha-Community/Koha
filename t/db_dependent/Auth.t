@@ -690,7 +690,7 @@ subtest 'Check value of login_attempts in checkpw' => sub {
 };
 
 subtest 'Check value of login_attempts in checkpw' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     t::lib::Mocks::mock_preference('FailedLoginAttempts', 3);
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -703,6 +703,10 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
     is( $test[0], -2, 'Patron returned as expired correctly' );
 
+    ## Make our patron the anonymous patron
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
+    @test = checkpw( $patron->userid, '123', undef, 'opac', 1 );
+    is( $test[0], -3, 'Patron returned as anonymous patron correctly' );
 };
 
 subtest '_timeout_syspref' => sub {
@@ -1084,7 +1088,7 @@ subtest 'checkpw() return values tests' => sub {
 
     subtest 'Internal check tests' => sub {
 
-        plan tests => 25;
+        plan tests => 29;
 
         $schema->storage->txn_begin;
 
@@ -1141,6 +1145,14 @@ subtest 'checkpw() return values tests' => sub {
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
 
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
+        @return = checkpw( $patron->userid, $password, undef, );
+
+        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( $return[0],        -3, '-3 returned' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
         @return = checkpw( $unused_userid, $password, undef, );
 
         is( scalar @return, 2,     "Two results on non-existing userid scenario" );
@@ -1158,7 +1170,7 @@ subtest 'checkpw() return values tests' => sub {
 
     subtest 'CAS check (mocked) tests' => sub {
 
-        plan tests => 25;
+        plan tests => 29;
 
         $schema->storage->txn_begin;
 
@@ -1222,6 +1234,13 @@ subtest 'checkpw() return values tests' => sub {
 
         is( scalar @return,    2,  "Two results on expired password scenario" );
         is( $return[0],        -2, '-2 returned' );
+        is( ref( $return[1] ), 'Koha::Patron' );
+        is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
+
+        t::lib::Mocks::mock_preference( 'AnonymousPatron', $patron->id );
+        @return = checkpw( $patron->userid, $password, undef, );
+        is( scalar @return,    2,  "Two results on expired password scenario" );
+        is( $return[0],        -3, '-3 returned' );
         is( ref( $return[1] ), 'Koha::Patron' );
         is( $return[1]->id,    $patron->id, 'Patron matched correctly' );
 
