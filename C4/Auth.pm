@@ -1414,8 +1414,8 @@ sub checkauth {
     my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
 
-    my $borrowernumber = $patron and $patron->borrowernumber;
-    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+    my $borrowernumber      = $patron and $patron->borrowernumber;
+    my $anonymous_patron    = C4::Context->preference('AnonymousPatron');
     my $is_anonymous_patron = $patron && ( $patron->borrowernumber eq $anonymous_patron );
 
     $template->param(
@@ -2063,10 +2063,9 @@ sub checkpw {
             @return = ();
         } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
-            if ( $patron->password_expired ) {
-                @return = ( -2, $patron );
-            }
             if ( $patron->borrowernumber eq $anonymous_patron ) {
+                @return = ( -3, $patron );
+            } elsif ( $patron->password_expired ) {
                 @return = ( -2, $patron );
             }
         } else {
