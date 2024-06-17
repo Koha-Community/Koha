@@ -149,4 +149,12 @@ $(document).ready(function(){
             return false;
         }
     });
+
+    $(".log-disabled").each(function(){
+        if( CAN_user_parameters_manage_sysprefs ){
+            let pref = $(this).data("log")
+            url = "/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=";
+            $(this).wrap("<a href='" + url + pref + "' target='_blank'></a>")
+        }
+    }).tooltip();
 });
