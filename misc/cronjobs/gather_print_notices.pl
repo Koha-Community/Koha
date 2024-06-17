@@ -291,9 +291,10 @@ sub send_files {
 
     my $email = Koha::Email->create(
         {
-            from    => $from,
-            to      => $to,
-            subject => 'Print notices for ' . $today_syspref,
+            from      => $from,
+            to        => $to,
+            subject   => 'Print notices for ' . $today_syspref,
+            text_body => ' ',
         }
     );
 
