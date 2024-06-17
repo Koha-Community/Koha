@@ -77,6 +77,8 @@
                 <thead>
                 <tr>
                     <th class="hq-title anti-the">Title</th>
+                    <th class="hq-author">Author</th>
+                    <th class="hq-pubdetails">Publication details</th>
                     <th class="hq-holdingbranch">Current library</th>
                     <th class="hq-homebranch">Home library</th>
                     <th class="hq-collection">Collection</th>
@@ -96,6 +98,16 @@
                     <td class="hq-title">
                         <span class="filter_column filter_text">
                             <input class="text_filter" type="text" placeholder="Title">
+                        </span>
+                    </td>
+                    <td class="hq-author">
+                        <span class="filter_column filter_text">
+                            <input class="text_filter" type="text" placeholder="Author">
+                        </span>
+                    </td>
+                    <td class="hq-pubdetails">
+                        <span class="filter_column filter_text">
+                            <input class="text_filter" type="text" placeholder="Author">
                         </span>
                     </td>
                     <td class="hq-holdingbranch">
@@ -177,9 +189,11 @@
                                 [% INCLUDE 'biblio-title.inc' biblio=itemsloo.biblio link = 1 %]
                             </p>
                             <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
-                            <div class="hq-author">[% itemsloo.biblio.author | html %]</div>
-                            [% IF ( itemsloo.biblio.biblioitem.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.biblio.biblioitem.editionstatement | html %]</div>[% END %]
+                        </td>
+                        <td class="hq-author">[% itemsloo.biblio.author | html %]</td>
+                        <td class="hq-pubdetails">
                             <div class="hq-pubdata">
+                                [% IF ( itemsloo.biblio.biblioitem.editionstatement ) %]<div class="hq-editionstatement">[% itemsloo.biblio.biblioitem.editionstatement | html %]</div>[% END %]
                                 [% IF ( itemsloo.biblio.biblioitem.publishercode ) %][% itemsloo.biblio.biblioitem.publishercode | html %][% END %]
 
                                 [% IF ( itemsloo.biblio.biblioitem.publicationyear ) %]
