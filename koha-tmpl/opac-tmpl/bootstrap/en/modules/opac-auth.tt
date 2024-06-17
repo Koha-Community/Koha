@@ -190,6 +190,12 @@
                             [% END # /IF GoogleOpenIDConnect %]
                         [% END # /UNLESS OPACShibOnly %]
 
+                        [% IF !(invalid_username_or_password || too_many_login_attempts) and is_anonymous_patron %]
+                            <div class="alert alert-info">
+                                <p><strong>Error: </strong>You can't log in as the anonymous patron!</p>
+                            </div>
+                        [% END %]
+
                         [% IF !(invalid_username_or_password || too_many_login_attempts) and password_has_expired %]
                             <div class="alert alert-info">
                                 <p><strong>Error: </strong>Your password has expired!</p>
