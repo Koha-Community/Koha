@@ -1,5 +1,4 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "26176",
@@ -13,19 +12,15 @@ return {
             UPDATE IGNORE systempreferences SET variable = "StaffLoginRestrictLibraryByIP"
             WHERE variable = "AutoLocation"
         }
-            ) == 1
-            && say_success( $out, "Renamed system preference 'AutoLocation' to 'StaffLoginRestrictLibraryByIP'" );
+        );
+        say $out "Renamed system preference 'AutoLocation' to 'StaffLoginRestrictLibraryByIP'";
 
         $dbh->do(
             q{
             UPDATE IGNORE systempreferences SET variable = "StaffLoginLibraryBasedOnIP"
             WHERE variable = "StaffLoginBranchBasedOnIP"
         }
-            ) == 1
-            && say_success(
-            $out,
-            "Renamed system preference 'StaffLoginBranchBasedOnIP' to 'StaffLoginLibraryBasedOnIP'"
-            );
-
+        );
+        say $out "Renamed system preference 'StaffLoginBranchBasedOnIP' to 'StaffLoginLibraryBasedOnIP'";
     },
 };
