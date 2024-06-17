@@ -1413,6 +1413,11 @@ sub checkauth {
     my $auth_error = $query->param('auth_error');
     my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
+
+    my $borrowernumber = $patron and $patron->borrowernumber;
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+    my $is_anonymous_patron = $patron && ( $patron->borrowernumber eq $anonymous_patron );
+
     $template->param(
         login                                 => 1,
         INPUTS                                => \@inputs,
@@ -1447,6 +1452,7 @@ sub checkauth {
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
         password_has_expired                  => ( $patron and $patron->password_expired ),
+        is_anonymous_patron                   => ( $is_anonymous_patron ),
         auth_error                            => $auth_error,
     );
 
@@ -1976,6 +1982,8 @@ sub checkpw {
     my $shib       = C4::Context->config('useshibboleth') && shib_ok();
     my $shib_login = $shib ? get_login_shib() : undef;
 
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+
     my @return;
     my $check_internal_as_fallback = 0;
     my $passwd_ok                  = 0;
@@ -2056,6 +2064,9 @@ sub checkpw {
         } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
             if ( $patron->password_expired ) {
+                @return = ( -2, $patron );
+            }
+            if ( $patron->borrowernumber eq $anonymous_patron ) {
                 @return = ( -2, $patron );
             }
         } else {
