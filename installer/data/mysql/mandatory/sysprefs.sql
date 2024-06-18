@@ -568,6 +568,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('opacuserlogin','1',NULL,'Enable or disable display of user login features','YesNo'),
 ('OPACUserSummary', 1, NULL, "Show the summary of a logged in user's checkouts, overdues, holds and fines on the mainpage", 'YesNo'),
 ('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
+('OPACVirtualCard','0',NULL,'If ON, the patron virtual library card tab in the OPAC will be enabled','YesNo'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on OPAC','Free'),
