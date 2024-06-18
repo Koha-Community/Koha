@@ -16,31 +16,33 @@
         [% t("Koha") | html %]
     [% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
+    <style>.pager div.dt-buttons { justify-content: flex-start; }</style>
 </head>
 
 <body id="pat_moremember-print" class="pat">
     <div id="main">
         <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | uri %]">Account summary: [% INCLUDE 'patron-title.inc' no_html = 1 %] &rsaquo;</a></h3>
-
-        <ul>
-            [% PROCESS 'display-address-style' %]
-            <li>[% IF ( patron.phone ) %][% patron.phone | html %][% ELSE %](no phone number on file)[% END %]</li>
-            <li>[% IF ( patron.email ) %][% patron.email | html %][% ELSE %](no primary email on file)[% END %]</li>
-            [% IF ( patron.emailpro ) %]
-                <li>[% patron.emailpro | html %]</li>
-            [% END %]
-            <li>Registration date: [% patron.dateenrolled | $KohaDates %]</li>
-            <li>Expiration date: [% patron.dateexpiry | $KohaDates %]</li>
-            <li>Library: [% Branches.GetName( patron.branchcode ) | html %]</li>
-            <li>Category: [% patron.category.description | html %]</li>
-        </ul>
+        <div class="page-section">
+            <ul>
+                [% PROCESS 'display-address-style' %]
+                <li>[% IF ( patron.phone ) %][% patron.phone | html %][% ELSE %](no phone number on file)[% END %]</li>
+                <li>[% IF ( patron.email ) %][% patron.email | html %][% ELSE %](no primary email on file)[% END %]</li>
+                [% IF ( patron.emailpro ) %]
+                    <li>[% patron.emailpro | html %]</li>
+                [% END %]
+                <li>Registration date: [% patron.dateenrolled | $KohaDates %]</li>
+                <li>Expiration date: [% patron.dateexpiry | $KohaDates %]</li>
+                <li>Library: [% Branches.GetName( patron.branchcode ) | html %]</li>
+                <li>Category: [% patron.category.description | html %]</li>
+            </ul>
+        </div>
 
         [% IF ( issues ) %]
+            <h2>Items checked out</h2>
             <table id="print-summary-checkouts">
-                <caption>Items checked out</caption>
                 <thead>
                     <tr>
-                        <th>Title</th>
+                        <th class="anti-the">Title</th>
                         <th>Author</th>
                         <th>Call number</th>
                         <th>Item type</th>
@@ -61,7 +63,7 @@
                             <td>[% issue.author | html %]</td>
                             <td>[% issue.itemcallnumber | html %]</td>
                             <td>[% ItemTypes.GetDescription( issue.itype ) | html %]</td>
-                            <td>[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
+                            <td data-order="[% issue.date_due | html %]">[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
                             <td>[% issue.barcode | html %]</td>
                             <td>[% issue.stocknumber | html %]</td>
                             [% IF ( issue.charge <= 0 ) %]
@@ -112,11 +114,11 @@
         [% END %]
 
     [% IF ( reserves ) %]
+        <h2>Pending holds</h2>
         <table id="print-summary-holds">
-            <caption>Pending holds</caption>
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th class="anti-the">Title</th>
                     <th>Author</th>
                     <th>Placed on</th>
                     <th>Expires on</th>
@@ -129,8 +131,8 @@
                     <tr>
                         <td>[% reserve.title | html %]</td>
                         <td>[% reserve.author | html %]</td>
-                        <td>[% reserve.reservedate | $KohaDates %]</td>
-                        <td>[% reserve.expirationdate | $KohaDates %]</td>
+                        <td data-sort="[% reserve.reservedate | html %]">[% reserve.reservedate | $KohaDates %]</td>
+                        <td data-sort="[% reserve.expirationdate | html %]">[% reserve.expirationdate | $KohaDates %]</td>
                         <td>[% reserve.waiting_at | html %]</td>
                         <td>[% reserve.priority | html %]</td>
                     </tr>
@@ -139,8 +141,8 @@
         </table>
     [% END %]
     [% IF accounts && totaldue != 0 %]
+        <h2>Account fines and payments</h2>
         <table id="print-summary-fines">
-            <caption>Account fines and payments</caption>
             <thead>
               <tr>
                   <th>Date</th>
@@ -153,7 +155,7 @@
             <tbody>
                 [% FOREACH account IN accounts %]
                     <tr>
-                        <td>[% account.date | $KohaDates %]</td>
+                        <td data-sort="[% account.date| html %]">[% account.date | $KohaDates %]</td>
                         <td>
                             [% PROCESS account_type_description account=account %]
                             [%- IF account.payment_type %]
@@ -220,43 +222,33 @@
         var holds_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-holds', 'json' ) | $raw %];
         var fines_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-fines', 'json' ) | $raw %];
 
-        function moveColumnsButton( tableId ){
-            /* Hide the export button */
-            $("#" + tableId + "_wrapper").find("button.export_controls").remove();
-            /* We don't show the table controls toolbar here, so the columns settings button looks better as part of the caption */
-            $("#" + tableId).find("caption").append( $("#" + tableId + "_wrapper").find("button.columns_controls") );
-        }
-
-        $(document).ready(function() {
-
+        function initTables(){
             KohaTable("print-summary-checkouts", {
-                "dom": "Bt",
+                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
                 "paging": false,
                 "autoWidth": false,
-                initComplete: function( settings) {
-                    moveColumnsButton( settings.nTable.id );
-                }
             }, checkouts_columns);
 
             KohaTable("print-summary-holds", {
-                "dom": "Bt",
+                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
                 "paging": false,
                 "autoWidth": false,
-                initComplete: function( settings) {
-                    moveColumnsButton( settings.nTable.id );
-                }
             }, holds_columns);
 
             KohaTable("print-summary-fines", {
-                "dom": "Bt",
+                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
                 "paging": false,
                 "autoWidth": false,
-                initComplete: function( settings) {
-                    moveColumnsButton( settings.nTable.id );
-                }
             }, fines_columns);
+        }
 
-        });
+        if( autoprint ){
+            window.onbeforeprint = initTables();
+        } else {
+            $(document).ready(function(){
+                initTables();
+            });
+        }
     </script>
 [% END %]
 
