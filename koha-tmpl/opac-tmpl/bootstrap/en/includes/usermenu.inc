@@ -167,6 +167,14 @@
                 <a href="/cgi-bin/koha/opac-alert-subscriptions.pl">Alert subscriptions ([% logged_in_user.alert_subscriptions.count | html %])</a></li>
             [% END %]
 
+            [% IF Koha.Preference( 'OPACVirtualCard' ) %]
+                [% IF ( virtualcardview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-virtual-card.pl">My Virtual Card</a></li>
+            [% END %]
         </ul>
     </div>
 [% END %]
