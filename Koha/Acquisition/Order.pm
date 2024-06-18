@@ -450,20 +450,16 @@ sub duplicate_to {
             for my $field (
                 qw(
                 ordernumber
-                received_on
                 datereceived
                 invoiceid
                 datecancellationprinted
                 cancellationreason
-                claims_count
-                claimed_date
                 parent_ordernumber
                 )
               )
             {
                 undef $order_info->{$field};
             }
-            $order_info->{placed_on}        = dt_from_string;
             $order_info->{entrydate}        = dt_from_string;
             $order_info->{orderstatus}      = 'new';
             $order_info->{quantityreceived} = 0;
