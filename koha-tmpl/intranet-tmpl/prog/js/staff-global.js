@@ -974,3 +974,23 @@ function toggleBtnIcon(element, start, replacement) {
             });
     });
 }
+
+/**
+ * Returns a roughly ideal position to scroll an element into view
+ * @param {string} target - The HTML id of the element to scroll into view
+ * @param {string} elemid - The HTML id of the element which might obscure
+ *                          the view of the target element e.g. a floating toolbar
+ * @return {number} - The y-coordinate to pass to window.scrollTo()
+ */
+function getScrollto(target, elemid) {
+    var dest = $("#" + target);
+    var yoffset = dest.offset();
+
+    if (elemid != "") {
+        var element = $("#" + elemid);
+        var elem_height = element.outerHeight();
+    } else {
+        elem_height = 0;
+    }
+    return yoffset.top - elem_height - 20;
+}
