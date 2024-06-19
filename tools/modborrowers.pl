@@ -157,7 +157,7 @@ if ( $op eq 'cud-show' ) {
                 attribute_code => $attr_type->code,
                 attribute_lib  => $attr_type->description,
                 category_lib   => $category_lib,
-                type           => $attr_type->authorised_value_category ? 'cud-select' : 'text',
+                type           => $attr_type->authorised_value_category ? 'select' : 'text',
             };
     }
 
