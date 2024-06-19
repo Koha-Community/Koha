@@ -171,6 +171,14 @@ tables:
           authorised_value:
 
         - authtypecode: ""
+          tagfield: "023"
+          liblibrarian: "CLUSTER ISSN"
+          libopac: "CLUSTER ISSN"
+          repeatable: 1
+          mandatory: 0
+          authorised_value:
+
+        - authtypecode: ""
           tagfield: "024"
           liblibrarian: "OTHER STANDARD IDENTIFIER"
           libopac: "OTHER STANDARD IDENTIFIER"
@@ -2003,8 +2011,8 @@ tables:
         - authtypecode: ""
           tagfield: "022"
           tagsubfield: "l"
-          liblibrarian: "ISSN-L"
-          libopac: "ISSN-L"
+          liblibrarian: "ISSN-L [OBSOLETE]"
+          libopac: "ISSN-L [OBSOLETE]"
           repeatable: 0
           mandatory: 0
           tab: 0
@@ -2020,8 +2028,8 @@ tables:
         - authtypecode: ""
           tagfield: "022"
           tagsubfield: "m"
-          liblibrarian: "Canceled ISSN-L"
-          libopac: "Canceled ISSN-L"
+          liblibrarian: "Canceled ISSN-L [OBSOLETE]"
+          libopac: "Canceled ISSN-L [OBSOLETE]"
           repeatable: 1
           mandatory: 0
           tab: 0
@@ -2056,6 +2064,142 @@ tables:
           tagsubfield: "z"
           liblibrarian: "Canceled ISSN"
           libopac: "Canceled ISSN"
+          repeatable: 1
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "0"
+          liblibrarian: "Authority record control number or standard number"
+          libopac: "Authority record control number or standard number"
+          repeatable: 0
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "1"
+          liblibrarian: "Real World Object URI"
+          libopac: "Real World Object URI"
+          repeatable: 1
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "2"
+          liblibrarian: "Source"
+          libopac: "Source"
+          repeatable: 0
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "6"
+          liblibrarian: "Linkage"
+          libopac: "Linkage"
+          repeatable: 0
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "8"
+          liblibrarian: "Field link and sequence number"
+          libopac: "Field link and sequence number"
+          repeatable: 1
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "a"
+          liblibrarian: "Cluster ISSN"
+          libopac: "Cluster ISSN"
+          repeatable: 0
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "y"
+          liblibrarian: "Incorrect Cluster ISSN"
+          libopac: "Incorrect Cluster ISSN"
+          repeatable: 1
+          mandatory: 0
+          tab: 0
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "023"
+          tagsubfield: "z"
+          liblibrarian: "Canceled Cluster ISSN"
+          libopac: "Canceled Cluster ISSN"
           repeatable: 1
           mandatory: 0
           tab: 0
@@ -13973,6 +14117,23 @@ tables:
           tagsubfield: "c"
           liblibrarian: "Hereditary title"
           libopac: "Hereditary title"
+          repeatable: 1
+          mandatory: 0
+          tab: 3
+          authorised_value:
+          value_builder:
+          seealso:
+          isurl: 0
+          hidden: 0
+          linkid: 0
+          kohafield: ""
+          frameworkcode: ""
+
+        - authtypecode: ""
+          tagfield: "376"
+          tagsubfield: "d"
+          liblibrarian: "Other designation"
+          libopac: "Other designation"
           repeatable: 1
           mandatory: 0
           tab: 3
