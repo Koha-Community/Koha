@@ -84,7 +84,7 @@ sub build_authorized_values_list {
     }
 
     return {
-        type     => 'cud-select',
+        type     => 'select',
         id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         values   => \@authorised_values,
