@@ -4,8 +4,21 @@ var bookings_table;
 $(document).ready(function () {
     // Load bookings table on tab selection
     $("#bookings-tab").on("click", function () {
+        let filter_expired = true;
+        let additional_filters = {
+            patron_id: patron_borrowernumber,
+            end_date: function () {
+                if (filter_expired) {
+                    let today = new Date();
+                    return { ">=": today.toISOString() }
+                } else {
+                    return;
+                }
+            }
+        };
+
         if (!bookings_table) {
-            var today = new Date();
+
             var bookings_table_url = "/api/v1/bookings";
             bookings_table = $("#bookings_table").kohaTable(
                 {
@@ -87,13 +100,23 @@ $(document).ready(function () {
                         },
                     ],
                 },
-                table_settings_bookings_table,
-                0,
-                {
-                    patron_id: patron_borrowernumber,
-                    end_date: { ">=": today.toISOString() },
-                }
+                table_settings_bookings_table, 0, additional_filters
             );
         }
     });
+
+    var txtActivefilter = _("Show expired");
+    var txtInactivefilter = _("Hide expired");
+    $("#expired_filter").on("click", function () {
+        if ($(this).hasClass('filtered')) {
+            filter_expired = false;
+            $(this).html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
+        } else {
+            filter_expired = true;
+            $(this).html('<i class="fa fa-bars"></i> ' + txtActivefilter);
+        }
+        bookings_table.DataTable().draw();
+        $(this).toggleClass('filtered');
+    });
+
 });

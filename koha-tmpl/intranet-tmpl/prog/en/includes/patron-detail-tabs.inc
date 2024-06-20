@@ -214,6 +214,9 @@
 
             [% WRAPPER tab_panel tabname="bookings" %]
                 [% IF ( bookings_count ) %]
+                    <fieldset class="action filters" style="cursor:pointer;">
+                        <a id="expired_filter" class="filtered"><i class="fa fa-bars"></i> Show expired</a>
+                    </fieldset>
                     <table id="bookings_table" style="width: 100% !Important;"></table>
                 [% ELSE %]
                     <p>Patron has nothing booked.</p>
