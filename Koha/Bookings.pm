@@ -32,19 +32,6 @@ Koha::Bookings - Koha Booking object set class
 
 =head2 Class Methods
 
-=head3 filter_by_future
-
-    $bookings->filter_by_future;
-
-Will return the bookings starting from now.
-
-=cut
-
-sub filter_by_future {
-    my ($self) = @_;
-    return $self->search( { start_date => { '>' => \'NOW()' } } );
-}
-
 =head3 filter_by_active
 
     $bookings->filter_by_active;

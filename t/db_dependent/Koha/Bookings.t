@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 1;
 
 use Koha::Bookings;
 use Koha::Database;
@@ -30,64 +30,6 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 
 my $builder = t::lib::TestBuilder->new;
-
-subtest 'filter_by_future' => sub {
-
-    plan tests => 2;
-
-    $schema->storage->txn_begin;
-
-    my $biblio = $builder->build_sample_biblio;
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => dt_from_string->subtract( days => 1 )->truncate( to => 'day' ),
-                end_date   => undef
-            }
-        }
-    );
-
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => dt_from_string->add( days => 1 )->truncate( to => 'day' ),
-                end_date   => undef
-            }
-        }
-    );
-
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => dt_from_string->add( days => 2 )->truncate( to => 'day' ),
-                end_date   => undef
-            }
-        }
-    );
-
-    is( $biblio->bookings->filter_by_future->count, 2, 'There should have 2 bookings starting after now' );
-
-    $builder->build_object(
-        {
-            class => 'Koha::Bookings',
-            value => {
-                biblio_id  => $biblio->biblionumber,
-                start_date => dt_from_string->truncate( to => 'day' ),
-                end_date   => undef
-            }
-        }
-    );
-
-    is( $biblio->bookings->filter_by_future->count, 2, 'Current day is not considered future' );
-
-    $schema->storage->txn_rollback;
-};
 
 subtest 'filter_by_active' => sub {
 
