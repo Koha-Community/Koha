@@ -31,7 +31,7 @@
             [% END %]
             [% WRAPPER tab_item tabname="bookings" %]
                 [% SET bookings_count = patron.bookings.filter_by_active.count %]
-                <span>Bookings ([% bookings_count || 0 | html %])</span>
+                <span class="bookings_count">Bookings ([% bookings_count || 0 | html %])</span>
             [% END %]
         [% END %]
 
