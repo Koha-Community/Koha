@@ -470,7 +470,7 @@ sub CheckMandatoryFields {
 
     foreach my $key ( keys %$mandatory_fields ) {
         push( @empty_mandatory_fields, $key )
-            unless ( defined( $borrower->{$key} ) && $borrower->{$key} );
+            unless ( defined( $borrower->{$key} ) && $borrower->{$key} && $borrower->{$key} !~ /^\s*$/ );
     }
 
     return @empty_mandatory_fields;
