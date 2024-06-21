@@ -111,6 +111,7 @@ Koha::FrameworkPlugin - Facilitate use of plugins in MARC/items editor
 =cut
 
 use Modern::Perl;
+use Cwd qw//;
 
 use base qw(Class::Accessor);
 
@@ -213,7 +214,16 @@ sub _load {
     my ( $rv, $file );
     return $self->_error( 'Plugin needs a name' ) if !$self->{name}; #2chk
     $self->{path} //= _valuebuilderpath();
+    #NOTE: Resolve symlinks and relative path components if present,
+    #so the base will compare correctly lower down
+    my $abs_base_path = Cwd::abs_path( $self->{path} );
     $file= $self->{path}. '/'. $self->{name};
+    #NOTE: Resolve relative path components to prevent loading files outside the base path
+    my $abs_file_path = Cwd::abs_path($file);
+    if ( $abs_file_path !~ /^\Q$abs_base_path\E/ ) {
+        warn "Attempt to load $file ($abs_file_path) in framework plugin!";
+        return $self->_error('File not found');
+    }
     return $self->_error( 'File not found' ) if !-e $file;
 
     # undefine oldschool subroutines before defining them again
