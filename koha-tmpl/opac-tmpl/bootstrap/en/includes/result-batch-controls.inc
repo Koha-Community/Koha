@@ -23,7 +23,9 @@
 
         [% IF ( CartEnabled ) %]
             <div class="btn-group">
-                <a id="addtocart" class="btn btn-link btn-xs" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
+                <button id="addtocart" class="btn btn-link btn-xs">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart
+                </button>
             </div>
         [% END %]
 
@@ -62,6 +64,12 @@
                     <a href="#" class="dropdown-item addtolist newlist">New list</a>
                 </div>
             </div>
+            [% IF loggedinusername && can_remove_biblios %]
+                <button class="btn btn-link btn-sm disabled removeitems tag_hides">
+                    <i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list</button>
+                </button>
+            [% END %]
+
         [% END # /IF virtualshelves %]
 
         [% IF ( MultiHolds ) %]
