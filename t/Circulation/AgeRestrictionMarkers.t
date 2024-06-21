@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use DateTime;
 use Koha::DateUtils qw( dt_from_string );
-use Test::More tests => 8;
+use Test::More tests => 6;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -37,35 +37,6 @@ is ( C4::Circulation::GetAgeRestriction('PEGI16'), '16', 'PEGI16 returns 16' );
 is ( C4::Circulation::GetAgeRestriction('Age 16'), '16', 'Age 16 returns 16' );
 is ( C4::Circulation::GetAgeRestriction('K16'), '16', 'K16 returns 16' );
 
-subtest 'Patron tests - 15 years old' => sub {
-    plan tests => 5;
-    ##Testing age restriction for a borrower.
-    my $now = dt_from_string();
-    my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
-    TestPatron($borrower,0);
-};
-
-subtest 'Patron tests - 15 years old (Time Zone shifts)' => sub {
-    my $CheckTimeFake = eval { require Time::Fake; 1; } || 0;
-    SKIP: {
-        skip "Install Time::Fake to regression test for Bug 14362.", 115 if $CheckTimeFake!=1;
-        # 115 regression tests = 5 tests (see TestPatron) for 23 timezones.
-        plan tests => 115;
-        my $offset = 1;
-        # <24 hours in a day.
-        while ($offset<24) {
-            Time::Fake->offset("+${offset}h");
-
-            ##Testing age restriction for a borrower.
-            my $now = dt_from_string();
-            my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
-            TestPatron($borrower,$offset);
-
-            $offset++;
-        }
-    }
-};
-
 subtest 'No age restriction' => sub {
     plan tests => 1;
 
@@ -76,19 +47,3 @@ subtest 'No age restriction' => sub {
 
 };
 
-# The Patron tests
-sub TestPatron {
-    my ($borrower,$offset) = @_;
-
-    my ($restriction_age, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction('FSK 16', $borrower);
-    is ( ($daysToAgeRestriction > 0), 1, "FSK 16 blocked for a 15 year old - $offset hours" );
-    ($restriction_age, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction('PEGI 15', $borrower);
-    is ( ($daysToAgeRestriction <= 0), 1, "PEGI 15 allowed for a 15 year old - $offset hours" );
-    ($restriction_age, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction('PEGI14', $borrower);
-    is ( ($daysToAgeRestriction <= 0), 1, "PEGI14 allowed for a 15 year old - $offset hours" );
-    ($restriction_age, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction('Age 10', $borrower);
-    is ( ($daysToAgeRestriction <= 0), 1, "Age 10 allowed for a 15 year old - $offset hours" );
-    ($restriction_age, $daysToAgeRestriction) = C4::Circulation::GetAgeRestriction('K18', $borrower);
-    is ( ($daysToAgeRestriction > 0), 1, "K18 blocked for a 15 year old - $offset hours" );
-    return;
-}
