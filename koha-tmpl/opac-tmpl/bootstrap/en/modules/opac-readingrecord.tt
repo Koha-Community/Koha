@@ -190,12 +190,10 @@
                             [% END %]
                         [% END %]
                         <span class="itypetext">
-                            <span class="tdlabel">Item type:</span>
                             [% item_type.translated_description | html %]
                         </span>
                     </td>
                     <td>
-                        <span class="tdlabel">Call number:</span>
                         [% item.itemcallnumber | html %]
                     </td>
                     <td>
@@ -205,7 +203,6 @@
                     </td>
                     [% IF checkout.returndate %]
                         <td data-order="[% checkout.returndate | html %]">
-                            <span class="tdlabel">Check-in date:</span>
                             [% checkout.returndate | $KohaDates %]
                         </td>
                     [% ELSE %]

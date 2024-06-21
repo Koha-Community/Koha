@@ -163,7 +163,6 @@
                                                         <input type="checkbox" class="cb" name="biblionumber" value="[% MY_TAG.biblionumber | html %]" data-title="[% MY_TAG.title | html %]" data-tagname="[% MY_TAG.term | html %]" data-tagid="[% MY_TAG.tag_id | html %]" aria-label="[% check_title | html %]"/>
                                                     </td>
                                                     <td class="tagterm">
-                                                        <span class="tdlabel">Tag:</span>
                                                         [% IF MY_TAG.approved == 1 %]
                                                             <a href="/cgi-bin/koha/opac-search.pl?tag=[% MY_TAG.term |uri %]&amp;q=[% MY_TAG.term |uri %]">[% MY_TAG.term | html %]</a>
                                                         [% ELSE %]
@@ -174,7 +173,6 @@
                                                         [% IF ( MY_TAG.XSLTBloc ) %]
                                                             [% MY_TAG.XSLTBloc | $raw %]
                                                         [% ELSE %]
-                                                            <span class="tdlabel">Title:</span>
                                                             [% INCLUDE 'biblio-title.inc' biblio=MY_TAG link=> 1 %]
                                                             [% IF ( MY_TAG.author ) %]
                                                                 by [% MY_TAG.author | html %]
@@ -184,7 +182,6 @@
                                                         [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
                                                     </td>
                                                     <td data-order="[% MY_TAG.date_created | html %]">
-                                                        <span class="tdlabel">Date added:</span>
                                                         [% MY_TAG.date_created | $KohaDates %]
                                                     </td>
                                                     <td>
