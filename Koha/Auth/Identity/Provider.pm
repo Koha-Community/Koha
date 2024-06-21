@@ -62,7 +62,7 @@ sub get_config {
     my ($self) = @_;
 
     return try {
-        return decode_json( $self->config );
+        return decode_json( Encode::encode_utf8( $self->config ) );
     }
     catch {
         Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
@@ -127,7 +127,7 @@ sub get_mapping {
     my ($self) = @_;
 
     return try {
-        return decode_json( $self->mapping );
+        return decode_json( Encode::encode_utf8( $self->mapping ) );
     }
     catch {
         Koha::Exceptions::Object::BadValue->throw("Error reading JSON data: $_");
