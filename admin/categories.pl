@@ -168,7 +168,7 @@ elsif ( $op eq 'cud-add_validate' ) {
     $searchfield = q||;
     $op = 'list';
 }
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
 
     my $count = Koha::Patrons->search({
         categorycode => $categorycode
