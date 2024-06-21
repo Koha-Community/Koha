@@ -16,11 +16,11 @@ $(document).ready(function () {
                     columns: [
                         {
                             data: "booking_id",
-                            title: _("Booking ID"),
+                            title: __("Booking ID"),
                         },
                         {
                             data: "biblio.title",
-                            title: _("Title"),
+                            title: __("Title"),
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
@@ -31,10 +31,10 @@ $(document).ready(function () {
                         },
                         {
                             data: "item.external_id",
-                            title: _("Item"),
+                            title: __("Item"),
                             searchable: true,
                             orderable: true,
-                            defaultContent: _("Any item"),
+                            defaultContent: __("Any item"),
                             render: function (data, type, row, meta) {
                                 if (row.item) {
                                     return (
@@ -50,7 +50,7 @@ $(document).ready(function () {
                         },
                         {
                             data: "start_date",
-                            title: _("Start date"),
+                            title: __("Start date"),
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
@@ -59,7 +59,7 @@ $(document).ready(function () {
                         },
                         {
                             data: "end_date",
-                            title: _("End date"),
+                            title: __("End date"),
                             searchable: true,
                             orderable: true,
                             render: function (data, type, row, meta) {
@@ -68,7 +68,7 @@ $(document).ready(function () {
                         },
                         {
                             data: "",
-                            title: _("Actions"),
+                            title: __("Actions"),
                             class: "actions",
                             searchable: false,
                             orderable: false,
@@ -79,7 +79,7 @@ $(document).ready(function () {
                                         '<button type="button" class="btn btn-default btn-xs cancel-action" data-toggle="modal" data-target="#cancelBookingModal" data-booking="' +
                                         row.booking_id +
                                         '"><i class="fa fa-trash" aria-hidden="true"></i> ' +
-                                        _("Cancel") +
+                                        __("Cancel") +
                                         "</button>";
                                 }
                                 return result;
