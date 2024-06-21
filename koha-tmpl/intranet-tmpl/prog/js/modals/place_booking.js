@@ -140,14 +140,15 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
             type: "GET",
             dataType: "json",
             data: {
-                category: booking_patron.category_id,
-                itemtype: booking_itemtype_id,
-                branchcode: pickup_library_id,
-                rules: [ 'bookings_lead_period', 'bookings_trail_period' ]
+                patron_category_id: booking_patron.category_id,
+                item_type_id: booking_itemtype_id,
+                library_id: pickup_library_id,
+                rules: 'bookings_lead_period,bookings_trail_period'
             },
             success: function (response) {
-                leadDays = response.bookings_lead_period;
-                trailDays = response.bookings_trail_period;
+                let rules = response[0]
+                leadDays = rules.bookings_lead_period;
+                trailDays = rules.bookings_trail_period;
             },
             error: function (xhr, status, error) {
                 console.log("Circulation rules fetch failed: ", error);
