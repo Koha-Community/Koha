@@ -129,7 +129,7 @@ elsif ( $op eq 'cud-add_validate' ) {
     # END $OP eq ADD_VALIDATE
 }
 #DELETE_CONFIRM: called by default form, used to confirm deletion of data in DB
-elsif ( $op eq 'cud-delete_confirm' ) {
+elsif ( $op eq 'delete_confirm' ) {
     $template->param( delete_confirm => 1 );
 
     my $contract = GetContract( { contractnumber => $contractnumber } );
