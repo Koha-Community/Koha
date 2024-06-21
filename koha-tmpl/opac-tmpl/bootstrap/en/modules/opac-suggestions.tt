@@ -374,7 +374,7 @@
                                 [% SET can_delete_suggestion = 0 %]
                                 <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     [% INCLUDE 'csrf-token.inc' %]
-                                    <input type="hidden" name="op" value="cud-delete_confirm" />
+                                    <input type="hidden" name="op" value="cud-delete" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]

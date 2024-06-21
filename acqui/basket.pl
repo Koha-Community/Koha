@@ -134,7 +134,7 @@ if ( $op eq 'cud-delete-order' ) {
     $order->delete if $order;
     $op = 'list';
 
-} elsif ( $op eq 'cud-delete_confirm' ) {
+} elsif ( $op eq 'cud-delete' ) {
 
     output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
       unless $logged_in_patron->has_permission( { acquisition => 'delete_baskets' } );

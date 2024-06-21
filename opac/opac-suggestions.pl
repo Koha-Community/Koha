@@ -232,7 +232,7 @@ my $suggestions = [ Koha::Suggestions->search_limited(
     }
 )->as_list ];
 
-if ( $op eq "cud-delete_confirm" ) {
+if ( $op eq "cud-delete" ) {
     my @delete_field = $input->multi_param("delete_field");
     foreach my $delete_field (@delete_field) {
         &DelSuggestion( $borrowernumber, $delete_field );
