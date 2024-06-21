@@ -109,15 +109,12 @@
                                                     [% IF ( result.item('size') ) %][% result.item('size') | html %][% END %]</p>
                                             </td>
                                             <td>
-                                                <span class="tdlabel">Item type</span>
                                                 [% ItemTypes.GetDescription(result.itemtype) | html %]
                                             </td>
                                             <td>
-                                                <span class="tdlabel">Collection</span>
                                                 [% AuthorisedValues.GetByCode('ccode', result.ccode, 1) | html %]
                                             </td>
                                             <td data-order="[% result.count | html %]">
-                                                <span class="tdlabel">Checkouts: </span>
                                                 [% result.count | html %]
                                             </td>
                                             [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]

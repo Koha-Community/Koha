@@ -449,14 +449,12 @@
                                                     </td>
                                                     <td>
                                                         [% IF ( suggestion.note ) %]
-                                                            <span class="tdlabel">Note: </span>
                                                             [% suggestion.note | html %]
                                                         [% END %]
                                                     </td>
                                                     [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]
                                                         <td>
                                                             [% IF suggestion.suggestedby %]
-                                                                <span class="tdlabel">Suggested for:</span>
                                                                 [% Branches.GetName(suggestion.branchcode) | html %]
                                                             [% END %]
                                                         </td>
@@ -464,14 +462,12 @@
                                                     [% IF Koha.Preference( 'OpacSuggestionManagedBy' ) %]
                                                     <td>
                                                         [% IF suggestion.managedby %]
-                                                            <span class="tdlabel">Managed by:</span>
                                                             [% INCLUDE 'patron-title.inc' patron = suggestion.manager %]
                                                             [% IF ( suggestion.manageddate ) %] - [% suggestion.manageddate | $KohaDates %][% END %]
                                                         [% END %]
                                                     </td>
                                                     [% END %]
                                                     <td>
-                                                        <span class="tdlabel">Status:</span>
                                                         [% IF ( suggestion.STATUS == 'ASKED' ) %]<span>Requested</span>
                                                         [% ELSIF ( suggestion.STATUS == 'CHECKED' ) %]<span>Checked by the library</span>
                                                         [% ELSIF ( suggestion.STATUS == 'ACCEPTED' ) %]<span>Accepted by the library</span>

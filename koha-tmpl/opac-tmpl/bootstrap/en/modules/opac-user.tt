@@ -418,18 +418,15 @@
                                                     <td class="author">[% ISSUE.author | html %]</td>
                                                     [% IF ( ISSUE.overdue ) %]
                                                         <td class="date_due overdue" data-order="[% ISSUE.date_due | html %]">
-                                                            <span class="tdlabel">Date due:</span>
                                                             [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% ELSE %]
                                                         <td class="date_due" data-order="[% ISSUE.date_due | html %]">
-                                                            <span class="tdlabel">Date due:</span>
                                                             [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% END %]
                                                     [% IF ( Koha.Preference('BiblioItemtypeInfo') || !item_level_itypes ) %]
                                                         <td class="itype">
-                                                            <span class="tdlabel">Item type:</span>
                                                             [% IF ( ISSUE.imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
                                                                 <img class="itemtype-image" src="[% ISSUE.imageurl | html %]" title="[% ISSUE.description | html %]" alt="[% ISSUE.description | html %]" />
                                                                 [% END %] <span class="itypetext">[% ISSUE.description | html %]</span>
@@ -437,12 +434,10 @@
                                                     [% END %]
                                                     [% IF ( show_barcode ) %]
                                                         <td class="barcode">
-                                                            <span class="tdlabel">Barcode:</span>
                                                             [% ISSUE.barcode | html %]
                                                         </td>
                                                     [% END %]
                                                     <td class="call_no">
-                                                        <span class="tdlabel">Call number:</span>
                                                         [% ISSUE.itemcallnumber | html %]
                                                     </td>
                                                     [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
@@ -515,7 +510,6 @@
                                                     [% END %]
                                                     [% IF ( OPACFinesTab ) %]
                                                         <td class="fines">
-                                                            <span class="tdlabel">Fines:</span>
                                                             [% IF ( ISSUE.charges ) %]
                                                                 <span>Yes (Item overdue or lost)</span>
                                                             [% ELSIF ( ISSUE.rentalfines ) %]
@@ -785,16 +779,13 @@
                                                     [% END %]
                                                     [% IF ( show_barcode ) %]
                                                         <td>
-                                                            <span class="tdlabel">Barcode:</span>
                                                             [% OVERDUE.barcode | html %]
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <span class="tdlabel">Call number:</span>
                                                         [% OVERDUE.itemcallnumber | html %]
                                                     </td>
                                                     <td data-order="[% OVERDUE.date_due | html %]">
-                                                        <span class="tdlabel">Date due:</span>
                                                         [% OVERDUE.date_due | $KohaDates as_due_date => 1 %]
                                                     </td>
                                                     [% IF ( OpacRenewalAllowed ) %]
@@ -822,7 +813,6 @@
                                                     [% END %]
                                                     [% IF ( OPACFinesTab ) %]
                                                         <td>
-                                                            <span class="tdlabel">Fines:</span>
                                                             [% IF ( OVERDUE.charges ) %]
                                                                 <span>Yes</span>
                                                             [% ELSE %]
@@ -868,29 +858,24 @@
                                                 </td>
                                                 <td class="recalldate" data-order="[% RECALL.created_date | html %]">
                                                     <span title="[% RECALL.created_date | html %]">
-                                                        <span class="tdlabel">Recall date:</span>
                                                         [% RECALL.created_date | $KohaDates %]
                                                     </span>
                                                 </td>
                                                 <td class="expirationdate" data-order="[% RECALL.expiration_date | html %]">
                                                     [% IF ( RECALL.expiration_date ) %]
                                                         <span title="[% RECALL.expiration_date | html %]">
-                                                            <span class="tdlabel">Expiration:</span>
                                                             [% RECALL.expiration_date | $KohaDates %]
                                                         </span>
                                                     [% ELSE %]
                                                         <span title="0000-00-00">
-                                                            <span class="tdlabel">Expiration:</span>
                                                             Never expires
                                                         </span>
                                                     [% END %]
                                                 </td>
                                                 <td class="branch">
-                                                    <span class="tdlabel">Pick up location:</span>
                                                     [% RECALL.library.branchname | html %]
                                                 </td>
                                                 <td class="status">
-                                                    <span class="tdlabel">Status:</span>
                                                     [% IF ( RECALL.requested ) %]
                                                         <span>Requested</span>
                                                     [% ELSIF ( RECALL.overdue ) %]
