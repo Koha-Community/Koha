@@ -19,18 +19,12 @@
 
 use Modern::Perl;
 
-#need
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Libraries;
-
-#unsure
-use C4::Biblio;
-use C4::External::BakerTaylor qw( image_url link_url );
-use MARC::Record;
 use Koha::Patrons;
-use Koha::ItemTypes;
+
 
 my $query = CGI->new;
 
@@ -54,17 +48,9 @@ if (C4::Context->preference('OPACpatronimages')) {
         $template->param( display_patron_image => 1 ) if $patron->image;
     }
 
-my $branchcode = $patron->branchcode;
-# Fetch the library object using the branchcode
-my $library = Koha::Libraries->find($branchcode);
-
-# Get the library name
-my $library_name = $library ? $library->branchname : 'Unknown Library';
-
 $template->param(
     virtualcardview => 1,
-    cardnumber      => $patron->cardnumber,
-    library         => $library_name,
+    patron          => $patron,
 );
 
 

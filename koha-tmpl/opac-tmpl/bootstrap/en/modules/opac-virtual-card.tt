@@ -2,6 +2,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -32,22 +33,22 @@
                 </div>
             </div>
             <div class="col-10 order-first order-lg-2">
+                <h1>My virtual card </h1>
                 <div id="patron-virtual-card">
-                    <h1>My virtual card </h1>
-                    <div id="barcode-container">
-                        <svg id="patron-barcode" data-barcode="[% cardnumber | html %]"></svg>
-                    </div>
                     <div id="image-and-library-container">
                         [% IF ( display_patron_image ) %]
                             <div id="image-container">
                                 <img id="patron-image" src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
                             </div>
                         [% END %]
+                        <div id="barcode-container">
+                            <svg id="patron-barcode" data-barcode="[% patron.cardnumber | html %]"></svg>
+                        </div>
                         <div id="lib-container">
-                            <p id="patron-lib"><strong>Library:</strong> [% library | html %]</p>
+                            <p id="patron-lib"><strong>Library:</strong> [% Branches.GetName( patron.branchcode ) | html %]</p>
                         </div>
                     </div>
-                </div> <!-- / #patron-virtual-card -->
+                </div>
             </div> <!-- / .col-10 -->
         </div> <!-- / .row -->
     </div> <!-- / .container-fluid -->
