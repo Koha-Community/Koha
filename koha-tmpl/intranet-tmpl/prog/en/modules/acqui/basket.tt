@@ -146,7 +146,7 @@
                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                                                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                         [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-delete_confirm" />
+                                                        <input type="hidden" name="op" value="cud-delete" />
                                                         <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                                         <input type="hidden" name="delbiblio" value="0" />
@@ -165,7 +165,7 @@
                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                                                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                         [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-delete_confirm" />
+                                                        <input type="hidden" name="op" value="cud-delete" />
                                                         <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                                         <input type="hidden" name="delbiblio" value="0" />
@@ -174,7 +174,7 @@
 
                                                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                                         [% INCLUDE 'csrf-token.inc' %]
-                                                        <input type="hidden" name="op" value="cud-delete_confirm" />
+                                                        <input type="hidden" name="op" value="cud-delete" />
                                                         <input type="hidden" name="basketno" value="[% basketno | html %]" />
                                                         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
                                                         <input type="hidden" name="delbiblio" value="1" />
