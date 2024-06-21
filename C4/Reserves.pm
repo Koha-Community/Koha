@@ -497,9 +497,8 @@ sub CanItemBeReserved {
     if( GetMarcFromKohaField('biblioitems.agerestriction') ){
         my $biblio = $item->biblio;
         # Check for the age restriction
-        my ( $ageRestriction, $daysToAgeRestriction ) =
-          C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
-        return _cache { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+        my $ageRestriction = C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction );
+        return _cache { status => 'ageRestricted' } if $ageRestriction && $patron->dateofbirth && $ageRestriction > $patron->get_age();
     }
 
     # Check that the patron doesn't have an item level hold on this item already
