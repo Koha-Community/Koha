@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "35153",
@@ -29,12 +30,12 @@ return {
                 undef, $insert_id, $intranetmainuserblock
             );
 
-            say $out "Added 'IntranetmainUserblock' HTML customization";
+            say_success( $out, "Added 'IntranetmainUserblock' HTML customization" );
         }
 
         # Remove old system preference
         $dbh->do("DELETE FROM systempreferences WHERE variable='IntranetmainUserblock'");
-        say $out "Removed system preference 'IntranetmainUserblock'";
+        say_success( $out, "Removed system preference 'IntranetmainUserblock'" );
 
     },
 };
