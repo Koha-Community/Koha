@@ -142,7 +142,7 @@ if ($op eq 'add_form') {
                                                     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'cud-delete_confirm') {
+} elsif ($op eq 'delete_confirm') {
     $sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where tagfield=?");
     $sth->execute($searchfield);
     my $data=$sth->fetchrow_hashref;
