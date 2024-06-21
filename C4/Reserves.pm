@@ -485,10 +485,6 @@ sub CanItemBeReserved {
         }
     }
 
-    # we retrieve borrowers and items informations #
-    # item->{itype} will come for biblioitems if necessery
-    my $borrower = $patron->unblessed;
-
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
     return _cache { status =>'damaged' }
       if ( $item->damaged
@@ -526,14 +522,14 @@ sub CanItemBeReserved {
     }
     elsif ( $controlbranch eq "PatronLibrary" ) {
         $branchfield = "borrowers.branchcode";
-        $reserves_control_branch  = $borrower->{branchcode};
+        $reserves_control_branch  = $patron->branchcode;
     }
 
     # we retrieve rights
     if (
         my $reservesallowed = Koha::CirculationRules->get_effective_rule({
                 itemtype     => $item->effective_itemtype,
-                categorycode => $borrower->{categorycode},
+                categorycode => $patron->categorycode,
                 branchcode   => $reserves_control_branch,
                 rule_name    => 'reservesallowed',
         })
@@ -546,7 +542,7 @@ sub CanItemBeReserved {
     }
 
     my $rights = Koha::CirculationRules->get_effective_rules({
-        categorycode => $borrower->{'categorycode'},
+        categorycode => $patron->categorycode,
         itemtype     => $item->effective_itemtype,
         branchcode   => $reserves_control_branch,
         rules        => ['holds_per_record','holds_per_day']
@@ -655,7 +651,7 @@ sub CanItemBeReserved {
     }
 
     if (   $branchitemrule->{holdallowed} eq 'from_home_library'
-        && $borrower->{branchcode} ne $item->homebranch )
+        && $patron->branchcode ne $item->homebranch )
     {
         return _cache { status => 'cannotReserveFromOtherBranches' };
     }
@@ -684,7 +680,7 @@ sub CanItemBeReserved {
         if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup' && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
             return _cache { status => 'pickupNotInHoldGroup' };
         }
-        if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
+        if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $patron->branchcode})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
             return _cache { status => 'pickupNotInHoldGroup' };
         }
     }
