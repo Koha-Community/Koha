@@ -9,10 +9,12 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         # Do you stuffs here
-        $dbh->do(q{
+        $dbh->do(
+            q{
             INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
             ('OPACVirtualCard', '0', NULL,'Enable virtual library cards for patrons on the OPAC.', 'YesNo')
-        });
+        }
+        );
 
         # sysprefs
         say $out "Added new system preference 'OPACVirtualCard'";

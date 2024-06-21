@@ -19,39 +19,38 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
+use CGI        qw ( -utf8 );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::Libraries;
 use Koha::Patrons;
 
-
 my $query = CGI->new;
 
 # if OPACVirtualCard is disabled, leave immediately
-if ( ! C4::Context->preference('OPACVirtualCard') ) {
+if ( !C4::Context->preference('OPACVirtualCard') ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-virtual-card.tt",
-        query           => $query,
-        type            => "opac",
+        template_name => "opac-virtual-card.tt",
+        query         => $query,
+        type          => "opac",
     }
 );
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron = Koha::Patrons->find($borrowernumber);
+
 # Find and display patron image if allowed
-if (C4::Context->preference('OPACpatronimages')) {
-        $template->param( display_patron_image => 1 ) if $patron->image;
-    }
+if ( C4::Context->preference('OPACpatronimages') ) {
+    $template->param( display_patron_image => 1 ) if $patron->image;
+}
 
 $template->param(
     virtualcardview => 1,
     patron          => $patron,
 );
-
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
