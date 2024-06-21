@@ -5,7 +5,8 @@ let bookable_items,
     checkouts,
     booking_id,
     booking_item_id,
-    booking_patron;
+    booking_patron,
+    booking_itemtype_id;
 
 function containsAny(integers1, integers2) {
     // Create a hash set to store integers from the second array
@@ -25,6 +26,7 @@ function containsAny(integers1, integers2) {
 }
 
 $("#placeBookingModal").on("show.bs.modal", function (e) {
+
     // Get context
     let button = $(e.relatedTarget);
     let biblionumber = button.data("biblionumber");
@@ -128,6 +130,31 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         placeholder: __("Search for a patron"),
     });
 
+    // Lead and Trail days syncing
+    let leadDays = 0;
+    let trailDays = 0;
+    function setBufferDays() {
+        let rules_url = "/api/v1/circulation_rules";
+        $.ajax({
+            url: rules_url,
+            type: "GET",
+            dataType: "json",
+            data: {
+                category: booking_patron.category_id,
+                itemtype: booking_itemtype_id,
+                branchcode: pickup_library_id,
+                rules: [ 'bookings_lead_period', 'bookings_trail_period' ]
+            },
+            success: function (response) {
+                leadDays = response.bookings_lead_period;
+                trailDays = response.bookings_trail_period;
+            },
+            error: function (xhr, status, error) {
+                console.log("Circulation rules fetch failed: ", error);
+            },
+        });
+    }
+
     // Pickup location select2
     let pickup_url = "/api/v1/biblios/" + biblionumber + "/pickup_locations";
     $("#pickup_library_id").select2({
@@ -172,7 +199,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
         $pickupSelect.prop("disabled", false);
 
-        // If pickup_library alread exists, pre-select
+        // If pickup_library already exists, pre-select
         if (pickup_library_id) {
             $pickupSelect.val(pickup_library_id).trigger("change");
         } else {
@@ -244,6 +271,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         if ($bookingItemtypeSelect.data("loaded")) {
             $bookingItemtypeSelect.prop("disabled", false);
         }
+
+        // Populate circulation rules
+        setBufferDays();
     });
 
     // Adopt periodPicker
@@ -524,7 +554,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                 // Setup listener for itemtype select2
                 $("#booking_itemtype").on("select2:select", function (e) {
-                    effective_itemtype = e.params.data.id
+                    booking_itemtype_id = e.params.data.id
                         ? e.params.data.id
                         : null;
 
@@ -533,7 +563,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         let option = $(this);
                         if (option.val() != 0) {
                             let item_itemtype = option.data("itemtype");
-                            if (item_itemtype == effective_itemtype) {
+                            if (item_itemtype == booking_itemtype_id) {
                                 if (
                                     option.data("available") &&
                                     option.data("pickup")
@@ -546,6 +576,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         }
                     });
                     $("#booking_item_id").trigger("change.select2");
+
+                    // update buffer days
+                    setBufferDays();
                 });
 
                 // Setup listener for item select2
@@ -582,6 +615,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     // handle itemtype picker
                     if (booking_item_id != 0) {
                         let itemtype = e.params.data.element.dataset.itemtype;
+                        booking_itemtype_id = itemtype;
 
                         $("#booking_itemtype").val(itemtype);
                         $("#booking_itemtype").trigger("change.select2");
@@ -589,6 +623,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     } else {
                         $("#booking_itemtype").prop("disabled", false);
                     }
+
+                    // update buffer days
+                    setBufferDays();
 
                     // redraw pariodPicker taking selected item into account
                     periodPicker.redraw();
@@ -760,8 +797,6 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 }
 
                 // Add hints for days before the start range and after the end range
-                const leadDays = 2;
-                const trailDays = 3;
                 periodPicker.calendarContainer.addEventListener(
                     "mouseover",
                     function (event) {
@@ -1089,6 +1124,7 @@ $("#placeBookingModal").on("hidden.bs.modal", function (e) {
     // Reset itemtype select
     $("#booking_itemtype").val(0).trigger("change");
     $("#booking_itemtype").prop("disabled", true);
+    booking_itemtype_id = undefined;
 
     // Reset pickup library select
     $("#pickup_library_id").val(null).trigger("change");
