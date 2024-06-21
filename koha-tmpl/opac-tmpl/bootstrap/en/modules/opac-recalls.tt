@@ -40,7 +40,7 @@
                                             <th>Pickup location</th>
                                             <th>Status</th>
                                             <th>Due date</th>
-                                            <th class="nosort">&nbsp;</th>
+                                            <th class="nosort">Modify</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -57,83 +57,71 @@
                                                     [% RECALL.biblio.author | html %]
                                                 </td>
                                                 <td class="recalldate" data-order="[% RECALL.created_date | html %]">
-                                                    <span title="[% RECALL.created_date | html %]">
-                                                        <span class="tdlabel">Recall date:</span>
-                                                            [% RECALL.created_date | $KohaDates %]
-                                                    </span>
+                                                    [% RECALL.created_date | $KohaDates %]
                                                 </td>
                                                 <td class="expirationdate" data-order="[% RECALL.expiration_date | html %]">
-                                                        [% IF ( RECALL.expiration_date ) %]
-                                                            <span title="[% RECALL.expiration_date | html %]">
-                                                                <span class="tdlabel">Expiration:</span>
-                                                                [% RECALL.expiration_date | $KohaDates %]
-                                                            </span>
-                                                        [% ELSIF ( !RECALL.completed ) %]
-                                                            <span title="0000-00-00">
-                                                                <span class="tdlabel">Expiration:</span>
-                                                                    Never expires
-                                                                </span>
-                                                        [% ELSE %]
-                                                            <span title="0000-00-00">-</span>
-                                                        [% END %]
-                                                    </td>
-                                                    <td class="branch">
-                                                        <span class="tdlabel">Pick up location:</span>
-                                                        [% RECALL.library.branchname | html %]
-                                                    </td>
-                                                    <td class="status">
-                                                        <span class="tdlabel">Status:</span>
-                                                        [% IF ( RECALL.in_transit ) %]
-                                                            <span>In transit to [% RECALL.library.branchname | html %]</span>
-                                                        [% ELSIF ( RECALL.waiting ) %]
-                                                            <span>Ready for pickup</span>
-                                                        [% ELSIF ( RECALL.overdue ) %]
-                                                            <span>Overdue to be returned</span>
-                                                        [% ELSIF ( RECALL.expired ) %]
-                                                            <span>Expired on [% RECALL.expiration_date | $KohaDates %]</span>
-                                                        [% ELSIF ( RECALL.cancelled ) %]
-                                                            <span>Cancelled on [% RECALL.completed_date | $KohaDates %]</span>
-                                                        [% ELSIF ( RECALL.fulfilled ) %]
-                                                            <span>Fulfilled</span>
-                                                        [% ELSE %]
-                                                            <span>Requested</span>
-                                                        [% END %]
-                                                    </td>
-                                                    <td class="due_date">
-                                                        <span class="tdlabel">Due date</span>
-                                                        [% IF ( RECALL.requested ) %]
-                                                            <span>Due to be returned by [% RECALL.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
-                                                        [% ELSIF ( RECALL.waiting and RECALL.expiration_date ) %]
-                                                            <span>Pick up by [% RECALL.expiration_date | $KohaDates %]</span>
-                                                        [% ELSE %]
-                                                            -
-                                                        [% END %]
-                                                    </td>
+                                                    [% IF ( RECALL.expiration_date ) %]
+                                                        [% RECALL.expiration_date | $KohaDates %]
+                                                    [% ELSIF ( !RECALL.completed ) %]
+                                                        <span>Never expires</span>
+                                                    [% ELSE %]
+                                                        -
+                                                    [% END %]
+                                                </td>
+                                                <td class="branch">
+                                                    [% RECALL.library.branchname | html %]
+                                                </td>
+                                                <td class="status">
+                                                    [% IF ( RECALL.in_transit ) %]
+                                                        <span>In transit to [% RECALL.library.branchname | html %]</span>
+                                                    [% ELSIF ( RECALL.waiting ) %]
+                                                        <span>Ready for pickup</span>
+                                                    [% ELSIF ( RECALL.overdue ) %]
+                                                        <span>Overdue to be returned</span>
+                                                    [% ELSIF ( RECALL.expired ) %]
+                                                        <span>Expired on [% RECALL.expiration_date | $KohaDates %]</span>
+                                                    [% ELSIF ( RECALL.cancelled ) %]
+                                                        <span>Cancelled on [% RECALL.completed_date | $KohaDates %]</span>
+                                                    [% ELSIF ( RECALL.fulfilled ) %]
+                                                        <span>Fulfilled</span>
+                                                    [% ELSE %]
+                                                        <span>Requested</span>
+                                                    [% END %]
+                                                </td>
+                                                <td class="due_date">
+                                                    [% IF ( RECALL.requested ) %]
+                                                        <span>Due to be returned by [% RECALL.checkout.date_due | $KohaDates as_due_date => 1 %]</span>
+                                                    [% ELSIF ( RECALL.waiting and RECALL.expiration_date ) %]
+                                                        <span>Pick up by [% RECALL.expiration_date | $KohaDates %]</span>
+                                                    [% ELSE %]
+                                                        -
+                                                    [% END %]
+                                                </td>
 
-                                                    <td class="cancelrecall">
-                                                        [% IF ( RECALL.requested or RECALL.overdue ) %]
-                                                            <form action="/cgi-bin/koha/opac-recall.pl" method="post">
-                                                                <input type="hidden" name="op" value="cancel">
-                                                                <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
-                                                                <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
-                                                                <input type="submit" name="submit" class="btn btn-danger cancel_recall" value="Cancel">
-                                                            </form>
-                                                        [% END %]
-                                                    </td>
-                                                [% END %]
+                                                <td class="cancelrecall">
+                                                    [% IF ( RECALL.requested or RECALL.overdue ) %]
+                                                        <form action="/cgi-bin/koha/opac-recall.pl" method="post">
+                                                            <input type="hidden" name="op" value="cancel">
+                                                            <input type="hidden" name="recall_id" value="[% RECALL.id | html %]">
+                                                            <input type="hidden" name="biblionumber" value="[% RECALL.biblio_id | html %]">
+                                                            <input type="submit" name="submit" class="btn btn-danger cancel_recall" value="Cancel">
+                                                        </form>
+                                                    [% END %]
+                                                </td>
                                                 <td></td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            [% ELSE %]
-                                <span>No recalls have been made.</span>
-                            [% END # / # RECALLS.count %]
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                            </div>
                         [% ELSE %]
-                            <span>Recalls have not been enabled. Please contact your library.</span>
-                        [% END %]
-                        </div> <!-- /#recalls -->
-                    </div> <!-- /.col-md-12 -->
+                            <span>No recalls have been made.</span>
+                        [% END # / # RECALLS.count %]
+                    [% ELSE %]
+                        <span>Recalls have not been enabled. Please contact your library.</span>
+                    [% END %]
+                    </div> <!-- /#recalls -->
+                </div> <!-- /.col-md-12 -->
             </div> <!-- /.row -->
         </div> <!-- /.container-fluid -->
 </div> <!-- /#main -->
@@ -141,23 +129,22 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/JavaScript">
-        //<![CDATA[
-            $(document).ready(function(){
-                $(".cancel_recall").click(function(){
-                    return confirmDelete(_("Are you sure you want to remove this recall?"));
-                });
-                $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "responsive": {
-                        "details": { "type": 'column', "target": -1 }
-                    },
-                    "aoColumnDefs": [
-                        { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
-                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                        { "className": "dtr-control", "orderable": false, "targets": -1 }
-                    ]
-                }));
+    <script>
+        $(document).ready(function(){
+            $(".cancel_recall").click(function(){
+                return confirmDelete(_("Are you sure you want to remove this recall?"));
             });
+            $("#recalls-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "autoWidth": false,
+                "responsive": {
+                    "details": { "type": 'column', "target": -1 }
+                },
+                "aoColumnDefs": [
+                    { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "className": "dtr-control", "orderable": false, "targets": -1 }
+                ]
+            }));
+        });
     </script>
 [% END %]
