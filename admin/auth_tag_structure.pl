@@ -156,8 +156,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
     $dbh->do(q|delete from auth_tag_structure where tagfield=? and authtypecode=?|, undef, $searchfield, $authtypecode);
     $dbh->do(q|delete from auth_subfield_structure where tagfield=? and authtypecode=?|, undef, $searchfield, $authtypecode);
-    my $tagfield = $input->param('tagfield');
-    print $input->redirect("/cgi-bin/koha/admin/auth_tag_structure.pl?searchfield=$tagfield&amp;authtypecode=$authtypecode");
+    print $input->redirect("/cgi-bin/koha/admin/auth_tag_structure.pl?searchfield=$searchfield&amp;authtypecode=$authtypecode");
     exit;
                                                     # END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
