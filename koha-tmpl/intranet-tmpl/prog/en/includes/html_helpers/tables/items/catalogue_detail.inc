@@ -488,8 +488,8 @@
                         nodes += '<span class="wdn">%s</span>'.format(escape_str(withdrawn_lib));
                     }
 
-                    if ( row.damaged ) {
-                        let damaged_lib = av_damaged.get(row.damaged.toString()) || _("Damaged");
+                    if ( row.damaged_status ) {
+                        let damaged_lib = av_damaged.get(row.damaged_status.toString()) || _("Damaged");
                         nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
                     }
 
@@ -533,7 +533,7 @@
                         }
                     [% END %]
 
-                    if ( ! ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged || row.transfer || row.first_hold || row.recall ) ) {
+                    if ( ! ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
                         nodes += ' <span>%s</span>'.format(_("Available"))
                     }
 
