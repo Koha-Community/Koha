@@ -46,11 +46,11 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 
 my $op = $input->param('op');
 
-if($op && ($op eq 'new' || $op eq 'cud-modify')) {
+if($op && ($op eq 'new' || $op eq 'modify')) {
     my @units_loop;
     push @units_loop, {val => $_} for (qw/ day week month year /);
 
-    if($op eq 'cud-modify') {
+    if($op eq 'modify') {
         my $frequencyid = $input->param('frequencyid');
         my $frequency = GetSubscriptionFrequency($frequencyid);
         foreach (@units_loop) {
