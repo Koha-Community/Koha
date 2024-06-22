@@ -15,9 +15,6 @@
     [% IF ( delete_confirm ) %]
         [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %] &rsaquo;
     [% END %]
-    [% IF ( delete_confirmed ) %]
-        [% t("Data deleted") | html %] &rsaquo;
-    [% END %]
     [% IF framework %]
         [% framework.frameworktext | html %] ([% framework.frameworkcode | html %]) &rsaquo;
     [% ELSE %]
@@ -83,20 +80,6 @@
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1%]
                 [% tx("Confirm deletion of tag {searchfield}", { searchfield = searchfield }) | html %]
-            [% END %]
-
-        [% ELSIF ( delete_confirmed ) %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">
-                    [% IF framework %]
-                        <span>[% framework.frameworktext | html %] ([% framework.frameworkcode | html %])</span>
-                    [% ELSE %]
-                        <span>Default framework</span>
-                    [% END %]
-                </a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1%]
-                <span>Data deleted</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -212,14 +195,6 @@
     </div>
 [% END %]
 
-[% IF ( delete_confirmed ) %]
-
-    <div class="dialog message"><h3>Tag deleted</h3>
-    <form action="[% script_name | html %]" method="post"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-        [% INCLUDE 'csrf-token.inc' %]
-        <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
-    </form></div>
-[% END %]
 [% IF ( framework_create ) %]
 
     <form action="[% script_name | html %]" method="post">

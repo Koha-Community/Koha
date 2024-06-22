@@ -180,7 +180,9 @@ if ($op eq 'add_form') {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
     $cache->clear_from_cache("MarcCodedFields-$frameworkcode");
-    $template->param( searchfield => $searchfield );
+    print $input->redirect(
+        "/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$searchfield&amp;frameworkcode=$frameworkcode");
+    exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
