@@ -16,9 +16,6 @@
     [% IF ( delete_confirm ) %]
         [% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %] &rsaquo;
     [% END %]
-    [% IF ( delete_confirmed ) %]
-        [% t("Data deleted") | html %] &rsaquo;
-    [% END %]
     [% IF ( authtypecode ) %]
         [% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]
     [% ELSE %]
@@ -46,7 +43,7 @@
             <a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a>
         [% END %]
 
-        [% IF ( add_form || delete_confirm || delete_confirmed ) %]
+        [% IF ( add_form || delete_confirm ) %]
             [% IF ( authtypecode ) %]
                 [% WRAPPER breadcrumb_item %]
                     <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% tx("'{authtypecode}' framework", { authtypecode = authtypecode }) | html %]</a>
@@ -84,19 +81,13 @@
                     [% tx("Confirm deletion of tag '{searchfield}'", { searchfield = searchfield }) | html %]
                 [% END %]
             [% ELSE %]
-                [% IF ( delete_confirmed ) %]
+                [% IF ( authtypecode ) %]
                     [% WRAPPER breadcrumb_item bc_active= 1 %]
-                        <span>Data deleted</span>
+                        [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
                     [% END %]
                 [% ELSE %]
-                    [% IF ( authtypecode ) %]
-                        [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            [% tx("{authtypecode} framework", { authtypecode = authtypecode }) | html %]
-                        [% END %]
-                    [% ELSE %]
-                        [% WRAPPER breadcrumb_item bc_active= 1 %]
-                            <span>Default framework</span>
-                        [% END %]
+                    [% WRAPPER breadcrumb_item bc_active= 1 %]
+                        <span>Default framework</span>
                     [% END %]
                 [% END %]
 
