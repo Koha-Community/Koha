@@ -683,7 +683,7 @@ sub GetBranchcodesWithOverdueRules {
         WHERE delay1 IS NOT NULL
         ORDER BY branchcode
     |);
-    if ( $branchcodes->[0] eq '' ) {
+    if ( defined $branchcodes->[0] && $branchcodes->[0] eq '' ) {
         # If a default rule exists, all branches should be returned
         return Koha::Libraries->search({}, { order_by => 'branchname' })->get_column('branchcode');
     }
