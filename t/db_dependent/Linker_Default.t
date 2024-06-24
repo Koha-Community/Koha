@@ -42,7 +42,7 @@ my $schema  = $builder->schema();
 $schema->storage->txn_begin;
 
 subtest 'Test caching in get_link and update_cache' => sub {
-    plan tests => 13;
+    plan tests => 16;
 
     my @tags = C4::Context->preference('marcflavour') eq 'UNIMARC' ? (601,'j',602,'a') : (650,'a',655,'a');
 
@@ -53,6 +53,8 @@ subtest 'Test caching in get_link and update_cache' => sub {
     my $subject_field5 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'sao');
     my $subject_field6 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'sao');
     my $subject_field7 = MARC::Field->new($tags[0],0,4,$tags[1]=>'Science fiction');
+    my $subject_field8 = MARC::Field->new($tags[0],0,7,$tags[1]=>'Science fiction','2'=>'oth');
+    my $subject_field9 = MARC::Field->new($tags[0],0,3,$tags[1]=>'Science fiction');
     my $genre_field = MARC::Field->new($tags[2],0,2,$tags[3]=>'Science fiction');
     # Can we build a heading from it?
     my $subject_heading = C4::Heading->new_from_field( $subject_field, q{} );
@@ -62,8 +64,11 @@ subtest 'Test caching in get_link and update_cache' => sub {
     my $subject_heading5 = C4::Heading->new_from_field( $subject_field5, q{} );
     my $subject_heading6 = C4::Heading->new_from_field( $subject_field6, q{} );
     my $subject_heading7 = C4::Heading->new_from_field( $subject_field7, q{} );
+    my $subject_heading8 = C4::Heading->new_from_field( $subject_field8, q{} );
+    my $subject_heading9 = C4::Heading->new_from_field( $subject_field9, q{} );
     my $genre_heading = C4::Heading->new_from_field( $genre_field, q{} );
 
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus',1);
 
     # Now test to see if C4::Linker can find it.
     my $linker = C4::Linker::Default->new();
@@ -91,6 +96,19 @@ subtest 'Test caching in get_link and update_cache' => sub {
 
     $linker->get_link($subject_heading7);
     is( keys %{$linker->{cache}},6, "Eighth (matching) term added to cache because of thesaurus source not specified (2nd indicator is 4)");
+
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus',0);
+
+    $linker->get_link($subject_heading);
+    is( keys %{$linker->{cache}},7, "First term added to cache because cache key now has 'notconsidered' for thesaurus");
+
+    $linker->get_link($subject_heading8);
+    is( keys %{$linker->{cache}},7, "Ninth (matching) term not added to cache because thesaurus differs but is not considered");
+
+    $linker->get_link($subject_heading9);
+    is( keys %{$linker->{cache}},7, "Tenth (matching) term not added to cache because thesaurus differs but is not considered");
+
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus',1);
 
     $linker->update_cache($subject_heading,32);
     is( $linker->{cache}->{$subject_heading->search_form.$subject_heading->auth_type.$subject_heading->{'thesaurus'}}->{authid}, 32, "Linker cache is correctly updated by 'update_cache'");
