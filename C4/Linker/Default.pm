@@ -31,6 +31,7 @@ sub get_link {
     my $search_form = $heading->search_form();
     my $auth_type = $heading->auth_type();
     my $thesaurus   = $heading->{thesaurus} || 'notdefined';
+    $thesaurus = 'notconsidered' unless C4::Context->preference('LinkerConsiderThesaurus');
     my $authid;
     my $fuzzy = 0;
     my $match_count;
