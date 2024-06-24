@@ -48,9 +48,13 @@ if ( C4::Context->preference('OPACpatronimages') ) {
     $template->param( display_patron_image => 1 ) if $patron->image;
 }
 
+# Get the desired barcode format
+my $barcode_format = C4::Context->preference('OPACVirtualCardBarcode');
+
 $template->param(
     virtualcardview => 1,
     patron          => $patron,
+    barcode_format  => $barcode_format,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

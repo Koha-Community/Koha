@@ -35,18 +35,16 @@
             <div class="col-10 order-first order-lg-2">
                 <h1>My virtual card </h1>
                 <div id="patron-virtual-card">
-                    <div id="image-and-library-container">
-                        [% IF ( display_patron_image ) %]
-                            <div id="image-container">
-                                <img id="patron-image" src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
-                            </div>
-                        [% END %]
-                        <div id="barcode-container">
-                            <svg id="patron-barcode" data-barcode="[% patron.cardnumber | html %]"></svg>
+                    [% IF ( display_patron_image ) %]
+                        <div id="image-container">
+                            <img id="patron-image" src="/cgi-bin/koha/opac-patron-image.pl" alt="" />
                         </div>
-                        <div id="lib-container">
-                            <p id="patron-lib"><strong>Library:</strong> [% Branches.GetName( patron.branchcode ) | html %]</p>
-                        </div>
+                    [% END %]
+                    <div id="barcode-container">
+                        <svg id="patron-barcode" data-barcode="[% patron.cardnumber | html %]" data-barcode-format="[% barcode_format | html %]"></svg>
+                    </div>
+                    <div id="lib-container">
+                        <p id="patron-lib"><strong>Library:</strong> [% Branches.GetName( patron.branchcode ) | html %]</p>
                     </div>
                 </div>
             </div> <!-- / .col-10 -->
@@ -56,6 +54,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% Asset.js("lib/js-barcode/js-barcode.js") | $raw %]
+    [% Asset.js("lib/bwip-js/bwip-js-min.js") | $raw %]
     [% Asset.js("js/barcode-generator.js") | $raw %]
 [% END %]

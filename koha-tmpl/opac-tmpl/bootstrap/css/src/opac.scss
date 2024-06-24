@@ -2927,29 +2927,37 @@ $star-selected: #EDB867;
 }
 
 #patron-virtual-card {
-    width: 400px;
+    width: 100%;
+    min-width: 300px;
+    max-width: 500px;
     border-radius: 15px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 
-    #barcode-container {
-        flex: 1;
+    #image-container {
         width: 100%;
-        #patron-barcode {
-            padding: .5rem;
-            width: 100%;
+        #patron-image {
+            height: 75%;
+            width: auto;
+            border-radius: 15px;
+            padding: 0.5rem;
         }
     }
 
-    #image-and-library-container {
-        #image-container {
-            flex: 0;
-            width: 100%;
-            #patron-image {
-                padding: 1rem 0 0.25rem 0.25rem;
-            }
+    #barcode-container {
+        width: 100%;
+        padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+        &.qrcode {
+            width: 50%; // Set a smaller width for QR codes
+        }
+    }
+
+    #lib-container {
+        width: 100%;
+        #patron-lib {
+            padding-left: 0.5rem;
         }
     }
 }

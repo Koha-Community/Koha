@@ -1,11 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var barcodeNumber = document.getElementById("patron-barcode").dataset.barcode;
-    JsBarcode("#patron-barcode", barcodeNumber, {
-        format: "CODE39",
-        lineColor: "#000",
-        width: 2,
-        height: 100,
-        displayValue: false,
-        margin: 0
-    });
+    const svgElement = document.getElementById('patron-barcode');
+    var barcodeNumber = svgElement.dataset.barcode;
+    var barcodeFormat = svgElement.dataset.barcodeFormat;
+
+    try {
+        // Generate the barcode SVG
+        let svg = bwipjs.toSVG({
+            bcid:        barcodeFormat,  // Barcode type
+            text:        barcodeNumber,  // Text to encode
+            padding:     0,
+            height:      15,
+        });
+        // Add the generated SVG to the barcode container
+        if (barcodeFormat == "qrcode") {
+            document.getElementById('barcode-container').classList.add('qrcode');
+        }
+        document.getElementById('barcode-container').innerHTML = svg
+    } catch (error) {
+        // Use regex to find error message
+        const match = error.message.match(/: (.+)$/);
+        const errorMessage = match ? match[1] : error.message;
+
+        console.error(error);
+        document.getElementById('barcode-container').innerHTML = `<p><strong>Error: </strong>${errorMessage}</p>`;
+    }
 });
