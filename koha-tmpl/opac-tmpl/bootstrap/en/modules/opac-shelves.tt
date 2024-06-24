@@ -383,7 +383,7 @@
                                             </span>
                                         [% END %]
                                         [% IF loggedinusername && can_remove_biblios %]
-                                            <span id="removeitems"></span>
+                                            <a href="#" class="btn btn-link disabled removeitems tag_hides"><i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list</a>
                                         [% END %]
                                     </div> <!-- / .links -->
                                 </div> <!-- / .selections-toolbar -->
@@ -547,6 +547,15 @@
                                     <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger removeitems"/>
                                 [% END %]
                             </form> <!-- /myform -->
+                            [% IF can_manage_shelf %]
+                                <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="shelf_delete_title">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-remove_biblios" />
+                                    <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    <input type="hidden" name="biblionumber" id="shelf_delete_biblionumber" value="" />
+                                    <input type="hidden" name="modifyshelfcontents" value="1" />
+                                </form>
+                            [% END %]
                         [% ELSE %]
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
@@ -985,16 +994,16 @@ $(function() {
     [% IF loggedinusername && can_remove_biblios %]
         $("body").on("click", ".removeitems", function(e){
             e.preventDefault();
-            var href;
             var title;
             var yes_label;
             var no_label;
             var message = "";
+            var biblionumber;
             /* Single "Remove from list" link has a biblionumber data-attribute */
             if( $(this).data("biblionumber") ){
                 /* Use the checkbox with that value to preview the title in the confirmation */
                 var selected_titles = $(".cb[value='" + $(this).data("biblionumber") + "'");
-                var href = $(this).attr("href");
+                biblionumber = $(this).data("biblionumber");
             } else {
                 var selected_titles = $(".cb:checked");
             }
@@ -1004,23 +1013,24 @@ $(function() {
                 if( selected_titles.size() > 1 ){
                     message = $("<ul></ul>");
                     title = _("Are you sure you want to remove these items from the list?");
-                    yes_label = _("Yes, delete from list");
-                    no_label = _("No, do not delete from list");
+                    yes_label = _("Yes, remove from list");
+                    no_label = _("No, do not remove from list");
                     selected_titles.each(function(){
                         message.append( "<li>" +  $(this).data("title") + "</li>" );
                     });
                 } else {
                     title = _("Are you sure you want to remove this item from the list?");
-                    yes_label = _("Yes, delete from list");
-                    no_label = _("No, do not delete from list");
+                    yes_label = _("Yes, remove from list");
+                    no_label = _("No, do not remove from list");
                     selected_titles.each(function(){
                         message += $(this).data("title");
                     });
                 }
                 confirmModal( message, title, yes_label, no_label, function( result ){
                     if( result ){
-                        if( href ){
-                            location.href= href;
+                        if( selected_titles.size() == 1 ){
+                            $("#shelf_delete_biblionumber").val( biblionumber );
+                            $("#shelf_delete_title").submit();
                         } else {
                             $("#myform").submit();
                         }
@@ -1029,7 +1039,6 @@ $(function() {
             }
         });
 
-        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-remove\" aria-hidden=\"true\"></i> "+_("Remove from list")+"</a>");
     [% END %]
     [% IF OpenLibraryCovers %]KOHA.OpenLibrary.GetCoverFromIsbn();[% END %]
     [% IF OPACLocalCoverImages %]KOHA.LocalCover.GetCoverFromBibnumber(false);[% END %]
