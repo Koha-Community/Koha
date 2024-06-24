@@ -163,6 +163,8 @@ if ( $op eq 'cud-discount' ) {
     my $charge_id = scalar $input->param('accountlines_id');
     my $charge    = Koha::Account::Lines->find($charge_id);
     my $amount    = scalar $input->param('amount');
+    my $note      = scalar $input->param('apply_discount_note');
+
     $schema->txn_do(
         sub {
 
@@ -172,7 +174,8 @@ if ( $op eq 'cud-discount' ) {
                     branch         => $library_id,
                     staff_id       => $logged_in_user->id,
                     interface      => 'intranet',
-                    amount         => $amount
+                    amount         => $amount,
+                    note           => $note,
                 }
             );
         }

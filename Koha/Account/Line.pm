@@ -535,6 +535,7 @@ sub reduce {
                     borrowernumber    => $self->borrowernumber,
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
+                    note              => $params->{note},
                 }
             )->store();
 
