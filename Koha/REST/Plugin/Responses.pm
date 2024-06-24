@@ -77,6 +77,36 @@ Provides a generic method rendering the standard response for resource not found
             );
         }
     );
+
+=head3 render_invalid_parameter_value
+
+    $c->render_invalid_parameter_value
+
+Provides a generic method rendering the standard response for invalid parameter value passed.
+
+=cut
+
+    $app->helper(
+        'render_invalid_parameter_value' => sub {
+            my ( $c, $opts ) = @_;
+            my $path   = $opts->{path};
+            my $values = $opts->{values};
+
+            $c->render(
+                status  => 400,
+                openapi => {
+                    error      => "Invalid parameter value",
+                    error_code => 'invalid_parameter_value',
+                    path       => $path,
+                    (
+                        $values
+                        ? ( values => { uri => $values->{uri}, field => $values->{field} } )
+                        : ()
+                    )
+                },
+            );
+        }
+    );
 }
 
 1;

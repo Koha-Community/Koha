@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 use Test::Mojo;
 
@@ -112,6 +112,59 @@ subtest 'render_resource_deleted() tests' => sub {
     my $t = Test::Mojo->new('Koha::REST::V1');
 
     $t->delete_ok("//$userid:$password@/api/v1/cities/1")->status_is('204')->content_is(q{});
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'render_invalid_parameter_value() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $authorized_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 },
+        }
+    );
+    my $password = 'thePassword123';
+    $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $authorized_patron->userid;
+
+    my $path        = '/query/library';
+    my $uri         = '/api/v1/libraries';
+    my $field       = 'library_id';
+    my $mock_cities = Test::MockModule->new('Koha::REST::V1::CirculationRules');
+    $mock_cities->mock(
+        'list_effective_rules',
+        sub {
+            my $c = shift->openapi->valid_input or return;
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => $path,
+                    values => {
+                        uri   => $uri,
+                        field => $field
+                    }
+                }
+            );
+        }
+    );
+
+    my $t = Test::Mojo->new('Koha::REST::V1');
+
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library=SOMETHING")->status_is('400')->json_is(
+        {
+            error      => 'Invalid parameter value',
+            error_code => 'invalid_parameter_value',
+            path       => $path,
+            values     => {
+                uri   => $uri,
+                field => $field
+            }
+        }
+    );
 
     $schema->storage->txn_rollback;
 };
