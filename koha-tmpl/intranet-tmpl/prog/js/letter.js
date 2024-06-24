@@ -219,7 +219,7 @@ $(document).ready(function() {
     });
 
     function insertValueQuery(containerid) {
-        var fieldset = $("#" + containerid);
+        var fieldset = $("#" + containerid + "_panel");
         var myQuery = $(fieldset).find('textarea[name="content"]');
         var myListBox = $(fieldset).find('select[name="SQLfieldname"]');
 
