@@ -914,6 +914,23 @@ OPAC:
                   1: Allow
                   0: "Don't allow"
             - patrons to access the 'My Virtual Card' tab on their account page on the OPAC.
+            - "If set to allow, show a "
+            - pref: OPACVirtualCardBarcode
+              default: code39
+              choices:
+                  code39: "CODE39"
+                  code128: "CODE128"
+                  ean13: "EAN-13"
+                  upca: "UPC-A"
+                  upce: "UPC-E"
+                  ean8: "EAN-8"
+                  itf14: "ITF-14"
+                  qrcode: "QR Code"
+                  matrix2of5: "Matrix 2 of 5"
+                  industrial2of5: "Industrial 2 of 5"
+                  iata2of5: "IATA 2 of 5"
+                  coop2of5: "COOP 2 of 5"
+            - " barcode in the patron's virtual card."
         -
             - "Fields that should be mandatory for patron purchase suggestions:"
             - pref: OPACSuggestionMandatoryFields

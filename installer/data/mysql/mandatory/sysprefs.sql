@@ -569,6 +569,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACUserSummary', 1, NULL, "Show the summary of a logged in user's checkouts, overdues, holds and fines on the mainpage", 'YesNo'),
 ('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
 ('OPACVirtualCard','0',NULL,'If ON, the patron virtual library card tab in the OPAC will be enabled','YesNo'),
+('OPACVirtualCardBarcode','code39','code39|code128|ean13|upca|upce|ean8|itf14|qrcode|matrix2of5|industrial2of5|iata2of5|coop2of5','Specify the type of barcode to be used in the patron virtual library card tab in the OPAC','Choice'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on OPAC','Free'),
 ('OPACXSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on OPAC','Free'),
