@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% PROCESS 'i18n.inc' %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title
@@ -220,15 +221,14 @@
         var sTable;
         $(document).ready(function () {
             enableSelectedActions();
+            var table_settings = [% TablesSettings.GetTableSettings( "serials", "claims", "claimst", "json" ) | $raw %];
             sTable = $("#claimst").kohaTable(
                 {
-                    dom: "t",
+                    autowidth: false,
                     order: [[7, "asc"]],
                     paging: false,
-                },
-                null,
-                true
-            );
+                    orderCellsTop: true
+                }, table_settings, 1);
 
             // Checkboxes : Select All / None
             $("span.checkall").html('<input type="checkbox" name="CheckAll"> ' + _("Check all") + "</input>");
