@@ -292,7 +292,7 @@ sub columns {
             "publishercode"         => __("Publisher"),
             "size"                  => __("Size"),
             "timestamp"             => __("Modification date"),
-            "totalissues"           => __("Koha issues (borrowed), all copies"),
+            "totalissues"           => __("Total checkouts, all items"),
             "url"                   => __("URL"),
             "volume"                => __("Volume number"),
             "volumedate"            => __("Volume date"),
