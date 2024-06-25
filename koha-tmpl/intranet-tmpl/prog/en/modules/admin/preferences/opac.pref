@@ -61,11 +61,15 @@ OPAC:
             - pref: OpacMetaDescription
               type: textarea
         -
-            - "Improve search engine crawling."
+            - "Control how search engines index the OPAC by adding a robots meta tag with"
             - pref: OpacMetaRobots
               multiple:
                noindex: "noindex"
                nofollow: "nofollow"
+            - "options.<br>"
+            - "<br><strong>nofollow:</strong> This option tells search engines not to follow any links on the OPAC. If you don't specify this rule, search engines may use links on the page to discover those linked pages."
+            - "<br/><strong>noindex:</strong> This option instructs search engines not to index the OPAC at all. This means the OPAC won't appear in search results. This might be useful for internal library catalogs that are not intended for public search."
+            - "<br><strong>both:</strong> Search engines won't follow any links on the OPAC and won't index the OPAC itself."
         -
             - By default, show bibliographic records
             - pref: BiblioDefaultView
