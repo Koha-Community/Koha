@@ -42,7 +42,7 @@ my $schema  = $builder->schema();
 $schema->storage->txn_begin;
 
 subtest 'Test caching in get_link and update_cache' => sub {
-    plan tests => 16;
+    plan tests => 18;
 
     my @tags = C4::Context->preference('marcflavour') eq 'UNIMARC' ? (601,'j',602,'a') : (650,'a',655,'a');
 
@@ -120,6 +120,13 @@ subtest 'Test caching in get_link and update_cache' => sub {
     is( $authid, 4, "Correct id for sao term is retrieved from the cache" );
     $linker->update_cache($subject_heading4,78);
     is( $linker->{cache}->{$subject_heading4->search_form.$subject_heading4->auth_type.$subject_heading4->{'thesaurus'}}->{authid}, 78, "Linker cache for the bnb record is correctly updated by 'update_cache'");
+
+    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus',0);
+    $linker->update_cache($subject_heading,32);
+    is( $linker->{cache}->{$subject_heading->search_form.$subject_heading->auth_type.'notconsidered'}->{authid}, 32, "Linker cache is correctly updated by 'update_cache'");
+    ( $authid, undef ) = $linker->get_link($subject_heading);
+    is( $authid, 32, "Correct id is retrieved from the cache" );
+
 };
 
 $schema->storage->txn_rollback;
