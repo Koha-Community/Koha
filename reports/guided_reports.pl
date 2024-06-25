@@ -690,7 +690,11 @@ elsif ($op eq 'export'){
                 # Output
                 binmode(STDOUT);
                 open $ods_fh, '<', $ods_filepath;
-                $content .= $_ while <$ods_fh>;
+                print $input->header(
+                    -type       => $type,
+                    -attachment => $reportfilename
+                );
+                print $_ while <$ods_fh>;
                 unlink $ods_filepath;
             }
             elsif ( $format eq 'template' ) {
@@ -714,11 +718,14 @@ elsif ($op eq 'export'){
                 );
             }
         }
-        print $input->header(
-            -type => $type,
-            -attachment=> $reportfilename
-        );
-        print $content;
+
+        unless ( $format eq 'ods' ) {
+            print $input->header(
+                -type       => $type,
+                -attachment => $reportfilename
+            );
+            print $content;
+        }
 
         foreach my $err (@$q_errors, @errors) {
             print "# ERROR: " . (map {$_ . ": " . $err->{$_}} keys %$err) . "\n";
