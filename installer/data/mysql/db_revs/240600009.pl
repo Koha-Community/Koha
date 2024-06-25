@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "33317",
@@ -11,6 +12,6 @@ return {
             q{INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('OpacMetaRobots','','','Improve search engine crawling.', 'Multiple') }
         );
 
-        say $out "Added system preference 'OpacMetaRobots'";
+        say_success( $out, "Added system preference 'OpacMetaRobots'" );
     },
 };
