@@ -157,37 +157,37 @@ else {
             }
 
             # Getting frameworktext
-            my $frameworktext1 = Koha::Authority::Types->find( $recordObj1->authtypecode );
-            my $frameworktext2 = Koha::Authority::Types->find( $recordObj2->authtypecode );
-            my $frameworktextdestination = Koha::Authority::Types->find( $framework );
+            my $frameworktext1           = Koha::Authority::Types->find( $recordObj1->authtypecode );
+            my $frameworktext2           = Koha::Authority::Types->find( $recordObj2->authtypecode );
+            my $frameworktextdestination = Koha::Authority::Types->find($framework);
 
             # Creating a loop for display
 
             my @records = (
                 {
-                    recordid => $mergereference,
-                    record => $recordObj1->record,
+                    recordid      => $mergereference,
+                    record        => $recordObj1->record,
                     frameworkcode => $recordObj1->authtypecode,
                     frameworktext => $frameworktext1->authtypetext,
-                    display => $recordObj1->createMergeHash($tagslib),
-                    reference => 1,
+                    display       => $recordObj1->createMergeHash($tagslib),
+                    reference     => 1,
                 },
                 {
-                    recordid => $notreference,
-                    record => $recordObj2->record,
+                    recordid      => $notreference,
+                    record        => $recordObj2->record,
                     frameworkcode => $recordObj2->authtypecode,
                     frameworktext => $frameworktext2->authtypetext,
-                    display => $recordObj2->createMergeHash($tagslib),
+                    display       => $recordObj2->createMergeHash($tagslib),
                 },
             );
 
             # Parameters
             $template->param(
-                recordid1        => $mergereference,
-                recordid2        => $notreference,
-                records        => \@records,
-                framework      => $framework,
-                frameworktext => $frameworktextdestination->authtypetext,
+                recordid1         => $mergereference,
+                recordid2         => $notreference,
+                records           => \@records,
+                framework         => $framework,
+                frameworktext     => $frameworktextdestination->authtypetext,
                 multipleauthtypes => ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) ? 1 : 0,
             );
         }
