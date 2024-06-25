@@ -92,6 +92,7 @@ sub update_cache {
     my $search_form = $heading->search_form();
     my $auth_type = $heading->auth_type();
     my $thesaurus   = $heading->{thesaurus} || 'notdefined';
+    $thesaurus = 'notconsidered' unless C4::Context->preference('LinkerConsiderThesaurus');
     my $fuzzy = 0;
 
     $self->{'cache'}->{$search_form.$auth_type.$thesaurus}->{'cached'} = 1;
