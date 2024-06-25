@@ -128,19 +128,19 @@
                                 <li>
                                     <label class="required" for="title">Title: </label>
                                     [% IF ( editColTitle ) %]
-                                        <input type="text" name="title" value="[% editColTitle | html %]" required="required" />
+                                        <input id="title" type="text" name="title" value="[% editColTitle | html %]" required="required" />
                                         <span class="required">Required</span>
                                     [% ELSE %]
-                                        <input type="text" name="title" required="required" />
+                                        <input id="title" type="text" name="title" required="required" />
                                         <span class="required">Required</span>
                                     [% END %]
                                 </li>
                                 <li>
                                     <label for="description">Description: </label>
                                     [% IF (editColDescription ) %]
-                                        <input type="text" size="50" name="description" value="[% editColDescription | html %]" />
+                                        <input id="description" type="text" size="50" name="description" value="[% editColDescription | html %]" />
                                     [% ELSE %]
-                                        <input type="text" size="50" name="description" />
+                                        <input id="description" type="text" size="50" name="description" />
                                     [% END %]
                                 </li>
                             </ol>
