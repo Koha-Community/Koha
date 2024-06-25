@@ -21,6 +21,7 @@ use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::BackgroundJobs;
 use Koha::BackgroundJob::PseudonymizeStatistic;
 
@@ -29,6 +30,7 @@ use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+my $dtf     = $schema->storage->datetime_parser;
 
 subtest 'enqueue() tests' => sub {
 
@@ -65,29 +67,39 @@ subtest 'enqueue() tests' => sub {
 
 subtest 'process() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_config( 'bcrypt_settings', '$2a$08$9lmorEKnwQloheaCLFIfje' );
-    t::lib::Mocks::mock_preference( 'Pseudonymization',             1 );
-    t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields', 'branchcode,categorycode,sort1' );
+    t::lib::Mocks::mock_preference( 'Pseudonymization',                  1 );
+    t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields',      'branchcode,categorycode,sort1' );
+    t::lib::Mocks::mock_preference( 'PseudonymizationTransactionFields', 'datetime' );
 
     my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item      = $builder->build_sample_item();
     my $statistic = $builder->build_object(
         {
             class => 'Koha::Statistics',
-            value => { type => 'issue', borrowernumber => $patron->id, itemnumber => $item->id }
+            value => {
+                borrowernumber => $patron->id,
+                datetime       => $dtf->format_datetime( dt_from_string()->subtract( days => 7 ) ),
+                itemnumber     => $item->id,
+                type           => 'issue',
+            }
         }
-    );
+    )->unblessed;
 
-    my $job_id = Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $statistic->unblessed } );
-    my $pseudonymized_transactions_before = Koha::PseudonymizedTransactions->search()->count();
-    my $job                               = Koha::BackgroundJobs->find($job_id)->_derived_class;
-    $job->process( { statistic => $statistic->unblessed } );
-    my $pseudonymized_transactions_after = Koha::PseudonymizedTransactions->search()->count();
-    is( $pseudonymized_transactions_after, $pseudonymized_transactions_before + 1, "Pseudonymized transaction added" );
+    my $job_id          = Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $statistic } );
+    my $pt_count_before = Koha::PseudonymizedTransactions->search()->count();
+
+    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( { statistic => $statistic } );
+
+    my $pt_after = Koha::PseudonymizedTransactions->search();
+    is( $pt_after->count, $pt_count_before + 1, "Pseudonymized transaction added" );
+
+    is( $statistic->{datetime}, $pt_after->last->datetime, "'datetime' column preserved" );
 
     $job->discard_changes;
     is( $job->data, '{"data":""}', "Job data cleared after pseudonymization" );
