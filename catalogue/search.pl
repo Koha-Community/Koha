@@ -425,9 +425,9 @@ if ($params->{'limit-yr'}) {
 # $ %z3950p will be a hash ref if the indexes are present (advacned search), otherwise undef
 my $z3950par;
 my $indexes2z3950 = {
-    kw=>'title', au=>'author', 'au,phr'=>'author', nb=>'isbn', ns=>'issn',
-    'lcn,phr'=>'dewey', su=>'subject', 'su,phr'=>'subject',
-    ti=>'title', 'ti,phr'=>'title', se=>'title'
+    kw      => 'title', au       => 'author',  'au,phr' => 'author', nb => 'isbn', ns => 'issn',
+    callnum => 'dewey', su       => 'subject', 'su,phr' => 'subject',
+    ti      => 'title', 'ti,phr' => 'title',   se       => 'title'
 };
 for (my $ii = 0; $ii < @operands; ++$ii)
 {
