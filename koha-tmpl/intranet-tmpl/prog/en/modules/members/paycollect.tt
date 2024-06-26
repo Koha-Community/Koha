@@ -154,7 +154,6 @@
 
                             <fieldset class="rows">
                                 <legend>Pay an individual charge</legend>
-                                <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
                                 <table>
                                     <thead
                                         ><tr>
@@ -208,6 +207,10 @@
                                             [% END %]
                                         </li>
                                     [% END %]
+                                    <li>
+                                        <label> Note: </label>
+                                        <input name="payment_note" id="payment_note" value="[% payment_note | html %]" />
+                                    </li>
                                 </ol>
                             </fieldset>
 
@@ -247,7 +250,6 @@
                             <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
                             <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
                             <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
-                            <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
                             <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
                             <input type="hidden" name="change_given" id="change_given" />
                             <table>
@@ -278,6 +280,10 @@
                                     <label for="paid">Writeoff amount: </label>
                                     <!-- default to writing off all -->
                                     <input name="paid" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 %]" type="text" />
+                                </li>
+                                <li>
+                                    <label> Note: </label>
+                                    <input name="payment_note" id="payment_note" value="[% payment_note | html %]" />
                                 </li>
                             </ol>
                         </fieldset>
