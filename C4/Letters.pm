@@ -557,24 +557,30 @@ sub SendAlerts {
 
 =head2 GetPreparedLetter( %params )
 
-    %params hash:
-      module => letter module, mandatory
-      letter_code => letter code, mandatory
-      branchcode => for letter selection, if missing default system letter taken
-      tables => a hashref with table names as keys. Values are either:
-        - a scalar - primary key value
-        - an arrayref - primary key values
-        - a hashref - full record
-      substitute => custom substitution key/value pairs
-      repeat => records to be substituted on consecutive lines:
-        - an arrayref - tries to guess what needs substituting by
-          taking remaining << >> tokensr; not recommended
-        - a hashref token => @tables - replaces <token> << >> << >> </token>
-          subtemplate for each @tables row; table is a hashref as above
-      want_librarian => boolean,  if set to true triggers librarian details
-        substitution from the userenv
-    Return value:
-      letter fields hashref (title & content useful)
+    my $letter = GetPreparedLetter(
+        {
+            module      => "letter module",           # mandatory
+            letter_code => "letter code",             # mandatory
+            branchcode  => "for letter selection",    # if missing default system letter taken
+            objects     => {},                        # a hashref with object names as keys and objects as values
+            tables      => {},                        # a hashref with table names as keys. Values are either:
+                                                      #  - a scalar - primary key value
+                                                      #  - an arrayref - primary key values
+                                                      #  - a hashref - full record
+            substitute  => {},                        # custom substitution key/value pairs
+            repeat      => '',                        # records to be substituted on consecutive lines, accepts either:
+                                                      #  - an arrayref
+                                                      #    tries to guess what needs substituting by taking remaining
+                                                      #    << >> tokensr; not recommended
+                                                      #  - a hashref token => @tables
+                                                      #    replaces <token> << >> << >> </token> subtemplate for each
+                                                      #    @tables row; table is a hashref as above
+            want_librarian => ''                      # boolean,  if set to true triggers librarian details substitution
+                                                      # from the userenv
+        }
+    );
+
+Return value: letter fields hashref (title & content useful)
 
 =cut
 
