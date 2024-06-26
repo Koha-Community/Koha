@@ -95,7 +95,8 @@
                                                 [% IF ( text_field.select_field ) %]
                                                     <td class="actions">
                                                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/labels/label-edit-[% label_element |url %].pl?op=edit_form&amp;element_id=[% text_field.field_value |url %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                        <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=[% label_element | html %]&amp;element_id=[% text_field.field_value |url %]"><i class="fa fa-trash-can"></i> Delete</a>
+
+                                                        <a class="btn btn-default btn-xs submit-form-link" href="#" data-label_element="[% label_element | html %]" data-element_id="[% text_field.field_value | html %]" data-action="label-manage.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this?') | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                     </td>
                                                     [% IF label_element == 'batch' %] <td><input type="checkbox" name="action" value="[% text_field.field_value | html %]" /></td>[% END %]
                                                 [% ELSIF ( text_field.field_value ) %]
@@ -134,6 +135,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     <script>
         function Xport() {
             batches= new Array;
