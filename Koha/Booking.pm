@@ -246,43 +246,36 @@ sub to_api_mapping {
 
 =head3 delete
 
-$booking->delete();
+  my $deleted = $booking->delete();
 
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $deleted = $self->SUPER::delete($self);
-    my $patron  = Koha::Patrons->find( $self->patron_id );
-    my $item    = Koha::Items->find( $self->item_id );
-    my $library = Koha::Libraries->find( $self->pickup_library_id );
+    my $patron         = $self->patron;
+    my $pickup_library = $self->pickup_library;
 
     my $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'bookings',
-            letter_code            => 'BOOKING_CANCELLATION',
-            message_transport_type => 'email',
-            branchcode             => $patron->branchcode,
-            lang                   => $patron->lang,
-            tables                 => {
-                branches    => $library->branchcode,
-                borrowers   => $patron->borrowernumber,
-                items       => $item->itemnumber,
-                biblio      => $item->biblionumber,
-                biblioitems => $item->biblionumber,
-                bookings    => $self->unblessed,
+        module                 => 'bookings',
+        letter_code            => 'BOOKING_CANCELLATION',
+        message_transport_type => 'email',
+        branchcode             => $pickup_library->branchcode,
+        lang                   => $patron->lang,
+        objects                => { booking => $self }
+    );
+
+    if ($letter) {
+        C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $patron->borrowernumber,
+                message_transport_type => 'email',
             }
         );
+    }
 
-        if ($letter) {
-            C4::Letters::EnqueueLetter(
-                {
-                    letter                 => $letter,
-                    borrowernumber         => $patron->borrowernumber,
-                    message_transport_type => 'email',
-                }
-            );
-        }
+    my $deleted = $self->SUPER::delete($self);
     return $deleted;
 }
 
