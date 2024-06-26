@@ -124,7 +124,9 @@
                                 <a class="btn btn-default" id="additems" href="#"><i class="fa fa-plus"></i> Add item(s)</a>[% IF ( table_loop ) %]
                                 <a class="btn btn-default" id="savedesc" href="#" data-batch_id="[% batch_id | html %]"><i class="fa fa-save"></i> Save description</a>
                                 <a class="btn btn-default" id="removeitems" href="#"><i class="fa fa-trash-can"></i> Remove selected items</a>
-                                <a class="btn btn-default" id="deletebatch" href="#"><i class="fa fa-minus-square"></i> Delete batch</a>
+
+                                <a class="btn btn-default submit-form-link" id="deletebatch" href="#" data-op="cud-delete" data-label_element="batch" data-element_id="[% batch_id | html %]" data-action="/cgi-bin/koha/labels/label-manage.pl" data-method="post" data-confirmation-msg="[% tx("Are you sure you want to delete batch {batch_number}?", { batch_number = batch_id }) %]"><i class="fa fa-minus-square"></i> Delete batch</a>
+
                                 <a class="btn btn-default" id="deduplicate" href="#"><i class="fa fa-minus"></i> Remove duplicates</a>
                                 <a class="btn btn-default" id="exportitems" href="#"><i class="fa-solid fa-share-from-square"></i> Export selected items</a>
                                 <a class="btn btn-default" id="exportbatch" href="#"><i class="fa-solid fa-share-from-square"></i> Export full batch</a>[% END %]
@@ -206,17 +208,8 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     <script>
-        function DeleteConfirm() {
-            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id | html %]");
-            var answer = confirm(msg);
-            if (answer) {
-                window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=[% batch_id | html %]";
-            }
-            else {
-                return; // abort delete
-            }
-        }
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
             $(".focus:last").select();
         }
@@ -343,10 +336,7 @@
                 Remove();
                 return false;
             });
-            $("#deletebatch").click(function(){
-                DeleteConfirm();
-                return false;
-            });
+
             $("#deduplicate").click(function(){
                 DeDuplicate();
                 return false;
