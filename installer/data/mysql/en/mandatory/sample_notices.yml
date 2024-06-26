@@ -43,6 +43,26 @@ tables:
             - ""
             - "Your library."
 
+        - module: bookings
+          code: BOOKING_CANCELLATION
+          branchcode: ""
+          name: "Booking cancellation notice"
+          is_html: 0
+          title: "A library bookings has been cancelled"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[%- PROCESS 'html_helpers.inc' -%]"
+            - "[%- USE KohaDates -%]"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => booking.patron -%],"
+            - ""
+            - "We regret to inform you, that the following booking has been cancelled."
+            - ""
+            - "Title: [%- INCLUDE 'biblio-title.inc' biblio=booking.biblio link = 0 -%]"
+            - "Dates: [% booking.start_date | $KohaDates %] to [% booking.end_date | $KohaDates %]"
+            - ""
+            - "You library."
+
         - module: catalogue
           code: TICKET_ACKNOWLEDGE
           branchcode: ""
