@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -292,6 +292,49 @@ Koha::CirculationRules->set_rules(
         }
     }
 );
+
+subtest 'AddIssue | renewal when adding issue to same borrower' => sub {
+    plan tests => 2;
+
+    my $item = $builder->build_sample_item();
+
+    # Set a simple circ policy
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $item->itype,
+            rules        => {
+                maxissueqty     => 1,
+                reservesallowed => 25,
+                issuelength     => 7,
+                lengthunit      => 'days',
+                renewalsallowed => 5,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+            }
+        }
+    );
+
+    my $now           = dt_from_string()->truncate( to => 'day' );
+    my $seven_days    = $now->clone->add( days => 7 )->truncate( to => 'day' );
+    my $fourteen_days = $now->clone->add( days => 14 )->truncate( to => 'day' );
+    my $patron        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $staff         = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $staff } );
+
+    my $issue = AddIssue( $patron, $item->barcode );
+    is( dt_from_string( $issue->date_due )->truncate( to => 'day' ), $seven_days, "Item issued for correct term" );
+    $issue = AddIssue( $patron, $item->barcode );
+    is(
+        dt_from_string( $issue->date_due )->truncate( to => 'day' ), $fourteen_days,
+        "Second issue renews item for correct term"
+    );
+
+};
 
 subtest "CanBookBeRenewed AllowRenewalIfOtherItemsAvailable multiple borrowers and items tests" => sub {
     plan tests => 7;
