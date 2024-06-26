@@ -134,6 +134,8 @@ if ( $op eq 'cud-refund' ) {
     my $charge      = Koha::Account::Lines->find($charge_id);
     my $amount      = scalar $input->param('amount');
     my $refund_type = scalar $input->param('refund_type');
+    my $note        = scalar $input->param('refund_note');
+
     $schema->txn_do(
         sub {
 
@@ -143,7 +145,8 @@ if ( $op eq 'cud-refund' ) {
                     branch         => $library_id,
                     staff_id       => $logged_in_user->id,
                     interface      => 'intranet',
-                    amount         => $amount
+                    amount         => $amount,
+                    note           => $note
                 }
             );
             unless ( $refund_type eq 'AC' ) {
@@ -154,7 +157,8 @@ if ( $op eq 'cud-refund' ) {
                         staff_id      => $logged_in_user->id,
                         cash_register => $registerid,
                         interface     => 'intranet',
-                        amount        => $amount
+                        amount        => $amount,
+                        note          => $note
                     }
                 );
             }

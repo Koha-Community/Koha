@@ -703,7 +703,8 @@ sub apply {
         register_id => $register_id,
         staff_id    => $staff_id,
         interface   => 'intranet',
-        amount      => $amount
+        amount      => $amount,
+        note        => $note
     }
   );
 
@@ -763,7 +764,8 @@ sub payout {
                     borrowernumber    => $self->borrowernumber,
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
-                    register_id       => $params->{cash_register}
+                    register_id       => $params->{cash_register},
+                    note              => $params->{note},
                 }
             )->store();
 
