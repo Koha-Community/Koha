@@ -231,7 +231,8 @@ sub debits {
 
   $payment_accountline->void({
       interface => $interface,
-      [ staff_id => $staff_id, branch => $branchcode ]
+      [ staff_id => $staff_id, branch => $branchcode ],
+      note       => $note
   });
 
 Used to 'void' (or reverse) a payment/credit. It will roll back any offsets
@@ -290,6 +291,7 @@ sub void {
                     manager_id        => $params->{staff_id},
                     interface         => $params->{interface},
                     branchcode        => $params->{branch},
+                    note              => $params->{note}
                 }
             )->store();
 

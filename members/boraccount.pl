@@ -75,11 +75,13 @@ if ( $op eq 'cud-void' ) {
     output_and_exit_if_error( $input, $cookie, $template, { check => 'csrf_token' } );
     my $payment_id = scalar $input->param('accountlines_id');
     my $payment    = Koha::Account::Lines->find($payment_id);
+    my $note       = scalar $input->param('void_note');
     $payment->void(
         {
             branch    => $library_id,
             staff_id  => $logged_in_user->id,
             interface => 'intranet',
+            note      => $note
         }
     );
 }
