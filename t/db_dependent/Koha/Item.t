@@ -2260,7 +2260,7 @@ subtest 'store() tests' => sub {
 
     subtest '_set_found_trigger() tests' => sub {
 
-        plan tests => 9;
+        plan tests => 13;
 
         $schema->storage->txn_begin;
 
@@ -2336,6 +2336,56 @@ subtest 'store() tests' => sub {
 
         $messages = $item->object_messages;
         is( scalar @{$messages}, 0, 'This item has no history, no associated lost fines, presumed not lost by patron, no messages returned');
+
+        # NoRefundOnLostFinesPaidAge
+        t::lib::Mocks::mock_preference( 'NoRefundOnLostFinesPaidAge', 10 );
+        $mocked_circ_rules->mock( 'get_lostreturn_policy', sub { return { lostreturn => 'refund' }; } );
+
+        $item = $builder->build_sample_item( { itemlost => 1, itemlost_on => dt_from_string() } );
+        my $fine = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                date              => '1970-01-01 14:00:01',
+                amount            => 5,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'LOST',
+                itemnumber        => $item->itemnumber
+            }
+        )->store();
+        my $payment = Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                date              => '1970-01-01 14:00:01',
+                amountoutstanding => 0,
+                amount            => -5,
+                interface         => 'commandline',
+                credit_type_code  => 'PAYMENT'
+            }
+        )->store();
+        my $offset = Koha::Account::Offset->new(
+            {
+                credit_id  => $payment->id,
+                debit_id   => $fine->id,
+                type       => 'APPLY',
+                amount     => -5,
+                created_on => '1971-01-01 14:00:01'
+            }
+        )->store();
+
+        $item->set( { itemlost => 0 } )->store;
+
+        $messages = $item->object_messages;
+
+        is(
+            scalar @{$messages}, 1,
+            'This item has one message assigned'
+        );
+
+        my $message = $messages->[0];
+        is( $message->type,    'info',                 'type is correct' );
+        is( $message->message, 'payment_not_refunded', 'message is correct' );
+        is( $message->payload, undef,                  'no payload' );
 
         $schema->storage->txn_rollback;
     };
