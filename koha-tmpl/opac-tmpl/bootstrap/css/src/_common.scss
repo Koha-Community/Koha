@@ -843,7 +843,6 @@ button {
 #logo {
     background: transparent url( "../images/koha-green-logo.svg" ) no-repeat scroll 0%;
     border: 0;
-    float: left !important;
     margin: 0;
     padding: 0;
     width: 100px;
@@ -861,6 +860,25 @@ button {
 
         &:focus {
             background-color: transparent;
+        }
+    }
+}
+
+#header-region .navbar {
+    #logo {
+        flex-grow: 1;
+        flex-shrink: 0;
+    }
+
+    &:has( #cart-list-nav ) {
+        #logo {
+            flex-grow: 0;
+            flex-shrink: 1;
+        }
+
+        #cart-list-nav {
+            flex-grow: 1;
+            flex-shrink: 0;
         }
     }
 }
