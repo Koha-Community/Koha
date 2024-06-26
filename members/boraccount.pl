@@ -90,6 +90,7 @@ if ( $op eq 'cud-payout' ) {
     my $payment     = Koha::Account::Lines->find($payment_id);
     my $amount      = scalar $input->param('amount');
     my $payout_type = scalar $input->param('payout_type');
+    my $note        = scalar $input->param('payout_note');
     if ( $payment_id eq "" ) {
         $schema->txn_do(
             sub {
@@ -100,7 +101,7 @@ if ( $op eq 'cud-payout' ) {
                         staff_id      => $logged_in_user->id,
                         cash_register => $registerid,
                         interface     => 'intranet',
-                        amount        => $amount
+                        amount        => $amount,
                     }
                 );
             }
@@ -116,7 +117,8 @@ if ( $op eq 'cud-payout' ) {
                         staff_id      => $logged_in_user->id,
                         cash_register => $registerid,
                         interface     => 'intranet',
-                        amount        => $amount
+                        amount        => $amount,
+                        note          => $note
                     }
                 );
             }
