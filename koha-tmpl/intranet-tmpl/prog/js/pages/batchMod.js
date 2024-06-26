@@ -169,6 +169,11 @@ function hideAllColumns() {
     });
 }
 
+function ShowSerialEditingConfirmation(form) {
+    $("#edit-serial-issues-modal").modal("show");
+    return false;
+}
+
 $(document).ready(function () {
     var items_table = $("#itemst").kohaTable({
         columnDefs: [
@@ -219,4 +224,23 @@ $(document).ready(function () {
             }
         }
     });
+    $(document).on(
+        "click",
+        "#edit-serial-issues-modal-btn-submit",
+        function (e) {
+            e.preventDefault();
+            $("#edit-serial-issues-modal").modal("hide");
+            $("#edit-serial-issues").val("1");
+            return $("form[name='f'").submit();
+        }
+    );
+    $(document).on(
+        "click",
+        "#no-edit-serial-issues-modal-btn-submit",
+        function (e) {
+            e.preventDefault();
+            $("#edit-serial-issues-modal").modal("hide");
+            return $("form[name='f'").submit();
+        }
+    );
 });
