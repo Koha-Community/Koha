@@ -41,8 +41,16 @@ Returns the default notice template content.
 =cut
 
 sub get_default {
-    my $self            = shift;
-    my $lang            = $self->lang;
+    my $self = shift;
+    my $lang = $self->lang;
+    if ( $lang eq 'default' ) {
+        my $translated_languages = C4::Languages::getTranslatedLanguages(
+            'opac',
+            C4::Context->preference('template')
+        );
+        $lang = @{ @{$translated_languages}[0]->{sublanguages_loop} }[0]->{rfc4646_subtag};
+    }
+
     my $defaulted_to_en = 0;
 
     my $file = C4::Context->config('intranetdir') . "/installer/data/mysql/$lang/mandatory/sample_notices.yml";
