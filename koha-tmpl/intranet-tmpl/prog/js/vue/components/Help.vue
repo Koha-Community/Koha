@@ -5,7 +5,8 @@
             class="toplinks"
             id="helper"
             target="_blank"
-            ><i class="fa fa-question-circle"></i> <span>Help</span></a
+            ><i class="fa fa-question-circle"></i>
+            <span>{{ $__("Help") }}</span></a
         >
     </nav>
 </template>
