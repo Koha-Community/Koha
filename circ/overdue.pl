@@ -231,6 +231,14 @@ if ($noreport) {
     $bornamefilter =~ s/\*/\%/g;
     $bornamefilter =~ s/\?/\_/g;
 
+    # Escape single quote
+    $bornamefilter =~s/'/\\'/g;
+    $itemtypefilter =~s/'/\\'/g;
+    $borcatfilter =~s/'/\\'/g;
+    $holdingbranchfilter =~s/'/\\'/g;
+    $homebranchfilter =~s/'/\\'/g;
+    $branchfilter =~s/'/\\'/g;
+
     my $strsth = "SELECT date_due,
         borrowers.title as borrowertitle,
         borrowers.surname,
