@@ -1071,7 +1071,7 @@ subtest "payout() tests" => sub {
 
 subtest "reduce() tests" => sub {
 
-    plan tests => 34;
+    plan tests => 35;
 
     $schema->storage->txn_begin;
 
@@ -1253,6 +1253,29 @@ subtest "reduce() tests" => sub {
     }
     'Koha::Exceptions::Account::IsNotDebit',
       '->reduce() cannot be used on a payout debit';
+
+    # Throw exception if attempting to reduce a voided debt
+    my $payment = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => -20,
+            amountoutstanding => -20,
+            interface         => 'commandline',
+            credit_type_code  => 'CREDIT'
+        }
+    )->store();
+    my $void = $payment->void(
+        {
+            interface   => 'intranet',
+            staff_id    => $staff->borrowernumber,
+            branch      => $branchcode,
+        }
+    );
+    throws_ok {
+        $void->reduce($reduce_params);
+    }
+    'Koha::Exceptions::Account::IsNotDebit',
+      '->reduce() cannot be used on a void debit';
 
     $schema->storage->txn_rollback;
 };
