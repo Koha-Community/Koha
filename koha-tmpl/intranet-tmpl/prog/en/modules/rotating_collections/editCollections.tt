@@ -40,6 +40,16 @@
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Collection deleted</span>
             [% END %]
+        [% ELSIF ( op == "cud-create" ) %]
+            [% IF ( createSuccess ) %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Collection created successfully</span>
+                [% END %]
+            [% ELSE %]
+                [% WRAPPER breadcrumb_item bc_active= 1 %]
+                    <span>Collection creation failed</span>
+                [% END %]
+            [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]</em></a>
