@@ -13,7 +13,7 @@ return {
         say $out "Updated system preference 'EmailFieldPrimary' to include 'selected addresses' option";
 
         $dbh->do(
-            "INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('EmailFieldSelection','email|emailpro|B_email','','Selection list of patron email fields to use whern AutoEmailPrimaryAddress is set to selected addresses','multiple')"
+            "INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('EmailFieldSelection','','email|emailpro|B_email','Selection list of patron email fields to use whern AutoEmailPrimaryAddress is set to selected addresses','multiple')"
         );
 
         say $out "Added new system preference 'EmailFieldSelection'";
