@@ -999,8 +999,9 @@
                                     [% END %]
                                 </form>
 
-                                <form method="get" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
-                                    <input type="hidden" name="op" value="show" />
+                                <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <input type="hidden" name="op" value="cud-show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %]
                                     [% IF cardnumbers %]
