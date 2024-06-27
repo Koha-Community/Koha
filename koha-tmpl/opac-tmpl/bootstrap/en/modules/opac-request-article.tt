@@ -16,6 +16,7 @@
 [% INCLUDE 'masthead.inc' %]
 
 [% SET disclaimer = AdditionalContents.get( location => "ArticleRequestsDisclaimerText", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 } ) %]
 
 <div class="main">
     [% WRAPPER breadcrumbs %]
@@ -163,18 +164,20 @@
                                         </select>
                                     </li>
 
-                                    <li>
-                                        <label for="branchcode">Pickup library:</label>
-                                        <select name="branchcode" id="branchcode" required="required">
-                                            [% FOREACH b IN Branches.all %]
-                                                [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
-                                                    <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
-                                                [% ELSE %]
-                                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                                    [% IF AllPublicBranches.size > 1 %]
+                                        <li>
+                                            <label for="branchcode">Pickup library:</label>
+                                            <select name="branchcode" id="branchcode" required="required">
+                                                [% FOREACH b IN AllPublicBranches %]
+                                                    [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
+                                                        <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                                                    [% END %]
                                                 [% END %]
-                                            [% END %]
-                                        </select>
-                                    </li>
+                                            </select>
+                                        </li>
+                                    [% END %]
                                 </ul>
                             </fieldset>
 

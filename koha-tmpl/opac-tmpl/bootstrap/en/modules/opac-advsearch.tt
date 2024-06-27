@@ -14,6 +14,8 @@
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='advsearch' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 } ) %]
+
 <form id="advsearch_form" action="/cgi-bin/koha/opac-search.pl" method="get">
     <input type="hidden" name="advsearch" value="1"/>
     <div class="main">
@@ -232,27 +234,33 @@
                             <!-- AVAILABILITY LIMITS -->
                             <div id="location" class="advsearch_limit">
                                 <fieldset>
-                                    <label for="branchloop">Location and availability:</label>
-                                    <select class="form-select" name="limit" id="branchloop">
-                                    <option value="">All libraries</option>
-                                    [% FOREACH BranchesLoo IN Branches.all( selected => opac_name ) %]
-                                        [% NEXT UNLESS BranchesLoo.public %]
-                                        [% IF BranchesLoo.selected %]
-                                            <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
-                                        [% ELSE %]
-                                            <option value="branch:[% BranchesLoo.branchcode | html %]">[% BranchesLoo.branchname | html %]</option>
-                                        [% END %]
+                                    [% IF AllPublicBranches.size > 1 %]
+                                        <label for="branchloop">Location and availability:</label>
+                                    [% ELSE %]
+                                        <label for="branchloop">Availability:</label>
                                     [% END %]
-                                    </select>
-                                    [% IF search_groups %]
-                                        <p>OR</p>
-                                        <label for="categoryloop">Groups of libraries</label>
-                                        <select class="form-select" name="limit" id="categoryloop">
-                                            <option value=""> -- none -- </option>
-                                            [% FOREACH sg IN search_groups %]
-                                                <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+
+                                    [% IF AllPublicBranches.size > 1 %]
+                                        <select class="form-select" name="limit" id="branchloop">
+                                        <option value="">All libraries</option>
+                                        [% FOREACH BranchesLoo IN AllPublicBranches %]
+                                            [% IF BranchesLoo.selected %]
+                                                <option value="branch:[% BranchesLoo.branchcode | html %]" selected="selected">[% BranchesLoo.branchname | html %]</option>
+                                            [% ELSE %]
+                                                <option value="branch:[% BranchesLoo.branchcode | html %]">[% BranchesLoo.branchname | html %]</option>
                                             [% END %]
+                                        [% END %]
                                         </select>
+                                        [% IF search_groups %]
+                                            <p>OR</p>
+                                            <label for="categoryloop">Groups of libraries</label>
+                                            <select class="form-select" name="limit" id="categoryloop">
+                                                <option value=""> -- none -- </option>
+                                                [% FOREACH sg IN search_groups %]
+                                                    <option value="multibranchlimit:[% sg.id | html %]">[% sg.title | html %]</option>
+                                                [% END %]
+                                            </select>
+                                        [% END %]
                                     [% END %]
                                     <div style="margin-top:.4em">
                                         <label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label>

@@ -12,6 +12,7 @@
 [% SET OpacNavRight = AdditionalContents.get( location => "OpacNavRight", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacMainUserBlock = AdditionalContents.get( location => "OpacMainUserBlock", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacLoginInstructions = AdditionalContents.get( location => "OpacLoginInstructions", lang => lang, library => branchcode || default_branch ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 <link rel="canonical" href="[% OPACBaseURL | url %]/" />
@@ -64,7 +65,7 @@
 
         <h1 class="sr-only">Koha home</h1>
 
-        [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+        [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) && AllPublicBranches.size > 1 %]
             [% UNLESS news_id %]
                 <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
                     <legend class="sr-only">News</legend>
@@ -75,7 +76,7 @@
                         [% ELSE %]
                             <option value="">System-wide only</option>
                         [% END %]
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                        [% PROCESS options_for_libraries libraries => AllPublicBranches %]
                     </select>
                 </form>
             [% END %]

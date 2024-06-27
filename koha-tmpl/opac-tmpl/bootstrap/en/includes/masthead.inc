@@ -16,6 +16,7 @@
 [% SET OpacMoreSearches = AdditionalContents.get( location => "OpacMoreSearches", lang => lang, library => branchcode || default_branch ) %]
 [% SET CookieConsentBar = AdditionalContents.get( location => "CookieConsentBar", lang => lang, library => branchcode || default_branch ) %]
 [% SET CookieConsentPopup = AdditionalContents.get( location => "CookieConsentPopup", lang => lang, library => branchcode || default_branch ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => opac_name ) %]
 
 <button id="scrolltocontent">Skip to main content</button>
 <div id="wrapper">
@@ -257,15 +258,14 @@
                                                 [% END # /ms_value %]
                                             </div> <!-- /.col -->
 
-                                            [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
+                                            [% IF ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 && AllPublicBranches.size > 1 ) %]
                                                 <div class="col-sm col-md-3 col-lg-2 order-3 order-sm-4">
                                                     <select name="limit" id="select_library" class="form-select">
                                                         <option value="">All libraries</option>
 
                                                         [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
 
-                                                        [% FOREACH library IN Branches.all( selected => opac_name ) %]
-                                                            [% NEXT UNLESS library.public %]
+                                                        [% FOREACH library IN AllPublicBranches %]
                                                             [% IF library.selected %]
                                                                 <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
                                                             [% ELSE %]
@@ -370,10 +370,10 @@
                             </li>
                         [% END %]
                     [% END %]
-                    [% IF ( Koha.Preference('OPACShowLibraries') ) %]
+                    [% IF ( Koha.Preference('OPACShowLibraries') && AllPublicBranches.size > 0 ) %]
                         <li class="nav-item">
                             <a id="library_page" href="/cgi-bin/koha/opac-library.pl">
-                                [% IF ( singleBranchMode ) %]
+                                [% IF ( singleBranchMode || AllPublicBranches.size == 1 ) %]
                                     <span>Library</span>
                                 [% ELSE %]
                                     <span>Libraries</span>

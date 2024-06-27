@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% PROCESS 'html_helpers.inc' %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => branch ) %]
 
 <div id="search-facets">
     <form method="get" action="/cgi-bin/koha/opac-topissues.pl">
@@ -17,12 +18,14 @@
                                 [% IF ( limit == 100 ) %]<option value ="100" selected="selected">100 titles</option>[% ELSE %]<option value="100">100 titles</option>[% END %]
                             </select></li>
 
-                [% IF Branches.all.size > 1 %]
-                <li><label for="branch">From: </label>
-                            <select name="branch" id="branch">
-                                <option value="">All libraries</option>
-                                [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
-                            </select></li>
+                [% IF AllPublicBranches.size > 1 %]
+                    <li>
+                        <label for="branch">From: </label>
+                        <select name="branch" id="branch">
+                            <option value="">All libraries</option>
+                            [% PROCESS options_for_libraries libraries => AllPublicBranches %]
+                        </select>
+                    </li>
                 [% END %]
 
                 [% OpacAdvancedSearchTypes = Koha.Preference('OpacAdvancedSearchTypes').split('\|') %]

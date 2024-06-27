@@ -8,6 +8,7 @@
 [% SET opacsuggestion = AdditionalContents.get( location => "OpacSuggestioninstructions", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => logged_in_user.branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( op_add_form ) %]Enter a new purchase suggestion[% END %]
 [% IF ( op_else ) %]Purchase suggestions[% END %] &rsaquo;
@@ -219,19 +220,19 @@
                                             [% END %]
                                             </li>
                                         [% END %]
-                                        [% UNLESS ( branchcode_hidden )%]
+                                        [% UNLESS ( branchcode_hidden || AllPublicBranches.size < 2 )%]
                                             <li>
                                                 [% IF ( branchcode_required ) %]
                                                     <label for="branch" class="required">Library:</label>
                                                     <select name="branchcode" id="branch" required="required">
                                                         <option value=""></option>
-                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => logged_in_user.branchcode ) %]
+                                                        [% PROCESS options_for_libraries libraries => AllPublicBranches %]
                                                     </select>
                                                     <div class="required_label required">Required</div>
                                                 [% ELSE %]
                                                     <label for="branch">Library:</label>
                                                     <select name="branchcode" id="branch">
-                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => logged_in_user.branchcode ) %]
+                                                        [% PROCESS options_for_libraries libraries => AllPublicBranches %]
                                                     </select>
                                                 [% END %]
                                             </li>
