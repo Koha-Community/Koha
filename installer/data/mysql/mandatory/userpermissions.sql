@@ -71,6 +71,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (10, 'manual_credit', 'Add manual credits to a patron account'),
    (10, 'manual_invoice', 'Add manual invoices to a patron account'),
    (10, 'remaining_permissions', 'Remaining permissions for managing fines and fees'),
+   (10, 'edit_notes', 'Edit accountline notes'),
    (11, 'currencies_manage', 'Manage currencies and exchange rates'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
