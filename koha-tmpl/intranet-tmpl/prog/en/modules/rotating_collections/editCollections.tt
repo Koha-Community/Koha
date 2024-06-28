@@ -4,13 +4,21 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
-    [% IF ( op == "new" ) %]
-        [% t("Add a new collection") | html %]
+    [% IF ( op == "new" || op == "edit" ) %]
+        [% IF ( previousActionEdit ) %]
+            [% t("Edit collection") | html %] &rsaquo;
+            [% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]
+        [% ELSE %]
+            [% t("Add a new collection") | html %]
+        [% END %]
     [% ELSIF ( op == "cud-delete" ) %]
         [% t("Collection deleted") | html %]
-    [% ELSE %]
-        [% t("Edit collection") | html %] &rsaquo;
-        [% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]
+    [% ELSIF ( op == "cud-create" ) %]
+        [% IF ( createSuccess ) %]
+            [% t("Collection created successfully") | html %]
+        [% ELSE %]
+            [% t("Collection creation failed") | html %]
+        [% END %]
     [% END %] &rsaquo;
     [% t("Rotating collections") | html %] &rsaquo;
     [% t("Tools") | html %] &rsaquo;
@@ -52,7 +60,7 @@
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]</em></a>
+                <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = editColTitle }) | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 [% t("Edit collection") | html %]
