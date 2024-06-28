@@ -78,7 +78,7 @@ describe("Title CRUD operations", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.get("#navmenulist").contains("Titles").click();
+        cy.get(".sidebar_menu").contains("Titles").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );

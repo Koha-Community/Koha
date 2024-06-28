@@ -55,7 +55,7 @@ describe("Dialog operations", () => {
             },
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.get("#navmenulist").contains("Packages").click();
+        cy.get(".sidebar_menu").contains("Packages").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: This is a specific error message"
         );
@@ -64,13 +64,13 @@ describe("Dialog operations", () => {
             statusCode: 500, // No body, in case of Internal Server Error, we get statusText
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.get("#navmenulist").contains("Packages").click();
+        cy.get(".sidebar_menu").contains("Packages").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
 
         cy.intercept("GET", "/api/v1/erm/agreements*", []);
-        cy.get("#navmenulist").contains("Agreements").click();
+        cy.get(".sidebar_menu").contains("Agreements").click();
         // Info messages should be cleared when view is changed
         cy.get("main div[class='alert alert-info']").contains(
             "There are no agreements defined"
@@ -116,7 +116,7 @@ describe("Dialog operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.get("#navmenulist").contains("Titles").click();
+        cy.get(".sidebar_menu").contains("Titles").click();
         // Info messages should be cleared when view is changed
         cy.get("main div[class='alert alert-info']").should("not.exist");
     });

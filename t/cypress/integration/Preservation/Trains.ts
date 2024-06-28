@@ -262,7 +262,7 @@ describe("Trains", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/preservation/home.pl");
-        cy.get("#navmenulist").contains("Trains").click();
+        cy.get(".sidebar_menu").contains("Trains").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );

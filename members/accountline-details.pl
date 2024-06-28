@@ -60,6 +60,7 @@ if ($accountline) {
         available_additional_fields => Koha::AdditionalFields->search(
             { tablename => $accountline->credit_type_code ? 'accountlines:credit' : 'accountlines:debit' }
         ),
+        finesview => 1,
     );
 
     my $patron = Koha::Patrons->find( $accountline->borrowernumber );

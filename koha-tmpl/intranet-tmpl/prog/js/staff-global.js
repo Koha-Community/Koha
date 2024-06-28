@@ -206,18 +206,18 @@ $(document).ready(function () {
         $($(this).data("element")).toggle();
     });
 
-    var navmenulist = $("#navmenulist");
-    if (navmenulist.length > 0) {
+    var sidebar_menu = $(".sidebar_menu");
+    if (sidebar_menu.length > 0) {
         var path = location.pathname.substring(1);
         var url = window.location.toString();
         var params = "";
         if (url.match(/\?(.+)$/)) {
             params = "?" + RegExp.$1;
         }
-        if ($('a[href$="/' + path + params + '"]', navmenulist).length == 0) {
-            $('a[href$="/' + path + '"]', navmenulist).addClass("current");
+        if ($('a[href$="/' + path + params + '"]', sidebar_menu).length == 0) {
+            $('a[href$="/' + path + '"]', sidebar_menu).addClass("current");
         } else {
-            $('a[href$="/' + path + params + '"]', navmenulist).addClass(
+            $('a[href$="/' + path + params + '"]', sidebar_menu).addClass(
                 "current"
             );
         }

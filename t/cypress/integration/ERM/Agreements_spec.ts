@@ -26,7 +26,7 @@ describe("Agreement CRUD operations", () => {
             statusCode: 500,
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.get("#navmenulist").contains("Agreements").click();
+        cy.get(".sidebar_menu").contains("Agreements").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );

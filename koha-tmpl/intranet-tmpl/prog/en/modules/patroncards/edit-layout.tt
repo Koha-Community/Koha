@@ -481,6 +481,7 @@
     </form>
 [% END %]
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
             var selectedUnit = $("#units option:selected").val();

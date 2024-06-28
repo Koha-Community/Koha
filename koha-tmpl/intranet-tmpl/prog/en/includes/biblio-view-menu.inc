@@ -2,7 +2,7 @@
 [% USE Biblio %]
 [% SET biblio_object_id = biblio.biblionumber %]
 
-<div id="menu">
+<div id="biblio-view-menu" class="sidebar_menu">
     <ul>
         <li [% IF detailview %]class="active"[% END %]>
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_object_id | url %]">Normal</a>
@@ -98,3 +98,4 @@
         [%- END -%]
     </ul>
 </div>
+<!-- /.sidebar_menu -->

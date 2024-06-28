@@ -130,7 +130,7 @@
 
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
-                <div id="menu">
+                <div id="list-menu" class="sidebar_menu">
                     <ul>
                         <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
                         <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
@@ -138,6 +138,7 @@
                         <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
                     </ul>
                 </div>
+                <!-- /.sidebar_menu -->
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
         </div>
@@ -149,6 +150,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
             $(".delete").click(function (event) {

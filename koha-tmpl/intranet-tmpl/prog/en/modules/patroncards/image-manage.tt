@@ -148,6 +148,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         function DeleteConfirm() {
             var results = selected_images();

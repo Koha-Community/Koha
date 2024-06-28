@@ -28,7 +28,7 @@ describe("Data provider CRUD operations", () => {
             error: "Something went wrong",
         });
         cy.visit("/cgi-bin/koha/erm/erm.pl");
-        cy.get("#navmenulist").contains("Data providers").click();
+        cy.get(".sidebar_menu").contains("Data providers").click();
         cy.get("main div[class='alert alert-warning']").contains(
             /Something went wrong/
         );

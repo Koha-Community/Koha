@@ -686,7 +686,7 @@
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% IF ( op == 'manage_stages' || op == 'manage_items' ) %]
-                    <div id="menu">
+                    <div id="stockrotation-menu" class="sidebar_menu">
                         <ul>
                             [% SET item_class = "" %]
                             [% IF op == 'manage_stages' %]
@@ -704,6 +704,7 @@
                             </li>
                         </ul>
                     </div>
+                    <!-- /.sidebar_menu -->
                 [% END %]
                 [% INCLUDE 'cat-menu.inc' %]
             </aside>

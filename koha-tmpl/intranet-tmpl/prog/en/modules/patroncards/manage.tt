@@ -188,6 +188,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'greybox.inc' %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
     <script>
         function DeleteConfirm() {
             var element_ids = selected_layouts("delete");

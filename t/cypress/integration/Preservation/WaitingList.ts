@@ -49,7 +49,7 @@ describe("WaitingList", () => {
         );
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
-        cy.get("#navmenulist").contains("Waiting list").click();
+        cy.get(".sidebar_menu").contains("Waiting list").click();
         cy.get("#waiting-list").contains(
             "You need to configure this module first."
         );
@@ -62,7 +62,7 @@ describe("WaitingList", () => {
         );
         cy.visit("/cgi-bin/koha/preservation/home.pl");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
-        cy.get("#navmenulist").contains("Waiting list").click();
+        cy.get(".sidebar_menu").contains("Waiting list").click();
         cy.get("#waiting-list").contains(
             "There are no items in the waiting list"
         );

@@ -159,7 +159,7 @@
     </div>
     <!-- /.patronifo -->
 
-    <div id="menu">
+    <div id="circ-menu" class="sidebar_menu">
         <ul>
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                 <li [% IF circview %]class="active"[% END %]>
@@ -257,6 +257,7 @@
             [% END %]
         </ul>
     </div>
+    <!-- /.sidebar_menu -->
 
     [% IF patronimages && CAN_user_tools_batch_upload_patron_images %]
         <!-- Modal -->

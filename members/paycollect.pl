@@ -277,6 +277,7 @@ if ( $input->param('error_over') ) {
 }
 
 $template->param(
+    finesview                   => 1,
     payment_id                  => $payment_id,
     type                        => $type,
     borrowernumber              => $borrowernumber,    # some templates require global

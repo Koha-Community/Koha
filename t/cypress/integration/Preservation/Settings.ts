@@ -82,7 +82,7 @@ describe("Processings", () => {
 
     it("Settings", () => {
         cy.visit("/cgi-bin/koha/preservation/home.pl");
-        cy.get("#navmenulist").contains("Settings").click();
+        cy.get(".sidebar_menu").contains("Settings").click();
         cy.get("#not_for_loan_waiting_list_in .vs__selected").contains(
             "In preservation"
         );

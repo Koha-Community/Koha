@@ -1,5 +1,5 @@
 [% IF ( booksellerid ) %]
-    <div id="menu">
+    <div id="vendor-menu" class="sidebar_menu">
         <ul>
             [% IF ( CAN_user_acquisition_order_manage ) %]<li><a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | uri %]">Baskets</a></li>[% END %]
             [% IF ( CAN_user_acquisition_group_manage ) %]<li><a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | uri %]">Basket groups</a></li>[% END %]
@@ -13,4 +13,5 @@
             [% END %][% END %]
         </ul>
     </div>
+    <!-- /.sidebar_menu -->
 [% END %]

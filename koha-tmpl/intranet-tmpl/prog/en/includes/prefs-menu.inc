@@ -1,5 +1,5 @@
 [% USE HtmlId %]
-<div id="menu">
+<div id="prefs-menu" class="sidebar_menu">
     <ul>
         [% IF ( accounting ) %]
             <li class="active">
@@ -221,6 +221,7 @@
         [% END %]
     </ul>
 </div>
+<!-- /.sidebar_menu -->
 
 [% BLOCK subtabs %]
     [% UNLESS ( searchfield ) %]
