@@ -8,9 +8,14 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
+        # Fix options field on EmailFieldSelection
         $dbh->do(
             q{ UPDATE systempreferences SET options = 'email|emailpro|B_email' WHERE variable = 'EmailFieldSelection' }
+        );
+
+        # Clear invalid value from EmailFieldSelection
+        $dbh->do(
+            q{ UPDATE systempreferences SET value = '' WHERE variable = 'EmailFieldSelection' AND value='email|emailpro|B_email' }
         );
 
         say_success( $out, "Updated system preference 'EmailFieldSelection'" );
