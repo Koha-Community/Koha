@@ -67,7 +67,7 @@ $number_list = $cgi->param('number_list') if $cgi->param('number_list');
 
 my $branch_code = C4::Context->userenv->{'branch'};
 
-if ($op eq 'remove') {
+if ($op eq 'cud-delete') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
     foreach my $label_id (@label_ids) {
     $err = $batch->remove_item($label_id);
@@ -76,10 +76,6 @@ if ($op eq 'remove') {
 #    Something like this would be nice to avoid problems with the browser's 'refresh' button, but it needs an error handling mechanism...
 #    print $cgi->redirect("label-edit-batch.pl?op=edit&batch_id=$batch_id");
 #    exit;
-}
-elsif ($op eq 'cud-delete') {
-    $err = C4::Labels::Batch::delete(batch_id => $batch_id, branch_code => $branch_code);
-    $errtype = 'BATCH_NOT_DELETED' if $err;
 }
 elsif ($op eq 'cud-add') {
     if ($number_list) {
