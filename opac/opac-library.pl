@@ -29,6 +29,12 @@ my $query = CGI->new();
 
 my $branchcode = $query->param('branchcode');
 
+# if OPACShowLibraries is disabled, leave immediately
+if ( !C4::Context->preference('OPACShowLibraries') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-library.tt",

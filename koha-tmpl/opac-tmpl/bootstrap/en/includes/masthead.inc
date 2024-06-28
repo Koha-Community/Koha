@@ -364,15 +364,17 @@
                             </li>
                         [% END %]
                     [% END %]
-                    <li class="nav-item">
-                        <a id="library_page" href="/cgi-bin/koha/opac-library.pl">
-                            [% IF ( singleBranchMode ) %]
-                                <span>Library</span>
-                            [% ELSE %]
-                                <span>Libraries</span>
-                            [% END %]
-                        </a>
-                    </li>
+                    [% IF ( Koha.Preference('OPACShowLibraries') ) %]
+                        <li class="nav-item">
+                            <a id="library_page" href="/cgi-bin/koha/opac-library.pl">
+                                [% IF ( singleBranchMode ) %]
+                                    <span>Library</span>
+                                [% ELSE %]
+                                    <span>Libraries</span>
+                                [% END %]
+                            </a>
+                        </li>
+                    [% END %]
                     [% PROCESS koha_news_block news => OpacMoreSearches %]
                 </ul> <!-- /.nav#moresearches -->
             </div> <!-- /.row -->

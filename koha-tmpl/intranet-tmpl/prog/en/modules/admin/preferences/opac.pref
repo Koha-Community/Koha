@@ -43,6 +43,12 @@ OPAC:
             - "Koha OPAC as public. Private OPAC requires authentication before accessing the OPAC. "
             - 'Note: This does not affect the public API, see the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RESTPublicAnonymousRequests">RESTPublicAnonymousRequests</a> to control the API.'
         -
+            - pref: OPACShowLibraries
+              choices:
+                  1: "Show"
+                  0: "Don't show"
+            - "a link to a page in the OPAC showing information about each library."
+        -
             - "Show star-ratings on"
             - pref: OpacStarRatings
               choices:
