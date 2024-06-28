@@ -535,8 +535,8 @@ subtest 'get_items_that_can_fill' => sub {
 
     Koha::CirculationRules->search(
         {
-            rule_name    => 'holdallowed',
-            rule_value   => 'not_allowed',
+            rule_name  => 'holdallowed',
+            rule_value => 'not_allowed',
         }
     )->delete;
 
