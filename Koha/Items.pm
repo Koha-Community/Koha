@@ -68,7 +68,7 @@ sub filter_by_for_hold {
         }
     );
     my @hold_not_allowed_itypes;
-    if ( $default_rule ) {
+    if ($default_rule) {
         @hold_not_allowed_itypes = Koha::ItemTypes->search->get_column('itemtype');
         my @hold_allowed_itypes = Koha::CirculationRules->search(
             {
@@ -78,7 +78,7 @@ sub filter_by_for_hold {
                 categorycode => undef,
             }
         )->get_column('itemtype');
-        @hold_not_allowed_itypes = array_minus( @hold_not_allowed_itypes, @hold_allowed_itypes )
+        @hold_not_allowed_itypes = array_minus( @hold_not_allowed_itypes, @hold_allowed_itypes );
     } else {
         @hold_not_allowed_itypes = Koha::CirculationRules->search(
             {
