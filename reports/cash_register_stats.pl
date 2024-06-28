@@ -88,7 +88,7 @@ if ($do_it) {
 
     my $whereBranchCode = q{};
     if ($manager_branchcode ne 'ALL') {
-        $whereBranchCode = q{ AND m.branchcode = ?};
+        $whereBranchCode = q{ AND al.branchcode = ?};
         push @extra_params, $manager_branchcode;
     }
 
