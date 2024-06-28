@@ -90,12 +90,12 @@ run_rebuild_elasticsearch()
         KOHA_BINDIR=${KOHA_HOME}/misc
     fi
 
-    if [ "${clo_commit_size}" \> 0 ]; then
+    if [ "${clo_commit_size}" -gt 0 ] 2>/dev/null; then
         commit_size=${clo_commit_size}
     fi
     rebuild_opts="--commit ${commit_size}"
 
-    if [ "${clo_processes}" \> 0 ]; then
+    if [ "${clo_processes}" -gt 0 ] 2>/dev/null; then
         processes=${clo_processes}
     fi
     rebuild_opts="${rebuild_opts} --processes ${processes}"
