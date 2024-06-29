@@ -61,8 +61,9 @@ if ($batchedit) {
         notes           => scalar $cgi->param('notes'),
         internalnotes   => scalar $cgi->param('internalnotes'),
         serialsadditems => scalar $cgi->param('serialsadditems'),
-        enddate         => dt_from_string( scalar $cgi->param('enddate') ),
     );
+    # If we convert a blank string we get todays date, we should only convert enddate if it is not blank
+    $params{'enddate'} = dt_from_string( scalar $cgi->param('enddate') ) if $cgi->param('enddate');
 
     my $field_values = {};
     foreach my $field (@available_additional_fields) {
