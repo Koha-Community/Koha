@@ -58,7 +58,7 @@
                         v-bind:class="
                             tab_content === item.data_type ? 'active' : ''
                         "
-                        >{{ $__(item.tab_name) }}</a
+                        >{{ $item.tab_name }}</a
                     >
                 </li>
                 <li class="nav-item">
@@ -162,10 +162,22 @@ export default {
             initialized: false,
             tab_content: "detail",
             available_data_types: [
-                { test: "TR", data_type: "title", tab_name: "Titles" },
-                { test: "PR", data_type: "platform", tab_name: "Platforms" },
-                { test: "IR", data_type: "item", tab_name: "Items" },
-                { test: "DR", data_type: "database", tab_name: "Databases" },
+                {
+                    test: "TR",
+                    data_type: "title",
+                    tab_name: this.$__("Titles"),
+                },
+                {
+                    test: "PR",
+                    data_type: "platform",
+                    tab_name: this.$__("Platforms"),
+                },
+                { test: "IR", data_type: "item", tab_name: this.$__("Items") },
+                {
+                    test: "DR",
+                    data_type: "database",
+                    tab_name: this.$__("Databases"),
+                },
             ],
         }
     },

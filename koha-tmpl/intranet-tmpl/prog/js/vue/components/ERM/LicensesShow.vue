@@ -117,7 +117,8 @@
                                             {{ document.file_name }}
                                             <i class="fa fa-download"></i>
                                         </a>
-                                        ({{ document.file_type }}) Uploaded on:
+                                        ({{ document.file_type }})
+                                        {{ $__("Uploaded on") }}:
                                         {{ format_date(document.uploaded_on) }}
                                     </div>
                                     <div v-if="document.physical_location">

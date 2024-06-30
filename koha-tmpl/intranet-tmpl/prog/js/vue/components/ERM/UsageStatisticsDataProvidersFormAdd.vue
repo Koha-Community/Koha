@@ -177,7 +177,7 @@
                         </li>
                     </ol>
                 </fieldset>
-                <legend>{{ $__("Sushi credentials") }}</legend>
+                <legend>{{ $__("SUSHI credentials") }}</legend>
                 <fieldset class="rows credentials">
                     <ol class="credentials_form">
                         <li>
@@ -328,8 +328,8 @@
                             </label>
                             <span id="customer_id_info">{{
                                 sushi_service.customer_id_info
-                                    ? $__(sushi_service.customer_id_info)
-                                    : "No information provided"
+                                    ? sushi_service.customer_id_info
+                                    : $__("No information provided")
                             }}</span>
                         </li>
                         <li>
@@ -338,8 +338,8 @@
                             </label>
                             <span id="requestor_id_info">{{
                                 sushi_service.requestor_id_info
-                                    ? $__(sushi_service.requestor_id_info)
-                                    : "No information provided"
+                                    ? sushi_service.requestor_id_info
+                                    : $__("No information provided")
                             }}</span>
                         </li>
                         <li>
@@ -348,8 +348,8 @@
                             </label>
                             <span id="api_key_info">{{
                                 sushi_service.api_key_info
-                                    ? $__(sushi_service.api_key_info)
-                                    : "No information provided"
+                                    ? sushi_service.api_key_info
+                                    : $__("No information provided")
                             }}</span>
                         </li>
                         <span
@@ -421,8 +421,8 @@ export default {
             initialized: false,
             previous_route: "",
             statuses: [
-                { description: "Active", value: 1 },
-                { description: "Inactive", value: 0 },
+                { description: __("Active"), value: 1 },
+                { description: __("Inactive"), value: 0 },
             ],
             registry_data: [],
             valid_report_types: [...this.av_report_types],

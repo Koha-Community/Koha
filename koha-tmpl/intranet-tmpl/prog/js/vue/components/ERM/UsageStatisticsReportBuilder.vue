@@ -18,21 +18,27 @@
                                 :options="[
                                     {
                                         value: 'monthly',
-                                        description: 'By month',
+                                        description: __('By month'),
                                     },
                                     {
                                         value: 'monthly_with_totals',
-                                        description:
-                                            'By month with period total',
+                                        description: __(
+                                            'By month with period total'
+                                        ),
                                     },
-                                    { value: 'yearly', description: 'By year' },
+                                    {
+                                        value: 'yearly',
+                                        description: __('By year'),
+                                    },
                                     {
                                         value: 'metric_type',
-                                        description: 'By metric type',
+                                        description: __('By metric type'),
                                     },
                                     {
                                         value: 'usage_data_provider',
-                                        description: 'By data provider totals',
+                                        description: __(
+                                            'By data provider totals'
+                                        ),
                                     },
                                 ]"
                                 :required="!query.data_display"
@@ -219,7 +225,7 @@
                             class="checkbox_options"
                         >
                             <label :for="prop.name" class="checkbox"
-                                >{{ $__(prop.name) }}:</label
+                                >{{ $prop.name }}:</label
                             >
                             <input
                                 type="checkbox"
@@ -304,7 +310,7 @@
                                 class="month_selectors"
                             >
                                 <label for="month" class="month_labels">
-                                    {{ $__(month.short) }}
+                                    {{ $month.short }}
                                 </label>
                                 <input
                                     type="checkbox"

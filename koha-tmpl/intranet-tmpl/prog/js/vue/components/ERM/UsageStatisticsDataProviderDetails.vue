@@ -17,7 +17,11 @@
             <li>
                 <label>{{ $__("Status") }}:</label>
                 <span id="harvester_status">
-                    {{ usage_data_provider.active ? "Active" : "Inactive" }}
+                    {{
+                        usage_data_provider.active
+                            ? $__("Active")
+                            : $__("Inactive")
+                    }}
                 </span>
             </li>
             <li>
