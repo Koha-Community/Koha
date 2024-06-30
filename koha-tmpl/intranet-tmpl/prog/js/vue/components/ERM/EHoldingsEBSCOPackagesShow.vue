@@ -87,9 +87,11 @@
                     </li>
 
                     <li>
-                        <label
-                            >Titles ({{ erm_package.resources_count }})</label
-                        >
+                        <label>{{
+                            $__("Titles (%s)").format(
+                                erm_package.resources_count
+                            )
+                        }}</label>
                     </li>
                 </ol>
                 <div v-if="erm_package.resources_count">

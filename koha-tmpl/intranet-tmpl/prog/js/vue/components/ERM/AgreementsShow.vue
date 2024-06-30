@@ -262,7 +262,7 @@
                                             agreement_package.package.name
                                         }}</router-link
                                     >
-                                    (EBSCO)</span
+                                    {{ $__("(EBSCO)") }}</span
                                 >
                                 <span v-else
                                     ><router-link
@@ -278,7 +278,7 @@
                                             agreement_package.package.name
                                         }}</router-link
                                     >
-                                    (local)</span
+                                    {{ $__("(local)") }}</span
                                 >
                             </div>
                         </div>
@@ -303,7 +303,8 @@
                                             {{ document.file_name }}
                                             <i class="fa fa-download"></i>
                                         </a>
-                                        ({{ document.file_type }}) Uploaded on:
+                                        ({{ document.file_type }})
+                                        {{ $__("Uploaded on") }}:
                                         {{ format_date(document.uploaded_on) }}
                                     </div>
                                     <div v-if="document.physical_location">

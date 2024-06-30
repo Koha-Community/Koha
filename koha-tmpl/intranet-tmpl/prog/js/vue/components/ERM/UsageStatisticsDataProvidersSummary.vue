@@ -100,7 +100,7 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`earliest_${data_type}`]
                                 ? row[`earliest_${data_type}`]
-                                : "N/A"
+                                : this.$__("N/A")
                             return date
                         },
                     },
@@ -112,7 +112,7 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`latest_${data_type}`]
                                 ? row[`latest_${data_type}`]
-                                : "N/A"
+                                : this.$__("N/A")
                             return date
                         },
                     }
@@ -132,13 +132,13 @@ export default {
                     return cell
                 })
             cellTwo.colSpan = 2
-            cellTwo.innerHTML = "Title reports"
+            cellTwo.innerHTML = this.$__("Title reports")
             cellThree.colSpan = 2
-            cellThree.innerHTML = "Platform reports"
+            cellThree.innerHTML = this.$__("Platform reports")
             cellFour.colSpan = 2
-            cellFour.innerHTML = "Database reports"
+            cellFour.innerHTML = this.$__("Database reports")
             cellFive.colSpan = 2
-            cellFive.innerHTML = "Item reports"
+            cellFive.innerHTML = this.$__("Item reports")
 
             this.$refs.table_div.classList.remove("hide-table")
         },

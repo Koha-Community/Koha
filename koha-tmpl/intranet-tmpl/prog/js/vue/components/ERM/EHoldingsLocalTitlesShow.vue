@@ -240,7 +240,9 @@
                         </span>
                     </li>
                     <li>
-                        <label>Packages ({{ title.resources.length }})</label>
+                        <label>{{
+                            $__("Packages (%s)").format(title.resources.length)
+                        }}</label>
                         <div v-if="title.resources.length">
                             <EHoldingsTitlePackagesList
                                 :resources="title.resources"

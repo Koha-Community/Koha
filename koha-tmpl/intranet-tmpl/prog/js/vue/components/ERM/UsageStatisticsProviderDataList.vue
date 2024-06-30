@@ -6,7 +6,9 @@
         </div>
         <div v-else-if="initialized" class="alert alert-info">
             {{
-                $__(`No ${data_type} data has been harvested for this provider`)
+                $__("No %s data has been harvested for this provider").format(
+                    data_type
+                )
             }}
         </div>
     </div>
@@ -68,10 +70,9 @@ export default {
                 {
                     used_by: ["title", "platform", "item", "database"],
                     column: {
-                        title: __(
+                        title:
                             this.data_type.charAt(0).toUpperCase() +
-                                this.data_type.slice(1)
-                        ),
+                            this.data_type.slice(1),
                         data: this.data_type,
                         searchable: true,
                         orderable: true,
@@ -80,7 +81,7 @@ export default {
                 {
                     used_by: ["item", "database", "platforms"],
                     column: {
-                        title: "Platform",
+                        title: __("Platform"),
                         data: "platform",
                         searchable: true,
                         orderable: true,
@@ -89,7 +90,7 @@ export default {
                 {
                     used_by: ["title", "item", "database"],
                     column: {
-                        title: "Publisher",
+                        title: __("Publisher"),
                         data: "publisher",
                         searchable: true,
                         orderable: true,
@@ -98,7 +99,7 @@ export default {
                 {
                     used_by: ["title", "database"],
                     column: {
-                        title: "Publisher ID",
+                        title: __("Publisher ID"),
                         data: "publisher_id",
                         searchable: true,
                         orderable: true,
@@ -107,7 +108,7 @@ export default {
                 {
                     used_by: ["title"],
                     column: {
-                        title: "DOI",
+                        title: __("DOI"),
                         data: "title_doi",
                         searchable: true,
                         orderable: true,
@@ -116,7 +117,7 @@ export default {
                 {
                     used_by: ["title"],
                     column: {
-                        title: "Print ISSN",
+                        title: __("Print ISSN"),
                         data: "print_issn",
                         searchable: true,
                         orderable: true,
@@ -125,7 +126,7 @@ export default {
                 {
                     used_by: ["title"],
                     column: {
-                        title: "Online ISSN",
+                        title: __("Online ISSN"),
                         data: "online_issn",
                         searchable: true,
                         orderable: true,
@@ -134,7 +135,7 @@ export default {
                 {
                     used_by: ["title"],
                     column: {
-                        title: "URI",
+                        title: __("URI"),
                         data: "title_uri",
                         searchable: true,
                         orderable: true,

@@ -382,8 +382,8 @@
                     <label for="create_linked_biblio"
                         >{{
                             title.title_id
-                                ? $__("Update record")
-                                : $__("Create record")
+                                ? $__("Update bibliographic record")
+                                : $__("Create bibliographic record")
                         }}:</label
                     >
                     <input
