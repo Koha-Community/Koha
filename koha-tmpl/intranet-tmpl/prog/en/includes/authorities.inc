@@ -1,3 +1,4 @@
+[% USE Math %]
 [% BLOCK showhierarchy %]
     [% FOREACH tree IN trees %]
         [% PROCESS showtree tree = tree %]
@@ -6,7 +7,7 @@
 [% BLOCK showtree %]
     <ul class="hierarchy">
         [% FOREACH node IN tree %]
-            <li id="hier[% node.authid | html %]" class="[% node.class | html %] authnode">
+            <li id="hier[% node.authid | html %]_[% Math.rand( 1 ).remove( '\.' ) | html %]" class="[% node.class | html %] authnode">
             [% IF ( node.current_value ) %]
                 <span class='currentauth'>[% node.value | html %]</span>
             [% ELSE %]
