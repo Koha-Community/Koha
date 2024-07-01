@@ -350,7 +350,7 @@
                     [% END %]
                     <fieldset class="rows">
                         <ol>
-                            <li> <span id="item" class="label">Account: </span><span></span> </li>
+                            <li> <span id="refund_item" class="label">Account: </span><span></span> </li>
                             <li> <span id="paid" class="label">Amount paid: </span><span></span> </li>
                             <li>
                                 <label class="required" for="amount">Returned to patron: </label>
@@ -408,7 +408,7 @@
                 <div class="modal-body">
                     <fieldset class="rows">
                         <ol>
-                            <li> <span id="item" class="label">Account type: </span><span></span> </li>
+                            <li> <span id="apply_discount_item" class="label">Account type: </span><span></span> </li>
                             <li> <span id="charged" class="label">Amount charged: </span><span></span> </li>
                             <li>
                                 <label for="apply_discount_note">Note: </label>
@@ -455,7 +455,7 @@
                     <fieldset class="rows">
                         <ol>
                             <li>
-                                <label for="apply_discount_note">Note: </label>
+                                <label for="void_note">Note: </label>
                                 <input type="text" id="void_note" name="void_note" />
                             </li>
                         </ol>
@@ -584,7 +584,7 @@
             $("#applyDiscountModal").on("shown.bs.modal", function(e){
                 var button = $(e.relatedTarget);
                 var item = button.data('item');
-                $("#item + span").replaceWith(item);
+                $("#apply_discount_item + span").replaceWith(item);
                 var accountline = button.data('accountline');
                 $('#discountline').val(accountline);
                 var amountoutstanding = button.data('amountoutstanding');
@@ -595,10 +595,8 @@
 
             $("#voidPaymentModal").on("shown.bs.modal", function(e){
                 var button = $(e.relatedTarget);
-                var item = button.data('item');
-                $("#item + span").replaceWith(item);
-                var accountline = button.data('accountline');
-                $('#voidline').val(accountline);
+                var item = button.data('accountline');
+                $('#voidline').val(item);
             });
 
             $("#cancelChargeModal").on("shown.bs.modal", function(e){
