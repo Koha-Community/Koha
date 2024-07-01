@@ -420,6 +420,7 @@ sub cancel {
                     borrowernumber    => $self->borrowernumber,
                     interface         => 'intranet',
                     branchcode        => $params->{branch},
+                    note              => $params->{note},
                 }
             )->store();
 
