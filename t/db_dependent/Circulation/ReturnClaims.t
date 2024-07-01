@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 
@@ -141,6 +141,36 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
     is( $checkout2, undef, "Checkout is not longer in the issues table");
     $checkout2 = Koha::Old::Checkouts->find( $checkout->id );
     is( $checkout2->id, $checkout->id, "Checkout was found in the old_issues table");
+};
+
+subtest 'Test Koha::Checkout::claim_returned should not update the itemlost status if it is already set' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    my $item     = $builder->build_sample_item( { itemlost => 0 } );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = AddIssue( $patron, $item->barcode );
+
+    my $claim = $checkout->claim_returned(
+        {
+            created_by => $patron->borrowernumber,
+            notes      => "Test note",
+        }
+    );
+    my $updated_item = Koha::Items->find( $item->id );
+    is( $updated_item->itemlost, 1, 'Itemlost was set by the return claim' );
+
+    my $item2     = $builder->build_sample_item( { itemlost => 2 } );
+    my $checkout2 = AddIssue( $patron, $item->barcode );
+
+    my $claim2 = $checkout2->claim_returned(
+        {
+            created_by => $patron->borrowernumber,
+            notes      => "Test note",
+        }
+    );
+    my $updated_item2 = Koha::Items->find( $item2->id );
+    is( $updated_item2->itemlost, 2, 'Itemlost was not set by the return claim as it already has an Itemlost status' );
 };
 
 $schema->storage->txn_rollback;
