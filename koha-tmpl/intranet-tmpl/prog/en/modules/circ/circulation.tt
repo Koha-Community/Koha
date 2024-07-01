@@ -473,7 +473,7 @@
                                 [% IF ( STATS ) %]
                                     <li>Local use recorded</li>
                                     [% IF ( CHECKEDIN ) %]
-                                        <li>Item checked in from: [% INCLUDE 'patron-title.inc' patron=BORROWER %]</li>
+                                        <li>Item checked in from: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% BORROWER.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=BORROWER %]</a></li>
                                     [% END %]
                                     [% IF ( MESSAGES.ResFound ) %]
                                         <li>Item on hold, please checkin.</li>
