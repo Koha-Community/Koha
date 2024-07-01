@@ -28,8 +28,27 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-[% WRAPPER 'main-container.inc' aside='cat-menu' %]
+[% WRAPPER 'main-container.inc' aside='labels-menu' %]
     [% INCLUDE 'labels-toolbar.inc' %]
     <h1>Label creator</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="buttons-list">
+                <li
+                    ><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch"><i class="fa-solid fa-list-ul"></i> Label batches</a></li
+                >
+                <li
+                    ><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout"><i class="fa-solid fa-object-group"></i> Layouts</a></li
+                >
+                <li
+                    ><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template"><i class="fa-solid fa-table-cells"></i> Label templates</a></li
+                >
+                <li
+                    ><a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile"><i class="fa fa-print"></i> Printer profiles</a></li
+                >
+            </ul>
+        </div>
+    </div>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
