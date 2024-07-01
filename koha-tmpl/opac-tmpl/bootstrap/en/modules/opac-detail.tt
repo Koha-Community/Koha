@@ -1959,7 +1959,7 @@
                                 authid = $(this).data("authid");
                                 search_string = "an:" + authid;
                             } else {
-                                search_string = terms[term]["keyword_search"] + encodeURIComponent( search_label );
+                                search_string = terms[term]["keyword_search"] + '"' + encodeURIComponent( search_label ) + '"';
                             }
                             var termLink = $("<li>")
                                 .append( $("<input>", { type: "checkbox", class: "select_term", value: search_string, id: terms[term]["label"] + index } ).prop("checked", preselected ) )
