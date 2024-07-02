@@ -58,7 +58,7 @@ sub list_effective_rules {
         my $type = Koha::ItemTypes->find($item_type);
         return $c->render_invalid_parameter_value(
             {
-                path   => '/query/item_type',
+                path   => '/query/item_type_id',
                 values => {
                     uri   => '/api/v1/item_types',
                     field => 'item_type_id'
@@ -71,7 +71,7 @@ sub list_effective_rules {
         my $library = Koha::Libraries->find($branchcode);
         return $c->render_invalid_parameter_value(
             {
-                path   => '/query/library',
+                path   => '/query/library_id',
                 values => {
                     uri   => '/api/v1/libraries',
                     field => 'library_id'
@@ -84,7 +84,7 @@ sub list_effective_rules {
         my $category = Koha::Patron::Categories->find($patron_category);
         return $c->render_invalid_parameter_value(
             {
-                path   => '/query/patron_category',
+                path   => '/query/patron_category_id',
                 values => {
                     uri   => '/api/v1/patron_categories',
                     field => 'patron_category_id'

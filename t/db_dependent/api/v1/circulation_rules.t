@@ -34,7 +34,7 @@ t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list_effective_rules() tests' => sub {
 
-    plan tests => 26;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -140,19 +140,65 @@ subtest 'list_effective_rules() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")->status_is(400)
         ->json_is( [ { path => '/query/rules_blah', message => 'Malformed query string' } ] );
 
+    # Make sure we have a non-existent library
+    my $library_to_delete    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $non_existent_library = $library_to_delete->branchcode;
+    $library_to_delete->delete;
+
     # Warn on incorrect query parameter value
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=SMITH")->status_is(400)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$non_existent_library")->status_is(400)
+        ->json_is(
         '' => {
             error      => 'Invalid parameter value',
             error_code => 'invalid_parameter_value',
-            path       => '/query/library',
+            path       => '/query/library_id',
             values     => {
                 uri   => '/api/v1/libraries',
                 field => 'library_id'
             }
         },
         "Invalid parameter value handled correctly"
-    );
+        );
+
+    # Make sure we have a non-existent category
+    my $category_to_delete    = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    my $non_existent_category = $category_to_delete->categorycode;
+    $category_to_delete->delete;
+
+    # Warn on incorrect query parameter value
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?patron_category_id=$non_existent_category")
+        ->status_is(400)->json_is(
+        '' => {
+            error      => 'Invalid parameter value',
+            error_code => 'invalid_parameter_value',
+            path       => '/query/patron_category_id',
+            values     => {
+                uri   => '/api/v1/patron_categories',
+                field => 'patron_category_id'
+            }
+        },
+        "Invalid parameter value handled correctly"
+        );
+
+    # Make sure we have a non-existent itemtype
+    my $itemtype_to_delete    = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $non_existent_itemtype = $itemtype_to_delete->itemtype;
+    $itemtype_to_delete->delete;
+
+    # Warn on incorrect query parameter value
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?item_type_id=$non_existent_itemtype")->status_is(400)
+        ->json_is(
+        '' => {
+            error      => 'Invalid parameter value',
+            error_code => 'invalid_parameter_value',
+            path       => '/query/item_type_id',
+            values     => {
+                uri   => '/api/v1/item_types',
+                field => 'item_type_id'
+            }
+        },
+        "Invalid parameter value handled correctly"
+        );
 
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/circulation_rules")->status_is(403);

@@ -154,7 +154,7 @@ subtest 'render_invalid_parameter_value() tests' => sub {
 
     my $t = Test::Mojo->new('Koha::REST::V1');
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library=SOMETHING")->status_is('400')->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=SOMETHING")->status_is('400')->json_is(
         {
             error      => 'Invalid parameter value',
             error_code => 'invalid_parameter_value',
