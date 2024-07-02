@@ -49,9 +49,9 @@ List all effective rules for the requested patron/item/branch combination
 sub list_effective_rules {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_type       = $c->param('itemtype');
-    my $branchcode      = $c->param('library');
-    my $patron_category = $c->param('category');
+    my $item_type       = $c->param('item_type_id');
+    my $branchcode      = $c->param('library_id');
+    my $patron_category = $c->param('patron_category_id');
     my $rules           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
 
     if ($item_type) {

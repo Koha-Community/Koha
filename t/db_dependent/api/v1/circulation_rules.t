@@ -120,7 +120,7 @@ subtest 'list_effective_rules() tests' => sub {
         "Given I added an issuing rule branchcode => $branchcode," . ' categorycode => undef, itemtype => undef,'
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library=$branchcode")->status_is(200)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")->status_is(200)->json_is(
         '' => {
             fine     => 4,
             finedays => 5,
@@ -141,7 +141,7 @@ subtest 'list_effective_rules() tests' => sub {
         ->json_is( [ { path => '/query/rules_blah', message => 'Malformed query string' } ] );
 
     # Warn on incorrect query parameter value
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library=SMITH")->status_is(400)->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=SMITH")->status_is(400)->json_is(
         '' => {
             error      => 'Invalid parameter value',
             error_code => 'invalid_parameter_value',
