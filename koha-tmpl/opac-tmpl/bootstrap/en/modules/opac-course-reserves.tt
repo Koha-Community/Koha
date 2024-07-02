@@ -73,7 +73,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course_reserves_table', 'json' ) | $raw %]
+            columns_settings = [% TablesSettings.GetColumns( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
             KohaTable("#course_reserves_table", {
                 "dom": '<"top"f>rt<"clear">',
                 "sorting": [[ 1, "asc" ]],
