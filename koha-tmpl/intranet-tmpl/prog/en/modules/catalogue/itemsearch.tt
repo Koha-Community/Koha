@@ -2,6 +2,7 @@
 [% USE To %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [%- BLOCK form_label -%]
   [%- SWITCH label -%]
@@ -355,6 +356,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     <script>
@@ -453,28 +455,28 @@
         function submitForm($form) {
             var tr = ''
                 + '    <tr>'
-                + '      <th id="items_checkbox"></th>'
-                + '      <th id="items_title">' + _("Title") + '</th>'
-                + '      <th id="items_pubdate">' + _("Publication date") + '</th>'
-                + '      <th id="items_publisher">' + _("Publisher") + '</th>'
-                + '      <th id="items_collection">' + _("Collection") + '</th>'
-                + '      <th id="items_barcode">' + _("Barcode") + '</th>'
-                + '      <th id="items_itemnumber">' + _("Item number") + '</th>'
-                + '      <th id="items_enumchron">' + _("Serial enumeration") + '</th>'
-                + '      <th id="items_callno">' + _("Call number") + '</th>'
-                + '      <th id="items_homebranch">' + _("Home library") + '</th>'
-                + '      <th id="items_holdingbranch">' + _("Current library") + '</th>'
-                + '      <th id="items_location">' + _("Shelving location") + '</th>'
-                + '      <th id="items_itype">' + _("Itemtype") + '</th>'
-                + '      <th id="item_inventoryno">' + _("Inventory number") + '</th>'
-                + '      <th id="items_status">' + _("Not for loan status") + '</th>'
-                + '      <th id="items_itemlost">' + _("Lost status") + '</th>'
-                + '      <th id="items_widthdrawn">' + _("Withdrawn status") + '</th>'
-                + '      <th id="items_damaged">' + _("Damaged status") + '</th>'
-                + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
-                + '      <th id="items_datelastborrowed">' + _("Last checkout date") + '</th>'
-                + '      <th id="items_date_due">' + _("Due date") + '</th>'
-                + '      <th id=""></th>'
+                + '      <th id="items_checkbox" data-colname="itemsearch_checkbox"></th>'
+                + '      <th id="items_title" data-colname="title">' + _("Title") + '</th>'
+                + '      <th id="items_pubdate" data-colname="publication_date">' + _("Publication date") + '</th>'
+                + '      <th id="items_publisher" data-colname="publisher">' + _("Publisher") + '</th>'
+                + '      <th id="items_collection" data-colname="collection">' + _("Collection") + '</th>'
+                + '      <th id="items_barcode" data-colname="barcode">' + _("Barcode") + '</th>'
+                + '      <th id="items_itemnumber" data-colname="item_number">' + _("Item number") + '</th>'
+                + '      <th id="items_enumchron" data-colname="serial_enumeration">' + _("Serial enumeration") + '</th>'
+                + '      <th id="items_callno" data-colname="call_number">' + _("Call number") + '</th>'
+                + '      <th id="items_homebranch" data-colname="home_library">' + _("Home library") + '</th>'
+                + '      <th id="items_holdingbranch" data-colname="current_library">' + _("Current library") + '</th>'
+                + '      <th id="items_location" data-colname="shelving_location">' + _("Shelving location") + '</th>'
+                + '      <th id="items_itype" data-colname="item_type">' + _("Itemtype") + '</th>'
+                + '      <th id="item_inventoryno" data-colname="inventory_number">' + _("Inventory number") + '</th>'
+                + '      <th id="items_status" data-colname="notforloan_status">' + _("Not for loan status") + '</th>'
+                + '      <th id="items_itemlost" data-colname="lost_status">' + _("Lost status") + '</th>'
+                + '      <th id="items_widthdrawn" data-colname="withdrawn_status">' + _("Withdrawn status") + '</th>'
+                + '      <th id="items_damaged" data-colname="damaged_status">' + _("Damaged status") + '</th>'
+                + '      <th id="items_checkouts" data-colname="checkouts">' + _("Checkouts") + '</th>'
+                + '      <th id="items_datelastborrowed" data-colname="last_checkout_date">' + _("Last checkout date") + '</th>'
+                + '      <th id="items_date_due" data-colname="due_date">' + _("Due date") + '</th>'
+                + '      <th id="itmes_actions" data-colname="actions">Actions</th>'
                 + '    </tr>';
 
             var table = ''
@@ -566,7 +568,9 @@
 
             var params = getParams($form);
 
-            $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
+            var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
+            KohaTable('results' , {
+                "bKohaColumnsUseNames": true,
                 "destroy": true,
                 "serverSide": true,
                 "processing": true,
@@ -585,7 +589,7 @@
                         return d;
                     }
                 },
-                'dom': '<"top pager"ilp>t<"bottom pager"ip>r',
+                'dom': 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 'order': [[1, 'asc']],
                 'columns': [
                     { 'name': 'checkbox', 'orderable': false },
@@ -616,7 +620,7 @@
                     prepSelections();
                 },
                 fixedHeader: false // There is a bug on this view
-            })).columnFilter({
+            }, table_settings ).columnFilter({
                 'sPlaceHolder': 'head:after',
                 "aoColumns": [
                     null,
