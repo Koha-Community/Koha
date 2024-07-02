@@ -6,7 +6,7 @@
             <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions home</a></li>
             <li><a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced search</a></li>
             [% IF ( CAN_user_acquisition_order_receive ) %]<li><a href="/cgi-bin/koha/acqui/lateorders.pl">Late orders</a></li>[% END %]
-            [% IF ( suggestion && ( CAN_user_suggestions_suggestions_create || CAN_user_suggestions_suggestions_manage || CAN_user_suggestions_suggestions_delete )  )  %]<li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>[% END %]
+            [% IF CAN_user_suggestions_suggestions_create || CAN_user_suggestions_suggestions_manage || CAN_user_suggestions_suggestions_delete %]<li><a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a></li>[% END %]
             <li><a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a></li>
             [% IF Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage %]
                 <li><a href="/cgi-bin/koha/acqui/edifactmsgs.pl">EDIFACT messages</a></li>
