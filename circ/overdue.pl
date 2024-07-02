@@ -231,14 +231,6 @@ if ($noreport) {
     $bornamefilter =~ s/\*/\%/g;
     $bornamefilter =~ s/\?/\_/g;
 
-    # Escape single quote
-    $bornamefilter =~s/'/\\'/g;
-    $itemtypefilter =~s/'/\\'/g;
-    $borcatfilter =~s/'/\\'/g;
-    $holdingbranchfilter =~s/'/\\'/g;
-    $homebranchfilter =~s/'/\\'/g;
-    $branchfilter =~s/'/\\'/g;
-
     my $strsth = "SELECT date_due,
         borrowers.title as borrowertitle,
         borrowers.surname,
@@ -284,22 +276,23 @@ if ($noreport) {
     WHERE 1=1 ";    # placeholder, since it is possible that none of the additional
                     # conditions will be selected by user
     $strsth .= " AND date_due               < '" . $todaysdate . "' " unless ( $showall or $datedueto );
-    $strsth .=
-          " AND (borrowers.firstname like '"
-        . $bornamefilter
-        . "%' or borrowers.surname like '"
-        . $bornamefilter
-        . "%' or borrowers.cardnumber like '"
-        . $bornamefilter . "%')"
-        if ($bornamefilter);
-    $strsth .= " AND borrowers.categorycode = '" . $borcatfilter . "' " if $borcatfilter;
 
+    my @bind_values;
+    if ($bornamefilter) {
+        $strsth .= " AND (borrowers.firstname like ? or borrowers.surname like ? or borrowers.cardnumber like ?)";
+        push @bind_values, "$bornamefilter%", "$bornamefilter%", "$bornamefilter%";
+    }
+    if ($borcatfilter) {
+        $strsth .= " AND borrowers.categorycode = ? ";
+        push @bind_values, $borcatfilter;
+    }
     if ($itemtypefilter) {
         if ( C4::Context->preference('item-level_itypes') ) {
-            $strsth .= " AND items.itype   = '" . $itemtypefilter . "' ";
+            $strsth .= " AND items.itype   = ? ";
         } else {
-            $strsth .= " AND biblioitems.itemtype   = '" . $itemtypefilter . "' ";
+            $strsth .= " AND biblioitems.itemtype   = ? ";
         }
+        push @bind_values, $itemtypefilter;
     }
     if ( $borflagsfilter eq 'gonenoaddress' ) {
         $strsth .= " AND borrowers.gonenoaddress <> 0";
@@ -308,11 +301,26 @@ if ($noreport) {
     } elsif ( $borflagsfilter eq 'lost' ) {
         $strsth .= " AND borrowers.lost <> 0";
     }
-    $strsth .= " AND borrowers.branchcode   = '" . $branchfilter . "' "        if $branchfilter;
-    $strsth .= " AND items.homebranch       = '" . $homebranchfilter . "' "    if $homebranchfilter;
-    $strsth .= " AND items.holdingbranch    = '" . $holdingbranchfilter . "' " if $holdingbranchfilter;
-    $strsth .= " AND date_due >= ?"                                            if $dateduefrom;
-    $strsth .= " AND date_due <= ?"                                            if $datedueto;
+    if ($branchfilter) {
+        $strsth .= " AND borrowers.branchcode   = ? ";
+        push @bind_values, $branchfilter;
+    }
+    if ($homebranchfilter) {
+        $strsth .= " AND items.homebranch       = ? ";
+        push @bind_values, $homebranchfilter;
+    }
+    if ($holdingbranchfilter) {
+        $strsth .= " AND items.holdingbranch    = ? ";
+        push @bind_values, $holdingbranchfilter;
+    }
+    if ($dateduefrom) {
+        $strsth .= " AND date_due >= ?";
+        push @bind_values, DateTime::Format::MySQL->format_datetime($dateduefrom);
+    }
+    if ($datedueto) {
+        $strsth .= " AND date_due <= ?";
+        push @bind_values, DateTime::Format::MySQL->format_datetime($datedueto);
+    }
 
     # restrict patrons (borrowers) to those matching the patron attribute filter(s), if any
     my $bnlist = $have_pattr_filter_data ? join( ',', keys %borrowernumber_to_attributes ) : '';
@@ -322,10 +330,7 @@ if ($noreport) {
     $strsth .= " ORDER BY date_due, surname, firstname";
     $template->param( sql => $strsth );
     my $sth = $dbh->prepare($strsth);
-    $sth->execute(
-        ( $dateduefrom ? DateTime::Format::MySQL->format_datetime($dateduefrom) : () ),
-        ( $datedueto   ? DateTime::Format::MySQL->format_datetime($datedueto)   : () ),
-    );
+    $sth->execute(@bind_values);
 
     my @overduedata;
     while ( my $data = $sth->fetchrow_hashref ) {
