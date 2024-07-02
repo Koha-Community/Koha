@@ -707,7 +707,7 @@
                             if ( row.phone != null ) library_info.push(_("Ph: ") + row.phone.escapeHtml());
                             if ( row.fax != null ) library_info.push(_("Fax: ") + row.fax.escapeHtml());
                             if ( row.email != null ) library_info.push('<a href="mailto:'+encodeURIComponent(row.email)+'">'+row.email.escapeHtml()+'</a>');
-                            if ( row.url != null ) library_info.push('<a href="'+encodeURIComponent(row.url)+'">'+row.url.escapeHtml()+'</a>');
+                            if ( row.url != null ) library_info.push('<a href="'+encodeURI(row.url)+'">'+row.url.escapeHtml()+'</a>');
                             if ( row.notes != null ) library_info.push(_("Notes")+': '+row.notes.escapeHtml());
                             return library_info.join('<br/>');
                         },
