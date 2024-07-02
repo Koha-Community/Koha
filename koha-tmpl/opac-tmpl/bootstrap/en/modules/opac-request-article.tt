@@ -177,6 +177,8 @@
                                                 [% END %]
                                             </select>
                                         </li>
+                                    [% ELSE %]
+                                        <input type="hidden" name="branchcode" value="[% Branches.GetLoggedInBranchcode | html %]" />
                                     [% END %]
                                 </ul>
                             </fieldset>
