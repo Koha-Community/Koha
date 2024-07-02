@@ -17,7 +17,6 @@ package Koha::Virtualshelf;
 
 use Modern::Perl;
 
-
 use C4::Auth;
 
 use Koha::Patrons;
@@ -43,7 +42,7 @@ Koha::Virtualshelf - Koha Virtualshelf Object class
 =cut
 
 sub store {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     unless ( $self->owner ) {
         Koha::Exceptions::Virtualshelf::UseDbAdminAccount->throw;
@@ -53,33 +52,33 @@ sub store {
         Koha::Exceptions::Virtualshelf::DuplicateObject->throw;
     }
 
-    $self->allow_change_from_owner( 1 )
+    $self->allow_change_from_owner(1)
         unless defined $self->allow_change_from_owner;
-    $self->allow_change_from_others( 0 )
+    $self->allow_change_from_others(0)
         unless defined $self->allow_change_from_others;
-    $self->allow_change_from_staff( 0 )
+    $self->allow_change_from_staff(0)
         unless defined $self->allow_change_from_staff;
-    $self->allow_change_from_permitted_staff( 0 )
+    $self->allow_change_from_permitted_staff(0)
         unless defined $self->allow_change_from_permitted_staff;
 
-    $self->created_on( dt_from_string )
+    $self->created_on(dt_from_string)
         unless defined $self->created_on;
 
-    return $self->SUPER::store( $self );
+    return $self->SUPER::store($self);
 }
 
 sub is_public {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return $self->public;
 }
 
 sub is_private {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return !$self->public;
 }
 
 sub is_shelfname_valid {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
     my $conditions = {
         shelfname => $self->shelfname,
@@ -89,15 +88,13 @@ sub is_shelfname_valid {
     if ( $self->is_private and defined $self->owner ) {
         $conditions->{-or} = {
             "virtualshelfshares.borrowernumber" => $self->owner,
-            "me.owner" => $self->owner,
+            "me.owner"                          => $self->owner,
         };
         $conditions->{public} = 0;
-    }
-    elsif ( $self->is_private and not defined $self->owner ) {
-        $conditions->{owner} = undef;
+    } elsif ( $self->is_private and not defined $self->owner ) {
+        $conditions->{owner}  = undef;
         $conditions->{public} = 0;
-    }
-    else {
+    } else {
         $conditions->{public} = 1;
     }
 
@@ -111,36 +108,36 @@ sub is_shelfname_valid {
 }
 
 sub get_shares {
-    my ( $self ) = @_;
-    my $rs = $self->_result->virtualshelfshares;
-    my $shares = Koha::Virtualshelfshares->_new_from_dbic( $rs );
+    my ($self) = @_;
+    my $rs     = $self->_result->virtualshelfshares;
+    my $shares = Koha::Virtualshelfshares->_new_from_dbic($rs);
     return $shares;
 }
 
 sub get_contents {
-    my ( $self ) = @_;
-    my $rs = $self->_result->virtualshelfcontents;
-    my $contents = Koha::Virtualshelfcontents->_new_from_dbic( $rs );
+    my ($self)   = @_;
+    my $rs       = $self->_result->virtualshelfcontents;
+    my $contents = Koha::Virtualshelfcontents->_new_from_dbic($rs);
     return $contents;
 }
 
 sub share {
     my ( $self, $key ) = @_;
-    unless ( $key ) {
+    unless ($key) {
         Koha::Exceptions::Virtualshelf::InvalidKeyOnSharing->throw;
     }
     Koha::Virtualshelfshare->new(
         {
             shelfnumber => $self->shelfnumber,
-            invitekey => $key,
-            sharedate => dt_from_string,
+            invitekey   => $key,
+            sharedate   => dt_from_string,
         }
     )->store;
 }
 
 sub is_shared {
-    my ( $self ) = @_;
-    return  $self->get_shares->search(
+    my ($self) = @_;
+    return $self->get_shares->search(
         {
             borrowernumber => { '!=' => undef },
         }
@@ -150,7 +147,7 @@ sub is_shared {
 sub is_shared_with {
     my ( $self, $borrowernumber ) = @_;
     return unless $borrowernumber;
-    return  $self->get_shares->search(
+    return $self->get_shares->search(
         {
             borrowernumber => $borrowernumber,
         }
@@ -161,7 +158,7 @@ sub remove_share {
     my ( $self, $borrowernumber ) = @_;
     my $shelves = Koha::Virtualshelfshares->search(
         {
-            shelfnumber => $self->shelfnumber,
+            shelfnumber    => $self->shelfnumber,
             borrowernumber => $borrowernumber,
         }
     );
@@ -182,13 +179,17 @@ sub add_biblio {
     return if $already_exists;
 
     # Check permissions
-    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
-    return 0 unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists ) || $self->allow_change_from_others;
+    my $patron = Koha::Patrons->find($borrowernumber) or return 0;
+    return 0
+        unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
+        || ( $self->allow_change_from_staff           && $patron->can_patron_change_staff_only_lists )
+        || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists )
+        || $self->allow_change_from_others;
 
     my $content = Koha::Virtualshelfcontent->new(
         {
-            shelfnumber => $self->shelfnumber,
-            biblionumber => $biblionumber,
+            shelfnumber    => $self->shelfnumber,
+            biblionumber   => $biblionumber,
             borrowernumber => $borrowernumber,
         }
     )->store;
@@ -200,19 +201,22 @@ sub add_biblio {
 
 sub remove_biblios {
     my ( $self, $params ) = @_;
-    my $biblionumbers = $params->{biblionumbers} || [];
+    my $biblionumbers  = $params->{biblionumbers} || [];
     my $borrowernumber = $params->{borrowernumber};
     return unless @$biblionumbers;
 
     my $number_removed = 0;
-    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
-    if( ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
-      || ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists )
-      || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists )
-      || $self->allow_change_from_others ) {
-        $number_removed += $self->get_contents->search({
-            biblionumber => $biblionumbers,
-        })->delete;
+    my $patron         = Koha::Patrons->find($borrowernumber) or return 0;
+    if (   ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
+        || ( $self->allow_change_from_staff           && $patron->can_patron_change_staff_only_lists )
+        || ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists )
+        || $self->allow_change_from_others )
+    {
+        $number_removed += $self->get_contents->search(
+            {
+                biblionumber => $biblionumbers,
+            }
+        )->delete;
     }
     return $number_removed;
 }
@@ -235,7 +239,7 @@ sub can_be_deleted {
     return 0 unless $borrowernumber;
     return 1 if $self->owner == $borrowernumber;
 
-    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    my $patron = Koha::Patrons->find($borrowernumber) or return 0;
 
     return 1 if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
 
@@ -245,11 +249,11 @@ sub can_be_deleted {
 sub can_be_managed {
     my ( $self, $borrowernumber ) = @_;
     return 1
-      if $borrowernumber and $self->owner == $borrowernumber;
+        if $borrowernumber and $self->owner == $borrowernumber;
 
-    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    my $patron = Koha::Patrons->find($borrowernumber) or return 0;
     return 1
-      if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_lists' } );
+        if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_lists' } );
     return 0;
 }
 
@@ -271,6 +275,7 @@ sub can_biblios_be_added {
 sub can_biblios_be_removed {
     my ( $self, $borrowernumber ) = @_;
     return $self->can_biblios_be_added($borrowernumber);
+
     # Same answer since bug 18228
 }
 
@@ -300,26 +305,27 @@ sub can_biblios_be_removed {
 
 sub cannot_be_transferred {
     my ( $self, $params ) = @_;
-    my $to = $params->{to};
-    my $by = $params->{by};
+    my $to        = $params->{to};
+    my $by        = $params->{by};
     my $interface = $params->{interface};
 
     # Check on interface: currently we don't support transfer shared on intranet, transfer public on OPAC
-    if( $interface ) {
+    if ($interface) {
         return 'unauthorized_transfer'
-            if ( $self->public && $interface eq 'opac' ) or
-               ( $self->is_private && $interface eq 'intranet' );
-                   # is_private call is enough here, get_shares tested below
+            if ( $self->public && $interface eq 'opac' )
+            or ( $self->is_private && $interface eq 'intranet' );
+
+        # is_private call is enough here, get_shares tested below
     }
 
-    my $shares = $self->public ? undef : $self->get_shares->search({ borrowernumber => { '!=' => undef } });
+    my $shares = $self->public ? undef : $self->get_shares->search( { borrowernumber => { '!=' => undef } } );
     return 'unauthorized_transfer' if $self->is_private && !$shares->count;
 
-    if( $by ) {
-        if( $self->public ) {
+    if ($by) {
+        if ( $self->public ) {
             my $by_patron = Koha::Patrons->find($by);
             return 'unauthorized_transfer'
-                if !$by_patron || !C4::Auth::haspermission( $by_patron->userid, { lists => 'edit_public_lists' });
+                if !$by_patron || !C4::Auth::haspermission( $by_patron->userid, { lists => 'edit_public_lists' } );
         } else {
             return 'unauthorized_transfer' if !$self->can_be_managed($by);
         }
@@ -327,17 +333,17 @@ sub cannot_be_transferred {
         return 'missing_by_parameter';
     }
 
-    if( $to ) {
-        if( !Koha::Patrons->find($to) ) {
+    if ($to) {
+        if ( !Koha::Patrons->find($to) ) {
             return 'new_owner_not_found';
         }
-        if( !$self->public && !$shares->search({ borrowernumber => $to })->count ) {
+        if ( !$self->public && !$shares->search( { borrowernumber => $to } )->count ) {
             return 'new_owner_has_no_share';
         }
     } else {
         return 'missing_to_parameter';
     }
-    return 0; # serving as green light
+    return 0;    # serving as green light
 }
 
 =head3 transfer_ownership
@@ -351,11 +357,11 @@ This method transfers the list ownership to the passed I<$patron_id>.
 sub transfer_ownership {
     my ( $self, $patron_id ) = @_;
 
-    Koha::Exceptions::MissingParameter->throw( "Mandatory parameter 'patron' missing" )
-      unless $patron_id;
+    Koha::Exceptions::MissingParameter->throw("Mandatory parameter 'patron' missing")
+        unless $patron_id;
 
-    $self->remove_share( $patron_id ) if $self->is_private;
-    return $self->set({ owner => $patron_id })->store;
+    $self->remove_share($patron_id) if $self->is_private;
+    return $self->set( { owner => $patron_id } )->store;
 }
 
 =head2 Internal methods
