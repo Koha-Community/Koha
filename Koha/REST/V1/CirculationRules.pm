@@ -49,63 +49,67 @@ List all effective rules for the requested patron/item/branch combination
 sub list_effective_rules {
     my $c = shift->openapi->valid_input or return;
 
-    my $item_type       = $c->param('item_type_id');
-    my $branchcode      = $c->param('library_id');
-    my $patron_category = $c->param('patron_category_id');
-    my $rules           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+    return try {
+        my $item_type       = $c->param('item_type_id');
+        my $branchcode      = $c->param('library_id');
+        my $patron_category = $c->param('patron_category_id');
+        my $rules           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
 
-    if ($item_type) {
-        my $type = Koha::ItemTypes->find($item_type);
-        return $c->render_invalid_parameter_value(
-            {
-                path   => '/query/item_type_id',
-                values => {
-                    uri   => '/api/v1/item_types',
-                    field => 'item_type_id'
+        if ($item_type) {
+            my $type = Koha::ItemTypes->find($item_type);
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/item_type_id',
+                    values => {
+                        uri   => '/api/v1/item_types',
+                        field => 'item_type_id'
+                    }
                 }
-            }
-        ) unless $type;
-    }
-
-    if ($branchcode) {
-        my $library = Koha::Libraries->find($branchcode);
-        return $c->render_invalid_parameter_value(
-            {
-                path   => '/query/library_id',
-                values => {
-                    uri   => '/api/v1/libraries',
-                    field => 'library_id'
-                }
-            }
-        ) unless $library;
-    }
-
-    if ($patron_category) {
-        my $category = Koha::Patron::Categories->find($patron_category);
-        return $c->render_invalid_parameter_value(
-            {
-                path   => '/query/patron_category_id',
-                values => {
-                    uri   => '/api/v1/patron_categories',
-                    field => 'patron_category_id'
-                }
-            }
-        ) unless $category;
-    }
-
-    my $effective_rules = Koha::CirculationRules->get_effective_rules(
-        {
-            categorycode => $patron_category,
-            itemtype     => $item_type,
-            branchcode   => $branchcode,
-            rules        => $rules
+            ) unless $type;
         }
-    );
 
-    return $c->render(
-        status  => 200,
-        openapi => $effective_rules ? $effective_rules : {}
-    );
+        if ($branchcode) {
+            my $library = Koha::Libraries->find($branchcode);
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/library_id',
+                    values => {
+                        uri   => '/api/v1/libraries',
+                        field => 'library_id'
+                    }
+                }
+            ) unless $library;
+        }
+
+        if ($patron_category) {
+            my $category = Koha::Patron::Categories->find($patron_category);
+            return $c->render_invalid_parameter_value(
+                {
+                    path   => '/query/patron_category_id',
+                    values => {
+                        uri   => '/api/v1/patron_categories',
+                        field => 'patron_category_id'
+                    }
+                }
+            ) unless $category;
+        }
+
+        my $effective_rules = Koha::CirculationRules->get_effective_rules(
+            {
+                categorycode => $patron_category,
+                itemtype     => $item_type,
+                branchcode   => $branchcode,
+                rules        => $rules
+            }
+        );
+
+        return $c->render(
+            status  => 200,
+            openapi => $effective_rules ? $effective_rules : {}
+        );
+    } catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 1;
