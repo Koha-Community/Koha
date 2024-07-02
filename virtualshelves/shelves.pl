@@ -57,8 +57,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op      = $query->param('op')      || 'list';
 my $referer = $query->param('referer') || $op;
 my $page    = int( $query->param('page') || 1 );
-my $public  = $query->param('public') ? 1 : 0;
-my ( $shelf, $shelfnumber, @messages, $allow_transfer );
+my ( $public, $shelf, $shelfnumber, @messages, $allow_transfer, $allow_create_public_lists );
+
+# work out permissions once
+# this check is for the create list permission
+$allow_create_public_lists = haspermission( $loggedinuser, { lists => 'create_public_lists' } ) ? 1 : 0;
+
+# we want the user to be able to pick if public or private only if they are allowed
+$public = ( $query->param('public') == 1 && $allow_create_public_lists == 1 ) ? 1 : 0;
 
 # PART1: Perform a few actions
 if ( $op eq 'add_form' ) {
@@ -397,6 +403,7 @@ $template->param(
     print    => scalar $query->param('print') || 0,
     csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' })->as_list ],
     allow_transfer => $allow_transfer,
+    allow_create_public_lists => $allow_create_public_lists,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

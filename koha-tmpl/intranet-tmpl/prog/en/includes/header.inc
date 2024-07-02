@@ -228,6 +228,9 @@
                         <li class="toplinks-mycheckouts">
                             <a class="toplinks" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% loggedinusernumber | html %]">My checkouts</a>
                         </li>
+                        <li class="toplinks-mylists">
+                            <a class="toplinks" href="/cgi-bin/koha/virtualshelves/shelves.pl">My lists</a>
+                        </li>
                     [% END %]
                     [% IF Koha.Preference( 'CookieConsent' ) %]
                         <li class="toplinks-myconsents">

@@ -256,16 +256,21 @@ sub can_be_managed {
 sub can_biblios_be_added {
     my ( $self, $borrowernumber ) = @_;
 
-    my $patron = Koha::Patrons->find( $borrowernumber ) or return 0;
+    my $patron = Koha::Patrons->find($borrowernumber) or return 0;
     return 1
-      if $borrowernumber
-      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or ( $self->allow_change_from_staff && $patron->can_patron_change_staff_only_lists ) or ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists ) or $self->allow_change_from_others );
+        if $borrowernumber
+        and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
+        or ( $self->allow_change_from_staff           && $patron->can_patron_change_staff_only_lists )
+        or ( $self->allow_change_from_permitted_staff && $patron->can_patron_change_permitted_staff_lists )
+        or $self->allow_change_from_others )
+        and ( ( $self->public && C4::Auth::haspermission( $patron->userid, { lists => 'edit_public_list_contents' } ) )
+        or !$self->public );
     return 0;
 }
 
 sub can_biblios_be_removed {
     my ( $self, $borrowernumber ) = @_;
-    return $self->can_biblios_be_added( $borrowernumber );
+    return $self->can_biblios_be_added($borrowernumber);
     # Same answer since bug 18228
 }
 

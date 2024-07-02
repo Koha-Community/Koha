@@ -767,6 +767,11 @@
             Use administrative plugins
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'create_public_lists' -%]
+        <span class="sub_permission create_public_lists_subpermission">
+            Create public lists
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'delete_public_lists' -%]
         <span class="sub_permission delete_public_lists_subpermission">
             Delete public lists
@@ -780,6 +785,11 @@
     [%- CASE 'edit_public_list_contents' -%]
         <span class="sub_permission edit_public_list_contents_subpermission">
             Edit public lists contents
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'use_public_lists' -%]
+        <span class="sub_permission use_public_lists_subpermission">
+            Use public lists
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'upload_general_files' -%]

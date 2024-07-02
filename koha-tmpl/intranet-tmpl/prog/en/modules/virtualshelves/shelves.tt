@@ -455,19 +455,25 @@
                                 </select>
                             </li>
                             <li>
-                                <label for="public">Public: </label>
-                                <select id="public" name="public" onchange="AdjustRemark()">
-                                    [% IF shelf.is_private %]
-                                        <option value="0" selected="selected">Private</option>
-                                    [% ELSE %]
-                                        <option value="0">Private</option>
-                                    [% END %]
-                                    [% IF shelf.is_public %]
-                                        <option value="1" selected="selected">Public</option>
-                                    [% ELSE %]
-                                        <option value="1">Public</option>
-                                    [% END %]
-                                </select>
+                                [% IF ( CAN_user_lists_create_public_lists ) %]
+                                    <label for="public">Public: </label>
+                                    <select id="public" name="public" onchange="AdjustRemark()">
+                                        [% IF shelf.is_private %]
+                                            <option value="0" selected="selected">Private</option>
+                                        [% ELSE %]
+                                            <option value="0">Private</option>
+                                        [% END %]
+                                        [% IF shelf.is_public %]
+                                            <option value="1" selected="selected">Public</option>
+                                        [% ELSE %]
+                                            <option value="1">Public</option>
+                                        [% END %]
+                                    </select>
+                                [% ELSE %]
+                                    <label>Public: </label>
+                                    <span>Private</span>
+                                    <input id="public" name="public" value="0" type="hidden" />
+                                [% END %]
                             </li>
                             [% INCLUDE list_permissions %]
                         </ol>
@@ -494,7 +500,9 @@
                 [% WRAPPER tabs id= "tabs" %]
                     [% WRAPPER tabs_nav %]
                         [% WRAPPER tab_item tabname= "privateshelves_tab" bt_active= 1 %] <span>Your lists</span> [% END %]
-                        [% WRAPPER tab_item tabname= "publicshelves_tab" %] <span>Public lists</span> [% END %]
+                        [% IF ( CAN_user_lists_use_public_lists ) %]
+                            [% WRAPPER tab_item tabname= "publicshelves_tab" %] <span>Public lists</span> [% END %]
+                        [% END %]
                     [% END # /WRAPPER tabs_nav %]
 
                     [% WRAPPER tab_panels %]
