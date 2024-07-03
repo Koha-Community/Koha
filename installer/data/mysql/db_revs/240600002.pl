@@ -36,8 +36,8 @@ return {
 
         # Update categories database table BlockExpiredPatronOpacActions column settings
         $dbh->do(
-            "ALTER TABLE categories MODIFY BlockExpiredPatronOpacActions mediumtext NOT NULL DEFAULT 'follow_syspref_BlockExpiredPatronOpacActions' COMMENT 'specific actions expired patrons of this category are blocked from performing or if the BlockExpiredPatronOpacActions system preference is to be followed'"
-        ) and say_success( $out, "Updated categories.BlockExpiredPatronOpacActions to mediumtext" );
+            "ALTER TABLE categories MODIFY BlockExpiredPatronOpacActions varchar(128) NOT NULL DEFAULT 'follow_syspref_BlockExpiredPatronOpacActions' COMMENT 'specific actions expired patrons of this category are blocked from performing or if the BlockExpiredPatronOpacActions system preference is to be followed'"
+        ) and say_success( $out, "Updated categories.BlockExpiredPatronOpacActions to varchar(128)" );
 
         # Update patron categories using -1
         $dbh->do(
