@@ -100,6 +100,52 @@ sub resources {
     return Koha::ERM::EHoldings::Resources->_new_from_dbic($resources_rs);
 }
 
+=head3 _detect_delimiter_and_quote
+
+Identifies the delimiter and the quote character used in the KBART file and returns both.
+
+=cut
+
+sub _detect_delimiter_and_quote {
+    my ($file) = @_;
+    my $sample_lines = 5;    # Number of lines to sample for detection
+
+    open my $fh, '<', \$file or die "Could not open '$file': $!";
+
+    my @lines;
+    while (<$fh>) {
+        push @lines, $_;
+        last if $. >= $sample_lines;
+    }
+    close $fh;
+
+    my %delimiter_count;
+    my %quote_count;
+
+    foreach my $line (@lines) {
+        foreach my $char ( ',', '\t', ';', '|' ) {
+            my $count = () = $line =~ /\Q$char\E/g;
+            $delimiter_count{$char} += $count if $count;
+        }
+        foreach my $char ( '"', "'" ) {
+            my $count = () = $line =~ /\Q$char\E/g;
+            $quote_count{$char} += $count if $count;
+        }
+    }
+
+    # Guess the delimiter with the highest count
+    my ($delimiter) = sort { $delimiter_count{$b} <=> $delimiter_count{$a} } keys %delimiter_count;
+
+    # Guess the quote character with the highest count
+    my ($quote) = sort { $quote_count{$b} <=> $quote_count{$a} } keys %quote_count;
+
+    # Fallback to common defaults if nothing is detected
+    $delimiter //= ',';
+    $quote     //= '"';
+
+    return ( $delimiter, $quote );
+}
+
 =head2 Internal methods
 
 =head3 _type
