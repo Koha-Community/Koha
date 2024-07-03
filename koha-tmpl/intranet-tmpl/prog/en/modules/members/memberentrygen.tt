@@ -942,6 +942,7 @@
                                                                 data-pwd-length="[% category.effective_min_password_length | html %]"
                                                                 data-pwd-strong="[% category.effective_require_strong_password | html %]"
                                                                 data-typename="[% category_type | html %]"
+                                                                data-expiry-date="[% category.get_expiry_date | html %]"
                                                                 >[% category.description | html %]</option
                                                             >
                                                         [% ELSE %]
@@ -950,6 +951,7 @@
                                                                 data-pwd-length="[% category.effective_min_password_length | html %]"
                                                                 data-pwd-strong="[% category.effective_require_strong_password | html %]"
                                                                 data-typename="[% category_type | html %]"
+                                                                data-expiry-date="[% category.get_expiry_date | html %]"
                                                                 >[% category.description | html %]</option
                                                             >
                                                         [% END %]
