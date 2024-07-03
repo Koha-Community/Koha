@@ -1178,7 +1178,7 @@ sub SearchItems {
           LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
           LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
           LEFT JOIN biblio_metadata ON biblio_metadata.biblionumber = biblio.biblionumber
-          LEFT JOIN issues ON issues.itemnumber = items.itemnumber
+          LEFT JOIN issues USING (itemnumber)
           WHERE 1
     };
     if (defined $where_str and $where_str ne '') {
