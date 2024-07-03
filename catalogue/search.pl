@@ -243,7 +243,7 @@ my @search_groups =
 
 my $branch_limit = '';
 my $limit_param = $cgi->param('limit');
-if ( $limit_param and $limit_param =~ /branch:([\w-]+)/ ) {
+if ( $limit_param and $limit_param =~ /^branch:([\w-]+)/ ) {
     $branch_limit = $1;
 }
 
