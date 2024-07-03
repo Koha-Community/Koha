@@ -157,7 +157,7 @@ if ( $backends_available ) {
                 whole     => $backend_result,
                 request   => $request
             );
-            handle_commit_maybe($backend_result, $request);
+            redirect_user($backend_result, $request);
         }
     } elsif ( $op eq 'migrate' ) {
         # We're in the process of migrating a request
@@ -187,7 +187,7 @@ if ( $backends_available ) {
                 request => $request
             );
         }
-        handle_commit_maybe( $backend_result, $request );
+        redirect_user( $backend_result, $request );
 
     } elsif ( $op eq 'confirm' ) {
         # Backend 'confirm' method
@@ -200,7 +200,7 @@ if ( $backends_available ) {
         );
 
         # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
+        redirect_user($backend_result, $request);
 
     } elsif ( $op eq 'cud-cancel' ) {
         # Backend 'cancel' method
@@ -213,7 +213,7 @@ if ( $backends_available ) {
         );
 
         # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
+        redirect_user($backend_result, $request);
 
     } elsif ( $op eq 'cud-edit_action' ) {
         $op =~ s/^cud-//;
@@ -279,7 +279,7 @@ if ( $backends_available ) {
                     next    => 'illlist',
                     value   => {}
                 };
-                handle_commit_maybe( $backend_result, $request );
+                redirect_user( $backend_result, $request );
             }
         }
 
@@ -321,7 +321,7 @@ if ( $backends_available ) {
         );
 
         # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
+        redirect_user($backend_result, $request);
 
     } elsif ( $op eq 'cud-generic_confirm' ) {
         $op =~ s/^cud-//;
@@ -383,7 +383,7 @@ if ( $backends_available ) {
         };
 
         # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
+        redirect_user($backend_result, $request);
     } elsif ( $op eq 'cud-check_out') {
         $op =~ s/^cud-//;
         my $request = Koha::ILL::Requests->find($params->{illrequest_id});
@@ -471,7 +471,7 @@ if ( $backends_available ) {
         );
 
         # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
+        redirect_user($backend_result, $request);
     }
 }
 
@@ -484,7 +484,7 @@ $template->param(
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );
 
-sub handle_commit_maybe {
+sub redirect_user {
     my ( $backend_result, $request ) = @_;
 
     # We need to special case 'commit'
