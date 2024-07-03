@@ -605,7 +605,7 @@
                                 [% END %]
                             </select>
                             <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                            <input type="checkbox" id="showallfunds" />
+                            <input type="checkbox" class="showallfunds" />
                         </li>
                         <li>
                             <label for="quantity">Copies:</label>
@@ -1219,22 +1219,25 @@
                                     <fieldset class="brief acquisition_information">
                                         <ol>
                                             <li>
-                                                <label for="budgetid"> Book fund:</label>
+                                                <label for="budgetid">Fund:</label>
                                                 <select name="budgetid" id="budgetid">
-                                                    <option value="__ANY__">Any</option>
                                                     [% IF budgetid == '__NONE__' %]
                                                         <option value="__NONE__" selected="selected">None</option>
                                                     [% ELSE %]
                                                         <option value="__NONE__">None</option>
                                                     [% END %]
-                                                    [% FOREACH budgetsloo IN budgetsloop %]
-                                                        [% IF ( budgetsloo.selected ) %]
-                                                            <option value="[% budgetsloo.budget_id | html %]" selected="selected">[% budgetsloo.budget_name | html %]</option>
+                                                    [% FOREACH budget IN sugg_budgets %]
+                                                        [% IF ( budget.selected ) %]
+                                                            <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
+                                                        [% ELSIF ( budget.b_active ) %]
+                                                            <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
                                                         [% ELSE %]
-                                                            <option value="[% budgetsloo.budget_id | html %]">[% budgetsloo.budget_name | html %]</option>
+                                                            <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
                                                         [% END %]
                                                     [% END %]
                                                 </select>
+                                                <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+                                                <input type="checkbox" class="showallfunds" />
                                             </li>
                                         </ol>
                                     </fieldset> <!-- /#acquisition_information -->
@@ -1325,6 +1328,20 @@
             });
             return 0;
         }
+
+        //keep a copy of all budgets before removing the inactives
+        var budgetId = $("#budgetid");
+        var disabledBudgetsCopy = budgetId.html();
+        $('.b_inactive').remove();
+
+        $('.showallfunds').click(function() {
+            if ($(this).is(":checked")) {
+                budgetId.html(disabledBudgetsCopy); //Puts back all the funds
+            }
+            else {
+                $('.b_inactive').remove();
+            }
+        });
     </script>
 
     [% IF ( op == 'show' || op == 'else' ) %]
@@ -1483,19 +1500,6 @@
                     $('#notify').prop('checked', false).prop('disabled', true);
                 });
 
-                //keep a copy of all budgets before removing the inactives
-                var budgetId = $("form#add_edit #budgetid");
-                var disabledBudgetsCopy = budgetId.html();
-                $('.b_inactive').remove();
-
-                $('#showallfunds').click(function() {
-                    if ($(this).is(":checked")) {
-                        budgetId.html(disabledBudgetsCopy); //Puts back all the funds
-                    }
-                    else {
-                        $('.b_inactive').remove();
-                    }
-                });
 
             });
         </script>
