@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::MockModule;
 use Test::Warn;
 
@@ -40,7 +40,6 @@ subtest 'enqueue' => sub {
 
     $schema->storage->txn_begin;
 
-    # FIXME: Should be an exception
     my $job_id = Koha::BackgroundJob::ImportKBARTFile->new->enqueue();
     is( $job_id, undef, 'Nothing enqueued if missing file param' );
 
@@ -51,15 +50,13 @@ subtest 'calculate_chunked_params_size' => sub {
 
     plan tests => 2;
 
-    my $max_number_of_lines =
-        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size( 500000, 100000, 50000 );
+    my $max_number_of_lines = Koha::ERM::EHoldings::Title::calculate_chunked_params_size( 500000, 100000, 50000 );
     is( $max_number_of_lines, 7500, 'Number of lines calculated correctly' );
-    my $max_number_of_lines2 =
-        Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size( 400000, 100000, 60000 );
+    my $max_number_of_lines2 = Koha::ERM::EHoldings::Title::calculate_chunked_params_size( 400000, 100000, 60000 );
     is( $max_number_of_lines2, 11250, 'Number of lines calculated correctly' );
 };
 
-subtest 'format_title' => sub {
+subtest '_format_title' => sub {
 
     plan tests => 4;
 
@@ -68,7 +65,7 @@ subtest 'format_title' => sub {
         coverage_notes => 'Test notes'
     };
 
-    my $formatted_title = Koha::BackgroundJob::ImportKBARTFile::format_title($title);
+    my $formatted_title = Koha::BackgroundJob::ImportKBARTFile::_format_title($title);
 
     is( $formatted_title->{external_id}, 1,            'external_id formatted correctly' );
     is( $formatted_title->{notes},       'Test notes', 'notes formatted correctly' );
@@ -78,7 +75,7 @@ subtest 'format_title' => sub {
 
 subtest 'read_file' => sub {
 
-    plan tests => 7;
+    plan tests => 6;
 
     my $file = {
         filename     => 'Test_file.csv',
@@ -89,7 +86,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         )
     };
 
-    my ( $column_headers, $lines, $error ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my ( $column_headers, $lines, $error ) = Koha::ERM::EHoldings::Title::read_file($file);
 
     is( @{$column_headers},     25,                  '25 column headers found' );
     is( @{$column_headers}[0],  'publication_title', 'First header correctly extracted' );
@@ -113,7 +110,24 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         ],
         'Line correctly identified'
     );
+};
 
+subtest '_detect_delimiter_and_quote' => sub {
+
+    plan tests => 3;
+
+    my $file = {
+        filename     => 'Test_file.txt',
+        file_content => encode_base64(
+            'publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P'
+        )
+    };
+
+    my ( $delimiter, $quote_char ) = Koha::ERM::EHoldings::Title::_detect_delimiter_and_quote($file);
+    is( $delimiter,  ',', 'Comma delimiter identified' );
+    is( $quote_char, '"', 'Quote character identified' );
     my $file2 = {
         filename     => 'Test_file2.csv',
         file_content => encode_base64(
@@ -123,12 +137,12 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         )
     };
     warning_is {
-        Koha::BackgroundJob::ImportKBARTFile::read_file($file2);
+        Koha::ERM::EHoldings::Title::read_file($file2);
     }
     '2023, EIQ - QUO character not allowed, 157', 'Error message correctly reported';
 };
 
-subtest 'create_title_hash_from_line_data' => sub {
+subtest '_create_title_hash_from_line_data' => sub {
 
     plan tests => 2;
 
@@ -141,14 +155,14 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         )
     };
 
-    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my ( $column_headers, $lines ) = Koha::ERM::EHoldings::Title::read_file($file);
     my @invalid_columns;
 
-    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::_create_title_hash_from_line_data(
         @{$lines}[0], $column_headers,
         \@invalid_columns
     );
-    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::_create_title_hash_from_line_data(
         @{$lines}[1], $column_headers,
         \@invalid_columns
     );
@@ -212,7 +226,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
     is_deeply( $title_from_line2, $line2_match, 'Title hash created correctly' );
 };
 
-subtest 'create_title_hash_from_line_data with invalid columns using csv' => sub {
+subtest '_create_title_hash_from_line_data with invalid columns using csv' => sub {
 
     plan tests => 2;
 
@@ -225,14 +239,14 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         )
     };
 
-    my ( $column_headers, $lines ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my ( $column_headers, $lines ) = Koha::ERM::EHoldings::Title::read_file($file);
     my @invalid_columns = ('invalid_column');
 
-    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+    my $title_from_line1 = Koha::BackgroundJob::ImportKBARTFile::_create_title_hash_from_line_data(
         @{$lines}[0], $column_headers,
         \@invalid_columns
     );
-    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::create_title_hash_from_line_data(
+    my $title_from_line2 = Koha::BackgroundJob::ImportKBARTFile::_create_title_hash_from_line_data(
         @{$lines}[1], $column_headers,
         \@invalid_columns
     );
@@ -318,7 +332,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         )
     };
 
-    my ( $column_headers, $rows, $error ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+    my ( $column_headers, $rows, $error ) = Koha::ERM::EHoldings::Title::read_file($file);
     my $data = {
         column_headers => $column_headers,
         rows           => $rows,
@@ -374,7 +388,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
 
     my $module = Test::MockModule->new('Koha::BackgroundJob::ImportKBARTFile');
     $module->mock(
-        'create_title_hash_from_line_data',
+        '_create_title_hash_from_line_data',
         sub {
             my ( $row, $column_headers ) = @_;
 
@@ -430,7 +444,7 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
     );
 
     $module->mock(
-        'create_title_hash_from_line_data',
+        '_create_title_hash_from_line_data',
         sub {
             my ( $row, $column_headers ) = @_;
 
