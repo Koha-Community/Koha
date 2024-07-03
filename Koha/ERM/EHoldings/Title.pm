@@ -136,8 +136,7 @@ sub read_file {
     unless ( $csv->eof() ) {
         my ( $cde, $str, $pos ) = $csv->error_diag();
         my $error = $cde ? "$cde, $str, $pos" : "";
-        warn $error if $error;
-        return ( $column_headers, $lines, $error );
+        Koha::Exceptions::FileNotParsed->throw( filename => $file->{filename}, error => $error );
     }
 
     return ( $column_headers, $lines, '' );

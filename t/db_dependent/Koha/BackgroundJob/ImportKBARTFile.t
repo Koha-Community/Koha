@@ -21,6 +21,7 @@ use Test::NoWarnings;
 use Test::More tests => 9;
 use Test::MockModule;
 use Test::Warn;
+use Test::Exception;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -136,10 +137,8 @@ Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,f
 Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P"
         )
     };
-    warning_is {
-        Koha::ERM::EHoldings::Title::read_file($file2);
-    }
-    '2023, EIQ - QUO character not allowed, 157', 'Error message correctly reported';
+
+    throws_ok { Koha::ERM::EHoldings::Title::read_file($file2); } 'Koha::Exceptions::FileNotParsed';
 };
 
 subtest '_create_title_hash_from_line_data' => sub {

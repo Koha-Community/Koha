@@ -20,6 +20,11 @@ use Exception::Class (
         description => 'File not found',
         fields      => ['filename'],
     },
+    'Koha::Exceptions::FileNotParsed' => {
+        isa         => 'Koha::Exception',
+        description => 'File could not be parsed',
+        fields      => [ 'filename', 'error' ],
+    },
     'Koha::Exceptions::InvalidStatus' => {
         isa         => 'Koha::Exception',
         description => 'The current status is not valid in context',
