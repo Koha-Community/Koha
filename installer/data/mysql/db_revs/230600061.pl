@@ -35,7 +35,7 @@ return {
                 $old_rooms_table TO $rooms_table,
                 $old_bookings_table TO $bookings_table,
                 $old_equipment_table TO $equipment_table,
-                $old_roomequipment_table TO $roomequipment_table,
+                $old_roomequipment_table TO $roomequipment_table
             }
                 );
                 $dbh->do("ALTER TABLE $rooms_table RENAME INDEX $old_rooms_index TO $rooms_index");
