@@ -1584,6 +1584,7 @@ Return all the historical holds for this patron
 sub old_holds {
     my ($self) = @_;
     my $old_holds_rs = $self->_result->old_reserves->search( {}, { order_by => 'reservedate' } );
+    require Koha::Old::Holds;
     return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
 }
 
