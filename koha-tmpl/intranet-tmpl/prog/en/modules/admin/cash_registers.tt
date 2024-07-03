@@ -161,7 +161,7 @@
 
                <h1>Cash registers</h1>
                <div class="page-section">
-                    <label for="branch_filter"><strong>Filter by branch:</strong></label>
+                    <label for="branch_filter"><strong>Filter by library:</strong></label>
                     <select id="branch_filter" name="branch_filter">
                         <option value=""></option>
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
