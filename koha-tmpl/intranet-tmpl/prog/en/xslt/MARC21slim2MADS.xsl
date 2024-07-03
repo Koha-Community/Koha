@@ -6,7 +6,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:marc="http://www.loc.gov/MARC21/slim"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
 
-    <xsl:include href="http://www.loc.gov/marcxml/xslt/MARC21slimUtils.xsl"/>
+    <xsl:include href="MARC21slimUtils.xsl"/>
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
     <!-- Stylesheet copyright (c) 2011 Library of Congress
@@ -319,37 +319,6 @@
         </xsl:for-each>
     </xsl:template>
 -->
-
-    <xsl:template name="part">
-        <xsl:variable name="partNumber">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">n</xsl:with-param>
-                <xsl:with-param name="anyCodes">n</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="partName">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">p</xsl:with-param>
-                <xsl:with-param name="anyCodes">p</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="string-length(normalize-space($partNumber))">
-            <mads:partNumber>
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partNumber"/>
-                </xsl:call-template>
-            </mads:partNumber>
-        </xsl:if>
-        <xsl:if test="string-length(normalize-space($partName))">
-            <mads:partName>
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partName"/>
-                </xsl:call-template>
-            </mads:partName>
-        </xsl:if>
-    </xsl:template>
 
     <xsl:template name="nameABCDN">
         <xsl:for-each select="marc:subfield[@code='a']">
