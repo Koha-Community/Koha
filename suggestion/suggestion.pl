@@ -470,21 +470,6 @@ $template->param( returnsuggestedby => $returnsuggestedby );
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 $template->param(patron_reason_loop=>$patron_reason_loop);
 
-# Budgets for filtering
-my $budgets = GetBudgets;
-my @budgets_loop;
-foreach my $budget ( @{$budgets} ) {
-    next unless (CanUserUseBudget($borrowernumber, $budget, $userflags));
-
-    ## Please see file perltidy.ERR
-    $budget->{'selected'} = 1
-        if ($$suggestion_ref{'budgetid'}
-        && $budget->{'budget_id'} eq $$suggestion_ref{'budgetid'});
-
-    push @budgets_loop, $budget;
-}
-$template->param( budgetsloop => \@budgets_loop);
-
 # Budgets for suggestion add or edition
 my $sugg_budget_loop = [];
 my $sugg_budgets     = GetBudgetHierarchy();
