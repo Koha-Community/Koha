@@ -140,7 +140,7 @@ sub read_file {
         return ( $column_headers, $lines, $error );
     }
 
-    return ( $column_headers, $lines );
+    return ( $column_headers, $lines, '' );
 }
 
 =head3 get_valid_headers
@@ -262,7 +262,7 @@ sub _detect_delimiter_and_quote {
     my %quote_count;
 
     foreach my $line (@lines) {
-        foreach my $char ( ',', '\t', ';', '|' ) {
+        foreach my $char ( ",", "\t", ";", "|" ) {
             my $count = () = $line =~ /\Q$char\E/g;
             $delimiter_count{$char} += $count if $count;
         }

@@ -2,21 +2,6 @@
     <h2>{{ $__("Import from a KBART file") }}</h2>
     <div class="page-section" id="files">
         <form @submit="addDocument($event)" class="file_upload">
-            <h3>{{ $__("Requirements:") }}</h3>
-            <ul style="margin-bottom: 1.5em">
-                <li>{{ $__("The file must be in TSV or CSV format") }}</li>
-                <li>
-                    {{
-                        $__(
-                            "The file should not contain any additional information / header rows, e.g. a file with a single title would be structured as follows:"
-                        )
-                    }}
-                    <ol>
-                        <li>{{ $__("Column headings row") }}</li>
-                        <li>{{ $__("Title data row") }}</li>
-                    </ol>
-                </li>
-            </ul>
             <fieldset class="rows" id="package_list">
                 <h3>{{ $__("Select file for upload") }}:</h3>
                 <ol>
@@ -174,7 +159,7 @@ export default {
                     }
                     if (success.warnings.invalid_filetype) {
                         message += `<p>${this.$__(
-                            "The file must be in .tsv or .csv format, please convert your file and try again."
+                            "Could not detect whether the file is TSV or CSV, please check the file."
                         )}</p>`;
                         this.setWarning(message);
                     }
