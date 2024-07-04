@@ -175,8 +175,17 @@
                         <p>This will delete [% IF ( too_many_items_display ) %]all the[% ELSE %]the selected[% END %] items.</p>
                         <input type="hidden" name="del" value="1" />
                         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                            <input type="checkbox" name="del_records" id="del_records" />
-                            <label for="del_records">Delete records if no items remain.</label>
+                            <div style="display: flex; flex-direction: column; gap: 5px;">
+                                <div>
+                                    <input type="checkbox" name="del_records" id="del_records" />
+
+                                    <label for="del_records">Delete records if no items remain.</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="del_serial_issues" id="del_serial_issues" />
+                                    <label for="del_serial_issues">Delete serial issues linked to items.</label>
+                                </div>
+                            </div>
                         [% END %]
 
                         <fieldset class="action">

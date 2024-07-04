@@ -49,6 +49,7 @@ my $biblionumber                      = $input->param('biblionumber');
 my $op                                = $input->param('op');
 my $del                               = $input->param('del');
 my $del_records                       = $input->param('del_records');
+my $del_serial_issues                 = $input->param('del_serial_issues');
 my $src                               = $input->param('src');
 my $use_default_values                = $input->param('use_default_values');
 my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
@@ -94,8 +95,9 @@ if ( $op eq "cud-action" ) {
     if ($del) {
         try {
             my $params = {
-                record_ids     => \@itemnumbers,
-                delete_biblios => $del_records,
+                record_ids           => \@itemnumbers,
+                delete_biblios       => $del_records,
+                delete_serial_issues => $del_serial_issues,
             };
             my $job_id = Koha::BackgroundJob::BatchDeleteItem->new->enqueue($params);
             $nextop = 'enqueued';

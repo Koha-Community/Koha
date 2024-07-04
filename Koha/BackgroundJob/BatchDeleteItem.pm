@@ -81,8 +81,9 @@ sub process {
 
     $self->start;
 
-    my @record_ids     = @{ $args->{record_ids} };
-    my $delete_biblios = $args->{delete_biblios};
+    my @record_ids           = @{ $args->{record_ids} };
+    my $delete_biblios       = $args->{delete_biblios};
+    my $delete_serial_issues = $args->{delete_serial_issues};
 
     my $report = {
         total_records => scalar @record_ids,
@@ -106,7 +107,12 @@ sub process {
 
                     my $item = Koha::Items->find($record_id) || next;
 
-                    my $return = $item->safe_delete( { skip_record_index => 1, skip_holds_queue => 1 } );
+                    my $return = $item->safe_delete(
+                        {
+                            skip_record_index    => 1, skip_holds_queue => 1,
+                            delete_serial_issues => $delete_serial_issues
+                        }
+                    );
                     unless ($return) {
 
                         # FIXME Do we need to rollback the whole transaction if a deletion failed?
@@ -221,15 +227,17 @@ sub enqueue {
     # TODO Raise exception instead
     return unless exists $args->{record_ids};
 
-    my @record_ids     = @{ $args->{record_ids} };
-    my $delete_biblios = $args->{delete_biblios} || 0;
+    my @record_ids           = @{ $args->{record_ids} };
+    my $delete_biblios       = $args->{delete_biblios}       || 0;
+    my $delete_serial_issues = $args->{delete_serial_issues} || 0;
 
     $self->SUPER::enqueue(
         {
             job_size => scalar @record_ids,
             job_args => {
-                record_ids     => \@record_ids,
-                delete_biblios => $delete_biblios,
+                record_ids           => \@record_ids,
+                delete_biblios       => $delete_biblios,
+                delete_serial_issues => $delete_serial_issues,
             },
             job_queue => 'long_tasks',
         }
