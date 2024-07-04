@@ -34,17 +34,10 @@ use Carp qw( carp );
 use Koha::SharedContent;
 
 my $query = CGI->new;
-my $op = $query->param('op') || q{};
-my $issueconfirmed = $query->param('issueconfirmed');
-my $dbh            = C4::Context->dbh;
-my $subscriptionid = $query->param('subscriptionid');
-my $subscription = Koha::Subscriptions->find( $subscriptionid );
 
-if ( $op and $op eq "cud-close" ) {
-    C4::Serials::CloseSubscription( $subscriptionid );
-} elsif ( $op and $op eq "cud-reopen" ) {
-    C4::Serials::ReopenSubscription( $subscriptionid );
-}
+my $op             = $query->param('op') || q{};
+my $issueconfirmed = $query->param('issueconfirmed');
+my $subscriptionid = $query->param('subscriptionid');
 
 # the subscription must be deletable if there is NO issues for a reason or another (should not happened, but...)
 
@@ -69,7 +62,13 @@ $subs->{enddate} ||= GetExpirationDate($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
-if ($op eq 'cud-del') {
+my $subscription = Koha::Subscriptions->find( $subscriptionid );
+
+if ( $op eq "cud-close" ) {
+    C4::Serials::CloseSubscription( $subscriptionid );
+} elsif ( $op eq "cud-reopen" ) {
+    C4::Serials::ReopenSubscription( $subscriptionid );
+} elsif ( $op eq "cud-del" ) {
     if ($$subs{'cannotedit'}){
         carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
         print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -94,8 +93,7 @@ if ($op eq 'cud-del') {
         print $query->redirect("/cgi-bin/koha/serials/serials-home.pl");
         exit;
     }
-}
-elsif ( $op and $op eq "share" ) {
+} elsif ( $op eq "share" ) {
     my $mana_language = $query->param('mana_language');
     my $result = Koha::SharedContent::send_entity($mana_language, $loggedinuser, $subscriptionid, 'subscription');
     $template->param( mana_code => $result->{msg} );
