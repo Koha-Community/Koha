@@ -439,7 +439,7 @@ subtest 'get_availability' => sub {
 
 subtest 'add checkout' => sub {
 
-    plan tests => 10;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
     my $librarian = $builder->build_object(
@@ -465,8 +465,13 @@ subtest 'add checkout' => sub {
 
     my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 
-    my $item1    = $builder->build_sample_item;
-    my $item1_id = $item1->id;
+    my $item1         = $builder->build_sample_item;
+    my $item1_id      = $item1->id;
+    my $item1_barcode = $item1->barcode;
+
+    my $item2         = $builder->build_sample_item;
+    my $item2_id      = $item2->id;
+    my $item2_barcode = $item2->barcode;
 
     my %issuingimpossible = ();
     my %needsconfirmation = ();
@@ -490,6 +495,19 @@ subtest 'add checkout' => sub {
 
     $t->post_ok( "//$userid:$password@/api/v1/checkouts" => json => { item_id => $item1_id, patron_id => $patron_id } )
         ->status_is(201);
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts" => json => { external_id => $item1_barcode, patron_id => $patron_id } )
+        ->status_is(201);
+
+    # mismatch of item_id and barcode when both given
+    $t->post_ok(
+        "//$userid:$password@/api/v1/checkouts" => json => {
+            external_id => $item1_barcode,
+            item_id     => $item2_id,
+            patron_id   => $patron_id
+        }
+    )->status_is(409);
 
     # Needs confirm
     %needsconfirmation = ( confirm1 => 1, confirm2 => 'please' );

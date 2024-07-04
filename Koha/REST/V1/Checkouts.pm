@@ -189,6 +189,7 @@ sub add {
     my $item_id   = $body->{item_id};
     my $patron_id = $body->{patron_id};
     my $onsite    = $body->{onsite_checkout};
+    my $barcode   = $body->{external_id};
 
     if ( $c->stash('is_public')
         && !C4::Context->preference('OpacTrustedCheckout') )
@@ -203,7 +204,24 @@ sub add {
     }
 
     return try {
-        my $item = Koha::Items->find($item_id);
+
+        unless ( $item_id or $barcode ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error      => 'Missing or wrong parameters',
+                    error_code => 'MISSING_OR_WRONG_PARAMETERS',
+                }
+            );
+        }
+
+        my $item;
+        if ($item_id) {
+            $item = Koha::Items->find($item_id);
+        } else {
+            $item = Koha::Items->find( { barcode => $barcode } );
+        }
+
         unless ($item) {
             return $c->render(
                 status  => 409,
@@ -213,6 +231,21 @@ sub add {
                 }
             );
         }
+
+        # check that item matches when barcode and item_id were given
+        if (    $item_id
+            and $barcode
+            and ( $item->barcode ne $barcode or $item->id != $item_id ) )
+        {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Item id and external id belong to different items',
+                    error_code => 'ITEM_ID_NOT_MATCHING_EXTERNAL_ID',
+                }
+            );
+        }
+
 
         my $patron = Koha::Patrons->find($patron_id);
         unless ($patron) {
