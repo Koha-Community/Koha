@@ -25,6 +25,8 @@ use JSON qw( encode_json );
 
 use Koha::Database;
 use Koha::BackgroundJob::BatchDeleteItem;
+use Koha::Serial;
+use Koha::Serial::Items;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -34,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "process() tests" => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -102,6 +104,45 @@ subtest "process() tests" => sub {
     );
 
     is( $counter, 1, 'Counter untouched with RealTimeHoldsQueue disabled' );
+
+    $biblio = $builder->build_sample_biblio;
+    my $item_with_serial = $builder->build_sample_item( { biblionumber => $biblio->id } );
+    my $serial =
+        $builder->build_object( { class => 'Koha::Serials', value => { biblionumber => $biblio->biblionumber } } );
+    my $serial_item = $builder->build_object(
+        {
+            class => 'Koha::Serial::Items',
+            value => { itemnumber => $item_with_serial->itemnumber, serialid => $serial->serialid }
+        }
+    );
+
+    $job = Koha::BackgroundJob::BatchDeleteItem->new(
+        {
+            status         => 'new',
+            size           => 2,
+            borrowernumber => undef,
+            type           => 'batch_item_record_deletion',
+            data           => encode_json {
+                record_ids           => [ $item_with_serial->id ],
+                delete_biblios       => 1,
+                delete_serial_issues => 1,
+            }
+        }
+    );
+
+    $job->process(
+        {
+            record_ids           => [ $item_with_serial->id ],
+            delete_biblios       => 1,
+            delete_serial_issues => 1,
+        }
+    );
+
+    my $serial_check      = Koha::Serials->find( $serial->serialid );
+    my $serial_item_check = Koha::Serial::Items->find( $serial_item->itemnumber );
+
+    is( $serial_check,      undef, 'Serial deleted' );
+    is( $serial_item_check, undef, 'Serial item deleted' );
 
     $schema->storage->txn_rollback;
 };

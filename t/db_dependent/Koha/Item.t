@@ -1264,7 +1264,7 @@ subtest 'store check barcodes' => sub {
 };
 
 subtest 'deletion' => sub {
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -1452,6 +1452,56 @@ subtest 'deletion' => sub {
         my $extra_item = $builder->build_sample_item( { biblionumber => $item->biblionumber } );
 
         ok( $item->safe_to_delete );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'serial issues tests' => sub {
+        plan tests => 4;
+
+        t::lib::Mocks::mock_preference( 'IndependentBranches', 0 );
+
+        $schema->storage->txn_begin;
+
+        my $biblio           = $builder->build_sample_biblio;
+        my $item_with_serial = $builder->build_sample_item( { biblionumber => $biblio->id } );
+        my $serial =
+            $builder->build_object( { class => 'Koha::Serials', value => { biblionumber => $biblio->biblionumber } } );
+        my $serial_item = $builder->build_object(
+            {
+                class => 'Koha::Serial::Items',
+                value => { itemnumber => $item_with_serial->itemnumber, serialid => $serial->serialid }
+            }
+        );
+
+        # Check serial issue is not deleted unless argument passed
+        $item_with_serial->safe_delete( { delete_serial_issues => 0 } );
+
+        my $serial_check      = Koha::Serials->find( $serial->serialid );
+        my $serial_item_check = Koha::Serial::Items->find( $serial_item->itemnumber );
+
+        is( $serial_check->serialid, $serial->serialid, 'Serial not deleted as the argument was not passed' );
+        is( $serial_item_check,      undef,             'Serial item deleted by cascade' );
+
+        $biblio           = $builder->build_sample_biblio;
+        $item_with_serial = $builder->build_sample_item( { biblionumber => $biblio->id } );
+        $serial =
+            $builder->build_object( { class => 'Koha::Serials', value => { biblionumber => $biblio->biblionumber } } );
+        $serial_item = $builder->build_object(
+            {
+                class => 'Koha::Serial::Items',
+                value => { itemnumber => $item_with_serial->itemnumber, serialid => $serial->serialid }
+            }
+        );
+
+        # Check serial issue is deleted when argument passed
+        $item_with_serial->safe_delete( { delete_serial_issues => 1 } );
+
+        $serial_check      = Koha::Serials->find( $serial->serialid );
+        $serial_item_check = Koha::Serial::Items->find( $serial_item->itemnumber );
+
+        is( $serial_check,      undef, 'Serial deleted' );
+        is( $serial_item_check, undef, 'Serial item deleted by cascade' );
 
         $schema->storage->txn_rollback;
     };
