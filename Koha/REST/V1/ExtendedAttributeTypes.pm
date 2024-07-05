@@ -53,9 +53,13 @@ sub list {
 
     return try {
         my $additional_fields_set = Koha::AdditionalFields->new;
-        if ($resource_type) {
+        if ( $resource_type && $resource_to_table->{$resource_type} ) {
             $additional_fields_set =
                 $additional_fields_set->search( { tablename => $resource_to_table->{$resource_type} } );
+        } elsif ($resource_type) {
+            $additional_fields_set = $additional_fields_set->search( { tablename => $resource_type } );
+        } else {
+            $additional_fields_set = $additional_fields_set->search();
         }
 
         return $c->render(
