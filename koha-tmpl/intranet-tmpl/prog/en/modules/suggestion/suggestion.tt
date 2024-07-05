@@ -591,21 +591,7 @@
                             </select>
                         </li>
                         <li>
-                            <label for="budgetid">Fund:</label>
-                            <select name="budgetid" id="budgetid">
-                                <option value="">Any</option>
-                                [% FOREACH budget IN sugg_budgets %]
-                                    [% IF ( budget.selected ) %]
-                                        <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
-                                    [% ELSIF ( budget.b_active ) %]
-                                        <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                                    [% ELSE %]
-                                        <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
-                                    [% END %]
-                                [% END %]
-                            </select>
-                            <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                            <input type="checkbox" class="showallfunds" />
+                            [% PROCESS funds_dropdown %]
                         </li>
                         <li>
                             <label for="quantity">Copies:</label>
@@ -1219,25 +1205,7 @@
                                     <fieldset class="brief acquisition_information">
                                         <ol>
                                             <li>
-                                                <label for="budgetid">Fund:</label>
-                                                <select name="budgetid" id="budgetid">
-                                                    [% IF budgetid == '__NONE__' %]
-                                                        <option value="__NONE__" selected="selected">None</option>
-                                                    [% ELSE %]
-                                                        <option value="__NONE__">None</option>
-                                                    [% END %]
-                                                    [% FOREACH budget IN sugg_budgets %]
-                                                        [% IF ( budget.selected ) %]
-                                                            <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
-                                                        [% ELSIF ( budget.b_active ) %]
-                                                            <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                                                        [% ELSE %]
-                                                            <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
-                                                        [% END %]
-                                                    [% END %]
-                                                </select>
-                                                <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                                                <input type="checkbox" class="showallfunds" />
+                                                [% PROCESS funds_dropdown %]
                                             </li>
                                         </ol>
                                     </fieldset> <!-- /#acquisition_information -->
@@ -1270,6 +1238,33 @@
         </div> <!-- /.row -->
 
     [% END # /IF op == "show" %]
+
+[% BLOCK funds_dropdown %]
+    <label for="budgetid">Fund:</label>
+    <select name="budgetid" id="budgetid">
+        [% IF op == 'save' %]
+            <option value="">Any</option>
+        [% ELSE %]
+            [% IF budgetid == '__NONE__' %]
+                <option value="__NONE__" selected="selected">None</option>
+            [% ELSE %]
+                <option value="__NONE__">None</option>
+            [% END %]
+        [% END %]
+        [% FOREACH budget IN sugg_budgets %]
+            [% IF ( budget.selected ) %]
+                <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
+            [% ELSIF ( budget.b_active ) %]
+                <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
+            [% ELSE %]
+                <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
+            [% END %]
+        [% END %]
+    </select>
+    <!-- this is needed -->
+    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+    <input type="checkbox" class="showallfunds" />
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
