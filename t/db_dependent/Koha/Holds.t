@@ -29,6 +29,7 @@ use Koha::Biblio::ItemGroups;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
+use Koha::Old::Holds;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

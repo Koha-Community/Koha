@@ -11,6 +11,7 @@ use C4::Reserves qw( CancelExpiredReserves );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Holds;
+use Koha::Old::Holds;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
