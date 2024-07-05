@@ -54,14 +54,14 @@
         [% END %]
 
         [% IF not cannotedit or CAN_user_serials_receive_serials %]
-            [% IF CAN_user_serials_renew_subscription and not closed %]
+            [% IF CAN_user_serials_renew_subscription and not subscription.closed %]
                 <div class="btn-group"><a id="renew" class="btn btn-default" href="#"><i class="fa-solid fa-rotate"></i> Renew</a></div>
             [% END %]
-            [% IF CAN_user_serials_receive_serials and not closed %]
+            [% IF CAN_user_serials_receive_serials and not subscription.closed %]
                 <div class="btn-group"><a id="receive" class="btn btn-default" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscriptionid | html %]&amp;serstatus=1,3"><i class="fa fa-inbox"></i> Receive</a></div>
             [% END %]
             [% UNLESS cannotedit %]
-                [% IF closed %]
+                [% IF subscription.closed %]
                     <div class="btn-group">
                         <form action="subscription-detail.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
