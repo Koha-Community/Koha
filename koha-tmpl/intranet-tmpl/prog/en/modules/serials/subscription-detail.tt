@@ -44,10 +44,10 @@
                 [% INCLUDE 'serials-toolbar.inc' %]
                 [% INCLUDE 'mana/mana-comment-status.inc' %]
 
-                <h1>Subscription for [% INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 0 %] [% IF closed %](closed)[% END %]</h1>
+                <h1>Subscription for [% INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 0 %] [% IF subscription.closed %](closed)[% END %]</h1>
 
                 [% IF ( abouttoexpire ) %]
-                    [% UNLESS closed %]
+                    [% UNLESS subscription.closed %]
                         <div class="dialog message">Subscription will expire [% enddate | html %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
                     [% END %]
                 [% END %]
