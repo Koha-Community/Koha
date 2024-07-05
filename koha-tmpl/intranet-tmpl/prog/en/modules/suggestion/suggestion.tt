@@ -100,11 +100,9 @@
                         <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit_form&amp;suggestionid=[% suggestionid | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                         <form class="delete_form" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl">
                             [% INCLUDE 'csrf-token.inc' %]
-                            <fieldset class="action">
-                                <input type="hidden" name="op" value="cud-delete" />
-                                <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
-                                <button type="submit" class="btn btn-primary">Delete</button>
-                            </fieldset>
+                            <input type="hidden" name="op" value="cud-delete" />
+                            <input type="hidden" name="suggestionid" value="[% suggestionid | html %]" />
+                            <button type="submit" class="btn btn-default deletesuggestion"><i class="fa fa-trash-can"></i> Delete</button>
                         </form>
                     </div>
 
