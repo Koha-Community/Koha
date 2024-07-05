@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "18317",
@@ -14,6 +15,6 @@ return {
         }
         );
 
-        say $out "Added new system preference 'AllowItemsOnLoanCheckoutSIP'";
+        say_success( $out, "Added new system preference 'AllowItemsOnLoanCheckoutSIP'" );
     },
 };
