@@ -27,7 +27,11 @@ var dataTablesDefaults = {
             "copySuccess": {
                 _: __('Copied %d rows to clipboard'),
                 1: __('Copied one row to clipboard'),
-            }
+            },
+            "print": __("Print"),
+            "copy": __("Copy"),
+            "csv": __("CSV"),
+            "excel": __("Excel")
         }
     },
     "dom": '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
@@ -682,7 +686,6 @@ function _dt_buttons(params){
     var export_buttons = [
         {
             extend: 'excelHtml5',
-            text: __("Excel"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
@@ -690,7 +693,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'csvHtml5',
-            text: __("CSV"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
@@ -698,7 +700,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'copyHtml5',
-            text: __("Copy"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
@@ -706,7 +707,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'print',
-            text: __("Print"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
