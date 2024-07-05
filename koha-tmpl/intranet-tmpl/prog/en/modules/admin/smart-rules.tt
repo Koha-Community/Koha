@@ -1046,7 +1046,7 @@
                                 [% IF ( article_request_fee.defined && article_request_fee != '' ) %]
                                 <tr>
                                     <td>
-                                        [% IF c == '*' %]
+                                        [% IF c == undef %]
                                             <em>All</em>
                                         [% ELSE %]
                                             [% Categories.GetName(c) | html %]
