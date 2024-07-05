@@ -178,6 +178,8 @@ if ( $tab eq 'about' ) {
         $where_is_memcached_config = 'config_only';
     }
 
+    message_broker_check($template);
+
     $template->param(
         effective_caching_method => $effective_caching_method,
         memcached_servers   => $memcached_servers,
@@ -672,16 +674,7 @@ if($tab eq 'sysinfo') {
         $template->param( warnFastCataloging => $no_FA_framework );
     }
 
-    {
-        # BackgroundJob - test connection to message broker
-        eval {
-            Koha::BackgroundJob->connect;
-        };
-        if ( $@ ) {
-            warn $@;
-            $template->param( warnConnectBroker => $@ );
-        }
-    }
+    message_broker_check($template);
 
     #BZ 28267: Warn administrators if there are database rows with a format other than 'DYNAMIC'
     {
@@ -905,5 +898,17 @@ if ( $tab eq 'history' ) {
         $template->param( timeline_read_error => 1 );
     }
 }
+
+sub message_broker_check {
+    my $template = shift;
+    {
+        # BackgroundJob - test connection to message broker
+        eval { Koha::BackgroundJob->connect; };
+        if ($@) {
+            warn $@;
+            $template->param( warnConnectBroker => $@ );
+        }
+    }
+  }
 
 output_html_with_http_headers $query, $cookie, $template->output;
