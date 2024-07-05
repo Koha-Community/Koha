@@ -62,8 +62,6 @@ $subs->{enddate} ||= GetExpirationDate($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
-my $subscription = Koha::Subscriptions->find( $subscriptionid );
-
 if ( $op and $op eq "close" ) {
     C4::Serials::CloseSubscription( $subscriptionid );
 } elsif ( $op and $op eq "reopen" ) {
@@ -123,12 +121,13 @@ my @irregular_issues = split /;/, $subs->{irregularity};
 my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($subs->{periodicity});
 my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subs->{numberpattern});
 
-my $subscription_object = Koha::Subscriptions->find( $subscriptionid );
+my $subscription = Koha::Subscriptions->find( $subscriptionid );
+
 $template->param(
     available_additional_fields => Koha::AdditionalFields->search( { tablename => 'subscription' } ),
     additional_field_values => {
         map { $_->field->name => $_->value }
-          $subscription_object->additional_field_values->as_list
+          $subscription->additional_field_values->as_list
     },
 );
 
