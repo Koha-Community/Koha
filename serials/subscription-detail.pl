@@ -62,8 +62,6 @@ $subs->{enddate} ||= GetExpirationDate($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 
-my $subscription = Koha::Subscriptions->find( $subscriptionid );
-
 if ( $op and $op eq "close" ) {
     C4::Serials::CloseSubscription( $subscriptionid );
 } elsif ( $op and $op eq "reopen" ) {
