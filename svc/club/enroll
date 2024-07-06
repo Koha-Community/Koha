@@ -64,7 +64,7 @@ if ($enrollent_id) {
         }
     }
 } elsif ($club) {
-    my $already_enrolled = Koha::Club::Entrollments->search(
+    my $already_enrolled = Koha::Club::Enrollments->search(
         {
             club_id        => $club->id(),
             borrowernumber => $borrowernumber,
