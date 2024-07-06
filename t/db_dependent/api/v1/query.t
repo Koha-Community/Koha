@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -145,6 +145,33 @@ subtest 'x-koha-embed tests' => sub {
     )->status_is(400)->tx->res->json;
 
     is($res, 'Embedding objects is not allowed on this endpoint.', 'Correct error message is returned');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'SQL injection in "query" handling' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }     # superlibrarian
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron_id = $builder->build_object( { class => 'Koha::Patrons' } )->id;
+
+    my $q =
+        "[{\"-and\":[[{\"me.patron_id\":{\"like(IF(ASCII(SUBSTRING((SELECT version()),1,1))=ASCII('1'),SLEEP(1/100000),0))or\":\"\%a\%\"}}]]}]";
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons?q=$q")
+        ->status_is( 400, 'Attempt to inject SQL through operators is rejected' );
 
     $schema->storage->txn_rollback;
 };
