@@ -1,3 +1,4 @@
+[% PROCESS 'i18n.inc' %]
 [% BLOCK options_for_libraries %]
     [% FOREACH l IN libraries %]
         [% IF l.selected %]
