@@ -700,7 +700,7 @@ sub _validate_query {
 
         # Top-level OR combination or nested AND combination
         for my $element (@$query) {
-            if ( ref $element eq 'ARRAY' && $element->[0] eq '-and' ) {
+            if ( ref $element eq 'ARRAY' && scalar @{$element} && $element->[0] eq '-and' ) {
                 _validate_query( $element->[1] );
             } else {
                 _validate_query($element);
