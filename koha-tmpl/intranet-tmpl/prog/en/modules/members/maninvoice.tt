@@ -67,7 +67,7 @@
                     <div role="tabpanel" class="tab-pane active">
                 [% IF error == 'itemnumber' %]
                     <div id="error_message" class="alert alert-warning">
-                        Error: Invalid barcode entered, please try again
+                        Error: Invalid item barcode entered, please try again
                     </div>
                 [% ELSIF error %]
                     <div id="error_message" class="alert alert-warning">
@@ -93,7 +93,7 @@
                                     [% END %]
                                 </select>
                             </li>
-                            <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode | html %]" /></li>
+                            <li><label for="barcode">Item barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode | html %]" /></li>
                             <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc | html %]" /></li>
                             <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note | html %]" /></li>
                             <li class="additional_field"><label for="cost">Cost: </label><input type="text" inputmode="decimal" pattern="^\d+(\.\d{2})?$" name="cost" id="cost" min="0" value="[% amount | $Price on_editing => 1 %]" /></li>
