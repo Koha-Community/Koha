@@ -63,12 +63,7 @@
                                                 <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa fa-plus"></i> Manage items</a></li>
                                                 <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-right-left"></i> Transfer</a></li>
                                                 <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?op=edit&amp;colId=[% collectionsLoo.colId | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                                                <li><form id="delete_rc" action="/cgi-bin/koha/rotating_collections/editCollections.pl" method="post">
-                                                    [% INCLUDE 'csrf-token.inc' %]
-                                                    <input type="hidden" name="op" value="cud-delete">
-                                                    <input type="hidden" name="colId" value="[% collectionsLoo.colId | html %]">
-                                                    <a class="confirmdelete"><i class="fa fa-trash-can"></i> Delete</a>
-                                                    </form>
+                                                <li><a class="confirmdelete submit-form-link" data-action="/cgi-bin/koha/rotating_collections/editCollections.pl" data-method="post" data-op="cud-delete" data-col-id="[% collectionsLoo.colId | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -97,6 +92,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("js/rotating-collections.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
