@@ -1,7 +1,7 @@
 ---
 /circulation_rules:
   get:
-    x-mojo-to: CirculationRules#list_effective_rules
+    x-mojo-to: CirculationRules#list_rules
     operationId: listCirculationRules
     tags:
       - circulation_rules
@@ -9,6 +9,11 @@
     produces:
       - application/json
     parameters:
+      - name: effective
+        in: query
+        description: Boolean indicating whether to return effective rules or all rules. Defaults to true.
+        required: false
+        type: boolean
       - name: item_type_id
         in: query
         description: The item type identifier
@@ -36,9 +41,9 @@
       "200":
         description: A list of rules for this item type, library and patron category combination
         schema:
-          type: object
-          additionalProperties:
-            type: [ 'string', 'integer' ]
+          type: array
+          items:
+            type: object
       "400":
         description: Bad request
         schema:

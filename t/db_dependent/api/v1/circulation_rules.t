@@ -32,8 +32,7 @@ my $builder = t::lib::TestBuilder->new;
 my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-subtest 'list_effective_rules() tests' => sub {
-
+subtest 'list_rules() tests' => sub {
     plan tests => 32;
 
     $schema->storage->txn_begin;
@@ -65,7 +64,7 @@ subtest 'list_effective_rules() tests' => sub {
 
     ## Authorized user tests
     # No circulation_rules, so empty hash should be returned
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is( {} );
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is( '/0' => {} );
 
     # One rule created, should get returned
     ok(
@@ -82,7 +81,7 @@ subtest 'list_effective_rules() tests' => sub {
     );
 
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
-        ->json_is( '' => { 'fine' => 2 }, "Our single rule is returned" );
+        ->json_is( '/0' => { 'fine' => 2 }, "Our single rule is returned" );
 
     # Two circulation_rules created, they should both be returned
     ok(
@@ -99,7 +98,7 @@ subtest 'list_effective_rules() tests' => sub {
     );
 
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is(
-        '' => {
+        '/0' => {
             fine     => 2,
             finedays => 5,
         },
@@ -121,7 +120,7 @@ subtest 'list_effective_rules() tests' => sub {
     );
 
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")->status_is(200)->json_is(
-        '' => {
+        '/0' => {
             fine     => 4,
             finedays => 5,
         },
@@ -129,7 +128,7 @@ subtest 'list_effective_rules() tests' => sub {
     );
 
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is(
-        '' => {
+        '/0' => {
             fine     => 2,
             finedays => 5,
         },

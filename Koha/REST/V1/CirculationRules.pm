@@ -40,20 +40,21 @@ sub get_kinds {
     );
 }
 
-=head3 list_effective_rules
+=head3 list_rules
 
-List all effective rules for the requested patron/item/branch combination
+Get effective rules for the requested patron/item/branch combination
 
 =cut
 
-sub list_effective_rules {
+sub list_rules {
     my $c = shift->openapi->valid_input or return;
 
     return try {
+        my $effective       = $c->param('effective') // 1;
         my $item_type       = $c->param('item_type_id');
         my $branchcode      = $c->param('library_id');
         my $patron_category = $c->param('patron_category_id');
-        my $rules           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+        my $kinds           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
 
         if ($item_type) {
             my $type = Koha::ItemTypes->find($item_type);
@@ -94,18 +95,40 @@ sub list_effective_rules {
             ) unless $category;
         }
 
-        my $effective_rules = Koha::CirculationRules->get_effective_rules(
-            {
-                categorycode => $patron_category,
-                itemtype     => $item_type,
-                branchcode   => $branchcode,
-                rules        => $rules
+        my $rules;
+        if ($effective) {
+
+            my $effective_rules = Koha::CirculationRules->get_effective_rules(
+                {
+                    categorycode => $patron_category,
+                    itemtype     => $item_type,
+                    branchcode   => $branchcode,
+                    rules        => $kinds
+                }
+            ) // {};
+            push @{$rules}, $effective_rules;
+        } else {
+            my $select = [ 'branchcode', 'categorycode', 'itemtype' ];
+            my $as     = [ 'branchcode', 'categorycode', 'itemtype' ];
+            for my $kind ( @{$kinds} ) {
+                push @{$select}, { max => \[ "CASE WHEN rule_name = ? THEN rule_value END", $kind ], -as => $kind };
+                push @{$as}, $kind;
             }
-        );
+
+            $rules = Koha::CirculationRules->search(
+                {},
+                {
+                    select   => $select,
+                    as       => $as,
+                    group_by => [ 'branchcode', 'categorycode', 'itemtype' ]
+                }
+            )->unblessed;
+
+        }
 
         return $c->render(
             status  => 200,
-            openapi => $effective_rules ? $effective_rules : {}
+            openapi => $rules
         );
     } catch {
         $c->unhandled_exception($_);
