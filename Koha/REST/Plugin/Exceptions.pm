@@ -59,6 +59,16 @@ sub register {
             my $path   = $req->url->to_abs->path;
             my $type = "";
 
+            if ( blessed $exception && ref($exception) eq 'Koha::Exceptions::REST::Query::InvalidOperator' ) {
+                return $c->render(
+                    status => 500,
+                    json   => {
+                        error      => printf( "Invalid operator in query: %s", $exception->operator ),
+                        error_code => 'invalid_query',
+                    }
+                );
+            }
+
             if ( blessed $exception ) {
                 $type = "(" . ref($exception) . ")";
             }
