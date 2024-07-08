@@ -73,6 +73,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/order"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -190,6 +197,10 @@
         description: An order
         schema:
           $ref: "../swagger.yaml#/definitions/order"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -237,6 +248,10 @@
         description: An order
         schema:
           $ref: "../swagger.yaml#/definitions/order"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -276,6 +291,10 @@
     responses:
       "204":
         description: Order deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

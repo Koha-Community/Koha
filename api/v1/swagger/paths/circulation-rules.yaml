@@ -15,6 +15,10 @@
           type: object
           additionalProperties:
             $ref: "../swagger.yaml#/definitions/circ-rule-kind"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:

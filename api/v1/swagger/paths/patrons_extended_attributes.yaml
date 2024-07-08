@@ -25,6 +25,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron_extended_attribute"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -73,7 +80,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/patron_extended_attribute"
       "400":
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -132,7 +139,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/patron_extended_attribute"
       "400":
-        description: Bad parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -199,7 +206,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/patron_extended_attribute"
       "400":
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -250,6 +257,10 @@
     responses:
       "204":
         description: Extended patron attribute deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

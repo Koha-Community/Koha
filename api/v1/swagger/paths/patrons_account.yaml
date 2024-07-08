@@ -15,6 +15,10 @@
         description: Patron's account balance
         schema:
           $ref: "../swagger.yaml#/definitions/patron_balance"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -64,6 +68,10 @@
         description: Credit added
         schema:
           $ref: "../swagger.yaml#/definitions/account_line"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
