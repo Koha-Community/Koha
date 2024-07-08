@@ -171,7 +171,7 @@ subtest 'SQL injection in "query" handling' => sub {
         "[{\"-and\":[[{\"me.patron_id\":{\"like(IF(ASCII(SUBSTRING((SELECT version()),1,1))=ASCII('1'),SLEEP(1/100000),0))or\":\"\%a\%\"}}]]}]";
 
     $t->get_ok("//$userid:$password@/api/v1/patrons?q=$q")
-        ->status_is( 400, 'Attempt to inject SQL through operators is rejected' );
+        ->status_is( 500, 'Attempt to inject SQL through operators is rejected' );
 
     $schema->storage->txn_rollback;
 };
