@@ -18,6 +18,7 @@ package Koha::Recalls;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use DateTime;
 
 use Koha::Database;
 use Koha::Recall;
@@ -140,16 +141,19 @@ sub add_recall {
             branchcode => $branchcode,
             rule_name => 'recall_due_date_interval',
         });
-        my $due_interval = defined $recall_due_date_interval ? $recall_due_date_interval->rule_value : 5;
-        my $timestamp = dt_from_string( $recall->timestamp );
-        my $checkout_timestamp = dt_from_string( $checkout->date_due );
-        my $due_date = $timestamp->set(
+        my $due_interval = 5;
+        $due_interval = $recall_due_date_interval->rule_value
+            if defined $recall_due_date_interval && $recall_due_date_interval->rule_value;
+        my $timestamp         = dt_from_string( $recall->timestamp );
+        my $checkout_due_date = dt_from_string( $checkout->date_due );
+        my $recall_due_date   = $timestamp->set(
             {
-                hour   => $checkout_timestamp->hour, minute => $checkout_timestamp->minute,
-                second => $checkout_timestamp->second
+                hour   => $checkout_due_date->hour, minute => $checkout_due_date->minute,
+                second => $checkout_due_date->second
             }
         )->add( days => $due_interval );
-        $checkout->update( { date_due => $due_date } );
+        $checkout->update( { date_due => $recall_due_date } )
+            if DateTime->compare( $recall_due_date, $checkout_due_date ) == -1;
 
         # get itemnumber of most relevant checkout if a biblio-level recall
         unless ( $recall->item_level ) { $itemnumber = $checkout->itemnumber; }
@@ -200,7 +204,7 @@ sub add_recall {
         # add action log
         C4::Log::logaction( 'RECALLS', 'CREATE', $recall->id, "Recall requested by borrower #" . $recall->patron_id, $interface ) if ( C4::Context->preference('RecallsLog') );
 
-        return ( $recall, $due_interval, $due_date );
+        return ( $recall, $due_interval, $recall_due_date );
     }
 
     # unable to add recall
