@@ -93,21 +93,23 @@ subtest 'anonymize() tests' => sub {
         {
             class => 'Koha::Checkouts::Renewals',
             value => {
-                checkout_id => $checkout_4->id,
+                checkout_id => undef,
                 interface   => 'opac',
                 renewer_id  => $patron->id
             }
         }
     );
+    $renewal_1->checkout_id( $checkout_4->id )->store();
     my $renewal_2 = $builder->build_object(
         {
             class => 'Koha::Checkouts::Renewals',
             value => {
-                checkout_id => $checkout_4->id,
+                checkout_id => undef,
                 interface   => 'intranet'
             }
         }
     );
+    $renewal_2->checkout_id( $checkout_4->id )->store();
 
     is( $patron->old_checkouts->count, 4, 'Patron has 4 completed checkouts' );
     is( $checkout_4->renewals->count,  2, 'Checkout 4 has 2 renewals' );
