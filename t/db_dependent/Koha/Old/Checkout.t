@@ -54,21 +54,23 @@ subtest 'anonymize() tests' => sub {
         {
             class => 'Koha::Checkouts::Renewals',
             value => {
-                checkout_id => $checkout_2->id,
+                checkout_id => undef,
                 interface   => 'opac',
                 renewer_id  => $patron->id
             }
         }
     );
+    $renewal_1->checkout_id( $checkout_2->id )->store();
     my $renewal_2 = $builder->build_object(
         {
             class => 'Koha::Checkouts::Renewals',
             value => {
-                checkout_id => $checkout_2->id,
+                checkout_id => undef,
                 interface   => 'intranet'
             }
         }
     );
+    $renewal_2->checkout_id( $checkout_2->id )->store();
 
     is( $patron->old_checkouts->count, 2, 'Patron has 2 completed checkouts' );
 
