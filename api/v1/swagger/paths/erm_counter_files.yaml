@@ -19,6 +19,10 @@
         description: A counter file
         schema:
           type: file
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
@@ -108,7 +112,10 @@
             $ref: "../swagger.yaml#/definitions/erm_counter_file"
           type: array
       400:
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -143,7 +150,7 @@
       204:
         description: counter_file deleted
       400:
-        description: counter_file deletion failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:

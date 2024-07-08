@@ -372,6 +372,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -435,7 +442,7 @@
             $ref: "../swagger.yaml#/definitions/patron"
       "400":
         description: |
-          Bad parameter. Possible `error_code` attribute values:
+          Bad request. Possible `error_code` attribute values:
 
             * `invalid_attribute_type`
             * `attribute_not_unique`
@@ -500,6 +507,10 @@
         description: A patron
         schema:
           $ref: "../swagger.yaml#/definitions/patron"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -563,7 +574,7 @@
             $ref: "../swagger.yaml#/definitions/patron"
       "400":
         description: |
-          Bad parameter. Possible `error_code` attribute values:
+          Bad request. Possible `error_code` attribute values:
 
             * `invalid_attribute_type`
             * `attribute_not_unique`
@@ -611,7 +622,7 @@
       "204":
         description: Patron deleted
       "400":
-        description: Patron deletion failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":

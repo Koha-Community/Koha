@@ -36,7 +36,7 @@
       "200":
         description: Match updated
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -87,6 +87,10 @@
     responses:
       "204":
         description: Matches unchosen
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
