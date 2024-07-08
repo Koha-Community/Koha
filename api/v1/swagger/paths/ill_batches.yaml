@@ -35,6 +35,13 @@
         description: A list of ILL batches
         schema:
           $ref: "../swagger.yaml#/definitions/ill_batches"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -170,6 +177,13 @@
         description: An ILL batch
         schema:
           $ref: "../swagger.yaml#/definitions/ill_batch"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -264,6 +278,10 @@
         description: ILL batch deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

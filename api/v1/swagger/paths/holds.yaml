@@ -112,6 +112,13 @@
         description: A list of holds
         schema:
           $ref: "../swagger.yaml#/definitions/holds"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -224,7 +231,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/hold"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -291,7 +298,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/hold"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -359,7 +366,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/hold"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -413,6 +420,10 @@
         description: Hold request recorded
       "204":
         description: Hold deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -461,6 +472,10 @@
         description: The new priority value for the hold
         schema:
           type: integer
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -520,7 +535,7 @@
       "201":
         description: Hold suspended
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -565,7 +580,7 @@
       "204":
         description: Hold resumed
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -630,7 +645,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/library"
       "400":
-        description: Missing or wrong parameters
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -693,7 +711,7 @@
               description: Internal identifier for the pickup library
           additionalProperties: false
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":

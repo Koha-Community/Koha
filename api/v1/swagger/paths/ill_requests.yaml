@@ -41,6 +41,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/ill_request"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:

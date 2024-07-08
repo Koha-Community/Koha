@@ -33,6 +33,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/fund"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -93,6 +100,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -145,6 +159,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:

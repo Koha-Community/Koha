@@ -23,6 +23,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron_category"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

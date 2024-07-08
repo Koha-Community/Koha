@@ -24,6 +24,10 @@
     responses:
       '200':
         description: The merge result as a biblio record
+      '400':
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '404':
         description: Biblio not found
         schema:

@@ -62,8 +62,11 @@
           items:
             $ref: "../swagger.yaml#/definitions/preservation_train"
           type: array
-      400:
-        description: Bad request
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -107,8 +110,8 @@
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/preservation_train"
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -178,6 +181,10 @@
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/preservation_train"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
@@ -228,8 +235,8 @@
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/preservation_train"
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -275,8 +282,8 @@
     responses:
       204:
         description: Train deleted
-      400:
-        description: Train deletion failed
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -333,8 +340,8 @@
         description: A successfully added item
         schema:
           $ref: "../swagger.yaml#/definitions/preservation_train_item"
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -399,8 +406,8 @@
           type: array
           items:
             type: object
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -472,8 +479,8 @@
         description: A successfully updated item
         schema:
           $ref: "../swagger.yaml#/definitions/preservation_train_item"
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -521,7 +528,7 @@
       "204":
         description: Item removed
       "400":
-        description: Item removal failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -578,6 +585,10 @@
         description: An item in train
         schema:
           $ref: "../swagger.yaml#/definitions/preservation_train_item"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
@@ -635,8 +646,8 @@
         description: A successfully copied item
         schema:
           $ref: "../swagger.yaml#/definitions/preservation_train_item"
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
