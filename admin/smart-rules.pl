@@ -555,7 +555,7 @@ elsif ( $op eq "cud-add-open-article-requests-limit" ) {
 }
 elsif ( $op eq "cud-set-article-request-fee" ) {
 
-    my $category = $input->param('categorycode');
+    my $category = $input->param('article_request_fee_category');
     my $fee      = strip_non_numeric( scalar $input->param('article_request_fee') );
 
     Koha::Exception->throw("No value passed for article request fee")
