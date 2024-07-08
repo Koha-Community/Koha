@@ -2063,7 +2063,7 @@ sub checkpw {
             @return = ();
         } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
-            if ( $patron->borrowernumber eq $anonymous_patron ) {
+            if ( defined($anonymous_patron) && ($patron->borrowernumber eq $anonymous_patron) ) {
                 @return = ( -3, $patron );
             } elsif ( $patron->password_expired ) {
                 @return = ( -2, $patron );
