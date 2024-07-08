@@ -67,8 +67,11 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_license"
           type: array
-      400:
-        description: Bad request
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -112,7 +115,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_license"
       400:
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -178,6 +181,10 @@
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/erm_license"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: authentication required
         schema:
@@ -239,7 +246,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_license"
       400:
-        description: bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -285,7 +292,7 @@
       204:
         description: license deleted
       400:
-        description: license deletion failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:

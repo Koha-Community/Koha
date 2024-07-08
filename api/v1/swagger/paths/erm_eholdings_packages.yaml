@@ -81,8 +81,11 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
           type: array
-      400:
-        description: Bad request
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -131,7 +134,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
       400:
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -198,6 +201,10 @@
         schema:
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:
@@ -264,7 +271,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_eholdings_package"
       400:
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -311,7 +318,7 @@
       204:
         description: package deleted
       400:
-        description: package deletion failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -379,6 +386,10 @@
               description: Add or remove this package from remote holdings
               type: boolean
           additionalProperties: false
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       401:
         description: Authentication required
         schema:

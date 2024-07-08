@@ -44,6 +44,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/quote"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -82,6 +89,10 @@
         description: Quote added
         schema:
           $ref: "../swagger.yaml#/definitions/quote"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -120,6 +131,10 @@
         description: A Quote
         schema:
           $ref: "../swagger.yaml#/definitions/quote"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Quote not found
         schema:
@@ -159,6 +174,10 @@
         description: A quote
         schema:
           $ref: "../swagger.yaml#/definitions/quote"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -198,6 +217,10 @@
     responses:
       "204":
         description: Quote deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

@@ -25,6 +25,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/suggestion"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -119,6 +126,10 @@
         description: A suggestion
         schema:
           $ref: "../swagger.yaml#/definitions/suggestion"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -205,6 +216,10 @@
         description: Suggestion deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -266,6 +281,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/patron"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:

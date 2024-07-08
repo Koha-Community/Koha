@@ -29,6 +29,13 @@
         description: A list of import batch profiles
         schema:
           $ref: "../swagger.yaml#/definitions/import_batch_profiles"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -129,7 +136,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/import_batch_profile"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -238,7 +245,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/import_batch_profile"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -280,6 +287,10 @@
     responses:
       "204":
         description: Profile deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
