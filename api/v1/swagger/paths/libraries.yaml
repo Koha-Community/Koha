@@ -116,6 +116,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/library"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -209,6 +216,10 @@
         description: A library
         schema:
           $ref: "../swagger.yaml#/definitions/library"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Library not found
         schema:
@@ -284,6 +295,10 @@
         description: Library deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -335,6 +350,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/desk"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Resource not found
         schema:
@@ -378,6 +400,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/cash_register"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       404:
         description: Resource not found
         schema:
@@ -420,6 +449,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/library"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:
@@ -445,6 +481,10 @@
     responses:
       "200":
         description: A library
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

@@ -15,6 +15,10 @@
         description: Patron's account balance
         schema:
           $ref: "../swagger.yaml#/definitions/patron_balance"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -66,6 +70,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/credit"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -103,6 +114,10 @@
         description: Credit added
         schema:
           $ref: "../swagger.yaml#/definitions/account_line"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -153,6 +168,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/debit"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -195,7 +217,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/debit"
       "400":
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":

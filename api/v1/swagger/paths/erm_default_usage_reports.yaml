@@ -37,8 +37,11 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_default_usage_report"
           type: array
-      400:
-        description: Bad request
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       403:
@@ -82,7 +85,7 @@
           items:
             $ref: "../swagger.yaml#/definitions/erm_default_usage_report"
       400:
-        description: Bad parameter
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -132,8 +135,8 @@
     responses:
       204:
         description: default_usage_report deleted
-      400:
-        description: default_usage_report deletion failed
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:

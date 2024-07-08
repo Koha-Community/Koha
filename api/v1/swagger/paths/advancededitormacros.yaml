@@ -43,6 +43,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -81,6 +88,10 @@
         description: Macro added
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -121,6 +132,10 @@
         description: Macro added
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -158,6 +173,10 @@
         description: A macro
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -198,6 +217,10 @@
         description: An advanced editor macro
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -236,6 +259,10 @@
         description: Advanced editor macro deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -275,6 +302,10 @@
         description: A macro
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -315,6 +346,10 @@
         description: An advanced editor macro
         schema:
           $ref: "../swagger.yaml#/definitions/advancededitormacro"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -355,6 +390,10 @@
         description: Advanced editor macro deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

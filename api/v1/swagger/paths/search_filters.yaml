@@ -23,6 +23,13 @@
           type: array
           items:
             $ref: "../swagger.yaml#/definitions/search_filter"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '403':
         description: Access forbidden
         schema:
@@ -58,6 +65,10 @@
         description: Search filter added
         schema:
           $ref: "../swagger.yaml#/definitions/search_filter"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '401':
         description: Authentication required
         schema:
@@ -97,6 +108,10 @@
         description: A search filter
         schema:
           $ref: "../swagger.yaml#/definitions/search_filter"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '403':
         description: Access forbidden
         schema:
@@ -137,6 +152,10 @@
         description: An search_filter
         schema:
           $ref: "../swagger.yaml#/definitions/search_filter"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '401':
         description: Authentication required
         schema:
@@ -175,6 +194,10 @@
         description: Searc filter deleted
         schema:
           type: string
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       '401':
         description: Authentication required
         schema:

@@ -22,7 +22,7 @@
               type: integer
           additionalProperties: false
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
@@ -65,7 +65,7 @@
               type: string
           additionalProperties: false
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
@@ -111,7 +111,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "403":
@@ -163,9 +163,12 @@
           items:
             $ref: ../swagger.yaml#/definitions/auth_provider
       "400":
-        description: Bad Request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
-          $ref: ../swagger.yaml#/definitions/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -225,7 +228,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -272,6 +275,10 @@
         description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -332,7 +339,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -370,6 +377,10 @@
     responses:
       "204":
         description: identity provider deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -428,6 +439,13 @@
         schema:
           items:
             $ref: ../swagger.yaml#/definitions/auth_provider_domain
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -468,7 +486,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider_domain
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -510,6 +528,10 @@
         description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/auth_provider_domain
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -542,6 +564,10 @@
     responses:
       "204":
         description: identity provider deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -601,9 +627,12 @@
           items:
             $ref: ../swagger.yaml#/definitions/identity_provider
       "400":
-        description: Bad Request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
-          $ref: ../swagger.yaml#/definitions/error
+          $ref: "../swagger.yaml#/definitions/error"
       "403":
         description: Access forbidden
         schema:
@@ -663,7 +692,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -710,6 +739,10 @@
         description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -770,7 +803,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -807,7 +840,11 @@
       - application/json
     responses:
       "204":
-        description: identity provider deleted
+        description: Identity provider deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:
@@ -866,6 +903,13 @@
         schema:
           items:
             $ref: ../swagger.yaml#/definitions/identity_provider_domain
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -906,7 +950,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -948,6 +992,10 @@
         description: An identity provider
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "404":
         description: Object not found
         schema:
@@ -989,7 +1037,7 @@
         schema:
           $ref: ../swagger.yaml#/definitions/identity_provider_domain
       "400":
-        description: Bad Request
+        description: Bad request
         schema:
           $ref: ../swagger.yaml#/definitions/error
       "403":
@@ -1028,6 +1076,10 @@
     responses:
       "204":
         description: identity provider deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "401":
         description: Authentication required
         schema:

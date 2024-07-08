@@ -25,7 +25,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/record_source"
       "400":
-        description: Missing or wrong parameters
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -73,7 +76,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/record_source"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -117,7 +120,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/record_source"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -170,7 +173,7 @@
         schema:
           $ref: "../swagger.yaml#/definitions/record_source"
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -215,7 +218,7 @@
       "204":
         description: Deleted
       "400":
-        description: Missing or wrong parameters
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":

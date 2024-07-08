@@ -41,7 +41,10 @@
           items:
             $ref: "../swagger.yaml#/definitions/item"
       "400":
-        description: Bad parameter
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
@@ -92,8 +95,8 @@
           type: array
           items:
             type: object
-      400:
-        description: Bad parameter
+      "400":
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       401:
@@ -145,7 +148,7 @@
       "204":
         description: Item removed
       "400":
-        description: Item removal failed
+        description: Bad request
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
