@@ -155,7 +155,7 @@ elsif ( $domain_ops && $op eq 'cud-add' ) {
     # list servers after adding
     $op = 'list';
 }
-elsif ( !$domain_ops && $op eq 'cud-edit_form' ) {
+elsif ( !$domain_ops && $op eq 'edit_form' ) {
 
     if ( $identity_provider ) {
         $template->param(
@@ -171,7 +171,7 @@ elsif ( !$domain_ops && $op eq 'cud-edit_form' ) {
             };
     }
 }
-elsif ( $domain_ops && $op eq 'cud-edit_form' ) {
+elsif ( $domain_ops && $op eq 'edit_form' ) {
     my $identity_provider_domain_id = $input->param('identity_provider_domain_id');
     my $identity_provider_domain;
 
