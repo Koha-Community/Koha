@@ -23,12 +23,7 @@
                 </div>
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
                     <div class="btn-group">
-                        <form action="/cgi-bin/koha/acqui/supplier.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="op" value="cud-delete" />
-                            <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                            <button class="btn btn-default" id="deletesupplier" type="submit"><i class="fa fa-trash-can"></i> Delete vendor</button>
-                        </form>
+                        <button type="button" data-toggle="modal" data-target="#deleteVendorModal" data-booksellerid="[% booksellerid | html %]" class="btn btn-default"><i class="fa fa-trash-can"></i> Delete vendor</button>
                     </div>
                 [% END %]
             [% END %]
