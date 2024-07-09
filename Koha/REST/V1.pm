@@ -109,10 +109,12 @@ sub startup {
             }
         ) unless C4::Context->needs_install; # load only if Koha is installed
 
+        my $route = $self->config('route') // '/api/v1';
+
         $self->plugin(
             OpenAPI => {
                 spec  => $spec,
-                route => $self->routes->under('/api/v1')->to('Auth#under'),
+                route => $self->routes->under($route)->to('Auth#under'),
             }
         );
 
