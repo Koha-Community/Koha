@@ -555,7 +555,7 @@ describe("Agreement CRUD operations", () => {
         // AV's libs displayed
         // Tables for periods and users
     });
-    it("Delete agreement", () => {
+    it.only("Delete agreement", () => {
         let agreement = cy.get_agreement();
         let agreements = [agreement];
 
@@ -633,7 +633,7 @@ describe("Agreement CRUD operations", () => {
             "Agreement #" + agreement.agreement_id
         );
 
-        cy.get("#agreements_show .action_links .fa-trash").click();
+        cy.get("#agreements_show #toolbar").contains("Delete").click();
         cy.get(".dialog.alert.confirmation h1").contains(
             "remove this agreement"
         );

@@ -1,21 +1,25 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="licenses_show">
+        <Toolbar>
+            <ToolbarButton
+                :to="{
+                    name: 'LicensesFormAddEdit',
+                    params: { license_id: license.license_id },
+                }"
+                class="btn btn-default"
+                icon="pencil"
+                :title="$__('Edit')"
+            />
+            <a
+                @click="delete_license(license.license_id, license.name)"
+                class="btn btn-default"
+                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
+            >
+        </Toolbar>
+
         <h2>
             {{ $__("License #%s").format(license.license_id) }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'LicensesFormAddEdit',
-                        params: { license_id: license.license_id },
-                    }"
-                    :title="$__('Edit')"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a @click="delete_license(license.license_id, license.name)"
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
         </h2>
         <div>
             <fieldset class="rows">
@@ -147,6 +151,8 @@
 <script>
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 
 export default {
     setup() {
@@ -227,16 +233,11 @@ export default {
             )
         },
     },
-    components: {},
+    components: { Toolbar, ToolbarButton },
     name: "LicensesShow",
 }
 </script>
 <style scoped>
-.action_links a {
-    padding-left: 0.2em;
-    font-size: 11px;
-    cursor: pointer;
-}
 #license_documents ul {
     padding-left: 0px;
 }

@@ -383,7 +383,9 @@ describe("Data provider CRUD operations", () => {
             "Data provider #" + dataProvider.erm_usage_data_provider_id
         );
 
-        cy.get("#usage_data_providers_show .action_links .fa-trash").click();
+        cy.get("#usage_data_providers_show #toolbar")
+            .contains("Delete")
+            .click();
         cy.get(".dialog.alert.confirmation h1").contains(
             "remove this data provider"
         );

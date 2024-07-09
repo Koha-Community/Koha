@@ -1,24 +1,27 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_show">
+        <Toolbar>
+            <ToolbarButton
+                :to="{
+                    name: 'AgreementsFormAddEdit',
+                    params: { agreement_id: agreement.agreement_id },
+                }"
+                class="btn btn-default"
+                icon="pencil"
+                :title="$__('Edit')"
+            />
+            <a
+                @click="
+                    delete_agreement(agreement.agreement_id, agreement.name)
+                "
+                class="btn btn-default"
+                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
+            >
+        </Toolbar>
+
         <h2>
             {{ $__("Agreement #%s").format(agreement.agreement_id) }}
-            <span class="action_links">
-                <router-link
-                    :to="{
-                        name: 'AgreementsFormAddEdit',
-                        params: { agreement_id: agreement.agreement_id },
-                    }"
-                    :title="$__('Edit')"
-                    ><i class="fa fa-pencil"></i
-                ></router-link>
-                <a
-                    @click="
-                        delete_agreement(agreement.agreement_id, agreement.name)
-                    "
-                    ><i class="fa fa-trash"></i
-                ></a>
-            </span>
         </h2>
         <div>
             <fieldset class="rows">
@@ -334,6 +337,8 @@
 <script>
 import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
+import Toolbar from "../Toolbar.vue"
+import ToolbarButton from "../ToolbarButton.vue"
 
 export default {
     setup() {
@@ -420,15 +425,11 @@ export default {
             )
         },
     },
+    components: { Toolbar, ToolbarButton },
     name: "AgreementsShow",
 }
 </script>
 <style scoped>
-.action_links a {
-    padding-left: 0.2em;
-    font-size: 11px;
-    cursor: pointer;
-}
 #agreement_documents ul {
     padding-left: 0px;
 }

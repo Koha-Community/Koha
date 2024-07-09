@@ -351,7 +351,7 @@ describe("Package CRUD operations", () => {
             "Package #" + erm_package.package_id
         );
 
-        cy.get("#packages_show .action_links .fa-trash").click();
+        cy.get("#packages_show #toolbar").contains("Delete").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this package");
         cy.contains("Yes, delete").click();
 

@@ -352,7 +352,7 @@ describe("License CRUD operations", () => {
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
         cy.get("#licenses_show h2").contains("License #" + license.license_id);
 
-        cy.get("#licenses_show .action_links .fa-trash").click();
+        cy.get("#licenses_show #toolbar").contains("Delete").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this license");
         cy.contains("Yes, delete").click();
 

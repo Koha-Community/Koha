@@ -514,7 +514,7 @@ describe("Title CRUD operations", () => {
             "Title #" + erm_title.title_id
         );
 
-        cy.get("#eholdings_title_show .action_links .fa-trash").click();
+        cy.get("#eholdings_title_show #toolbar").contains("Delete").click();
         cy.get(".dialog.alert.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
 
