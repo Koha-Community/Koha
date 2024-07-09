@@ -3,8 +3,8 @@
     <div v-else id="agreements_list">
         <Toolbar v-if="!embedded">
             <ToolbarButton
-                :to="{ name: 'AgreementsFormAdd' }"
-                icon="plus"
+                type="add"
+                @add-clicked="add_agreement"
                 :title="$__('New agreement')"
             />
         </Toolbar>
@@ -221,6 +221,11 @@ export default {
                             }));
                     });
                 });
+        },
+        add_agreement: function () {
+            this.$router.push({
+                name: "AgreementsFormAdd",
+            });
         },
         doShow: function ({ agreement_id }, dt, event) {
             event.preventDefault();

@@ -2,21 +2,8 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_show">
         <Toolbar>
-            <ToolbarButton
-                :to="{
-                    name: 'AgreementsFormAddEdit',
-                    params: { agreement_id: agreement.agreement_id },
-                }"
-                icon="pencil"
-                :title="$__('Edit')"
-            />
-            <a
-                @click="
-                    delete_agreement(agreement.agreement_id, agreement.name)
-                "
-                class="btn btn-default"
-                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
-            >
+            <ToolbarButton type="edit" @edit-clicked="edit_agreement" />
+            <ToolbarButton type="delete" @delete-clicked="delete_agreement" />
         </Toolbar>
 
         <h2>
@@ -406,7 +393,16 @@ export default {
                 error => {}
             );
         },
-        delete_agreement: function (agreement_id, agreement_name) {
+        edit_agreement: function () {
+            this.$router.push({
+                name: "AgreementsFormAddEdit",
+                params: { agreement_id: this.agreement.agreement_id },
+            });
+        },
+        delete_agreement: function () {
+            let agreement_id = this.agreement.agreement_id;
+            let agreement_name = this.agreement.name;
+
             this.setConfirmationDialog(
                 {
                     title: this.$__(

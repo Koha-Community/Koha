@@ -7,6 +7,10 @@ import Link from "./Link.vue";
 export default {
     components: { Link },
     props: {
+        type: {
+            type: String,
+            required: true,
+        },
         to: {
             type: [String, Object],
         },
