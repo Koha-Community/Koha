@@ -3,6 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -401,6 +402,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function checkForm() {
             if ( $('#uploadbarcodes').val() && $('#barcodelist').val() ) {
@@ -453,7 +455,8 @@
         }
 
         $(document).ready(function(){
-            inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
+            var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'inventory', 'inventoryt', 'json' ) | $raw %];
+            inventorydt = KohaTable("inventoryt", {
                 "pagingType": 'full_numbers',
                 [% IF compareinv2barcd %]
                     // sort on callnumber
@@ -474,7 +477,7 @@
                         openWindow(this.href,'marcview',800,600);
                     });
                 }
-            } ));
+            }, table_settings );
 
 
             $("#continuewithoutmarkingbutton").click(function(){
