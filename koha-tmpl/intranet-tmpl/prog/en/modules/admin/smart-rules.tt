@@ -235,7 +235,7 @@
                                                 </td>
                                                 <td class="actions">
                                                   <a href="#" class="editrule btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </td>
                                                 <td>
                                                     [% IF note.defined && note != '' %]
@@ -402,7 +402,7 @@
                                                 [% END %]
                                                 <td class="actions">
                                                   <a href="#" class="editrule btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                  <a href="#" class="delete btn btn-default btn-xs" data-itemtype="[% i || '*' | html %]" data-categorycode="[% c || '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                                 </td>
                                         </tr>
                                     [% END %]
@@ -793,7 +793,7 @@
                                 <td class="actions">
                                     <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
                                     [% IF ( default_checkout_hold_and_return_policy ) %]
-                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-undo"></i> Unset</a>
+                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-undo"></i> Unset</a>
                                     [% END %]
                                 </td>
                             </tr>
@@ -861,7 +861,7 @@
                                     </td>
 
                                     <td class="actions">
-                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="delete-branch-cat btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -930,7 +930,7 @@
                                                 [% END %]
                                             </td>
                                             <td class="actions">
-                                                <a href="#" class="del-waiting-hold-cancellation btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-itemtype="[% i|| '*' | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                                <a href="#" class="del-waiting-hold-cancellation btn btn-default btn-xs" data-categorycode="[% c || '*' | html %]" data-itemtype="[% i|| '*' | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                             </td>
                                         </tr>
                                     [% END %]
@@ -1002,7 +1002,7 @@
                                     </td>
 
                                     <td class="actions">
-                                        <a href="#" class="del-open-article-requests-limit btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="del-open-article-requests-limit btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -1060,7 +1060,7 @@
                                         [% END %]
                                     </td>
                                     <td class="actions">
-                                        <a href="#" class="del-article-request-fee btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <a href="#" class="del-article-request-fee btn btn-default btn-xs" data-categorycode="[% c | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                     </td>
                                 </tr>
                                 [% END %]
@@ -1352,7 +1352,7 @@
                                             [% END %]
                                         </td>
                                         <td class="actions">
-                                            <a href="#" class="delete-branch-item btn btn-default btn-xs" data-itemtype="[% i.itemtype | html %]" data-branch"[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                            <a href="#" class="delete-branch-item btn btn-default btn-xs" data-itemtype="[% i.itemtype | html %]" data-branch="[% current_branch | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                         </td>
                                     </tr>
                                 [% END %]
