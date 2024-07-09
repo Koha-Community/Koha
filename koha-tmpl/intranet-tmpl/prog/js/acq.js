@@ -389,7 +389,9 @@ function hideAllColumns(){
 }
 
 $(document).ready(function(){
-    $("#deletesupplier").on("click", function(){
-        confirmDelete(__("Are you sure you want to delete this vendor?") );
+    $("#deleteVendorModal").on("shown.bs.modal", function(e){
+        var button = $(e.relatedTarget);
+        var item = button.data('booksellerid');
+        $('#booksellerid').val(item);
     });
 });

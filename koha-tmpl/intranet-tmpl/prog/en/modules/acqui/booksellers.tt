@@ -208,7 +208,7 @@
                                                 <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                             [% END %]
                                             <!-- Modal -->
-                                            <div id="addtoBasket[% basket.basketno | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
+                                            <div id="addtoBasket[% basket.basketno | html %]" class="modal add_to_basket" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -257,6 +257,8 @@
     </div>
 </div> <!-- /.row -->
 
+[% INCLUDE 'modals/delete_vendor.inc' %]
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
@@ -277,7 +279,7 @@
                 var id = $(this).find("option:selected").val();
                 window.location.href = "#vendor" + id;
             });
-            $(".modal").on("shown.bs.modal", function(){
+            $(".add_to_basket").on("shown.bs.modal", function(){
                 var basket = $(this).data("basketno");
                 var legend = _("Add order to basket %s").format(basket);
                 $(this).find("h4").text( legend );
