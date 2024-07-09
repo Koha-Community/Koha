@@ -39,6 +39,9 @@
 
                 [% INCLUDE 'modals/serials_skip_issues.inc' %]
 
+                [% INCLUDE 'modals/generate_next.inc' %]
+
+
                 [% UNLESS ( popup ) %]
                     [% INCLUDE 'serials-toolbar.inc' %]
 
@@ -182,7 +185,7 @@
                                                 <div class="btn-group"><input type="submit" value="Edit serials" class="btn btn-primary btn-sm" /></div>
                                                 [% UNLESS subscription.closed %]
                                                     <div class="btn-group">
-                                                        <input type="button" value="Generate next" data-subscriptionid="[% subscriptionidlist | html %]" class="btn btn-default btn-sm generatenext" />
+                                                        <input type="button" value="Generate next" data-subscriptionid="[% subscriptionidlist | html %]" href="#generate_next" class="btn btn-default btn-sm" data-toggle="modal" />
                                                     </div>
                                                     <div class="btn-group">
                                                         <input type="button" value="Skip issues and generate next" data-subscriptionid="[% subscriptionidlist | html %]"  href="#skip_issues" class="btn btn-default btn-sm" data-toggle="modal" />
@@ -349,12 +352,6 @@
                 document.location = location;
             } else {
                 alert(_("No serials selected"));
-            }
-        }
-
-        function generateNext(subscriptionid) {
-            if(confirm(_("Do you really want to generate next serial?"))){
-                document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid;
             }
         }
 
