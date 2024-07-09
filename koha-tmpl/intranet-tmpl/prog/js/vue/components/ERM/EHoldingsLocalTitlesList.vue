@@ -218,22 +218,22 @@ export default {
                     render: function (data, type, row, meta) {
                         let print_identifier = row.print_identifier
                         let online_identifier = row.online_identifier
-                        return (
-                            (print_identifier
+                        return [
+                            print_identifier
                                 ? escape_str(
                                       __("ISBN (Print): %s").format(
                                           print_identifier
                                       )
                                   )
-                                : "") +
-                            (online_identifier
+                                : "",
+                            online_identifier
                                 ? escape_str(
                                       __("ISBN (Online): %s").format(
                                           online_identifier
                                       )
                                   )
-                                : "")
-                        )
+                                : "",
+                        ].join("<br/>")
                     },
                 },
             ]
