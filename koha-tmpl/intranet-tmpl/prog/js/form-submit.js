@@ -1,6 +1,6 @@
 /* keep tidy */
 $(document).ready(function () {
-    $(".submit-form-link").click(function (e) {
+    $("body").on("click", ".submit-form-link", function (e) {
         e.preventDefault();
         let form_data = $(this).data();
 
