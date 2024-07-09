@@ -104,18 +104,48 @@ subtest 'list_av_from_category() tests' => sub {
 
     # Test the query webservice endpoint for multiple av_cats with authorised_values embedded
     my $av_2 = $builder->build_object(
-        { class => 'Koha::AuthorisedValues', value => { category => $av_cat_2->category_name, lib => undef } } );
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category         => $av_cat_2->category_name,
+                authorised_value => 'a',
+                lib              => undef
+            }
+        }
+    );
     my $av_3 = $builder->build_object(
         {
             class => 'Koha::AuthorisedValues',
-            value => { category => $av_cat_2->category_name, lib => 'description_value' }
+            value => {
+                category         => $av_cat_2->category_name,
+                authorised_value => 'c',
+                lib              => 'description_value'
+              }
+        }
+    );
+    my $av_4 = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category         => $av_cat_2->category_name,
+                authorised_value => 'b',
+                lib              => 'description_value'
+            }
         }
     );
 
     my $embedded_av_query = { "me.category_name" => [ $av_cat_2->category_name ] };
-    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?q="
+    $t->get_ok( "//$userid:$password@/api/v1/authorised_value_categories?_order_by=authorised_values.authorised_value&q="
             . encode_json($embedded_av_query) => { 'x-koha-embed' => 'authorised_values' } )->status_is(200)
-        ->json_is( [ { %{ $av_cat_2->to_api }, authorised_values => [ $av_2->to_api, $av_3->to_api ] } ] );
+        ->json_is(
+            [
+                {
+                    %{ $av_cat_2->to_api },
+                    authorised_values =>
+                      [ $av_2->to_api, $av_4->to_api, $av_3->to_api ]
+                }
+            ]
+        );
 
     $schema->storage->txn_rollback;
 };
