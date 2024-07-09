@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 23;
 use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -45,6 +45,7 @@ my $biblio1 = $item1->biblio;
 my $branch1 = $item1->holdingbranch;
 my $itemtype1 = $item1->effective_itemtype;
 my $item2 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
+my $item3 = $builder->build_sample_item({ biblionumber => $biblio1->biblionumber });
 my $biblio2 = $item1->biblio;
 my $branch2 = $item1->holdingbranch;
 my $itemtype2 = $item1->effective_itemtype;
@@ -53,20 +54,25 @@ my $category1 = $builder->build({ source => 'Category' })->{ categorycode };
 my $patron1 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch1 } });
 my $patron2 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch2 } });
 my $patron3 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch1 } });
+my $patron4 = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $category1, branchcode => $branch2 } });
 t::lib::Mocks::mock_userenv({ patron => $patron1 });
 
-Koha::CirculationRules->set_rules({
-    branchcode => undef,
-    categorycode => undef,
-    itemtype => undef,
-    rules => {
-        'recall_due_date_interval' => undef,
-        'recalls_allowed' => 10,
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => undef,
+        rules        => {
+            'issuelength'              => 7,
+            'recall_due_date_interval' => undef,
+            'recalls_allowed'          => 10,
+        }
     }
-});
+);
 
 C4::Circulation::AddIssue( $patron3, $item1->barcode );
 C4::Circulation::AddIssue( $patron3, $item2->barcode );
+C4::Circulation::AddIssue( $patron4, $item3->barcode );
 
 my ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
     patron => undef,
@@ -98,6 +104,7 @@ ok( !defined $recall, "Can't add a recall without specifying a biblio" );
 });
 ok( !defined $recall, "Can't add a recall without specifying a biblio" );
 
+my $initial_checkout_due_date = Koha::Checkouts->find( $item2->checkout->issue_id )->date_due;
 ( $recall, $due_interval, $due_date ) = Koha::Recalls->add_recall({
     patron => $patron2,
     biblio => $biblio1,
@@ -106,8 +113,13 @@ ok( !defined $recall, "Can't add a recall without specifying a biblio" );
     expirationdate => undef,
     interface => 'COMMANDLINE',
 });
+my $checkout_due_date_after_recall = Koha::Checkouts->find( $item2->checkout->issue_id )->date_due;
 is( $recall->pickup_library_id, $branch2, "No pickup branch specified so patron branch used" );
 is( $due_interval, 5, "Recall due date interval defaults to 5 if not specified" );
+ok(
+    $checkout_due_date_after_recall lt $initial_checkout_due_date,
+    "Checkout due date has been moved backwards"
+);
 
 Koha::CirculationRules->set_rule({
     branchcode => undef,
@@ -145,6 +157,34 @@ is(
     "Checkout due date has correctly been extended by recall_due_date_interval days"
 );
 is( t::lib::Dates::compare( $due_date, $expected_due_date ), 0, "Due date correctly returned" );
+
+Koha::CirculationRules->set_rule(
+    {
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => undef,
+        rule_name    => 'recall_due_date_interval',
+        rule_value   => 10,
+    }
+);
+$initial_checkout_due_date = Koha::Checkouts->find( $item3->checkout->issue_id )->date_due;
+my $recall2;
+( $recall2, $due_interval, $due_date ) = Koha::Recalls->add_recall(
+    {
+        patron         => $patron2,
+        biblio         => $biblio1,
+        branchcode     => $branch1,
+        item           => $item3,
+        expirationdate => undef,
+        interface      => 'COMMANDLINE',
+    }
+);
+$checkout_due_date_after_recall = Koha::Checkouts->find( $item3->checkout->issue_id )->date_due;
+is( $due_interval, 10, "Recall due date interval increased above checkout due" );
+ok(
+    $checkout_due_date_after_recall eq $initial_checkout_due_date,
+    "Checkout due date has not been moved forward"
+);
 
 my $messages_count = Koha::Notice::Messages->search({ borrowernumber => $patron3->borrowernumber, letter_code => 'RETURN_RECALLED_ITEM' })->count;
 is( $messages_count, 3, "RETURN_RECALLED_ITEM notice successfully sent to checkout borrower" );
