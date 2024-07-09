@@ -132,7 +132,7 @@ SKIP: {
             # Check with a script that is using check_cookie_auth, session must not be deleted!
             $driver->get( $s->base_url . q|svc/checkouts| );
             #FIXME - 500 is the current behaviour, but it's not nice. It could be improved.
-            like( $driver->get_title, qr(Error 500), 'Patron cannot access svc script where circulate permissions are required');
+            like( $driver->get_title, qr(An Error Occurred), 'Patron cannot access svc script where circulate permissions are required');
             $driver->get( $s->base_url . q|catalogue/search.pl| );
             like( $driver->get_title, qr(Advanced search), 'Patron can reuse the cookie after a script that used check_cookie_auth' );
             $cookie = $driver->get_cookie_named('CGISESSID');
