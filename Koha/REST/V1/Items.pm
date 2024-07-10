@@ -292,6 +292,7 @@ sub bundled_items {
     };
 }
 
+
 =head3 add_to_bundle
 
 Controller function that handles adding items to this bundle
@@ -302,7 +303,7 @@ sub add_to_bundle {
     my $c = shift->openapi->valid_input or return;
 
     my $item_id = $c->param('item_id');
-    my $item = Koha::Items->find( $item_id );
+    my $item    = Koha::Items->find($item_id);
 
     return $c->render_resource_not_found("Item")
         unless $item;
@@ -316,24 +317,22 @@ sub add_to_bundle {
     return $c->render_resource_not_found("Bundle item")
         unless $bundle_item;
 
-    my $add_link = $c->validation->param('body')->{'marc_link'} // 0;
+    my $add_link = $body->{'marc_link'} // 0;
     return try {
         my $options = {
             force_checkin => $body->{force_checkin},
-            ignore_holds => $body->{ignore_holds},
+            ignore_holds  => $body->{ignore_holds},
         };
 
-        my $link = $item->add_to_bundle($bundle_item, $options);
+        my $link = $item->add_to_bundle( $bundle_item, $options );
         if ($add_link) {
-            $bundle_item->biblio->link_marc_host(
-                { biblionumber => $item->biblio->biblionumber } );
+            $bundle_item->biblio->link_marc_host( { host => $item->biblio } );
         }
         return $c->render(
             status  => 201,
-            openapi => $bundle_item
+            openapi => $bundle_item->to_api
         );
-    }
-    catch {
+    } catch {
         if ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
             return $c->render(
                 status  => 409,
@@ -343,8 +342,7 @@ sub add_to_bundle {
                     key        => $_->duplicate_id
                 }
             );
-        }
-        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' ) {
+        } elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::BundleIsCheckedOut' ) {
             return $c->render(
                 status  => 409,
                 openapi => {
@@ -360,8 +358,7 @@ sub add_to_bundle {
                     error_code => 'checked_out'
                 }
             );
-        }
-        elsif ( ref($_) eq 'Koha::Exceptions::Checkin::FailedCheckin' ) {
+        } elsif ( ref($_) eq 'Koha::Exceptions::Checkin::FailedCheckin' ) {
             return $c->render(
                 status  => 409,
                 openapi => {
@@ -369,8 +366,7 @@ sub add_to_bundle {
                     error_code => 'failed_checkin'
                 }
             );
-        }
-        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemHasHolds' ) {
+        } elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::ItemHasHolds' ) {
             return $c->render(
                 status  => 409,
                 openapi => {
@@ -378,8 +374,7 @@ sub add_to_bundle {
                     error_code => 'reserved'
                 }
             );
-        }
-        elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::IsBundle' ) {
+        } elsif ( ref($_) eq 'Koha::Exceptions::Item::Bundle::IsBundle' ) {
             return $c->render(
                 status  => 400,
                 openapi => {
@@ -387,8 +382,7 @@ sub add_to_bundle {
                     error_code => 'failed_nesting'
                 }
             );
-        }
-        else {
+        } else {
             $c->unhandled_exception($_);
         }
     };
