@@ -70,7 +70,7 @@
         [% INCLUDE 'csrf-token.inc' %]
         [% IF op == 'edit' %]
             <h1>Modify OAI repository</h1>
-            <input type="hidden" name="id" value="[% server.id | html %]" />
+            <input type="hidden" name="id" value="[% server.oai_server_id | html %]" />
         [% ELSE %]
             <h1>New OAI repository</h1>
         [% END %]
@@ -138,8 +138,8 @@
         <tbody>
         [% FOREACH loo IN loop %]
             <tr>
-            <td>[% loo.id | html %]</td>
-            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
+            <td>[% loo.oai_server_id | html %]</td>
+            <td><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.endpoint | html %]</td><td>[% loo.oai_set | html %]</td>
             <td>[% loo.dataformat | html %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]
                 <span>Bibliographic</span>
@@ -153,14 +153,14 @@
                         Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
                         <li>
-                            <a href="#" class="delete" data-formid="server_row_[% loo.id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
-                            <form id="server_row_[% loo.id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
+                            <a href="#" class="delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            <form id="server_row_[% loo.oai_server_id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_confirmed">
-                                <input type="hidden" name="id" value="[% loo.id | uri %]">
+                                <input type="hidden" name="id" value="[% loo.oai_server_id | uri %]">
                             </form>
                         </li>
 

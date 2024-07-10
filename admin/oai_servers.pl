@@ -83,7 +83,7 @@ if ( $op eq 'cud-delete_confirmed' && $id ) {
     }
 } elsif ( $op eq 'search' ) {
 
-    #use searchfield only in remaining operations
+    # use searchfield only in remaining operations
     $searchfield = $input->param('searchfield') || '';
 }
 
@@ -108,11 +108,11 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 # End of main code
 
-sub server_search {    #find server(s) by id or name
+sub server_search {    # find server(s) by id or name
     my ( $schema, $id, $searchstring ) = @_;
 
     return Koha::OAIServers->search(
-        $id ? { id => $id } : { servername => { like => $searchstring . '%' } },
+        $id ? { oai_server_id => $id } : { servername => { like => $searchstring . '%' } },
     )->unblessed;
 }
 

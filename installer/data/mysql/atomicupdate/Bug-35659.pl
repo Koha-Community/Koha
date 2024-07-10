@@ -16,7 +16,7 @@ return {
               `dataformat` enum('oai_dc','marc-xml', 'marcxml') NOT NULL DEFAULT 'oai_dc' COMMENT 'data format',
               `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'server contains bibliographic or authority records',
               `add_xslt` longtext DEFAULT NULL COMMENT 'zero or more paths to XSLT files to be processed on the search results',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`oai_server_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
@@ -32,7 +32,7 @@ return {
               `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
               `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
               `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-              PRIMARY KEY (id),
+              PRIMARY KEY (`import_oai_biblio_id`),
               KEY biblionumber (biblionumber),
               CONSTRAINT FK_import_oai_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49,7 +49,7 @@ return {
               `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
               `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
               `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-              PRIMARY KEY (id),
+              PRIMARY KEY (`import_oai_authority_id`),
               KEY authid (authid),
               CONSTRAINT FK_import_oai_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

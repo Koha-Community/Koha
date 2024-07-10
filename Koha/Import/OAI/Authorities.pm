@@ -36,7 +36,7 @@ This object represents a collection of OAI-PMH records being imported as authori
 =cut
 
 sub _type {
-    return 'ImportOAIAuthority';
+    return 'ImportOaiAuthority';
 }
 
 =head3 object_class

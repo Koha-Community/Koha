@@ -35,7 +35,7 @@ This object represents an OAI-PMH record being imported as an authority
 =cut
 
 sub _type {
-    return 'ImportOAIAuthority';
+    return 'ImportOaiAuthority';
 }
 
 1;

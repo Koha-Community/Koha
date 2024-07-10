@@ -32,7 +32,6 @@ use open qw( :std :utf8 );
 
 use C4::Biblio          qw( AddBiblio GetFrameworkCode ModBiblio DelBiblio );
 use C4::AuthoritiesMarc qw (AddAuthority GuessAuthTypeCode ModAuthority DelAuthority );
-use C4::Log             qw( cronlogaction );
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 use Koha::DateUtils qw( dt_from_string );
@@ -276,14 +275,12 @@ sub processRecord {
                         "Record " . $oai_record->identifier . " not deleted, biblionumber: $biblionumber ($error)" );
                     $status = 'in_error';
                 } else {
-                    $imported_record->delete;
                     $self->printlog( "Record " . $oai_record->identifier . " deleted, biblionumber: $biblionumber" );
                     $status = 'deleted';
                 }
             } else {
                 my $authid = $imported_record->authid;
                 DelAuthority( { authid => $authid } );
-                $imported_record->delete;
                 $self->printlog( "Record " . $oai_record->identifier . " deleted, authid: $authid" );
                 $status = 'deleted';
             }
