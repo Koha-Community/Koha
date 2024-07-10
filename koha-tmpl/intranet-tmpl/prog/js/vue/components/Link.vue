@@ -1,11 +1,11 @@
 <template>
-    <a v-if="type === 'add'" @click="$emit('addResource')" class="btn btn-default"
+    <a v-if="action === 'add'" @click="$emit('addResource')" class="btn btn-default"
         ><font-awesome-icon icon="plus" /> {{ title }}</a
     >
-    <a v-if="type === 'delete'" @click="$emit('deleteResource')" class="btn btn-default"
+    <a v-if="action === 'delete'" @click="$emit('deleteResource')" class="btn btn-default"
         ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
     >
-    <a v-if="type === 'edit'" @click="$emit('editResource')" class="btn btn-default"
+    <a v-if="action === 'edit'" @click="$emit('editResource')" class="btn btn-default"
         ><font-awesome-icon icon="pencil" /> {{ $__("Edit") }}</a
     >
     <a
@@ -24,7 +24,7 @@
 <script>
 export default {
     props: {
-        type: {
+        action: {
             type: String,
             required: true,
         },

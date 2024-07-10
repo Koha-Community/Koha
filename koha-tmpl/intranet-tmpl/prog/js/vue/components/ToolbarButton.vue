@@ -12,7 +12,7 @@ import Link from "./Link.vue";
 export default {
     components: { Link },
     props: {
-        type: {
+        action: {
             type: String,
             required: true,
         },

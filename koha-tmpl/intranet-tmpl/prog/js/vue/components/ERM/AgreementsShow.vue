@@ -2,8 +2,8 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_show">
         <Toolbar>
-            <ToolbarButton type="edit" @editResource="edit_agreement" />
-            <ToolbarButton type="delete" @deleteResource="delete_agreement" />
+            <ToolbarButton action="edit" @editResource="edit_agreement" />
+            <ToolbarButton action="delete" @deleteResource="delete_agreement" />
         </Toolbar>
 
         <h2>

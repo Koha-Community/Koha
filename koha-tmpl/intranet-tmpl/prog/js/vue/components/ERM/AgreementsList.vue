@@ -3,7 +3,7 @@
     <div v-else id="agreements_list">
         <Toolbar v-if="!embedded">
             <ToolbarButton
-                type="add"
+                action="add"
                 @addResource="add_agreement"
                 :title="$__('New agreement')"
             />
