@@ -30,7 +30,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'transfer_ownership() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -94,6 +94,31 @@ subtest 'transfer_ownership() tests' => sub {
     my $private_list_shares = $private_list->get_shares;
     is( $private_list_shares->count, 1, 'Count is correct' );
     is( $private_list_shares->next->borrowernumber, $patron_3->id, "Private lists get the share for the new owner removed" );
+
+    my %params;
+    my $mocked_letters = Test::MockModule->new('C4::Letters');
+    $mocked_letters->mock(
+        'GetPreparedLetter',
+        sub {
+            %params = @_;
+            return 1;
+        }
+    );
+    $mocked_letters->mock(
+        'EnqueueLetter',
+        sub {
+            return 1;
+        }
+    );
+
+    $public_list->transfer_ownership( $patron_1->id );
+    $public_list->discard_changes;
+
+    is( $params{module}, "lists", "Enqueued letter with module lists correctly" );
+    is( $params{letter_code}, "TRANSFER_OWNERSHIP", "Enqueued letter with code TRANSFER_OWNERSHIP correctly" );
+    is( $params{objects}->{old_owner}->borrowernumber, $patron_2->borrowernumber, "old_owner passed to enqueue letter correctly" );
+    is( $params{objects}->{new_owner}->borrowernumber, $patron_1->borrowernumber, "new_owner passed to enqueue letter correctly" );
+    is( $params{objects}->{shelf}->shelfnumber, $public_list->shelfnumber, "shelf passed to enqueue letter correctly" );
 
     $schema->storage->txn_rollback;
 };

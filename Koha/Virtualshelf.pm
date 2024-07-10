@@ -360,8 +360,43 @@ sub transfer_ownership {
     Koha::Exceptions::MissingParameter->throw("Mandatory parameter 'patron' missing")
         unless $patron_id;
 
+    ## before we change the owner, collect some details
+    my $old_owner = Koha::Patrons->find( $self->owner );
+    my $new_owner = Koha::Patrons->find($patron_id);
+    my $library   = $new_owner->library->unblessed;
+
+    ## first we change the owner
     $self->remove_share($patron_id) if $self->is_private;
-    return $self->set( { owner => $patron_id } )->store;
+    $self->set( { owner => $patron_id } )->store;
+
+    ## now we message the new owner
+    my $letter = C4::Letters::GetPreparedLetter(
+        module      => 'lists',
+        letter_code => 'TRANSFER_OWNERSHIP',
+        branchcode  => $library->{branchcode},
+        lang        => $new_owner->lang || 'default',
+        objects     => {
+            old_owner => $old_owner,
+            new_owner => $new_owner,
+            shelf     => $self,
+        },
+        tables => {
+            'branches' => $library->{branchcode},
+        },
+        message_transport_type => 'email',
+    );
+
+    if ($letter) {
+        my $message_id = C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $patron_id,
+                message_transport_type => 'email',
+            }
+        ) or warn "can't enqueue letter $letter";
+    }
+
+    return $self;
 }
 
 =head2 Internal methods

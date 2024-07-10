@@ -1329,6 +1329,22 @@ tables:
             - "[% branch.branchillemail %]"
             - "[% branch.branchemail %]"
 
+        - module: lists
+          code: TRANSFER_OWNERSHIP
+          branchcode: ""
+          name: "Transfer ownership"
+          is_html: 1
+          title: "A list has been transferred to you"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => new_owner -%],<br>"
+            - "<br>"
+            - "A public list, titled <em>[% shelf.shelfname | html %]</em>, has been transferred to you[% IF ( old_owner ) %] by [%- INCLUDE 'patron-title.inc' patron => old_owner%][% IF ( old_owner.email ) %] <em>([% old_owner.email | html %])</em>[% END %][% END %].<br>"
+            - "<br>"
+            - "Thank you<br>"
+            - "<br>"
+
         - module: members
           code: DISCHARGE
           branchcode: ""

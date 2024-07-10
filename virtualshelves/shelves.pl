@@ -266,7 +266,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'error', code => $error_code };
         $op = 'list';
     } else {
-        $shelf->owner($new_owner)->store;
+        $shelf->transfer_ownership($new_owner);
         $op = 'list';
     }
 }
