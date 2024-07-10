@@ -47,6 +47,8 @@ sub list {
     # FIXME: Maybe not the best place for this mapping
     my $resource_to_table = {
         basket  => 'aqbasket',
+        credit  => 'accountlines:credit',
+        debit   => 'accountlines:debit',
         invoice => 'aqinvoices',
         order   => 'aqorders',
     };
