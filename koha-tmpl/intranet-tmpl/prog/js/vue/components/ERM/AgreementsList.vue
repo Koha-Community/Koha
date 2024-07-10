@@ -4,7 +4,7 @@
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 type="add"
-                @add-clicked="add_agreement"
+                @addResource="add_agreement"
                 :title="$__('New agreement')"
             />
         </Toolbar>
