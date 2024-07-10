@@ -27,6 +27,7 @@ use Koha::Exceptions;
 
 use base qw(Koha::Object);
 
+use Koha;
 use Koha::ERM::EUsage::CounterFile;
 use Koha::ERM::EUsage::CounterFiles;
 use Koha::ERM::EUsage::UsageTitles;
@@ -176,6 +177,7 @@ sub harvest_sushi {
     my $url      = $self->_build_url_query;
     my $request  = HTTP::Request->new( 'GET' => $url );
     my $ua       = LWP::UserAgent->new;
+    $ua->agent( 'Koha/' . Koha::version() );
     my $response = $ua->simple_request($request);
 
     if ( $response->code >= 400 ) {
@@ -279,6 +281,7 @@ sub test_connection {
 
     my $request  = HTTP::Request->new( 'GET' => $url );
     my $ua       = LWP::UserAgent->new;
+    $ua->agent( 'Koha/' . Koha::version() );
     my $response = $ua->simple_request($request);
 
     if ( $response->{_rc} >= 400 ) {
