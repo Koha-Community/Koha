@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 37;
+use Test::More tests => 39;
 use Test::Exception;
 use Test::Warn;
 
@@ -940,6 +940,126 @@ subtest 'get_volumes_query' => sub {
         "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") NOT (bib-level:a OR bib-level:b))",
         "UseControlNumber enabled with MarcOrgCode"
     );
+};
+
+subtest 'generate_marc_host_field' => sub {
+    plan tests => 22;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $record = $biblio->metadata->record;
+    $record->append_fields(
+        MARC::Field->new( '001', '1234' ),
+        MARC::Field->new( '003', 'FIRST' ),
+        MARC::Field->new( '240', '', '', a => 'A uniform title' ),
+        MARC::Field->new( '260', '', '', a => 'Publication' ),
+        MARC::Field->new( '250', '', '', a => 'Edition a', b => 'Edition b' ),
+        MARC::Field->new( '022', '', '', a => '0317-8471' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '0' );
+    my $link = $biblio->generate_marc_host_field();
+
+    is( ref($link),           'MARC::Field',         "->generate_marc_host_field returns a MARC::Field object" );
+    is( $link->tag,           '773',                 "MARC::Field->tag returns '773' when marcflavour is 'MARC21" );
+    is( $link->subfield('a'), 'Some boring author',  'MARC::Field->subfield(a) returns content from 100ab' );
+    is( $link->subfield('b'), 'Edition a Edition b', 'MARC::Field->subfield(b) returns content from 250ab' );
+    is( $link->subfield('d'), 'Publication',         'MARC::Field->subfield(c) returns content from 260abc' );
+    is( $link->subfield('s'), 'A uniform title',     'MARC::Field->subfield(s) returns content from 240a' );
+    is( $link->subfield('t'), 'Some boring read',    'MARC::Field->subfield(s) returns content from 245ab' );
+    is( $link->subfield('x'), '0317-8471',           'MARC::Field->subfield(s) returns content from 022a' );
+    is( $link->subfield('z'), undef,                 'MARC::Field->subfield(s) returns undef when 020a is empty' );
+    is( $link->subfield('w'), undef, 'MARC::Field->subfield(w) returns undef when "UseControlNumber" is disabled' );
+
+    t::lib::Mocks::mock_preference( 'UseControlNumber', '1' );
+    $link = $biblio->generate_marc_host_field();
+    is(
+        $link->subfield('w'), '(FIRST)1234',
+        'MARC::Field->subfield(w) returns content from 003 and 001 when "UseControlNumber" is enabled'
+    );
+
+    # UNIMARC tests
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+
+    $biblio = $builder->build_sample_biblio();
+    $record = $biblio->metadata->record;
+    $record->append_fields(
+        MARC::Field->new( '001', '1234' ),
+        MARC::Field->new( '700', '', '', a => 'A nice author' ),
+        MARC::Field->new( '210', '', '', a => 'A publication', d => 'A date' ),
+        MARC::Field->new( '205', '', '', a => "Fun things" ),
+        MARC::Field->new( '856', '', '', u => 'http://myurl.com/' ),
+        MARC::Field->new( '011', '', '', a => '0317-8471' ),
+        MARC::Field->new( '545', '', '', a => 'Invisible on OPAC' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    $link = $biblio->generate_marc_host_field();
+
+    is( ref($link),           'MARC::Field',       "->generate_marc_host_field returns a MARC::Field object" );
+    is( $link->tag,           '461',               "MARC::Field->tag returns '461' when marcflavour is 'UNIMARC" );
+    is( $link->subfield('a'), 'A nice author',     'MARC::Field->subfield(a) returns content from 700ab' );
+    is( $link->subfield('c'), 'A publication',     'MARC::Field->subfield(b) returns content from 210a' );
+    is( $link->subfield('d'), 'A date',            'MARC::Field->subfield(c) returns content from 210d' );
+    is( $link->subfield('e'), 'Fun things',        'MARC::Field->subfield(s) returns content from 205' );
+    is( $link->subfield('t'), 'Some boring read',  'MARC::Field->subfield(s) returns content from 200a' );
+    is( $link->subfield('u'), 'http://myurl.com/', 'MARC::Field->subfield(s) returns content from 856u' );
+    is( $link->subfield('x'), '0317-8471',         'MARC::Field->subfield(s) returns content from 011a' );
+    is( $link->subfield('y'), undef,               'MARC::Field->subfield(w) returns undef if 010a is empty' );
+    is( $link->subfield('0'), '1234',              'MARC::Field->subfield(0) returns content from 001' );
+
+    $schema->storage->txn_rollback;
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+};
+
+subtest 'link_marc_host' => sub {
+    plan tests => 6;
+    $schema->storage->txn_begin;
+
+    my $host = $builder->build_sample_biblio();
+
+    my $child        = $builder->build_sample_biblio();
+    my $child_record = $child->metadata->record;
+
+    is( $child_record->field('773'), undef, "773 field is undefined before link_marc_host" );
+    $child->link_marc_host( { host => $host->biblionumber } );
+    $child->discard_changes;
+    $child_record = $child->metadata->record;
+    is(
+        ref( $child_record->field('773') ), 'MARC::Field',
+        '773 field is set after calling link_marc_host({ host => $biblionumber })'
+    );
+
+    $child        = $builder->build_sample_biblio();
+    $child_record = $child->metadata->record;
+    is( $child_record->field('773'), undef, "773 field is undefined before link_marc_host" );
+    $child->link_marc_host( { host => $host } );
+    $child->discard_changes;
+    $child_record = $child->metadata->record;
+    is(
+        ref( $child_record->field('773') ), 'MARC::Field',
+        '773 field is set after calling link_marc_host({ host => $biblio })'
+    );
+
+    $child        = $builder->build_sample_biblio();
+    $child_record = $child->metadata->record;
+    is( $child_record->field('773'), undef, "773 field is undefined before link_marc_host" );
+    my $link_field = $host->generate_marc_host_field;
+    $child->link_marc_host( { field => $link_field } );
+    $child->discard_changes;
+    $child_record = $child->metadata->record;
+    is(
+        ref( $child_record->field('773') ), 'MARC::Field',
+        '773 field is set after calling link_marc_host({ field => $link_field })'
+    );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest '->orders, ->uncancelled_orders and ->acq_status tests' => sub {
