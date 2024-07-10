@@ -358,7 +358,6 @@ sub _shared_preferences {
         yuipath
         HidePatronName
         intranetbookbag
-        StaffDetailItemSelection
         viewISBD
         viewLabeledMARC
         viewMARC

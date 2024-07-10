@@ -9,7 +9,7 @@
 [% BLOCK build_table %]
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
-            [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
+            <th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>
             [% IF Koha.Preference('LocalCoverImages') %]
                 <th id="[% tab | html %]_cover_image" data-colname="[% tab | html %]_cover_image">Cover image</th>
             [% END %]
@@ -51,36 +51,34 @@
             <button class="btn btn-link show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</button>
             <button class="btn btn-link hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</button>
         </span>
-        [% IF (StaffDetailItemSelection) %]
-            <button class="btn btn-link SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</button>
-            <button class="btn btn-link ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</button>
-            <span class="itemselection_actions">
-              | Actions:
-              [% IF CAN_user_tools_items_batchdel %]
-                  <form class="itemselection_action_delete_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
-                      [% INCLUDE 'csrf-token.inc' %]
-                      <input name='src' type='hidden' value='CATALOGUING' />
-                      <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
-                      <input name='op' type='hidden' value='cud-show' />
-                      <input name='del' type='hidden' value='1' />
-                      <button type="submit" class="itemselection_action_delete btn btn-link" /><i class="fa fa-trash-can"></i> Delete selected items</button>
-                  </form>
-              [% END %]
-              [% IF CAN_user_tools_items_batchmod %]
-                  <form class="itemselection_action_modify_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
-                      [% INCLUDE 'csrf-token.inc' %]
-                      <input name='src' type='hidden' value='CATALOGUING' />
-                      <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
-                      <input name='op' type='hidden' value='cud-show' />
-                      <button type="submit" class="itemselection_action_modify btn btn-link" /><i class="fa-solid fa-pencil"></i> Modify selected items</button>
-                  </form>
-              [% END %]
-              [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
-                <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
-                <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>
-              [% END %]
-            </span>
-        [% END %]
+        <button class="btn btn-link SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</button>
+        <button class="btn btn-link ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</button>
+        <span class="itemselection_actions">
+          | Actions:
+          [% IF CAN_user_tools_items_batchdel %]
+              <form class="itemselection_action_delete_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                  [% INCLUDE 'csrf-token.inc' %]
+                  <input name='src' type='hidden' value='CATALOGUING' />
+                  <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
+                  <input name='op' type='hidden' value='cud-show' />
+                  <input name='del' type='hidden' value='1' />
+                  <button type="submit" class="itemselection_action_delete btn btn-link" /><i class="fa fa-trash-can"></i> Delete selected items</button>
+              </form>
+          [% END %]
+          [% IF CAN_user_tools_items_batchmod %]
+              <form class="itemselection_action_modify_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                  [% INCLUDE 'csrf-token.inc' %]
+                  <input name='src' type='hidden' value='CATALOGUING' />
+                  <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
+                  <input name='op' type='hidden' value='cud-show' />
+                  <button type="submit" class="itemselection_action_modify btn btn-link" /><i class="fa-solid fa-pencil"></i> Modify selected items</button>
+              </form>
+          [% END %]
+          [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
+            <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
+            <a class="itemselection_action_item_group_unset" href="#"><i class="fa fa-unlink"></i> Remove from item group</a>
+          [% END %]
+        </span>
     </div>
 
     [% PROCESS build_table tab => tab %]
@@ -91,67 +89,64 @@
 <script>
 
     let hide_patron_name = [% IF Koha.Preference('HidePatronName') %]true[% ELSE %]false[% END %];
-    [% IF StaffDetailItemSelection %]
 
-        let items_selection = {};
+    let items_selection = {};
 
-        function _itemSelectionBuildLink(tab_id, link_class) {
+    function _itemSelectionBuildLink(tab_id, link_class) {
 
-            let itemnumbers = items_selection[tab_id];
-            let tab = $("#" + tab_id + "_panel" );
-            let form = tab.find(link_class);
-            $(form).find("input[name='itemnumber']").remove();
+        let itemnumbers = items_selection[tab_id];
+        let tab = $("#" + tab_id + "_panel" );
+        let form = tab.find(link_class);
+        $(form).find("input[name='itemnumber']").remove();
 
-            $(itemnumbers).each(function() {
-                $(form).append("<input name='itemnumber' type='hidden' value='%s'/>".format(this));
-            });
-            return !!itemnumbers.length
-        }
-        function itemSelectionBuildDeleteLink(tab_id) {
-            return _itemSelectionBuildLink(tab_id, '.itemselection_action_delete_form');
-        }
-        function itemSelectionBuildModifyLink(tab_id) {
-            return _itemSelectionBuildLink(tab_id, '.itemselection_action_modify_form');
-        }
-
-        function itemSelectionBuildActionLinks(tab_id) {
-            var delete_link_ok = itemSelectionBuildDeleteLink(tab_id);
-            var modify_link_ok = itemSelectionBuildModifyLink(tab_id);
-            var tab = $("#" + tab_id + "_panel" );
-            if (modify_link_ok || delete_link_ok) {
-                $('.itemselection_actions', tab).show();
-            } else {
-                $('.itemselection_actions', tab).hide();
-            }
-        }
-
-        $(document).ready(function() {
-
-            $(".SelectAll").on("click",function(e){
-                e.preventDefault();
-                let tab_id = $(this).data("tab");
-                let tab = $("#" + tab_id + "_panel" );
-                items_selection[tab_id] = [];
-                tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
-                    let itemnumber = parseInt($(input).val());
-                    items_selection[tab_id].push(itemnumber);
-                    $(input).prop('checked', true);
-                });
-                itemSelectionBuildActionLinks(tab_id);
-            });
-
-            $(".ClearAll").on("click",function(e){
-                e.preventDefault();
-                let tab_id = $(this).data("tab");
-                let tab = $("#" + tab_id + "_panel" );
-                items_selection[tab_id] = [];
-                $("input[name='itemnumber'][type='checkbox']", tab).prop('checked', false);
-                itemSelectionBuildActionLinks(tab_id);
-            });
-
+        $(itemnumbers).each(function() {
+            $(form).append("<input name='itemnumber' type='hidden' value='%s'/>".format(this));
         });
-    [% END %]
+        return !!itemnumbers.length
+    }
+    function itemSelectionBuildDeleteLink(tab_id) {
+        return _itemSelectionBuildLink(tab_id, '.itemselection_action_delete_form');
+    }
+    function itemSelectionBuildModifyLink(tab_id) {
+        return _itemSelectionBuildLink(tab_id, '.itemselection_action_modify_form');
+    }
 
+    function itemSelectionBuildActionLinks(tab_id) {
+        var delete_link_ok = itemSelectionBuildDeleteLink(tab_id);
+        var modify_link_ok = itemSelectionBuildModifyLink(tab_id);
+        var tab = $("#" + tab_id + "_panel" );
+        if (modify_link_ok || delete_link_ok) {
+            $('.itemselection_actions', tab).show();
+        } else {
+            $('.itemselection_actions', tab).hide();
+        }
+    }
+
+    $(document).ready(function() {
+
+        $(".SelectAll").on("click",function(e){
+            e.preventDefault();
+            let tab_id = $(this).data("tab");
+            let tab = $("#" + tab_id + "_panel" );
+            items_selection[tab_id] = [];
+            tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
+                let itemnumber = parseInt($(input).val());
+                items_selection[tab_id].push(itemnumber);
+                $(input).prop('checked', true);
+            });
+            itemSelectionBuildActionLinks(tab_id);
+        });
+
+        $(".ClearAll").on("click",function(e){
+            e.preventDefault();
+            let tab_id = $(this).data("tab");
+            let tab = $("#" + tab_id + "_panel" );
+            items_selection[tab_id] = [];
+            $("input[name='itemnumber'][type='checkbox']", tab).prop('checked', false);
+            itemSelectionBuildActionLinks(tab_id);
+        });
+
+    });
 
     $(document).ready(function() {
         $(".show_filters").on("click",function(e){
@@ -162,9 +157,7 @@
             tab.find(".hide_filters").show();
             $("#"+tab_id+"_table thead tr:eq(1)").remove();
             build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
-            [% IF StaffDetailItemSelection %]
-                itemSelectionBuildActionLinks(tab_id);
-            [% END %]
+            itemSelectionBuildActionLinks(tab_id);
         });
 
         $(".hide_filters").on("click",function(e){
@@ -175,9 +168,7 @@
             tab.find(".show_filters").show();
             $("#"+tab_id+"_table thead tr:eq(1)").remove();
             build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
-            [% IF StaffDetailItemSelection %]
-                itemSelectionBuildActionLinks(tab_id);
-            [% END %]
+            itemSelectionBuildActionLinks(tab_id);
         });
     });
 
@@ -278,15 +269,12 @@
         [% IF hidden_count %]
             default_filters.lost_status = "0";
         [% END %]
-        [% IF StaffDetailItemSelection %]
         if ( !items_selection.hasOwnProperty(tab_id) ){
             items_selection[tab_id] = [];
         }
-        [% END %]
 
         let offset = 2;
         [% UNLESS Koha.Preference('LocalCoverImages') %]offset--;[% END %]
-        [% UNLESS Koha.Preference('StaffDetailItemSelection') %]offset--;[% END %]
         let filters_options = {
             [offset]   : () => all_item_types,
             [offset+1] : () => all_libraries,
@@ -300,7 +288,6 @@
             autoWidth: false,
             bKohaColumnsUseNames: true,
             columns: [
-            [% IF (StaffDetailItemSelection) %]
             {
                 data: "me.item_id",
                 searchable: false,
@@ -317,7 +304,6 @@
                     }
                 }
             },
-            [% END %]
             [% IF Koha.Preference('LocalCoverImages') %]
             {
                 data: "",
@@ -797,11 +783,8 @@
                         table.columns(i).visible(false);
                     }
                 });
-                [% IF StaffDetailItemSelection %]
                 itemSelectionBuildActionLinks(tab_id);
-                [% END %]
             },
-            [% IF StaffDetailItemSelection %]
             drawCallback: function(settings){
                 var api = new $.fn.dataTable.Api(settings)
                 $.each(
@@ -841,7 +824,6 @@
 
                 if ( drawcallback ) { drawcallback(this); }
             },
-            [% END %]
             ...dt_options,
         },
         items_table_settings[tab_id],

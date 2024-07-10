@@ -497,25 +497,6 @@ my $illrequests =
   : [];
 $template->param( illrequests => $illrequests );
 
-my $StaffDetailItemSelection = C4::Context->preference('StaffDetailItemSelection');
-if ($StaffDetailItemSelection) {
-    # Only enable item selection if user can execute at least one action
-    if (
-        $flags->{superlibrarian}
-        || (
-            ref $flags->{tools} eq 'HASH' && (
-                $flags->{tools}->{items_batchmod}       # Modify selected items
-                || $flags->{tools}->{items_batchdel}    # Delete selected items
-            )
-        )
-        || ( ref $flags->{tools} eq '' && $flags->{tools} )
-      )
-    {
-        $template->param(
-            StaffDetailItemSelection => $StaffDetailItemSelection );
-    }
-}
-
 # get biblionumbers stored in the cart
 my @cart_list;
 
