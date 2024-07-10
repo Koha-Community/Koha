@@ -664,7 +664,8 @@ sub _rewrite_related_metadata_query {
 sub _validate_operator {
     my ($operator) = @_;
     my %allowed_operators =
-        map { $_ => 1 } qw(= != < > <= >= like -not_like -in -ident -bool -not_bool -or -like -not -and -regexp);
+        map { $_ => 1 }
+        qw(= != < > <= >= -in -ident -bool -not_bool -or like -like -not_like -between -not_between -not -and -regexp);
     Koha::Exceptions::REST::Query::InvalidOperator->throw( operator => $operator )
         unless exists $allowed_operators{$operator};
     return;
