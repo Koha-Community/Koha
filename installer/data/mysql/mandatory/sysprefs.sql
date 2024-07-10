@@ -526,6 +526,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACnumSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
 ('OPACnumSearchResultsDropdown', 0, NULL, 'Enable option list of number of results per page to show in OPAC search results','YesNo'),
 ('OPACOpenURLItemTypes', '', NULL, 'Show the OpenURL link only for these item types', 'Free'),
+('OPACOverDrive','0',NULL,'Enable OverDrive integration in the OPAC','YesNo'),
 ('OpacPasswordChange','1',NULL,'If ON, enables patron-initiated password change in OPAC (disable it when using LDAP auth)','YesNo'),
 ('OPACPatronDetails','1','','If OFF the patron details tab in the OPAC is disabled.','YesNo'),
 ('OPACpatronimages','0',NULL,'Enable patron images in the OPAC','YesNo'),

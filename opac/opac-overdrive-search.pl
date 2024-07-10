@@ -27,6 +27,12 @@ use C4::Output qw( output_html_with_http_headers );
 
 my $cgi = CGI->new;
 
+# if OPACOverDrive is disabled, leave immediately
+if ( !C4::Context->preference('OPACOverDrive') ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 # Getting the template and auth
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

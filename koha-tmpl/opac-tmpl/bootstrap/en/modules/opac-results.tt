@@ -29,6 +29,7 @@
     [% SET OPACCustomCoverImages = ( Koha.Preference('OPACCustomCoverImages') && Koha.Preference('CustomCoverImagesURL') ) %]
     [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
 [% END %]
+[% SET OverDriveEnabled = ( Koha.Preference( "OPACOverDrive" ) && Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -674,7 +675,7 @@
                         highlightOff();
                     });
                 [% END # /IF OpacHighlightedWords %]
-                [% IF ( OverDriveEnabled ) %]
+                [% IF ( OverDriveEnabled && firstPage ) %]
                     var $overdrive_results = $( '<div id="overdrive-results">' + _("Searching %s...").format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" /></div>' );
                     $( '#numresults' ) .after( $overdrive_results );
                     //Clean querystring, first we remove CCL entities, then decode HTML entities, then swap double quotes for single quotes
