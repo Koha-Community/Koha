@@ -61,7 +61,7 @@ my ( $public, $shelf, $shelfnumber, @messages, $allow_transfer, $allow_create_pu
 
 # work out permissions once
 # this check is for the create list permission
-$allow_create_public_lists = haspermission( $loggedinuser, { lists => 'create_public_lists' } ) ? 1 : 0;
+$allow_create_public_lists = haspermission( C4::Context->userenv->{id}, { lists => 'create_public_lists' } ) ? 1 : 0;
 
 # we want the user to be able to pick if public or private only if they are allowed
 $public = ( $query->param('public') == 1 && $allow_create_public_lists == 1 ) ? 1 : 0;
