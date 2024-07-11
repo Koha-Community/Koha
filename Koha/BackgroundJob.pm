@@ -26,6 +26,7 @@ use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::BackgroundJob;
+use Koha::Plugins;
 
 use base qw( Koha::Object );
 
@@ -163,6 +164,12 @@ sub process {
     my ( $self, $args ) = @_;
 
     return {} if ref($self) ne 'Koha::BackgroundJob';
+
+    # Our background jobs are called in forked processes
+    # to ensure we have all plugin hooks and data we call
+    # get_enabled_plugins at the star of processing
+    # to populate the cache
+    Koha::Plugins->get_enabled_plugins();
 
     my $derived_class = $self->_derived_class;
 
