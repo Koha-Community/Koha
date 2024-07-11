@@ -10,6 +10,20 @@ export default {
     },
     methods: {
         /**
+         * Navigates to the show page of the given resource.
+         *
+         * @param {Object} resource - The resource to navigate to
+         * @return {void}
+         */
+        goToResourceShow: function (resource, dt, event) {
+            event?.preventDefault();
+            this.$router.push({
+                name: this.show_component,
+                params: { [this.id_attr]: resource[this.id_attr] },
+            });
+        },
+
+        /**
          * Navigates to the edit page of the given resource.
          *
          * @param {Object} resource - The resource to navigate to (optional)
@@ -40,6 +54,7 @@ export default {
     props: {
         resource_name: String,
         id_attr: String,
+        show_component: String,
         add_component: String,
         edit_component: String,
     },

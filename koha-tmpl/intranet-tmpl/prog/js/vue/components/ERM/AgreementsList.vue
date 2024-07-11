@@ -45,7 +45,7 @@
                 v-bind="tableOptions"
                 :searchable_additional_fields="searchable_additional_fields"
                 :searchable_av_options="searchable_av_options"
-                @show="doShow"
+                @show="goToResourceShow"
                 @edit="goToResourceEdit"
                 @delete="doDelete"
                 @select="doSelect"
@@ -220,13 +220,6 @@ export default {
                             }));
                     });
                 });
-        },
-        doShow: function ({ agreement_id }, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "AgreementsShow",
-                params: { agreement_id },
-            });
         },
         doDelete: function (agreement, dt, event) {
             this.setConfirmationDialog(

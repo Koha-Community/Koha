@@ -8,6 +8,7 @@ export default {
             ...BaseResource.setup({
                 resource_name: "agreement",
                 id_attr: "agreement_id",
+                show_component: "AgreementsShow",
                 add_component: "AgreementsFormAdd",
                 edit_component: "AgreementsFormAddEdit",
             }),
