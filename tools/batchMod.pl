@@ -223,6 +223,7 @@ if ($op eq "show"){
         if ($filecontent eq 'barcode_file') {
             @contentlist = grep /\S/, ( map { split /[$split_chars]/ } @contentlist );
             @contentlist = uniq @contentlist;
+            @contentlist = map { barcodedecode($_) } @contentlist;
             # Note: adding lc for case insensitivity
             my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => { -in => \@contentlist } }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
             @itemnumbers = map { exists $itemdata{lc $_} ? $itemdata{lc $_} : () } @contentlist;
