@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 use Test::Exception;
 use Test::MockModule;
 
@@ -843,6 +843,29 @@ subtest 'request_transfer' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'store check barcodes' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    $item->barcode("")->store();
+    is( $item->barcode, undef, 'Empty string barcodes are treated as undef');
+
+    $item->barcode("123456789")->store();
+    is( $item->barcode, "123456789", 'Non-empty string barcodes are unchanged');
+
+    $item->barcode(undef)->store();
+    is( $item->barcode, undef, 'undef barcodes remain undef');
+};
 subtest 'deletion' => sub {
     plan tests => 15;
 
