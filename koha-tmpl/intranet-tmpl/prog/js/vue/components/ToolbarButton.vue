@@ -1,9 +1,9 @@
 <template>
     <Link
         v-bind="$props"
-        @addResource="$emit('addResource')"
-        @deleteResource="$emit('deleteResource')"
-        @editResource="$emit('editResource')"
+        @go-to-add-resource="$emit('go-to-add-resource')"
+        @delete-resource="$emit('delete-resource')"
+        @go-to-edit-resource="$emit('go-to-edit-resource')"
     />
 </template>
 
@@ -36,7 +36,7 @@ export default {
             required: false,
         },
     },
-    emits: ["addResource", "deleteResource", "editResource"],
-    name: "ToolbarButton",
+    emits: ["go-to-add-resource", "delete-resource", "go-to-edit-resource"],
+    name: "Toolbar",
 };
 </script>

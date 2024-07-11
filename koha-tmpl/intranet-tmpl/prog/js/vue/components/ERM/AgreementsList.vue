@@ -4,7 +4,7 @@
         <Toolbar v-if="!embedded">
             <ToolbarButton
                 action="add"
-                @addResource="add_agreement"
+                @go-to-add-resource="goToResourceAdd"
                 :title="$__('New agreement')"
             />
         </Toolbar>
@@ -220,11 +220,6 @@ export default {
                             }));
                     });
                 });
-        },
-        add_agreement: function () {
-            this.$router.push({
-                name: "AgreementsFormAdd",
-            });
         },
         doShow: function ({ agreement_id }, dt, event) {
             event.preventDefault();

@@ -3,28 +3,18 @@ import BaseResource from "../BaseResource.vue";
 
 export default {
     extends: BaseResource,
-    setup() {
+    setup(props) {
         return {
-            ...BaseResource.setup(),
+            ...BaseResource.setup({
+                resource_name: "agreement",
+                id_attr: "agreement_id",
+                add_component: "AgreementsFormAdd",
+                edit_component: "AgreementsFormAddEdit",
+            }),
             //AgreementResource specific setup here
         };
     },
-    methods: {
-        /**
-         * Navigates to the edit page of the given agreement.
-         *
-         * @param {Object} agreement - The agreement to navigate to (optional)
-         * @return {void}
-         */
-        goToResourceEdit: function (agreement) {
-            let agreement_id =
-                agreement?.agreement_id || this.agreement.agreement_id;
-            this.$router.push({
-                name: "AgreementsFormAddEdit",
-                params: { agreement_id: agreement_id },
-            });
-        },
-    },
+    methods: {},
     name: "AgreementResource",
 };
 </script>

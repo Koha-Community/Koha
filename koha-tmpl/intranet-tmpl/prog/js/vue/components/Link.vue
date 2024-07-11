@@ -1,11 +1,11 @@
 <template>
-    <a v-if="action === 'add'" @click="$emit('addResource')" class="btn btn-default"
+    <a v-if="action === 'add'" @click="$emit('go-to-add-resource')" class="btn btn-default"
         ><font-awesome-icon icon="plus" /> {{ title }}</a
     >
-    <a v-if="action === 'delete'" @click="$emit('deleteResource')" class="btn btn-default"
+    <a v-if="action === 'delete'" @click="$emit('delete-resource')" class="btn btn-default"
         ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
     >
-    <a v-if="action === 'edit'" @click="$emit('editResource')" class="btn btn-default"
+    <a v-if="action === 'edit'" @click="$emit('go-to-edit-resource')" class="btn btn-default"
         ><font-awesome-icon icon="pencil" /> {{ $__("Edit") }}</a
     >
     <a
@@ -78,7 +78,7 @@ export default {
             return url;
         },
     },
-    emits: ["addResource", "deleteResource", "editResource"],
+    emits: ["go-to-add-resource", "delete-resource", "go-to-edit-resource"],
     name: "Link",
 };
 </script>
