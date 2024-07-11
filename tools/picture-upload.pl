@@ -95,6 +95,7 @@ if ( ( $op eq 'Upload' ) && ($uploadfile || $uploadfiletext) ) {
 
     my $dirname = File::Temp::tempdir( CLEANUP => 1 );
     my $filesuffix;
+    $uploadfilename =~ s/[^A-Za-z0-9\-\.]//g;
     if ( $uploadfilename =~ m/(\..+)$/i ) {
         $filesuffix = $1;
     }
