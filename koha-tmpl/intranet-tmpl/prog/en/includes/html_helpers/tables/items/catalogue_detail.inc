@@ -130,6 +130,7 @@
                 e.preventDefault();
                 let tab_id = $(this).data("tab");
                 let tab = $("#" + tab_id + "_panel" );
+                items_selection[tab_id] = [];
                 tab.find("input[name='itemnumber'][type='checkbox']").each( (i, input) => {
                     let itemnumber = parseInt($(input).val());
                     items_selection[tab_id].push(itemnumber);
