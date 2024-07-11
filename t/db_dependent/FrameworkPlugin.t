@@ -3,8 +3,9 @@ use Modern::Perl;
 use CGI;
 use File::Temp qw/tempfile/;
 use Getopt::Long;
+use Test::More tests => 7;
 use Test::MockModule;
-use Test::More tests => 6;
+use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -59,6 +60,19 @@ subtest 'Test06 -- test biblio_008' => sub {
     t::lib::Mocks::mock_preference('DefaultCountryField008', undef );
     $field = biblio_008();
     is( substr($field, 15, 3), '|||', 'Check country fallback for undefined' );
+};
+
+subtest 'Test07 -- validate input' => sub {
+    plan tests => 4;
+
+    my $plugin = Koha::FrameworkPlugin->new( { name => '../../misc/maintenance/touch_all_biblios.pl' } );
+    warning_like { $plugin->launch } qr{Attempt to load};
+    like( $plugin->errstr, qr{File not found} );
+
+    $plugin = Koha::FrameworkPlugin->new( { name => 'non-existent-plugin.pl' } );
+    warning_like { $plugin->launch } q{};
+    like( $plugin->errstr, qr{File not found} );
+
 };
 
 $schema->storage->txn_rollback;
