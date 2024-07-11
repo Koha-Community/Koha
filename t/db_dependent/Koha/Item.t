@@ -858,14 +858,18 @@ subtest 'store check barcodes' => sub {
     );
 
     $item->barcode("")->store();
-    is( $item->barcode, undef, 'Empty string barcodes are treated as undef');
+    $item->discard_changes;
+    is( $item->barcode, undef, 'Empty string barcodes are treated as undef' );
 
     $item->barcode("123456789")->store();
-    is( $item->barcode, "123456789", 'Non-empty string barcodes are unchanged');
+    $item->discard_changes;
+    is( $item->barcode, "123456789", 'Non-empty string barcodes are unchanged' );
 
     $item->barcode(undef)->store();
-    is( $item->barcode, undef, 'undef barcodes remain undef');
+    $item->discard_changes;
+    is( $item->barcode, undef, 'undef barcodes remain undef' );
 };
+
 subtest 'deletion' => sub {
     plan tests => 15;
 
