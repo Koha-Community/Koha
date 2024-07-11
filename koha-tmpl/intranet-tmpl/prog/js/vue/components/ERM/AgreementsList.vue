@@ -74,8 +74,6 @@ export default {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
-
         const { get_lib_from_av, map_av_dt_filter } = inject("ERMStore");
 
         const table = ref();
@@ -92,8 +90,6 @@ export default {
             map_av_dt_filter,
             logged_in_user,
             table,
-            setConfirmationDialog,
-            setMessage,
             escape_str,
             agreement_table_settings,
             filters,
