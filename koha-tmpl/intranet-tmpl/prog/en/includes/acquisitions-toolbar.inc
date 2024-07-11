@@ -1,4 +1,5 @@
 <!-- acquisitions-toolbar.inc -->
+[% INCLUDE 'modals/delete_vendor.inc' %]
 <div id="toolbar" class="btn-toolbar">
     [% IF ( booksellerid ) %]
         <div class="btn-group">
