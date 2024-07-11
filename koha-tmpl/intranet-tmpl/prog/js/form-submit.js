@@ -30,6 +30,9 @@ $(document).ready(function () {
                 })
             );
         });
+        if (form_data.new_tab) {
+            the_form.attr("target", "_blank");
+        }
         $("body").append(the_form);
         the_form.submit();
     });
