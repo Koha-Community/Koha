@@ -57,7 +57,7 @@
             <span class="itemselection_actions">
               | Actions:
               [% IF CAN_user_tools_items_batchdel %]
-                  <form id="itemselection_action_delete_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                  <form class="itemselection_action_delete_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
                       [% INCLUDE 'csrf-token.inc' %]
                       <input name='src' type='hidden' value='CATALOGUING' />
                       <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
@@ -67,7 +67,7 @@
                   </form>
               [% END %]
               [% IF CAN_user_tools_items_batchmod %]
-                  <form id="itemselection_action_modify_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                  <form class="itemselection_action_modify_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
                       [% INCLUDE 'csrf-token.inc' %]
                       <input name='src' type='hidden' value='CATALOGUING' />
                       <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
@@ -95,10 +95,10 @@
 
         let items_selection = {};
 
-        function _itemSelectionBuildLink(tab_id, form) {
+        function _itemSelectionBuildLink(tab_id, link_class) {
 
-            var itemnumbers = items_selection[tab_id];
-
+            let itemnumbers = items_selection[tab_id];
+            let form = $("#" + tab_id).find(link_class);
             $(form).find("input[name='itemnumber']").remove();
 
             $(itemnumbers).each(function() {
@@ -107,10 +107,10 @@
             return !!itemnumbers.length
         }
         function itemSelectionBuildDeleteLink(tab_id) {
-            return _itemSelectionBuildLink(tab_id, $('#itemselection_action_delete_form'));
+            return _itemSelectionBuildLink(tab_id, '.itemselection_action_delete_form');
         }
         function itemSelectionBuildModifyLink(tab_id) {
-            return _itemSelectionBuildLink(tab_id, $('#itemselection_action_modify_form'));
+            return _itemSelectionBuildLink(tab_id, '.itemselection_action_modify_form');
         }
 
         function itemSelectionBuildActionLinks(tab_id) {
