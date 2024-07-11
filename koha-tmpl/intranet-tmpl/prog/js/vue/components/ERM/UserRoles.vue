@@ -21,6 +21,7 @@
                     <span class="user">
                         {{ user_role.patron_str }}
                     </span>
+                    &nbsp;
                     <a
                         href="#patron_search_modal"
                         @click="selectUser(counter)"
