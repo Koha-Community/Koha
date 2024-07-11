@@ -48,12 +48,12 @@
 [% BLOCK items_table %]
     <div class="[% tab | html %]_table_table_controls">
         <span class="show_hide_filters">
-            <a href="#" class="show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</a>
-            <a href="#" class="hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</a>
+            <button class="btn btn-link show_filters" data-tab="[% tab | html %]"><i class="fa fa-filter"></i> Show filters</button>
+            <button class="btn btn-link hide_filters" data-tab="[% tab | html %]" style="display: none;"><i class="fa fa-filter"></i> Hide filters</button>
         </span>
         [% IF (StaffDetailItemSelection) %]
-            | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a>
-            | <a href="#" class="ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</a>
+            <button class="btn btn-link SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</button>
+            <button class="btn btn-link ClearAll" data-tab="[% tab | html %]"><i class="fa fa-times"></i> Clear all</button>
             <span class="itemselection_actions">
               | Actions:
               [% IF CAN_user_tools_items_batchdel %]
