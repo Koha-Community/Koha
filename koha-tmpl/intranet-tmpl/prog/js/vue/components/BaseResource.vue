@@ -15,8 +15,7 @@ export default {
          * @param {Object} resource - The resource to navigate to
          * @return {void}
          */
-        goToResourceShow: function (resource, dt, event) {
-            event?.preventDefault();
+        goToResourceShow: function (resource) {
             this.$router.push({
                 name: this.show_component,
                 params: { [this.id_attr]: resource[this.id_attr] },
