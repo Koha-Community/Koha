@@ -444,7 +444,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_manage' -%]
         <span class="sub_permission suggestions_manage_subpermission">
-            Manage purchase suggestions
+            Edit purchase suggestions
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'suggestions_delete' -%]
