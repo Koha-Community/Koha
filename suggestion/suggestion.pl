@@ -170,6 +170,7 @@ if ( $op =~ /save/i ) {
         delete $suggestion_ref->{suggesteddate};
         delete $suggestion_ref->{manageddate};
         Init($suggestion_ref);
+        $op = 'save';
     }
     else {
 
