@@ -2380,7 +2380,7 @@
 
         function mana_search( textquery ){
             $(".mana_search_status").hide();
-            $("#mana_result_content").load("/cgi-bin/koha/svc/mana/search #mana_results", { resource: 'report', id: textquery, usecomments: 1 }, function( response, status, xhr ) {
+            $("#mana_result_content").load("/cgi-bin/koha/svc/mana/search #mana_results", "resource=report&usecomments=1&id=" + textquery, function( response, status, xhr ) {
 
                     if ( status == "error" ) {
                         $("#mana_search_errortext").html( xhr.status + " " + xhr.statusText );
