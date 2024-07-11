@@ -2,7 +2,7 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="agreements_show">
         <Toolbar>
-            <ToolbarButton action="edit" @editResource="edit_agreement" />
+            <ToolbarButton action="edit" @editResource="goToResourceEdit" />
             <ToolbarButton action="delete" @deleteResource="delete_agreement" />
         </Toolbar>
 
@@ -333,8 +333,10 @@ import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
+import AgreementResource from "./AgreementResource.vue";
 
 export default {
+    extends: AgreementResource,
     setup() {
         const format_date = $date;
         const patron_to_html = $patron_to_html;
@@ -345,6 +347,7 @@ export default {
         const { get_lib_from_av } = ERMStore;
 
         return {
+            ...AgreementResource.setup(),
             format_date,
             patron_to_html,
             get_lib_from_av,
@@ -392,12 +395,6 @@ export default {
                 },
                 error => {}
             );
-        },
-        edit_agreement: function () {
-            this.$router.push({
-                name: "AgreementsFormAddEdit",
-                params: { agreement_id: this.agreement.agreement_id },
-            });
         },
         delete_agreement: function () {
             let agreement_id = this.agreement.agreement_id;

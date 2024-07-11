@@ -46,7 +46,7 @@
                 :searchable_additional_fields="searchable_additional_fields"
                 :searchable_av_options="searchable_av_options"
                 @show="doShow"
-                @edit="doEdit"
+                @edit="goToResourceEdit"
                 @delete="doDelete"
                 @select="doSelect"
             ></KohaTable>
@@ -66,8 +66,10 @@ import { APIClient } from "../../fetch/api-client.js";
 import { storeToRefs } from "pinia";
 import { build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
+import AgreementResource from "./AgreementResource.vue";
 
 export default {
+    extends: AgreementResource,
     setup() {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
@@ -84,6 +86,7 @@ export default {
             by_mine: false,
         });
         return {
+            ...AgreementResource.setup(),
             vendors,
             get_lib_from_av,
             map_av_dt_filter,
@@ -231,12 +234,6 @@ export default {
             event.preventDefault();
             this.$router.push({
                 name: "AgreementsShow",
-                params: { agreement_id },
-            });
-        },
-        doEdit: function ({ agreement_id }, dt, event) {
-            this.$router.push({
-                name: "AgreementsFormAddEdit",
                 params: { agreement_id },
             });
         },
