@@ -1661,6 +1661,25 @@
 </div>
 <!-- /.main.container-fluid -->
 
+        <!-- Expiration date modal-->
+        <div id="expirationDateModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="expirationDateModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="expirationDateModalLabel">Confirm expiration date</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Change expiration date to default for this category?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="expirationDateConfirmBtn" class="btn btn-primary"><i class="fa fa-check" aria-hidden="true"></i> Yes</button>
+                        <button id="expirationDateCancelBtn"data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-times" aria-hidden="true"></i> No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]

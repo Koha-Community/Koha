@@ -91,13 +91,18 @@ function update_category_code(category_code) {
 
     // Change patron's expiration date
     $('#categorycode_entry').change(function() {
-        var fp = $("#to").flatpickr();
-        var expiryDate = $('select'+category_selector+' option:selected').data('expiryDate');
-        // Check if expiryDate is available and format it to YYYY-MM-DD
-        if (expiryDate) {
-            var formattedDate = expiryDate.split('T')[0];
-            fp.setDate(formattedDate);
-        }
+        $('#expirationDateModal').modal('show');
+        // Handle confirmation Yes button click
+        $('#expirationDateConfirmBtn').on('click', function() {
+            var fp = $("#to").flatpickr();
+            var expiryDate = $('select'+category_selector+' option:selected').data('expiryDate');
+            // Check if expiryDate is available and format it to YYYY-MM-DD
+            if (expiryDate) {
+                var formattedDate = expiryDate.split('T')[0];
+                fp.setDate(formattedDate);
+            }
+            $('#expirationDateModal').modal('hide');
+        });
     });
 }
 
