@@ -51,48 +51,64 @@ sub list_rules {
 
     return try {
         my $effective       = $c->param('effective') // 1;
+        my $kinds           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
         my $item_type       = $c->param('item_type_id');
         my $branchcode      = $c->param('library_id');
         my $patron_category = $c->param('patron_category_id');
-        my $kinds           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+        my ($filter_branch, $filter_itemtype, $filter_patron);
 
         if ($item_type) {
-            my $type = Koha::ItemTypes->find($item_type);
-            return $c->render_invalid_parameter_value(
-                {
-                    path   => '/query/item_type_id',
-                    values => {
-                        uri   => '/api/v1/item_types',
-                        field => 'item_type_id'
+            $filter_itemtype = 1;
+            if ( $item_type eq '*' ) {
+                $item_type = undef;
+            } else {
+                my $type = Koha::ItemTypes->find($item_type);
+                return $c->render_invalid_parameter_value(
+                    {
+                        path   => '/query/item_type_id',
+                        values => {
+                            uri   => '/api/v1/item_types',
+                            field => 'item_type_id'
+                        }
                     }
-                }
-            ) unless $type;
+                ) unless $type;
+            }
         }
 
         if ($branchcode) {
-            my $library = Koha::Libraries->find($branchcode);
-            return $c->render_invalid_parameter_value(
-                {
-                    path   => '/query/library_id',
-                    values => {
-                        uri   => '/api/v1/libraries',
-                        field => 'library_id'
+            $filter_branch = 1;
+            if ( $branchcode eq '*' ) {
+                $branchcode = undef;
+            } else {
+                my $library = Koha::Libraries->find($branchcode);
+                return $c->render_invalid_parameter_value(
+                    {
+                        path   => '/query/library_id',
+                        values => {
+                            uri   => '/api/v1/libraries',
+                            field => 'library_id'
+                        }
                     }
-                }
-            ) unless $library;
+                ) unless $library;
+            }
         }
 
         if ($patron_category) {
-            my $category = Koha::Patron::Categories->find($patron_category);
-            return $c->render_invalid_parameter_value(
-                {
-                    path   => '/query/patron_category_id',
-                    values => {
-                        uri   => '/api/v1/patron_categories',
-                        field => 'patron_category_id'
+            $filter_patron = 1;
+            if ( $patron_category eq '*' ) {
+                $patron_category = undef;
+            } else {
+                my $category = Koha::Patron::Categories->find($patron_category);
+                return $c->render_invalid_parameter_value(
+                    {
+                        path   => '/query/patron_category_id',
+                        values => {
+                            uri   => '/api/v1/patron_categories',
+                            field => 'patron_category_id'
+                        }
                     }
-                }
-            ) unless $category;
+                ) unless $category;
+            }
         }
 
         my $rules;
@@ -116,7 +132,11 @@ sub list_rules {
             }
 
             $rules = Koha::CirculationRules->search(
-                {},
+                {
+                    ( $filter_branch   ? ( branchcode   => $branchcode )      : () ),
+                    ( $filter_itemtype ? ( itemtype     => $item_type )       : () ),
+                    ( $filter_patron   ? ( categorycode => $patron_category ) : () )
+                },
                 {
                     select   => $select,
                     as       => $as,
