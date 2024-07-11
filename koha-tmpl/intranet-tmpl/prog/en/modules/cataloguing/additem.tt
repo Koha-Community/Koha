@@ -35,6 +35,7 @@
 [% INCLUDE 'calendar.inc' %]
 [% INCLUDE 'str/cataloging_additem.inc' %]
 [% Asset.js("js/cataloging_additem.js") | $raw %]
+[% Asset.js("js/form-submit.js") | $raw %]
     <script>
         var has_item_groups = "[% item_groups.size | html %]";
     </script>
@@ -134,7 +135,9 @@
                                     <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
                                 [% END %]
                                 <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
-                                <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
+                                <li class="print_label">
+                                     <a class="submit-form-link" target="_blank" href="#" data-op="cud-add" data-number_list="[% item.itemnumber | html %]" data-number_type="itemnumber" data-method="post" data-action="/cgi-bin/koha/labels/label-edit-batch.pl" data-new_tab="true">Print label</a>
+                                </li>
                                 [% UNLESS item.nomod %]
                                     <li>
                                         <form id="[% item.itemnumber | html %]-delete-item-form" action="/cgi-bin/koha/cataloguing/additem.pl" method="post">
