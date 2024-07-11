@@ -57,10 +57,23 @@
             <span class="itemselection_actions">
               | Actions:
               [% IF CAN_user_tools_items_batchdel %]
-                <a class="itemselection_action_delete"><i class="fa fa-trash-can"></i> Delete selected items</a>
+                  <form id="itemselection_action_delete_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                      [% INCLUDE 'csrf-token.inc' %]
+                      <input name='src' type='hidden' value='CATALOGUING' />
+                      <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
+                      <input name='op' type='hidden' value='cud-show' />
+                      <input name='del' type='hidden' value='1' />
+                      <button type="submit" class="itemselection_action_delete btn btn-link" /><i class="fa fa-trash-can"></i> Delete selected items</button>
+                  </form>
               [% END %]
               [% IF CAN_user_tools_items_batchmod %]
-                <a class="itemselection_action_modify"><i class="fa-solid fa-pencil"></i> Modify selected items</a>
+                  <form id="itemselection_action_modify_form" method="post" action="/cgi-bin/koha/tools/batchMod.pl">
+                      [% INCLUDE 'csrf-token.inc' %]
+                      <input name='src' type='hidden' value='CATALOGUING' />
+                      <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
+                      <input name='op' type='hidden' value='cud-show' />
+                      <button type="submit" class="itemselection_action_modify btn btn-link" /><i class="fa-solid fa-pencil"></i> Modify selected items</button>
+                  </form>
               [% END %]
               [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
                 <a class="itemselection_action_item_group_set" href="#"><i class="fa fa-book"></i> Add/move to item group</a>
@@ -81,32 +94,23 @@
     [% IF StaffDetailItemSelection %]
 
         let items_selection = {};
-        function itemSelectionBuildDeleteLink(tab_id) {
-            var itemnumbers = items_selection[tab_id];
-            if (itemnumbers.length > 0) {
-                var url = '/cgi-bin/koha/tools/batchMod.pl?op=show&del=1';
-                url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                url += '&biblionumber=[% biblionumber | uri %]';
-                url += '&src=CATALOGUING';
-                $('a.itemselection_action_delete').attr('href', url);
-            } else {
-                return false;
-            }
-            return true
-        }
 
-        function itemSelectionBuildModifyLink(tab_id) {
+        function _itemSelectionBuildLink(tab_id, form) {
+
             var itemnumbers = items_selection[tab_id];
-            if (itemnumbers.length > 0) {
-                var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
-                url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                url += '&biblionumber=[% biblionumber | uri %]';
-                url += '&src=CATALOGUING';
-                $('a.itemselection_action_modify').attr('href', url);
-            } else {
-                return false;
-            }
-            return true;
+
+            $(form).find("input[name='itemnumber']").remove();
+
+            $(itemnumbers).each(function() {
+                $(form).append("<input name='itemnumber' type='hidden' value='%s'/>".format(this));
+            });
+            return !!itemnumbers.length
+        }
+        function itemSelectionBuildDeleteLink(tab_id) {
+            return _itemSelectionBuildLink(tab_id, $('#itemselection_action_delete_form'));
+        }
+        function itemSelectionBuildModifyLink(tab_id) {
+            return _itemSelectionBuildLink(tab_id, $('#itemselection_action_modify_form'));
         }
 
         function itemSelectionBuildActionLinks(tab_id) {
