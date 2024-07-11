@@ -98,6 +98,9 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
+    # Ensure barcode is either defined or undef
+    $self->barcode(undef) if $self->barcode eq '';
+
     $self->barcode( C4::Circulation::barcodedecode( $self->barcode ) );
 
     my $today  = dt_from_string;
