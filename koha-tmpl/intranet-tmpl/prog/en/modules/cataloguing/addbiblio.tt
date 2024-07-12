@@ -266,7 +266,7 @@ function addCreateAuthorityButton(tag_subfield_line, heading, tag_index) {
         if(popup !== null) {
             // Create a new form that will be POSTed in the new window
             var form = $('<form>').attr({
-            method: 'post',
+            method: 'get',
             action: "/cgi-bin/koha/authorities/authorities.pl",
             target: "new_auth_popup"
             });
