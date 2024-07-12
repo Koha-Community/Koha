@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Output qw( output_html_with_http_headers );
 use C4::Letters qw( GetPreparedLetter EnqueueLetter SendQueuedMessages );
 use C4::Members;
+use C4::Members::Messaging qw( SetMessagingPreferencesFromDefaults );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;
@@ -90,6 +91,8 @@ elsif ( $rego_found
     try {
         $patron = Koha::Patron->new( $patron_attrs )->store;
         Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $patron && $consent_dt;
+        C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
+            { borrowernumber => $patron->borrowernumber, categorycode => $patron->categorycode } );
     } catch {
         $error_type = ref($_);
         $error_info = "$_";
@@ -112,7 +115,6 @@ elsif ( $rego_found
             }
         );
         $template->param( "confirmed" => 1 );
-        C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $patron->plain_text_password );
         $template->param( borrower => $patron );
