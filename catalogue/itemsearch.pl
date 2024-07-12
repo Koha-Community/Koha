@@ -90,6 +90,8 @@ if (defined $format and $format eq 'json') {
 } elsif (defined $format and $format eq 'barcodes') {
     # Retrieve all results
     $cgi->param('rows', 0);
+} elsif (defined $format and $format eq 'shareable') {
+    # get the item search parameters from the url and fill form
 } elsif (defined $format) {
     die "Unsupported format $format";
 }
@@ -119,7 +121,7 @@ if ( Koha::MarcSubfieldStructures->search( { frameworkcode => '', kohafield => '
     $template->param( has_new_status => 1 );
 }
 
-if ( defined $format ) {
+if ( defined $format and $format ne 'shareable') {
     # Parameters given, it's a search
 
     my $filter = {
@@ -351,6 +353,7 @@ $template->param(
     damageds => \@damageds,
     items_search_fields => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
+    query => $cgi,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

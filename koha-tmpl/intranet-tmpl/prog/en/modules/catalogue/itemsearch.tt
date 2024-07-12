@@ -37,30 +37,59 @@
   <div class="form-field form-field-select">
     <label class="form-field-label" for="[% name | html %]">[% INCLUDE form_label label=name %]</label>
     <select id="[% name | html %]_op" name="[% name | html %]_op">
-      <option value="=">is</option>
-      <option value="!=" >is not</option>
+      [% IF query.param(name _ '_op') == '=' || !query.param(name _ '_op') %]
+        <option value="=" selected="selected">is</option>
+        <option value="!=" >is not</option>
+      [% ELSE %]
+        <option value="=">is</option>
+        <option value="!=" selected="selected">is not</option>
+      [% END %]
     </select>
     <select id="[% name | html %]" name="[% name | html %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 | html %]">
-      <option value="" selected="selected">
-        [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
-      </option>
+      [% IF query.param(name).size == 0 %]
+        <option value="" selected="selected">
+            [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
+        </option>
+      [% END %]
       [% FOREACH option IN options %]
+        [% IF query.param(name).grep(option.value).size %]
+            <option value="[% option.value | html %]" selected="selected">[% option.label | html %]</option>
+        [% ELSE %]
         <option value="[% option.value | html %]">[% option.label | html %]</option>
+        [% END %]
       [% END %]
     </select>
   </div>
 [% END %]
 
 [% BLOCK form_field_select_option %]
-  <option value="[% value | html %]">[% INCLUDE form_label label=value %]</option>
+  [% IF query.param('f').$i == value || query.param('f') == value %]
+    <option value="[% value | html %]" selected="selected">[% INCLUDE form_label label=value %]</option>
+  [% ELSE %]
+    <option value="[% value | html %]">[% INCLUDE form_label label=value %]</option>
+  [% END %]
 [% END %]
 
 [% BLOCK form_field_select_text %]
+  [% SET i = loop.index %]
   <div class="form-field form-field-select-text">
-    <select name="c" class="form-field-conjunction" disabled="disabled">
-      <option value="and">AND</option>
-      <option value="or">OR</option>
-    </select>
+    [% IF loop.first || !query.param('f') %]
+        <select name="c" class="form-field-conjunction" disabled="disabled">
+        <option value="and">AND</option>
+        <option value="or">OR</option>
+        </select>
+    [% ELSE %]
+        [% SET j = i - 1 %]
+        <select name="c" class="form-field-conjunction">
+            [% IF query.param('c').$j == 'and' %]
+                <option value="and" selected="selected">AND</option>
+                <option value="or">OR</option>
+            [% ELSE %]
+                <option value="and">AND</option>
+                <option value="or" selected="selected">OR</option>
+            [% END %]
+        </select>
+    [% END %]
     <select name="f" class="form-field-column">
       [% INCLUDE form_field_select_option value='barcode' %]
       [% INCLUDE form_field_select_option value='itemcallnumber' %]
@@ -84,22 +113,16 @@
         </optgroup>
       [% END %]
     </select>
-    [% IF params.exists('op') %]
-        <select name="op" class="form-field-not">
-           <option value="like">is</option>
-            [% IF params.op == 'not like' %]
-               <option value="not like" selected="selected">is not</option>
-            [% ELSE %]
-               <option value="not like">is not</option>
-            [% END %]
-        </select>
-    [% ELSE %]
-        <select name="op" class="form-field-not">
-           <option value="like">is</option>
-           <option value="not like">is not</option>
-        </select>
-    [% END %]
-    <input type="text" name="q" class="form-field-value" value="" />
+    <select name="op" class="form-field-not">
+        [% IF query.param('op').$i == 'not like' || query.param('op') == 'not like' %]
+            <option value="like">is</option>
+            <option value="not like" selected="selected">is not</option>
+        [% ELSE %]
+            <option value="like">is</option>
+            <option value="not like">is not</option>
+        [% END %]
+    </select>
+    <input type="text" name="q" class="form-field-value" value="[% query.param('q').$i ? query.param('q').$i : query.param('q') | html %]"/>
   </div>
 [% END %]
 
@@ -210,16 +233,34 @@
             [% END %]
             <div class="form-field">
                 <label class="form-field-label">Availability:</label>
-                <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked"/>
+                [% IF query.param('onloan') == '' %]
+                    <input type="radio" name="onloan" id="onloan_indifferent" value="" checked="checked"/>
+                [% ELSE %]
+                    <input type="radio" name="onloan" id="onloan_indifferent" value=""/>
+                [% END %]
                 <label for="onloan_indifferent">Ignore</label>
-                <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" />
+                [% IF query.param('onloan') == 'IS NOT NULL' %]
+                    <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL" checked="checked"/>
+                [% ELSE %]
+                    <input type="radio" name="onloan" id="onloan_yes" value="IS NOT NULL"/>
+                [% END %]
                 <label for="onloan_yes">Checked out</label>
-                <input type="radio" name="onloan" id="onloan_no" value="IS NULL" />
+                [% IF query.param('onloan') == 'IS NULL' %]
+                    <input type="radio" name="onloan" id="onloan_no" value="IS NULL" checked="checked"/>
+                [% ELSE %]
+                    <input type="radio" name="onloan" id="onloan_no" value="IS NULL"/>
+                [% END %]
                 <label for="onloan_no">Not checked out</label>
             </div>
           </fieldset>
           <fieldset>
-            [% INCLUDE form_field_select_text %]
+            [% IF !query.param('f') %]
+                [% INCLUDE form_field_select_text %]
+            [% ELSE %]
+                [% FOREACH field IN query.param('f') %]
+                    [% INCLUDE form_field_select_text %]
+                [% END  %]
+            [% END %]
             <p class="hint">You can use the following wildcard characters: % _</p>
             <p class="hint">% matches any number of characters</p>
             <p class="hint">_ matches only a single character</p>
@@ -227,12 +268,12 @@
           <fieldset>
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
-              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="" />
+              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% query.param('itemcallnumber_from') | html %]" />
               <span class="hint">(inclusive)</span>
             </div>
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
-              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="" />
+              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% query.param('itemcallnumber_to') | html %]" />
               <span class="hint">(inclusive)</span>
             </div>
             [% IF ( has_new_status ) %]
@@ -241,21 +282,49 @@
             <div class="form-field">
               <label class="form-field-label" for="issues_op">Checkout count:</label>
               <select id="issues_op" name="issues_op">
-                <option value=">">&gt;</option>
-                <option value="<">&lt;</option>
-                <option value="=">=</option>
-                <option value="!=">!=</option>
+                [% IF query.param('issues_op') == '>' %]
+                  <option value=">" selected="selected">&gt;</option>
+                [% ELSE %]
+                  <option value=">">&gt;</option>
+                [% END %]
+                [% IF query.param('issues_op') == '<' %]
+                  <option value="<" selected="selected">&lt;</option>
+                [% ELSE %]
+                  <option value="<">&lt;</option>
+                [% END %]
+                [% IF query.param('issues_op') == '=' %]
+                  <option value="=" selected="selected">=</option>
+                [% ELSE %]
+                  <option value="=">=</option>
+                [% END %]
+                [% IF query.param('issues_op') == '!=' %]
+                  <option value="!=" selected="selected">!=</option>
+                [% ELSE %]
+                  <option value="!=">!=</option>
+                [% END %]
               </select>
-              <input type="text" name="issues" />
+              <input type="text" name="issues" value="[% query.param('issues') | html %]"/>
             </div>
             <div class="form-field">
               <label class="form-field-label" for="datelastborrowed_op">Last checkout date:</label>
               <select id="datelastborrowed_op" name="datelastborrowed_op">
-                <option value=">">After</option>
-                <option value="<">Before</option>
-                <option value="=">On</option>
+                [% IF query.param('datelastborrowed_op') == '>' %]
+                  <option value=">" selected="selected">After</option>
+                [% ELSE %]
+                  <option value=">">After</option>
+                [% END %]
+                [% IF query.param('datelastborrowed_op') == '<' %]
+                  <option value="<" selected="selected">Before</option>
+                [% ELSE %]
+                  <option value="<">Before</option>
+                [% END %]
+                [% IF query.param('datelastborrowed_op') == '=' %]
+                  <option value="=" selected="selected">On</option>
+                [% ELSE %]
+                  <option value="=">On</option>
+                [% END %]
               </select>
-              <input type="text" name="datelastborrowed" />
+              <input type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]"/>
               <span class="hint">ISO Format (YYYY-MM-DD)</span>
             </div>
           </fieldset>
@@ -368,6 +437,20 @@
             }
         }
 
+        function getParams($form) {
+            var params = [];
+            $form.find('select:not(:disabled) option:selected,input[type="text"]:not(:disabled),input[type="hidden"]:not(:disabled),input[type="radio"]:checked').each(function() {
+                if ( $(this).prop('tagName').toLowerCase() == 'option' ) {
+                    var name = $(this).parents('select').first().attr('name');
+                    var value = $(this).val();
+                    params.push({ 'name': name, 'value': value });
+                } else {
+                    params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+                }
+            });
+            return params;
+        }
+
         function submitForm($form) {
             var tr = ''
                 + '    <tr>'
@@ -451,6 +534,24 @@
                     $('#item-search-block').show();
                 });
 
+            var getShareableLink = $('<a>')
+                .attr('href', '#')
+                .html("<i class='fa fa-copy'></i> " + _("Copy shareable link") )
+                .addClass('btn btn-secondary')
+                .on('click', function(e) {
+                    e.preventDefault();
+                    var params = getParams( $('#itemsearchform') );
+                    params = params.map(p => {
+                        if(p.name === 'format') {
+                            return { ...p, value: 'shareable' };
+                        }
+                        return p;
+                    })
+                    var url = window.location.origin + window.location.pathname + '?' + $.param(params);
+                    navigator.clipboard.writeText(url);
+                    $(this).tooltip({trigger: 'manual', title: 'Copied!'}).tooltip('show');
+                });
+
             var results_heading = $('<div>').addClass('results-heading')
                 .append("<h1>" + _("Item search results") + "</h1>")
                 .append($('<p>').append(advSearchLink))
@@ -458,21 +559,13 @@
                     .addClass("btn-toolbar")
                     .attr("id","toolbar")
                     .append(editSearchLink)
+                    .append(getShareableLink)
                 );
             $('#results-wrapper').empty()
                 .append(results_heading)
                 .append(table);
 
-            var params = [];
-            $form.find('select:not(:disabled) option:selected,input[type="text"]:not(:disabled),input[type="hidden"]:not(:disabled),input[type="radio"]:checked').each(function() {
-                if ( $(this).prop('tagName').toLowerCase() == 'option' ) {
-                    var name = $(this).parents('select').first().attr('name');
-                    var value = $(this).val();
-                    params.push({ 'name': name, 'value': value });
-                } else {
-                    params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
-                }
-            });
+            var params = getParams($form);
 
             $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
                 "destroy": true,
