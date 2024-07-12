@@ -122,7 +122,11 @@ sub list_rules {
                     rules        => $kinds
                 }
             ) // {};
-            push @{$rules}, $effective_rules;
+            my $return;
+            for my $kind ( @{$kinds} ) {
+                $return->{$kind} = $effective_rules->{$kind};
+            }
+            push @{$rules}, $return;
         } else {
             my $select = [
                 { 'COALESCE' => [ 'branchcode',   \["'*'"] ], -as => 'branchcode' },
