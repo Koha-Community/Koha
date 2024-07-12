@@ -33,7 +33,10 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 subtest 'list_rules() tests' => sub {
-    plan tests => 32;
+
+    my $expected_rules = [ keys %{ Koha::CirculationRules->rule_kinds } ];
+
+    plan tests => ( scalar( @{$expected_rules} ) * 2 ) + 36;
 
     $schema->storage->txn_begin;
 
@@ -62,9 +65,18 @@ subtest 'list_rules() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     my $unauth_userid = $patron->userid;
 
+    note("Effective rules by default");
     ## Authorized user tests
-    # No circulation_rules, so empty hash should be returned
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is( '/0' => {} );
+    # No circulation_rules, so all keys in the returned hash should be undefined
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200);
+
+    # Extract and decode the JSON response
+    my $json = $t->tx->res->json;
+    note("No rules defined");
+    foreach my $key ( @{$expected_rules} ) {
+        ok( exists $json->[0]->{$key}, "Key '$key' exists in the JSON response" );
+        is( $json->[0]->{$key}, undef, "'$key' is undefined" );
+    }
 
     # One rule created, should get returned
     ok(
@@ -80,8 +92,10 @@ subtest 'list_rules() tests' => sub {
         'Given I added an issuing rule branchcode => undef,' . ' categorycode => undef, itemtype => undef,'
     );
 
+    note("One default rule defined");
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
-        ->json_is( '/0' => { 'fine' => 2 }, "Our single rule is returned" );
+        ->json_is( '/0/fine'     => 2,     "Default fine rule is returned as expected" )
+        ->json_is( '/0/finedays' => undef, "Rule finedays is undefined as expected" );
 
     # Two circulation_rules created, they should both be returned
     ok(
@@ -97,13 +111,10 @@ subtest 'list_rules() tests' => sub {
         'Given I added another issuing rule branchcode => undef,' . ' categorycode => undef, itemtype => undef,'
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is(
-        '/0' => {
-            fine     => 2,
-            finedays => 5,
-        },
-        "Two default rules are returned"
-    );
+    note("Two default rules defined");
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
+        ->json_is( '/0/fine'     => 2, "Default fine rule is returned as expected" )
+        ->json_is( '/0/finedays' => 5, "Default finedays rule is returned as expected" );
 
     # Specificity works, three circulation_rules stored, one branchcode specific
     ok(
@@ -119,21 +130,17 @@ subtest 'list_rules() tests' => sub {
         "Given I added an issuing rule branchcode => $branchcode," . ' categorycode => undef, itemtype => undef,'
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")->status_is(200)->json_is(
-        '/0' => {
-            fine     => 4,
-            finedays => 5,
-        },
-        "Branch specific rule is returned when library is added to request query"
-    );
+    note("Two default rules and one branch rule defined");
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?library_id=$branchcode")->status_is(200)
+        ->json_is( '/0/fine' => 4, "Branch specific fine rule is returned when library is added to request query" )
+        ->json_is(
+        '/0/finedays' => 5,
+        "Default finedays rule is returned when library is added to request query but no branch specific rule is defined"
+        );
 
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)->json_is(
-        '/0' => {
-            fine     => 2,
-            finedays => 5,
-        },
-        "Default rules are returned when no library is added to request query"
-    );
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
+        ->json_is( '/0/fine'     => 2, "Defaul fine rule returned when no library is added to request query" )
+        ->json_is( '/0/finedays' => 5, "Default finedays rule returned when no library is added to request query" );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")->status_is(400)
@@ -202,5 +209,71 @@ subtest 'list_rules() tests' => sub {
     # Unauthorized access
     $t->get_ok("//$unauth_userid:$password@/api/v1/circulation_rules")->status_is(403);
 
+    subtest 'effective=false tests' => sub {
+
+        my $count = scalar( @{$expected_rules} );
+
+        plan tests => ( $count * 2 ) + $count + 10;
+
+        # All rules
+        $t->get_ok("//$userid:$password@/api/v1/circulation_rules?effective=0")->status_is(200);
+
+        # Extract and decode the JSON response
+        my $json = $t->tx->res->json;
+
+        # Check if the response is an array
+        is( ref $json,          'ARRAY', 'Response is an array' );
+        is( scalar( @{$json} ), 2,       'Response contains 2 rule sets' );
+
+        # Iterate over each hash in the array
+        my $index = 0;
+        foreach my $hash ( @{$json} ) {
+            my $pointer = Mojo::JSON::Pointer->new($hash);
+
+            # First rule set should march default, default, default
+            if ( $index == 0 ) {
+                ok(        $pointer->get('/branchcode') eq "*"
+                        && $pointer->get('/itemtype') eq '*'
+                        && $pointer->get('/categorycode') eq '*', "Default rules returned first" );
+            }
+
+            # Iterate over the list of expected keys for each hash
+            foreach my $key ( @{$expected_rules} ) {
+                ok( $pointer->contains( '/' . $key ), "Hash contains key '$key'" );
+            }
+
+            $index++;
+        }
+
+        # Filter on library
+        $t->get_ok("//$userid:$password@/api/v1/circulation_rules?effective=0&library_id=$branchcode")->status_is(200);
+
+        # Extract and decode the JSON response
+        $json = $t->tx->res->json;
+
+        # Check if the response is an array
+        is( ref $json,          'ARRAY', 'Response is an array' );
+        is( scalar( @{$json} ), 1,       'Filtered response contains 1 rule set' );
+
+        $index = 0;
+        foreach my $hash ( @{$json} ) {
+            my $pointer = Mojo::JSON::Pointer->new($hash);
+
+            # First (and only) rule set should match branchcode, default, default.
+            if ( $index == 0 ) {
+                ok(        $pointer->get('/branchcode') eq $branchcode
+                        && $pointer->get('/itemtype') eq '*'
+                        && $pointer->get('/categorycode') eq '*', "Branchcode rule set returned when filtered" );
+            }
+
+            # Iterate over the list of expected keys for each hash
+            foreach my $key ( @{$expected_rules} ) {
+                ok( $pointer->contains( '/' . $key ), "Hash contains key '$key'" );
+            }
+
+            $index++;
+        }
+
+    };
     $schema->storage->txn_rollback;
 };
