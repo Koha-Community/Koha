@@ -667,6 +667,7 @@ sub LinkBibHeadingsToAuthorities {
     my $tagtolink     = shift;
     my $verbose = shift;
     my %results;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
     if (!$bib) {
         carp 'LinkBibHeadingsToAuthorities called on undefined bib record';
         return ( 0, {});
@@ -708,7 +709,12 @@ sub LinkBibHeadingsToAuthorities {
             push(@{$results{'details'}}, { tag => $field->tag(), authid => $authid, status => 'LOCAL_FOUND'}) if $verbose;
         }
         else {
-            my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
+            my $authority_type =
+                $memory_cache->get_from_cache( "LinkBibHeadingsToAuthorities:AuthorityType:" . $heading->auth_type() );
+            unless ($authority_type) {
+                $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
+                $memory_cache->set_in_cache( "LinkBibHeadingsToAuthorities:AuthorityType:" . $heading->auth_type() );
+            }
             if ( defined $current_link
                 && (!$allowrelink || C4::Context->preference('LinkerKeepStale')) )
             {
@@ -722,7 +728,6 @@ sub LinkBibHeadingsToAuthorities {
                     $results{'unlinked'}->{ $heading->display_form() }++;
                     push(@{$results{'details'}}, { tag => $field->tag(), authid => undef, status => 'MULTIPLE_MATCH', auth_type => $heading->auth_type(), tag_to_report => $authority_type->auth_tag_to_report}) if $verbose;
                 } elsif ( !$match_count ) {
-                    my $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
                     my $marcrecordauth = MARC::Record->new();
                     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
                         $marcrecordauth->leader('     nz  a22     o  4500');
