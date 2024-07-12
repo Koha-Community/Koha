@@ -51,11 +51,11 @@ sub list_rules {
 
     return try {
         my $effective       = $c->param('effective') // 1;
-        my $kinds           = $c->param('rules') // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+        my $kinds           = $c->param('rules')     // [ keys %{ Koha::CirculationRules->rule_kinds } ];
         my $item_type       = $c->param('item_type_id');
         my $branchcode      = $c->param('library_id');
         my $patron_category = $c->param('patron_category_id');
-        my ($filter_branch, $filter_itemtype, $filter_patron);
+        my ( $filter_branch, $filter_itemtype, $filter_patron );
 
         if ($item_type) {
             $filter_itemtype = 1;
@@ -124,8 +124,12 @@ sub list_rules {
             ) // {};
             push @{$rules}, $effective_rules;
         } else {
-            my $select = [ 'branchcode', 'categorycode', 'itemtype' ];
-            my $as     = [ 'branchcode', 'categorycode', 'itemtype' ];
+            my $select = [
+                { 'COALESCE' => [ 'branchcode',   \["'*'"] ], -as => 'branchcode' },
+                { 'COALESCE' => [ 'categorycode', \["'*'"] ], -as => 'categorycode' },
+                { 'COALESCE' => [ 'itemtype',     \["'*'"] ], -as => 'itemtype' }
+            ];
+            my $as = [ 'branchcode', 'categorycode', 'itemtype' ];
             for my $kind ( @{$kinds} ) {
                 push @{$select}, { max => \[ "CASE WHEN rule_name = ? THEN rule_value END", $kind ], -as => $kind };
                 push @{$as}, $kind;
