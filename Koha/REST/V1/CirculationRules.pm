@@ -51,7 +51,10 @@ sub list_rules {
 
     return try {
         my $effective       = $c->param('effective') // 1;
-        my $kinds           = $c->param('rules')     // [ keys %{ Koha::CirculationRules->rule_kinds } ];
+        my $kinds =
+            defined( $c->param('rules') )
+            ? [ split /\s*,\s*/, $c->param('rules') ]
+            : [ keys %{ Koha::CirculationRules->rule_kinds } ];
         my $item_type       = $c->param('item_type_id');
         my $branchcode      = $c->param('library_id');
         my $patron_category = $c->param('patron_category_id');

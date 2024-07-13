@@ -36,7 +36,7 @@ subtest 'list_rules() tests' => sub {
 
     my $expected_rules = [ keys %{ Koha::CirculationRules->rule_kinds } ];
 
-    plan tests => ( scalar( @{$expected_rules} ) * 2 ) + 36;
+    plan tests => ( scalar( @{$expected_rules} ) * 2 ) + 39;
 
     $schema->storage->txn_begin;
 
@@ -139,8 +139,12 @@ subtest 'list_rules() tests' => sub {
         );
 
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules")->status_is(200)
-        ->json_is( '/0/fine'     => 2, "Defaul fine rule returned when no library is added to request query" )
+        ->json_is( '/0/fine'     => 2, "Default fine rule returned when no library is added to request query" )
         ->json_is( '/0/finedays' => 5, "Default finedays rule returned when no library is added to request query" );
+
+    # Limit to only rules we're interested in
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules=fine,finedays")->status_is(200)
+        ->json_is( '/0' => { fine => 2, finedays => 5 }, "Only the two rules we asked for are returned" );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")->status_is(400)
