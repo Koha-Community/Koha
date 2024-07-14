@@ -132,8 +132,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     // Lead and Trail days syncing
     let leadDays = 0;
     let trailDays = 0;
+    let lengthDays;
     function getCirculationRules() {
-        let rules_url = "/api/v1/circulation_rules";
         $.ajax({
             url: rules_url,
             type: "GET",
@@ -142,10 +142,12 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 patron_category_id: booking_patron.category_id,
                 item_type_id: booking_itemtype_id,
                 library_id: pickup_library_id,
-                rules: "bookings_lead_period,bookings_trail_period",
+                rules: "bookings_lead_period,bookings_trail_period,issuelength,renewalsallowed,renewalperiod"
             },
             success: function (response) {
                 let rules = response[0];
+                let renewalLength = rules.renewalsallowed * rules.renewalperiod;
+                lengthDays = rules.issuelength + renewalLength;
                 leadDays = rules.bookings_lead_period;
                 trailDays = rules.bookings_trail_period;
 
@@ -676,8 +678,17 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         dateStr,
                         instance
                     ) {
+                        // Start date selected
+                        if (selectedDates[0] && !selectedDates[1]) {
+                            // Calculate the maximum date based on the selected start date
+                            const maxDate = new Date(selectedDates[0]);
+                            maxDate.setDate(maxDate.getDate() + lengthDays );
+
+                            // Update the maxDate option of the flatpickr instance
+                            instance.set('maxDate', maxDate);
+                        }
                         // Range set, update hidden fields and set available items
-                        if (selectedDates[0] && selectedDates[1]) {
+                        else if (selectedDates[0] && selectedDates[1]) {
                             // set form fields from picker
                             let picker_start = dayjs(selectedDates[0]);
                             let picker_end = dayjs(selectedDates[1]).endOf(
