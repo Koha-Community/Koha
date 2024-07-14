@@ -132,8 +132,12 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     // Lead and Trail days syncing
     let leadDays = 0;
     let trailDays = 0;
-    let lengthDays;
+    let boldDates = [];
+    let issueLength;
+    let renewalLength;
+    let renewalsAllowed;
     function getCirculationRules() {
+        let rules_url = "/api/v1/circulation_rules";
         $.ajax({
             url: rules_url,
             type: "GET",
@@ -142,12 +146,13 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 patron_category_id: booking_patron.category_id,
                 item_type_id: booking_itemtype_id,
                 library_id: pickup_library_id,
-                rules: "bookings_lead_period,bookings_trail_period,issuelength,renewalsallowed,renewalperiod"
+                rules: "bookings_lead_period,bookings_trail_period,issuelength,renewalsallowed,renewalperiod",
             },
             success: function (response) {
                 let rules = response[0];
-                let renewalLength = rules.renewalsallowed * rules.renewalperiod;
-                lengthDays = rules.issuelength + renewalLength;
+                issueLength = rules.issuelength;
+                renewalsAllowed = rules.renewalsallowed;
+                renewalLength = rules.renewalperiod;
                 leadDays = rules.bookings_lead_period;
                 trailDays = rules.bookings_trail_period;
 
@@ -680,12 +685,40 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     ) {
                         // Start date selected
                         if (selectedDates[0] && !selectedDates[1]) {
+                            const startDate = new Date(selectedDates[0]);
+
+                            // Custom format function to make specific dates bold
+                            boldDates = [new Date(startDate)];
+                            // Add issueLength days after the startDate
+                            const nextDate = new Date(startDate);
+                            nextDate.setDate(
+                                nextDate.getDate() + parseInt(issueLength)
+                            );
+                            boldDates.push(new Date(nextDate));
+
+                            // Add subsequent dates based on renewalsAllowed and renewalLength
+                            for (let i = 0; i < renewalsAllowed; i++) {
+                                nextDate.setDate(
+                                    nextDate.getDate() + parseInt(renewalLength)
+                                );
+                                boldDates.push(new Date(nextDate));
+                            }
+
                             // Calculate the maximum date based on the selected start date
-                            const maxDate = new Date(selectedDates[0]);
-                            maxDate.setDate(maxDate.getDate() + lengthDays );
+                            let totalRenewalLength =
+                                parseInt(renewalsAllowed) *
+                                parseInt(renewalLength);
+                            let totalIssueLength =
+                                parseInt(issueLength) +
+                                parseInt(totalRenewalLength);
+
+                            const maxDate = new Date(startDate.getTime());
+                            maxDate.setDate(
+                                maxDate.getDate() + totalIssueLength
+                            );
 
                             // Update the maxDate option of the flatpickr instance
-                            instance.set('maxDate', maxDate);
+                            instance.set("maxDate", maxDate);
                         }
                         // Range set, update hidden fields and set available items
                         else if (selectedDates[0] && selectedDates[1]) {
@@ -799,15 +832,24 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         instance,
                         dayElem
                     ) {
-                        const currentDate = dayElem.dateObj
+                        const currentDate = dayElem.dateObj;
+                        const dateString = currentDate
                             .toISOString()
                             .split("T")[0];
 
-                        if (bookingsByDate[currentDate]) {
+                        const isBold = boldDates.some(
+                            boldDate =>
+                                boldDate.getTime() === currentDate.getTime()
+                        );
+                        if (isBold) {
+                            dayElem.classList.add("title");
+                        }
+
+                        if (bookingsByDate[dateString]) {
                             const dots = document.createElement("span");
                             dots.className = "event-dots";
                             dayElem.appendChild(dots);
-                            bookingsByDate[currentDate].forEach(item => {
+                            bookingsByDate[dateString].forEach(item => {
                                 const dot = document.createElement("span");
                                 dot.className = "event item_" + item;
                                 dots.appendChild(dot);
