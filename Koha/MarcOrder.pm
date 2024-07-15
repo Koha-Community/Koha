@@ -108,7 +108,7 @@ sub import_record_and_create_order_lines {
         skip                => $result->{skip}
     } if $result->{skip};
 
-    my $order_line_details = add_items_from_import_record(
+    my $itemnumbers = add_items_from_import_record(
         {
             record_result      => $result->{record_result},
             basket_id          => $basket_id,
@@ -118,8 +118,6 @@ sub import_record_and_create_order_lines {
             client_item_fields => $client_item_fields
         }
     );
-
-    my $order_lines = create_order_lines( { order_line_details => $order_line_details } );
 
     return {
         duplicates_in_batch => 0,
@@ -136,7 +134,7 @@ sub import_record_and_create_order_lines {
 =cut
 
 sub _get_syspref_mappings {
-    my ($record, $syspref_to_read) = @_;
+    my ( $record, $syspref_to_read ) = @_;
     my $syspref = C4::Context->yaml_preference($syspref_to_read);
     my @result;
     my @tags_list;
@@ -183,7 +181,7 @@ sub _get_syspref_mappings {
             push @result, $r;
         }
     }
-    return \@result if $syspref_to_read eq 'MarcItemFieldsToOrder';
+    return \@result   if $syspref_to_read eq 'MarcItemFieldsToOrder';
     return $result[0] if $syspref_to_read eq 'MarcFieldsToOrder';
 }
 
@@ -370,7 +368,7 @@ sub add_items_from_import_record {
             }
         );
 
-        my $order_line_details = create_items_and_generate_order_hash(
+        my $itemnumbers = create_items_and_generate_order_hash(
             {
                 fields          => $order_line_fields,
                 vendor          => $vendor,
@@ -379,7 +377,7 @@ sub add_items_from_import_record {
             }
         );
 
-        return $order_line_details;
+        return $itemnumbers;
     }
 
     if ( $agent eq 'client' ) {
@@ -405,35 +403,6 @@ sub add_items_from_import_record {
 
         return $order_line_details;
     }
-}
-
-=head3 create_order_lines
-
-    my $order_lines = create_order_lines({
-        order_line_details => $order_line_details
-    });
-
-    Creates order lines based on an array of order line details
-
-=cut
-
-sub create_order_lines {
-    my ($args) = @_;
-
-    my $order_line_details = $args->{order_line_details};
-
-    foreach my $order_detail ( @{$order_line_details} ) {
-        my @itemnumbers = $order_detail->{itemnumbers} || ();
-        delete( $order_detail->{itemnumbers} );
-        my $order = Koha::Acquisition::Order->new( \%{$order_detail} );
-        $order->populate_with_prices_for_ordering();
-        $order->populate_with_prices_for_receiving();
-        $order->store;
-        foreach my $itemnumber (@itemnumbers) {
-            $order->add_item($itemnumber);
-        }
-    }
-    return;
 }
 
 =head3 import_batches_list
@@ -563,13 +532,13 @@ sub import_biblios_list {
 
         my $infos = _get_syspref_mappings( $marcrecord, 'MarcFieldsToOrder' );
 
-        my $price            = $infos->{price} || undef;
+        my $price            = $infos->{price}            || undef;
         my $replacementprice = $infos->{replacementprice} || undef;
-        my $quantity         = $infos->{quantity} || undef;
-        my $budget_code      = $infos->{budget_code} || undef;
-        my $discount         = $infos->{discount} || undef;
-        my $sort1            = $infos->{sort1} || undef;
-        my $sort2            = $infos->{sort2} || undef;
+        my $quantity         = $infos->{quantity}         || undef;
+        my $budget_code      = $infos->{budget_code}      || undef;
+        my $discount         = $infos->{discount}         || undef;
+        my $sort1            = $infos->{sort1}            || undef;
+        my $sort2            = $infos->{sort2}            || undef;
         my $budget_id;
 
         if ($budget_code) {
@@ -582,10 +551,11 @@ sub import_biblios_list {
         # Items
         my @itemlist           = ();
         my $all_items_quantity = 0;
-        my $alliteminfos = _get_syspref_mappings( $marcrecord, 'MarcItemFieldsToOrder' );
+        my $alliteminfos       = _get_syspref_mappings( $marcrecord, 'MarcItemFieldsToOrder' );
 
         if ( $alliteminfos != -1 ) {
             foreach my $iteminfos (@$alliteminfos) {
+
                 # Quantity is required, default to one if not supplied
                 my $quantity = delete $iteminfos->{quantity} || 1;
 
@@ -787,7 +757,7 @@ sub parse_input_into_order_line_fields {
         marcrecord               => $marcrecord,
     };
 
-    if($client) {
+    if ($client) {
         $order_line_fields->{tags}               = $fields->{tags};
         $order_line_fields->{subfields}          = $fields->{subfields};
         $order_line_fields->{field_values}       = $fields->{field_values};
@@ -825,8 +795,7 @@ sub create_items_and_generate_order_hash {
     my $budget_id       = $fields->{budget_id};
     my $vendor          = $args->{vendor};
     my $active_currency = $args->{active_currency};
-    my @order_line_details;
-    my $itemcreation = 0;
+    my $itemcreation    = 0;
     my @itemnumbers;
 
     for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
@@ -856,11 +825,12 @@ sub create_items_and_generate_order_hash {
     }
 
     if ( $itemcreation == 1 ) {
+
         # Group orderlines from MarcItemFieldsToOrder
         my $budget_hash;
         my @budget_ids = @{ $fields->{budget_code} };
         for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
-            $budget_ids[$i] = $budget_id if !$budget_ids[$i];   # Use default budget if no budget provided
+            $budget_ids[$i] = $budget_id if !$budget_ids[$i];    # Use default budget if no budget provided
             $budget_hash->{ $budget_ids[$i] }->{quantity} += 1;
             $budget_hash->{ $budget_ids[$i] }->{price} = @{ $fields->{price} }[$i];
             $budget_hash->{ $budget_ids[$i] }->{replacementprice} =
@@ -911,6 +881,7 @@ sub create_items_and_generate_order_hash {
             }
         }
     } else {
+
         # Add an orderline for each MARC record
         # Get quantity in the MARC record (1 if none)
         my $quantity  = GetMarcQuantity( $fields->{marcrecord}, C4::Context->preference('marcflavour') ) || 1;
@@ -930,8 +901,8 @@ sub create_items_and_generate_order_hash {
         );
 
         # Get the price if there is one.
-        if ($fields->{c_price}) {
-            $fields->{c_price} = _format_price_to_CurrencyFormat_syspref($fields->{c_price});
+        if ( $fields->{c_price} ) {
+            $fields->{c_price}                = _format_price_to_CurrencyFormat_syspref( $fields->{c_price} );
             $fields->{c_price}                = Koha::Number::Price->new( $fields->{c_price} )->unformat;
             $orderinfo{tax_rate_on_ordering}  = $vendor->tax_rate;
             $orderinfo{tax_rate_on_receiving} = $vendor->tax_rate;
@@ -954,7 +925,7 @@ sub create_items_and_generate_order_hash {
         $order->populate_with_prices_for_receiving();
         $order->store;
 
-        my $basket = Koha::Acquisition::Baskets->find( $basket_id );
+        my $basket = Koha::Acquisition::Baskets->find($basket_id);
         if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
             my @tags         = @{ $fields->{tags} };
             my @subfields    = @{ $fields->{subfields} };
@@ -963,13 +934,14 @@ sub create_items_and_generate_order_hash {
             my $xml          = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
             my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for ( my $qtyloop = 1 ; $qtyloop <= $fields->{c_quantity} ; $qtyloop++ ) {
-                my ( $biblionumber, undef, $itemnumber ) = AddItemFromMarc( $fields->{marcrecord}, $fields->{biblionumber} );
+                my ( $biblionumber, undef, $itemnumber ) =
+                    AddItemFromMarc( $fields->{marcrecord}, $fields->{biblionumber} );
                 $order->add_item($itemnumber);
             }
         }
     }
 
-    return \@order_line_details;
+    return \@itemnumbers;
 }
 
 =head3 _format_price_to_CurrencyFormat_syspref

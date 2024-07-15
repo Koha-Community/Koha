@@ -32,7 +32,7 @@ use t::lib::TestBuilder;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest '_get_MarcItemFieldsToOrder_syspref_data()' => sub {
+subtest '_get_syspref_mappings() MarcItemFieldsToOrder' => sub {
     plan tests => 14;
 
     $schema->storage->txn_begin;
@@ -66,8 +66,8 @@ replacementprice: 975$v'
     );
 
     my $marc_item_fields_to_order = @{
-        Koha::MarcOrder::_get_MarcItemFieldsToOrder_syspref_data(
-            $record,
+        Koha::MarcOrder::_get_syspref_mappings(
+            $record, 'MarcItemFieldsToOrder',
         )
     }[0];
 
@@ -131,7 +131,7 @@ replacementprice: 975$v'
     $schema->storage->txn_rollback;
 };
 
-subtest '_get_MarcFieldsToOrder_syspref_data()' => sub {
+subtest '_get_syspref_mappings() MarcFieldsToOrder' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
@@ -149,9 +149,8 @@ budget_code: 975$h'
         [ '975', ' ', ' ', p => 10, q => 1, h => 1 ],
     );
 
-    my $marc_fields_to_order = Koha::MarcOrder::_get_MarcFieldsToOrder_syspref_data(
-        'MarcFieldsToOrder', $record,
-        [ 'price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2' ]
+    my $marc_fields_to_order = Koha::MarcOrder::_get_syspref_mappings(
+        $record, 'MarcFieldsToOrder',
     );
 
     is(
@@ -381,10 +380,13 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         'itypes'     => [
             'BK',
             'BK'
-        ]
+        ],
+        'coded_location_qualifiers' => [],
+        'barcodes'                  => [],
+        'enumchrons'                => []
     };
 
-    my $order_line_details = Koha::MarcOrder::add_items_from_import_record(
+    my $itemnumbers = Koha::MarcOrder::add_items_from_import_record(
         {
             record_result      => $result->{record_result},
             basket_id          => 1,
@@ -395,25 +397,26 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         }
     );
 
+    my $orders = Koha::Acquisition::Orders->search()->unblessed;
+
     is(
-        @{$order_line_details}[0]->{rrp}, '10.00',
+        @{$orders}[0]->{rrp} + 0, '10',
         "Price has been read correctly"
     );
     is(
-        @{$order_line_details}[0]->{listprice}, '10',
+        @{$orders}[0]->{listprice} + 0, '10',
         "Listprice has been created successfully"
     );
     is(
-        @{$order_line_details}[0]->{quantity}, 1,
+        @{$orders}[0]->{quantity}, 2,
         "Quantity has been read correctly"
     );
     is(
-        @{$order_line_details}[0]->{budget_id}, $budgetid,
+        @{$orders}[0]->{budget_id}, $budgetid,
         "Budget code has been read correctly"
     );
 
-    my @created_items = @{$order_line_details}[0]->{itemnumbers};
-    my $new_item      = Koha::Items->find( $created_items[0] );
+    my $new_item = Koha::Items->find( ${$itemnumbers}[0] );
 
     isnt(
         $new_item, undef,
