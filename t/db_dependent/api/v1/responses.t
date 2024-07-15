@@ -132,9 +132,10 @@ subtest 'render_invalid_parameter_value() tests' => sub {
     $authorized_patron->set_password( { password => $password, skip_validation => 1 } );
     my $userid = $authorized_patron->userid;
 
-    my $path        = '/query/library';
-    my $uri         = '/api/v1/libraries';
-    my $field       = 'library_id';
+    my $path  = '/query/library_id';
+    my $uri   = '/api/v1/libraries';
+    my $field = 'library_id';
+
     my $mock_circulation_rules = Test::MockModule->new('Koha::REST::V1::CirculationRules');
     $mock_circulation_rules->mock(
         'list_effective_rules',
