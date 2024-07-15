@@ -361,10 +361,13 @@ sub build_authorized_values_list {
         }
     }
 
+    my $id_subfield = $subfield;
+    $id_subfield = "00" if $id_subfield eq "@";
+
     return {
         type     => 'select',
-        id       => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
-        name     => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        id       => "tag_".$tag."_subfield_".$id_subfield."_".$index_tag."_".$index_subfield,
+        name     => "tag_".$tag."_subfield_".$id_subfield."_".$index_tag."_".$index_subfield,
         default  => $value,
         values   => \@authorised_values,
         labels   => \%authorised_lib,
