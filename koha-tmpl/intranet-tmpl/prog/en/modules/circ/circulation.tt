@@ -1112,7 +1112,9 @@
                     [% END %]
                 }
             });
-            toggle_onsite_checkout();
+            [% IF Koha.Preference('OnSiteCheckoutAutoCheck') && onsite_checkout == "on" %]
+                toggle_onsite_checkout();
+            [% END %]
             $("#onsite_checkout").click(function(){
                 toggle_onsite_checkout();
             });
