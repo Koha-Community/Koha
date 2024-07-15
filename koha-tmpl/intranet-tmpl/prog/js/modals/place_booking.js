@@ -133,7 +133,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
     // Lead and Trail days syncing
     let leadDays = 0;
     let trailDays = 0;
-    function setBufferDays() {
+    function getCirculationRules() {
         let rules_url = "/api/v1/circulation_rules";
         $.ajax({
             url: rules_url,
@@ -149,6 +149,14 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 let rules = response[0]
                 leadDays = rules.bookings_lead_period;
                 trailDays = rules.bookings_trail_period;
+
+                // redraw pariodPicker taking selected item into account
+                periodPicker.redraw();
+
+                // Enable flatpickr now we have data we need
+                if (dataFetched) {
+                    $("#period_fields :input").prop("disabled", false);
+                }
             },
             error: function (xhr, status, error) {
                 console.log("Circulation rules fetch failed: ", error);
@@ -274,7 +282,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         }
 
         // Populate circulation rules
-        setBufferDays();
+        getCirculationRules();
     });
 
     // Adopt periodPicker
@@ -578,8 +586,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     });
                     $("#booking_item_id").trigger("change.select2");
 
-                    // update buffer days
-                    setBufferDays();
+                    // Update circulation rules
+                    getCirculationRules();
                 });
 
                 // Setup listener for item select2
@@ -625,11 +633,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         $("#booking_itemtype").prop("disabled", false);
                     }
 
-                    // update buffer days
-                    setBufferDays();
-
-                    // redraw pariodPicker taking selected item into account
-                    periodPicker.redraw();
+                    // Update circulation rules
+                    getCirculationRules();
                 });
 
                 // Setup listener for pickup location select2
@@ -859,7 +864,6 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                 // Enable flatpickr now we have date function populated
                 periodPicker.redraw();
-                $("#period_fields :input").prop("disabled", false);
 
                 // Redraw itemtype select with new options and enable
                 let $bookingItemtypeSelect = $("#booking_itemtype");
