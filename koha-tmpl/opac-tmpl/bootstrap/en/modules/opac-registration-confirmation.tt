@@ -106,19 +106,20 @@
                                 <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="koha_login_context" value="opac" />
+                                    <input type="hidden" name="op" value="cud-login">
                                     <fieldset class="brief">
                                         <legend>Log in to your account:</legend>
                                         <label for="userid">Login:</label>
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="[% borrower.userid | html %]" autocomplete="off" />
+                                            <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="[% borrower.userid | html %]" autocomplete="off" />
                                         [% ELSE %]
-                                            <input class="form-control" type="text" id="userid" size="10" name="userid" value="" autocomplete="off" />
+                                            <input class="form-control" type="text" id="userid" size="10" name="login_userid" value="" autocomplete="off" />
                                         [% END %]
                                         <label for="password">Password:</label>
                                         [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                            <input class="form-control" type="password" id="password" size="10" name="password" value="[% password_cleartext | html %]" autocomplete="off" />
+                                            <input class="form-control" type="password" id="password" size="10" name="login_password" value="[% password_cleartext | html %]" autocomplete="off" />
                                         [% ELSE %]
-                                            <input class="form-control" type="password" id="password" size="10" name="password" value="" autocomplete="off" />
+                                            <input class="form-control" type="password" id="password" size="10" name="login_password" value="" autocomplete="off" />
                                         [% END %]
                                     <fieldset class="action">
                                         <input type="submit" value="Log in" class="btn btn-primary" />
