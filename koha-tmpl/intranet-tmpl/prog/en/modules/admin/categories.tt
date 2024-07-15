@@ -446,16 +446,19 @@
                     <div class="hint">If <i>Yes</i>, holds placed by patrons of this category will not be given priority</div>
                 </li>
                 <li>
-                    <label for="noissuescharge">No issues charge: </label>
-                    <input type="text" name="noissuescharge" id="noissuescharge" value="[% category.noissuescharge | html %]" size="3" maxlength="3" />
+                    <label for="noissuescharge">Checkout charge limit: </label>
+                    <input type="text" name="noissuescharge" id="noissuescharge" value="[% category.noissuescharge | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">noissuescharge</a> preference</div>
                 </li>
                 <li>
-                    <label for="noissueschargeguarantees">No issues charge guarantees: </label>
-                    <input type="text" name="noissueschargeguarantees" id="noissueschargeguarantees" value="[% category.noissueschargeguarantees | html %]" size="3" maxlength="3" />
+                    <label for="noissueschargeguarantees">Guarantees checkout charge limit: </label>
+                    <input type="text" name="noissueschargeguarantees" id="noissueschargeguarantees" value="[% category.noissueschargeguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantees</a> preference</div>
                 </li>
                 <li>
-                    <label for="noissueschargeguarantorswithguarantees">No issues charge guarantors with guarantees: </label>
-                    <input type="text" name="noissueschargeguarantorswithguarantees" id="noissueschargeguarantorswithguarantees" value="[% category.noissueschargeguarantorswithguarantees | html %]" size="3" maxlength="3" />
+                    <label for="noissueschargeguarantorswithguarantees">Guarantors with guarantees checkout charge limit: </label>
+                    <input type="text" name="noissueschargeguarantorswithguarantees" id="noissueschargeguarantorswithguarantees" value="[% category.noissueschargeguarantorswithguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantorsWithGuarantees</a> preference</div>
                 </li>
             </ol>
         </fieldset>
@@ -602,9 +605,9 @@
                     <th scope="col">Can be guarantee</th>
                     <th scope="col">Default privacy</th>
                     <th scope="col">Exclude from local holds priority</th>
-                    <th scope="col">No issues charge</th>
-                    <th scope="col">No issues charge guarantees</th>
-                    <th scope="col">No issues charge guarantors with guarantees</th>
+                    <th scope="col">Checkout charge limit</th>
+                    <th scope="col">Guarantees checkout charge limit</th>
+                    <th scope="col">Guarantors with guarantees checkout charge limit</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -743,19 +746,19 @@
                             [% END %]
                         </td>
                         [% IF (category.noissuescharge) %]
-                            <td>[% category.noissuescharge | html %]</td>
+                            <td>[% category.noissuescharge | $Price %]</td>
                         [% ELSE %]
-                            <td>0.00</td>
+                            <td>[% 0.00 | $Price %]</td>
                         [% END %]
                         [% IF (category.noissueschargeguarantees) %]
-                            <td>[% category.noissueschargeguarantees | html %]</td>
+                            <td>[% category.noissueschargeguarantees | $Price %]</td>
                         [% ELSE %]
-                            <td>0.00</td>
+                            <td>[% 0.00 | $Price %]</td>
                         [% END %]
                         [% IF (category.noissueschargeguarantorswithguarantees) %]
-                            <td>[% category.noissueschargeguarantorswithguarantees | html %]</td>
+                            <td>[% category.noissueschargeguarantorswithguarantees | $Price %]</td>
                         [% ELSE %]
-                            <td>0.00</td>
+                            <td>[% 0.00 | $Price %]</td>
                         [% END %]
                         <td class="actions">
                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/categories.pl?op=add_form&amp;categorycode=[% category.categorycode |uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>

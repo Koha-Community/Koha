@@ -2902,12 +2902,13 @@ sub consent {
 }
 
 
-=head3 can_borrow
 
-my $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+=head3 can_checkout
 
-This method determines whether a borrower is able to borrow based on various parameters.
-- Debarrments
+my $patron_borrowing_status = $patron->can_checkout( { patron => $patron } );
+
+This method determines whether a patron is able to borrow based on various parameters.
+- Restrictions
 - Expiry
 - Charges
 
@@ -2915,19 +2916,19 @@ If any blockers are found, these are returned in a hash
 
 =cut
 
-sub can_borrow {
+sub can_checkout {
     my ($self) = @_;
 
-    my $status = { can_borrow => 1 };
+    my $status = { can_checkout => 1 };
 
-    $status->{debarred}   = 1 if $self->debarred;
-    $status->{expired}    = 1 if $self->is_expired;
-    $status->{can_borrow} = 0 if $status->{debarred} || $status->{expired};
+    $status->{debarred}     = 1 if $self->debarred;
+    $status->{expired}      = 1 if $self->is_expired;
+    $status->{can_checkout} = 0 if $status->{debarred} || $status->{expired};
 
     # Patron charges
     my $patron_charge_limits = $self->is_patron_inside_charge_limits();
     %$status = ( %$status, %$patron_charge_limits );
-    $status->{can_borrow} = 0
+    $status->{can_checkout} = 0
         if $patron_charge_limits->{noissuescharge}->{overlimit}
         || $patron_charge_limits->{NoIssuesChargeGuarantees}->{overlimit}
         || $patron_charge_limits->{NoIssuesChargeGuarantorsWithGuarantees}->{overlimit};

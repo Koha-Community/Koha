@@ -2250,7 +2250,7 @@ subtest 'guarantor requirements tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'can_borrow() tests' => sub {
+subtest 'can_checkout() tests' => sub {
     plan tests => 11;
     $schema->storage->txn_begin;
 
@@ -2277,15 +2277,15 @@ subtest 'can_borrow() tests' => sub {
     my $patron_borrowing_status;
 
     $patron->debarred(1);
-    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
-    is( $patron_borrowing_status->{can_borrow}, 0, 'Debarred patron blocked from borrowing' );
-    is( $patron_borrowing_status->{debarred},   1, 'Blocker correctly identified and returned' );
+    $patron_borrowing_status = $patron->can_checkout( { patron => $patron } );
+    is( $patron_borrowing_status->{can_checkout}, 0, 'Debarred patron blocked from borrowing' );
+    is( $patron_borrowing_status->{debarred},     1, 'Blocker correctly identified and returned' );
     $patron->debarred(0);
 
     $patron->dateexpiry( dt_from_string->subtract( days => 1 ) );
-    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
-    is( $patron_borrowing_status->{can_borrow}, 0, 'Expired patron blocked from borrowing' );
-    is( $patron_borrowing_status->{expired},    1, 'Blocker correctly identified and returned' );
+    $patron_borrowing_status = $patron->can_checkout( { patron => $patron } );
+    is( $patron_borrowing_status->{can_checkout}, 0, 'Expired patron blocked from borrowing' );
+    is( $patron_borrowing_status->{expired},      1, 'Blocker correctly identified and returned' );
     $patron->dateexpiry(undef);
 
     my $child   = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -2328,18 +2328,18 @@ subtest 'can_borrow() tests' => sub {
         }
     )->store;
 
-    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+    $patron_borrowing_status = $patron->can_checkout( { patron => $patron } );
 
     is( $patron_borrowing_status->{noissuescharge}->{charge},    11, "Only patron's fines are reported in total" );
     is( $patron_borrowing_status->{noissuescharge}->{limit},     10, "Limit correctly identified at category level" );
     is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 1,  "Patron is over the charge limit" );
-    is( $patron_borrowing_status->{can_borrow}, 0, "Patron is over the charge limit and is blocked from borrowing" );
+    is( $patron_borrowing_status->{can_checkout}, 0, "Patron is over the charge limit and is blocked from borrowing" );
     $patron->category->noissuescharge(undef);
 
-    $patron_borrowing_status = $patron->can_borrow( { patron => $patron } );
+    $patron_borrowing_status = $patron->can_checkout( { patron => $patron } );
     is( $patron_borrowing_status->{noissuescharge}->{limit}, 50, "Limit correctly identified at global syspref level" );
     is( $patron_borrowing_status->{noissuescharge}->{overlimit}, 0, "Patron is within the charge limit" );
-    is( $patron_borrowing_status->{can_borrow}, 1, "Patron is within the charge limit and can borrow" );
+    is( $patron_borrowing_status->{can_checkout}, 1, "Patron is within the charge limit and can borrow" );
 
     $schema->storage->txn_rollback;
 };
