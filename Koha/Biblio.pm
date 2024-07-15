@@ -1848,7 +1848,7 @@ sub generate_marc_host_field {
 
             # Control number
             if ( $host_field = $marc_host->field('001') ) {
-                $sfd{w} = $host_field->data(),;
+                $sfd{w} = $host_field->data();
             }
 
             # Control number identifier
@@ -1923,7 +1923,7 @@ sub generate_marc_host_field {
             }
         }
         if ( $host_field = $marc_host->field('001') ) {
-            $sfd{0} = $host_field->data(),;
+            $sfd{0} = $host_field->data();
         }
         $link_field = MARC::Field->new( 461, '0', ' ', %sfd );
     }
