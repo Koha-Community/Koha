@@ -57,28 +57,31 @@ if ( $op eq 'add_form' ) {
     }
 }
 elsif ( $op eq 'cud-add_validate' ) {
+    my $categorycode                           = $input->param('categorycode');
+    my $description                            = $input->param('description');
+    my $enrolmentperiod                        = $input->param('enrolmentperiod');
+    my $enrolmentperioddate                    = $input->param('enrolmentperioddate')  || undef;
+    my $password_expiry_days                   = $input->param('password_expiry_days') || undef;
+    my $upperagelimit                          = $input->param('upperagelimit');
+    my $dateofbirthrequired                    = $input->param('dateofbirthrequired');
+    my $enrolmentfee                           = $input->param('enrolmentfee');
+    my $reservefee                             = $input->param('reservefee');
+    my $hidelostitems                          = $input->param('hidelostitems');
+    my $overduenoticerequired                  = $input->param('overduenoticerequired');
+    my $category_type                          = $input->param('category_type');
+    my $BlockExpiredPatronOpacActions          = join( ',', $input->multi_param('BlockExpiredPatronOpacActions') );
+    my $checkPrevCheckout                      = $input->param('checkprevcheckout');
+    my $can_place_ill_in_opac                  = $input->param('can_place_ill_in_opac') // 1;
+    my $default_privacy                        = $input->param('default_privacy');
+    my $reset_password                         = $input->param('reset_password');
+    my $change_password                        = $input->param('cud-change_password');
+    my $exclude_from_local_holds_priority      = $input->param('exclude_from_local_holds_priority');
+    my $min_password_length                    = $input->param('min_password_length');
+    my $require_strong_password                = $input->param('require_strong_password');
+    my $noissuescharge                         = $input->param('noissuescharge') || undef;
+    my $noissueschargeguarantees               = $input->param('noissueschargeguarantees') || undef;
+    my $noissueschargeguarantorswithguarantees = $input->param('noissueschargeguarantorswithguarantees') || undef;
 
-    my $categorycode = $input->param('categorycode');
-    my $description = $input->param('description');
-    my $enrolmentperiod = $input->param('enrolmentperiod');
-    my $enrolmentperioddate = $input->param('enrolmentperioddate') || undef;
-    my $password_expiry_days = $input->param('password_expiry_days') || undef;
-    my $upperagelimit = $input->param('upperagelimit');
-    my $dateofbirthrequired = $input->param('dateofbirthrequired');
-    my $enrolmentfee = $input->param('enrolmentfee');
-    my $reservefee = $input->param('reservefee');
-    my $hidelostitems = $input->param('hidelostitems');
-    my $overduenoticerequired = $input->param('overduenoticerequired');
-    my $category_type = $input->param('category_type');
-    my $BlockExpiredPatronOpacActions = join( ',', $input->multi_param('BlockExpiredPatronOpacActions') );
-    my $checkPrevCheckout = $input->param('checkprevcheckout');
-    my $can_place_ill_in_opac = $input->param('can_place_ill_in_opac') // 1;
-    my $default_privacy = $input->param('default_privacy');
-    my $reset_password = $input->param('reset_password');
-    my $change_password = $input->param('cud-change_password');
-    my $exclude_from_local_holds_priority = $input->param('exclude_from_local_holds_priority');
-    my $min_password_length = $input->param('min_password_length');
-    my $require_strong_password = $input->param('require_strong_password');
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
     my $can_be_guarantee = $input->param('can_be_guarantee');
 
@@ -113,6 +116,9 @@ elsif ( $op eq 'cud-add_validate' ) {
         $category->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
         $category->min_password_length($min_password_length);
         $category->require_strong_password($require_strong_password);
+        $category->noissuescharge($noissuescharge);
+        $category->noissueschargeguarantees($noissueschargeguarantees);
+        $category->noissueschargeguarantorswithguarantees($noissueschargeguarantorswithguarantees);
         eval {
             $category->store;
             $category->replace_library_limits( \@branches );
@@ -124,30 +130,35 @@ elsif ( $op eq 'cud-add_validate' ) {
         }
     }
     else {
-        my $category = Koha::Patron::Category->new({
-            categorycode => $categorycode,
-            description => $description,
-            enrolmentperiod => $enrolmentperiod,
-            enrolmentperioddate => $enrolmentperioddate,
-            password_expiry_days => $password_expiry_days,
-            upperagelimit => $upperagelimit,
-            dateofbirthrequired => $dateofbirthrequired,
-            enrolmentfee => $enrolmentfee,
-            reservefee => $reservefee,
-            hidelostitems => $hidelostitems,
-            overduenoticerequired => $overduenoticerequired,
-            category_type => $category_type,
-            can_be_guarantee => $can_be_guarantee,
-            BlockExpiredPatronOpacActions => $BlockExpiredPatronOpacActions,
-            checkprevcheckout => $checkPrevCheckout,
-            can_place_ill_in_opac => $can_place_ill_in_opac,
-            default_privacy => $default_privacy,
-            reset_password => $reset_password,
-            change_password => $change_password,
-            exclude_from_local_holds_priority => $exclude_from_local_holds_priority,
-            min_password_length => $min_password_length,
-            require_strong_password => $require_strong_password,
-        });
+        my $category = Koha::Patron::Category->new(
+            {
+                categorycode                           => $categorycode,
+                description                            => $description,
+                enrolmentperiod                        => $enrolmentperiod,
+                enrolmentperioddate                    => $enrolmentperioddate,
+                password_expiry_days                   => $password_expiry_days,
+                upperagelimit                          => $upperagelimit,
+                dateofbirthrequired                    => $dateofbirthrequired,
+                enrolmentfee                           => $enrolmentfee,
+                reservefee                             => $reservefee,
+                hidelostitems                          => $hidelostitems,
+                overduenoticerequired                  => $overduenoticerequired,
+                category_type                          => $category_type,
+                can_be_guarantee                       => $can_be_guarantee,
+                BlockExpiredPatronOpacActions          => $BlockExpiredPatronOpacActions,
+                checkprevcheckout                      => $checkPrevCheckout,
+                can_place_ill_in_opac                  => $can_place_ill_in_opac,
+                default_privacy                        => $default_privacy,
+                reset_password                         => $reset_password,
+                change_password                        => $change_password,
+                exclude_from_local_holds_priority      => $exclude_from_local_holds_priority,
+                min_password_length                    => $min_password_length,
+                require_strong_password                => $require_strong_password,
+                noissuescharge                         => $noissuescharge,
+                noissueschargeguarantees               => $noissueschargeguarantees,
+                noissueschargeguarantorswithguarantees => $noissueschargeguarantorswithguarantees,
+            }
+        );
         eval {
             $category->store;
             $category->replace_library_limits( \@branches );
