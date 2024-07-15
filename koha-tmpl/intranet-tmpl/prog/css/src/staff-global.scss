@@ -857,6 +857,11 @@ $dayTrailBackground: #fcdcb3 !default;
     &.leadRange {
         box-shadow: -2.5 * $dayMargin 0 0 $dayLeadBackground, 2.5 * $dayMargin 0 0 $dayLeadBackground;
         background: $dayLeadBackground;
+        &.flatpickr-disabled {
+            $darkLeadBackground: darken($dayLeadBackground, 10);
+            box-shadow: -2.5 * $dayMargin 0 0 $darkLeadBackground, 2.5 * $dayMargin 0 0 $darkLeadBackground;
+            background: $darkLeadBackground;
+        }
     }
 
     &.selected {
@@ -875,6 +880,11 @@ $dayTrailBackground: #fcdcb3 !default;
     &.trailRange {
         box-shadow: -2.5 * $dayMargin 0 0 $dayTrailBackground, 2.5 * $dayMargin 0 0 $dayTrailBackground;
         background: $dayTrailBackground;
+        &.flatpickr-disabled {
+            $darkTrailBackground: darken($dayTrailBackground, 10);
+            box-shadow: -2.5 * $dayMargin 0 0 $darkTrailBackground, 2.5 * $dayMargin 0 0 $darkTrailBackground;
+            background: $darkTrailBackground;
+        }
     }
 
     &.trailRangeEnd {
