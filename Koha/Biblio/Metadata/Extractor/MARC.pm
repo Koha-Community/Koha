@@ -76,6 +76,30 @@ sub metadata {
     return $self->{metadata};
 }
 
+=head2 get_control_number
+
+    my $control_number = $extractor->get_control_number();
+
+Returns the control number/record identifier as extracted from the metadata.
+It returns an empty string if no 001 present or if undef.
+
+=cut
+
+sub get_control_number {
+    my ($self) = @_;
+
+    my $record = $self->metadata;
+    my $field  = $record->field('001');
+
+    my $control_number = q{};
+
+    if ($field) {
+        $control_number = $field->data() // q{};
+    }
+
+    return $control_number;
+}
+
 =head3 _normalize_string
 
     my $normalized_string = $self->_normalize_string($string);
