@@ -345,7 +345,7 @@
                 orderable: true,
                 render: function (data, type, row, meta) {
                     let node = '';
-                    let item_type_description = row._strings.item_type_id.str;
+                    let item_type_description = row._strings.item_type_id ? row._strings.item_type_id.str : row.item_type_id;
                     [% UNLESS noItemTypeImages %]
                         let image_location = item_type_image_locations[row.item_type_id];
                         node += image_location
@@ -363,7 +363,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return escape_str(row._strings.holding_library_id.str);
+                    return escape_str(row._strings.holding_library_id ? row._strings.holding_library_id.str : row.holding_library_id);
                 }
             },
             {
@@ -372,12 +372,12 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    let nodes = '<span class="homebranchdesc">%s</span>'.format(escape_str(row._strings.home_library_id.str));
+                    let nodes = '<span class="homebranchdesc">%s</span>'.format(escape_str(row._strings.home_library_id ? row._strings.home_library_id.str : row.home_library_id));
                     nodes += '<span class="shelvingloc">'
                     [%# If permanent location is defined, show description or code and             %]
                     [%# display current location in parentheses. If not, display current location. %]
                     [%# Note that permanent location is a code, and location may be an authval.    %]
-                    let loc_str = row._strings.location.str;
+                    let loc_str = row._strings.location ? row._strings.location.str : row.location;
                     if ( row.permanent_location && row.permanent_location != row.location ) {
                         let permanent_loc_str = av_loc.get(row.permanent_location);
                         nodes += '%s (%s)'.format(escape_str(permanent_loc_str), escape_str(loc_str));
@@ -393,7 +393,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return escape_str(row._strings.collection_code.str);
+                    return escape_str(row._strings.collection_code ? row._strings.collection_code.str : row.collection_code);
                 }
             },
             [% IF Koha.Preference('EnableItemGroups') %]
