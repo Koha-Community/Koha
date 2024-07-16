@@ -33,12 +33,22 @@ use C4::Ris qw( marc2ris );
 use Koha::Biblios;
 use Koha::RecordProcessor;
 
+use List::MoreUtils qw(none);
+
 my $query = CGI->new;
 my $op=$query->param("op")||''; #op=export is currently the only use
 my $format=$query->param("format")||'utf8';
 my $biblionumber = $query->param("bib")||0;
 $biblionumber = int($biblionumber);
 my $error = q{};
+
+my @valid_formats = split( ',', C4::Context->preference('OpacExportOptions') // '' );
+if ( !scalar @valid_formats || none { $format eq $_ } @valid_formats ) {
+    # bad request: either the feature is disabled, or requested a format the
+    # library hasn't made available
+    print $query->redirect("/cgi-bin/koha/errors/400.pl");
+    exit;
+}
 
 # Determine logged in user's patron category.
 # Blank if not logged in.
