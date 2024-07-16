@@ -6,7 +6,7 @@
     [%# authid: if it is a linked authority, its authid %]
 
     [% SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' %]
-    [% SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=exact&orderby=HeadingAsc&value=' %]
+    [% SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=mainentry&operator=exact&orderby=HeadingAsc&value=' %]
 
     [% IF marcflavour == 'UNIMARC' %]
         [% IF authid %]

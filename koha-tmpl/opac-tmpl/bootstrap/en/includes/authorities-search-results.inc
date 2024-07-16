@@ -6,7 +6,7 @@
     [%# authid: if it is a linked authority, its authid %]
 
     [% SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' %]
-    [% SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=exact&marclist=any&and_or=and&orderby=HeadingAsc&value=' %]
+    [% SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=exact&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' %]
     [% IF marcflavour == 'UNIMARC' %]
         [% SWITCH type %]
         [% CASE 'broader' %]
