@@ -52,7 +52,6 @@ use CGI qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
     GetAuthorisedValueDesc
-    GetMarcControlnumber
     GetMarcFromKohaField
     GetMarcISSN
     GetMarcStructure
@@ -107,6 +106,8 @@ unless ( $patron and $patron->category->override_hidden_items ) {
         exit;
     }
 }
+
+my $metadata_extractor = $biblio->metadata_extractor;
 
 my $items = $biblio->items->filter_by_visible_in_opac({ patron => $patron });
 my $framework = $biblio ? $biblio->frameworkcode : q{};
@@ -339,12 +340,12 @@ if ( C4::Context->preference("OPACISBD") ) {
 }
 
 #Search for title in links
-my $marcflavour  = C4::Context->preference("marcflavour");
-my $dat = TransformMarcToKoha({ record => $record });
-my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
-my $marccontrolnumber   = GetMarcControlnumber ($record, $marcflavour);
-my $marcissns = GetMarcISSN( $record, $marcflavour );
-my $issn = $marcissns->[0] || '';
+my $marcflavour    = C4::Context->preference("marcflavour");
+my $dat            = TransformMarcToKoha( { record => $record } );
+my $isbn           = GetNormalizedISBN( undef, $record, $marcflavour );
+my $control_number = $metadata_extractor->get_control_number();
+my $marcissns      = GetMarcISSN( $record, $marcflavour );
+my $issn           = $marcissns->[0] || '';
 
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{title} =~ s/\/+$//; # remove trailing slash
@@ -357,7 +358,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             AUTHOR        => $dat->{author},
             ISBN          => $isbn,
             ISSN          => $issn,
-            CONTROLNUMBER => $marccontrolnumber,
+            CONTROLNUMBER => $control_number,
             BIBLIONUMBER  => $biblionumber,
             OCLC_NO       => $oclc_no,
         }

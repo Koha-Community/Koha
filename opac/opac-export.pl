@@ -25,7 +25,6 @@ use C4::Output;
 use C4::Biblio qw(
     GetFrameworkCode
     GetISBDView
-    GetMarcControlnumber
 );
 use CGI qw ( -utf8 );
 use C4::Auth;
@@ -85,13 +84,14 @@ if(!$marc) {
     exit;
 }
 
+my $metadata_extractor = $biblio->metadata_extractor;
+
 my $file_id = $biblionumber;
 my $file_pre = "bib-";
-if( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ){
-    my $marcflavour = C4::Context->preference('marcflavour'); #FIXME This option is required but does not change control num behaviour
-    my $control_num = GetMarcControlnumber( $marc, $marcflavour );
-    if( $control_num ){
-        $file_id = $control_num;
+if ( C4::Context->preference('DefaultSaveRecordFileID') eq 'controlnumber' ) {
+    my $control_number = $metadata_extractor->get_control_number();
+    if ($control_number) {
+        $file_id  = $control_number;
         $file_pre = "record-";
     }
 }

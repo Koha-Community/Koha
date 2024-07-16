@@ -21,10 +21,10 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
-plan tests => 34;
+plan tests => 32;
 
 
-use_ok('C4::Biblio', qw( AddBiblio ModBiblio BiblioAutoLink LinkBibHeadingsToAuthorities GetMarcPrice GetMarcQuantity GetMarcControlnumber GetMarcISBN GetMarcISSN GetMarcSubjects GetMarcUrls GetMarcSeries TransformMarcToKoha ModBiblioMarc RemoveAllNsb UpdateTotalIssues ));
+use_ok('C4::Biblio', qw( AddBiblio ModBiblio BiblioAutoLink LinkBibHeadingsToAuthorities GetMarcPrice GetMarcQuantity GetMarcISBN GetMarcISSN GetMarcSubjects GetMarcUrls GetMarcSeries TransformMarcToKoha ModBiblioMarc RemoveAllNsb UpdateTotalIssues ));
 
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
@@ -69,12 +69,6 @@ warning_is { $ret = GetMarcQuantity(undef, 'MARC21') }
            "GetMarcQuantity returns carped warning on undef record";
 
 ok( !defined $ret, 'GetMarcQuantity returns undef if not passed rec');
-
-warning_is { $ret = GetMarcControlnumber() }
-           { carped => 'GetMarcControlnumber called on undefined record'},
-           "GetMarcControlnumber returns carped warning on undef record";
-
-ok( !defined $ret, 'GetMarcControlnumber returns undef if not passed rec');
 
 warning_is { $ret = GetMarcISBN() }
            { carped => 'GetMarcISBN called on undefined record'},

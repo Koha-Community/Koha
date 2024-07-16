@@ -48,7 +48,6 @@ use CGI qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
     GetISBDView
-    GetMarcControlnumber
     GetMarcISSN
     TransformMarcToKoha
 );
@@ -101,6 +100,8 @@ unless ( $patron and $patron->category->override_hidden_items ) {
 
 my $record = $biblio->metadata->record;
 my @items  = $biblio->items->filter_by_visible_in_opac({ patron => $patron })->as_list;
+
+my $metadata_extractor = $biblio->metadata_extractor;
 
 my $record_processor = Koha::RecordProcessor->new(
     {   filters => [ 'EmbedItems', 'ViewPolicy' ],
@@ -195,7 +196,7 @@ $template->param(
 );
 
 #Search for title in links
-my $marccontrolnumber   = GetMarcControlnumber ($record, $marcflavour);
+my $control_number = $metadata_extractor->get_control_number();
 my $marcissns = GetMarcISSN ( $record, $marcflavour );
 my $issn = $marcissns->[0] || '';
 
@@ -210,7 +211,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             AUTHOR        => $dat->{author},
             ISBN          => $isbn,
             ISSN          => $issn,
-            CONTROLNUMBER => $marccontrolnumber,
+            CONTROLNUMBER => $control_number,
             BIBLIONUMBER  => $biblionumber,
             OCLC_NO       => $oclc_no,
         }

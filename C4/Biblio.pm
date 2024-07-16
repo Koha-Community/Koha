@@ -30,7 +30,6 @@ BEGIN {
         AddBiblio
         GetBiblioData
         GetISBDView
-        GetMarcControlnumber
         GetMarcISBN
         GetMarcISSN
         GetMarcSubjects
@@ -1526,32 +1525,6 @@ sub GetAuthorisedValueDesc {
     } else {
         return $value;    # if nothing is found return the original value
     }
-}
-
-=head2 GetMarcControlnumber
-
-  $marccontrolnumber = GetMarcControlnumber($record,$marcflavour);
-
-Get the control number / record Identifier from the MARC record and return it.
-
-=cut
-
-sub GetMarcControlnumber {
-    my ( $record, $marcflavour ) = @_;
-    if (!$record) {
-        carp 'GetMarcControlnumber called on undefined record';
-        return;
-    }
-    my $controlnumber = "";
-    # Control number or Record identifier are the same field in MARC21 and UNIMARC
-    # Keep $marcflavour for possible later use
-    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC" ) {
-        my $controlnumberField = $record->field('001');
-        if ($controlnumberField) {
-            $controlnumber = $controlnumberField->data();
-        }
-    }
-    return $controlnumber;
 }
 
 =head2 GetMarcISBN

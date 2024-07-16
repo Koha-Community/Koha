@@ -38,7 +38,6 @@ use C4::Output qw( parametrized_url output_html_with_http_headers );
 use C4::Biblio qw(
     CountItemsIssued
     GetBiblioData
-    GetMarcControlnumber
     GetMarcISBN
     GetMarcISSN
     GetMarcSeries
@@ -111,6 +110,8 @@ unless ( $biblio && $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
+
+my $metadata_extractor = $biblio->metadata_extractor;
 
 my $items = $biblio->items->search_ordered;
 if ($specific_item) {
@@ -1166,9 +1167,9 @@ if ( C4::Context->preference('OpacStarRatings') !~ /disable/ ) {
 }
 
 #Search for title in links
-my $marccontrolnumber   = GetMarcControlnumber ($record, $marcflavour);
-my $marcissns = GetMarcISSN ( $record, $marcflavour );
-my $issn = $marcissns->[0] || '';
+my $control_number = $metadata_extractor->get_control_number();
+my $marcissns      = GetMarcISSN( $record, $marcflavour );
+my $issn           = $marcissns->[0] || '';
 
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{title} =~ s/\/+$//; # remove trailing slash
@@ -1181,7 +1182,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
             AUTHOR        => $dat->{author},
             ISBN          => $isbn,
             ISSN          => $issn,
-            CONTROLNUMBER => $marccontrolnumber,
+            CONTROLNUMBER => $control_number,
             BIBLIONUMBER  => $biblionumber,
             OCLC_NO       => $oclc_no,
         }

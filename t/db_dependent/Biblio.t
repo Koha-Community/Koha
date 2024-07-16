@@ -34,7 +34,7 @@ use Koha::MarcSubfieldStructures;
 use C4::Linker::Default qw( get_link );
 
 BEGIN {
-    use_ok('C4::Biblio', qw( AddBiblio GetMarcFromKohaField BiblioAutoLink GetMarcSubfieldStructure GetMarcSubfieldStructureFromKohaField LinkBibHeadingsToAuthorities GetBiblioData ModBiblio GetMarcISSN GetMarcControlnumber GetMarcISBN GetMarcPrice GetFrameworkCode GetMarcUrls IsMarcStructureInternal GetMarcStructure GetXmlBiblio DelBiblio ));
+    use_ok('C4::Biblio', qw( AddBiblio GetMarcFromKohaField BiblioAutoLink GetMarcSubfieldStructure GetMarcSubfieldStructureFromKohaField LinkBibHeadingsToAuthorities GetBiblioData ModBiblio GetMarcISSN GetMarcISBN GetMarcPrice GetFrameworkCode GetMarcUrls IsMarcStructureInternal GetMarcStructure GetXmlBiblio DelBiblio ));
 }
 
 my $schema = Koha::Database->new->schema;
@@ -417,21 +417,6 @@ sub run_tests {
     is( scalar @$issns, 4,
         'GetMARCISSN skips empty ISSN fields (Bug 12674)');
 
-    ## Testing GetMarcControlnumber
-    my $controlnumber;
-    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
-    is( $controlnumber, '', 'GetMarcControlnumber handles records without 001' );
-
-    $field = MARC::Field->new( '001', '' );
-    $marc_record->append_fields($field);
-    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
-    is( $controlnumber, '', 'GetMarcControlnumber handles records with empty 001' );
-
-    $field = $marc_record->field('001');
-    $field->update('123456789X');
-    $controlnumber = GetMarcControlnumber( $marc_record, $marcflavour );
-    is( $controlnumber, '123456789X', 'GetMarcControlnumber handles records with 001' );
-
     ## Testing GetMarcISBN
     my $record_for_isbn = MARC::Record->new();
     my $isbns = GetMarcISBN( $record_for_isbn, $marcflavour );
@@ -632,14 +617,14 @@ sub create_author_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 46;
+    plan tests => 43;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 46;
+    plan tests => 43;
 
     # Mock the auth type data for UNIMARC
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
