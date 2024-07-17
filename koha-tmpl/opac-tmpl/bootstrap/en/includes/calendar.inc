@@ -102,15 +102,16 @@
                         instance.set('allowInput',false);
                     }
                 });
-        },
-        onOpen: function( selectedDates, dateText, instance ) {
-            var thisInput = instance.input;
-            let options = maskitoDateOptionsGenerator({
-                mode: altinput_dateformat,
-                separator: delimiter,
-            });
 
-            new Maskito( instance.altInput, options );
+                /* When flatpickr instance is ready, add maskito input mask */
+                var thisInput = instance.input;
+                let options = maskitoDateOptionsGenerator({
+                    mode: altinput_dateformat,
+                    separator: delimiter,
+                    overwriteMode: 'replace',
+                });
+
+                new Maskito( instance.altInput, options );
         },
         onClose: function( selectedDates, dateText, instance) {
             validate_date( dateText, instance );
