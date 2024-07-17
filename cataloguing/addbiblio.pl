@@ -34,7 +34,6 @@ use C4::Biblio qw(
     GetMarcStructure
     GetUsedMarcStructure
     ModBiblio
-    prepare_host_field
     PrepHostMarcField
     TransformHtmlToMarc
     ApplyMarcOverlayRules
@@ -649,7 +648,8 @@ if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
     SetMarcUnicodeFlag($record, $marcflavour);
-    my $hostfield = prepare_host_field($parentbiblio,$marcflavour);
+    my $parent    = Koha::Biblios->find($parentbiblio);
+    my $hostfield = $parent->generate_marc_host_field;
     if ($hostfield) {
         $record->append_fields($hostfield);
     }
