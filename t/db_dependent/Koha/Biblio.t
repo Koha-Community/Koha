@@ -953,7 +953,7 @@ subtest 'get_volumes_query' => sub {
 };
 
 subtest 'generate_marc_host_field' => sub {
-    plan tests => 22;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -965,7 +965,7 @@ subtest 'generate_marc_host_field' => sub {
         MARC::Field->new( '001', '1234' ),
         MARC::Field->new( '003', 'FIRST' ),
         MARC::Field->new( '240', '', '', a => 'A uniform title' ),
-        MARC::Field->new( '260', '', '', a => 'Publication' ),
+        MARC::Field->new( '260', '', '', a => 'Publication 260' ),
         MARC::Field->new( '250', '', '', a => 'Edition a', b => 'Edition b' ),
         MARC::Field->new( '022', '', '', a => '0317-8471' ),
     );
@@ -979,7 +979,7 @@ subtest 'generate_marc_host_field' => sub {
     is( $link->tag,           '773',                 "MARC::Field->tag returns '773' when marcflavour is 'MARC21" );
     is( $link->subfield('a'), 'Some boring author',  'MARC::Field->subfield(a) returns content from 100ab' );
     is( $link->subfield('b'), 'Edition a Edition b', 'MARC::Field->subfield(b) returns content from 250ab' );
-    is( $link->subfield('d'), 'Publication',         'MARC::Field->subfield(c) returns content from 260abc' );
+    is( $link->subfield('d'), 'Publication 260',     'MARC::Field->subfield(c) returns content from 260abc' );
     is( $link->subfield('s'), 'A uniform title',     'MARC::Field->subfield(s) returns content from 240a' );
     is( $link->subfield('t'), 'Some boring read',    'MARC::Field->subfield(s) returns content from 245ab' );
     is( $link->subfield('x'), '0317-8471',           'MARC::Field->subfield(s) returns content from 022a' );
@@ -991,6 +991,30 @@ subtest 'generate_marc_host_field' => sub {
     is(
         $link->subfield('w'), '(FIRST)1234',
         'MARC::Field->subfield(w) returns content from 003 and 001 when "UseControlNumber" is enabled'
+    );
+
+    $record->append_fields(
+        MARC::Field->new( '264', '', '', a => 'Publication 264' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    $link = $biblio->generate_marc_host_field();
+    is(
+        $link->subfield('d'), 'Publication 264',
+        'MARC::Field->subfield(d) returns content from 264 in preference to 260'
+    );
+
+    $record->append_fields(
+        MARC::Field->new( '264', '3', '', a => 'Publication 264', b => 'Preferred' ),
+    );
+    C4::Biblio::ModBiblio( $record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find( $biblio->biblionumber );
+
+    $link = $biblio->generate_marc_host_field();
+    is(
+        $link->subfield('d'), 'Publication 264 Preferred',
+        'MARC::Field->subfield(d) returns content from 264 with indicator 1 = 3 in preference to 264 without'
     );
 
     # UNIMARC tests
