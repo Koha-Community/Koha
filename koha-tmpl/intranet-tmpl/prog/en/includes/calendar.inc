@@ -85,6 +85,27 @@
                         instance.set('allowInput',false);
                     }
                 });
+
+            /* When flatpickr instance is ready, add maskito input mask */
+            var thisInput = instance.input;
+            let accepts_time = $(thisInput).data('flatpickr-enable-time');
+            let accepts_period = $(thisInput).data('flatpickr-period');
+            let maskitoOptions = {};
+            if ( !accepts_period ) {
+                if ( accepts_time ) {
+                    maskitoOptions = maskitoDateTimeOptionsGenerator({
+                        dateMode: altinput_dateformat,
+                        timeMode: 'HH:MM',
+                        dateSeparator: delimiter,
+                    });
+                } else {
+                    maskitoOptions = maskitoDateOptionsGenerator({
+                        mode: altinput_dateformat,
+                        separator: delimiter,
+                    });
+                }
+            }
+            new Maskito( instance.altInput, maskitoOptions );
         },
         onChange: function( selectedDates, dateText, instance) {
             var thisInput = instance.input;
@@ -97,27 +118,6 @@
                         instance.setDate(selectedDates[0].setHours(23, 59, 0, 0));
                     }
                 }
-            }
-        },
-        onOpen: function( selectedDates, dateText, instance ) {
-            var thisInput = instance.input;
-            let accepts_time = $(thisInput).data('flatpickr-enable-time');
-            let accepts_period = $(thisInput).data('flatpickr-period');
-            let options = {};
-            if ( !accepts_period ) {
-                if ( accepts_time ) {
-                    options = maskitoDateTimeOptionsGenerator({
-                        dateMode: altinput_dateformat,
-                        timeMode: 'HH:MM',
-                        dateSeparator: delimiter,
-                    });
-                } else {
-                    options = maskitoDateOptionsGenerator({
-                        mode: altinput_dateformat,
-                        separator: delimiter,
-                    });
-                }
-                new Maskito( instance.altInput, options );
             }
         },
         onClose: function( selectedDates, dateText, instance) {
