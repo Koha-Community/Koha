@@ -37,7 +37,7 @@
             }
 
             if ( name.replace(' ', '').length == 0 ) {
-                return _("A patron from library %s".format(patron.library.name));
+                return _("A patron from %s".format(patron.library.name));
             }
 
             if ( config && config.hide_patron_name ) {
