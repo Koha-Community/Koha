@@ -381,7 +381,7 @@
                 [% default_sort_column = "name" %]
             [% END %]
             [% SET order_column_index = 0 %]
-            [% SET embed = ['extended_attributes'] %]
+            [% SET embed = ['extended_attributes','library'] %]
             patrons_table = $("#[% table_id | html %]").kohaTable({
                 "ajax": {
                     "url": patron_search_url,
