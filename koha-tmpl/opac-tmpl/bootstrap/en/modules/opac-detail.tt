@@ -1679,12 +1679,14 @@
 
             [% IF ( Koha.Preference('OPACDetailQRCode') ) %]
 
+                var link_canonical = document.querySelector("link[rel=canonical]");
+
                 var qrcode = kjua({
                     ecLevel: "H",
                     render: "canvas",
                     rounded: 100,
                     size: 150,
-                    text: location.href,
+                    text: link_canonical ? link_canonical.href : location.href,
                 });
                 if (qrcode) {
                     document.getElementById("qrcode").appendChild( qrcode );
