@@ -97,11 +97,13 @@
                         dateMode: altinput_dateformat,
                         timeMode: 'HH:MM',
                         dateSeparator: delimiter,
+                        overwiteMode: 'replace',
                     });
                 } else {
                     maskitoOptions = maskitoDateOptionsGenerator({
                         mode: altinput_dateformat,
                         separator: delimiter,
+                        overwiteMode: 'replace',
                     });
                 }
             }
