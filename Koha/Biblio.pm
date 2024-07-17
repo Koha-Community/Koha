@@ -1913,10 +1913,25 @@ sub generate_marc_host_field {
         }
 
         # Publication
-        if ( $host_field = $marc_host->field('260') ) {
+        my @publication_fields = $marc_host->field('264');
+        @publication_fields = $marc_host->field('260') unless (@publication_fields);
+        my $index = 0;
+        for my $host_field (@publication_fields) {
+
+            # Use first entry unless we find a preferred indicator1 = 3
+            if ( $index == 0 ) {
             my $s = $host_field->as_string('abc');
             if ($s) {
                 $sfd{d} = $s;
+            }
+                $index++;
+            }
+            if ( $host_field->indicator(1) && ( $host_field->indicator(1) eq '3' ) ) {
+                my $s = $host_field->as_string('abc');
+                if ($s) {
+                    $sfd{d} = $s;
+                }
+                last;
             }
         }
 
@@ -1930,7 +1945,7 @@ sub generate_marc_host_field {
 
         # Title
         if ( $host_field = $marc_host->field('245') ) {
-            my $s = $host_field->as_string('ab');
+            my $s = $host_field->as_string('abnp');
             if ($s) {
                 $sfd{t} = $s;
             }
