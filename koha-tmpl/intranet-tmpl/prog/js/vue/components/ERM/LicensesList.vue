@@ -191,6 +191,21 @@ export default {
 
             return [
                 {
+                    title: __("ID"),
+                    data: "me.license_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/cgi-bin/koha/erm/licenses/' +
+                            row.license_id +
+                            '" class="show">' +
+                            escape_str(`(#${row.license_id})`) +
+                            "</a>"
+                        );
+                    },
+                },
+                {
                     title: __("Name"),
                     data: "me.name:me.license_id",
                     searchable: true,
@@ -200,7 +215,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/licenses/' +
                             row.license_id +
                             '" class="show">' +
-                            escape_str(`${row.name} (#${row.license_id})`) +
+                            escape_str(row.name) +
                             "</a>"
                         );
                     },

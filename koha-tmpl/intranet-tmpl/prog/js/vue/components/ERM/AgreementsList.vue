@@ -300,6 +300,21 @@ export default {
 
             return [
                 {
+                    title: __("ID"),
+                    data: "me.agreement_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a href="/cgi-bin/koha/erm/agreements/' +
+                            row.agreement_id +
+                            '" class="show">' +
+                            escape_str(`(#${row.agreement_id})`) +
+                            "</a>"
+                        );
+                    },
+                },
+                {
                     title: __("Name"),
                     data: "me.name:me.agreement_id",
                     searchable: true,
@@ -309,7 +324,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/agreements/' +
                             row.agreement_id +
                             '" class="show">' +
-                            escape_str(`${row.name} (#${row.agreement_id})`) +
+                            escape_str(row.name) +
                             "</a>"
                         );
                     },
