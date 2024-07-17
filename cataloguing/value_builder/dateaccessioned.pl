@@ -41,15 +41,19 @@ my $builder = sub {
 
 \$(document).ready(function(){
     \$("#$function_name").flatpickr({
-        onOpen: function(selectedDates, dateStr, instance) {
+        onReady: function(selectedDates, dateStr, instance) {
             let options = maskitoDateOptionsGenerator({
                 mode: altinput_dateformat,
                 separator: delimiter,
+                overwriteMode: 'replace',
             });
+
+            new Maskito( instance.altInput, options );
+        },
+        onOpen: function(selectedDates, dateStr, instance) {
             if (dateStr == '') {
                 instance.setDate(new Date());
             }
-            new Maskito( instance.altInput, options );
         }
     });
 });
