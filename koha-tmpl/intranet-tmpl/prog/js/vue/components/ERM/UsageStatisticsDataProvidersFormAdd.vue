@@ -59,7 +59,10 @@
                             </v-select>
                             <span class="required">{{ $__("Required") }}</span>
                             <button
-                                v-if="!manual_form"
+                                v-if="
+                                    !manual_form &&
+                                    !usage_data_provider.erm_usage_data_provider_id
+                                "
                                 type="button"
                                 style="margin-left: 1em"
                                 @click="createManualProvider()"
@@ -67,7 +70,10 @@
                                 {{ $__("Create manually") }}
                             </button>
                             <button
-                                v-else
+                                v-if="
+                                    manual_form &&
+                                    !usage_data_provider.erm_usage_data_provider_id
+                                "
                                 type="button"
                                 style="margin-left: 1em"
                                 @click="createFromRegistry()"
@@ -440,7 +446,6 @@ export default {
                     this.usage_data_provider.report_types =
                         this.formatReportTypes(usage_data_provider.report_types)
                     this.getCounterRegistry(usage_data_provider.name, "edit")
-                    this.initialized = true
                 },
                 error => {}
             )
@@ -463,6 +468,7 @@ export default {
                             )
                     }
                     this.searching = false
+                    this.initialized = true
                 },
                 error => {}
             )
