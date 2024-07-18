@@ -177,8 +177,8 @@ if ( $query->param('reserve_id') ) {
     # FIXME do we need to do this if we didn't take the cancel_reserve branch above?
     my ( undef, $nextreservinfo, undef ) = CheckReserves($item);
 
-    my $patron = Koha::Patrons->find( $nextreservinfo->{'borrowernumber'} );
     if ( $userenv_branch ne $nextreservinfo->{'branchcode'} ) {
+        my $patron = Koha::Patrons->find( $nextreservinfo->{'borrowernumber'} );
         $template->param(
             itemtitle      => $biblio->title,
             itembiblionumber => $biblio->biblionumber,
