@@ -123,6 +123,11 @@ for my $authvfield (@$statuses) {
     }
 }
 
+my $report_lost_items;
+if ( defined $input->param('ReportLostItems') && $input->param('ReportLostItems') eq 'on' ) {
+    $report_lost_items = "1";
+}
+
 # if there's a list of not for loans types selected use it rather than
 # the full set.
 @notforloans = @{$staton->{'items.notforloan'}} if defined $staton->{'items.notforloan'} and scalar @{$staton->{'items.notforloan'}} > 0;
@@ -162,6 +167,7 @@ my $results = {};
 my @scanned_items;
 my @errorloop;
 my $moddatecount = 0;
+my @lost_items;
 if ( $op eq 'cud-inventory'
     && ( ( $uploadbarcodes && length($uploadbarcodes) > 0 ) || ( $barcodelist && length($barcodelist) > 0 ) ) )
 {
@@ -225,6 +231,9 @@ if ( $op eq 'cud-inventory'
                 next;
             }
             # Modify date last seen for scanned items, remove lost status
+            if ( $item->unblessed->{itemlost} ) {
+                push @lost_items, $barcode;
+            }
             $item->set({ itemlost => 0, datelastseen => $date_dt })->store;
             my $item_unblessed = $item->unblessed;
             $moddatecount++;
@@ -335,6 +344,12 @@ for ( my $i = 0; $i < @scanned_items; $i++ ) {
         $item->{problems}->{wrongplace} = 1;
         additemtoresults( $item, $results );
     }
+
+    # Report a lost item if asked
+    if ( @lost_items && ( scalar grep { $_ eq $item->{barcode} } @lost_items ) && $report_lost_items ) {
+        $item->{problems}->{lost} = 1;
+        additemtoresults( $item, $results );
+    }
 }
 
 # Compare barcodes with inventory list, report no_barcode and not_scanned.
@@ -418,8 +433,11 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
                 $errstr .= "checked out,";
             } elsif( $key eq 'out_of_order' ) {
                 $errstr .= "shelved out of order,";
+            } elsif ( $key eq 'lost' ) {
+                $errstr .= "item was lost";
             }
         }
+
         $errstr =~ s/,$//;
         push @line, $errstr;
         $csv->combine(@line);

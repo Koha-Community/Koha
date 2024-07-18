@@ -254,6 +254,10 @@
                                 <label for="CSVexport">Export to CSV file: </label>
                                 <input type="checkbox" name="CSVexport" id="CSVexport" />
                             </li>
+                            <li>
+                                <label for="ReportLostItems">Add losts items to the report: </label>
+                                <input type="checkbox" name="ReportLostItems" id="ReportLostItems" />
+                            </li>
                         </ol>
                     </fieldset>
 
@@ -370,6 +374,8 @@
                                                     <span>No barcode</span><br/>
                                                 [% ELSIF problem.key == 'out_of_order' %]
                                                     <span>Item may be shelved out of order</span><br/>
+                                                [% ELSIF problem.key == 'lost' %]
+                                                    <span>Item was lost and is now marked as found</span><br/>
                                                 [% END %]
                                             [% END %]
                                         </td>
