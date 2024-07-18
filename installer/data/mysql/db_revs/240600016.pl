@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "28924",
@@ -12,19 +13,19 @@ return {
                 q{ ALTER TABLE categories ADD COLUMN `noissuescharge` int(11) AFTER `exclude_from_local_holds_priority` }
             );
 
-            say $out "Added column 'noissuescharge' to categories";
+            say_success( $out, "Added column 'noissuescharge' to categories" );
         }
         unless ( column_exists( 'categories', 'noissueschargeguarantees' ) ) {
             $dbh->do(q{ ALTER TABLE categories ADD COLUMN `noissueschargeguarantees` int(11) AFTER `noissuescharge` });
 
-            say $out "Added column 'noissueschargeguarantees' to categories";
+            say_success( $out, "Added column 'noissueschargeguarantees' to categories" );
         }
         unless ( column_exists( 'categories', 'noissueschargeguarantorswithguarantees' ) ) {
             $dbh->do(
                 q{ ALTER TABLE categories ADD COLUMN `noissueschargeguarantorswithguarantees` int(11) AFTER `noissueschargeguarantees` }
             );
 
-            say $out "Added column 'noissueschargeguarantorswithguarantees' to categories";
+            say_success( $out, "Added column 'noissueschargeguarantorswithguarantees' to categories" );
         }
     },
 };
