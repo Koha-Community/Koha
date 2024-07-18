@@ -128,6 +128,11 @@ if ( defined $input->param('ReportLostItems') && $input->param('ReportLostItems'
     $report_lost_items = "1";
 }
 
+my $report_items_without_problems;
+if ( defined $input->param('ReportItemsWithoutProblem') && $input->param('ReportItemsWithoutProblem') eq 'on' ) {
+    $report_items_without_problems = "1";
+}
+
 # if there's a list of not for loans types selected use it rather than
 # the full set.
 @notforloans = @{$staton->{'items.notforloan'}} if defined $staton->{'items.notforloan'} and scalar @{$staton->{'items.notforloan'}} > 0;
@@ -348,6 +353,10 @@ for ( my $i = 0; $i < @scanned_items; $i++ ) {
     # Report a lost item if asked
     if ( @lost_items && ( scalar grep { $_ eq $item->{barcode} } @lost_items ) && $report_lost_items ) {
         $item->{problems}->{lost} = 1;
+        additemtoresults( $item, $results );
+    }
+
+    if ($report_items_without_problems) {
         additemtoresults( $item, $results );
     }
 }
