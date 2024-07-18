@@ -1085,7 +1085,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             </li>
                                         [% END %]
 
-                                        [% UNLESS noprotected %]
+                                        [% UNLESS noprotected || !CanUpdateProtectPatron %]
                                             <li class="radio">
                                                 <label for="protected">Protected:</label>
                                                 [% IF ( patron.protected == 1 ) %]
