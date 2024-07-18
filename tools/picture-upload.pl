@@ -25,6 +25,8 @@ use File::Temp;
 use CGI qw ( -utf8 );
 use GD;
 use MIME::Base64;
+use Cwd;
+
 use C4::Context;
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
@@ -230,13 +232,15 @@ sub handle_dir {
         my $dir_h;
         opendir $dir_h, $dir;
         while ( my $filename = readdir $dir_h ) {
-            $file = "$dir/$filename"
-              if ( $filename =~ m/datalink\.txt/i
-                || $filename =~ m/idlink\.txt/i );
+
+              if ( ($filename =~ m/datalink\.txt/i
+                || $filename =~ m/idlink\.txt/i ) && ( -e "$dir/$filename" && !-l "$dir/$filename")) {
+                  $file = Cwd::abs_path("$dir/$filename");
+              }
         }
         my $fh;
         unless ( open( $fh, '<', $file ) ) {
-            warn "Opening $dir/$file failed!";
+            warn "Opening $file failed!";
             $direrrors{'OPNLINK'} = $file;
             # This error is fatal to the import of this directory contents
             # so bail and return the error to the caller
