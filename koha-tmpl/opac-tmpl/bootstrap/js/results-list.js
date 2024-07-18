@@ -213,11 +213,4 @@ $(document).ready(function(){
         KOHA.Tags.add_tag_button(thisid, tag);
         return false;
     });
-
-    Sticky = $("#floating");
-    Sticky.hcSticky({
-        stickTo: ".searchresults",
-        stickyClass: "floating",
-        bottom: 0
-    });
 });
