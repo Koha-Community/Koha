@@ -293,7 +293,7 @@ if ($transit && $op eq 'cud-transfer') {
 
 # actually return book and prepare item table.....
 my $returnbranch;
-if ($barcode && $op eq 'cud-checkin') {
+if ($barcode && ( $op eq 'cud-checkin' || $op eq 'cud-affect_reserve' ) ) {
     $barcode = barcodedecode($barcode) if $barcode;
     my $item = Koha::Items->find({ barcode => $barcode });
 
