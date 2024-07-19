@@ -11,7 +11,7 @@ return {
         if ( column_exists( 'categories', 'bulk' ) ) {
             my ($bulkdata) = $dbh->selectrow_array(
                 q|
-                SELECT bulk FROM categories;
+                SELECT bulk FROM categories WHERE bulk IS NOT NULL;
             |
             );
             if ($bulkdata) {
@@ -28,7 +28,7 @@ return {
         if ( column_exists( 'categories', 'finetype' ) ) {
             my ($bulkdata) = $dbh->selectrow_array(
                 q|
-                SELECT finetype FROM categories;
+                SELECT finetype FROM categories WHERE finetype IS NOT NULL;
             |
             );
             if ($bulkdata) {
@@ -46,7 +46,7 @@ return {
         if ( column_exists( 'categories', 'issuelimit' ) ) {
             my ($bulkdata) = $dbh->selectrow_array(
                 q|
-                SELECT issuelimit FROM categories;
+                SELECT issuelimit FROM categories WHERE issuelimit IS NOT NULL;
             |
             );
             if ($bulkdata) {
