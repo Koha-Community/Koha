@@ -1526,14 +1526,9 @@ subtest 'copy_and_replace_field' => sub {
         );
 
         # Copy control field to subfield
-        copy_and_replace_field(
-            { record => $record, from_field => '001', to_field => '099', to_subfield   => 'a' } );
+        copy_and_replace_field( { record => $record, from_field => '001', to_field => '099', to_subfield => 'a' } );
         is_deeply(
-            [
-                read_field(
-                    { record => $record, field => '099', subfield => 'a' }
-                )
-            ],
+            [ read_field( { record => $record, field => '099', subfield => 'a' } ) ],
             ['4815162342'],
             'Copy and replace - Update a subfield with content of control field'
         );

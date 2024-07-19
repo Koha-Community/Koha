@@ -135,12 +135,12 @@ sub copy_and_replace_field {
 
     if ( ! ( $record && $fromFieldName && $toFieldName ) ) { return; }
 
-    if (
-        ( !defined $fromSubfieldName or $fromSubfieldName eq '' )
-        and ( !defined $toSubfieldName or $toSubfieldName eq '' )
-    ) {
+    if (    ( !defined $fromSubfieldName or $fromSubfieldName eq '' )
+        and ( !defined $toSubfieldName or $toSubfieldName eq '' ) )
+    {
         _copy_move_field(
-            {   record        => $record,
+            {
+                record        => $record,
                 from_field    => $fromFieldName,
                 to_field      => $toFieldName,
                 regex         => $regex,
@@ -150,7 +150,8 @@ sub copy_and_replace_field {
         );
     } else {
         _copy_move_subfield(
-            {   record        => $record,
+            {
+                record        => $record,
                 from_field    => $fromFieldName,
                 from_subfield => $fromSubfieldName,
                 to_field      => $toFieldName,
