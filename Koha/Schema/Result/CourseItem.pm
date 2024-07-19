@@ -380,8 +380,11 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2021-06-11 18:35:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3fFJ3uJr+5pMZniZ1glIpg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-19 12:30:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZlR7CGNngDWQKmuggaYgVw
+
+
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 __PACKAGE__->add_columns(
     '+itype_enabled'         => { is_boolean => 1 },

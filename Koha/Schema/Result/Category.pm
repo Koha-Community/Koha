@@ -75,19 +75,6 @@ age limit for the patron
 
 the minimum age required for the patron category
 
-=head2 finetype
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 30
-
-unused in Koha
-
-=head2 bulk
-
-  data_type: 'tinyint'
-  is_nullable: 1
-
 =head2 enrolmentfee
 
   data_type: 'decimal'
@@ -102,13 +89,6 @@ enrollment fee for the patron
   is_nullable: 1
 
 are overdue notices sent to this patron category (1 for yes, 0 for no)
-
-=head2 issuelimit
-
-  data_type: 'smallint'
-  is_nullable: 1
-
-unused in Koha
 
 =head2 reservefee
 
@@ -138,9 +118,10 @@ type of Koha patron (Adult, Child, Professional, Organizational, Statistical, St
 =head2 BlockExpiredPatronOpacActions
 
   accessor: 'block_expired_patron_opac_actions'
-  data_type: 'mediumtext'
-  default_value: ''follow_syspref_BlockExpiredPatronOpacActions''
+  data_type: 'varchar'
+  default_value: 'follow_syspref_BlockExpiredPatronOpacActions'
   is_nullable: 0
+  size: 128
 
 specific actions expired patrons of this category are blocked from performing or if the BlockExpiredPatronOpacActions system preference is to be followed
 
@@ -218,21 +199,21 @@ Exclude patrons of this category from local holds priority
   data_type: 'integer'
   is_nullable: 1
 
-define maximum amount withstanding before checkouts are blocked
+define maximum amount outstanding before checkouts are blocked
 
 =head2 noissueschargeguarantees
 
   data_type: 'integer'
   is_nullable: 1
 
-define maximum amount withstanding before checkouts are blocked
+define maximum amount that the guarantees of a patron in this category can have outstanding before checkouts are blocked
 
 =head2 noissueschargeguarantorswithguarantees
 
   data_type: 'integer'
   is_nullable: 1
 
-define maximum amount withstanding before checkouts are blocked
+define maximum amount that the guarantors with guarantees of a patron in this category can have outstanding before checkouts are blocked
 
 =cut
 
@@ -251,16 +232,10 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", is_nullable => 1 },
   "dateofbirthrequired",
   { data_type => "tinyint", is_nullable => 1 },
-  "finetype",
-  { data_type => "varchar", is_nullable => 1, size => 30 },
-  "bulk",
-  { data_type => "tinyint", is_nullable => 1 },
   "enrolmentfee",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "overduenoticerequired",
   { data_type => "tinyint", is_nullable => 1 },
-  "issuelimit",
-  { data_type => "smallint", is_nullable => 1 },
   "reservefee",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "hidelostitems",
@@ -269,10 +244,11 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "A", is_nullable => 0, size => 1 },
   "BlockExpiredPatronOpacActions",
   {
-    accessor      => "block_expired_patron_opac_actions",
-    data_type     => "mediumtext",
-    default_value => "'follow_syspref_BlockExpiredPatronOpacActions'",
-    is_nullable   => 0,
+    accessor => "block_expired_patron_opac_actions",
+    data_type => "varchar",
+    default_value => "follow_syspref_BlockExpiredPatronOpacActions",
+    is_nullable => 0,
+    size => 128,
   },
   "default_privacy",
   {
@@ -415,8 +391,11 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-03-26 17:00:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6I6SD78A/PJ0AhUc1IEOPg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-19 12:29:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WC8+n0x/UB9kDO1ZAVTo/A
+
+
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 sub koha_object_class {
     'Koha::Patron::Category';
