@@ -920,28 +920,26 @@ sub pickup_locations {
     my $patron = $params->{patron};
 
     my $circ_control_branch = Koha::Policy::Holds->holds_control_library( $self, $patron );
-    my $branchitemrule =
-      C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
+    my $branchitemrule      = C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
-    if (
-        $branchitemrule->{holdallowed} eq 'from_local_hold_group' &&
-        !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} ) ||
-        $branchitemrule->{holdallowed} eq 'from_home_library' &&
-        $self->home_branch->branchcode ne $patron->branchcode
-    ) {
+    if ( $branchitemrule->{holdallowed} eq 'from_local_hold_group'
+        && !$self->home_branch->validate_hold_sibling( { branchcode => $patron->branchcode } )
+        || $branchitemrule->{holdallowed} eq 'from_home_library'
+        && $self->home_branch->branchcode ne $patron->branchcode )
+    {
         return Koha::Libraries->new()->empty;
     }
 
     my $pickup_libraries;
-    if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
+    if ( $branchitemrule->{hold_fulfillment_policy} eq 'holdgroup' ) {
         $pickup_libraries = $self->home_branch->get_hold_libraries;
-    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup') {
-        my $plib = Koha::Libraries->find({ branchcode => $patron->branchcode});
+    } elsif ( $branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' ) {
+        my $plib = Koha::Libraries->find( { branchcode => $patron->branchcode } );
         $pickup_libraries = $plib->get_hold_libraries;
-    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'homebranch') {
-        $pickup_libraries = Koha::Libraries->search({ branchcode => $self->homebranch });
-    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {
-        $pickup_libraries = Koha::Libraries->search({ branchcode => $self->holdingbranch });
+    } elsif ( $branchitemrule->{hold_fulfillment_policy} eq 'homebranch' ) {
+        $pickup_libraries = Koha::Libraries->search( { branchcode => $self->homebranch } );
+    } elsif ( $branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch' ) {
+        $pickup_libraries = Koha::Libraries->search( { branchcode => $self->holdingbranch } );
     } else {
         $pickup_libraries = Koha::Libraries->search();
     }
