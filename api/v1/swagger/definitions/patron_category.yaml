@@ -100,6 +100,21 @@ properties:
       - boolean
       - "null"
     description: Exclude patrons of this category from local holds priority
+  no_issues_charge:
+    type:
+      - number
+      - "null"
+    description: Set threshold of debt allowed before issues are blocked
+  no_issues_charge_guarantees:
+    type:
+      - number
+      - "null"
+    description: Set threshold of debt allowed, inclusive of guarantees debts, before issues are blocked
+  no_issues_charge_guarantors_with_guarantees:
+    type:
+      - number
+      - "null"
+    description: Set threshold of debt allowed, inclused of relations debts, before issues are blocked
 additionalProperties: false
 required:
   - patron_category_id
