@@ -173,9 +173,6 @@
                                 <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl"><i class="fa fa-fw fa-gears"></i>Koha administration</a>
                             </li>
                             [% END %]
-                            <li>
-                                <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl"><img src="[% interface | html %]/[% theme | html %]/img/koha-egg.svg" alt="Koha Logo SVG"/> About Koha</a>
-                            </li>
                         </ul>
                     </div> <!-- /.col-sm-6 -->
 
@@ -297,7 +294,7 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <div id="koha_version"><a href="https://koha-community.org">Koha [% Koha.Version.maintenance | html %]</a></div>
+                        <div id="koha_version"><a href="/cgi-bin/koha/about.pl">Koha [% Koha.Version.maintenance | html %]</a></div>
                     </div>
                 </div>
 
