@@ -1737,9 +1737,7 @@ sub to_api {
 
     $overrides->{effective_item_type_id} = $self->effective_itemtype;
 
-    my $itype_notforloan = $self->itemtype->notforloan;
-    $overrides->{effective_not_for_loan_status} =
-        ( defined $itype_notforloan && !$self->notforloan ) ? $itype_notforloan : $self->notforloan;
+    $overrides->{effective_not_for_loan_status} = $self->effective_not_for_loan_status;
 
     return { %$response, %$overrides };
 }
@@ -1835,17 +1833,18 @@ sub item_type {
     return shift->itemtype;
 }
 
-=head3 not_for_loan
+=head3 effective_not_for_loan_status
 
-  my $nfl = $item->not_for_loan;
+  my $nfl = $item->effective_not_for_loan_status;
 
 Returns the effective not for loan status of the item
 
 =cut
 
-sub not_for_loan {
+sub effective_not_for_loan_status {
     my ($self) = @_;
-    return $self->notforloan ? $self->notforloan : $self->itemtype->notforloan;
+    my $itype_notforloan = $self->itemtype->notforloan;
+    return ( defined($itype_notforloan) && !$self->notforloan ) ? $itype_notforloan : $self->notforloan;
 }
 
 =head3 orders
