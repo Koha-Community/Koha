@@ -826,6 +826,12 @@
                 selectField.style.minWidth = '320px';
                 $(selectField).select2();
             });
+
+            let urlParams = new URLSearchParams(window.location.search)
+            if(urlParams.get('format') === 'shareable' ) {
+                submitForm($('#itemsearchform'));
+                $("#item-search-block").hide();
+            }
         });
     </script>
 [% END %]
