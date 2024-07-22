@@ -1,4 +1,4 @@
-use Modern::Perl
+use Modern::Perl;
 
 return {
     bug_number  => "17473",
