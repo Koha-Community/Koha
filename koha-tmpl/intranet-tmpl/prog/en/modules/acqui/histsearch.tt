@@ -184,7 +184,7 @@
             }
             patron_autocomplete($("#find_patron"), {
                 'on-select-callback': function( event, ui ) {
-                    var field = ui.item.borrowernumber;
+                    var field = ui.item.patron_id;
                     AddPatron( ui.item.firstname + " " + ( ui.item.middle_name || "" ) + " " + ui.item.surname, field, $("#basket_creators"), 'created_by' );
                     $("#find_patron").val('').focus();
                     return false;
