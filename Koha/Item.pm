@@ -2398,20 +2398,6 @@ sub check_recalls {
     return $recall;
 }
 
-=head3 is_notforloan
-
-    my $is_notforloan = $item->is_notforloan;
-
-Determine whether or not this item is "notforloan" based on
-the item's notforloan status or its item type
-
-=cut
-
-sub is_notforloan {
-    my ( $self ) = @_;
-    return $self->not_for_loan;
-}
-
 =head3 is_denied_renewal
 
     my $is_denied_renewal = $item->is_denied_renewal;
