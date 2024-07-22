@@ -1026,8 +1026,13 @@ sub clean_search_term {
     # screen all brackets with backslash
     $term =~ s/(?<!\\)(?:[\\]{2})*([\{\}\[\]])$lookahead/\\$1/g;
 
-    # remove problematic punctuation and escaped slashes surrounded by spaces if truncate
-    $term =~ s/\s+(\s*[&;,:\.=\-\/]|(\\\/)\s*)+\s$lookahead/ /g if $truncate;
+    # Remove problematic punctuation  and escaped slashes surrounded by spaces if truncate.
+    # This mainly relates to ISBD punctuation.
+    # Note that slashes identified as RE limits will not be removed nor the contents of RE
+    # will be altered (cf. @saved_regexes).  In other cases (i.e. escaped slashes
+    # (cf. QueryRegexEscapeOptions) and unescaped slashes not identified as being limits
+    # to a RE, i.e. the last odd unescaped slash), the slashes will be removed.
+    $term =~ s/\s([&;,:\.=\-\/\s]|(\\\/))+\s$lookahead/ /g if $truncate;
 
     # restore all regex contents after escaping brackets:
     for (my $i = 0; $i < @saved_regexes; $i++) {
