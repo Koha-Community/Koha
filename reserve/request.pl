@@ -89,6 +89,7 @@ my $messages;
 my $exceeded_maxreserves;
 my $exceeded_holds_per_record;
 my @failed_holds = $input->multi_param('failed_holds');
+my $form_submitted = $input->param('form_submitted');
 
 my $op = $input->param('op') || q{};
 
@@ -150,22 +151,29 @@ if ($findborrower) {
     $borrowernumber_hold = $patron->borrowernumber if $patron;
 }
 
-if($findclub) {
-    my $club = Koha::Clubs->find( { name => $findclub } );
-    if( $club ) {
-        $club_hold = $club->id;
-    } else {
-        my @clubs = Koha::Clubs->search( [
-            { name => { like => '%'.$findclub.'%' } },
-            { description => { like => '%'.$findclub.'%' } }
-        ] )->as_list;
-        if( scalar @clubs == 1 ) {
-            $club_hold = $clubs[0]->id;
-        } elsif ( @clubs ) {
-            $template->param( clubs => \@clubs );
+if ($form_submitted) {
+    if ($findclub) {
+        my $club = Koha::Clubs->find( { name => $findclub } );
+        if ($club) {
+            $club_hold = $club->id;
         } else {
-            $messageclub = "'$findclub'";
+            my @clubs = Koha::Clubs->search(
+                [
+                    { name        => { like => '%' . $findclub . '%' } },
+                    { description => { like => '%' . $findclub . '%' } }
+                ]
+            )->as_list;
+            if ( scalar @clubs == 1 ) {
+                $club_hold = $clubs[0]->id;
+            } elsif (@clubs) {
+                $template->param( clubs => \@clubs );
+            } else {
+                $messageclub = "'$findclub'";
+            }
         }
+    } else {
+        my @clubs = Koha::Clubs->search()->as_list;
+        $template->param( clubs => \@clubs );
     }
 }
 

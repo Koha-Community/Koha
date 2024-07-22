@@ -283,6 +283,7 @@
                                     <form id="holds_clubsearch" action="request.pl" method="get">
                                         <div class="hint">Enter club ID or partial name:</div>
                                         <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                        <input type="hidden" name="form_submitted" value="1" />
                                         <input type="submit" class="btn btn-primary" value="Search" />
                                         [% FOREACH biblionumber IN biblionumbers %]
                                         <input type="hidden" name="biblionumber" value="[% biblionumber | html %]"/>
