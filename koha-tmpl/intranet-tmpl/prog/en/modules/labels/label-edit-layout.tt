@@ -25,7 +25,7 @@
         [% ELSE %]
             [% t("New label layout") | html %]
         [% END %]
-        &rsaquo; [% t("Layouts") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+        &rsaquo; [% t("Label layouts") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
@@ -55,7 +55,7 @@
             <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a>
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Label layouts</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF ( layout_id ) %]
@@ -229,6 +229,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/labels-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
             $('.sidebar_menu a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");

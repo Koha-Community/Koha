@@ -10,7 +10,7 @@
         [% ELSE %]
             [% t("New printer profile") | html %]
         [% END %]
-        &rsaquo; [% t("Profiles") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+        &rsaquo; [% t("Printer profiles") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
@@ -30,7 +30,7 @@
             <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Profiles</a>
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Printer profiles</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF ( profile_id ) %]
@@ -129,6 +129,7 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/labels-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
             $('.sidebar_menu a[href$="/cgi-bin/koha/labels/label-home.pl"]').addClass("current");

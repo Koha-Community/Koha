@@ -12,7 +12,7 @@
         [% ELSE %]
             [% t("New label batch") | html %]
         [% END %]
-        &rsaquo; [% t("Batches") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
+        &rsaquo; [% t("Label batches") | html %] &rsaquo; [% t("Label creator") | html %] &rsaquo; [% t("Cataloging") | html %] &rsaquo; [% t("Koha") | html %]
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,7 +32,7 @@
             <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Batches</a>
+            <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Label batches</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% IF description %]
@@ -231,6 +231,7 @@
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/form-submit.js") | $raw %]
+    [% Asset.js("js/labels-menu.js") | $raw %]
     <script>
         function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
             $(".focus:last").select();
