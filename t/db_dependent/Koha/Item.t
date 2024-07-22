@@ -2251,12 +2251,12 @@ subtest 'Notforloan tests' => sub {
     my $item1 = $builder->build_sample_item;
     $item1->update({ notforloan => 0 });
     $item1->itemtype->notforloan(0);
-    is ( $item1->is_notforloan, 0, 'Notforloan is correctly false by item status and item type');
+    ok( !$item1->is_notforloan, 'Notforloan is correctly false by item status and item type');
     $item1->update({ notforloan => 1 });
-    is ( $item1->is_notforloan, 1, 'Notforloan is correctly true by item status');
+    ok( $item1->is_notforloan, 'Notforloan is correctly true by item status');
     $item1->update({ notforloan => 0 });
     $item1->itemtype->update({ notforloan => 1 });
-    is ( $item1->is_notforloan, 1, 'Notforloan is correctly true by item type');
+    ok( $item1->is_notforloan, 'Notforloan is correctly true by item type');
 
     $schema->storage->txn_rollback;
 };
