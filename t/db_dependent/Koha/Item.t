@@ -2747,7 +2747,7 @@ subtest 'check_booking tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'not_for_loan() tests' => sub {
+subtest 'effective_not_for_loan_status() tests' => sub {
 
     plan tests => 5;
 
@@ -2769,14 +2769,14 @@ subtest 'not_for_loan() tests' => sub {
     note("item-level_itypes: 0");
 
     is(
-        $item->not_for_loan, $item->notforloan,
-        '->not_for_loan returns item specific notforloan value when defined and non-zero'
+        $item->effective_not_for_loan_status, $item->notforloan,
+        '->effective_not_for_loan_status returns item specific notforloan value when defined and non-zero'
     );
 
     $item->notforloan(0)->store();
     is(
-        $item->not_for_loan, $biblio_itype->notforloan,
-        '->not_for_loan returns biblio level itype notforloan value when item notforloan is 0'
+        $item->effective_not_for_loan_status, $biblio_itype->notforloan,
+        '->effective_not_for_loan_status returns biblio level itype notforloan value when item notforloan is 0'
     );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
@@ -2784,14 +2784,14 @@ subtest 'not_for_loan() tests' => sub {
 
     $item->notforloan(1)->store();
     is(
-        $item->not_for_loan, $item->notforloan,
-        '->not_for_loan returns item specific notforloan value when defined and non-zero'
+        $item->effective_not_for_loan_status, $item->notforloan,
+        '->effective_not_for_loan_status returns item specific notforloan value when defined and non-zero'
     );
 
     $item->notforloan(0)->store();
     is(
-        $item->not_for_loan, $item_itype->notforloan,
-        '->not_for_loan returns biblio level itype notforloan value when item notforloan is 0'
+        $item->effective_not_for_loan_status, $item_itype->notforloan,
+        '->effective_not_for_loan_status returns biblio level itype notforloan value when item notforloan is 0'
     );
 
     $schema->storage->txn_rollback;
