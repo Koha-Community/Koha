@@ -1843,7 +1843,8 @@ Returns the effective not for loan status of the item
 
 sub effective_not_for_loan_status {
     my ($self) = @_;
-    my $itype_notforloan = $self->itemtype->notforloan;
+    my $itemtype = $self->itemtype;
+    my $itype_notforloan = $itemtype ? $itemtype->notforloan : undef;
     return ( defined($itype_notforloan) && !$self->notforloan ) ? $itype_notforloan : $self->notforloan;
 }
 
