@@ -116,9 +116,9 @@ subtest "Handle search filters" => sub {
 
     my ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
 
-    is( $limit,q{kw=(cat) AND ti=(bat) OR au=(rat) and (mc-itype,phr=BK or mc-itype,phr=MU) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit correctly formed");
+    is( $limit,q{(kw=(cat) AND ti=(bat) OR au=(rat)) and (mc-itype,phr=BK or mc-itype,phr=MU) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit correctly formed");
     is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
-    is( $limit_desc,q{kw=(cat) AND ti=(bat) OR au=(rat) and (mc-itype,phr=BK or mc-itype,phr=MU) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit description is correctly expanded");
+    is( $limit_desc,q{(kw=(cat) AND ti=(bat) OR au=(rat)) and (mc-itype,phr=BK or mc-itype,phr=MU) and (( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) ))},"Limit description is correctly expanded");
 
     $filter = Koha::SearchFilter->new({
         name => "test",
@@ -129,8 +129,8 @@ subtest "Handle search filters" => sub {
 
     ( undef, undef, undef, undef, undef, $limit, $limit_cgi, $limit_desc ) = $qb->build_query_compat( undef, undef, undef, ["search_filter:$filter_id"] );
 
-    is( $limit,q{(su=biography)},"Limit correctly formed for ccl type query");
+    is( $limit,q{((su=biography))},"Limit correctly formed for ccl type query");
     is( $limit_cgi,"&limit=search_filter%3A$filter_id","CGI limit is not expanded");
-    is( $limit_desc,q{(su=biography)},"Limit description is correctly handled for ccl type query");
+    is( $limit_desc,q{((su=biography))},"Limit description is correctly handled for ccl type query");
 
 };
