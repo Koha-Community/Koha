@@ -158,14 +158,16 @@
                     [% FOREACH header IN item_header_loop %]
                         [% SET attribute = header.attribute %]
                         [% SET can_mod = item.nomod ? "nomod" : "canmod" %]
-                        [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
-                            [% IF header.attribute == 'datelastseen' %]
+                        [% IF attribute AND date_fields.grep('^' _ attribute _ '$').size %]
+                            [% IF attribute == 'datelastseen' %]
                                 <td class="[% can_mod | html %]" data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates with_hours => 1 %]</td>
                             [% ELSE %]
                                 <td class="[% can_mod | html %]" data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
                             [% END %]
                         [% ELSIF ( item.$attribute && ( attribute == 'price' || attribute == 'replacementprice' ) ) %]
                             <td class="[% can_mod | html %]" data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
+                        [% ELSIF item.$attribute && attribute == 'itemcallnumber' %]
+                            <td class="[% can_mod | html %]" data-order="[% item.cn_sort | html %]">[% item.$attribute | html %]</td>
                         [% ELSE %]
                             <td class="[% can_mod | html %]">[% item.$attribute | html %]</td>
                         [% END %]
