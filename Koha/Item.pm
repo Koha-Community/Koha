@@ -2409,21 +2409,7 @@ the item's notforloan status or its item type
 
 sub is_notforloan {
     my ( $self ) = @_;
-    my $is_notforloan = 0;
-
-    if ( $self->notforloan ){
-        $is_notforloan = 1;
-    }
-    else {
-        my $itemtype = $self->itemtype;
-        if ($itemtype){
-            if ( $itemtype->notforloan ){
-                $is_notforloan = 1;
-            }
-        }
-    }
-
-    return $is_notforloan;
+    return $self->not_for_loan;
 }
 
 =head3 is_denied_renewal
