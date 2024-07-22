@@ -668,7 +668,8 @@ for (my $i=0;$i<@servers;$i++) {
                 }
 
                 if ( C4::Context->preference('LocalCoverImages') ) {
-                    $line->{has_local_cover_image} = $line->{biblio_object}->cover_images->count;
+                    $line->{has_local_cover_image} =
+                        $line->{biblio_object} ? $line->{biblio_object}->cover_images->count : 0;
                 }
             }
             my( $page_numbers, $hits_to_paginate, $pages, $current_page_number, $previous_page_offset, $next_page_offset, $last_page_offset ) =
