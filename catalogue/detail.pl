@@ -495,11 +495,8 @@ if ( C4::Context->preference('UseCourseReserves') ) {
     $template->param( course_reserves => $course_reserves );
 }
 
-my @libraries = $biblio->items($items_params)->get_column('homebranch');
-my %can_edit_items_from = map {
-    $_ => $patron->can_edit_items_from($_)
-} @libraries;
-$template->param(can_edit_items_from => \%can_edit_items_from);
+my @libraries = $patron->libraries_where_can_edit_items;
+$template->param(can_edit_items_from => \@libraries);
 
 my @itemtypes = Koha::ItemTypes->search->as_list;
 my %item_type_image_locations = map {
