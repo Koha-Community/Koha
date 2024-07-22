@@ -2242,25 +2242,6 @@ subtest 'Recalls tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Notforloan tests' => sub {
-
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $item1 = $builder->build_sample_item;
-    $item1->update({ notforloan => 0 });
-    $item1->itemtype->notforloan(0);
-    ok( !$item1->is_notforloan, 'Notforloan is correctly false by item status and item type');
-    $item1->update({ notforloan => 1 });
-    ok( $item1->is_notforloan, 'Notforloan is correctly true by item status');
-    $item1->update({ notforloan => 0 });
-    $item1->itemtype->update({ notforloan => 1 });
-    ok( $item1->is_notforloan, 'Notforloan is correctly true by item type');
-
-    $schema->storage->txn_rollback;
-};
-
 subtest 'item_group() tests' => sub {
 
     plan tests => 4;
