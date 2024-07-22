@@ -99,7 +99,7 @@ sub store {
     }
 
     # Ensure barcode is either defined or undef
-    $self->barcode(undef) if $self->barcode eq '';
+    $self->barcode(undef) if ( defined($self->barcode) && $self->barcode eq '' );
 
     $self->barcode( C4::Circulation::barcodedecode( $self->barcode ) );
 
