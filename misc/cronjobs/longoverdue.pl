@@ -387,6 +387,7 @@ my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_b
 
 my @available_branches = Koha::Libraries->search()->get_column('branchcode');
 my %branches_to_process;
+# If --branch was used, validate any branchcode passed in and mark them as branches to use
 for my $lib (@branches) {
     unless ( grep { $_ eq $lib } @available_branches ) {
         pod2usage(
@@ -396,6 +397,7 @@ for my $lib (@branches) {
     }
     $branches_to_process{$lib} = 1;
 }
+# If --skip-branch was used, validate any branchcode passed in and mark them as branches to *not* use
 if (@skip_branches) {
     for my $lib (@skip_branches) {
         unless ( grep { $_ eq $lib } @available_branches ) {
@@ -406,6 +408,8 @@ if (@skip_branches) {
         }
     }
     %branches_to_process = map { $_ => 1 } @available_branches;
+    # The mapped 0 values here will overwrite the corrosponding mapped 1 values
+    # where the 0 values exist
     %branches_to_process = ( %branches_to_process, map { $_ => 0 } @skip_branches );
 }
 
