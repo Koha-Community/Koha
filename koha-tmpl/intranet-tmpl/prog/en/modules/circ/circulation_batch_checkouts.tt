@@ -174,6 +174,9 @@
                   [% IF checkout_info.RENEW_ISSUE %]
                       <li><i class="fa fa-li fa-warning"></i>This item is currently checked out to this patron. Renew?</li>
                   [% END %]
+                  [% IF checkout_info.ADDITIONAL_MATERIALS %]
+                      <li><i class="fa fa-li fa-warning"></i>Please confirm that the accompanying materials are present: [%  checkout_info.ADDITIONAL_MATERIALS | html %]</li>
+                  [% END %]
                   [% IF checkout_info.RESERVE_WAITING %]
                       <li><i class="fa fa-li fa-warning"></i>This item is waiting for another patron.</li>
                   [% END %]
