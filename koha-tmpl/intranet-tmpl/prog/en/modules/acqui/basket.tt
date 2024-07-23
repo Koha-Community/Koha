@@ -812,6 +812,10 @@
                                                         <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
                                                         <br />
                                                         <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
+                                                        <br />
+                                                    [% END %]
+                                                    [% UNLESS ( books_loo.suggestionid ) %]
+                                                        <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;link_order=[% books_loo.ordernumber | uri %]">Search for suggestion to link</a>
                                                     [% END %]
                                                 </td>
                                             [% END %]
