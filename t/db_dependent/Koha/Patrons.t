@@ -1306,9 +1306,10 @@ subtest 'search_patrons_to_anonymise' => sub {
     t::lib::Mocks::mock_preference('IndependentBranches', 0);
 };
 
-subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_see_patron_infos + search_limited' =>
-    sub {
-    plan tests => 4;
+subtest
+    'libraries_where_can_see_patrons + libraries_where_can_see_things + can_see_patron_infos + search_limited+ can_see_patrons_from + can_edit_items_from'
+    => sub {
+    plan tests => 6;
 
     # group1
     #   + library_11
@@ -1316,8 +1317,12 @@ subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_
     # group2
     #   + library21
     $nb_of_patrons = Koha::Patrons->search->count;
-    my $group_1    = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
-    my $group_2    = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
+    my $group_1 =
+        Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )
+        ->store;
+    my $group_2 =
+        Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )
+        ->store;
     my $library_11 = $builder->build( { source => 'Branch' } );
     my $library_12 = $builder->build( { source => 'Branch' } );
     my $library_21 = $builder->build( { source => 'Branch' } );
@@ -1329,22 +1334,23 @@ subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_
     Koha::Library::Group->new( { branchcode => $library_21->branchcode, parent_id => $group_2->id } )->store;
 
     my $sth =
-        C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, 4, ?)|)
-        ;    # 4 for borrowers
+        C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, ?, ?)|)
+        ;
              # 2 patrons from library_11 (group1)
              # patron_11_1 see patron's infos from outside its group
              # Setting flags => undef to not be considered as superlibrarian
     my $patron_11_1 = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_11->branchcode, flags => undef, } } );
     $patron_11_1 = Koha::Patrons->find( $patron_11_1->{borrowernumber} );
-    $sth->execute( $patron_11_1->borrowernumber, 'edit_borrowers' );
-    $sth->execute( $patron_11_1->borrowernumber, 'view_borrower_infos_from_any_libraries' );
+    $sth->execute( $patron_11_1->borrowernumber, 4, 'edit_borrowers' );
+    $sth->execute( $patron_11_1->borrowernumber, 4,'view_borrower_infos_from_any_libraries' );
 
     # patron_11_2 can only see patron's info from its group
     my $patron_11_2 = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_11->branchcode, flags => undef, } } );
     $patron_11_2 = Koha::Patrons->find( $patron_11_2->{borrowernumber} );
-    $sth->execute( $patron_11_2->borrowernumber, 'edit_borrowers' );
+    $sth->execute( $patron_11_2->borrowernumber, 4, 'edit_borrowers' );
+    $sth->execute( $patron_11_2->borrowernumber, 9, 'edit_items' );
 
     # 1 patron from library_12 (group1)
     my $patron_12 = $builder->build(
@@ -1355,7 +1361,7 @@ subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_
     my $patron_21 = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_21->branchcode, flags => undef, } } );
     $patron_21 = Koha::Patrons->find( $patron_21->{borrowernumber} );
-    $sth->execute( $patron_21->borrowernumber, 'edit_borrowers' );
+    $sth->execute( $patron_21->borrowernumber, 4, 'edit_borrowers' );
 
     # Pfiou, we can start now!
     subtest 'libraries_where_can_see_things' => sub {
@@ -1376,6 +1382,43 @@ subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_
             \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ],
             q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
         );
+    };
+
+    subtest 'can_see_patrons_from' => sub {
+        plan tests => 2;
+        ok( $patron_11_2->can_see_patrons_from( $library_11->branchcode ), "We can see a patron from in our group" );
+        ok(
+            !$patron_11_2->can_see_patrons_from( $library_21->branchcode ),
+            "We cannot see a patron from outside our group without permissions"
+        );
+    };
+
+    subtest 'can_edit_items_from' => sub {
+        plan tests => 4;
+        ok( $patron_11_2->can_edit_items_from( $library_11->branchcode ), "We can edit an item from in our group" );
+        ok(
+            $patron_11_2->can_edit_items_from( $library_21->branchcode ),
+            "We can edit an item from outside our group as the group does not limit item editing"
+        );
+        $group_2->ft_limit_item_editing(1)->store();
+
+        $patron_11_2  = Koha::Patrons->find( $patron_11_2->borrowernumber );
+        #FIXME We refetch the patron because library lists are cached in an extra hash key
+        # in libraries_where_can_see_things
+
+        ok(
+            !$patron_11_2->can_edit_items_from( $library_21->branchcode ),
+            "We can not edit an item from outside our group as the group does limit item editing"
+        );
+
+        $sth->execute( $patron_11_2->borrowernumber, 9, 'edit_any_item' );
+        $patron_11_2  = Koha::Patrons->find( $patron_11_2->borrowernumber );
+
+        ok(
+            $patron_11_2->can_edit_items_from( $library_21->branchcode ),
+            "We can edit an item from outside our group as we have permission"
+        );
+
     };
 
     subtest 'libraries_where_can_see_patrons' => sub {
