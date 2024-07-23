@@ -111,6 +111,7 @@ my $op              = $input->param('op');
 my $suggestionid    = $input->param('suggestionid');
 my $duplicateNumber = $input->param('duplicateNumber');
 my $uncertainprice  = $input->param('uncertainprice');
+my $link_order      = $input->param('link_order');
 
 $op = 'else' unless $op;
 
@@ -126,6 +127,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ( $op eq 'connectDuplicate' ) {
     ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
+}
+
+if ( $op eq 'link_order' and $link_order ) {
+    my $order      = Koha::Acquisition::Orders->find($link_order);
+    my $suggestion = Koha::Suggestions->find($suggestionid);
+    $suggestion->update( { biblionumber => $order->biblionumber } ) if $order->biblionumber;
+    print $input->redirect( "/cgi-bin/koha/acqui/basket.pl?basketno=" . $basketno );
 }
 
 my $suggestions = [
@@ -147,6 +155,7 @@ $template->param(
     booksellerid => $booksellerid,
     name         => $vendor->name,
     "op_$op"     => 1,
+    link_order   => $link_order,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
