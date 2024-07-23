@@ -225,7 +225,7 @@
 
     <script>
         [% SET libraries = Branches.all %]
-        [% SET categories = Categories.limited.unblessed %]
+        [% SET categories = Categories.all.unblessed %]
         var categories = [% To.json(categories) | $raw %].map(e => {
             e['_id'] = e.categorycode.toLowerCase();
             e['_str'] = e.description;
