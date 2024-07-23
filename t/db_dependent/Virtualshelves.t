@@ -303,6 +303,7 @@ subtest 'Shelf permissions' => sub {
     my $patron4 = $builder->build( { source => 'Borrower', value => { flags => '0' } } );
     my $patron5 = $builder->build( { source => 'Borrower', value => { flags => '4' } } );
     my $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code) VALUES (?,?,?)");
+    $sth->execute($patron2->{borrowernumber}, 20, 'edit_public_list_contents'); # $patron2 has everything checked but not superlibrarian and delete_public_lists
     $sth->execute($patron4->{borrowernumber}, 20, 'edit_public_lists'); # $patron4 only has the edit_public_lists sub-permission checked
     $sth->execute($patron5->{borrowernumber}, 20, 'edit_public_list_contents'); # $patron5 has the 'catalogue' permission and edit_public_list_contents sub-permission checked
 
