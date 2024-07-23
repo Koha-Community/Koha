@@ -1135,6 +1135,16 @@
                     }
                 });
             [% END %]
+
+            // Handle checkout for fast cataloging
+            // Check the referrer to prevent csrf, fill and submit form
+            if(document.referrer.split('?')[0] === window.location.origin +'/cgi-bin/koha/cataloguing/additem.pl') {
+                let urlParams = new URLSearchParams(window.location.search);
+                let barcode = urlParams.get('barcode');
+                $('#barcode').val(barcode);
+                $('#mainform').submit();
+            }
+
         });
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
