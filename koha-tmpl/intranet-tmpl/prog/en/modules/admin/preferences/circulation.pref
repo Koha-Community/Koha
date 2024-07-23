@@ -918,6 +918,12 @@ Circulation:
             - "sending an email to the patron's library whenever a hold request is placed."
             - "The first email address set from this list will be used: library reply-to, library email, <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReplytoDefault'>ReplytoDefault</a>, <a href='/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=KohaAdminEmailAddress'>KohaAdminEmailAddress</a>."
         -
+            - pref: EmailPatronWhenHoldIsPlaced
+              choices:
+                  1: Email
+                  0:  "Don't email"
+            - a patron when they have placed a hold.
+        -
             - pref: DisplayMultiPlaceHold
               choices:
                   1: Enable
@@ -1105,12 +1111,6 @@ Circulation:
                   1: block
                   0: allow
             - renewing of items from the staff interface and via the <code>misc/cronjobs/automatic_renewals.pl</code> cronjob.
-        -
-            - pref: EmailPatronWhenHoldIsPlaced
-              choices:
-                  1: Email
-                  0:  "Don't email"
-            - a patron when they have placed a hold.
     Fines policy:
         -
             - pref: finesCalendar
