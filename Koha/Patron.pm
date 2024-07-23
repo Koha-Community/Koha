@@ -1946,7 +1946,7 @@ sub libraries_where_can_see_things {
     my $subpermission = $params->{subpermission};
     my $group_feature = $params->{group_feature};
 
-    return $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"}
+    return @{ $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} }
         if exists( $self->{"_restricted_branchcodes:$permission:$subpermission:$group_feature"} );
 
     my $userenv = C4::Context->userenv;
