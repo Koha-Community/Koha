@@ -447,17 +447,17 @@
                 </li>
                 <li>
                     <label for="noissuescharge">Checkout charge limit: </label>
-                    <input type="text" name="noissuescharge" id="noissuescharge" value="[% category.noissuescharge | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <input type="text" pattern="^\d+(\.\d{2})?$" name="noissuescharge" id="noissuescharge" value="[% category.noissuescharge | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
                     <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">noissuescharge</a> preference</div>
                 </li>
                 <li>
                     <label for="noissueschargeguarantees">Guarantees checkout charge limit: </label>
-                    <input type="text" name="noissueschargeguarantees" id="noissueschargeguarantees" value="[% category.noissueschargeguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <input type="text" pattern="^\d+(\.\d{2})?$" name="noissueschargeguarantees" id="noissueschargeguarantees" value="[% category.noissueschargeguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
                     <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantees</a> preference</div>
                 </li>
                 <li>
                     <label for="noissueschargeguarantorswithguarantees">Guarantors with guarantees checkout charge limit: </label>
-                    <input type="text" name="noissueschargeguarantorswithguarantees" id="noissueschargeguarantorswithguarantees" value="[% category.noissueschargeguarantorswithguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="3" />
+                    <input type="text" pattern="^\d+(\.\d{2})?$" name="noissueschargeguarantorswithguarantees" id="noissueschargeguarantorswithguarantees" value="[% category.noissueschargeguarantorswithguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
                     <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantorsWithGuarantees</a> preference</div>
                 </li>
             </ol>
