@@ -2615,7 +2615,7 @@ sub z3950_status {
         push @statuses, $status_strings->{LOST} // "LOST";
     }
 
-    if ( $self->is_notforloan() ) {
+    if ( $self->effective_not_for_loan_status() ) {
         push @statuses, $status_strings->{NOT_FOR_LOAN} // "NOT_FOR_LOAN";
     }
 
