@@ -464,15 +464,18 @@ foreach my $startrange (sort keys %$lost) {
         $sth_items->execute($startrange, $endrange, $lostvalue);
         $count=0;
         ITEM: while (my $row=$sth_items->fetchrow_hashref) {
+            my $patron;
             if( $filter_borrower_categories ) {
-                my $category = uc Koha::Patrons->find( $row->{borrowernumber} )->categorycode();
+                $patron ||= Koha::Patrons->find( $row->{borrowernumber} );
+                my $category = uc $patron->categorycode();
                 next ITEM unless ( $category_to_process{ $category } );
             }
             if ($filter_branches) {
                 my $lib;
                 for ($circ_control_pref) {
                     if ( $_ eq 'PatronLibrary' ) {
-                        $lib = Koha::Patrons->find( $row->{borrowernumber} )->branchcode();
+                        $patron ||= Koha::Patrons->find( $row->{borrowernumber} );
+                        $lib = $patron->branchcode();
                     } elsif ( $_ eq 'PickupLibrary' ) {
                         $lib = C4::Context->userenv->{'branch'};
                     } else {    # ( $_ eq 'ItemHomeLibrary' )
@@ -492,7 +495,7 @@ foreach my $startrange (sort keys %$lost) {
                 if ( $charge && $charge eq $lostvalue ) {
                     LostItem( $row->{'itemnumber'}, 'cronjob', $mark_returned );
                 } elsif ( $mark_returned ) {
-                    my $patron = Koha::Patrons->find( $row->{borrowernumber} );
+                    $patron ||= Koha::Patrons->find( $row->{borrowernumber} );
                     MarkIssueReturned($row->{borrowernumber},$row->{itemnumber},undef,$patron->privacy)
                 }
             }
