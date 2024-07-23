@@ -1284,8 +1284,8 @@ subtest 'search_patrons_to_anonymise' => sub {
     t::lib::Mocks::mock_preference('IndependentBranches', 0);
 };
 
-subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited' => sub {
-    plan tests => 3;
+subtest 'libraries_where_can_see_patrons + libraries_where_can_see_things + can_see_patron_infos + search_limited' => sub {
+    plan tests => 4;
 
     # group1
     #   + library_11
@@ -1329,6 +1329,26 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
     $sth->execute( $patron_21->borrowernumber, 'edit_borrowers' );
 
     # Pfiou, we can start now!
+    subtest 'libraries_where_can_see_things' => sub {
+        plan tests => 2;
+        t::lib::Mocks::mock_userenv( { patron => $patron_11_2 } );
+        my $params = {
+            permission    => 'editcatalogue',
+            subpermission => 'edit_any_item',
+            group_feature => 'ft_limit_item_editing',
+        };
+        my @branchcodes = $patron_11_2->libraries_where_can_see_things($params);
+        is_deeply(
+            \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ],
+            q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+        );
+        @branchcodes = $patron_11_2->libraries_where_can_see_things($params);
+        is_deeply(
+            \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ],
+            q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+        );
+    };
+
     subtest 'libraries_where_can_see_patrons' => sub {
         plan tests => 3;
 
