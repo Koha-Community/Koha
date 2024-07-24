@@ -192,7 +192,14 @@
                                                         [% IF basket.uncertainprices %]
                                                         <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa-solid fa-dollar-sign"></i> Uncertain prices</a></li>
                                                         [% ELSIF basket.total_items && !basket.is_standing %]
-                                                        <li><a href="/cgi-bin/koha/acqui/basket.pl?op=close&basketno=[% basket.basketno | uri %]&booksellerid=[% basket.booksellerid | uri %]"><i class="fa fa-times-circle"></i> Close this basket</a></li>
+                                                            <form method="post" action="/cgi-bin/koha/acqui/basket.pl">
+                                                                [% INCLUDE 'csrf-token.inc' %]
+                                                                <input type="hidden" id="basketno" value="[% basket.basketno | html %]" name="basketno" />
+                                                                <input type="hidden" value="cud-close" name="op" />
+                                                                <input type="hidden" name="booksellerid" value="[% basket.booksellerid | html %]" />
+                                                                <input type="hidden" name="confirm" value="1" />
+                                                                <li><button type="submit" class="btn btn-default"><i class="fa fa-times-circle"></i> Close this basket</button></li>
+                                                            </form>
                                                         [% END %]
                                                     </ul>
                                                 </div>
