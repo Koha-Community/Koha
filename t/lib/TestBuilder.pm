@@ -210,6 +210,40 @@ sub build_sample_item {
     )->store->get_from_storage;
 }
 
+=pod
+
+=head2 build_sample_ill_request
+
+Builds a sample ILL request with the supplied arguments.
+
+C<$args> is a hashref with the following optional keys:
+
+=over 4
+
+=item * C<biblio_id> (default: a new sample biblio created with L<build_sample_biblio>)
+
+=item * C<backend> (default: Standard)
+
+=item * C<branchcode> (default: a random branch)
+
+=back
+
+=cut
+sub build_sample_ill_request {
+    my ( $self, $args ) = @_;
+
+    $args->{biblio_id}  = $args->{biblio_id}  || $self->build_sample_biblio->biblionumber;
+    $args->{backend}    = $args->{backend}    || 'Standard';
+    $args->{branchcode} = $args->{branchcode} || $self->build_object( { class => 'Koha::Libraries' } )->branchcode;
+
+    return $self->build_object(
+        {
+            class => 'Koha::ILL::Requests',
+            value  => $args,
+        }
+    )->store->get_from_storage;
+}
+
 # ------------------------------------------------------------------------------
 # Internal helper routines
 
