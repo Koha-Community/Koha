@@ -1926,6 +1926,9 @@ sub can_see_things_from {
         $can = 1;
     } elsif ( my @branches = $self->libraries_where_can_see_things($params) ) {
         $can = ( any { $_ eq $branchcode } @branches ) ? 1 : 0;
+    } else {
+        # This should be the case of not finding any limits above, so we can
+        $can = 1;
     }
     return $can;
 }
@@ -1994,18 +1997,21 @@ sub libraries_where_can_see_things {
             )
           )
         {
-            my $library_groups = $self->library->library_groups({ $group_feature => 1 });
+            my $library_groups = $self->library->library_groups();
             if ( $library_groups->count )
             {
                 while ( my $library_group = $library_groups->next ) {
+                    my $root = Koha::Library::Groups->get_root_ancestor({ id => $library_group->id });
+                    next unless $root->$group_feature;
                     my $parent = $library_group->parent;
-                    if ( $parent->has_child( $self->branchcode ) ) {
-                        push @restricted_branchcodes, $parent->children->get_column('branchcode');
+                    my @children = $parent->all_libraries;
+                    foreach my $child (@children){
+                        push @restricted_branchcodes, $child->branchcode;
+
                     }
                 }
             }
 
-            @restricted_branchcodes = ( $self->branchcode ) unless @restricted_branchcodes;
         }
     }
 

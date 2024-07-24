@@ -83,6 +83,8 @@ is( Koha::Patrons->search->count, $nb_of_patrons + 2, 'The 2 patrons should have
 my $retrieved_patron_1 = Koha::Patrons->find( $new_patron_1->borrowernumber );
 is( $retrieved_patron_1->cardnumber, $new_patron_1->cardnumber, 'Find a patron by borrowernumber should return the correct patron' );
 
+
+
 subtest 'library' => sub {
     plan tests => 2;
     is( $retrieved_patron_1->library->branchcode, $library->{branchcode}, 'Koha::Patron->library should return the correct library' );
@@ -1365,22 +1367,33 @@ subtest
 
     # Pfiou, we can start now!
     subtest 'libraries_where_can_see_things' => sub {
-        plan tests => 2;
-        t::lib::Mocks::mock_userenv( { patron => $patron_11_2 } );
+        plan tests => 4;
+        t::lib::Mocks::mock_userenv( { patron => $patron_11_1 } );
         my $params = {
-            permission    => 'editcatalogue',
-            subpermission => 'edit_any_item',
-            group_feature => 'ft_limit_item_editing',
+            permission    => 'borrowers',
+            subpermission => 'view_borrower_infos_from_any_libraries',
+            group_feature => 'ft_hide_patron_info',
         };
-        my @branchcodes = $patron_11_2->libraries_where_can_see_things($params);
+        my @branchcodes = $patron_11_1->libraries_where_can_see_things($params);
+        is_deeply(
+            \@branchcodes, [ ],
+            q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+        );
+        @branchcodes = $patron_11_1->libraries_where_can_see_things($params);
+        is_deeply(
+            \@branchcodes, [ ],
+            q|confirming second/cached request is the same patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+        );
+
+        @branchcodes = $patron_11_2->libraries_where_can_see_things($params);
         is_deeply(
             \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ],
-            q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+            q|patron_11_2 can only view from group|
         );
         @branchcodes = $patron_11_2->libraries_where_can_see_things($params);
         is_deeply(
             \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ],
-            q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
+            q|confirming second/cached request is the same patron_11_2 can only view from group|
         );
     };
 
@@ -1400,7 +1413,7 @@ subtest
             $patron_11_2->can_edit_items_from( $library_21->branchcode ),
             "We can edit an item from outside our group as the group does not limit item editing"
         );
-        $group_2->ft_limit_item_editing(1)->store();
+        $group_1->ft_limit_item_editing(1)->store();
 
         $patron_11_2  = Koha::Patrons->find( $patron_11_2->borrowernumber );
         #FIXME We refetch the patron because library lists are cached in an extra hash key
