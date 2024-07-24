@@ -91,6 +91,34 @@ sub set_additional_fields {
     }
 }
 
+=head3 prepare_cgi_additional_field_values
+
+Prepares additional field values from CGI input for use in set_additional_fields
+
+    Usage example for aqorders:
+    my @additional_fields = $order->prepare_cgi_additional_field_values( $input, 'aqorders' );
+
+=cut
+
+sub prepare_cgi_additional_field_values {
+    my ( $self, $cgi, $tablename ) = @_;
+
+    my @additional_fields;
+    my $table_fields = Koha::AdditionalFields->search( { tablename => $tablename } );
+
+    while ( my $field = $table_fields->next ) {
+        my @field_values = $cgi->multi_param( 'additional_field_' . $field->id );
+        foreach my $value (@field_values) {
+            push @additional_fields, {
+                id    => $field->id,
+                value => $value,
+            } if $value;
+        }
+    }
+
+    return @additional_fields;
+}
+
 =head3 add_additional_fields
 
 Similar to set_additional_fields, but instead of overwriting existing fields, only adds new ones

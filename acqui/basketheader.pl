@@ -162,17 +162,8 @@ if ( $op eq 'add_form' ) {
         );
     }
 
-    my @additional_fields;
-    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
-    while ( my $field = $basket_fields->next ) {
-        my @field_values = $input->param( 'additional_field_' . $field->id );
-        foreach my $value (@field_values) {
-            push @additional_fields, {
-                id    => $field->id,
-                value => $value,
-            } if $value;
-        }
-    }
+    my @additional_fields =
+        Koha::Acquisition::Baskets->find($basketno)->prepare_cgi_additional_field_values( $input, 'aqbasket' );
     Koha::Acquisition::Baskets->find($basketno)->set_additional_fields(\@additional_fields);
 
     print $input->redirect('basket.pl?basketno='.$basketno);

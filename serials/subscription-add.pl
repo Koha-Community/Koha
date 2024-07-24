@@ -359,18 +359,8 @@ sub redirect_add_subscription {
         $template->param( mana_msg => $result->{msg} );
     }
 
-    my @additional_fields;
-    my $biblio = Koha::Biblios->find($biblionumber);
-    my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
-    while ( my $field = $subscription_fields->next ) {
-        my @field_values = $query->param( 'additional_field_' . $field->id );
-        foreach my $value (@field_values) {
-            push @additional_fields, {
-                id    => $field->id,
-                value => $value,
-            } if $value;
-        }
-    }
+    my @additional_fields = Koha::Subscriptions->find($subscriptionid)
+        ->prepare_cgi_additional_field_values( $query, 'subscription' );
     Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -475,18 +465,8 @@ sub redirect_mod_subscription {
         $skip_serialseq, $itemtype, $previousitemtype, $mana_id, $ccode, $published_on_template
     );
 
-    my @additional_fields;
-    my $biblio = Koha::Biblios->find($biblionumber);
-    my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
-    while ( my $field = $subscription_fields->next ) {
-        my @field_values = $query->param( 'additional_field_' . $field->id );
-        foreach my $value (@field_values) {
-            push @additional_fields, {
-                id    => $field->id,
-                value => $value,
-            } if $value;
-        }
-    }
+    my @additional_fields =
+        Koha::Subscriptions->find($subscriptionid)->prepare_cgi_additional_field_values( $query, 'subscription' );
     Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");

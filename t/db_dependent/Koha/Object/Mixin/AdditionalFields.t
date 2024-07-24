@@ -1,13 +1,14 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use t::lib::TestBuilder;
 use String::Random qw(random_string);
 use Koha::Database;
 use Koha::Subscription;
 use Koha::AdditionalField;
 use C4::Context;
+use CGI;
 
 my $builder = t::lib::TestBuilder->new;
 my $schema = Koha::Database->schema;
@@ -217,4 +218,65 @@ subtest 'add_additional_fields' => sub {
     );
 
     $schema->txn_rollback;
+};
+
+subtest 'prepare_cgi_additional_field_values' => sub {
+    plan tests => 1;
+
+    $schema->txn_begin;
+
+    my $field = Koha::AdditionalField->new(
+        {
+            tablename => 'subscription',
+            name      => random_string( 'c' x 100 )
+        }
+    );
+    $field->store()->discard_changes();
+
+    my $field2 = Koha::AdditionalField->new(
+        {
+            tablename => 'subscription',
+            name      => random_string( 'c' x 100 )
+        }
+    );
+    $field2->store()->discard_changes();
+
+    my $q = CGI->new;
+    $q->param(
+        -name  => 'additional_field_' . $field->id,
+        -value => [qw/value1 value2/],
+    );
+    $q->param(
+        -name  => 'additional_field_' . $field2->id,
+        -value => '0',
+    );
+    $q->param(
+        -name  => 'irrelevant_param',
+        -value => 'foo',
+    );
+
+    my @additional_fields =
+        Koha::Object::Mixin::AdditionalFields->prepare_cgi_additional_field_values( $q, 'subscription' );
+
+    is_deeply(
+        \@additional_fields,
+        [
+            {
+                'value' => 'value1',
+                'id'    => $field->id
+            },
+            {
+                'value' => 'value2',
+                'id'    => $field->id
+            },
+            {
+                'value' => '0',
+                'id'    => $field2->id
+            }
+        ],
+        'Return of prepare_cgi_additional_field_values should be correct'
+    );
+
+    $schema->txn_rollback;
+
 };

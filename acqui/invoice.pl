@@ -128,17 +128,8 @@ elsif ( $op && $op eq 'cud-mod' ) {
         defined($invoice_files) && $invoice_files->MergeFileRecIds(@sources);
     }
 
-    my @additional_fields;
-    my $invoice_fields = Koha::AdditionalFields->search({ tablename => 'aqinvoices' });
-    while ( my $field = $invoice_fields->next ) {
-        my @field_values = $input->param( 'additional_field_' . $field->id );
-        foreach my $value (@field_values) {
-            push @additional_fields, {
-                id    => $field->id,
-                value => $value,
-            } if $value;
-        }
-    }
+    my @additional_fields =
+        Koha::Acquisition::Invoices->find($invoiceid)->prepare_cgi_additional_field_values( $input, 'aqinvoices' );
     Koha::Acquisition::Invoices->find($invoiceid)->set_additional_fields(\@additional_fields);
 
     $template->param( modified => 1 );

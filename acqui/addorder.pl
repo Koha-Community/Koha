@@ -386,19 +386,7 @@ if ( $op eq 'cud-order' ) {
         my @order_users     = split( /:/, $order_users_ids );
         ModOrderUsers( $order->ordernumber, @order_users );
 
-        # Retrieve and save additional fields values
-        my @additional_fields;
-        my $order_fields = Koha::AdditionalFields->search( { tablename => 'aqorders' } );
-        while ( my $field = $order_fields->next ) {
-            my @field_values = $input->param( 'additional_field_' . $field->id );
-            foreach my $value (@field_values){
-                push @additional_fields,
-                {
-                    id    => $field->id,
-                    value => $value,
-                } if $value;
-            };
-        }
+        my @additional_fields = $order->prepare_cgi_additional_field_values( $input, 'aqorders' );
         $order->set_additional_fields( \@additional_fields );
 
         # now, add items if applicable

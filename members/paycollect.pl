@@ -170,19 +170,9 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             );
             $payment_id = $pay_result->{payment_id};
 
-            my @additional_fields;
-            my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:credit' });
-            while ( my $field = $accountline_fields->next ) {
-                my @field_values = $input->param( 'additional_field_' . $field->id );
-                foreach my $value (@field_values) {
-                    push @additional_fields, {
-                        id    => $field->id,
-                        value => $value,
-                    } if $value;
-                }
-            }
+            my $payment = Koha::Account::Lines->find($payment_id);
+            my @additional_fields = $payment->prepare_cgi_additional_field_values( $input, 'accountlines:credit' );
             if (@additional_fields) {
-                my $payment = Koha::Account::Lines->find($payment_id);
                 $payment->set_additional_fields(\@additional_fields);
             }
 
@@ -248,19 +238,9 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             }
             $payment_id = $pay_result->{payment_id};
 
-            my @additional_fields;
-            my $accountline_fields = Koha::AdditionalFields->search({ tablename => 'accountlines:credit' });
-            while ( my $field = $accountline_fields->next ) {
-                my @field_values = $input->param( 'additional_field_' . $field->id );
-                foreach my $value (@field_values) {
-                    push @additional_fields, {
-                        id    => $field->id,
-                        value => $value,
-                    } if $value;
-                }
-            }
+            my $payment = Koha::Account::Lines->find($payment_id);
+            my @additional_fields = $payment->prepare_cgi_additional_field_values( $input, 'accountlines:credit' );
             if (@additional_fields) {
-                my $payment = Koha::Account::Lines->find($payment_id);
                 $payment->set_additional_fields(\@additional_fields);
             }
 
