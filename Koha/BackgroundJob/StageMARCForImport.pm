@@ -144,7 +144,7 @@ sub process {
                 $matcher_code    = $matcher->code();
                 $num_with_matches =
                   BatchFindDuplicates( $batch_id, $matcher, 10, 50,
-                    sub { my $job_progress = shift; $self->progress( $self->progress + $job_progress )->store } );
+                    sub { my $job_progress = shift; $self->progress( $job_progress )->store } );
                 SetImportBatchMatcher( $batch_id, $matcher_id );
                 SetImportBatchOverlayAction( $batch_id, $overlay_action );
                 SetImportBatchNoMatchAction( $batch_id, $nomatch_action );
