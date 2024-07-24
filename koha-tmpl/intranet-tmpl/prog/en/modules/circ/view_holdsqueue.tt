@@ -218,6 +218,10 @@
                           </p>
                           [% UNLESS Koha.Preference('HidePatronName') %]
                              <p>[% itemsloo.patron.phone | html %]</p>
+                             <p class="patron-email">
+                             <a href="mailto:[% itemsloo.patron.email | uri %]?subject=Hold item: [% itemsloo.title | uri %]">
+                             [% itemsloo.patron.notice_email_address | html %]</a>
+                             </p>
                           [% END %]
                         </td>
                         <td class="hq-patroncategory">[% itemsloo.patron.category.description | html %] ([% itemsloo.patron.categorycode | html %])</td>
