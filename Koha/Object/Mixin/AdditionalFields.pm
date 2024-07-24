@@ -112,7 +112,7 @@ sub prepare_cgi_additional_field_values {
             push @additional_fields, {
                 id    => $field->id,
                 value => $value,
-            } if $value;
+            } if defined $value && $value ne '';
         }
     }
 
