@@ -41,39 +41,42 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
+    <main>
     <div class="row">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+        <div class="col-sm-10 col-sm-push-1">
+            [% INCLUDE 'messages.inc' %]
             <h1>Compare matched records</h1>
 
-        <div id="col1" class="col-sm-6">
-            <h2>Original</h2>
-            [% IF ( ERROR_FORMATTED1 ) %]
-                <div class="alert alert-warning">
-                    <p>The record ID <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
+            <div class="page-section col-sm-12">
+                <h2>[% RECORDTITLE | html %]</h2>
+                <div id="col1" class="col-sm-6">
+                    <h3>Original</h3>
+                    [% IF ( ERROR_FORMATTED1 ) %]
+                        <div class="alert alert-warning">
+                            <p>The record ID <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
+                        </div>
+                    [% ELSE %]
+                        <pre>[% MARC_FORMATTED1 | html %]</pre>
+                    [% END %]
                 </div>
-            [% ELSE %]
-                <h3>[% RECORDTITLE | html %]</h3>
-                <pre>[% MARC_FORMATTED1 | html %]</pre>
-            [% END %]
-        </div>
-        <div id="col2" class="col-sm-6">
-            <h2>Imported</h2>
-            [% IF ( ERROR_FORMATTED2 ) %]
-                <div class="alert alert-warning">
-                    <p>The import ID number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>
+                <div id="col2" class="col-sm-6">
+                    <h3>Imported</h3>
+                    [% IF ( ERROR_FORMATTED2 ) %]
+                        <div class="alert alert-warning">
+                            <p>The import ID number <em>[% IMPORTID | html %]</em> doesn't match any existing record.</p>
+                        </div>
+                    [% ELSE %]
+                        <h3>[% IMPORTTITLE | html %]</h3>
+                        <pre>[% MARC_FORMATTED2 | html %] </pre>
+                    [% END %]
                 </div>
-            [% ELSE %]
-                <h3>[% IMPORTTITLE | html %]</h3>
-                <pre>[% MARC_FORMATTED2 | html %] </pre>
-            [% END %]
+            </div>
+            <fieldset class="action">
+                <a class="btn btn-primary" href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">Return to staged MARC batch [% batchid | html %]</a>
+            </fieldset>
         </div>
     </div>
-
-<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">Return to staged MARC batch [% batchid | html %]</a></p>
-
-            </main>
-        </div>
+    </main>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
