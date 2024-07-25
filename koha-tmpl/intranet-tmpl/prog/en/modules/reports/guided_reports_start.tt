@@ -1003,8 +1003,15 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-show" />
                                     [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    [%- borrowernumbers = PROCESS batch_list results=results batch_type='borrowernumber' | trim | html -%]
+                                    [%- IF borrowernumbers -%]
+                                        [%- SET batch_borrowernumbers = 1 -%]
+                                        <textarea style="display:none;" name="borrowernumberlist" id="borrowernumberlist">
+                                        [%- borrowernumbers | html -%]
+                                        </textarea>
+                                    [%- END -%]
                                     [%- cardnumbers = PROCESS batch_list results=results batch_type='cardnumber' | trim | html %]
-                                    [% IF cardnumbers %]
+                                    [% IF !batch_borrowernumbers && cardnumbers %]
                                         [% SET batch_cardnumbers = cardnumbers.length %]
                                         [% FOR b IN cardnumbers.split("\n") %]
                                             <input type="hidden" name="cardnumber" value="[% b | uri %]" />
@@ -1067,7 +1074,7 @@
                                                     [% END %]
                                                     [% IF show_cardnumber_ops || show_borrowernumber_ops %]
                                                         <li class="dropdown-header">Patron records</li>
-                                                        [% IF show_cardnumber_ops %]
+                                                        [% IF show_cardnumber_ops || show_borrowernumber_ops %]
                                                             <li>
                                                                 <a href="#" data-submit="batch_patron_modification" data-toggle="tooltip" data-placement="right" title="Send visible results to batch patron modification" class="batch_op send_to_patron_mod">Batch patron modification</a>
                                                             </li>
