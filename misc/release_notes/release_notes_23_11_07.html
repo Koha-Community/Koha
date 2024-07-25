@@ -1,0 +1,826 @@
+<h1 id="releasenotesforkoha23.11.07">RELEASE NOTES FOR KOHA 23.11.07</h1>
+
+<p>25 Jul 2024</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 23.11.07 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-23.11.07.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 23.11.07 is a bugfix/maintenance release.</p>
+
+<p>It includes 4 enhancements, 62 bugfixes with 4 security.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h4 id="securitybugs">Security bugs</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37018">37018</a> SQL injection using q under api/</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37146">37146</a> plugin_launcher.pl allows running of any Perl file on file system</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37210">37210</a> SQL injection in overdue.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37247">37247</a> On subscriptions operation allowed without authentication</li>
+</ul>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="about">About</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37003">37003</a> Release team 24.11</p>
+
+<blockquote>
+  <p>This updates the About Koha > Koha team with the release team members for Koha 22.11.</li>
+  </ul></p>
+  
+  <h3 id="acquisitions">Acquisitions</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34444">34444</a> Statistic 1/2 not saving when updating fund after receipt</li>
+</ul>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30493">30493</a> Pending archived suggestions appear on staff interface home page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34718">34718</a> Input field in fund list (Select2) on receive is inactive</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37071">37071</a> Purchase suggestions from the patron account are not redirecting to the suggestion form</p>
+
+<blockquote>
+  <p>This fixes the "New purchase suggestion" link from a patron's purchase suggestion area. The link now takes you to the new purchase suggestion form, instead of the suggestions management page. (This is related to the CSRF changes added in Koha 24.05 to improve form security.)</li>
+  </ul></p>
+  
+  <h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35294">35294</a> Typo in comment in C4 circulation: barocode</p>
+
+<blockquote>
+  <p>This fixes spelling errors in catalog code comments (barocode => barcode, and preproccess => preprocess).</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36940">36940</a> Resolve two Auth warnings when AutoLocation is enabled having a branch without branchip</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37037">37037</a> touch_all_biblios.pl triggers rebuilding holds for all affected records when RealTimeHoldsQueue is enabled</li>
+  </ul></p>
+  
+  <h3 id="cataloging">Cataloging</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=25387">25387</a> Merging different authority types creates no warning</p>
+
+<blockquote>
+  <p>This improves merging authorities of different types so that:</p>
+  
+  <ol>
+  <li>When selecting the reference record, the authority record number and type are displayed next to each record.</li>
+  <li>When merging authority records of different types:
+  . the authority type is now displayed in the tab heading, and
+  . a warning is also displayed "Multiple authority types are used. There may be a data loss while merging.".</li>
+  </ol>
+  
+  <p>Previously, no warning was given when merging authority records with different types - this could result in undesirable outcomes, data loss, and extra work required to clean up.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36891">36891</a> Restore returning 404 from svc/bib when the bib number doesn't exist</li>
+  </ul></p>
+  
+  <h3 id="circulation">Circulation</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37031">37031</a> Club enrollment doesn't complete in staff interface</p>
+
+<blockquote>
+  <p>This fixes a typo in the code that causes the enrollment of a patron in a club to fail.</li>
+  </ul></p>
+  
+  <h4 id="otherbugsfixed">Other bugs fixed</h4>
+</blockquote>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36459">36459</a> Backdating checkouts on circ/circulation.pl not working properly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37014">37014</a> "Item was not checked in" printed on next POST because of missing supplementary form</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37345">37345</a> Remember for session checkbox on checkout page not sticking</p>
+
+<blockquote>
+  <p>This fixes the date in the "Specify due date" field if "Remember for session" is ticked (when checking out items to a patron). The date was not being remembered, and you had to select it again.</li>
+  </ul></p>
+  
+  <h3 id="command-lineutilities">Command-line Utilities</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34077">34077</a> writeoff_debts without --confirm doesn't show which accountline records it would have been written off</li>
+</ul>
+
+<h3 id="developerdocumentation">Developer documentation</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37198">37198</a> POD for GetPreparedLetter doesn't include 'objects'</p>
+
+<blockquote>
+  <p>This updates the GetPreparedLetter documentation for developers (it was not updated when changes were made in Bug 19966 - Add ability to pass objects directly to slips and notices).</li>
+  </ul></p>
+  
+  <h3 id="erm">ERM</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36956">36956</a> ERM eUsage reports: only the first 20 data providers are listed when creating a new report</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37043">37043</a> Counter registry has a new API base URL</li>
+</ul>
+
+<h3 id="finesandfees">Fines and fees</h3>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28664">28664</a> One should not be able to issue a refund against a VOID accountline</p>
+
+<blockquote>
+  <p>This fixes VOID transactions for patron accounting entries so that the 'Issue refund' button is not available.</li>
+  </ul></p>
+  
+  <h3 id="i18nl10n">I18N/L10N</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33237">33237</a> If TranslateNotices is off, use the default language includes in slips</p>
+
+<blockquote>
+  <p>This patch set cleans up the way languages are chosen and used in includes when printing slips. Previously, if the system preference 'TranslateNotices' was turned off (meaning the patron had their language set to 'Default'), the includes texts would be in English, even if the library had written their notices in a different language e.g. French.</p>
+  
+  <p>With this patch set, the language used for includes will always match the language used for creating the notice itself, regardless of whether 'TranslateNotices' is turned on or off.</p>
+  
+  <p>This patch set also makes important changes to the logic used to set the language. With this patch, the notice will:
+  1. use patron's preferred language
+  2. if patron's preferred language is 'default', use the first language in 'language' system preference.</p>
+  
+  <p>This patch set also adds the display of 'Default language' to the language that will be marked as 'Default' in the notices editor tool so that the librarian writing a notice will know exactly which language will be used when printing slips.</p>
+  
+  <p>Please note that due to these changes it is no longer possible to print the slip in any installed language simply by switching the staff interface language before printing! Bug 36733 has been added as a follow-up for restoring this functionality.</li>
+  </ul></p>
+  
+  <h4 id="otherbugsfixed">Other bugs fixed</h4>
+</blockquote>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=32313">32313</a> Complete database column descriptions for cataloguing module in guided reports</p>
+
+<blockquote>
+  <p>This fixes some column descriptions used in guided reports. It:
+  - Adds missing descriptions for the items and biblioitems tables (used by the Circulation, Catalog, Acquisitions, and Serials modules)
+  - Updates some column descriptions to make them more consistent or clearer.</li>
+  </ul></p>
+  
+  <h3 id="ill">ILL</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36894">36894</a> Journal article request authors do not show in the ILL requests table</p>
+
+<blockquote>
+  <p>This fixes the table for interlibrary loan (ILL) requests so that it now displays authors for journal article requests.</li>
+  </ul></p>
+  
+  <h3 id="installationandupgradecommand-lineinstaller">Installation and upgrade (command-line installer)</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36424">36424</a> Database update 23.06.00.061 breaks due to syntax error</li>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37106">37106</a> Upgrade to 23.11.05.009 causes an error because Koha::installer::Output doesn't exist in 23.11.x</p>
+
+<p><strong>Sponsored by</strong> <em>Catalyst</em></p></li>
+</ul>
+
+<h3 id="labelpatroncardprinting">Label/patron card printing</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36819">36819</a> Default layout data prints squished barcodes</p>
+
+<blockquote>
+  <p>This fixes the default label layouts value for the barcode width (Cataloging > Tools > Label creator > Manage > Layouts > choose a layout). It was incorrectly set to 0.080000 when it should have been 0.800000 - this was resulting is squished barcodes when printing.</p>
+  
+  <p>Note: For existing 23.11 installations, this updates the correct value for the barcode width (field scale_width) to 0.800000 IF it is 0.080000. If it is any other value, no change is made.</li>
+  </ul></p>
+  
+  <h3 id="notices">Notices</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37059">37059</a> 'Insert' button is not working in notices and slips tool</li>
+</ul>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36741">36741</a> AUTO_RENEWALS_DGST should skip auto_too_soon</p>
+
+<blockquote>
+  <p>This fixes the default AUTO_RENEWALS_DGST notice so that items where it is too soon to renew aren't included in the notice output to patrons when the automatic renewals cron job is run (based on the circulation rules settings). These items were previously included in the notice.</p>
+  
+  <p>NOTE: This notice is only updated for new installations. Existing installations should update this notice if they only want to show the actual items automatically renewed.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37036">37036</a> Cannot access template toolkit branch variable in auto renewal notices</li>
+  </ul></p>
+  
+  <h3 id="opac">OPAC</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=29539">29539</a> UNIMARC: authority number in $9 displays for thesaurus controlled fields instead of content of $a</p></p>
+
+<blockquote>
+  <p>This fixes the display of authority terms in the OPAC for UNIMARC systems. The authority record number was displaying instead of the term, depending on the order of the $9 and $a subfields (example for a 606 entry: if $a then $9, the authority number was displayed; if $9 then $a, the authority term was displayed).</p>
+</blockquote>
+
+<p><strong>Sponsored by</strong> <em>National Library of Greece</em></p>
+
+<p></li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30372">30372</a> Patron self registration: Extended patron attributes are emptied on submit when mandatory field isn't filled in</p>
+
+<blockquote>
+  <p>This fixes the patron self registration form when extended patron attributes are used. If a mandatory field wasn't filled in when submitting, the values entered into any extended patron attributes were lost and needed re-entering.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36983">36983</a> B_address_2 field is required even when not set to be required</li>
+  </ul></p>
+  
+  <h3 id="patrons">Patrons</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=25520">25520</a> Change wording on SMS phone number set up</p>
+
+<blockquote>
+  <p>This fixes the hint when entering an SMS number on the OPAC messaging settings page - it is now the same as the staff interface patron hint.</li>
+  </ul></p>
+  
+  <h3 id="restapi">REST API</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37021">37021</a> REST API: Holds endpoint handles item_id as string in GET call</li>
+</ul>
+
+<h3 id="sip2">SIP2</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36948">36948</a> Adjust SIPconfig for log_file and IP version</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37016">37016</a> SIP2 renew shows old/wrong date due</p>
+
+<blockquote>
+  <p>Set correct due date in SIP2 renewal response message.</li>
+  </ul></p>
+  
+  <h3 id="searching">Searching</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35989">35989</a> Searching Geographic authorities generates error</li>
+</ul>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=33563">33563</a> Document Elasticsearch secure mode</p>
+
+<blockquote>
+  <p>When using authentication with Elasticsearch/Opensearch, you must use HTTPS. This change adds some comments in koha-conf.xml to show how to do configure Koha to use authentication and HTTPS for ES/OS.</li>
+  </ul></p>
+  
+  <h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36982">36982</a> Collections facet does not get alphabetized based on collection descriptions</p>
+
+<blockquote>
+  <p>This fixes the display of the 'Collections' facet for search results in the staff interface and OPAC when using Elasticsearch and Open Search. Values for the facet are now sorted alphabetically using the CCODE authorized values' descriptions, instead of the authorized values' codes.</li>
+  </ul></p>
+  
+  <h3 id="selfcheckout">Self checkout</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35869">35869</a> Dismissing an OPAC message from SCO logs the user out</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36679">36679</a> Anonymous patron is not blocked from checkout via self check</p>
+
+<blockquote>
+  <p>This fixes the web-based self-checkout system to prevent the AnonymousPatron from checking out items.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37026">37026</a> Switching tabs in the sco_main page ( Checkouts, Holds, Charges ) creates a JS error</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37044">37044</a> OPAC message from SCO missing library branch
+  This fixes the self checkout "Messages for you" section for a patron so that any OPAC messages added by library staff now include the library name. Previously, "Written on DD/MM/YYYY by " was displayed after the message without including the library name.</li>
+  </ul></p>
+  
+  <h3 id="serials">Serials</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37183">37183</a> Serials batch edit changes the expiration date to TODAY</p>
+
+<blockquote>
+  <p>This fixes batch editing of serials and the expiration date. Before this patch, if no date was entered in the expiration date field, it was changed to the current date when the batch edit form was saved. This caused the expiration date to change to the current date for all serials in the batch edit.</li>
+  </ul></p>
+  
+  <h3 id="staffinterface">Staff interface</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36930">36930</a> Item search gives irrelevant results when using 2+ added filter criteria</li>
+</ul>
+
+<h3 id="systemadministration">System Administration</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36527">36527</a> Patron category or item type not changing when editing another circulation rule</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37157">37157</a> Error 500 when loading identity provider list</p>
+
+<blockquote>
+  <p>This fixes the listing of identity providers (Administration > Additional parameters > Identity providers) when special characters are used in the configuration and mapping fields (such as "scope": "élève"). Previously, using special characters in these fields caused a 500 error when viewing the Administration > Identity providers page.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37163">37163</a> Fix the redirect after deleting a tag from an authority framework to load the right page</li>
+  </ul></p>
+  
+  <h3 id="templates">Templates</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34573">34573</a> Inconsistencies in acquisitions modify vendor title tag</p>
+
+<blockquote>
+  <p>This fixes page title, breadcrumb, and browser page title inconsistencies when adding and modifying vendor details in acquisitions.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34706">34706</a> Capitalization: Cas login
+  This fixes a capitalization error. CAS is an abbreviation, and should be CAS on the login form (used when casAuthentication is enabled and configured).</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35240">35240</a> Missing form field ids in rotating collection edit form
+  This adds missing IDs to the rotating collections edit form (Tools > Rotating collections > edit a rotating collection (Actions > Edit)).</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36338">36338</a> Capitalization: Card number or Userid may already exist.
+  This fixes the text for the warning message in the web installer onboarding section when creating the Koha administrator patron - where the card number or username already exists. It now uses "username" instead of "Userid", and updates the surrounding text:
+  . Previous text: The patron has not been created! Card number or Userid may already exist.
+  . Updated text: The patron was not created! The card number or username already exists.</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37162">37162</a> Remove dead confirmation code when deleting tags from authority frameworks</li>
+  </ul></p>
+  
+  <h3 id="testsuite">Test Suite</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34838">34838</a> The ILL module and tests generate warnings</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36937">36937</a> api/v1/password_validation.t generates warnings</p>
+
+<blockquote>
+  <p>This fixes the cause of a warning for the t/db_dependent/api/v1/password_validation.t tests (warning fixed: Use of uninitialized value $status in numeric eq (==)).</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36938">36938</a> Biblio.t generates warnings</li>
+  <li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36999">36999</a> 00-strict.t fails to find koha_perl_deps.pl
+  This fixes the t/db_dependent/00-strict.t. The tests were failing as a file (koha_perl_deps.pl) was moved and is no longer required for these tests.</li>
+  </ul></p>
+  
+  <h3 id="tools">Tools</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36128">36128</a> Use of uninitialized value in string eq at /usr/share/koha/lib/C4/Overdues.pm</p>
+
+<blockquote>
+  <p>This fixes the following error message when running the overdues check cronjob on a Koha system without defined overdue rules:</p>
+  
+  <p>/etc/cron.daily/koha-common: Use of uninitialized value in string eq at /usr/share/koha/lib/C4/Overdues.pm line 686.</li>
+  </ul></p>
+  
+  <h3 id="transactionlogs">Transaction logs</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30715">30715</a> Terminology: Logs should use staff interface and not intranet for the interface</p>
+
+<blockquote>
+  <p>This fixes the log viewer so that 'Staff interface' is used instead of 'Intranet' for the filtering option and the value displayed in the log entries interface column.</p>
+  
+  <p>Note: This does not fix the underlying value recorded in the action_log table (these are added as 'intranet' to the interface column), or the values shown in CSV exports.</li>
+  </ul></p>
+  
+  <h2 id="enhancements">Enhancements</h2>
+</blockquote>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35536">35536</a> Improve removal of Koha plugins in unit tests</li>
+</ul>
+
+<h3 id="authentication">Authentication</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36503">36503</a> Add a plugin hook to modify patrons after authentication</p>
+
+<blockquote>
+  <p>This plugin hook allows to change patron data or define the patron based on the authenticated user.</p>
+</blockquote>
+
+<p><strong>Sponsored by</strong> <em>Karlsruhe Institute of Technology (KIT)</em></p></li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36141">36141</a> Add classes to CAS text on OPAC login page</p>
+
+<blockquote>
+  <p>This enhancement adds classes to the CAS-related messages on the OPAC login page. This will make it easier for libraries to customize using CSS and JavaScript. The new classes are cas_invalid, cas_title, and cas_url. It also moves the invalid CAS login message to above the CAS login heading (the same as for the Shibboleth login).</li>
+  </ul></p>
+  
+  <h3 id="restapi">REST API</h3>
+</blockquote>
+
+<h4 id="enhancements">Enhancements</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36565">36565</a> Fix API docs inconsistencies</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="http://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/23.11/zh_Hant/html/">Chinese (Traditional)</a> (76%)</p></li>
+<li><a href="https://koha-community.org/manual/23.11//html/">English</a> (100%)</li>
+<li><a href="https://koha-community.org/manual/23.11/en/html/">English (USA)</a></li>
+<li><a href="https://koha-community.org/manual/23.11/fr/html/">French</a> (46%)</li>
+<li><a href="https://koha-community.org/manual/23.11/de/html/">German</a> (38%)</li>
+<li><a href="https://koha-community.org/manual/23.11//html/">Greek</a> (43%)</li>
+<li><a href="https://koha-community.org/manual/23.11/hi/html/">Hindi</a> (77%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (ar_ARAB) (99%)
+- Armenian (hy_ARMN) (100%)
+- Bulgarian (bg_CYRL) (100%)
+- Chinese (Traditional) (91%)
+- Czech (70%)
+- Dutch (77%)
+- English (100%)
+- English (New Zealand) (64%)
+- English (USA)
+- Finnish (99%)
+- French (99%)
+- French (Canada) (97%)
+- German (100%)
+- German (Switzerland) (52%)
+- Greek (58%)
+- Hindi (99%)
+- Italian (84%)
+- Norwegian Bokmål (76%)
+- Persian (fa_ARAB) (95%)
+- Polish (99%)
+- Portuguese (Brazil) (92%)
+- Portuguese (Portugal) (88%)
+- Russian (92%)
+- Slovak (61%)
+- Spanish (99%)
+- Swedish (87%)
+- Telugu (70%)
+- Turkish (81%)
+- Ukrainian (74%)
+- hyw_ARMN (generated) (hyw_ARMN) (65%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 23.11.07 is</p>
+
+<ul>
+<li><p>Release Manager: Katrin Fischer</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Tomás Cohen Arazi</li>
+<li>Martin Renvoize</li>
+<li>Jonathan Druart</li>
+</ul></li>
+<li><p>QA Manager: Marcel de Rooy</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Marcel de Rooy</li>
+<li>Julian Maurice</li>
+<li>Lucas Gass</li>
+<li>Victor Grousset</li>
+<li>Kyle M Hall</li>
+<li>Nick Clemens</li>
+<li>Martin Renvoize</li>
+<li>Tomás Cohen Arazi</li>
+<li>Aleisha Amohia</li>
+<li>Emily Lamancusa</li>
+<li>David Cook</li>
+<li>Jonathan Druart</li>
+<li>Pedro Amorim</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>Zebra -- Fridolin Somers</li>
+<li>REST API -- Tomás Cohen Arazi</li>
+<li>ERM -- Matt Blenkinsop</li>
+<li>ILL -- Pedro Amorim</li>
+<li>SIP2 -- Matthias Meusburger</li>
+<li>CAS -- Matthias Meusburger</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Indranil Das Gupta</li>
+</ul></li>
+<li><p>Packaging Managers:</p>
+
+<ul>
+<li>Mason James</li>
+<li>Indranil Das Gupta</li>
+<li>Tomás Cohen Arazi</li>
+</ul></li>
+<li><p>Documentation Manager: Aude Charillon</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Caroline Cyr La Rose</li>
+<li>Kelly McElligott</li>
+<li>Philip Orr</li>
+<li>Marie-Luce Laflamme</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Manager: Jonathan Druart</p></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+<li>Katrin Fischer</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>23.11 -- Fridolin Somers</li>
+<li>23.05 -- Lucas Gass</li>
+<li>22.11 -- Frédéric Demians</li>
+<li>22.05 -- Danyon Sewell</li>
+</ul></li>
+<li><p>Release Maintainer assistants:</p>
+
+<ul>
+<li>22.05 -- Wainui Witika-Park</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries, companies, and other institutions who are known to have sponsored
+new features in Koha 23.11.07</p>
+
+<div style="column-count: 2;">
+
+- [Catalyst](https://www.catalyst.net.nz/products/library-management-koha)
+- Karlsruhe Institute of Technology (KIT)
+- National Library of Greece
+</div>
+
+<p>We thank the following individuals who contributed patches to Koha 23.11.07</p>
+
+<div style="column-count: 2;">
+
+- Aleisha Amohia (1)
+- Pedro Amorim (7)
+- Tomás Cohen Arazi (13)
+- Matt Blenkinsop (7)
+- Phan Tung Bui (1)
+- Nick Clemens (7)
+- David Cook (3)
+- Chris Cormack (1)
+- Jonathan Druart (2)
+- Marion Durand (1)
+- Katrin Fischer (3)
+- Eric Garcia (1)
+- Lucas Gass (5)
+- Kyle M Hall (1)
+- Andreas Jonsson (1)
+- Janusz Kaczmarek (1)
+- Denys Konovalov (1)
+- Emily Lamancusa (1)
+- Sam Lau (2)
+- Laurae (1)
+- Brendan Lawlor (2)
+- Owen Leonard (2)
+- Julian Maurice (3)
+- David Nind (6)
+- Andrew Nugged (1)
+- Martin Renvoize (19)
+- Phil Ringnalda (4)
+- Marcel de Rooy (14)
+- Caroline Cyr La Rose (2)
+- Fridolin Somers (5)
+- Lari Strand (2)
+- Raphael Straub (3)
+- Emmi Takkinen (1)
+- George Veranis (1)
+- Hammat Wele (5)
+- Baptiste Wojtkowski (1)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 23.11.07</p>
+
+<div style="column-count: 2;">
+
+- Athens County Public Libraries (2)
+- [BibLibre](https://www.biblibre.com) (10)
+- Bibliotheksservice-Zentrum Baden-Württemberg (BSZ) (3)
+- BigBallOfWax (1)
+- [ByWater Solutions](https://bywatersolutions.com) (14)
+- [Cape Libraries Automated Materials Sharing](https://info.clamsnet.org) (2)
+- Catalyst Open Source Academy (1)
+- Chetco Community Public Library (4)
+- [Dataly Tech](https://dataly.gr) (1)
+- David Nind (6)
+- denyskon.de (1)
+- Independant Individuals (5)
+- Karlsruhe Institute of Technology (KIT) (3)
+- Koha Community Developers (2)
+- [Koha-Suomi Oy](https://koha-suomi.fi) (3)
+- Kreablo AB (1)
+- [Montgomery County Public Libraries](montgomerycountymd.gov) (1)
+- [Prosentient Systems](https://www.prosentient.com.au) (3)
+- [PTFS Europe](https://ptfs-europe.com) (33)
+- Rijksmuseum, Netherlands (14)
+- [Solutions inLibro inc](https://inlibro.com) (8)
+- [Theke Solutions](https://theke.io) (13)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Aleisha Amohia (3)
+- Pedro Amorim (2)
+- Tomás Cohen Arazi (8)
+- Matt Blenkinsop (11)
+- Nick Clemens (17)
+- Chris Cormack (6)
+- Jonathan Druart (13)
+- Magnus Enger (1)
+- Katrin Fischer (63)
+- Eric Garcia (2)
+- Lucas Gass (78)
+- Kyle M Hall (9)
+- Mason James (1)
+- Jan Kissig (1)
+- Thomas Klausner (1)
+- Emily Lamancusa (7)
+- Sam Lau (6)
+- Owen Leonard (5)
+- David Nind (28)
+- Martin Renvoize (64)
+- Marcel de Rooy (8)
+- Michaela Sieber (1)
+- Fridolin Somers (99)
+- Tadeusz „tadzik” Sośnierz (2)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the main branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 23.11.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 25 Jul 2024 08:35:44.</p>
