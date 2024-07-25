@@ -46,6 +46,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Serial;
 use Koha::SharedContent;
 use Koha::Subscription::Histories;
+use Koha::Subscription::Routinglists;
 use Koha::Subscriptions;
 use Koha::Suggestions;
 use Koha::TemplateUtils qw( process_tt );
@@ -2017,21 +2018,18 @@ of either 1 or highest current rank + 1
 sub addroutingmember {
     my ( $borrowernumber, $subscriptionid ) = @_;
 
-    return unless ($borrowernumber and $subscriptionid);
+    return unless ( $borrowernumber and $subscriptionid );
 
-    my $rank;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "SELECT max(ranking) `rank` FROM subscriptionroutinglist WHERE subscriptionid = ?" );
-    $sth->execute($subscriptionid);
-    while ( my $line = $sth->fetchrow_hashref ) {
-        if ( defined $line->{rank} && $line->{rank} > 0 ) {
-            $rank = $line->{rank} + 1;
-        } else {
-            $rank = 1;
+    my $max_ranking = Koha::Subscription::Routinglists->search( { subscriptionid => $subscriptionid } )
+        ->_resultset->get_column('ranking')->max;
+
+    return Koha::Subscription::Routinglist->new(
+        {
+            subscriptionid => $subscriptionid,
+            borrowernumber => $borrowernumber,
+            ranking        => defined $max_ranking ? $max_ranking + 1 : 1,
         }
-    }
-    $sth = $dbh->prepare( "INSERT INTO subscriptionroutinglist (subscriptionid,borrowernumber,ranking) VALUES (?,?,?)" );
-    $sth->execute( $subscriptionid, $borrowernumber, $rank );
+    )->store();
 }
 
 =head2 reorder_members
