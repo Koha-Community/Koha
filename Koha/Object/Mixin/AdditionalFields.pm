@@ -150,7 +150,7 @@ sub add_additional_fields {
                 push @additional_fields, {
                     id    => $field->id,
                     value => $value,
-                } if $value;
+                } if defined $value && $value ne '';
             }
         } else {
             my $existing_additional_field_values = $self->additional_field_values->search( { field_id => $field->id } );
@@ -158,7 +158,7 @@ sub add_additional_fields {
                 push @additional_fields, {
                     id    => $field->id,
                     value => $existing->value,
-                } if $existing && $existing->value;
+                } if $existing && defined $existing->value && $existing->value ne '';
             }
         }
     }

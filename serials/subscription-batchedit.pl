@@ -72,7 +72,7 @@ if ( $op eq 'cud-batchedit' ) {
 
         my @submitted_fields_array;
         foreach my $submitted_field (@submitted_fields) {
-            push @submitted_fields_array, $submitted_field if $submitted_field;
+            push @submitted_fields_array, $submitted_field if defined $submitted_field && $submitted_field ne '';
         }
         $field_values->{ $available_field->id } = \@submitted_fields_array;
     }
