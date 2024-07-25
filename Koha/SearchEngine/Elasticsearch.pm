@@ -616,7 +616,7 @@ sub marc_records_to_documents {
                 my $altscript = 0;
                 if ($marcflavour eq 'marc21' && $tag eq '880') {
                     my $sub6 = $field->subfield('6');
-                    if ($sub6 =~ /^(...)-\d+/) {
+                    if ($sub6 && $sub6 =~ /^(...)-\d+/) {
                         $tag = $1;
                         $altscript = 1;
                     }
