@@ -89,6 +89,21 @@ below the scannable barcode.
 
 =cut
 
+my %type_mapping = (
+    Code39         => 1,
+    UPCE           => 1,
+    UPCA           => 1,
+    QRcode         => 1,
+    NW7            => 1,
+    Matrix2of5     => 1,
+    ITF            => 1,
+    Industrial2of5 => 1,
+    IATA2of5       => 1,
+    EAN8           => 1,
+    EAN13          => 1,
+    COOP2of5       => 1,
+);
+
 my $input = CGI->new;
 
 my ( $auth_status ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '*' } );
@@ -99,12 +114,17 @@ if ( $auth_status ne "ok" ) {
 
 binmode(STDOUT);
 
-my $type = $input->param('type') || 'Code39';
+my $type = $input->param('type') || '';
 my $barcode = $input->param('barcode');
 my $notext = $input->param('notext') ? 1 : 0;
 my $height = $input->param('height') || 50;
 my $qrcode_modulesize = $input->param('modulesize') || "5"; # 1+
 my $image;
+
+# Validate the barcode type. Default to Code39 if no type or unsupported type sent.
+if ( !$type_mapping{$type} ) {
+    $type = 'Code39';
+}
 
 if ( $type eq 'Code39' ) {
     $barcode = '*' . $barcode unless $barcode =~ /^\*/;
@@ -115,6 +135,7 @@ eval {
     if( $type eq "QRcode" ){
         $image = GD::Barcode->new('QRcode', $barcode, { Ecc => "M", ModuleSize => $qrcode_modulesize } )->plot->png();
     } else {
+        # BZ 37464 - $type must be validated as GD::Barcode unsafely passes this argument directly to an eval{} block
         $image = GD::Barcode->new( $type, $barcode )->plot( NoText => $notext, Height => $height )->png();
     }
 };
