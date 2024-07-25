@@ -129,7 +129,7 @@
             [% IF disable_superlibrarian_privs && patron.is_superlibrarian %]
                 $("#CheckAllFlags,#UncheckAllFlags")
                     .attr("disabled", true)
-                    .attr("title", _("The system preference ProtectSuperlibrarian is enabled"))
+                    .attr("title", _("The system preference ProtectSuperlibrarianPrivileges is enabled"))
                     .on("click", function(e){e.preventDefault()});
             [% ELSE %]
                 $("#CheckAllFlags").on("click",function(){
