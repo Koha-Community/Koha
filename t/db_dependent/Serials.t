@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use C4::Serials qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate );
+use C4::Serials qw( getroutinglist updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate );
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
@@ -17,7 +17,7 @@ use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
-use Test::More tests => 57;
+use Test::More tests => 63;
 
 BEGIN {
     use_ok('C4::Serials', qw( updateClaim NewSubscription GetSubscription GetSubscriptionHistoryFromSubscriptionId SearchSubscriptions ModSubscription GetExpirationDate GetSerials GetSerialInformation NewIssue AddItem2Serial DelSubscription GetFullSubscription PrepareSerialsData GetSubscriptionsFromBiblionumber ModSubscriptionHistory GetSerials2 GetLatestSerials GetNextSeq GetSeq CountSubscriptionFromBiblionumber ModSerialStatus findSerialsByStatus HasSubscriptionStrictlyExpired HasSubscriptionExpired GetLateOrMissingIssues check_routing addroutingmember GetNextDate ));
@@ -226,6 +226,15 @@ my $patronid2 = $patron2->borrowernumber;
 # Add a fake routing list with fake patrons
 addroutingmember( $patronid1, $subscriptionwithroutinglistid );
 addroutingmember( $patronid2, $subscriptionwithroutinglistid );
+
+my @routinglist = getroutinglist($subscriptionwithroutinglistid);
+
+is( scalar @routinglist,               2,             'Two members on the routing list' );
+is( $routinglist[0]->{biblionumber},   $biblionumber, 'biblionumber is correct' );
+is( $routinglist[1]->{biblionumber},   $biblionumber, 'biblionumber is correct' );
+is( $routinglist[0]->{borrowernumber}, $patronid1,    'First patron added has the lowest rank' );
+is( $routinglist[0]->{ranking},        1,             'Rank 1 set for first subscription list member' );
+is( $routinglist[1]->{ranking},        2, 'Next rank value set for the second added subscription list member' );
 
 # Perform SearchSubscriptions
 my $fake_subscription = GetSubscription($subscriptionwithroutinglistid);
