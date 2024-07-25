@@ -69,11 +69,11 @@
                             <form name="add_by_bor_num" action="/cgi-bin/koha/patroncards/edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
-                                    <ol><li id="description">
+                                    <ol><li>
                                         <input type="hidden" name="op" value="add" />
                                         <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
                                         <label for="description">Batch description: </label>
-                                        <input type="text" name="description" value="[% description | html %]"> <span id="change-status"></span>
+                                        <input type="text" id="description" name="description" value="[% description | html %]"> <span id="change-status"></span>
                                     </li><li>
                                         <label for="bor_num_list">Add by borrowernumber(s):
                                             <br /> <span class="hint">One borrowernumber per line.</span>
