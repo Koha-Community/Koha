@@ -412,7 +412,7 @@
            var amount = button.data('amount');
            var amountoutstanding = button.data('amountoutstanding') || 0;
            var paid = amount - amountoutstanding;
-           $("#paid + span").replaceWith(paid);
+           $("#paid + span").text(paid);
            $("#returned").attr({ "value": paid, "max": paid });
            var member = button.data('member');
            if ( member === '' ) {
