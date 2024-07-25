@@ -29,7 +29,7 @@ use Koha::Patron;
 use Koha::Exceptions::Patron;
 use Koha::Patron::Categories;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects::Mixin::ExtendedAttributes Koha::Objects);
 
 =head1 NAME
 
@@ -564,6 +564,19 @@ sub filter_by_have_permission {
         },
         { prefetch => 'user_permissions' }
     );
+}
+
+=head3 extended_attributes_config
+
+=cut
+
+sub extended_attributes_config {
+    my ( $self ) = @_;
+    return {
+        'id_field'     => { 'foreign' => 'borrowernumber', 'self' => 'borrowernumber' },
+        'key_field'    => 'code',
+        'schema_class' => 'Koha::Schema::Result::BorrowerAttribute',
+    };
 }
 
 =head3 _type
