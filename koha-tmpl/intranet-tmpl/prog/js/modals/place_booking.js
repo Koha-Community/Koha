@@ -26,7 +26,6 @@ function containsAny(integers1, integers2) {
 }
 
 $("#placeBookingModal").on("show.bs.modal", function (e) {
-
     // Get context
     let button = $(e.relatedTarget);
     let biblionumber = button.data("biblionumber");
@@ -143,10 +142,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 patron_category_id: booking_patron.category_id,
                 item_type_id: booking_itemtype_id,
                 library_id: pickup_library_id,
-                rules: 'bookings_lead_period,bookings_trail_period'
+                rules: "bookings_lead_period,bookings_trail_period",
             },
             success: function (response) {
-                let rules = response[0]
+                let rules = response[0];
                 leadDays = rules.bookings_lead_period;
                 trailDays = rules.bookings_trail_period;
 
@@ -824,6 +823,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             const trailStart = hoverDate;
                             const trailEnd = hoverDate.add(trailDays, "day");
 
+                            let leadDisable = false;
+                            let trailDisable = false;
                             periodPicker.calendarContainer
                                 .querySelectorAll(".flatpickr-day")
                                 .forEach(function (dayElem) {
@@ -857,10 +858,55 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                         "trailRangeEnd",
                                         elemDate.isSame(trailEnd)
                                     );
+                                    // If we're overlapping a disabled date, disable our hoverDate
+                                    if (
+                                        dayElem.classList.contains(
+                                            "flatpickr-disabled"
+                                        )
+                                    ) {
+                                        if (
+                                            !periodPicker.selectedDates[0] &&
+                                            elemDate.isSameOrAfter(leadStart) &&
+                                            elemDate.isBefore(leadEnd)
+                                        ) {
+                                            leadDisable = true;
+                                        }
+                                        if (
+                                            elemDate.isAfter(trailStart) &&
+                                            elemDate.isSameOrBefore(trailEnd)
+                                        ) {
+                                            trailDisable = true;
+                                        }
+                                    }
+                                    dayElem.classList.remove("leadDisable");
+                                    dayElem.classList.remove("trailDisable");
+                                    dayElem.removeEventListener(
+                                        "click",
+                                        disableClick,
+                                        true
+                                    );
                                 });
+
+                            if (leadDisable) {
+                                target.classList.add("leadDisable");
+                            }
+                            if (trailDisable) {
+                                target.classList.add("trailDisable");
+                            }
+                            if (trailDisable || leadDisable) {
+                                target.addEventListener(
+                                    "click",
+                                    disableClick,
+                                    true
+                                );
+                            }
                         }
                     }
                 );
+
+                function disableClick(e) {
+                    e.stopImmediatePropagation();
+                }
 
                 // Enable flatpickr now we have date function populated
                 periodPicker.redraw();
