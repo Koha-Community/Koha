@@ -287,14 +287,6 @@ controller, and thus shouldn't be called twice in it.
             $c->stash('koha.pagination.base_total'   => $result_set->count);
             $c->stash('koha.pagination.query_params' => $args);
 
-            # Check and handle related metadata table joins
-            $c->dbic_extended_attributes_join(
-                {
-                    attributes      => $attributes,
-                    filtered_params => $filtered_params
-                }
-            );
-
             $c->dbic_validate_operators( { filtered_params => $filtered_params } );
 
             # Generate the resultset

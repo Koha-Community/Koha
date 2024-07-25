@@ -22,8 +22,9 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::ILL::Request;
 use Koha::ILL::Request::Config;
+use Koha::Objects::Mixin::ExtendedAttributes;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects::Mixin::ExtendedAttributes Koha::Objects);
 
 =head1 NAME
 
@@ -104,6 +105,19 @@ sub search_incomplete {
             -and => { '!=', 'COMP' }, { '!=', 'GENCOMP' }
         ]
     } );
+}
+
+=head3 extended_attributes_config
+
+=cut
+
+sub extended_attributes_config {
+    my ( $self ) = @_;
+    return {
+        'id_field'     => { 'foreign' => 'illrequest_id', 'self' => 'illrequest_id' },
+        'key_field'    => 'type',
+        'schema_class' => 'Koha::Schema::Result::Illrequestattribute',
+    };
 }
 
 =head2 Internal methods
