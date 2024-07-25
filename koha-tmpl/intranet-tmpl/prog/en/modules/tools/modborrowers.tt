@@ -361,7 +361,7 @@
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
-                                                <input type="text" name="[% field.name | html %]" value="" />
+                                                <input type="text" id="[%field.name | html %]" name="[% field.name | html %]" value="" />
                                             [% END %]
                                             [% IF ( field.type == 'select' ) %]
                                                 [% IF field.option.size %]
