@@ -402,7 +402,7 @@
                                 [% FOREACH entry IN housebound_visits %]
                                     <tr>
                                         <td>[% entry.id | html %]</td>
-                                        <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment | html %])</td>
+                                        <td data-order="[% entry.appointment_date | html %]">[% entry.appointment_date | $KohaDates %] ([% entry.day_segment | html %])</td>
                                         <td>
                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber | uri %]">
                                             [% INCLUDE 'patron-title.inc' patron = entry.chooser invert_name = 0 %]
