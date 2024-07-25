@@ -269,7 +269,7 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(409)
             ->json_is( "/error" => "Duplicate booking_id" );
     }
-    qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'PRIMARY'/;
+    qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(.*\.?)PRIMARY'/;
 
     # TODO: Test bookings clashes
     # TODO: Test item auto-assignment
