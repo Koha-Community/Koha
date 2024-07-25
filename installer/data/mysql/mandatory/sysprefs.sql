@@ -362,7 +362,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('KohaManualBaseURL','https://koha-community.org/manual/','','Where is the Koha manual/documentation located?','Free'),
 ('KohaManualLanguage','en','en|ar|cs|de|es|fr|it|pt_BR|tr|zh_TW','What is the language of the online manual you want to use?','Choice'),
 ('LabelMARCView','standard','standard|economical','Define how a MARC record will display','Choice'),
-('language','en',NULL,'Set the default language in the staff interface.','Languages'),
+('StaffInterfaceLanguages','en',NULL,'Set the default language in the staff interface.','Languages'),
 ('LibraryName','','','Define the library name as displayed on the OPAC',''),
 ('LibraryThingForLibrariesEnabled','0','','Enable or Disable Library Thing for Libraries Features','YesNo'),
 ('LibraryThingForLibrariesID','','','See:http://librarything.com/forlibraries/','free'),

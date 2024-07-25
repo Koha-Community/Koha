@@ -133,7 +133,7 @@ Prepare Koha entity data to be sent to Mana KB.
 
 sub prepare_entity_data {
     my ($lang, $loggedinuser, $ressourceid, $ressourcetype) = @_;
-    $lang ||= C4::Context->preference('language');
+    $lang ||= C4::Context->preference('StaffInterfaceLanguages');
 
     my $mana_email;
     if ( $loggedinuser ne 0 ) {

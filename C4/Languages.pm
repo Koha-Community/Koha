@@ -115,7 +115,7 @@ sub getTranslatedLanguages {
     my @languages;
     my @enabled_languages =
       ( $interface && $interface eq 'intranet' )
-      ? split ",", C4::Context->preference('language')
+      ? split ",", C4::Context->preference('StaffInterfaceLanguages')
       : split ",", C4::Context->preference('OPACLanguages');
 
     my $cache = Koha::Caches->get_instance;
