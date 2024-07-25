@@ -274,7 +274,7 @@ if ( $op eq 'view' ) {
             $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
             my $rows;
             if ( $query->param('print') ) {
-                $page="";
+                $page = "";
             } else {
                 $rows = C4::Context->preference('numSearchResults') || 20;
             }
