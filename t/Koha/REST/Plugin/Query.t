@@ -331,12 +331,35 @@ get '/dbic_extended_attributes_join' => sub {
     ];
     my $attributes = { 'prefetch' => ['extended_attributes'] };
 
-    $c->dbic_extended_attributes_join(
+    my $result_set = Koha::Patrons->new;
+
+    $c->render( json => { 'attributes' => $attributes, 'filtered_params' => $filtered_params }, status => 200 );
+};
+
+get '/dbic_extended_attributes_join_multiple_values' => sub {
+    my ( $c, $args ) = @_;
+
+    my $filtered_params = [
         {
-            'filtered_params' => $filtered_params,
-            'attributes'      => $attributes
+            '-and' => [
+                [
+                    {
+                        'extended_attributes.attribute' => { 'like' => 'abc%' },
+                        'extended_attributes.code'      => 'CODE_1'
+                    }
+                ],
+                [
+                    {
+                        'extended_attributes.code'      => 'CODE_2',
+                        'extended_attributes.attribute' => { 'like' => '123%' }
+                    }
+                ]
+            ]
         }
-    );
+    ];
+    my $attributes = { 'prefetch' => ['extended_attributes'] };
+
+    my $result_set = Koha::Patrons->new;
 
     $c->render( json => { 'attributes' => $attributes, 'filtered_params' => $filtered_params }, status => 200 );
 };
@@ -350,7 +373,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -684,5 +707,43 @@ subtest 'dbic_validate_operators' => sub {
     # Invalid queries
     $q = [ { "-and" => [ [ { "biblio_id" => { "like(sleep(1/100000))or" => "%a%" } } ] ] } ];
     $t->get_ok( '/dbic_validate_operators' => json => { q => $q } )->status_is(400);
+};
 
+subtest 'dbic_extended_attributes_join() tests' => sub {
+
+    plan tests => 4;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok( '/dbic_extended_attributes_join_multiple_values' => { 'x-koha-embed' => 'extended_attributes' } )
+        ->json_has(
+        '/attributes' => {
+            'join' => [
+                'extended_attributes_CODE_1',
+                'extended_attributes_CODE_2'
+            ],
+            'prefetch' => ['extended_attributes']
+        }
+        );
+
+    $t->get_ok( '/dbic_extended_attributes_join' => { 'x-koha-embed' => 'extended_attributes' } )->json_has(
+        '/filtered_params' => [
+            {
+                '-and' => [
+                    [
+                        {
+                            'extended_attributes_CODE_1.code'      => 'CODE_1',
+                            'extended_attributes_CODE_1.attribute' => { 'like' => 'abc%' }
+                        }
+                    ],
+                    [
+                        {
+                            'extended_attributes_CODE_2.code'      => 'CODE_2',
+                            'extended_attributes_CODE_2.attribute' => { 'like' => 'abc%' }
+                        }
+                    ],
+                ]
+            }
+        ]
+    );
 };
