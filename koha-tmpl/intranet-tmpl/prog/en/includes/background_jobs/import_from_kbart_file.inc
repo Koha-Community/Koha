@@ -67,7 +67,7 @@
         </div>
     [% END %]
 [% END %]
-    [% Asset.js("js/job_progress.js") | $raw %]
+
 
 [% BLOCK js %]
     [% INCLUDE 'str/job_progress.inc' job_id=job.id %]
