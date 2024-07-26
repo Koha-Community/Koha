@@ -21,7 +21,7 @@ describe("Flatpickr", () => {
         cy.get("#from+span > input").click();
         cy.get(".flatpickr-calendar")
             .eq(0)
-            .find("span.today")
+            .find("span.todays")
             .click({ force: true });
         cy.get("#from").invoke("val").should("eq", dates["today_iso"]);
 
