@@ -266,7 +266,12 @@ sub handle_dir {
             $cardnumber =~ s/[\"\r\n]//g; # remove offensive characters
             $filename   =~ s/[\"\r\n\s]//g;
             $logger->debug("Cardnumber: $cardnumber Filename: $filename");
-            $source = "$dir/$filename";
+            $source = Cwd::abs_path("$dir/$filename");
+            if ( $source !~ /^\Q$dir\E/ ) {
+
+                #NOTE: Unset $source if it points to a file outside of this unpacked ZIP archive
+                $source = '';
+            }
             %counts = handle_file( $cardnumber, $source, $template, %counts );
         }
         closedir $dir_h;
