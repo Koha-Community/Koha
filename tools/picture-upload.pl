@@ -232,11 +232,11 @@ sub handle_dir {
         my $dir_h;
         opendir $dir_h, $dir;
         while ( my $filename = readdir $dir_h ) {
-
-              if ( ($filename =~ m/datalink\.txt/i
-                || $filename =~ m/idlink\.txt/i ) && ( -e "$dir/$filename" && !-l "$dir/$filename")) {
-                  $file = Cwd::abs_path("$dir/$filename");
-              }
+            if (   ( $filename =~ m/datalink\.txt/i || $filename =~ m/idlink\.txt/i )
+                && ( -e "$dir/$filename" && !-l "$dir/$filename" ) )
+            {
+                $file = Cwd::abs_path("$dir/$filename");
+            }
         }
         my $fh;
         unless ( open( $fh, '<', $file ) ) {
