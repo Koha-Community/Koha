@@ -42,12 +42,8 @@ return {
             say $out "Removed UNIQUE KEY `field_record` (`field_id`,`record_id`) from the additional_field_values table";
         }
 
-        my $additional_fields_values = $dbh->selectall_arrayref(q|SELECT * FROM additional_field_values WHERE value = ''|, { Slice => {} });
-        my $number_of_entries = scalar @{$additional_fields_values};
-        if ( $number_of_entries ){
-            for my $afv (@$additional_fields_values) {
-                $dbh->do(q{DELETE FROM additional_field_values WHERE value = ''});
-            }
+        my $number_of_entries = $dbh->do(q{DELETE FROM additional_field_values WHERE value = ''});
+        if ( defined $number_of_entries && $number_of_entries > 0 ) {
             say $out "Removed $number_of_entries redundant additional_field_values entries with empty value";
         }
     },
