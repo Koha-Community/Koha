@@ -130,7 +130,8 @@ $(document).ready(function () {
         }
     });
 
-    $(".focus").focus();
+    $(".focus:visible").focus();
+
     $(".validated").each(function () {
         $(this).validate();
     });
