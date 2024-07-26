@@ -633,7 +633,8 @@ elsif ($op eq 'export'){
             $content .= join("\t", header_cell_values($sth)) . "\n";
             $content = $scrubber->scrub( Encode::decode( 'UTF-8', $content ) );
             while ( my $row = $sth->fetchrow_arrayref() ) {
-                $content .= join( "\t", $scrubber->scrub(@$row) ) . "\n";
+                $content .= join( "\t", map { $_ // '' } @$row ) . "\n";
+                $content = $scrubber->scrub( $content );
             }
         } else {
             if ( $format eq 'csv' ) {
