@@ -613,7 +613,7 @@
                 orderable: true,
                 render: function (data, type, row, meta) {
                     if ( row.external_id != null ) {
-                        return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=%s#item%s">%s</a>'.format(row.biblio_id, row.item_id, row.external_id);
+                        return '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=%s&itemnumber=%s#item%s">%s</a>'.format(row.biblio_id, row.item_id, row.item_id, row.external_id);
                     }
                     return '';
                 }
