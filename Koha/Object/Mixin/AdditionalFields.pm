@@ -104,7 +104,8 @@ sub prepare_cgi_additional_field_values {
     my ( $self, $cgi, $tablename ) = @_;
 
     my @additional_fields;
-    my $table_fields = Koha::AdditionalFields->search( { tablename => $tablename } );
+    my $table_fields =
+        Koha::AdditionalFields->search( { tablename => $tablename }, { order_by => { -asc => 'id' } } );
 
     while ( my $field = $table_fields->next ) {
         my @field_values = $cgi->multi_param( 'additional_field_' . $field->id );
