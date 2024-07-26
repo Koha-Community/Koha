@@ -293,11 +293,19 @@
                                         <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
                                         <input type="hidden" id="borrowernumber" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                         <button type="submit" class="btn btn-default btn-xs" name="op" value="cud-Upload"><i class="fa fa-upload"></i> Upload photo</button>
-                                        [% IF ( patron.image ) %]
-                                        <button id="delpicture" type="submit" class="btn btn-default btn-xs delete" name="op" value="cud-Delete"><i class="fa fa-trash-can"></i> Delete</button>
-                                        [% END %]
                                     </div> <!-- /.action -->
                                 </form> <!-- /#picture-upload -->
+                                [% IF ( patron.image ) %]
+                                    <form method="post" id="picture-delete" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+                                        <div class="action" style="padding-top:0px;">
+                                            [% INCLUDE 'csrf-token.inc' %]
+                                            <input type="hidden" id="image" name="filetype" value="image" />
+                                            <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
+                                            <input type="hidden" id="borrowernumber" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                                            <button id="delpicture" type="submit" class="btn btn-default btn-xs delete" name="op" value="cud-Delete"><i class="fa fa-trash-can"></i> Delete</button>
+                                        </div> <!-- /.action -->
+                                    </form> <!-- /#picture-delete -->
+                                [% END %]
                             </div> <!-- /#upload-patron-image -->
                             <div id="capture-patron-image" class="patroninfo-section">
                                 <h5>Take patron photo</h5>
