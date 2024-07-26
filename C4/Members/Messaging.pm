@@ -215,7 +215,25 @@ END_SQL
 
     my @return = values %$choices;
 
-    @return = sort { $a->{message_attribute_id} <=> $b->{message_attribute_id} } @return;
+    # Define messaging sort order based on logical grouping of events
+    my %messaging_order = (
+        'Hold_Filled'      => 1,
+        'Hold_Reminder'    => 2,
+        'Recall_Requested' => 3,
+        'Recall_Waiting'   => 4,
+        'Ill_ready'        => 5,
+        'Ill_unavailable'  => 6,
+        'Ill_update'       => 7,
+        'Item_Checkout'    => 8,
+        'Auto_Renewals'    => 9,
+        'Advance_Notice'   => 10,
+        'Item_Due'         => 11,
+        'Item_Check_in'    => 12
+    );
+
+    @return =
+        sort { ( $messaging_order{ $a->{message_name} } // 999 ) <=> ( $messaging_order{ $b->{message_name} } // 999 ) }
+        @return;
 
     # warn( Data::Dumper->Dump( [ \@return ], [ 'return' ] ) );
     return \@return;
