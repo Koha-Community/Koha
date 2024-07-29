@@ -233,11 +233,32 @@ Returns:
 sub delete {
     my ($self) = @_;
 
-    my $deleted = $self->_result()->delete;
+    my $deleted;
+
+    try {
+        $deleted = $self->_result()->delete;
+    } catch {
+        if ( ref($_) eq 'DBIx::Class::Exception' ) {
+            if ( $_->{msg} =~
+                /Cannot delete or update a parent row\: a foreign key constraint fails \(\`(?<database>.*?)\`\.\`(?<table>.*?)\`, CONSTRAINT \`(?<constraint>.*?)\` FOREIGN KEY \(\`(?<fk>.*?)\`\) REFERENCES \`.*\` \(\`(?<column>.*?)\`\)/
+                )
+            {
+                Koha::Exceptions::Object::FKConstraintDeletion->throw(
+                    column     => $+{column},
+                    constraint => $+{constraint},
+                    fk         => $+{fk},
+                    table      => $+{table},
+                );
+            }
+            $_->rethrow();
+        }
+    };
+
     if ( ref $deleted ) {
-        my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
+        my $object_class = Koha::Object::_get_object_class( $self->_result->result_class );
         $deleted = $object_class->_new_from_dbic($deleted);
     }
+
     return $deleted;
 }
 
