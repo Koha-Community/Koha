@@ -48,7 +48,7 @@
                     [% FOREACH image IN imageset.images %]
                         <label>
                             [% IF image.StaffImageUrl %]
-                                <img src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
+                                <img class="itemtype-image" src="[% image.StaffImageUrl | html %]" alt="[% image.StaffImageUrl | html %]" title="[% image.StaffImageUrl | html %]" />
                             [% END %]
                             [% IF image.checked %]
                                 <input type="radio" name="image" value="[% image.KohaImage | html %]" checked="checked" />

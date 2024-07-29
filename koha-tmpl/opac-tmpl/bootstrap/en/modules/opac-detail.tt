@@ -166,7 +166,7 @@
                     [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]
                         <span class="results_summary itemtype"><span class="label">Item type: </span>
                             [% IF ( imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
-                                <img src="[% imageurl | html %]" alt="" />
+                                <img class="itemtype-image" src="[% imageurl | html %]" alt="" />
                             [% END %]
                             [% IF ( description ) %]
                                 <span class="itypetext">[% description | html %]</span>
@@ -1249,7 +1249,7 @@
                     <td class="itype">
                         [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                             [% IF ( ITEM_RESULT.imageurl ) %]
-                                <img src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="[% ITEM_RESULT.description | html %]" />
+                                <img class="itemtype-image" src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="[% ITEM_RESULT.description | html %]" />
                             [% END %]
                         [% END %]
                        <span class="itypetext">[% ITEM_RESULT.description | html %]</span>

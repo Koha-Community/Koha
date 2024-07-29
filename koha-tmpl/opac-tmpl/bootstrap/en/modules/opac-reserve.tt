@@ -244,7 +244,7 @@
                                             [% UNLESS ( item_level_itypes ) %]
                                                 <li class="itype">
                                                     <span class="label">Item type: </span>
-                                                    [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl | html %]" alt="" />[% END %]
+                                                    [% IF ( bibitemloo.imageurl ) %]<img class="itemtype-image" src="[% bibitemloo.imageurl | html %]" alt="" />[% END %]
                                                     <span class="itypetext">[% bibitemloo.translated_description | html %]</span>
                                                 </li>
                                             [% END %]
@@ -435,7 +435,7 @@
                                                                 <td class="itype">
                                                                     [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                                         [% IF ( itemLoo.imageurl ) %]
-                                                                            <img src="[% itemLoo.imageurl | html %]" alt="" />
+                                                                            <img class="itemtype-image" src="[% itemLoo.imageurl | html %]" alt="" />
                                                                         [% END %]
                                                                     [% END %]
                                                                     <span class="itypetext">[% itemLoo.translated_description | html %]</span>

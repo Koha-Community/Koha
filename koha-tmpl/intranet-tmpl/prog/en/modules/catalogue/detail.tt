@@ -152,11 +152,11 @@
                                 <span class="label">MARC framework:</span>
                                 <span class="frameworkcode">[% Frameworks.GetName(biblio.frameworkcode) | html %]</span>
                             </span>
-                            [% IF !item_level_itypes ||  Koha.Preference("BiblioItemtypeInfo") %]
+                            [% IF !item_level_itypes || Koha.Preference("BiblioItemtypeInfo") %]
                                 <span class="results_summary itemtype">
                                     <span class="label">Itemtype:</span>
                                     [% IF ( !noItemTypeImages && imageurl ) %]
-                                        <img src="[% imageurl | html %]" alt="" />
+                                        <img class="itemtype-image" src="[% imageurl | html %]" alt="" />
                                     [% END %]
                                     [% IF ( description ) %]
                                         <span class="itypetext">[% description | html %]</span>

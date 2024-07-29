@@ -335,7 +335,7 @@
                                                     <th class="all anti-the">Title</th>
                                                     <th>Author</th>
                                                     <th class="psort">Due</th>
-                                                    [% UNLESS ( item_level_itypes ) %]
+                                                    [% IF ( Koha.Preference('BiblioItemtypeInfo') || !item_level_itypes ) %]
                                                         <th>Item type</th>
                                                     [% END %]
                                                     [% IF ( show_barcode ) %]
@@ -426,11 +426,11 @@
                                                             [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% END %]
-                                                    [% UNLESS ( item_level_itypes ) %]
+                                                    [% IF ( Koha.Preference('BiblioItemtypeInfo') || !item_level_itypes ) %]
                                                         <td class="itype">
                                                             <span class="tdlabel">Item type:</span>
                                                             [% IF ( ISSUE.imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
-                                                                <img src="[% ISSUE.imageurl | html %]" title="[% ISSUE.description | html %]" alt="[% ISSUE.description | html %]" />
+                                                                <img class="itemtype-image" src="[% ISSUE.imageurl | html %]" title="[% ISSUE.description | html %]" alt="[% ISSUE.description | html %]" />
                                                                 [% END %] <span class="itypetext">[% ISSUE.description | html %]</span>
                                                         </td>
                                                     [% END %]

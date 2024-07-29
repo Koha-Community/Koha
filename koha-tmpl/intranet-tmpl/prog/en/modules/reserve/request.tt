@@ -421,7 +421,7 @@
                                         </td>
                                         [% UNLESS Koha.Preference('item-level_itypes') %]
                                             <td>
-                                                <img src="[% biblioloo.itemtype.image_location| html %]" alt="[% biblioloo.itemtype.translated_description | html %]" title="[% biblioloo.itemtype.translated_description | html %]" />
+                                                <img class="itemtype-image" src="[% biblioloo.itemtype.image_location| html %]" alt="[% biblioloo.itemtype.translated_description | html %]" title="[% biblioloo.itemtype.translated_description | html %]" />
                                             </td>
                                         [% END %]
                                         <td>[% biblioloo.rank | html %]</td>
@@ -926,7 +926,7 @@
                                                     [% IF Koha.Preference('item-level_itypes') %]
                                                         <td>
                                                             [% UNLESS ( noItemTypeImages ) %]
-                                                                [% IF ( itemloo.itemtype.image_location) %]<img src="[% itemloo.itemtype.image_location | html %]" alt="" /> <br /> [% END %]
+                                                                [% IF ( itemloo.itemtype.image_location) %]<img class="itemtype-image" src="[% itemloo.itemtype.image_location | html %]" alt="" /> <br /> [% END %]
                                                             [% END %]
                                                             <span class="itypetext">[% itemloo.itemtype.translated_description | html %]</span>
                                                         </td>

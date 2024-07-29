@@ -368,7 +368,7 @@
                     <th scope="row">Image</th>
                     <td>
                         [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img src="[% image_location | html %]" alt="" />[% END %]
+                        [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% END %]
                     </td>
                 </tr>
             [% END %]
@@ -414,7 +414,7 @@
                 [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
                     <td>
                         [% SET image_location = itemtype.image_location('intranet') %]
-                        [% IF image_location %]<img src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
+                        [% IF image_location %]<img class="itemtype-image" src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
                     </td>
                 [% END %]
             <td>
