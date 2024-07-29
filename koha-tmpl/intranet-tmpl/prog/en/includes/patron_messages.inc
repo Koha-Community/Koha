@@ -5,7 +5,7 @@
 [% SET return_claims = patron.return_claims %]
 [% SET logged_in_branchcode = Branches.GetLoggedInBranchcode() %]
 
-[% IF ( has_modifications || warndeparture || returnbeforeexpiry || expired || patron.gonenoaddress || patron.lost || userdebarred || odues || ( return_claims.count > ClaimReturnedWarningThreshold ) || age_limitations || limited_category || charges || charges_guarantors_guarantees || charges_guarantees || credits ) %]
+[% IF ( has_modifications || warndeparture || returnbeforeexpiry || expired || patron.gonenoaddress || patron.lost || userdebarred || odues || ( return_claims.count > ClaimReturnedWarningThreshold ) || age_limitations || limited_category || charges || charges_guarantors_guarantees || charges_guarantees || credits || patron.account_locked ) %]
     <h3>Attention</h3>
     <ul>
         [% IF ( has_modifications ) %]
@@ -51,6 +51,25 @@
                 [% END %]
             </li>
         [% END %]
+
+        [% IF patron.account_locked %]
+            [% IF patron.login_attempts < 0 %]
+                <li class="blocker account_admin_locked">
+                    <span class="circ-hlt">Locked: </span><span> Patron's account has been administratively locked</span>
+                </li>
+            [% ELSE %]
+                <li class="blocker account_locked">
+                <span class="circ-hlt">Locked: </span><span> Patron's account has been locked (due to [% patron.login_attempts | html %] failed login attempts)</span>
+                [% IF CAN_user_borrowers_edit_borrowers %]
+                    <span>
+                        <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Change password</a>
+                    </span>
+                [% END %]
+                </li>
+            [% END %]
+        [% END %]
+
+
 
         [% IF ( patron.gonenoaddress ) %]
             <li class="gonenoaddress blocker">
