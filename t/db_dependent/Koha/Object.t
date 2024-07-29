@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Exception;
 use Test::Warn;
 
@@ -1234,6 +1234,33 @@ subtest 'is_accessible() tests' => sub {
 
     ok( $patron_1->is_accessible( { user  => $patron } ), 'Has access to the patron' );
     ok( !$patron_2->is_accessible( { user => $patron } ), 'Does not have access to the patron' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $rs     = $builder->build_object( { class => 'Koha::RecordSources' } );
+    my $biblio = $builder->build_sample_biblio();
+
+    $biblio->metadata->set( { record_source_id => $rs->id } )->store();
+
+    throws_ok { $rs->delete(); }
+    'Koha::Exceptions::Object::FKConstraintDeletion';
+
+    is( $@->column,     'record_source_id' );
+    is( $@->constraint, 'record_metadata_fk_2' );
+    is( $@->fk,         'record_source_id' );
+    is( $@->table,      'biblio_metadata' );
+
+    $biblio->metadata->set( { record_source_id => undef } )->store();
+
+    lives_ok { $rs->delete(); }
+    'No exception thrown';
 
     $schema->storage->txn_rollback;
 };
