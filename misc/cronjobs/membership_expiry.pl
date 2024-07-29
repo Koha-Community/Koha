@@ -252,69 +252,56 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 
 # main loop
 my ( $count_skipped, $count_renewed, $count_enqueued ) = ( 0, 0, 0 );
-while ( my $recent = $upcoming_mem_expires->next ) {
-    if ( $active && !$recent->is_active( { months => $active } ) ) {
+while ( my $expiring_patron = $upcoming_mem_expires->next ) {
+    if ( $active && !$expiring_patron->is_active( { months => $active } ) ) {
         $count_skipped++;
         next;
-    } elsif ( $inactive && $recent->is_active( { months => $inactive } ) ) {
+    } elsif ( $inactive && $expiring_patron->is_active( { months => $inactive } ) ) {
         $count_skipped++;
         next;
     }
+
+    my $messaging_prefs = C4::Members::Messaging::GetMessagingPreferences(
+        {
+            borrowernumber => $expiring_patron->borrowernumber,
+            message_name   => "Patron_Expiry",
+        }
+    );
+    my @message_transports = ( keys %{ $messaging_prefs->{transports} } );
+    my $letter_code = $messaging_prefs->{letter_code};
+
+    # Skip this patron if they don't want a notification email for card expiry
+    next if !$messaging_prefs;
 
     my $which_notice;
     if ($renew) {
-        $recent->renew_account;
+        $expiring_patron->renew_account;
         $which_notice = $letter_renew;
         $count_renewed++;
     } else {
-        $which_notice = $letter_expiry;
+        $which_notice = $letter_code || $letter_expiry;
     }
 
-    my $from_address = $recent->library->from_email_address;
-    my $letter =  C4::Letters::GetPreparedLetter(
+    my $from_address  = $expiring_patron->library->from_email_address;
+    my $letter_params = {
         module      => 'members',
         letter_code => $which_notice,
-        branchcode  => $recent->branchcode,
-        lang        => $recent->lang,
+        branchcode  => $expiring_patron->branchcode,
+        lang        => $expiring_patron->lang,
+        borrowernumber => $expiring_patron->borrowernumber,
         tables      => {
-            borrowers => $recent->borrowernumber,
-            branches  => $recent->branchcode,
+            borrowers => $expiring_patron->borrowernumber,
+            branches  => $expiring_patron->branchcode,
         },
-    );
-    last if !$letter;    # Letters.pm already warned, just exit
-    if ($nomail) {
-        print $letter->{'content'}."\n";
-        next;
-    }
+    };
 
-    C4::Letters::EnqueueLetter({
-        letter                 => $letter,
-        borrowernumber         =>  $recent->borrowernumber,
-        from_address           => $from_address,
-        message_transport_type => 'email',
-    });
-    $count_enqueued++;
+    my $sending_params = {
+        letter_params => $letter_params,
+        message_name => 'Patron_Expiry',
+    };
 
-    if ($recent->smsalertnumber) {
-        my $smsletter = C4::Letters::GetPreparedLetter(
-            module      => 'members',
-            letter_code => $which_notice,
-            branchcode  => $recent->branchcode,
-            lang        => $recent->lang,
-            tables      => {
-                borrowers => $recent->borrowernumber,
-                branches  => $recent->branchcode,
-            },
-            message_transport_type => 'sms',
-        );
-        if ($smsletter) {
-            C4::Letters::EnqueueLetter({
-                letter                 => $smsletter,
-                borrowernumber         => $recent->borrowernumber,
-                message_transport_type => 'sms',
-            });
-        }
-    }
+    my $result = $expiring_patron->queue_notice($sending_params);
+    $count_enqueued++ if $result->{sent};
 }
 
 if ($verbose) {
