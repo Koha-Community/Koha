@@ -33,6 +33,11 @@ use Exception::Class (
         description => "Foreign key constraint broken",
         fields      =>  ['broken_fk', 'value'],
     },
+    'Koha::Exceptions::Object::FKConstraintDeletion' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => "Foreign key constraint broken on deleting resource",
+        fields      => [ 'column', 'fk', 'table', 'constraint' ],
+    },
     'Koha::Exceptions::Object::MethodNotFound' => {
         isa => 'Koha::Exceptions::Object',
         description => "Invalid method",
