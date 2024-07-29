@@ -12,4 +12,5 @@ values
 (10, 'Hold_Reminder', 0),
 (11, 'Ill_update', 0),
 (12, 'Recall_Waiting', 0),
-(13, 'Recall_Requested', 0);
+(13, 'Recall_Requested', 0),
+(14, 'Patron_Expiry', 0);
