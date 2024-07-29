@@ -493,7 +493,7 @@ sub set_languages_syspref {
 
     warn "UPDATE Languages";
     # intranet
-    my $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='language'");
+    my $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='StaffInterfaceLanguages'");
     $pref->execute("en,$language");
     # opac
     $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='OPACLanguages'");

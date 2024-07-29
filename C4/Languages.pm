@@ -639,7 +639,7 @@ sub getlanguage {
     my $language;
 
     my $preference_to_check =
-      $interface eq 'intranet' ? 'language' : 'OPACLanguages';
+      $interface eq 'intranet' ? 'StaffInterfaceLanguages' : 'OPACLanguages';
     # Get the available/valid languages list
     my @languages;
     my $preference_value = C4::Context->preference($preference_to_check);
