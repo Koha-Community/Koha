@@ -623,6 +623,13 @@ sub execute_query {
         ->info("Report finished: $report_id") if $report_id;
 
     return ( $sth, { queryerr => $sth->errstr } ) if ( $sth->err );
+
+    foreach my $column ( @{ $sth->{NAME_lc} } ) {
+        if ( $column eq 'password' ) {
+            return ( $sth, { passworderr => $column } );
+        }
+    }
+
     return ($sth);
 }
 
