@@ -455,7 +455,7 @@ export default {
             client.counter_registry.getAll({ name: query }).then(
                 registry_data => {
                     this.registry_data = registry_data
-                    if (caller === "edit") {
+                    if (caller === "edit" && registry_data.length > 0) {
                         this.selected_provider = registry_data.find(
                             platform =>
                                 platform.name === this.usage_data_provider.name
@@ -466,6 +466,8 @@ export default {
                                     r => r.report_id === report.value
                                 )
                             )
+                    } else {
+                        this.manual_form = true
                     }
                     this.searching = false
                     this.initialized = true
