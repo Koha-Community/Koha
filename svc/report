@@ -76,7 +76,9 @@ unless ($json_text) {
             report_id  => $report_id,
         }
     );
-    if ($sth) {
+    if ($errors) {
+        $json_text = encode_json($errors);
+    } else {
         my $lines;
         if ($report_annotation) {
             $lines = $sth->fetchall_arrayref({});
@@ -89,9 +91,6 @@ unless ($json_text) {
         if ($cache_active) {
             $cache->set_in_cache( $cache_key, $json_text, { expiry => $report_rec->cache_expiry } );
         }
-    }
-    else {
-        $json_text = encode_json($errors);
     }
 }
 
