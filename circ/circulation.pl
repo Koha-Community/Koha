@@ -112,7 +112,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op                      = $query->param('op');
+my $op                      = $query->param('op') // '';
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
