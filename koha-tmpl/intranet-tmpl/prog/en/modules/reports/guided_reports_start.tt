@@ -1375,6 +1375,10 @@
                                     [% error.queryerr | html %]<br />Please check the log for further details.
                                 [% ELSIF ( error.cache_expiry ) %]
                                     Please select a cache expiry less than 30 days.
+                                [% ELSIF ( error.passworderr ) %]
+                                    The column selection in this report includes a password field.<br>
+                                    The report cannot be executed due to security risks.<br>
+                                    Please edit this report and ensure no password columns have been selected.
                                 [% ELSE %]
                                 [% END %]
                                 <div id="onerror_actions">
