@@ -143,7 +143,7 @@ foreach ( $query->param ) {
     push( @inputloop, \%input );
 }
 
-my $op          = $query->param('op');
+my $op          = $query->param('op') // '';
 
 ############
 # Deal with the requests....
