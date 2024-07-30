@@ -220,11 +220,12 @@ sub store {
         }
     }
 
+    my $original = Koha::Items->find( $self->itemnumber );    # $original will be undef if $action eq 'create'
     my $result = $self->SUPER::store;
     if ( $log_action && C4::Context->preference("CataloguingLog") ) {
         $action eq 'create'
-          ? logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
-          : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self );
+            ? logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
+            : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self, undef, $original );
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )

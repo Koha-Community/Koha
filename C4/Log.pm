@@ -88,7 +88,7 @@ sub logaction {
         local $Data::Dumper::Sortkeys = 1;
 
         if ( $infos->isa('Koha::Item') && $modulename eq 'CATALOGUING' && $actionname eq 'MODIFY' ) {
-            $infos = "item " . Dumper($updated);
+            $infos = "item " . Dumper( $original->unblessed );
         } else {
             $infos = Dumper($updated);
         }
