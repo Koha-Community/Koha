@@ -144,7 +144,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                             <div class="dialog alert">
                                 <h3>Duplicate patron record?</h3>
                                 <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
-                                <button id="duplicate" type="submit" class="new"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> It is a duplicate. Edit existing record </button>
+                                <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&borrowernumber=[% check_member | uri %]" class="btn btn-default" id="duplicate"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> It is a duplicate. Edit existing record </a>
                                 <button type="submit" id="not-duplicate" class="new"> <i class="fa fa-plus"></i> Not a duplicate. Save as new record </button>
                             </div>
                         [% END %]
@@ -1949,13 +1949,6 @@ legend.collapsed i.fa.fa-caret-down::before {
                 if( check_form_borrowers() ){
                     $("#entryform").submit();
                 }
-            });
-
-            $('#duplicate').on('click', function() {
-                $("input[name='op']").val('edit_form');
-                $("input[name='borrowernumber']").val('[% check_member | html %]');
-                $("input[name='check_member']").val('');
-                $('#entryform').submit();
             });
 
             $('#not-duplicate').on('click', function() {
