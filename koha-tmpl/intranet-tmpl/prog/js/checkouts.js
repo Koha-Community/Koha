@@ -738,20 +738,25 @@ $(document).ready(function() {
 
         let item_ids = $(".renew:checked:visible").map((i, c) => c.value);
 
-        renew_all(item_ids, renew).then(() => {
-            // Refocus on barcode field if it exists
-            if ( $("#barcode").length ) {
-                $("#barcode").focus();
-            }
+        if( item_ids.length > 0 ){
+            renew_all(item_ids, renew).then(() => {
+                // Refocus on barcode field if it exists
+                if ( $("#barcode").length ) {
+                    $("#barcode").focus();
+                }
 
-            if ( refresh_table ) {
-                RefreshIssuesTable();
-            }
-            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
-        });
+                if ( refresh_table ) {
+                    RefreshIssuesTable();
+                }
+                $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+            });
 
-        // Prevent form submit
-        return false;
+            // Prevent form submit
+            return false;
+        } else {
+            alert(_("There are no items to be renewed."));
+        }
+
     });
 
     $("#RenewAll").on("click",function(){
