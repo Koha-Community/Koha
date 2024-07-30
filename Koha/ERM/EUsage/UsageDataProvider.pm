@@ -174,11 +174,8 @@ sub harvest_sushi {
     $self->{report_type} = $args->{report_type};
     $self->{begin_date}  = $args->{begin_date};
     $self->{end_date}    = $args->{end_date};
-    my $url     = $self->_build_url_query;
-    my $request = HTTP::Request->new( 'GET' => $url );
-    my $ua      = LWP::UserAgent->new;
-    $ua->agent( 'Koha/' . Koha::version() );
-    my $response = $ua->simple_request($request);
+    my $url      = $self->_build_url_query;
+    my $response = _handle_sushi_request($url);
 
     my $result = decode_json( $response->decoded_content );
 
@@ -278,10 +275,7 @@ sub test_connection {
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
     $url .= '&api_key=' . $self->api_key           if $self->api_key;
 
-    my $request = HTTP::Request->new( 'GET' => $url );
-    my $ua      = LWP::UserAgent->new;
-    $ua->agent( 'Koha/' . Koha::version() );
-    my $response = $ua->simple_request($request);
+    my $response = _handle_sushi_request($url);
 
     if ( $response->{_rc} >= 400 ) {
         my $message = $response->{_msg};
@@ -523,6 +517,30 @@ sub _counter_file_size_too_large {
         return 1;
     }
     return 0;
+}
+
+=head3 _handle_sushi_response
+
+Creates and sends the request based on a provided url
+Also handles any redirects
+
+=cut
+
+sub _handle_sushi_request {
+    my ($url) = @_;
+
+    my $request = HTTP::Request->new( 'GET' => $url );
+    my $ua      = LWP::UserAgent->new;
+    $ua->agent( 'Koha/' . Koha::version() );
+    my $response = $ua->simple_request($request);
+
+    if ( $response->is_redirect ) {
+        my $redirect_url = $response->header('Location');
+        $redirect_url = URI->new_abs( $redirect_url, $url );
+        $response     = $ua->get($redirect_url);
+    }
+
+    return $response;
 }
 
 =head3 _type
