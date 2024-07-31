@@ -700,8 +700,9 @@ subtest "as_marc_field() tests" => sub {
 
 subtest 'pickup_locations() tests' => sub {
 
-    plan tests => 68;
+    plan tests => 70;
 
+    t::lib::Mocks::mock_preference( 'canreservefromotherbranches', 1 );
     $schema->storage->txn_begin;
 
     my $dbh = C4::Context->dbh;
@@ -1021,6 +1022,39 @@ subtest 'pickup_locations() tests' => sub {
     );
 
     t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', 0 );
+
+    t::lib::Mocks::mock_preference( 'IndependentBranches',         1 );
+    t::lib::Mocks::mock_preference( 'canreservefromotherbranches', 0 );
+    t::lib::Mocks::mock_userenv( { branchcode => $library4->branchcode } );
+
+    my $item4 = $builder->build_sample_item(
+        {
+            homebranch    => $library4->branchcode,
+            holdingbranch => $library4->branchcode
+        }
+    )->store;
+    my $patron5 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '5', flags => 84 } } );
+
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item4->pickup_locations( { patron => $patron5 } )->as_list;
+    ok(
+        scalar(@pickup_locations) == 1 && $pickup_locations[0] eq $library4->branchcode,
+        'There should be only one branch in the pickup locations, the connected branch'
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library2->branchcode } );
+
+    @pickup_locations = map {
+        my $pickup_location = $_;
+        grep { $pickup_location->branchcode eq $_ } @branchcodes
+    } $item4->pickup_locations( { patron => $patron5 } )->as_list;
+    ok(
+        scalar(@pickup_locations) == 0,
+        'The pickup locations should be empty if the user connected branch is not the same as the item home branch'
+    );
 
     $schema->storage->txn_rollback;
 };
