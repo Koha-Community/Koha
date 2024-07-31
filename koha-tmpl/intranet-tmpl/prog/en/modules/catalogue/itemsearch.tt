@@ -81,7 +81,7 @@
     [% ELSE %]
         [% SET j = i - 1 %]
         <select name="c" class="form-field-conjunction">
-            [% IF query.param('c').$j == 'and' %]
+            [% IF query.param('c').$j == 'and'  || query.param('c') == 'and' %]
                 <option value="and" selected="selected">AND</option>
                 <option value="or">OR</option>
             [% ELSE %]
