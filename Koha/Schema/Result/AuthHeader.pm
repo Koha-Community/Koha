@@ -128,9 +128,26 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("authid");
 
+=head1 RELATIONS
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-10 14:00:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gYG6yQ6EC5gVMZHF1h6MJA
+=head2 import_oai_authorities
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ImportOaiAuthority>
+
+=cut
+
+__PACKAGE__->has_many(
+  "import_oai_authorities",
+  "Koha::Schema::Result::ImportOaiAuthority",
+  { "foreign.authid" => "self.authid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-31 14:45:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQKXXu/9rBZ89hnDzJMsvA
 
 sub koha_object_class {
     'Koha::Authority';

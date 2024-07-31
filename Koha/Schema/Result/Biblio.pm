@@ -360,6 +360,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 import_oai_biblios
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ImportOaiBiblio>
+
+=cut
+
+__PACKAGE__->has_many(
+  "import_oai_biblios",
+  "Koha::Schema::Result::ImportOaiBiblio",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 item_groups
 
 Type: has_many
@@ -616,8 +631,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-05-09 07:11:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AZgt+4mVV/QYtSsdhxmaBQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-31 14:45:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rLzlHl6jAwBmgmiXavpP0w
 
 __PACKAGE__->has_many(
   "biblioitem",
