@@ -9,7 +9,7 @@ $(document).ready(function(){
     // otherwise the deletion confirmation will not work correctly
     $('a[href*="biblionumber="]').off('click');
 
-    if( popup && op != 'saveitem' ){
+    if( popup && op != 'cud-saveitem' ){
         window.close();
     }
 
