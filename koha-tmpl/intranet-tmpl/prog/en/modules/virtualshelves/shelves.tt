@@ -462,6 +462,8 @@
                             [% END %]
                             [% IF shelf.sortfield == "copyrightdate" %]
                                 <option value="copyrightdate" selected="selected">Copyrightdate</option>
+                            [% ELSIF shelf.sortfield == "publicationyear" %]
+                                <option value="publicationyear" selected="selected">Publication year</option>
                             [% ELSE %]
                                 <option value="copyrightdate">Copyrightdate</option>
                             [% END %]
