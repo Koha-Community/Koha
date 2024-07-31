@@ -554,7 +554,7 @@
         $(document).ready(function(){
             // keep a copy for re-rendering
             var $funds_tree = $('#bookfund').html();
-            var base_query = { "order_id": {"in": [[% multiple_orders | html %]]}};
+            var base_query = { "order_id": {"-in": [[% multiple_orders | html %]]}};
             var pending_orders_url = "/api/v1/acquisitions/orders?only_active=1";
             var options = {
                 "ajax": {
