@@ -90,23 +90,78 @@ my $builder = sub {
     # default js body (if not filled by hbyymmincr)
     $scr or $scr = <<END_OF_JS;
 if (\$('#' + id).val() == '' || force) {
-    \$('#' + id).val('$nextnum');
+    if ( autobarcodetype == "annual"){
+        const [prefix, numberStr] = '$nextnum'.split('-');
+        const incrementedNumber = parseInt(numberStr, 10) + offset;
+        const newNumberStr = incrementedNumber.toString().padStart(numberStr.length, '0');
+        \$('#' + id).val(prefix + '-' + newNumberStr);
+    }
+    else if ( autobarcodetype == "EAN13" ) {
+        \$('#' + id).val(incrementEAN13($nextnum, offset));
+    }
+    else if ( incremental_barcode ) {
+        \$('#' + id).val($nextnum + offset);
+    }
+    else {
+        \$('#' + id).val('$nextnum');
+    }
 };
 END_OF_JS
 
     my $js  = <<END_OF_JS;
 <script>
-function set_barcode(id, force) {
+if(typeof autobarcodetype == 'undefined') {
+    var autobarcodetype = "$autoBarcodeType";
+    var attempt = -1
+    var incrementalBarcodeTypes = ["hbyymmincr", "incremental", "annual", "EAN13"];
+    var incremental_barcode = incrementalBarcodeTypes.includes(autobarcodetype);
+}
+
+function set_barcode(id, force, offset=0) {
 $scr
 }
 
+function calculateChecksum(ean12) {
+    let sum = 0;
+    for (let i = 0; i < ean12.length; i++) {
+        const digit = parseInt(ean12[i], 10);
+        sum += (i % 2 === 0) ? digit : digit * 3;
+    }
+    const checksum = (10 - (sum % 10)) % 10;
+    return checksum;
+}
+
+function incrementEAN13(ean13, offset) {
+    // Increment the first 12 digits and recompute the checksum
+    let ean12 = String(ean13).slice(0, 12);
+    let incrementedNumber = (parseInt(ean12, 10) + offset).toString().padStart(12, '0');
+    const newChecksum = calculateChecksum(incrementedNumber);
+    return incrementedNumber + newChecksum;
+}
+
 function Focus$function_name(event) {
-    set_barcode(event.data.id, false);
+    if (incremental_barcode){
+        if (document.getElementById(event.data.id).value == ''){
+            attempt += 1
+        }
+        set_barcode(event.data.id, false, attempt);
+    }
+    else{
+        set_barcode(event.data.id, false);
+    }
     return false;
 }
 
 function Click$function_name(event) {
-    set_barcode(event.data.id, true);
+    if (incremental_barcode){
+        if (document.getElementById(event.data.id).value == ''){
+            attempt += 1
+        }
+        set_barcode(event.data.id, false, attempt);
+    }
+    else{
+        set_barcode(event.data.id, false);
+    }
     return false;
 }
 </script>

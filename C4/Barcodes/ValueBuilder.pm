@@ -63,8 +63,11 @@ sub get_barcode {
                             .siblings("select")
                             .val();
 
+        if(typeof offset == 'undefined'){
+            var offset = 0;
+        }
         if ( \$(elt).val() == '' ) {
-            \$(elt).val(homebranch + '$nextnum');
+            \$(elt).val(homebranch + ($nextnum + offset));
         }
     ~;
     return $nextnum, $scr;
