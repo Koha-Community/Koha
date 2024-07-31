@@ -17,9 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::MarcOrder;
+use Koha::MarcOrderAccount;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Bookseller;
 use MARC::Record;
@@ -28,6 +29,10 @@ use Koha::Database;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+
+use File::Temp qw|tempfile|;
+use MARC::Field;
+use MARC::File::XML;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -335,33 +340,24 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
     my $client_item_fields = {
         'notforloans' => [
             '',
-            ''
         ],
         'c_budget_id'       => 2,
         'replacementprices' => [
             '0.00',
-            '0.00'
         ],
         'uris' => [
             '',
-            ''
         ],
         'c_replacement_price' => '0.00',
-        'public_notes'        => [
+        'public_notes'        => [''],
+        'itemcallnumbers'     => [
             '',
-            ''
-        ],
-        'itemcallnumbers' => [
-            '',
-            ''
         ],
         'budget_codes' => [
             '',
-            ''
         ],
         'nonpublic_notes' => [
             '',
-            ''
         ],
         'homebranches' => [
             $branchcode,
@@ -369,7 +365,6 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         ],
         'copynos' => [
             '',
-            ''
         ],
         'holdingbranches' => [
             $branchcode,
@@ -377,7 +372,6 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         ],
         'ccodes' => [
             '',
-            ''
         ],
         'locs' => [
             '',
@@ -385,7 +379,6 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         ],
         'itemprices' => [
             '10.00',
-            '10.00'
         ],
         'c_discount' => '',
         'c_price'    => '0.00',
@@ -394,7 +387,6 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         'c_quantity' => '1',
         'itypes'     => [
             'BK',
-            'BK'
         ],
         'coded_location_qualifiers' => [],
         'barcodes'                  => [],
@@ -426,7 +418,7 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         "Listprice has been created successfully"
     );
     is(
-        @{$orders}[0]->{quantity}, 2,
+        @{$orders}[0]->{quantity}, 1,
         "Quantity has been read correctly"
     );
     is(
@@ -448,3 +440,59 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'match_file_to_account' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my ( $fh, $name ) = tempfile( SUFFIX => '.marcxml' );
+
+    my $rec = MARC::Record->new;
+    my $fld = MARC::Field->new( '975', '', '', 'p', '12345' );
+    $rec->append_fields($fld);
+    my $str = $rec->as_xml;
+
+    print $fh $str;
+
+    close $fh;
+
+    my $account1 = Koha::MarcOrderAccount->new(
+        {
+            match_field => '975$p',
+            match_value => '12345',
+            encoding    => 'UTF-8',
+            description => 'test',
+        }
+    )->store;
+
+    my $file_match = Koha::MarcOrder->match_file_to_account(
+        {
+            filename => $name,
+            filepath => $name,
+            profile  => $account1,
+        }
+    );
+
+    is( $file_match, 1, 'File matched correctly to the account' );
+
+    my $account2 = Koha::MarcOrderAccount->new(
+        {
+            match_field => '975$p',
+            match_value => 'abcde',
+            encoding    => 'UTF-8',
+            description => 'test',
+        }
+    )->store;
+
+    my $file_match2 = Koha::MarcOrder->match_file_to_account(
+        {
+            filename => $name,
+            filepath => $name,
+            profile  => $account2,
+        }
+    );
+
+    is( $file_match2, 0, 'File not matched to the account' );
+
+    $schema->storage->txn_rollback;
+};
