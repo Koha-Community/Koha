@@ -207,14 +207,14 @@ sub add_debit {
     my $c = shift->openapi->valid_input or return;
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
+    my $user   = $c->stash('koha.user');
 
     return $c->render_resource_not_found("Patron")
-        unless $patron;
+      unless $patron;
 
     return try {
         my $data =
-          Koha::Account::Debit->new_from_api( $c->req->json )
-          ->unblessed;
+          Koha::Account::Debit->new_from_api( $c->req->json )->unblessed;
 
         $data->{library_id}       = delete $data->{branchcode};
         $data->{type}             = delete $data->{debit_type_code};
@@ -223,11 +223,10 @@ sub add_debit {
         $data->{transaction_type} = delete $data->{payment_type};
         $data->{interface}        = 'api'
           ; # Should this always be API, or should we allow the API consumer to choose?
-        $data->{user_id} = $patron->borrowernumber
-          ; # Should this be API user OR staff the API may be acting on behalf of?
+        $data->{user_id} = delete $data->{manager_id} || $user->id;
 
         my $debit = $patron->account->add_debit($data);
-        $debit = Koha::Account::Debit->_new_from_dbic($debit->{_result});
+        $debit = Koha::Account::Debit->_new_from_dbic( $debit->{_result} );
 
         $c->res->headers->location(
             $c->req->url->to_string . '/' . $debit->id );
@@ -248,13 +247,13 @@ sub add_debit {
             }
             elsif ( $_->isa('Koha::Exceptions::Account::AmountNotPositive') ) {
                 return $c->render(
-                    status => 400,
+                    status  => 400,
                     openapi => { error => $_->description }
                 );
             }
             elsif ( $_->isa('Koha::Exceptions::Account::UnrecognisedType') ) {
                 return $c->render(
-                    status => 400,
+                    status  => 400,
                     openapi => { error => $_->description }
                 );
             }
