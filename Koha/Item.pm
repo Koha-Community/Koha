@@ -1032,7 +1032,15 @@ is not passed.
 sub pickup_locations {
     my ( $self, $params ) = @_;
 
-    return Koha::Libraries->search( { branchcode => $self->holdingbranch } ) if C4::Context->preference("IndependentBranches") && !C4::Context->IsSuperLibrarian();
+    if ( C4::Context->preference("IndependentBranches")
+        and !C4::Context->preference("canreservefromotherbranches") )
+    {
+        my $userenv = C4::Context->userenv;
+        unless ( C4::Context->IsSuperLibrarian ) {
+            return Koha::Libraries->new()->empty if ( $self->homebranch ne $userenv->{branch} );
+            return Koha::Libraries->search( { branchcode => $self->homebranch } );
+        }
+    }
 
     Koha::Exceptions::MissingParameter->throw( parameter => 'patron' )
         unless exists $params->{patron};
