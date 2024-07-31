@@ -371,50 +371,57 @@ subtest 'list_debits() test' => sub {
 
 subtest 'add_debit() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object(
+    my $librarian = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => { flags => 1 }
         }
     );
     my $password = 'thePassword123';
-    $patron->set_password( { password => $password, skip_validation => 1 } );
-    my $userid = $patron->userid;
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+    my $librarian_x = $builder->build_object({ class => 'Koha::Patrons' });
 
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
     my $library   = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_id = $patron->id;
     my $account   = $patron->account;
 
-    is( $account->outstanding_debits->count,
-        0, 'No outstanding debits for patron' );
-    is( $account->outstanding_credits->count,
-        0, 'No outstanding credits for patron' );
+    is(
+        $account->outstanding_debits->count,
+        0, 'No outstanding debits for patron'
+    );
+    is(
+        $account->outstanding_credits->count,
+        0, 'No outstanding credits for patron'
+    );
 
     my $debit = {
         amount      => 100,
         description => "A description",
         type        => "NEW_CARD",
-        user_id     => $patron->borrowernumber,
+        user_id     => $librarian_x->id,
         interface   => 'test',
         library_id  => $library->id,
     };
 
-    my $ret = $t->post_ok(
-        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
-          json => $debit )->status_is(201)->tx->res->json;
+    my $ret = $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $debit )
+        ->status_is(201)->json_is( '/user_id' => $librarian_x->id, 'Passed user_id is stored' )->tx->res->json;
     my $account_line = Koha::Account::Debits->find( $ret->{account_line_id} );
 
     is_deeply( $ret, $account_line->to_api, 'Line returned correctly' );
 
-    is( $account_line->branchcode,
-        $library->id, 'Library id is stored correctly' );
+    is(
+        $account_line->branchcode,
+        $library->id, 'Library id is stored correctly'
+    );
 
     my $outstanding_debits = $account->outstanding_debits;
-    is( $outstanding_debits->count,             1, "One outstanding debit added" );
+    is( $outstanding_debits->count,             1,   "One outstanding debit added" );
     is( $outstanding_debits->total_outstanding, 100, "Outstanding debit is 100" );
 
     my $credit_1 = $account->add_credit(
@@ -431,17 +438,19 @@ subtest 'add_debit() tests' => sub {
     )->store()->apply( { debits => [$account_line] } );
 
     is( $account->outstanding_credits->total_outstanding, 0, "Credits all applied" );
-    is( $account->outstanding_debits->total_outstanding,
-        75, "Credits partially cancelled debit" );
+    is(
+        $account->outstanding_debits->total_outstanding,
+        75, "Credits partially cancelled debit"
+    );
 
     my $account_line_id = $ret->{account_line_id};
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
-          json => $debit )->status_is(201);
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $debit )->status_is(201);
 
-    is( $account->outstanding_debits->total_outstanding,
-        175, "Debit added to total outstanding debits" );
+    is(
+        $account->outstanding_debits->total_outstanding,
+        175, "Debit added to total outstanding debits"
+    );
 
     # Cash register handling and PAYOUTs
     t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
@@ -450,25 +459,19 @@ subtest 'add_debit() tests' => sub {
         description => "A description",
         type        => "PAYOUT",
         payout_type => "CASH",
-        user_id     => $patron->borrowernumber,
         interface   => 'test',
         library_id  => $library->id,
     };
 
-    $t->post_ok(
-        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
-          json => $payout )->status_is(400)
-      ->json_is( '/error' => 'Account transaction requires a cash register' );
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $payout )->status_is(400)
+        ->json_is( '/error' => 'Account transaction requires a cash register' );
 
-    my $register = $builder->build_object(
-        {
-            class => 'Koha::Cash::Registers',
-        }
-    );
+    my $register = $builder->build_object( { class => 'Koha::Cash::Registers', } );
     $payout->{cash_register_id} = $register->id;
-    my $res = $t->post_ok(
-        "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" =>
-          json => $payout )->status_is(201)->tx->res->json;
+    my $res = $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $payout )
+        ->status_is(201)->tx->res->json;
+
+    is( $res->{user_id}, $librarian->id, 'If not passed, the session user ID is picked' );
 
     $schema->storage->txn_rollback;
 };
