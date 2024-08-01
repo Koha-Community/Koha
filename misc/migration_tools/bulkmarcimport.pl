@@ -613,7 +613,6 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                         AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, $framework );
                 };
                 my $error_adding = $@;
-                $record_has_added_items = @{$itemnumbers_ref};
 
                 if ($error_adding) {
                     warn "ERROR: Adding items to bib $record_id failed: $error_adding";
@@ -623,6 +622,9 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                     # the MARC columns in biblioitems were not set.
                     next RECORD;
                 }
+
+                $record_has_added_items = @{$itemnumbers_ref};
+
                 if ( $dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' }
                     @$errors_ref )
                 {
