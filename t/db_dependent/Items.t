@@ -20,7 +20,7 @@ use Data::Dumper;
 
 use MARC::Record;
 use C4::Items
-    qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc ModDateLastSeen CartToShelf );
+    qw( ModItemTransfer SearchItems AddItemFromMarc ModItemFromMarc get_hostitemnumbers_of Item2Marc ModDateLastSeen CartToShelf CheckItemPreSave );
 use C4::Biblio qw( GetMarcFromKohaField AddBiblio );
 use C4::Circulation qw( AddIssue );
 use Koha::BackgroundJobs;
@@ -36,7 +36,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Test::Warn;
 
@@ -125,6 +125,28 @@ subtest 'General Add, Get and Del tests' => sub {
     t::lib::Mocks::mock_preference('item-level_itypes', '0');
     $getitem = Koha::Items->find($itemnumber);
     is( $getitem->effective_itemtype, $biblio->biblioitem->itemtype, "Itemtype set correctly when not using item-level_itypes" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CheckItemPreSave tests' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = Koha::Items->find( { barcode => 'SPAGHETTI' } );
+    $item = $builder->build_sample_item( { barcode => "SPAGHETTI" } ) unless $item;
+
+    my $check_item = $item->unblessed;
+    delete $check_item->{itemnumber};
+    $check_item->{barcode} = " SPAGHETTI";
+
+    my %errors = CheckItemPreSave($check_item);
+    is_deeply(
+        \%errors, { duplicate_barcode => " SPAGHETTI" },
+        "We get a duplicate item error for barcode even if whitespace"
+    );
 
     $schema->storage->txn_rollback;
 };
