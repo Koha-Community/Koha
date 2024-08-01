@@ -191,7 +191,7 @@ sub Z3950Search {
                             push @errconn, { server => $servers[$k]->{servername}, error => $error, seq => $i+1 } if $error;
                         }
                         else {
-                            push @errconn, { 'server' => $servers[$k]->{servername}, error => ( ( $oConnection[$k]->error_x() )[0] ), seq => $i+1 };
+                            push @errconn, { 'server' => $servers[$k]->{servername}, error => ( ( $oConnection[$k]->error_x() )[0] ), error_msg => ( ( $oConnection[$k]->error_x() )[1] ), seq => $i+1 };
                         }
                     }
                 }    #if $numresults
