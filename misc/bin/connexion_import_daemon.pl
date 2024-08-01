@@ -104,7 +104,7 @@ use MARC::File::XML;
 
 use constant CLIENT_READ_TIMEOUT     => 5;
 use constant CLIENT_READ_BUFFER_SIZE => 100000;
-use constant AUTH_URI       => "/cgi-bin/koha/mainpage.pl";
+use constant AUTH_URI       => "/cgi-bin/koha/svc/authentication";
 use constant IMPORT_SVC_URI => "/cgi-bin/koha/svc/import_bib";
 
 sub new {
@@ -239,6 +239,32 @@ sub _ua {
     return $ua;
 }
 
+sub get_current_csrf_token {
+    my $self = shift;
+    my $ua = $self->{ua};
+    my $url = $self->{koha} . AUTH_URI;
+    return $ua->get($url)->header('CSRF-TOKEN');
+}
+
+sub authenticate {
+    my $self = shift;
+    my $ua = $self->{ua};
+    my $url = $self->{koha} . AUTH_URI;
+    my $resp = $ua->post(
+        $url,
+        {
+            login_userid => $self->{user},
+            login_password => $self->{password},
+            csrf_token => $self->get_current_csrf_token,
+        }
+    );
+    if ( !$resp->is_success ) {
+        $self->log("Authentication failed", $resp->request->as_string, $resp->as_string);
+        return;
+    }
+    return $resp->header('CSRF-TOKEN');
+}
+
 sub read_request {
     my ( $self, $io ) = @_;
 
@@ -355,38 +381,34 @@ sub handle_request {
     }
 
     my $base_url = $self->{koha};
+    my $post_body = {
+        'nomatch_action'    => $self->{params}->{nomatch_action},
+        'overlay_action'    => $self->{params}->{overlay_action},
+        'match'             => $self->{params}->{match},
+        'import_mode'       => $self->{params}->{import_mode},
+        'framework'         => $self->{params}->{framework},
+        'overlay_framework' => $self->{params}->{overlay_framework},
+        'item_action'       => $self->{params}->{item_action},
+        'xml'               => $data
+    };
+
+    # If we have a token, try it, else, authenticate for the first time.
+    $self->{csrf_token} = $self->authenticate unless $self->{csrf_token};
     my $resp = $ua->post(
         $base_url . IMPORT_SVC_URI,
-        {
-            'nomatch_action'    => $self->{params}->{nomatch_action},
-            'overlay_action'    => $self->{params}->{overlay_action},
-            'match'             => $self->{params}->{match},
-            'import_mode'       => $self->{params}->{import_mode},
-            'framework'         => $self->{params}->{framework},
-            'overlay_framework' => $self->{params}->{overlay_framework},
-            'item_action'       => $self->{params}->{item_action},
-            'xml'               => $data
-        }
+        $post_body,
+        csrf_token => $self->{csrf_token},
     );
 
     my $status = $resp->code;
     if ( $status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN ) {
-        my $user     = $self->{user};
-        my $password = $self->{password};
-        $resp = $ua->post( $base_url . AUTH_URI, { userid => $user, password => $password } );
+        # Our token might have expired. Re-authenticate and post again.
+        $self->{csrf_token} = $self->authenticate;
         $resp = $ua->post(
             $base_url . IMPORT_SVC_URI,
-            {
-                'nomatch_action'    => $self->{params}->{nomatch_action},
-                'overlay_action'    => $self->{params}->{overlay_action},
-                'match'             => $self->{params}->{match},
-                'import_mode'       => $self->{params}->{import_mode},
-                'framework'         => $self->{params}->{framework},
-                'overlay_framework' => $self->{params}->{overlay_framework},
-                'item_action'       => $self->{params}->{item_action},
-                'xml'               => $data
-            }
-        ) if $resp->is_success;
+            $post_body,
+            csrf_token => $self->{csrf_token},
+        )
     }
     unless ($resp->is_success) {
         $self->log("Unsuccessful request", $resp->request->as_string, $resp->as_string);
