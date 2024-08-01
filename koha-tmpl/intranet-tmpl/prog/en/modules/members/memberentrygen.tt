@@ -217,6 +217,9 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     [% IF ( ERROR_cannot_delete_guarantor ) %]
                                         <li id="ERROR_cannot_delete_guarantor">Cannot delete guarantor(s). A child patron needs a guarantor.</li>
                                     [% END %]
+                                    [% IF ( ERROR_invalid_relationship ) %]
+                                        <li id="ERROR_invalid_relationship">Guarantor relationship is invalid.</li>
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]
@@ -556,7 +559,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                                             [% END %]
                                                                         [% END %]
                                                                     </select>
-                                                                    [% UNLESS mandatoryrelationship %]
+                                                                    [% IF mandatoryrelationship %]
                                                                         <span class="required">Required</span>
                                                                     [% END %]
                                                                 </li>
