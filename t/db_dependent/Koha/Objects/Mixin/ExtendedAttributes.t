@@ -44,13 +44,13 @@ subtest 'extended_attributes patrons join searches() tests' => sub {
     my $attribute_type_1 = $builder->build(
         {
             source => 'BorrowerAttributeType',
-            value => { repeatable => 1, is_date => 0, code => 'CODE_1' },
+            value  => { repeatable => 1, is_date => 0, code => 'CODE_1' },
         }
     );
     my $attribute_type_2 = $builder->build(
         {
             source => 'BorrowerAttributeType',
-            value => { repeatable => 1, is_date => 0, code => 'CODE_2' }
+            value  => { repeatable => 1, is_date => 0, code => 'CODE_2' }
         }
     );
 
@@ -71,7 +71,7 @@ subtest 'extended_attributes patrons join searches() tests' => sub {
 
     my $patrons_search = Koha::Patrons->search(
         [
-            '-and'=>[
+            '-and' => [
                 {
                     'extended_attributes.attribute' => { 'like' => '%Bar%' },
                     'extended_attributes.code'      => $attr1->code
@@ -104,7 +104,6 @@ subtest 'extended_attributes patrons join searches() tests' => sub {
     );
 
     is( $patrons_search2->count, 0, "Second patrons extended_attribute 'AND' query works." );
-
 
     my $patrons_search3 = Koha::Patrons->search(
         [

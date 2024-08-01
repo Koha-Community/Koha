@@ -200,7 +200,7 @@ sub _rewrite_related_metadata_query {
 sub _build_extended_attributes_relations {
     my ( $self, $types ) = @_;
 
-    return if( !grep ( /extended_attributes/, keys %{$self->_resultset->result_source->_relationships} ) );
+    return if ( !grep ( /extended_attributes/, keys %{ $self->_resultset->result_source->_relationships } ) );
 
     my $ea_config = $self->extended_attributes_config;
 

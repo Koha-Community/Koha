@@ -571,7 +571,7 @@ sub filter_by_have_permission {
 =cut
 
 sub extended_attributes_config {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return {
         'id_field'     => { 'foreign' => 'borrowernumber', 'self' => 'borrowernumber' },
         'key_field'    => 'code',

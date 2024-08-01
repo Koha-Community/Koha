@@ -22,7 +22,6 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::ILL::Request;
 use Koha::ILL::Request::Config;
-use Koha::Objects::Mixin::ExtendedAttributes;
 
 use base qw(Koha::Objects::Mixin::ExtendedAttributes Koha::Objects);
 
@@ -112,7 +111,7 @@ sub search_incomplete {
 =cut
 
 sub extended_attributes_config {
-    my ( $self ) = @_;
+    my ($self) = @_;
     return {
         'id_field'     => { 'foreign' => 'illrequest_id', 'self' => 'illrequest_id' },
         'key_field'    => 'type',
