@@ -38,61 +38,65 @@ my $cgi = CGI->new;
 my $format = $cgi->param('format');
 my $template_name = 'catalogue/itemsearch.tt';
 
-if (defined $format and $format eq 'json') {
+if ( defined $format and $format eq 'json' ) {
     $template_name = 'catalogue/itemsearch_json.tt';
 
     # Map DataTables parameters with 'regular' parameters
-    $cgi->param('rows', scalar $cgi->param('length'));
-    $cgi->param('page', (scalar $cgi->param('start') / scalar $cgi->param('length')) + 1);
+    $cgi->param( 'rows', scalar $cgi->param('length') );
+    $cgi->param( 'page', ( scalar $cgi->param('start') / scalar $cgi->param('length') ) + 1 );
     my @columns = @{ from_json $cgi->param('columns') };
-    $cgi->param('sortby', $columns[ $cgi->param('order[0][column]') ]->{name});
-    $cgi->param('sortorder', scalar $cgi->param('order[0][dir]'));
+    $cgi->param( 'sortby',    $columns[ $cgi->param('order[0][column]') ]->{name} );
+    $cgi->param( 'sortorder', scalar $cgi->param('order[0][dir]') );
 
     my @f = $cgi->multi_param('f');
     my @q = $cgi->multi_param('q');
 
     # If index indicates the value is a barcode, we need to preprocess it before searching
-    for ( my $i = 0; $i < @q; $i++ ) {
-        $q[$i] = barcodedecode($q[$i]) if $f[$i] eq 'barcode';
+    for ( my $i = 0 ; $i < @q ; $i++ ) {
+        $q[$i] = barcodedecode( $q[$i] ) if $f[$i] eq 'barcode';
     }
 
     push @q, '' if @q == 0;
     my @op = $cgi->multi_param('op');
-    my @c = $cgi->multi_param('c');
+    my @c  = $cgi->multi_param('c');
     for my $column (@columns) {
-        my $search = $column->{search}->{value};
+        my $search      = $column->{search}->{value};
         my $column_name = $column->{name};
-        if (defined $search and $search ne '') {
+        if ( defined $search and $search ne '' ) {
             my @words = split /\s+/, $search;
             foreach my $word (@words) {
                 push @f, $column_name;
                 push @c, 'and';
 
-                if ( grep { $_ eq $column_name } qw( ccode homebranch holdingbranch location itype notforloan itemlost onloan ) ) {
-                    push @q, "$word";
+                if ( grep { $_ eq $column_name }
+                    qw( ccode homebranch holdingbranch location itype notforloan itemlost onloan ) )
+                {
+                    push @q,  "$word";
                     push @op, '=';
                 } else {
-                    push @q, "%$word%";
+                    push @q,  "%$word%";
                     push @op, 'like';
                 }
             }
         }
     }
-    $cgi->param('f', @f);
-    $cgi->param('q', @q);
-    $cgi->param('op', @op);
-    $cgi->param('c', @c);
-} elsif (defined $format and $format eq 'csv') {
+    $cgi->param( 'f',  @f );
+    $cgi->param( 'q',  @q );
+    $cgi->param( 'op', @op );
+    $cgi->param( 'c',  @c );
+} elsif ( defined $format and $format eq 'csv' ) {
     $template_name = 'catalogue/itemsearch_csv.tt';
 
     # Retrieve all results
-    $cgi->param('rows', 0);
-} elsif (defined $format and $format eq 'barcodes') {
+    $cgi->param( 'rows', 0 );
+} elsif ( defined $format and $format eq 'barcodes' ) {
+
     # Retrieve all results
-    $cgi->param('rows', 0);
-} elsif (defined $format and $format eq 'shareable') {
+    $cgi->param( 'rows', 0 );
+} elsif ( defined $format and $format eq 'shareable' ) {
+
     # get the item search parameters from the url and fill form
-} elsif (defined $format) {
+} elsif ( defined $format ) {
     die "Unsupported format $format";
 }
 
