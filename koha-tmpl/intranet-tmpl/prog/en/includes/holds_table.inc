@@ -190,7 +190,7 @@
                                         </option>
                                         <option value="1">Next available</option>
                                     </select>
-                                    [%- IF ( hold.barcodenumber ) -%]
+                                    [%- IF ( hold.itemnumber ) -%]
                                         <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
                                     [%- END -%]
                                     [%- IF hold.itemtype -%]
