@@ -287,6 +287,22 @@ foreach my $guarantor (@guarantors) {
     }
 }
 
+my @valid_relationships = split(/\|/, C4::Context->preference('borrowerRelationship'), -1);
+if (@valid_relationships) {
+    my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
+    my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
+
+    for ( my $i = 0 ; $i < scalar @new_guarantor_id; $i++ ) {
+        my $guarantor_id = $new_guarantor_id[$i];
+        my $relationship = $new_guarantor_relationship[$i];
+
+        next unless $guarantor_id;
+        unless ( grep { $_ eq $relationship } @valid_relationships ) {
+            push @errors, 'ERROR_invalid_relationship';
+        }
+    }
+}
+
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
 $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
