@@ -156,14 +156,14 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "CASCADE",
+    on_delete     => "RESTRICT",
     on_update     => "CASCADE",
   },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-26 13:23:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pQ87jRoTMpqkm8GPh/tpHQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-01 15:57:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ar73Sy86oYHspxu0udvnoA
 
 sub koha_object_class {
     'Koha::Biblio::Metadata';
