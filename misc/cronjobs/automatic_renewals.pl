@@ -213,7 +213,13 @@ sub _ProcessRenewals {
             $wants_digest   = 0;
         }
 
-        my ( $success, $error, $updated ) = $auto_renew->attempt_auto_renew( { confirm => $confirm } );
+        my ( $success, $error, $updated );
+        eval { ( $success, $error, $updated ) = $auto_renew->attempt_auto_renew( { confirm => $confirm } ); };
+        if ($@) {
+            print "An error was encountered in processing auto renewal for issue id: " . $auto_renew->issue_id . "\n";
+            print "$@ \n";
+            next;
+        }
         if ($success) {
             if ($verbose) {
                 say sprintf "Issue id: %s for borrower: %s and item: %s %s be renewed.",
