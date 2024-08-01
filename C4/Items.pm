@@ -45,6 +45,7 @@ BEGIN {
 }
 
 use Carp qw( croak );
+use C4::Circulation qw( barcodedecode );
 use C4::Context;
 use C4::Koha;
 use C4::Biblio qw( GetMarcStructure TransformMarcToKoha );
@@ -493,11 +494,15 @@ sub CheckItemPreSave {
     my %errors = ();
 
     # check for duplicate barcode
-    if (exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'}) {
-        my $existing_item= Koha::Items->find({barcode => $item_ref->{'barcode'}});
+    if ( exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'} ) {
+        my $barcode       = C4::Circulation::barcodedecode( $item_ref->{'barcode'} );
+        my $existing_item = Koha::Items->find( { barcode => $barcode } );
         if ($existing_item) {
-            if (!exists $item_ref->{'itemnumber'}                       # new item
-                or $item_ref->{'itemnumber'} != $existing_item->itemnumber) { # existing item
+            if (
+                !exists $item_ref->{'itemnumber'}    # new item
+                or $item_ref->{'itemnumber'} != $existing_item->itemnumber
+                )
+            {                                        # existing item
                 $errors{'duplicate_barcode'} = $item_ref->{'barcode'};
             }
         }
