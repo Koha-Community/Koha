@@ -110,7 +110,8 @@ sub new {
 
     my $resp = $ua->post(
         "$url/authentication",
-        { login_userid => $user, login_password => $password, csrf_token => $csrf_token }
+        'Csrf-Token' => $csrf_token,
+        'Content'    => { login_userid => $user, login_password => $password }
     );
     die $resp->status_line unless $resp->is_success;
 
@@ -152,9 +153,11 @@ sub post {
     my $url = $self->{url};
     warn "# post $url/bib/$biblionumber\n" if $self->{debug};
     my $csrf_token = $self->{csrf_token};
-    my $resp       = $self->{ua}->post(
-        "$url/bib/$biblionumber", 'Content_type' => 'text/xml', Content => $marcxml,
-        csrf_token => $csrf_token
+    my $resp = $self->{ua}->post(
+        "$url/bib/$biblionumber",
+        'Content_type' => 'text/xml',
+        'Csrf_Token'   => $csrf_token,
+        'Content'      => $marcxml,
     );
     die $resp->status_line unless $resp->is_success;
     return $resp->decoded_content;
