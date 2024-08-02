@@ -1,0 +1,19 @@
+---
+type: object
+properties:
+  context:
+    type: object
+    properties:
+      patron_category_id:
+        type: string
+        description: Patron category id
+      library_id:
+        type: string
+        description: Library branch id
+      item_type_id:
+        type: string
+        description: Item type id
+    description: Context of the ruleset
+additionalProperties: true
+required:
+  - context

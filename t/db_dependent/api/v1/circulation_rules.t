@@ -143,8 +143,12 @@ subtest 'list_rules() tests' => sub {
         ->json_is( '/0/finedays' => 5, "Default finedays rule returned when no library is added to request query" );
 
     # Limit to only rules we're interested in
-    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules=fine,finedays")->status_is(200)
-        ->json_is( '/0' => { fine => 2, finedays => 5 }, "Only the two rules we asked for are returned" );
+    $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules=fine,finedays")->status_is(200)->json_is(
+        '/0' => {
+            context => { item_type_id => '*', patron_category_id => '*', library_id => '*' }, fine => 2, finedays => 5
+        },
+        "Only the two rules we asked for are returned"
+    );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/circulation_rules?rules_blah=blah")->status_is(400)
@@ -236,9 +240,9 @@ subtest 'list_rules() tests' => sub {
 
             # First rule set should march default, default, default
             if ( $index == 0 ) {
-                ok(        $pointer->get('/branchcode') eq "*"
-                        && $pointer->get('/itemtype') eq '*'
-                        && $pointer->get('/categorycode') eq '*', "Default rules returned first" );
+                ok(        $pointer->get('/context/library_id') eq "*"
+                        && $pointer->get('/context/item_type_id') eq '*'
+                        && $pointer->get('/context/patron_category_id') eq '*', "Default rules returned first" );
             }
 
             # Iterate over the list of expected keys for each hash
@@ -265,9 +269,12 @@ subtest 'list_rules() tests' => sub {
 
             # First (and only) rule set should match branchcode, default, default.
             if ( $index == 0 ) {
-                ok(        $pointer->get('/branchcode') eq $branchcode
-                        && $pointer->get('/itemtype') eq '*'
-                        && $pointer->get('/categorycode') eq '*', "Branchcode rule set returned when filtered" );
+                ok(
+                           $pointer->get('/context/library_id') eq $branchcode
+                        && $pointer->get('/context/item_type_id') eq '*'
+                        && $pointer->get('/context/patron_category_id') eq '*',
+                    "Branchcode rule set returned when filtered"
+                );
             }
 
             # Iterate over the list of expected keys for each hash
