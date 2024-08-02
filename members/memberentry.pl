@@ -82,6 +82,7 @@ my $check_member = $input->param('check_member');
 my $nodouble     = $input->param('nodouble');
 my $duplicate    = $input->param('duplicate');
 my $quickadd     = $input->param('quickadd');
+my $check_patron;
 
 $nodouble = 1 if ($op eq 'edit_form' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
                                      # modifying an existing patron, it ipso facto
@@ -249,8 +250,9 @@ if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
     $nodouble = 1;
     my $patrons = Koha::Patrons->search($conditions); # FIXME Should be search_limited?
     if ( $patrons->count > 0) {
-        $nodouble = 0;
-        $check_member = $patrons->next->borrowernumber;
+        $nodouble     = 0;
+        $check_patron = $patrons->next;
+        $check_member = $check_patron->borrowernumber;
     }
 }
 
@@ -789,6 +791,7 @@ $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   destination   => $destination,#to know where u come from and where u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
+  check_patron    => $check_patron
 );
 
 $template->param(

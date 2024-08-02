@@ -143,7 +143,10 @@ legend.collapsed i.fa.fa-caret-down::before {
                         [% IF ( check_member ) %]
                             <div class="dialog alert">
                                 <h3>Duplicate patron record?</h3>
-                                <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
+                                <p>[%- INCLUDE 'patron-title.inc' patron => check_patron hide_patron_infos_if_needed => 1 -%]</p>
+                                [% IF logged_in_user.can_see_patron_infos( check_patron ) %]
+                                    <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
+                                [% END %]
                                 <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&borrowernumber=[% check_member | uri %]" class="btn btn-default" id="duplicate"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> It is a duplicate. Edit existing record </a>
                                 <button type="submit" id="not-duplicate" class="new"> <i class="fa fa-plus"></i> Not a duplicate. Save as new record </button>
                             </div>
