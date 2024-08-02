@@ -107,13 +107,16 @@ sub new {
 
     my $get_resp   = $ua->get("$url/authentication");
     my $csrf_token = $get_resp->header('CSRF-TOKEN');
-    $self->{csrf_token} = $csrf_token;
 
     my $resp = $ua->post(
         "$url/authentication",
         { login_userid => $user, login_password => $password, csrf_token => $csrf_token }
     );
     die $resp->status_line unless $resp->is_success;
+
+    #NOTE: A successful authentication means we have a new CGISESSID and a new CSRF Token
+    $csrf_token = $resp->header('CSRF-TOKEN');
+    $self->{csrf_token} = $csrf_token;
 
     warn "# $user $url = ", $resp->decoded_content, "\n" if $self->{debug};
 
