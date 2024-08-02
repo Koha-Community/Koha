@@ -95,15 +95,15 @@ Specified user must have C<editcatalogue> permission.
 
 sub new {
     my $class = shift;
-    my $self = {@_};
+    my $self  = {@_};
     bless $self, $class;
 
-    my $url = $self->{url} || die "no url found";
-    my $user = $self->{user} || die "no user specified";
+    my $url      = $self->{url}      || die "no url found";
+    my $user     = $self->{user}     || die "no user specified";
     my $password = $self->{password} || die "no password";
 
     my $ua = LWP::UserAgent->new();
-    $ua->cookie_jar({});
+    $ua->cookie_jar( {} );
 
     my $get_resp   = $ua->get("$url/authentication");
     my $csrf_token = $get_resp->header('CSRF-TOKEN');
@@ -149,11 +149,11 @@ sub get {
 =cut
 
 sub post {
-    my ($self,$biblionumber,$marcxml) = @_;
+    my ( $self, $biblionumber, $marcxml ) = @_;
     my $url = $self->{url};
     warn "# post $url/bib/$biblionumber\n" if $self->{debug};
     my $csrf_token = $self->{csrf_token};
-    my $resp = $self->{ua}->post(
+    my $resp       = $self->{ua}->post(
         "$url/bib/$biblionumber",
         'Content_type' => 'text/xml',
         'Csrf_Token'   => $csrf_token,
