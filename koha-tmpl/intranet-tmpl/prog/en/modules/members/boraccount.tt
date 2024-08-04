@@ -439,8 +439,8 @@
                 var accountline = button.data('accountline');
                 $('#payoutline').val(accountline);
                 var amount = button.data('amount') * -1;
-                $("#paid + span").replaceWith(amount.format_price());
-                $("#amount").attr({ "value": amount, "max": amount, "min": 0 });
+                $("#paid + span").text(amount.format_price());
+                $("#amount").attr({ "value": amount.format_price(), "max": amount, "min": 0 });
                 $("#amount, #payout_transaction_type").focus();
             });
 
@@ -453,8 +453,8 @@
                 var amount = button.data('amount');
                 var amountoutstanding = button.data('amountoutstanding') || 0;
                 var paid = amount - amountoutstanding;
-                $("#paid + span").replaceWith(paid.format_price());
-                $("#returned").attr({ "value": paid, "max": paid, "min": 0 });
+                $("#paid + span").text(paid.format_price());
+                $("#returned").attr({ "value": paid.format_price(), "max": paid.format_price(), "min": 0 });
                 var member = button.data('member');
                 if ( member === '' ) {
                     $("#refund_type option[value='AC']").remove();
@@ -470,9 +470,9 @@
                 $("#item + span").replaceWith(item);
                 var accountline = button.data('accountline');
                 $('#discountline').val(accountline);
-                var amount = button.data('amount');
-                $("#charged + span").replaceWith(amount.format_price());
-                $("#discount").attr({ "max": amount, "min": 0 });
+                var amountoutstanding = button.data('amountoutstanding');
+                $("#charged + span").text(amountoutstanding);
+                $("#discount").attr({ "value": (0).format_price(), "max": amountoutstanding, "min": 0 });
                 $("#discount").focus();
             });
 
