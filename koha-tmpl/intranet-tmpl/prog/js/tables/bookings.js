@@ -3,8 +3,8 @@
 var bookings_table;
 $(document).ready(function () {
     // Load bookings table on tab selection
+    let filter_expired = true;
     $("#bookings-tab").on("click", function () {
-        let filter_expired = true;
         let additional_filters = {
             patron_id: patron_borrowernumber,
             end_date: function () {
