@@ -2,8 +2,10 @@
 // Bookings
 var bookings_table;
 $(document).ready(function () {
+    // Determine whether we have a filtered list
+    let filter_expired = $("#expired_filter").hasClass('filtered');
+
     // Load bookings table on tab selection
-    let filter_expired = true;
     $("#bookings-tab").on("click", function () {
         let additional_filters = {
             patron_id: patron_borrowernumber,
