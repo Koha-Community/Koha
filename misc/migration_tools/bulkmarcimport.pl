@@ -75,6 +75,7 @@ my $framework = '';
 my $localcust;
 my $marc_mod_template    = '';
 my $marc_mod_template_id = -1;
+my $skip_indexing        = 0;
 $| = 1;
 
 GetOptions(
@@ -111,6 +112,7 @@ GetOptions(
     'framework=s'       => \$framework,
     'custom:s'          => \$localcust,
     'marcmodtemplate:s' => \$marc_mod_template,
+    'si|skip_indexing'  => \$skip_indexing,
 );
 
 $biblios ||= !$authorities;
@@ -128,13 +130,15 @@ if ($all) {
 my $using_elastic_search = ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' );
 my $mod_biblio_options   = {
     disable_autolink  => $using_elastic_search,
-    skip_record_index => $using_elastic_search,
+    skip_record_index => $using_elastic_search || $skip_indexing,
     overlay_context   => { source => 'bulkmarcimport' }
 };
 my $add_biblio_options = {
     disable_autolink  => $using_elastic_search,
-    skip_record_index => $using_elastic_search
+    skip_record_index => $using_elastic_search || $skip_indexing
 };
+my $mod_authority_options = { skip_record_index => $using_elastic_search || $skip_indexing };
+my $add_authority_options = { skip_record_index => $using_elastic_search || $skip_indexing };
 
 my @search_engine_record_ids;
 my @search_engine_records;
@@ -467,7 +471,12 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             if ($matched_record_id) {
                 if ($update) {
                     ## Authority has an id and is in database: update
-                    eval { ($authid) = ModAuthority( $matched_record_id, $record, $authtypecode ) };
+                    eval {
+                        ($authid) = ModAuthority(
+                            $matched_record_id, $record, $authtypecode,
+                            $mod_authority_options,
+                        );
+                    };
                     if ($@) {
                         warn "ERROR: Update authority $matched_record_id failed: $@\n";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
@@ -487,7 +496,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 }
             } elsif ($insert) {
                 ## An authid is defined but no authority in database: insert
-                eval { ($authid) = AddAuthority( $record, undef, $authtypecode ) };
+                eval { ($authid) = AddAuthority( $record, undef, $authtypecode, $add_authority_options ); };
                 if ($@) {
                     warn "ERROR: Insert authority $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
@@ -682,7 +691,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             $schema->txn_commit;
             $schema->txn_begin;
             if ($indexer) {
-                $indexer->update_index( \@search_engine_record_ids, \@search_engine_records );
+                $indexer->update_index( \@search_engine_record_ids, \@search_engine_records ) unless $skip_indexing;
                 if ( C4::Context->preference('AutoLinkBiblios') ) {
                     foreach my $record (@search_engine_records) {
                         BiblioAutoLink( $record, $framework );
