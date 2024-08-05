@@ -670,6 +670,8 @@ my $holdable_items = $biblio->items->filter_by_for_hold->count;
 my $can_holds_be_placed = $patron ? 0 : $holdable_items;
 
 my ( $itemloop_has_images, $otheritemloop_has_images );
+my $item_level_holds;
+my $item_checkouts;
 if ( not $viewallitems and $items->count > $max_items_to_display ) {
     $template->param(
         too_many_items => 1,
@@ -681,6 +683,7 @@ else {
     while ( my $item = $items->next ) {
         my $item_info = $item->unblessed;
         $item_info->{holds_count} = $item_reserves{ $item->itemnumber };
+        if( $item_info->{holds_count} && $item_info->{holds_count} > 0 ){ $item_level_holds = 1; }
         $item_info->{priority}    = $priority{ $item->itemnumber };
 
         # Get opac_info from Additional contents for home and holding library
@@ -721,9 +724,11 @@ else {
         $item_info->{'description'} =
           $itemtypes->{ $itemtype->itemtype }->{translated_description};
 
+        $item_info->{checkout} = $item->checkout;
+        if( $item_info->{checkout} && $item_info->{checkout} > 0 ){ $item_checkouts = 1; }
+
         foreach my $field (
-            qw(ccode materials enumchron copynumber itemnotes location_description uri)
-          )
+            qw(ccode materials enumchron copynumber itemnotes location_description uri barcode itemcallnumber))
         {
             $itemfields{$field} = 1 if $item_info->{$field};
         }
@@ -735,7 +740,6 @@ else {
             $item_info->{serial} = $serial if $serial;
         }
 
-        $item_info->{checkout} = $item->checkout;
         $item_info->{object} = $item;
 
 
@@ -772,6 +776,8 @@ else {
 }
 
 $template->param(
+    item_checkouts           => $item_checkouts,
+    item_level_holds         => $item_level_holds,
     ReservableItems          => $can_holds_be_placed,
     itemloop_has_images      => $itemloop_has_images,
     otheritemloop_has_images => $otheritemloop_has_images,
@@ -798,17 +804,19 @@ if( C4::Context->preference('ArticleRequests') ) {
     $template->param( artreqpossible => $artreqpossible );
 }
 
-    $template->param(
-                     MARCNOTES               => $marcnotesarray,
-                     itemdata_ccode          => $itemfields{ccode},
-                     itemdata_materials      => $itemfields{materials},
-                     itemdata_enumchron      => $itemfields{enumchron},
-                     itemdata_uri            => $itemfields{uri},
-                     itemdata_copynumber     => $itemfields{copynumber},
-                     itemdata_itemnotes      => $itemfields{itemnotes},
-                     itemdata_location       => $itemfields{location_description},
-                     OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
-    );
+$template->param(
+    MARCNOTES               => $marcnotesarray,
+    itemdata_ccode          => $itemfields{ccode},
+    itemdata_materials      => $itemfields{materials},
+    itemdata_enumchron      => $itemfields{enumchron},
+    itemdata_uri            => $itemfields{uri},
+    itemdata_copynumber     => $itemfields{copynumber},
+    itemdata_itemnotes      => $itemfields{itemnotes},
+    itemdata_location       => $itemfields{location_description},
+    itemdata_barcode        => $itemfields{barcode},
+    itemdata_itemcallnumber => $itemfields{itemcallnumber},
+    OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
+);
 
 if (C4::Context->preference("AlternateHoldingsField") && $items->count == 0) {
     my $fieldspec = C4::Context->preference("AlternateHoldingsField");

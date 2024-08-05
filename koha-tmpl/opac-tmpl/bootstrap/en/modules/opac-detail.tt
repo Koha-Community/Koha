@@ -1189,8 +1189,10 @@
                 [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
                     <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>
                 [% END %]
+                [% IF ( itemdata_itemcallnumber ) %]
                     <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
-                [% UNLESS TablesSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
+                [% END %]
+                [% IF ( itemdata_materials ) %]
                     <th id="item_materials" data-colname="item_materials" class="materials">Materials specified</th>
                 [% END %]
                 [% IF ( itemdata_enumchron ) %]
@@ -1206,9 +1208,13 @@
                 [% IF ( itemdata_itemnotes ) %]
                     <th id="item_notes" data-colname="item_notes" class="notes">Notes</th>
                 [% END %]
+                [% IF ( item_checkouts ) %]
                     <th id="item_datedue" data-colname="item_datedue" class="date_due">Date due</th>
+                [% END %]
+                [% IF ( itemdata_barcode ) %]
                     <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>
-                [% IF holds_count.defined %]
+                [% END %]
+                [% IF item_level_holds > 0 %]
                     <th id="item_holds" data-colname="item_holds">Item holds</th>
                 [% ELSIF show_priority %]
                     <th id="item_priority" data-colname="item_priority">Item hold queue priority</th>
@@ -1311,20 +1317,22 @@
                     <td class="shelving_location"><span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span></td>
                 [% END %]
 
-                <td class="call_no" property="sku">
-                    [% IF ( ITEM_RESULT.itemcallnumber ) %]
-                        [% ITEM_RESULT.itemcallnumber | html %]
-                        [% IF ( OPACShelfBrowser ) %]
-                            [% IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) %]
-                                (<a class="close_shelf" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | html %]#[% tab | html %]">Browse shelf<span class="sr-only">(Opens below)</span></a>)
-                            [% ELSE %]
-                                (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | uri %]#[% tab | uri %]">Browse shelf<span class="sr-only">(Opens below)</span></a>)
+                [% IF ( itemdata_itemcallnumber ) %]
+                    <td class="call_no" property="sku">
+                        [% IF ( ITEM_RESULT.itemcallnumber ) %]
+                            [% ITEM_RESULT.itemcallnumber | html %]
+                            [% IF ( OPACShelfBrowser ) %]
+                                [% IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) %]
+                                    (<a class="close_shelf" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | html %]#[% tab | html %]">Browse shelf<span class="sr-only">(Opens below)</span></a>)
+                                [% ELSE %]
+                                    (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | uri %]#[% tab | uri %]">Browse shelf<span class="sr-only">(Opens below)</span></a>)
+                                [% END %]
                             [% END %]
                         [% END %]
-                    [% END %]
-                </td>
+                    </td>
+                [% END %]
 
-                [% UNLESS TablesSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
+                [% IF ( itemdata_materials ) %]
                     <td class="materials">[% ITEM_RESULT.materials | html %]</td>
                 [% END %]
 
@@ -1378,14 +1386,15 @@
                 [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>[% END %]
                 <td class="status">[% INCLUDE 'item-status.inc' item = ITEM_RESULT.object include_schema_org = 1 %]</td>
                 [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>[% END %]
-                [% IF ITEM_RESULT.checkout %]
+                [% IF item_checkouts %]
                     <td class="date_due" data-order="[% ITEM_RESULT.checkout.date_due | html %]">[% ITEM_RESULT.checkout.date_due | $KohaDates as_due_date => 1 %]</td>
-                [% ELSE %]
-                    <td class="date_due"></td>
                 [% END %]
 
+                [% IF ( itemdata_barcode ) %]
                     <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
-                [% IF holds_count.defined || show_priority %]
+                [% END %]
+
+                [% IF item_level_holds > 0 %]
                     <td class="holds_count">
                         [% IF holds_count.defined %] [% ITEM_RESULT.holds_count | html %] [% END %]
                         [% IF ITEM_RESULT.priority %]
@@ -1397,6 +1406,7 @@
                         [% END %]
                     </td>
                 [% END %]
+
                 [% IF ShowCourseReservesHeader %]
                     <td>
                         [% IF ITEM_RESULT.course_reserves %]
