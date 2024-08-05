@@ -21,6 +21,8 @@ use Modern::Perl;
 use C4::Context;
 use C4::ClassSortRoutine qw( GetClassSortKey );
 
+use Koha::Cache::Memory::Lite;
+
 our (@ISA, @EXPORT_OK);
 BEGIN {
     require Exporter;
@@ -76,15 +78,18 @@ foreach my $cn_source (sort keys %$sources) {
 
 sub GetClassSources {
 
-    my %class_sources = ();
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM `class_sources`");
-    $sth->execute();
-    while (my $source = $sth->fetchrow_hashref) {
-        $class_sources{ $source->{'cn_source'} } = $source;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    my $class_sources = $memory_cache->get_from_cache( "GetClassSource:All" );;
+    unless( $class_sources ){
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT * FROM `class_sources`");
+        $sth->execute();
+        while (my $source = $sth->fetchrow_hashref) {
+            $class_sources->{ $source->{'cn_source'} } = $source;
+        }
+        $memory_cache->set_in_cache( "GetClassSource:All", $class_sources );
     }
-
-    return \%class_sources;
+    return $class_sources;
 
 }
 
@@ -99,11 +104,17 @@ sub GetClassSources {
 sub GetClassSource {
 
     my ($cn_source) = (@_);
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM `class_sources` WHERE cn_source = ?");
-    $sth->execute($cn_source);
-    my $row = $sth->fetchrow_hashref();
-    return $row;
+    return unless $cn_source;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    my $class_source = $memory_cache->get_from_cache( "GetClassSource:" . $cn_source );
+    unless( $class_source ){
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT * FROM `class_sources` WHERE cn_source = ?");
+        $sth->execute($cn_source);
+        $class_source = $sth->fetchrow_hashref();
+        $memory_cache->set_in_cache( "GetClassSource:" . $cn_source, $class_source );
+    }
+    return $class_source;
 }
 
 =head2 GetClassSortRule
@@ -117,11 +128,17 @@ sub GetClassSource {
 sub GetClassSortRule {
 
     my ($class_sort_rule) = (@_);
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
-    $sth->execute($class_sort_rule);
-    my $row = $sth->fetchrow_hashref();
-    return $row;
+    return unless $class_sort_rule;
+    my $memory_cache = Koha::Cache::Memory::Lite->get_instance();
+    my $class_sort_rules = $memory_cache->get_from_cache( "GetClassSortRule:" . $class_sort_rule );
+    unless( $class_sort_rules ){
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
+        $sth->execute($class_sort_rule);
+        $class_sort_rules = $sth->fetchrow_hashref();
+        $memory_cache->set_in_cache( "GetClassSortRule:" . $class_sort_rule, $class_sort_rules );
+    }
+    return $class_sort_rules;
 }
 
 =head2 GetClassSort
