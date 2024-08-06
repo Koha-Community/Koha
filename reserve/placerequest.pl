@@ -73,6 +73,9 @@ if ( $op eq 'cud-placerequest' && $patron ) {
 
         my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
         if ( @checkitems ) {
+
+            my $hold_priority = $rank[0];
+
             for ( my $i = 0 ; $i < scalar @checkitems ; $i++ ) {
                 my $checkitem = $checkitems[$i];
                 if ( my $item_pickup_location = $input->param("item_pickup_$checkitem") ) {
@@ -93,7 +96,7 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                                 branchcode       => $item_pickup_location,
                                 borrowernumber   => $patron->borrowernumber,
                                 biblionumber     => $biblionumber,
-                                priority         => $rank[$i],
+                                priority         => $hold_priority,
                                 reservation_date => $startdate,
                                 expiration_date  => $expirationdate,
                                 notes            => $notes,
@@ -104,6 +107,8 @@ if ( $op eq 'cud-placerequest' && $patron ) {
                                 non_priority     => $non_priority,
                             }
                         );
+
+                        $hold_priority++;
 
                     } else {
                         $failed_holds{$can_item_be_reserved} = 1;
