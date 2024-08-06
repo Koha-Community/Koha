@@ -1323,6 +1323,7 @@ sub get_age {
     my $date_of_birth = dt_from_string( $self->dateofbirth, undef, 'floating' );
     my $today         = dt_from_string(undef, undef, 'floating')->truncate( to => 'day' );
 
+    return 0 unless $date_of_birth;
     return $today->subtract_datetime( $date_of_birth )->years;
 }
 
