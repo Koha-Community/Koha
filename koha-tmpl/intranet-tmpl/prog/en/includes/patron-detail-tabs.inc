@@ -13,12 +13,6 @@
             [% END %]
         [% END %]
 
-        [% IF ( fines ) %]
-            [% WRAPPER tab_item tabname= "finesandcharges" %]
-                <span>Charges ([% fines | $Price %])</span>
-            [% END %]
-        [% END %]
-
         [% IF ( guarantees_fines ) %]
             [% WRAPPER tab_item tabname= "guarantees_finesandcharges" %]
                 <span>Guarantees' charges ([% guarantees_fines | $Price %])</span>
@@ -97,14 +91,6 @@
 
         [% WRAPPER tab_panel tabname="relatives-issues" %]
             [% INCLUDE "relatives-issues-table.inc" %]
-        [% END # /tab_panel# %]
-
-        [% WRAPPER tab_panel tabname="finesandcharges" %]
-            [% IF ( fines ) %]
-                <p>Total due: [% fines | $Price %]</p>
-            [% ELSE %]
-                <p>No outstanding charges</p>
-            [% END %]
         [% END # /tab_panel# %]
 
         [% IF ( guarantees_fines ) %]
