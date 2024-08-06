@@ -2646,6 +2646,7 @@ sub MarkIssueReturned {
             $issue->returndate( \'NOW()' )->store->discard_changes; # update and refetch
         }
 
+        $issue->return_branch(C4::Context->userenv->{'branch'});
         # Create the old_issues entry
         my $old_checkout = Koha::Old::Checkout->new($issue->unblessed)->store;
 
