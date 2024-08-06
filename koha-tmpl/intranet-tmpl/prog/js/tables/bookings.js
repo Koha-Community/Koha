@@ -3,7 +3,7 @@
 var bookings_table;
 $(document).ready(function () {
     // Determine whether we have a filtered list
-    let filter_expired = $("#expired_filter").hasClass('filtered');
+    let filter_expired = $("#expired_filter").hasClass("filtered");
 
     // Load bookings table on tab selection
     $("#bookings-tab").on("click", function () {
@@ -12,15 +12,14 @@ $(document).ready(function () {
             end_date: function () {
                 if (filter_expired) {
                     let today = new Date();
-                    return { ">=": today.toISOString() }
+                    return { ">=": today.toISOString() };
                 } else {
                     return;
                 }
-            }
+            },
         };
 
         if (!bookings_table) {
-
             var bookings_table_url = "/api/v1/bookings";
             bookings_table = $("#bookings_table").kohaTable(
                 {
@@ -102,7 +101,9 @@ $(document).ready(function () {
                         },
                     ],
                 },
-                table_settings_bookings_table, 0, additional_filters
+                table_settings_bookings_table,
+                0,
+                additional_filters
             );
         }
     });
@@ -110,7 +111,7 @@ $(document).ready(function () {
     var txtActivefilter = _("Show expired");
     var txtInactivefilter = _("Hide expired");
     $("#expired_filter").on("click", function () {
-        if ($(this).hasClass('filtered')) {
+        if ($(this).hasClass("filtered")) {
             filter_expired = false;
             $(this).html('<i class="fa fa-filter"></i> ' + txtInactivefilter);
         } else {
@@ -118,7 +119,6 @@ $(document).ready(function () {
             $(this).html('<i class="fa fa-bars"></i> ' + txtActivefilter);
         }
         bookings_table.DataTable().draw();
-        $(this).toggleClass('filtered');
+        $(this).toggleClass("filtered");
     });
-
 });
