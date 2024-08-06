@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -303,4 +303,34 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Pass return_branch to old_issues' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories', value => { category_type => 'P', enrolmentfee => 0 } } );
+    my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron   = $builder->build_object(
+        {   class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, categorycode => $category->categorycode }
+        }
+    );
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    my $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber );
+
+    is( $issue_id, $issue->issue_id, 'Item has been returned' );
+    my $old_issue = Koha::Old::Checkouts->find( $issue_id );
+    is( $old_issue->return_branch, $library->branchcode, 'Return branch is passed correctly' );
+
+    $schema->storage->txn_rollback
 };
