@@ -624,6 +624,10 @@ sub execute_query {
 
     return ( $sth, { queryerr => $sth->errstr } ) if ( $sth->err );
 
+    if ( $sql =~ m/password/ ) {
+        return ( $sth, { passworderr => $sql } );
+    }
+
     foreach my $column ( @{ $sth->{NAME_lc} } ) {
         if ( $column eq 'password' ) {
             return ( $sth, { passworderr => $column } );
