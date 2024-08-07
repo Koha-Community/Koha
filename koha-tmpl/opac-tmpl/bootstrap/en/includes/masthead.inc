@@ -36,7 +36,7 @@
                 <ul id="cart-list-nav" class="navbar-nav">
                     [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                         <li class="nav-item js-show">
-                            <a href="#" class="nav-link" title="Collect items you are interested in" id="cartmenulink" role="button">
+                            <a href="#" class="nav-link" title="Collect items you are interested in" id="cartmenulink" role="button" aria-label="Cart">
                                 <i id="carticon" class="fa fa-shopping-cart fa-icon-black" aria-hidden="true"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
                             </a>
                         </li>
@@ -44,7 +44,7 @@
                     <li class="divider-vertical"></li>
                     [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                         <li class="nav-item dropdown">
-                            <a href="/cgi-bin/koha/opac-shelves.pl" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button" aria-label="Show dropdown with detailed list information" aria-haspopup="true" aria-expanded="false"
+                            <a href="/cgi-bin/koha/opac-shelves.pl" title="Show lists" class="nav-link dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button" aria-label="Lists" aria-haspopup="true" aria-expanded="false"
                                 ><i class="fa fa-list fa-icon-black" aria-hidden="true"></i> <span class="listslabel">Lists</span>
                             </a>
                             <div aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
