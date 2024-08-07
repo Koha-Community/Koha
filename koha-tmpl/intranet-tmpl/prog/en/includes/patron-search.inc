@@ -13,7 +13,7 @@
 [% BLOCK patron_search_filters_simple  %]
     <form method="get" class="patron_search_form">
         <div class="hint">Enter patron card number or partial name:</div>
-        <input type="text" size="40" class="search_patron_filter focus" autocomplete="off" />
+        <input type="text" size="40" id="search_patron_filter_simple" class="search_patron_filter focus" autocomplete="off" />
         <input type="submit" class="btn btn-primary" value="Search" />
     </form>
 [% END %]
@@ -36,7 +36,7 @@
                 <ol>
                     <li>
                         <label>Search:</label>
-                        <input type="text" class="search_patron_filter focus" value="[% search_filter | html %]" />
+                        <input type="text" id="search_patron_filter" class="search_patron_filter focus" value="[% search_filter | html %]" />
                     </li>
 
                     [% FOR f IN filters %]
