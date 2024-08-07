@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 32;
 
 use Test::MockModule;
 use Test::Warn;
@@ -89,10 +89,10 @@ $builder->build_sample_item(
 );
 
 AddIssue( $patron, $barcode );
-is(
-    Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } ), 0,
-    'A patron with issues cannot be discharged'
-);
+my ( $can, $problems ) = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } );
+is( $can,                   0,     'A patron with issues cannot be discharged' );
+is( $problems->{checkouts}, 1,     "Patron has checkouts" );
+is( $problems->{debt},      undef, "Patron has no debt" );
 
 is(
     Koha::Patron::Discharge::request( { borrowernumber => $patron->borrowernumber } ), undef,
@@ -105,13 +105,46 @@ is(
 is_deeply( [Koha::Patron::Discharge::get_pendings],  [], 'There is no pending discharge request' );
 is_deeply( [Koha::Patron::Discharge::get_validated], [], 'There is no validated discharge' );
 
+# Discharge not possible with issues and fines
+$patron->account->add_debit(
+    {
+        amount    => 0.1,
+        interface => C4::Context->interface,
+        type      => 'OVERDUE'
+    }
+);
+
+( $can, $problems ) = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } );
+is(
+    $can, 0,
+    'A patron with fines and checkouts cannot be discharged'
+);
+is( $problems->{checkouts}, 1,   "Patron has checkouts" );
+is( $problems->{debt},      0.1, "Patron has debt" );
+
 AddReturn($barcode);
 
-# Discharge possible without issue
+( $can, $problems ) = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } );
 is(
-    Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } ), 1,
-    'A patron without issues can be discharged'
+    $can, 0,
+    'A patron with fines cannot be discharged'
 );
+is( $problems->{checkouts}, undef, "Patron has checkouts" );
+is( $problems->{debt},      0.1,   "Patron has debt" );
+
+$patron->account->pay(
+    {
+        amount => 0.1,
+    }
+);
+
+# Discharge possible without issue or fine
+( $can, $problems ) = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $patron->borrowernumber } );
+is(
+    $can, 1,
+    'A patron without issues or fines can be discharged'
+);
+is( scalar keys %$problems, 0, "No dishcharge problems found" );
 
 is( Koha::Patron::Discharge::generate_as_pdf, undef, "Confirm failure when lacking borrower number" );
 

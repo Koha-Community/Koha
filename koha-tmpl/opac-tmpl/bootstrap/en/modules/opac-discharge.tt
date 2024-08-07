@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE Price %]
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
@@ -41,8 +42,6 @@
                         <p><a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a></p>
                     [% ELSIF pending %]
                         <p>Your discharge will be available on this page within a few days.</p>
-                    [% ELSIF has_issues %]
-                        <p>You cannot be discharged, you have checked out items. Please return items before asking for a discharge.</p>
                     [% ELSIF not messages %]
                         <h2>What is a discharge?</h2>
                         <p
@@ -50,14 +49,28 @@
                             available on your reader account.</p
                         >
                         <p><strong>Warning</strong>: This request is only valid if you are in good standing with the library. Once the application is made, you can not borrow library materials.</p>
-                        [% IF has_checkouts %]
-                            <div class="alert alert-info">You cannot be discharged, you have checked out items. Please return items before asking for a discharge.</div>
-                        [% ELSE %]
+                        [% IF can_be_discharged %]
                             <form action="/cgi-bin/koha/opac-discharge.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-request" />
                                 <button class="btn btn-primary" type="submit">Ask for a discharge</button>
                             </form>
+                        [% ELSE %]
+                            [% IF failure %]
+                                <p> There was an error during the discharge process </p>
+                            [% END %]
+                            <div class="alert alert-info"
+                                >You cannot be discharged because:
+                                <ul>
+                                    [% IF discharge_problems.checkouts %]
+                                        <li> You have [% discharge_problems.checkouts | html %] item(s) checked out. Please return your checked out items before reapplying. </li>
+                                    [% END %]
+
+                                    [% IF discharge_problems.debt %]
+                                        <li> You have unpaid charges of [% discharge_problems.debt | $Price %]. Please pay your charges before reapplying. </li>
+                                    [% END %]
+                                </ul>
+                            </div>
                         [% END %]
                     [% END %]
                 </div>

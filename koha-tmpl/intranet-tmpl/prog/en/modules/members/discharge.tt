@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% USE Price %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% PROCESS 'i18n.inc' %]
@@ -52,10 +53,23 @@
         </div>
     [% END %]
     [% UNLESS can_be_discharged %]
-        <p>Cannot edit discharge: the patron has checked out items.</p>
+        <p>A discharge cannot be generated for this patron because:</p>
+        <ul>
+            [% IF discharge_problems.checkouts %]
+                <li>The patron has [% discharge_problems.checkouts | html %] item(s) checked out</li>
+            [% END %]
+
+            [% IF discharge_problems.debt %]
+                <li>The patron has unpaid charges of [% discharge_problems.debt | $Price %]</li>
+            [% END %]
+        </ul>
     [% ELSE %]
         [% IF patron.holds.count %]
-            <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
+            <p>The patron has holds. The holds will be cancelled if the discharge is generated.</p>
+        [% END %]
+
+        [% IF discharge_problems.debt %]
+            <li>The patron has unpaid charges of [% discharge_problems.debt | $Price %]</li>
         [% END %]
         <div class="btn-toolbar">
             <form method="post">

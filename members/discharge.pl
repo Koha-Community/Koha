@@ -65,7 +65,8 @@ output_and_exit_if_error(
     { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron }
 );
 
-my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $borrowernumber } );
+my ( $can_be_discharged, $discharge_problems ) =
+    Koha::Patron::Discharge::can_be_discharged( { borrowernumber => $borrowernumber } );
 
 # Generating discharge if needed
 if ( $op eq 'cud-discharge' && $input->param('discharge') and $can_be_discharged ) {
@@ -112,6 +113,7 @@ my @validated_discharges = Koha::Patron::Discharge::get_validated(
 $template->param(
     patron               => $patron,
     can_be_discharged    => $can_be_discharged,
+    discharge_problems   => $discharge_problems,
     validated_discharges => \@validated_discharges,
 );
 
