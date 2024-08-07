@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -286,5 +286,107 @@ subtest 'list_rules() tests' => sub {
         }
 
     };
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_rules() tests' => sub {
+    plan tests => 23;
+
+    $schema->storage->txn_begin;
+
+    my $categorycode = $builder->build( { source => 'Category' } )->{'categorycode'};
+    my $itemtype     = $builder->build( { source => 'Itemtype' } )->{'itemtype'};
+    my $branchcode   = $builder->build( { source => 'Branch' } )->{'branchcode'};
+    Koha::CirculationRules->delete;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 2 }     # circulate
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    ## Authorized user tests
+    note("Authorized user setting rules");
+
+    my $rules_to_set = {
+        context => {
+            library_id         => $branchcode,
+            patron_category_id => $categorycode,
+            item_type_id       => $itemtype,
+        },
+        fine     => 5,
+        finedays => 7,
+    };
+
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(200);
+
+    # Verify the rules were set
+    my $json = $t->tx->res->json;
+    is( $json->{fine},     5, "Fine rule set correctly" );
+    is( $json->{finedays}, 7, "Finedays rule set correctly" );
+
+    # Invalid item_type_id
+    note("Invalid item_type_id");
+    $rules_to_set->{context}->{item_type_id} = 'invalid_itemtype';
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+        ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid item_type_id" );
+
+    # Invalid library_id
+    note("Invalid library_id");
+    $rules_to_set->{context}->{item_type_id} = $itemtype;
+    $rules_to_set->{context}->{library_id}   = 'invalid_library';
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+        ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid library_id" );
+
+    # Invalid patron_category_id
+    note("Invalid patron_category_id");
+    $rules_to_set->{context}->{library_id}         = $branchcode;
+    $rules_to_set->{context}->{patron_category_id} = 'invalid_category';
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(400)
+        ->json_is( '/error_code' => 'invalid_parameter_value', "Handled invalid patron_category_id" );
+
+    # Unauthorized user tests
+    note("Unauthorized user trying to set rules");
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(403);
+
+    # Reset to valid context
+    $rules_to_set->{context}->{patron_category_id} = $categorycode;
+
+    # Updating existing rules
+    note("Updating existing rules");
+    $rules_to_set->{fine} = 10;
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(200);
+
+    # Verify the rules were updated
+    $json = $t->tx->res->json;
+    is( $json->{fine},     10, "Fine rule updated correctly" );
+    is( $json->{finedays}, 7,  "Finedays rule remains the same" );
+
+    # Setting rules with '*' context
+    note("Setting rules with '*' context");
+    $rules_to_set->{context}->{library_id}         = '*';
+    $rules_to_set->{context}->{patron_category_id} = '*';
+    $rules_to_set->{context}->{item_type_id}       = '*';
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(200);
+
+    # Verify the rules were set for wildcard context
+    $json = $t->tx->res->json;
+    is( $json->{fine},     10, "Fine rule set correctly for wildcard context" );
+    is( $json->{finedays}, 7,  "Finedays rule set correctly for wildcard context" );
+
     $schema->storage->txn_rollback;
 };
