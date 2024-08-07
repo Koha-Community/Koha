@@ -815,7 +815,7 @@
                                                         <br />
                                                     [% END %]
                                                     [% UNLESS ( books_loo.suggestionid ) %]
-                                                        <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;link_order=[% books_loo.ordernumber | uri %]">Search for suggestion to link</a>
+                                                        <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;link_order=[% books_loo.ordernumber | uri %]">[% tp('verb', 'Link suggestion') | html %]</a>
                                                     [% END %]
                                                 </td>
                                             [% END %]
