@@ -239,7 +239,7 @@ subtest 'Search patrons' => sub {
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     $driver->get( $base_url . "/members/members-home.pl" );
-    $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+    $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
     $s->submit_form;
     my $first_patron = Koha::Patrons->search( { surname => { like => 'test_patron_%' } } )->next;
 
@@ -276,7 +276,7 @@ subtest 'Search patrons' => sub {
     );
 
     $driver->get( $base_url . "/members/members-home.pl" );
-    $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+    $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -297,7 +297,7 @@ subtest 'Search patrons' => sub {
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
 
     # Pattern terms must be split
-    $s->fill_form( { 'class=search_patron_filter' => 'test patron' } );
+    $s->fill_form( { 'search_patron_filter' => 'test patron' } );
     $s->submit_form;
 
     sleep $DT_delay && $s->wait_for_ajax;
@@ -307,7 +307,7 @@ subtest 'Search patrons' => sub {
     sleep $DT_delay && $s->wait_for_ajax;
 
     # Search on non-searchable attribute, we expect no result!
-    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_1' } );
+    $s->fill_form( { 'search_patron_filter' => 'test_attr_1' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -317,7 +317,7 @@ subtest 'Search patrons' => sub {
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
 
     # Search on searchable attribute, we expect 2 patrons
-    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_2' } );
+    $s->fill_form( { 'search_patron_filter' => 'test_attr_2' } );
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -326,7 +326,7 @@ subtest 'Search patrons' => sub {
     # clear form
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
 
-    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_3' } ); # Terms must be split
+    $s->fill_form( { 'search_patron_filter' => 'test_attr_3' } ); # Terms must be split
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
@@ -336,7 +336,7 @@ subtest 'Search patrons' => sub {
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
 
     # Search on searchable attribute as specific field, we expect 2 patrons
-    $s->fill_form( { 'class=search_patron_filter' => 'test_attr_4' } );
+    $s->fill_form( { 'search_patron_filter' => 'test_attr_4' } );
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="searchfieldstype_filter"]//option[@value="_ATTR_'.$attribute_type_searchable_not_default->code.'"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
@@ -361,7 +361,7 @@ subtest 'Search patrons' => sub {
 
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+        $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
         my $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
@@ -387,7 +387,7 @@ subtest 'Search patrons' => sub {
 
         # Perform another search
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+        $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
         $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
@@ -414,7 +414,7 @@ subtest 'Search patrons' => sub {
         # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+        $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
 
@@ -491,7 +491,7 @@ subtest 'Search patrons in modal' => sub {
         $s->wait_for_element_visible('//div[@id="patron_search_modal"]//div[@class="modal-header"]');
 
         # Search for our test patrons
-        $s->fill_form( { 'class=search_patron_filter' => 'test_patron' } );
+        $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
 
@@ -582,7 +582,7 @@ subtest 'Search patrons in modal' => sub {
         $s->wait_for_element_visible('//div[@id="patron_search_modal_owner"]//div[@class="modal-header"]');
 
         # Search for our test patrons
-        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@class="search_patron_filter"]')
+        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@id="search_patron_filter"]')
             ->send_keys('test_patron');
         $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@type="submit"]')->click;
 
@@ -644,7 +644,7 @@ subtest 'Search patrons in modal' => sub {
         $s->wait_for_element_visible('//div[@id="patron_search_modal_users"]//div[@class="modal-header"]');
 
         # Search for our test patrons
-        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@class="search_patron_filter"]')
+        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@id="search_patron_filter"]')
             ->send_keys('test_patron');
         $driver->find_element('//div[@id="patron_search_modal_users"]//input[@type="submit"]')->click;
 
