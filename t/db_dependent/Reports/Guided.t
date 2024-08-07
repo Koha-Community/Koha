@@ -501,7 +501,7 @@ subtest 'nb_rows() tests' => sub {
 
 subtest 'Returning passwords tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     my $dbh = C4::Context->dbh;
     $schema->storage->txn_begin;
@@ -523,6 +523,12 @@ subtest 'Returning passwords tests' => sub {
     ( $sth, $errors ) = execute_query( { sql => $query } );
 
     is( defined($errors), 1, 'Query returns password field' );
+
+    $query = q{ SELECT password as secret FROM borrowers };
+
+    ( $sth, $errors ) = execute_query( { sql => $query } );
+
+    is( defined($errors), 1, 'Error raised for returning password' );
 
     $schema->storage->txn_rollback;
 };
