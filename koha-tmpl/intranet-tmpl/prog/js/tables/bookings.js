@@ -33,6 +33,31 @@ $(document).ready(function () {
                             title: __("Booking ID"),
                         },
                         {
+                            data: "",
+                            title: __("Status"),
+                            name: "status",
+                            searchable: true,
+                            orderable: true,
+                            render: function (data, type, row, meta) {
+                                let is_expired = dayjs(row.end_date).isBefore(
+                                    new Date()
+                                );
+                                if (is_expired) {
+                                    return (
+                                        '<span class="badge rounded-pill bg-secondary">' +
+                                        __("Expired") +
+                                        "</span>"
+                                    );
+                                }
+
+                                return (
+                                    '<span class="badge rounded-pill bg-success">' +
+                                    __("Active") +
+                                    "</span>"
+                                );
+                            },
+                        },
+                        {
                             data: "biblio.title",
                             title: __("Title"),
                             searchable: true,
@@ -118,7 +143,13 @@ $(document).ready(function () {
             filter_expired = true;
             $(this).html('<i class="fa fa-bars"></i> ' + txtActivefilter);
         }
-        bookings_table.DataTable().draw();
+
+        bookings_table.DataTable().ajax.reload(() => {
+            bookings_table
+                .DataTable()
+                .column("status:name")
+                .visible(!filter_expired, false);
+        });
         $(this).toggleClass("filtered");
     });
 });
