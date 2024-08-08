@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Test::Exception;
 
@@ -320,6 +320,65 @@ subtest 'store() tests' => sub {
         # ✓ Item 1    |----|
         # ✓ Item 2     |--|
         # ✓ Any (1)         |--|
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron                 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio                 = $builder->build_sample_biblio;
+    my $item_1                 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $start_0                = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
+    my $end_0                  = $start_0->clone->add( days => 6 );
+    my $original_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code    => 'BOOKING_CANCELLATION',
+            borrowernumber => $patron->borrowernumber,
+        }
+    )->count;
+
+    $item_1->bookable(1)->store;
+
+    my $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0
+        }
+    )->store;
+
+    my $deleted = $booking->delete;
+    is(
+        ref($deleted), 'Koha::Booking',
+        'Koha::Booking->delete should return the Koha::Booking object if the booking has been correctly deleted'
+    );
+    is(
+        Koha::Bookings->search( { booking_id => $booking->booking_id } )->count, 0,
+        'Koha::Booking->delete should have deleted the booking'
+    );
+
+    subtest 'notice trigger' => sub {
+        plan tests => 1;
+
+        my $post_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CANCELLATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_notices_count,
+            $original_notices_count + 1,
+            'Koha::Booking->delete should have enqueued a BOOKING_CANCELLATION email'
+        );
     };
 
     $schema->storage->txn_rollback;
