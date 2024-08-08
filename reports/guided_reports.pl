@@ -977,12 +977,12 @@ if ($op eq 'run'){
                 }
 
                 my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-                my $url = "/cgi-bin/koha/reports/guided_reports.pl?id=$report_id&amp;op=run&amp;limit=$limit&amp;want_full_chart=$want_full_chart";
+                my $url = "/cgi-bin/koha/reports/guided_reports.pl?id=$report_id&op=run&limit=$limit&want_full_chart=$want_full_chart";
                 if (@param_names) {
-                    $url = join('&amp;param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
+                    $url = join('&param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
                 }
                 if (@sql_params) {
-                    $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
+                    $url = join('&sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
                 }
 
                 if ($template_id) {
