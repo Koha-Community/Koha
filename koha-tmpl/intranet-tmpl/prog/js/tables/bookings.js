@@ -36,8 +36,8 @@ $(document).ready(function () {
                             data: "",
                             title: __("Status"),
                             name: "status",
-                            searchable: true,
-                            orderable: true,
+                            searchable: false,
+                            orderable: false,
                             render: function (data, type, row, meta) {
                                 let is_expired = dayjs(row.end_date).isBefore(
                                     new Date()
