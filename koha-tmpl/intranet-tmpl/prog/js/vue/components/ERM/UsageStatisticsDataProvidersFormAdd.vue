@@ -466,7 +466,8 @@ export default {
                                     r => r.report_id === report.value
                                 )
                             )
-                    } else {
+                    }
+                    if (caller === "edit" && registry_data.length === 0) {
                         this.manual_form = true
                     }
                     this.searching = false
