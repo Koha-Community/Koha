@@ -28,6 +28,10 @@ use base qw(Koha::Object);
 # Only 1 error is returned
 # TODO Koha::Report->store should check this before saving
 
+use constant FORBIDDEN_COLUMN_MATCHES => qw(password token uuid secret);
+use constant WHITELISTED_COLUMN_NAMES =>
+    qw(password_expiration_date password_expiry_days reset_password change_password min_password_length require_strong_password password_expiration_date);
+
 =head1 NAME
 
 Koha::Report - Koha Report Object class
@@ -58,9 +62,47 @@ sub is_sql_valid {
         push @errors, { sqlerr => $1 };
     } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
         push @errors, { queryerr => 'Missing SELECT' };
+    } else {
+        push @errors, { passworderr => "Illegal column in results" }
+            if $self->check_columns($sql);
     }
 
     return ( @errors ? 0 : 1, \@errors );
+}
+
+=head3 check_columns
+
+    $self->check_columns('SELECT password from borrowers');
+    $self->check_columns( undef, [qw(password token)] );
+
+    Check if passed sql statement or column_names arrayref contains
+    forbidden column names (credentials etc.).
+    Returns all bad column names or empty list.
+
+=cut
+
+sub check_columns {
+    my ( $self, $sql, $column_names ) = @_;
+
+    # TODO When passing sql, we actually go thru the whole statement, not just columns
+
+    my $regex;
+    push my @columns, @{ $column_names // [] };
+    if ($sql) {
+
+        # Now find all matches for e.g. password but also modulepassword or password_hash
+        # Note that \w includes underscore, not hyphen
+        $regex   = '(\w*(?:' . ( join '|', FORBIDDEN_COLUMN_MATCHES ) . ')\w*)';
+        @columns = ( $sql =~ /$regex/ig );
+    } else {
+        $regex   = '(' . ( join '|', FORBIDDEN_COLUMN_MATCHES ) . ')';
+        @columns = grep { /$regex/i } @columns;
+    }
+
+    # Check for whitelisted variants
+    $regex   = '(^' . ( join '|', WHITELISTED_COLUMN_NAMES ) . ')$';    # should be full match
+    @columns = grep { !/$regex/i } @columns;
+    return @columns;
 }
 
 =head3 get_search_info
