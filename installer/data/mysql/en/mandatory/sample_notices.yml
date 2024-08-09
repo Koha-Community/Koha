@@ -74,7 +74,7 @@ tables:
             - "[%- PROCESS 'html_helpers.inc' -%]"
             - "[%- USE Koha -%]"
             - "Dear cataloger,<br>"
-            - "[%- INCLUDE 'patron-title.inc' patron => libraian -%] has assigned the following concern with <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ticket.biblio.biblionumber %]' >[%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%]</a> to you<br>"
+            - "[%- INCLUDE 'patron-title.inc' patron => librarian -%] has assigned the following concern with <a href='[%- Koha.Preference('staffClientBaseURL') -%]/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ticket.biblio.biblionumber %]' >[%- INCLUDE 'biblio-title.inc' biblio=ticket.biblio link = 0 -%]</a> to you<br>"
             - "<br>"
             - "[%- ticket.body -%]<br>"
             - "<br>"

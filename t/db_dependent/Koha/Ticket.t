@@ -275,7 +275,7 @@ subtest 'store() tests' => sub {
         my $notices =
           Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
         is( $notices->count, 1,
-            'One assignement notice queued for the ticket assignee at ticket creation' );
+            'One assignment notice queued for the ticket assignee at ticket creation' );
         my $THE_notice = $notices->next;
         isnt( $THE_notice->status, 'pending',
             'Assignment notice is sent immediately' );
@@ -299,7 +299,7 @@ subtest 'store() tests' => sub {
         $notices =
           Koha::Notice::Messages->search( { borrowernumber => $assignee2->id } );
         is( $notices->count, 1,
-            'New assignement notice queued for a change of ticket assignee' );
+            'New assignment notice queued for a change of ticket assignee' );
 
         $new_ticket->set({ assignee_id => $librarian->id })->store();
         $notices =
