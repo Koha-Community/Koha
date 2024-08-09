@@ -116,7 +116,7 @@ function addRecord(val, selection,NoMsgAlert) {
                 return 0;
             }
             if (! NoMsgAlert ) {
-                showCartUpdate( __("This item is already in your cart") );
+                showCartUpdate( __("This record is already in your cart") );
             }
         }
         else {
@@ -133,7 +133,7 @@ function addRecord(val, selection,NoMsgAlert) {
             return 1;
         }
         if (! NoMsgAlert ) {
-            showCartUpdate( __("This item has been added to your cart") );
+            showCartUpdate( __("This record has been added to your cart") );
             updateLink(val,"add");
         }
     }
@@ -205,20 +205,20 @@ function addSelRecords(valSel) {
     var msg = "";
     if (nbAdd) {
         if (i > nbAdd) {
-            msg = __("%s item(s) added to your cart").format(nbAdd);
+            msg = __("%s record(s) added to your cart").format(nbAdd);
             msg += "<br/>";
             msg += __("%s already in your cart").format((i-nbAdd));
         }
         else {
-            msg = __("%s item(s) added to your cart").format(nbAdd);
+            msg = __("%s record(s) added to your cart").format(nbAdd);
         }
     }
     else {
         if (i < 1) {
-            msg = __("No item was selected");
+            msg = __("No record was selected");
         }
         else {
-            msg = __("No item was added to your cart (already in your cart)!");
+            msg = __("No record was added to your cart (already in your cart)!");
         }
     }
     showCartUpdate(msg);
@@ -257,7 +257,7 @@ function delSingleRecord(biblionumber){
     writeCookie( nameCookie, valCookie );
     updateBasket( arrayRecords.length-1 );
     updateLink(biblionumber,"del");
-    showCartUpdate(__("The item has been removed from your cart"));
+    showCartUpdate(__("The record has been removed from your cart"));
 }
 
 function delSelRecords() {
@@ -308,7 +308,7 @@ function delSelRecords() {
         document.location = CGIBIN + "basket/basket.pl?" + strCookie;
     }
     else {
-        alert(__("No item was selected"));
+        alert(__("No record was selected"));
     }
 }
 
@@ -355,7 +355,7 @@ function delBasket(context,rep) {
 function quit() {
     if (document.myform.records.value) {
         var rep = false;
-        rep = confirm(__("Are you sure you want to remove the selected items?"));
+        rep = confirm(__("Are you sure you want to remove the selected records?"));
         if (rep) {
             delSelRecords();
         }
@@ -409,10 +409,10 @@ function showLess() {
 function updateBasket(updated_value,target) {
     if(target){
         target.$('#basketcount').html(" <span>("+updated_value+")</span>");
-        target.$('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
+        target.$('#cartDetails').html(__("Records in your cart: %s").format(updated_value));
     } else {
         $('#basketcount').html(" <span>("+updated_value+")</span>");
-        $('#cartDetails').html(__("Items in your cart: %s").format(updated_value));
+        $('#cartDetails').html(__("Records in your cart: %s").format(updated_value));
     }
 }
 
@@ -426,7 +426,7 @@ function addSelToShelf() {
     if(items){
         document.location = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber="+items;
     } else {
-        alert(__("No item was selected"));
+        alert(__("No record was selected"));
     }
 }
 
@@ -441,7 +441,7 @@ function vShelfAdd(biblist) {
                 bibs.push("biblionumber=" +  biblist[i].value);
             }
         }
-        if (bibs.length === 0) { showListsUpdate(__("No item was selected")); }
+        if (bibs.length === 0) { showListsUpdate(__("No record was selected")); }
         return bibs.join("&");
     } else {
         var bibnums = getContextBiblioNumbers();
@@ -451,7 +451,7 @@ function vShelfAdd(biblist) {
             }
             return bibs.join("&");
         } else {
-            showListsUpdate(__("No item was selected"));
+            showListsUpdate(__("No record was selected"));
         }
     }
 }

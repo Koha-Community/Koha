@@ -151,7 +151,7 @@
                         <span>An error occurred when deleting this list.</span>
                     [% CASE 'error_on_add_biblio' %]
                         [% IF m.item_barcode %]
-                            <span>The item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
+                            <span>The record for this item ([% m.item_barcode | html %]) has not been added to the list. Please verify it is not already in the list.</span>
                         [% ELSE %]
                             <span>The record ([% m.bibnum | html %]) has not been added to the list. Please verify it is not already in the list.</span>
                         [% END %]
@@ -163,12 +163,12 @@
                         <span>List deleted.</span>
                     [% CASE 'success_on_add_biblio' %]
                         [% IF m.item_barcode %]
-                            <span>The item ([% m.item_barcode | html %]) has been added to the list.</span>
+                            <span>The record for this item ([% m.item_barcode | html %]) has been added to the list.</span>
                         [% ELSE %]
                             <span>The record ([% m.bibnum | html %]) has been added to the list.</span>
                         [% END %]
                     [% CASE 'success_on_remove_biblios' %]
-                        <span>The item has been removed from the list.</span>
+                        <span>The record has been removed from the list.</span>
                     [% CASE 'does_not_exist' %]
                         <span>This list does not exist.</span>
                     [% CASE 'item_does_not_exist' %]
@@ -571,7 +571,7 @@
                 [% INCLUDE 'csrf-token.inc' %]
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title" id="addToListLabel">Add items</h1>
+                        <h1 class="modal-title" id="addToListLabel">Add records</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -624,7 +624,7 @@
     [% END %]
     <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-        var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
+        var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these records from the list?");
         var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
 
         [% IF op == 'list' %]

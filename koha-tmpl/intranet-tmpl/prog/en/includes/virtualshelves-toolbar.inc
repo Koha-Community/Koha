@@ -4,7 +4,7 @@
     [% IF ( can_add_biblios ) %]
         <div class="btn-group">
             <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#addToList">
-                <i class="fa fa-plus"></i> Add items
+                <i class="fa fa-plus"></i> Add records
             </button>
         </div>
     [% END %]
