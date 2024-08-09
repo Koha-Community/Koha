@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::Report;
 use Koha::Reports;
@@ -76,8 +76,6 @@ subtest 'prep_report' => sub {
     is_deeply( $headers, { 'itemnumber for batch' => 'itemnumber' } );
 };
 
-$schema->storage->txn_rollback;
-
 subtest 'is_sql_valid' => sub {
     plan tests => 3 + 6 * 2;
     my @badwords = ( 'UPDATE', 'DELETE', 'DROP', 'INSERT', 'SHOW', 'CREATE' );
@@ -115,4 +113,27 @@ subtest 'is_sql_valid' => sub {
             $word . ' qux'
         );
     }
-  }
+};
+
+subtest 'check_columns' => sub {
+    plan tests => 3;
+
+    my $report = Koha::Report->new;
+    is_deeply( [ $report->check_columns('SELECT passWorD from borrowers') ], ['passWorD'], 'Bad column found in SQL' );
+    is( scalar $report->check_columns('SELECT reset_passWorD from borrowers'), 0, 'No bad column found in SQL' );
+
+    is_deeply(
+        [
+            $report->check_columns(
+                undef,
+                [
+                    qw(change_password hash secret test place mytoken hersecret password_expiry_days password_expiry_days2)
+                ]
+            )
+        ],
+        [qw(secret mytoken hersecret password_expiry_days2)],
+        'Check column_names parameter'
+    );
+};
+
+$schema->storage->txn_rollback;
