@@ -291,6 +291,7 @@ sub _export_table_csv
             for my $field (@fields) {
                 my $value = $hashRef->{$field} // q||;
                 $value =~ s/[\r\n]//g;
+                $value =~ s/"/""/g;
                 $$strCSV .= '"' . $value . '",';
             }
             chop $$strCSV;
