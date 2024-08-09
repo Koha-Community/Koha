@@ -258,7 +258,7 @@ subtest 'store() tests' => sub {
         my $biblio   = $builder->build_sample_biblio();
 
         my $librarian = $builder->build_object( { class => "Koha::Patrons" } );
-        t::lib::Mocks::mock_userenv({ patron => $librarian });
+        t::lib::Mocks::mock_userenv( { patron => $librarian } );
 
         my $new_ticket = Koha::Ticket->new(
             {
@@ -270,45 +270,53 @@ subtest 'store() tests' => sub {
             }
         )->store();
 
-        is( ref($new_ticket), 'Koha::Ticket',
-            'Koha::Ticket->store() returned the Koha::Ticket object' );
-        my $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
-        is( $notices->count, 1,
-            'One assignment notice queued for the ticket assignee at ticket creation' );
+        is(
+            ref($new_ticket), 'Koha::Ticket',
+            'Koha::Ticket->store() returned the Koha::Ticket object'
+        );
+        my $notices = Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
+        is(
+            $notices->count, 1,
+            'One assignment notice queued for the ticket assignee at ticket creation'
+        );
         my $THE_notice = $notices->next;
-        isnt( $THE_notice->status, 'pending',
-            'Assignment notice is sent immediately' );
+        isnt(
+            $THE_notice->status, 'pending',
+            'Assignment notice is sent immediately'
+        );
 
         $new_ticket->set( { title => "Changed title" } )->store();
-        $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
-        is( $notices->count, 1,
+        $notices = Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
+        is(
+            $notices->count, 1,
             "Further assignment notices are not queud for subsequent stores that don't set assignee"
         );
 
-        $new_ticket->set({ assignee_id => $assignee->id })->store();
-        $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
-        is( $notices->count, 1,
+        $new_ticket->set( { assignee_id => $assignee->id } )->store();
+        $notices = Koha::Notice::Messages->search( { borrowernumber => $assignee->id } );
+        is(
+            $notices->count, 1,
             "Further assignment notices are not queud for subsequent stores that don't change assignee"
         );
 
         my $assignee2 = $builder->build_object( { class => "Koha::Patrons" } );
-        $new_ticket->set({ assignee_id => $assignee2->id })->store();
-        $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $assignee2->id } );
-        is( $notices->count, 1,
-            'New assignment notice queued for a change of ticket assignee' );
+        $new_ticket->set( { assignee_id => $assignee2->id } )->store();
+        $notices = Koha::Notice::Messages->search( { borrowernumber => $assignee2->id } );
+        is(
+            $notices->count, 1,
+            'New assignment notice queued for a change of ticket assignee'
+        );
 
-        $new_ticket->set({ assignee_id => $librarian->id })->store();
-        $notices =
-          Koha::Notice::Messages->search( { borrowernumber => $librarian->id } );
-        is( $notices->count, 0,
-            'Assignment notice not queued for self-assignments' );
+        $new_ticket->set( { assignee_id => $librarian->id } )->store();
+        $notices = Koha::Notice::Messages->search( { borrowernumber => $librarian->id } );
+        is(
+            $notices->count, 0,
+            'Assignment notice not queued for self-assignments'
+        );
 
         $schema->storage->txn_rollback;
     };
+
 };
 
 subtest 'strings_map() tests' => sub {
