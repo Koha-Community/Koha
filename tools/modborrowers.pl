@@ -56,7 +56,7 @@ $template->param( CanUpdatePasswordExpiration => 1 ) if $logged_in_user->is_supe
 my $dbh       = C4::Context->dbh;
 
 # Show borrower informations
-if ( $op eq 'cud-show' ) {
+if ( $op eq 'cud-show' || $op eq 'show' ) {
     my @borrowers;
     my @patronidnumbers;
     my @notfoundcardnumbers;
