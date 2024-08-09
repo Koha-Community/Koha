@@ -70,8 +70,8 @@ GetOptions(
     'category=s'        => $borrower_category,
     'skip-category=s'   => $skip_borrower_category,
     'list-categories'   => \$list_categories,
-    'branch=s'          => \@branches,
-    'skip-branch=s'     => \@skip_branches,
+    'library=s'          => \@branches,
+    'skip-library=s'     => \@skip_branches,
     'itemtype=s'        => $itemtype,
     'skip-itemtype=s'   => $skip_itemtype,
     'list-itemtypes'    => \$list_itemtypes,
@@ -101,7 +101,7 @@ if ( scalar @$borrower_category && scalar @$skip_borrower_category) {
 if ( scalar @branches && scalar @skip_branches ) {
     pod2usage(
         -verbose => 1,
-        -message => "The options --branch and --skip-branch are mutually exclusive.\n" . "Use one or the other.",
+        -message => "The options --library and --skip-library are mutually exclusive.\n" . "Use one or the other.",
         -exitval => 1
     );
 }
@@ -133,7 +133,7 @@ if ( $list_itemtypes ) {
    longoverdue.pl --lost | -l DAYS=LOST_CODE [ --charge | -c CHARGE_CODE ] [ --verbose | -v ] [ --quiet ]
                   [ --maxdays MAX_DAYS ] [ --mark-returned ] [ --category BORROWER_CATEGORY ] ...
                   [ --skip-category BORROWER_CATEGORY ] ...
-                  [ --branch BRANCH_CODE ] [ --skip-branch BRANCH_CODE ] ...
+                  [ --library LIBRARY_CODE ] [ --skip-library LIBRARY_CODE ] ...
                   [ --skip-lost-value LOST_VALUE [ --skip-lost-value LOST_VALUE ] ]
                   [ --commit ]
 
@@ -200,15 +200,15 @@ If not provided, the value of the system preference 'DefaultLongOverdueSkipPatro
 List borrower categories available for use by B<--category> or
 B<--skip-category>, and exit.
 
-=item B<--branch>
+=item B<--library>
 
-Act on the listed branch codes.  Exclude all others.  This may be specified multiple times to include multiple branches.  Which branches are selected follows the CircControl system preference.
-May not be used with B<--skip-branch>
+Act on the listed library codes.  Exclude all others.  This may be specified multiple times to include multiple libraries.  Which libraries are selected follows the CircControl system preference.
+May not be used with B<--skip-library>
 
-=item B<--skip-branch>
+=item B<--skip-library>
 
-Act on all branch codes except the ones listed.  This may be specified multiple times to exclude multiple branches.  Which branches are excluded follows the CircControl system preference.
-May not be used with B<--branch>
+Act on all library codes except the ones listed.  This may be specified multiple times to exclude multiple libraries.  Which libraries are excluded follows the CircControl system preference.
+May not be used with B<--library>
 
 =item B<--itemtype>
 
@@ -387,7 +387,7 @@ my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_b
 
 my @available_branches = Koha::Libraries->search()->get_column('branchcode');
 my %branches_to_process;
-# If --branch was used, validate any branchcode passed in and mark them as branches to use
+# If --library was used, validate any branchcode passed in and mark them as branches to use
 for my $lib (@branches) {
     unless ( grep { $_ eq $lib } @available_branches ) {
         pod2usage(
@@ -397,7 +397,7 @@ for my $lib (@branches) {
     }
     $branches_to_process{$lib} = 1;
 }
-# If --skip-branch was used, validate any branchcode passed in and mark them as branches to *not* use
+# If --skip-library was used, validate any branchcode passed in and mark them as branches to *not* use
 if (@skip_branches) {
     for my $lib (@skip_branches) {
         unless ( grep { $_ eq $lib } @available_branches ) {
