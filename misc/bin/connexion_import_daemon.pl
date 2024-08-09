@@ -22,12 +22,12 @@ use warnings;
 
 use Getopt::Long qw( GetOptions );
 
-my ($help, $config, $daemon);
+my ( $help, $config, $daemon );
 
 GetOptions(
-    'config|c=s'    => \$config,
-    'daemon|d'      => \$daemon,
-    'help|?'        => \$help,
+    'config|c=s' => \$config,
+    'daemon|d'   => \$daemon,
+    'help|?'     => \$help,
 );
 
 if ( $help || !$config ) {
@@ -86,372 +86,376 @@ if ($daemon) {
 exit;
 
 {
-package ImportProxyServer;
 
-use Carp qw( croak );
-use IO::Socket::INET qw( SOCK_STREAM );
-# use IO::Socket::IP;
-use IO::Select;
-use POSIX;
-use HTTP::Status qw( HTTP_FORBIDDEN HTTP_UNAUTHORIZED );
-use strict;
-use warnings;
+    package ImportProxyServer;
 
-use LWP::UserAgent;
-use XML::Simple qw( XMLin );
-use MARC::Record;
-use MARC::File::XML;
+    use Carp             qw( croak );
+    use IO::Socket::INET qw( SOCK_STREAM );
 
-use constant CLIENT_READ_TIMEOUT     => 5;
-use constant CLIENT_READ_BUFFER_SIZE => 100000;
-use constant AUTH_URI       => "/cgi-bin/koha/svc/authentication";
-use constant IMPORT_SVC_URI => "/cgi-bin/koha/svc/import_bib";
+    # use IO::Socket::IP;
+    use IO::Select;
+    use POSIX;
+    use HTTP::Status qw( HTTP_FORBIDDEN HTTP_UNAUTHORIZED );
+    use strict;
+    use warnings;
 
-sub new {
-    my $class = shift;
-    my $config_file = shift or croak "No config file";
+    use LWP::UserAgent;
+    use XML::Simple qw( XMLin );
+    use MARC::Record;
+    use MARC::File::XML;
 
-    my $self = {time_to_die => 0, config_file => $config_file };
-    bless $self, $class;
+    use constant CLIENT_READ_TIMEOUT     => 5;
+    use constant CLIENT_READ_BUFFER_SIZE => 100000;
+    use constant AUTH_URI                => "/cgi-bin/koha/svc/authentication";
+    use constant IMPORT_SVC_URI          => "/cgi-bin/koha/svc/import_bib";
 
-    $self->parse_config;
-    return $self;
-}
+    sub new {
+        my $class       = shift;
+        my $config_file = shift or croak "No config file";
 
-sub parse_config {
-    my $self = shift;
+        my $self = { time_to_die => 0, config_file => $config_file };
+        bless $self, $class;
 
-    my $config_file = $self->{config_file};
-
-    open (my $conf_fh, '<', $config_file) or die "Cannot open config file $config: $!";
-
-    my %param;
-    my $line = 0;
-    while (<$conf_fh>) {
-        $line++;
-        chomp;
-        s/\s*#.*//o; # remove comments
-        s/^\s+//o;   # trim leading spaces
-        s/\s+$//o;   # trim trailing spaces
-        next unless $_;
-
-        my ($p, $v) = m/(\S+?):\s*(.*)/o;
-        die "Invalid config line $line: $_" unless defined $v;
-        $param{$p} = $v;
-    }
-    close($conf_fh);
-
-    $self->{koha} = delete( $param{koha} )
-      or die "No koha base url in config file";
-    $self->{user} = delete( $param{user} )
-      or die "No koha user in config file";
-    $self->{password} = delete( $param{password} )
-      or die "No koha user password in config file";
-
-    if( defined $param{connexion_user} || defined $param{connexion_password}){
-        # If either is defined we expect both
-        $self->{connexion_user} = delete( $param{connexion_user} )
-          or die "No koha connexion_user in config file";
-        $self->{connexion_password} = delete( $param{connexion_password} )
-          or die "No koha user connexion_password in config file";
+        $self->parse_config;
+        return $self;
     }
 
-    $self->{host} = delete( $param{host} );
-    $self->{port} = delete( $param{port} )
-      or die "Port not specified";
+    sub parse_config {
+        my $self = shift;
 
-    $self->{debug} = delete( $param{debug} );
+        my $config_file = $self->{config_file};
 
-    my $log_fh;
-    close $self->{log_fh} if $self->{log_fh};
-    if (my $logfile = delete $param{log}) {
-        open ($log_fh, '>>', $logfile) or die "Cannot open $logfile for write: $!";
-    } else {
-        $log_fh = \*STDERR;
-    }
-    $self->{log_fh} = $log_fh;
+        open( my $conf_fh, '<', $config_file ) or die "Cannot open config file $config: $!";
 
-    $self->{params} = \%param;
-}
+        my %param;
+        my $line = 0;
+        while (<$conf_fh>) {
+            $line++;
+            chomp;
+            s/\s*#.*//o;    # remove comments
+            s/^\s+//o;      # trim leading spaces
+            s/\s+$//o;      # trim trailing spaces
+            next unless $_;
 
-sub log {
-    my $self = shift;
-    my $log_fh = $self->{log_fh}
-      or warn "No log fh",
-         return;
-    my $t = localtime;
-    print $log_fh map "$t: $_\n", @_;
-}
-
-sub background {
-    my $self = shift;
-
-    my $pid = fork;
-    return ($pid) if $pid; # parent
-
-    die "Couldn't fork: $!" unless defined($pid);
-
-    POSIX::setsid() or die "Can't start a new session: $!";
-
-    $SIG{INT} = $SIG{TERM} = $SIG{HUP} = sub { $self->{time_to_die} = 1 };
-    # trap or ignore $SIG{PIPE}
-    $SIG{USR1} = sub { $self->parse_config };
-
-    $self->run;
-}
-
-sub run {
-    my $self = shift;
-
-    my $server_port = $self->{port};
-    my $server_host = $self->{host};
-
-    my $server = IO::Socket::INET->new(
-        LocalHost => $server_host,
-        LocalPort => $server_port,
-        Type      => SOCK_STREAM,
-        Proto     => "tcp",
-        Listen    => 12,
-        Blocking  => 1,
-        ReuseAddr => 1,
-    ) or die "Couldn't be a tcp server on port $server_port: $! $@";
-
-    $self->log("Started tcp listener on $server_host:$server_port");
-
-    $self->{ua} = _ua();
-
-    while ("FOREVER") {
-        my $client = $server->accept()
-          or die "Cannot accept: $!";
-        my $oldfh = select($client);
-        $self->handle_request($client);
-        select($oldfh);
-        last if $self->{time_to_die};
-    }
-
-    close($server);
-}
-
-sub _ua {
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->cookie_jar({});
-    return $ua;
-}
-
-sub get_current_csrf_token {
-    my $self = shift;
-    my $ua = $self->{ua};
-    my $url = $self->{koha} . AUTH_URI;
-    return $ua->get($url)->header('CSRF-TOKEN');
-}
-
-sub authenticate {
-    my $self = shift;
-    my $ua = $self->{ua};
-    my $url = $self->{koha} . AUTH_URI;
-    my $resp = $ua->post(
-        $url,
-        {
-            login_userid => $self->{user},
-            login_password => $self->{password},
-            csrf_token => $self->get_current_csrf_token,
+            my ( $p, $v ) = m/(\S+?):\s*(.*)/o;
+            die "Invalid config line $line: $_" unless defined $v;
+            $param{$p} = $v;
         }
-    );
-    if ( !$resp->is_success ) {
-        $self->log("Authentication failed", $resp->request->as_string, $resp->as_string);
-        return;
+        close($conf_fh);
+
+        $self->{koha} = delete( $param{koha} )
+            or die "No koha base url in config file";
+        $self->{user} = delete( $param{user} )
+            or die "No koha user in config file";
+        $self->{password} = delete( $param{password} )
+            or die "No koha user password in config file";
+
+        if ( defined $param{connexion_user} || defined $param{connexion_password} ) {
+
+            # If either is defined we expect both
+            $self->{connexion_user} = delete( $param{connexion_user} )
+                or die "No koha connexion_user in config file";
+            $self->{connexion_password} = delete( $param{connexion_password} )
+                or die "No koha user connexion_password in config file";
+        }
+
+        $self->{host} = delete( $param{host} );
+        $self->{port} = delete( $param{port} )
+            or die "Port not specified";
+
+        $self->{debug} = delete( $param{debug} );
+
+        my $log_fh;
+        close $self->{log_fh} if $self->{log_fh};
+        if ( my $logfile = delete $param{log} ) {
+            open( $log_fh, '>>', $logfile ) or die "Cannot open $logfile for write: $!";
+        } else {
+            $log_fh = \*STDERR;
+        }
+        $self->{log_fh} = $log_fh;
+
+        $self->{params} = \%param;
     }
-    return $resp->header('CSRF-TOKEN');
-}
 
-sub read_request {
-    my ( $self, $io ) = @_;
+    sub log {
+        my $self   = shift;
+        my $log_fh = $self->{log_fh}
+            or warn "No log fh",
+            return;
+        my $t = localtime;
+        print $log_fh map "$t: $_\n", @_;
+    }
 
-    my ($in, @in_arr, $timeout, $bad_marc);
-    my $select = IO::Select->new($io) ;
-    while ( "FOREVER" ) {
-        if ( $select->can_read(CLIENT_READ_TIMEOUT) ){
-            $io->recv($in, CLIENT_READ_BUFFER_SIZE);
-            last unless $in;
+    sub background {
+        my $self = shift;
 
-            # XXX ignore after NULL
-            if ( $in =~ m/^(.*)\000/so ) { # null received, EOT
-                push @in_arr, $1;
+        my $pid = fork;
+        return ($pid) if $pid;    # parent
+
+        die "Couldn't fork: $!" unless defined($pid);
+
+        POSIX::setsid() or die "Can't start a new session: $!";
+
+        $SIG{INT} = $SIG{TERM} = $SIG{HUP} = sub { $self->{time_to_die} = 1 };
+
+        # trap or ignore $SIG{PIPE}
+        $SIG{USR1} = sub { $self->parse_config };
+
+        $self->run;
+    }
+
+    sub run {
+        my $self = shift;
+
+        my $server_port = $self->{port};
+        my $server_host = $self->{host};
+
+        my $server = IO::Socket::INET->new(
+            LocalHost => $server_host,
+            LocalPort => $server_port,
+            Type      => SOCK_STREAM,
+            Proto     => "tcp",
+            Listen    => 12,
+            Blocking  => 1,
+            ReuseAddr => 1,
+        ) or die "Couldn't be a tcp server on port $server_port: $! $@";
+
+        $self->log("Started tcp listener on $server_host:$server_port");
+
+        $self->{ua} = _ua();
+
+        while ("FOREVER") {
+            my $client = $server->accept()
+                or die "Cannot accept: $!";
+            my $oldfh = select($client);
+            $self->handle_request($client);
+            select($oldfh);
+            last if $self->{time_to_die};
+        }
+
+        close($server);
+    }
+
+    sub _ua {
+        my $ua = LWP::UserAgent->new;
+        $ua->timeout(10);
+        $ua->cookie_jar( {} );
+        return $ua;
+    }
+
+    sub get_current_csrf_token {
+        my $self = shift;
+        my $ua   = $self->{ua};
+        my $url  = $self->{koha} . AUTH_URI;
+        return $ua->get($url)->header('CSRF-TOKEN');
+    }
+
+    sub authenticate {
+        my $self = shift;
+        my $ua   = $self->{ua};
+        my $url  = $self->{koha} . AUTH_URI;
+        my $resp = $ua->post(
+            $url,
+            {
+                login_userid   => $self->{user},
+                login_password => $self->{password},
+                csrf_token     => $self->get_current_csrf_token,
+            }
+        );
+        if ( !$resp->is_success ) {
+            $self->log( "Authentication failed", $resp->request->as_string, $resp->as_string );
+            return;
+        }
+        return $resp->header('CSRF-TOKEN');
+    }
+
+    sub read_request {
+        my ( $self, $io ) = @_;
+
+        my ( $in, @in_arr, $timeout, $bad_marc );
+        my $select = IO::Select->new($io);
+        while ("FOREVER") {
+            if ( $select->can_read(CLIENT_READ_TIMEOUT) ) {
+                $io->recv( $in, CLIENT_READ_BUFFER_SIZE );
+                last unless $in;
+
+                # XXX ignore after NULL
+                if ( $in =~ m/^(.*)\000/so ) {    # null received, EOT
+                    push @in_arr, $1;
+                    last;
+                }
+                push @in_arr, $in;
+            } else {
                 last;
             }
-            push @in_arr, $in;
         }
-        else {
-            last;
-        }
-    }
 
-    $in = join '', @in_arr;
-    $in =~ m/(.)$/;
-    my $lastchar = $1;
-    my ($xml, $user, $password, $local_user);
-    my $data = $in; # copy for diagmostic purposes
-    while () {
-        my $first = substr( $data, 0, 1 );
-        if (!defined $first) {
-           last;
-        }
-        $first eq 'U' && do {
-            ($user, $data) = _trim_identifier($data);
-            next;
-        };
-        $first eq 'A' && do {
-            ($local_user, $data) = _trim_identifier($data);
-            next;
-        };
-        $first eq 'P' && do {
-            ($password, $data) = _trim_identifier($data);
-            next;
-        };
-        $first eq ' ' && do {
-            $data = substr( $data, 1 ); # trim
-            next;
-        };
-        $data =~ m/^[0-9]/ && do {
-            # What we have here might be a MARC record...
-            my $marc_record;
-            eval { $marc_record = MARC::Record->new_from_usmarc($data); };
-            if ($@) {
-                $bad_marc = 1;
+        $in = join '', @in_arr;
+        $in =~ m/(.)$/;
+        my $lastchar = $1;
+        my ( $xml, $user, $password, $local_user );
+        my $data = $in;    # copy for diagmostic purposes
+        while () {
+            my $first = substr( $data, 0, 1 );
+            if ( !defined $first ) {
+                last;
             }
-            else {
-               $xml = $marc_record->as_xml();
-            }
-            last;
+            $first eq 'U' && do {
+                ( $user, $data ) = _trim_identifier($data);
+                next;
+            };
+            $first eq 'A' && do {
+                ( $local_user, $data ) = _trim_identifier($data);
+                next;
+            };
+            $first eq 'P' && do {
+                ( $password, $data ) = _trim_identifier($data);
+                next;
+            };
+            $first eq ' ' && do {
+                $data = substr( $data, 1 );    # trim
+                next;
+            };
+            $data =~ m/^[0-9]/ && do {
+
+                # What we have here might be a MARC record...
+                my $marc_record;
+                eval { $marc_record = MARC::Record->new_from_usmarc($data); };
+                if ($@) {
+                    $bad_marc = 1;
+                } else {
+                    $xml = $marc_record->as_xml();
+                }
+                last;
+            };
+            last;    # unexpected input
+        }
+
+        my @details;
+        push @details, "Timeout"                                                                   if $timeout;
+        push @details, "Bad MARC"                                                                  if $bad_marc;
+        push @details, "User: $user"                                                               if $user;
+        push @details, "Password: " . ( $self->{debug} ? $password : ( "x" x length($password) ) ) if $password;
+        push @details, "Local user: $local_user"                                                   if $local_user;
+        push @details, "XML: $xml"                                                                 if $xml;
+        push @details, "Remaining data: $data" if ( $data && !$xml );
+
+        unless ($xml) {
+            $self->log( "Invalid request", $in, @details );
+            return;
+        }
+        $user = $local_user if !$user && $local_user;
+
+        $self->log( "Request", @details );
+        $self->log($in) if $self->{debug};
+        return ( $xml, $user, $password );
+    }
+
+    sub _trim_identifier {
+
+        #my ($a, $len) = unpack "cc", substr( $_[0], 0, 2 );
+        my $len = ord( substr( $_[0], 1, 1 ) ) - 64;
+        if ( $len < 0 ) {    #length is numeric, and thus comes from the web client, not the desktop client.
+            $_[0] =~ m/.(\d+)/;
+            $len = $1;
+            return ( substr( $_[0], length($len) + 1, $len ), substr( $_[0], length($len) + 1 + $len ) );
+        }
+        return ( substr( $_[0], 2, $len ), substr( $_[0], 2 + $len ) );
+    }
+
+    sub handle_request {
+        my ( $self, $io ) = @_;
+        my ( $data, $user, $password ) = $self->read_request($io)
+            or return $self->error_response("Bad request");
+
+        unless ( !( defined $self->{connexion_user} )
+            || ( $user eq $self->{connexion_user} && $password eq $self->{connexion_password} ) )
+        {
+            return $self->error_response("Unauthorized request");
+        }
+
+        my $ua;
+        if ( $self->{user} ) {
+            $user     = $self->{user};
+            $password = $self->{password};
+            $ua       = $self->{ua};
+        } else {
+            $ua = _ua();    # fresh one, needs to authenticate
+        }
+
+        my $base_url  = $self->{koha};
+        my $post_body = {
+            'nomatch_action'    => $self->{params}->{nomatch_action},
+            'overlay_action'    => $self->{params}->{overlay_action},
+            'match'             => $self->{params}->{match},
+            'import_mode'       => $self->{params}->{import_mode},
+            'framework'         => $self->{params}->{framework},
+            'overlay_framework' => $self->{params}->{overlay_framework},
+            'item_action'       => $self->{params}->{item_action},
+            'xml'               => $data
         };
-        last; # unexpected input
-    }
 
-    my @details;
-    push @details, "Timeout" if $timeout;
-    push @details, "Bad MARC" if $bad_marc;
-    push @details, "User: $user" if $user;
-    push @details, "Password: " . ( $self->{debug} ? $password : ("x" x length($password)) ) if $password;
-    push @details, "Local user: $local_user" if $local_user;
-    push @details, "XML: $xml" if $xml;
-    push @details, "Remaining data: $data" if ($data && !$xml);
-    unless ($xml) {
-        $self->log("Invalid request", $in, @details);
-        return;
-    }
-    $user = $local_user if !$user && $local_user;
-
-    $self->log("Request", @details);
-    $self->log($in) if $self->{debug};
-    return ($xml, $user, $password);
-}
-
-sub _trim_identifier {
-    #my ($a, $len) = unpack "cc", substr( $_[0], 0, 2 );
-    my $len=ord(substr ($_[0], 1, 1)) - 64;
-    if ($len <0) {  #length is numeric, and thus comes from the web client, not the desktop client.
-       $_[0] =~ m/.(\d+)/;
-       $len = $1;
-       return ( substr( $_[0], length($len)+1 , $len ), substr( $_[0], length($len) + 1 + $len ) );
-    }
-    return ( substr( $_[0], 2 , $len ), substr( $_[0], 2 + $len ) );
-}
-
-sub handle_request {
-    my ( $self, $io ) = @_;
-    my ($data, $user, $password) = $self->read_request($io)
-      or return $self->error_response("Bad request");
-
-    unless(
-        !(defined $self->{connexion_user}) ||
-        ($user eq $self->{connexion_user} && $password eq $self->{connexion_password})
-    ){
-       return $self->error_response("Unauthorized request");
-    }
-
-    my $ua;
-    if ($self->{user}) {
-        $user = $self->{user};
-        $password = $self->{password};
-        $ua = $self->{ua};
-    }
-    else {
-        $ua  = _ua(); # fresh one, needs to authenticate
-    }
-
-    my $base_url = $self->{koha};
-    my $post_body = {
-        'nomatch_action'    => $self->{params}->{nomatch_action},
-        'overlay_action'    => $self->{params}->{overlay_action},
-        'match'             => $self->{params}->{match},
-        'import_mode'       => $self->{params}->{import_mode},
-        'framework'         => $self->{params}->{framework},
-        'overlay_framework' => $self->{params}->{overlay_framework},
-        'item_action'       => $self->{params}->{item_action},
-        'xml'               => $data
-    };
-
-    # If we have a token, try it, else, authenticate for the first time.
-    $self->{csrf_token} = $self->authenticate unless $self->{csrf_token};
-    my $resp = $ua->post(
-        $base_url . IMPORT_SVC_URI,
-        $post_body,
-        csrf_token => $self->{csrf_token},
-    );
-
-    my $status = $resp->code;
-    if ( $status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN ) {
-        # Our token might have expired. Re-authenticate and post again.
-        $self->{csrf_token} = $self->authenticate;
-        $resp = $ua->post(
+        # If we have a token, try it, else, authenticate for the first time.
+        $self->{csrf_token} = $self->authenticate unless $self->{csrf_token};
+        my $resp = $ua->post(
             $base_url . IMPORT_SVC_URI,
             $post_body,
             csrf_token => $self->{csrf_token},
-        )
+        );
+
+        my $status = $resp->code;
+        if ( $status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN ) {
+
+            # Our token might have expired. Re-authenticate and post again.
+            $self->{csrf_token} = $self->authenticate;
+            $resp = $ua->post(
+                $base_url . IMPORT_SVC_URI,
+                $post_body,
+                csrf_token => $self->{csrf_token},
+            );
+        }
+        unless ( $resp->is_success ) {
+            $self->log( "Unsuccessful request", $resp->request->as_string, $resp->as_string );
+            return $self->error_response("Unsuccessful request");
+        }
+
+        my ( $koha_status, $bib, $overlay, $batch_id, $error, $url );
+        if ( my $r = eval { XMLin( $resp->content ) } ) {
+            $koha_status = $r->{status};
+            $batch_id    = $r->{import_batch_id};
+            $error       = $r->{error};
+            $bib         = $r->{biblionumber};
+            $overlay     = $r->{match_status};
+            $url         = $r->{url};
+        } else {
+            $koha_status = "error";
+            $self->log("Response format error:\n$resp->content");
+            return $self->error_response("Invalid response");
+        }
+
+        if ( $koha_status eq "ok" ) {
+            my $response_string = sprintf(
+                "Success.  Batch number %s - biblio record number %s",
+                $batch_id, $bib
+            );
+            $response_string .= $overlay eq 'no_match' ? ' added to Koha.' : ' overlaid by import.';
+            $response_string .= "\n\n$url";
+
+            return $self->response($response_string);
+        }
+
+        return $self->error_response( sprintf( "%s.  Please contact administrator.", $error ) );
     }
-    unless ($resp->is_success) {
-        $self->log("Unsuccessful request", $resp->request->as_string, $resp->as_string);
-        return $self->error_response("Unsuccessful request");
+
+    sub error_response {
+        my $self = shift;
+        $self->response(@_);
     }
 
-    my ($koha_status, $bib, $overlay, $batch_id, $error, $url);
-    if ( my $r = eval { XMLin($resp->content) } ) {
-        $koha_status = $r->{status};
-        $batch_id    = $r->{import_batch_id};
-        $error       = $r->{error};
-        $bib         = $r->{biblionumber};
-        $overlay     = $r->{match_status};
-        $url         = $r->{url};
-    }
-    else {
-        $koha_status = "error";
-        $self->log("Response format error:\n$resp->content");
-        return $self->error_response("Invalid response");
+    sub response {
+        my $self = shift;
+        $self->log("Response: $_[0]");
+        printf $_[0] . "\0";
     }
 
-    if ($koha_status eq "ok") {
-        my $response_string = sprintf( "Success.  Batch number %s - biblio record number %s",
-                                        $batch_id,$bib);
-        $response_string .= $overlay eq 'no_match' ? ' added to Koha.' : ' overlaid by import.';
-        $response_string .= "\n\n$url";
-
-        return $self->response( $response_string );
-    }
-
-    return $self->error_response( sprintf( "%s.  Please contact administrator.", $error ) );
-}
-
-sub error_response {
-    my $self = shift;
-    $self->response(@_);
-}
-
-sub response {
-    my $self = shift;
-    $self->log("Response: $_[0]");
-    printf $_[0] . "\0";
-}
-
-
-} # package
+}    # package
