@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # Copyright 2012 Catalyst IT Ltd.
 # Copyright 2015 Koha Development team
 #
