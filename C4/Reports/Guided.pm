@@ -615,15 +615,9 @@ sub execute_query {
     };
     warn $@ if $@;
 
-    if ( $sql =~ m/password/ ) {
-        return ( $sth, { passworderr => "Illegal column in SQL" } );
-    }
-
-    foreach my $column ( @{ $sth->{NAME_lc} } ) {
-        if ( $column eq 'password' ) {
-            return ( $sth, { passworderr => "Illegal column in results" } );
-        }
-    }
+    # Check if table.* contained forbidden column names
+    return ( $sth, { passworderr => "Illegal column in results" } )
+        if Koha::Report->new->check_columns( undef, $sth->{NAME_lc} );
 
     return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
