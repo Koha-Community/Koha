@@ -290,7 +290,7 @@ subtest 'list_rules() tests' => sub {
 };
 
 subtest 'set_rules() tests' => sub {
-    plan tests => 23;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
 
@@ -387,6 +387,22 @@ subtest 'set_rules() tests' => sub {
     $json = $t->tx->res->json;
     is( $json->{fine},     10, "Fine rule set correctly for wildcard context" );
     is( $json->{finedays}, 7,  "Finedays rule set correctly for wildcard context" );
+
+    # Setting rules empty and undefined
+    note("Setting rules to empty and undefined");
+    $rules_to_set->{fine}     = '';
+    $rules_to_set->{finedays} = undef;
+    $t->put_ok( "//$userid:$password@/api/v1/circulation_rules" => json => $rules_to_set )->status_is(200);
+
+    # Verify the rules were updated
+    $json = $t->tx->res->json;
+    is( $json->{fine},     '',    "Fine rule updated correctly" );
+    is( $json->{finedays}, undef, "Finedays rule remains the same" );
+
+    # Verify that the explicit undef results in a rule deletion
+    my $rules = Koha::CirculationRules->search(
+        { categorycode => undef, branchcode => undef, itemtype => undef, rule_name => 'finedays' } );
+    is( $rules->count, 0, "Finedays rule deleted from database" );
 
     $schema->storage->txn_rollback;
 };
