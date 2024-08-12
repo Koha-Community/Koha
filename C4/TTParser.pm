@@ -73,6 +73,26 @@ sub text{
     my $line = shift;
     my $work = shift; # original text
     my $is_cdata = shift;
+    # If there is a split template toolkit tag
+    if ( $work =~ m/^(?:(?!\[%).)*?%\]/s ) {
+        my @strings = ($&);
+        my $token;
+        $work = $';
+        while ( $token = pop @tokens ) {
+            if ( $token->string =~ m/\[%.*?$/s ) {
+                push @tokens,  C4::TmplToken->new( $`, $token->type, $token->line_number, $token->pathname );
+                push @strings, $&;
+                last;
+            } else {
+                push @strings, $token->string;
+            }
+        }
+        push @tokens,
+            C4::TmplToken->new(
+            join( '', reverse @strings ),         C4::TmplTokenType::DIRECTIVE,
+            $token ? $token->line_number : $line, $self->{filename}
+            );
+    }
     while($work){
         # if there is a template_toolkit tag
         if( $work =~ m/\[%.*?%\]/ ){
