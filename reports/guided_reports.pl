@@ -846,7 +846,7 @@ elsif ($phase eq 'Run this report'){
             );
             my $total;
             if (!$sth) {
-                die "execute_query failed to return sth for report $report_id: $sql";
+                push @errors, "Report could not be run " . $errors;
             } elsif ( !$errors ) {
                 $total = nb_rows($sql) || 0;
                 my $headers = header_cell_loop($sth);
