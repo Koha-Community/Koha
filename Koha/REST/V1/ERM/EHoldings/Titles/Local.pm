@@ -157,7 +157,6 @@ sub update {
 
                 $title->resources($resources);
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $title->title_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($title),
