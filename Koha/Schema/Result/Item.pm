@@ -63,7 +63,7 @@ item barcode (MARC21 952$p)
   default_value: 0
   is_nullable: 0
 
-boolean value defining whether this this item is available for bookings or not
+boolean value defining whether this item is available for bookings or not
 
 =head2 dateaccessioned
 
