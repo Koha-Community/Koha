@@ -164,7 +164,6 @@ sub update {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $package->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $package->package_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($package),

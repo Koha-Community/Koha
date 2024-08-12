@@ -166,7 +166,6 @@ sub update {
                     map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $license->extended_attributes( \@extended_attributes );
 
-                $c->res->headers->location( $c->req->url->to_string . '/' . $license->license_id );
                 return $c->render(
                     status  => 200,
                     openapi => $c->objects->to_api($license),
