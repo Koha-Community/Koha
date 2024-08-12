@@ -177,7 +177,7 @@
                 }
             });
 
-            $(".select_patron").on("click", function() {
+            $(document).on("click", ".select_patron", function() {
                 if($(this).is(':checked')){
                     $("#delete_selected_lists").attr("class","btn btn-default btn-sm");
                     selectedPatronLists.push($(this).data("patron-list-id"));
