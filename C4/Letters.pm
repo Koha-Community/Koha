@@ -626,7 +626,8 @@ sub GetPreparedLetter {
          return;
     my $want_librarian = $params{want_librarian};
     if ($want_librarian) {
-        $objects->{librarian} = Koha::Patrons->find( C4::Context->userenv->{number} );
+        my $userenv = C4::Context->userenv;
+        $objects->{librarian} = Koha::Patrons->find( C4::Context->userenv->{number} ) if ($userenv);
     }
 
     # Best guess at language 'default' notice is written for include handling

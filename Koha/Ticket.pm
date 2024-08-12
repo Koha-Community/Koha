@@ -176,7 +176,8 @@ sub store {
         }
     } else {
         my %updated_columns = $self->_result->get_dirty_columns;
-        return $self->SUPER::store unless %updated_columns;
+        $self->SUPER::store;
+        $self->discard_changes;
 
         $assignee = ( exists $updated_columns{assignee_id} ) ? $self->assignee : undef;
     }
