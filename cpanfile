@@ -5,7 +5,7 @@ requires 'Auth::GoogleAuth', '1.02';
 requires 'Authen::CAS::Client', '0.05';
 requires 'Auth::GoogleAuth', '1.02';
 requires 'Biblio::EndnoteStyle', '0.05';
-requires 'Business::ISBN', '2.05';
+requires 'Business::ISBN', '3.009';
 requires 'Business::ISSN', '0.91';
 requires 'Bytes::Random::Secure', '0.28';
 requires 'CGI', '3.15';
