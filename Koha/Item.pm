@@ -1832,7 +1832,7 @@ sub to_api_mapping {
         replacementpricedate     => 'replacement_price_date',
         datelastborrowed         => 'last_checkout_date',
         datelastseen             => 'last_seen_date',
-        stack                    => undef,
+        stack                    => 'shelving_control_number',
         notforloan               => 'not_for_loan_status',
         damaged                  => 'damaged_status',
         damaged_on               => 'damaged_date',
