@@ -74,6 +74,7 @@ my $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|DELETE FROM message_transport_types|);
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
 
 my $library = $builder->build({
     source => 'Branch',
