@@ -174,9 +174,9 @@ sub harvest_sushi {
     $self->{report_type} = $args->{report_type};
     $self->{begin_date}  = $args->{begin_date};
     $self->{end_date}    = $args->{end_date};
-    my $url      = $self->_build_url_query;
-    my $request  = HTTP::Request->new( 'GET' => $url );
-    my $ua       = LWP::UserAgent->new;
+    my $url     = $self->_build_url_query;
+    my $request = HTTP::Request->new( 'GET' => $url );
+    my $ua      = LWP::UserAgent->new;
     $ua->agent( 'Koha/' . Koha::version() );
     my $response = $ua->simple_request($request);
 
@@ -277,10 +277,10 @@ sub test_connection {
     $url .= 'status';
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
-    $url .= '&api_key=' . $self->api_key if $self->api_key;
+    $url .= '&api_key=' . $self->api_key           if $self->api_key;
 
-    my $request  = HTTP::Request->new( 'GET' => $url );
-    my $ua       = LWP::UserAgent->new;
+    my $request = HTTP::Request->new( 'GET' => $url );
+    my $ua      = LWP::UserAgent->new;
     $ua->agent( 'Koha/' . Koha::version() );
     my $response = $ua->simple_request($request);
 
@@ -396,9 +396,9 @@ sub _build_url_query {
     $url .= lc $self->{report_type};
     $url .= '?customer_id=' . $self->customer_id;
     $url .= '&requestor_id=' . $self->requestor_id if $self->requestor_id;
-    $url .= '&api_key=' . $self->api_key if $self->api_key;
+    $url .= '&api_key=' . $self->api_key           if $self->api_key;
     $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
-    $url .= '&end_date=' . substr $self->{end_date}, 0, 7 if $self->{end_date};
+    $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
 
     return $url;
 }
