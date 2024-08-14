@@ -193,6 +193,19 @@ sub get_biblio_marcxml {
         $decoding_error = "INVALID_METADATA";
         $record         = $biblio->metadata->record_strip_nonxml( { embed_items => $with_items, opac => 1 } );
     }
+    if ($record) {
+
+        #FIXME: Syspref this?
+        my $hide_record = 1;
+        if ($hide_record) {
+            my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
+            if ( $biblio->hidden_in_opac( { rules => $rules } ) ) {
+                return;
+            }
+
+            #TODO: Also hide record if OpacSuppression is in use
+        }
+    }
     if ( $record && $expanded_avs ) {
         my $frameworkcode = GetFrameworkCode($biblionumber) || '';
         my $record_processor = Koha::RecordProcessor->new(

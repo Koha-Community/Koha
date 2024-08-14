@@ -98,14 +98,16 @@ sub new {
         push @setSpecs, $_->{spec};
     }
 
-    if ($deleted) {
+    #NOTE: Show a deleted record if there is no metadata
+    # We fetch it using this method, rather than the database directly,
+    # so it'll include the item data
+    my ( $marcxml, $marcxml_error ) =
+        $deleted ? undef : $repository->get_biblio_marcxml( $biblionumber, $args{metadataPrefix} );
+    if ( !$marcxml ) {
         $self->record(
             Koha::OAI::Server::DeletedRecord->new($timestamp, \@setSpecs, %args)
         );
     } else {
-        # We fetch it using this method, rather than the database directly,
-        # so it'll include the item data
-        my ( $marcxml, $marcxml_error ) = $repository->get_biblio_marcxml( $biblionumber, $args{metadataPrefix} );
         $args{about} = [$marcxml_error] if $marcxml_error;
         $self->record(
             Koha::OAI::Server::Record->new($repository, $marcxml, $timestamp, \@setSpecs, %args)

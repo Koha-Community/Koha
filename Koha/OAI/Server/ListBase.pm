@@ -187,12 +187,20 @@ sub GetRecords {
                     );
                 }
             } else {
+                #NOTE: Show a deleted record if there is no metadata
+                my $deleted_status = ($deleted) ? 'deleted' : undef;
+                if ( !$deleted_status ) {
+                    my ( $marcxml, $marcxml_error ) = $repository->get_biblio_marcxml( $biblionumber, $format );
+                    if ( !$marcxml ) {
+                        $deleted_status = 'deleted';
+                    }
+                }
                 $timestamp =~ s/ /T/;
                 $timestamp .= 'Z';
                 $self->identifier( HTTP::OAI::Header->new(
                     identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
                     datestamp  => $timestamp,
-                    status     => $deleted ? 'deleted' : undef,
+                    status     => $deleted_status,
                 ) );
             }
         }
