@@ -116,7 +116,7 @@
             if ( !accepts_period ) {
                 if ( accepts_time ) {
                     let parsedDate = flatpickr.parseDate(dateText, instance.config.dateFormat);
-                    if ( !parsedDate.getHours() ) {
+                    if ( Number.isNaN(parsedDate.getHours()) ) {
                         instance.setDate(selectedDates[0].setHours(23, 59, 0, 0));
                     }
                 }
