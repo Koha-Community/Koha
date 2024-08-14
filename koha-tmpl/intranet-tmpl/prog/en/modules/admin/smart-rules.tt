@@ -884,14 +884,14 @@
                                     [% IF ( waiting_hold_cancellation.defined && waiting_hold_cancellation != '' ) %]
                                         <tr>
                                             <td>
-                                                [% IF c == undef %]
+                                                [% IF c == '*' %]
                                                     <em>All</em>
                                                 [% ELSE %]
                                                     [% Categories.GetName(c) | html %]
                                                 [% END %]
                                             </td>
                                             <td>
-                                                [% IF i == undef %]
+                                                [% IF i == '*' %]
                                                     <em>All</em>
                                                 [% ELSE %]
                                                     [% ItemTypes.GetDescription(i,1) | html %]
