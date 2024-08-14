@@ -248,7 +248,7 @@ if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
         $conditions->{$f} = $newdata{$f} if $newdata{$f};
     }
     $nodouble = 1;
-    my $patrons = Koha::Patrons->search($conditions); # FIXME Should be search_limited?
+    my $patrons = Koha::Patrons->search($conditions);
     if ( $patrons->count > 0) {
         $nodouble     = 0;
         $check_patron = $patrons->next;
