@@ -795,11 +795,11 @@ subtest 'pay() tests' => sub {
     my $payment = Koha::Account::Lines->find( { accountlines_id => $result->{payment_id} } );
     is( $payment->manager_id, undef, "manager_id left undefined when no userenv found" );
 
-    subtest 'UseEmailReceipts tests' => sub {
+    subtest 'AutomaticEmailReceipts tests' => sub {
 
         plan tests => 5;
 
-        t::lib::Mocks::mock_preference( 'UseEmailReceipts', 1 );
+        t::lib::Mocks::mock_preference( 'AutomaticEmailReceipts', 1 );
 
         my %params;
 

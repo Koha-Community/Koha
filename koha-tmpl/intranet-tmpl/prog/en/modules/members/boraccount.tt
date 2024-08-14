@@ -157,7 +157,7 @@
                             <td class="[% td_class | html %]" style="text-align: right;">[% account.amountoutstanding | $Price %]</td>
                             <td class="actions">
                                 [% IF ( account.is_credit ) %]
-                                    [% IF Koha.Preference('UseEmailReceipts') %]
+                                    [% IF patron.notice_email_address %]
                                         <div class="btn-group dropup">
                                             <button class="btn btn-xs btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-receipt"></i> Receipt</button>
                                             <ul class="dropdown-menu dropdown-menu-end">
@@ -170,8 +170,8 @@
                                                         <input type="hidden" name="op" value="cud-send_receipt" />
                                                         <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]" />
                                                         <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]" />
-                                                        <button type="submit" class="dropdown-item receipt-email-action"> <i class="fa fa-envelope"></i> Email </button>
                                                     </form>
+                                                    <a href="#" class="receipt-email-action dropdown-item"><i class="fa fa-envelope"></i> Email</a>
                                                 </li>
                                             </ul>
                                         </div>

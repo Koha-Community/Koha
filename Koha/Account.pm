@@ -130,7 +130,7 @@ sub pay {
 
     my $patron          = Koha::Patrons->find( $self->{patron_id} );
     my @account_offsets = $payment->credit_offsets( { type => 'APPLY' } )->as_list;
-    if ( C4::Context->preference('UseEmailReceipts') ) {
+    if ( C4::Context->preference('AutomaticEmailReceipts') ) {
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module                 => 'circulation',

@@ -859,7 +859,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('useDaysMode','Calendar','Calendar|Days|Datedue|Dayweek','Choose the method for calculating due date: select Calendar, Datedue or Dayweek to use the holidays module, and Days to ignore the holidays module','Choice'),
 ('useDefaultReplacementCost', '0', NULL, 'default replacement cost defined in item type', 'YesNo'),
 ('useDischarge','0','','Allows librarians to discharge borrowers and borrowers to request a discharge','YesNo'),
-('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
+('AutomaticEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
 ('UseICUStyleQuotes','0','1','Tell Koha whether to use ICU style quotes ({) or default (") when tracing subjects .','YesNo'),
 ('UseLocationAsAQInSIP', '0', '', 'Use permanent_location instead of homebranch for AQ in SIP response', 'YesNo'),
 ('UseOCLCEncodingLevels','0',NULL,'If enabled, include OCLC encoding levels in leader value builder dropdown for position 17.','YesNo'),

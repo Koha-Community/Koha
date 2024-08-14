@@ -1257,14 +1257,20 @@ subtest "Payment notice tests" => sub {
     );
     $letter->store();
 
-    t::lib::Mocks::mock_preference( 'UseEmailReceipts', '0' );
+    t::lib::Mocks::mock_preference( 'AutomaticEmailReceipts', '0' );
     my $id = $account->pay( { amount => 1 } )->{payment_id};
-    is( Koha::Notice::Messages->search()->count(), 0, 'Notice for payment not sent if UseEmailReceipts is disabled' );
+    is(
+        Koha::Notice::Messages->search()->count(), 0,
+        'Notice for payment not sent if AutomaticEmailReceipts is disabled'
+    );
 
     $id = $account->pay( { amount => 1, type => 'WRITEOFF' } )->{payment_id};
-    is( Koha::Notice::Messages->search()->count(), 0, 'Notice for writeoff not sent if UseEmailReceipts is disabled' );
+    is(
+        Koha::Notice::Messages->search()->count(), 0,
+        'Notice for writeoff not sent if AutomaticEmailReceipts is disabled'
+    );
 
-    t::lib::Mocks::mock_preference( 'UseEmailReceipts', '1' );
+    t::lib::Mocks::mock_preference( 'AutomaticEmailReceipts', '1' );
 
     $id = $account->pay( { amount => 12, library_id => $branchcode } )->{payment_id};
     my $notice = Koha::Notice::Messages->search()->next();
