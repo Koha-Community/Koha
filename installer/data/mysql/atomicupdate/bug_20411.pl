@@ -12,9 +12,7 @@ return {
             q{
             DELETE FROM systempreferences WHERE variable='StaffDetailItemSelection'
         }
-        );
-
-        say $out "Removed system preference 'StaffDetailItemSelection'";
+        ) == 1 && say $out "Removed system preference 'StaffDetailItemSelection'";
 
     },
 };
