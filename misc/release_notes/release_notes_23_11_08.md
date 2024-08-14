@@ -46,14 +46,6 @@ You can learn about the system components (like OS and database) needed for runn
 
 - [36187](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36187) Cannot set suggestedby when adding/editing a suggestion from the staff interface
 
-### Fines and fees
-
-#### Critical bugs fixed
-
-- [37255](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37255) Creating default waiting hold cancellation policy for all patron categories and itemtypes breaks Koha
-
-  **Sponsored by** *Koha-Suomi Oy*
-
 ## Enhancements 
 
 ### Acquisitions
