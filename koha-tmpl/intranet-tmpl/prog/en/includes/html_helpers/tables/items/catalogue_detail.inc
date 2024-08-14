@@ -98,7 +98,8 @@
         function _itemSelectionBuildLink(tab_id, link_class) {
 
             let itemnumbers = items_selection[tab_id];
-            let form = $("#" + tab_id).find(link_class);
+            let tab = $("#" + tab_id + "_panel" );
+            let form = tab.find(link_class);
             $(form).find("input[name='itemnumber']").remove();
 
             $(itemnumbers).each(function() {
