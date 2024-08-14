@@ -371,6 +371,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('KohaManualBaseURL','https://koha-community.org/manual/','','Where is the Koha manual/documentation located?','Free'),
 ('KohaManualLanguage','en','en|ar|cs|de|es|fr|it|pt_BR|tr|zh_TW','What is the language of the online manual you want to use?','Choice'),
 ('LabelMARCView','standard','standard|economical','Define how a MARC record will display','Choice'),
+('LanguageToReportOnMerge','',NULL,'If set, the authority field having the given language code in its $7 subfield will be reported to the bibliographic record if it exists, rather than the first field. The code can be in a short, 2 characters long form (example: ba for latin) or in a long, 8 characters long form, with the short form in position 5 and 6 starting from 1 (example: ba0yba0y for latin). A list of available codes can be found here: https://documentation.abes.fr/sudoc/formats/unmb/DonneesCodees/CodesZone104.htm#$d','Free'),
 ('LibraryName','','','Define the library name as displayed on the OPAC',''),
 ('LibraryThingForLibrariesEnabled','0','','Enable or Disable Library Thing for Libraries Features','YesNo'),
 ('LibraryThingForLibrariesID','','','See:http://librarything.com/forlibraries/','free'),

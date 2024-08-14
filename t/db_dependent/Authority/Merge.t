@@ -3,7 +3,6 @@
 # Tests for C4::AuthoritiesMarc::merge
 
 use Modern::Perl;
-
 use Test::NoWarnings;
 use Test::More tests => 14;
 
@@ -209,6 +208,78 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     );
 
     # Note: the +1 comes from the added subfield $9 in the biblio
+};
+
+subtest 'Test merge A1 to B1 (choosing language)' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', '' );
+
+    my $auth1 = MARC::Record->new;
+    $auth1->append_fields(
+        MARC::Field->new( '109', '0', '0', 'a' => 'language da', '7' => 'da' ),
+        MARC::Field->new( '109', '0', '0', 'a' => 'language ba', '7' => 'ba' ),
+    );
+    my $authid1 = AddAuthority( $auth1, undef, $authtype1 );
+
+    my $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '003', 'some_003' ),
+        MARC::Field->new( '245', '', '', a => 'My title' ),
+        MARC::Field->new( '609', '', '', a => 'language ba', '7' => 'ba', 9 => $authid1 ),
+    );
+    my ($biblionumber) = C4::Biblio::AddBiblio( $marc, '' );
+
+    @linkedrecords = ($biblionumber);
+    C4::AuthoritiesMarc::merge( { mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth1 } );
+    my $biblio = Koha::Biblios->find($biblionumber)->metadata->record;
+
+    is(
+        $biblio->subfield( '609', 'a' ), 'language da',
+        'When LanguageToReportOnMerge is not set, the first authority field is used'
+    );
+
+    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'ba' );
+    C4::AuthoritiesMarc::merge( { mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth1 } );
+    $biblio = Koha::Biblios->find($biblionumber)->metadata->record;
+    is(
+        $biblio->subfield( '609', 'a' ), 'language ba',
+        'When LanguageToReportOnMerge is set, the field with the matching language is reported'
+    );
+
+    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'xx' );
+    C4::AuthoritiesMarc::merge( { mergefrom => $authid1, MARCfrom => $auth1, mergeto => $authid1, MARCto => $auth1 } );
+    $biblio = Koha::Biblios->find($biblionumber)->metadata->record;
+    is(
+        $biblio->subfield( '609', 'a' ), 'language da',
+        'When LanguageToReportOnMerge is set to a value that does not exist in the authority, the first authority field is used'
+    );
+
+    # Long form of lang code
+    t::lib::Mocks::mock_preference( 'LanguageToReportOnMerge', 'ba' );
+    my $auth2 = MARC::Record->new;
+    $auth2->append_fields(
+        MARC::Field->new( '109', '0', '0', 'a' => 'language da (long form)', '7' => 'ba0yda0y' ),
+        MARC::Field->new( '109', '0', '0', 'a' => 'language ba (long form)', '7' => 'ba0yba0y' ),
+    );
+    my $authid2 = AddAuthority( $auth2, undef, $authtype1 );
+
+    $marc = MARC::Record->new;
+    $marc->append_fields(
+        MARC::Field->new( '003', 'some_003' ),
+        MARC::Field->new( '245', '', '', a => 'My title' ),
+        MARC::Field->new( '609', '', '', a => 'language ba', '7' => 'ba', 9 => $authid2 ),
+    );
+    my ($biblionumber2) = C4::Biblio::AddBiblio( $marc, '' );
+
+    @linkedrecords = ($biblionumber2);
+    C4::AuthoritiesMarc::merge( { mergefrom => $authid2, MARCfrom => $auth2, mergeto => $authid2, MARCto => $auth2 } );
+    my $biblio2 = Koha::Biblios->find($biblionumber2)->metadata->record;
+    is(
+        $biblio2->subfield( '609', 'a' ), 'language ba (long form)',
+        'When LanguageToReportOnMerge is set, the field with the matching language in its long form is reported'
+    );
+
 };
 
 subtest 'Test merge A1 to B1 (changing authtype)' => sub {

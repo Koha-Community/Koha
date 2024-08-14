@@ -1619,8 +1619,25 @@ sub merge {
     my $auth_tag_to_report_to   = $authtypeto   ? $authtypeto->auth_tag_to_report   : '';
 
     my @record_to;
-    @record_to = $MARCto->field($auth_tag_to_report_to)->subfields()
-        if $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to);
+
+    my $short_langcode = C4::Context->preference('LanguageToReportOnMerge');
+    if ( $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to) ) {
+        my $chosen_field = $MARCto->field($auth_tag_to_report_to);
+        if ($short_langcode) {
+            foreach my $field ( $MARCto->field($auth_tag_to_report_to) ) {
+                my $subfield = $field->subfield('7');
+                if (
+                    defined $subfield
+                    && (   ( length($subfield) == 2 && $subfield eq $short_langcode )
+                        || ( length($subfield) == 8 && substr( $subfield, 4, 2 ) eq $short_langcode ) )
+                    )
+                {
+                    $chosen_field = $field;
+                }
+            }
+        }
+        @record_to = $chosen_field->subfields();
+    }
 
     # Exceptional: If MARCto and authtypeto exist but $auth_tag_to_report_to
     # is empty, make sure that $9 and $a remain (instead of clearing the

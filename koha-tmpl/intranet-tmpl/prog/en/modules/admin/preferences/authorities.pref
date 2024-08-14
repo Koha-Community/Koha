@@ -103,7 +103,9 @@ Authorities:
                   0: "Don't"
             - consider the intended use of MARC21 authority records (008/14-16) during cataloging and linking.
             - "<br/>NOTE: If you enable this preference, 'No attempt to code' in 008/14-16 is excluded from search results too."
-
+        -
+            - "If set, the authority field having the given language code in its $7 subfield will be reported to the bibliographic record if it exists, rather than the first field. The code can be in a short, 2 characters long form (example: ba for latin) or in a long, 8 characters long form, with the short form in position 5 and 6 starting from 1 (example: ba0yba0y for latin). A list of available codes can be found here: https://documentation.abes.fr/sudoc/formats/unmb/DonneesCodees/CodesZone104.htm#$d"
+            - pref: LanguageToReportOnMerge
     Linker:
         -
             - Use the
