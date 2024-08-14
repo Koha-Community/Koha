@@ -45,14 +45,6 @@ You can learn about the system components (like OS and database) needed for runn
 
 - [37533](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37533) Invalid query when receiving an order
 
-### Fines and fees
-
-#### Critical bugs fixed
-
-- [37255](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37255) Creating default waiting hold cancellation policy for all patron categories and itemtypes breaks Koha
-
-  **Sponsored by** *Koha-Suomi Oy*
-
 ## Documentation
 
 The Koha manual is maintained in Sphinx. The home page for Koha
