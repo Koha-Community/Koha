@@ -801,17 +801,18 @@ sub old_holds {
 
 =head3 current_holds
 
-my $holds = $biblio->current_holds
+    my $holds = $biblio->current_holds
 
-Return the holds placed on this bibliographic record.
-It does not include future holds.
+    Return the holds placed on this bibliographic record.
+    Respects the lookahead days in ConfirmFutureHolds pref.
 
 =cut
 
 sub current_holds {
     my ($self) = @_;
-    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    return $self->holds( { reservedate => { '<=' => $dtf->format_date(dt_from_string) } } );
+    my $dtf    = Koha::Database->new->schema->storage->datetime_parser;
+    my $dt     = dt_from_string()->add( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
+    return $self->holds( { reservedate => { '<=' => $dtf->format_date($dt) } } );
 }
 
 =head3 biblioitem
