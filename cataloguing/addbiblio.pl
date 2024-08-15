@@ -66,7 +66,7 @@ if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     MARC::File::XML->default_record_format('UNIMARC');
 }
 
-our($tagslib,$authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950,$op,$changed_framework);
+our ( $tagslib, $usedTagsLib, $mandatory_z3950, $is_a_modif, $op, $changed_framework );
 
 =head1 FUNCTIONS
 
@@ -501,7 +501,6 @@ my $biblionumber  = $input->param('biblionumber'); # if biblionumber exists, it'
 my $parentbiblio  = $input->param('parentbiblionumber');
 my $breedingid    = $input->param('breedingid');
 my $z3950         = $input->param('z3950');
-$op               = $input->param('op') // q{};
 my $mode          = $input->param('mode') // q{};
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
@@ -517,6 +516,14 @@ my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
 my $userflags = 'edit_catalogue';
+
+# Set default values for global variable
+$tagslib           = &GetMarcStructure( 1, $frameworkcode );
+$usedTagsLib       = &GetUsedMarcStructure($frameworkcode);
+$mandatory_z3950   = GetMandatoryFieldZ3950($frameworkcode);
+$is_a_modif        = 0;
+$op                = $input->param('op') // q{};
+$changed_framework = 0;
 
 if ( $op eq 'cud-change-framework' ) {
     $op = $input->param('original_op');
@@ -587,12 +594,6 @@ $template->param(
     breedingid => $breedingid,
 );
 
-# ++ Global
-$tagslib         = &GetMarcStructure( 1, $frameworkcode );
-$usedTagsLib     = &GetUsedMarcStructure( $frameworkcode );
-$mandatory_z3950 = GetMandatoryFieldZ3950($frameworkcode);
-# -- Global
-
 my $record   = -1;
 my $encoding = "";
 my (
@@ -653,8 +654,6 @@ if ($parentbiblio) {
         $record->append_fields($hostfield);
     }
 }
-
-$is_a_modif = 0;
 
 if ($biblionumber) {
     $is_a_modif = 1;
