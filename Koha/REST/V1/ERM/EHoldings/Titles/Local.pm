@@ -27,7 +27,6 @@ use Scalar::Util qw( blessed );
 use Try::Tiny    qw( catch try );
 use MIME::Base64 qw( decode_base64 encode_base64 );
 use POSIX        qw( floor );
-use Text::CSV_XS;
 
 =head1 API
 
