@@ -81,7 +81,7 @@
     [% ELSE %]
         [% SET j = i - 1 %]
         <select name="c" class="form-field-conjunction">
-            [% IF query.param('c').$j == 'and'  || query.param('c') == 'and' %]
+            [% IF query.param('c').$j == 'and' || query.param('c') == 'and' %]
                 <option value="and" selected="selected">AND</option>
                 <option value="or">OR</option>
             [% ELSE %]
@@ -828,7 +828,7 @@
             });
 
             let urlParams = new URLSearchParams(window.location.search)
-            if(urlParams.get('format') === 'shareable' ) {
+            if (urlParams.get('format') === 'shareable') {
                 submitForm($('#itemsearchform'));
                 $("#item-search-block").hide();
             }
