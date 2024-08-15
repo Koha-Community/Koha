@@ -831,7 +831,7 @@ $(document).ready(function(){
 
                 <h1>
                     [% IF ( biblionumber ) %]
-                        Editing [% title | $HtmlTags tag="em" %] (Record number [% biblionumber | html %])
+                        Editing [% title | html | $HtmlTags tag="em" %] (Record number [% biblionumber | html %])
                     [% ELSE %]
                         [% IF (circborrowernumber) %]
                             <span>Add MARC record (fast cataloging)</span>
