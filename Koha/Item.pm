@@ -1172,11 +1172,12 @@ sub current_holds {
     my ($self)     = @_;
     my $attributes = { order_by => 'priority' };
     my $dtf        = Koha::Database->new->schema->storage->datetime_parser;
+    my $dt         = dt_from_string()->add( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
     my $params     = {
         itemnumber => $self->itemnumber,
         suspend    => 0,
         -or        => [
-            reservedate => { '<=' => $dtf->format_date(dt_from_string) },
+            reservedate => { '<=' => $dtf->format_date($dt) },
             waitingdate => { '!=' => undef },
         ],
     };
