@@ -262,7 +262,7 @@ sub delete {
         message_transport_type => 'email',
         branchcode             => $pickup_library->branchcode,
         lang                   => $patron->lang,
-        objects                => { booking => $self, branch => $pickup_library }
+        objects                => { booking => $self }
     );
 
     if ($letter) {
