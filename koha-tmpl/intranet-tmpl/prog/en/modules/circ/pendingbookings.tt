@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
@@ -50,7 +51,7 @@
                 </main>
             </div>
 
-            <!-- Filters -->
+            <!-- Filters & Navigation -->
             <div class="col-sm-2 col-sm-pull-10">
                 <aside>
                     <div id="filters">
@@ -58,6 +59,22 @@
                             <fieldset class="brief">
                                 <h4>Refine results</h4>
                                 <ol>
+                                    <li>
+                                        <label for="library">Library:</label>
+                                        <select name="library" id="library">
+                                            [% SET libraries = Branches.all( only_from_group => 1 ) %]
+                                            [% IF libraries.size != 1 %]
+                                                <option value="">Any</option>
+                                            [% END %]
+                                            [% FOREACH l IN libraries %]
+                                                [% IF (l.branchcode == branchcode) %]
+                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    </li>
                                     <li>
                                         <label for="from">Start date: </label>
                                         <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to"/>
@@ -74,6 +91,7 @@
                             </fieldset>
                         </form>
                     </div>
+                    [% INCLUDE 'circ-nav.inc' %]
                 </aside>
             </div>
         </div>
@@ -106,7 +124,11 @@
                        }
 
                        return { '>=': isoFrom, '<=': isoTo };
-                    }
+                    },
+                    'item.holding_library_id': function() {
+                       let library = $("#library").find(":selected").val();
+                       return library;
+                    },
                 };
 
                 var bookings_table_url = '/api/v1/bookings?';
@@ -117,13 +139,20 @@
                     "embed": [
                         "biblio",
                         "item",
-                        "patron"
+                        "patron",
+                        "pickup_library"
                     ],
                     "order": [[ 1, "asc" ]],
                     "columns": [{
                         "data": "booking_id",
                         "title": "Booking ID",
                         "visible": false
+                    },
+                    {
+                        "data": "pickup_library.name",
+                        "title": "Pickup library",
+                        "searchable": true,
+                        "orderable": true,
                     },
                     {
                         "data": "biblio.title",

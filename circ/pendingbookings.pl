@@ -21,8 +21,10 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
+use C4::Context;
+
 use C4::Output qw( output_html_with_http_headers );
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 
 use Koha::DateUtils qw(dt_from_string);
 
@@ -36,14 +38,17 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $today = dt_from_string();
+my $today     = dt_from_string();
 my $startdate = $today->truncate( to => 'day' );
-my $enddate = $startdate->clone->add( days => 7 );
+my $enddate   = $startdate->clone->add( days => 7 );
+my $branchcode =
+    defined( $input->param('library') ) ? $input->param('library') : C4::Context->userenv->{'branch'};
 
 $template->param(
-    todaysdate          => $today,
-    from                => $startdate,
-    to                  => $enddate
+    todaysdate => $today,
+    from       => $startdate,
+    to         => $enddate,
+    branchcode => $branchcode
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
