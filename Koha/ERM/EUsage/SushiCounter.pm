@@ -86,7 +86,7 @@ sub _build_COUNTER_report_file {
     my @report = ( @{$header}, @{$column_headings}, @{$body} );
 
     #TODO: change this to tab instead of comma
-    csv( in => \@report, out => \my $counter_file, encoding => "utf-8" );
+    csv( in => \@report, out => \my $counter_file, encoding => "utf-8", formula => 'empty' );
 
     return $counter_file;
 
