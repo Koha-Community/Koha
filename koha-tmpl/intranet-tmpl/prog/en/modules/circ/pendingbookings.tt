@@ -129,6 +129,7 @@
                        let library = $("#library").find(":selected").val();
                        return library;
                     },
+                    status: { '!=': 'waiting' },
                 };
 
                 var bookings_table_url = '/api/v1/bookings?';
@@ -138,7 +139,8 @@
                     },
                     "embed": [
                         "biblio",
-                        "item",
+                        "item+strings",
+                        "item.checkout",
                         "patron",
                         "pickup_library"
                     ],
@@ -189,6 +191,23 @@
                                 return row.item.callnumber;
                             } else {
                                 return null;
+                            }
+                        }
+                    },
+                    {
+                        "data": "",
+                        "title": "Location",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function(data,type,row,meta) {
+                            if ( row.item ) {
+                                if ( row.item.checked_out_date ) {
+                                    return __("On loan, due: ") . $date(row.item.checked_out_date);
+                                } else {
+                                    return row.item._strings.location.str;
+                                }
+                            } else {
+                                    return null;
                             }
                         }
                     },
