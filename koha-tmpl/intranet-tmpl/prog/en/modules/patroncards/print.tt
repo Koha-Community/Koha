@@ -61,9 +61,8 @@
                         [% IF ( multi_batch_count == 1 ) %]<span>1 batch to export</span>[% ELSE %]<span>[% multi_batch_count | html %] batches to export</span>[% END %]
                     [% END %]
             </h3>
-            <form id="exportingf" name="exporting" method="post" action="/cgi-bin/koha/patroncards/print.pl">
-                [% INCLUDE 'csrf-token.inc' %]
-                <input type="hidden" name="op" value="cud-export" />
+            <form id="exportingf" name="exporting" method="get" action="/cgi-bin/koha/patroncards/print.pl">
+                <input type="hidden" name="op" value="export" />
                 <input type="hidden" name="referer" value="[% referer | html %]" />
                 [% FOREACH batch_id IN batch_ids %]
                     <input type="hidden" name="batch_id" value="[% batch_id.batch_id | html %]" />
