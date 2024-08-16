@@ -232,7 +232,7 @@ REST API embed of additional_field_values
 =cut
 
 sub extended_attributes {
-    my ($self, $extended_attributes) = @_;
+    my ( $self, $extended_attributes ) = @_;
 
     if ($extended_attributes) {
         $self->set_additional_fields($extended_attributes);
@@ -297,7 +297,7 @@ sub strings_map {
         );
     }
 
-    my @sorted = sort { $a->{field_id} <=> $b->{field_id} } @{ $strings->{additional_field_values} };
+    my @sorted    = sort { $a->{field_id} <=> $b->{field_id} } @{ $strings->{additional_field_values} };
     my @non_empty = grep { $_->{value_str} ne "" } @sorted;
     $strings->{additional_field_values} = \@non_empty;
 

@@ -85,15 +85,16 @@ sub add {
 
                 my $body = $c->req->json;
 
-                my $user_roles = delete $body->{user_roles} // [];
-                my $documents = delete $body->{documents} // [];
+                my $user_roles          = delete $body->{user_roles}          // [];
+                my $documents           = delete $body->{documents}           // [];
                 my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 my $license = Koha::ERM::License->new_from_api($body)->store;
                 $license->user_roles($user_roles);
                 $license->documents($documents);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $license->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);
@@ -167,15 +168,16 @@ sub update {
 
                 my $body = $c->req->json;
 
-                my $user_roles = delete $body->{user_roles} // [];
-                my $documents = delete $body->{documents} // [];
+                my $user_roles          = delete $body->{user_roles}          // [];
+                my $documents           = delete $body->{documents}           // [];
                 my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 $license->set_from_api($body)->store;
                 $license->user_roles($user_roles);
                 $license->documents($documents);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $license->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $license->license_id);

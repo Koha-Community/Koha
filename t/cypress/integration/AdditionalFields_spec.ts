@@ -348,7 +348,6 @@ describe("Additional Fields operations", () => {
                 statusCode: 200,
             }
         ).as("avcategories");
-        // cy.wait("@avcategories");
 
         cy.intercept("GET", "/api/v1/erm/licenses/*", license).as(
             "get-license"
@@ -453,7 +452,6 @@ describe("Additional Fields operations", () => {
                 statusCode: 200,
             }
         ).as("avcategories");
-        // cy.wait("@avcategories");
         // There are additional fields, fieldset should exist
         cy.visit("/cgi-bin/koha/erm/licenses/add");
         cy.get("#licenses_add form #additional_fields").should("exist");

@@ -285,9 +285,9 @@ subtest 'prepare_cgi_additional_field_values' => sub {
 
 subtest 'strings_map() tests' => sub {
     plan tests => 1;
-     $schema->txn_begin;
-     Koha::AdditionalFields->search->delete;
-     my $license = Koha::ERM::License->new(
+    $schema->txn_begin;
+    Koha::AdditionalFields->search->delete;
+    my $license = Koha::ERM::License->new(
         {
             name   => "license name",
             type   => "national",
@@ -296,7 +296,7 @@ subtest 'strings_map() tests' => sub {
         }
     );
     $license->store()->discard_changes();
-     my $field = Koha::AdditionalField->new(
+    my $field = Koha::AdditionalField->new(
         {
             tablename => 'erm_licenses',
             name      => 'af_1',
@@ -304,7 +304,7 @@ subtest 'strings_map() tests' => sub {
         }
     );
     $field->store()->discard_changes();
-     my $field2 = Koha::AdditionalField->new(
+    my $field2 = Koha::AdditionalField->new(
         {
             tablename => 'erm_licenses',
             name      => 'af_2',
@@ -312,7 +312,7 @@ subtest 'strings_map() tests' => sub {
         }
     );
     $field2->store()->discard_changes();
-     my $value = 'some license value';
+    my $value = 'some license value';
     $license->set_additional_fields(
         [
             {
@@ -327,23 +327,23 @@ subtest 'strings_map() tests' => sub {
             }
         ]
     );
-     $license->add_additional_fields(
+    $license->add_additional_fields(
         {
             $field2->id => ['second field'],
 
         },
         'erm_licenses'
     );
-      my $av_category = Koha::AuthorisedValueCategory->new( { category_name => "AV_CAT_NAME" } );
+    my $av_category = Koha::AuthorisedValueCategory->new( { category_name => "AV_CAT_NAME" } );
     $av_category->store()->discard_changes();
-     my $av_value = Koha::AuthorisedValue->new(
+    my $av_value = Koha::AuthorisedValue->new(
         {
             category         => $av_category->category_name,
             authorised_value => 'BOB',
             lib              => "Robert"
         }
     );
-     my $av_field = Koha::AdditionalField->new(
+    my $av_field = Koha::AdditionalField->new(
         {
             tablename                 => "erm_licenses",
             name                      => "av_field",
@@ -352,15 +352,15 @@ subtest 'strings_map() tests' => sub {
         }
     );
     $av_field->store()->discard_changes();
-       $license->add_additional_fields(
+    $license->add_additional_fields(
         {
             $av_field->id => [ $av_value->authorised_value ],
 
         },
         'erm_licenses'
     );
-     my $values      = $license->get_additional_field_values_for_template;
-     my $strings_map = $license->strings_map;
+    my $values      = $license->get_additional_field_values_for_template;
+    my $strings_map = $license->strings_map;
     is_deeply(
         $strings_map,
         {
@@ -387,6 +387,6 @@ subtest 'strings_map() tests' => sub {
         },
         'strings_map looks good'
     );
-     $schema->txn_rollback;
-    ;
+    $schema->txn_rollback;
+
 };

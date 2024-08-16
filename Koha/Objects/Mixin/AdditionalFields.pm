@@ -60,19 +60,25 @@ sub filter_by_additional_fields {
 
 =head3 extended_attributes_config
 
+    Returns a hash containing the configuration for extended attributes
+
 =cut
 
 sub extended_attributes_config {
     my ($self) = @_;
 
-    my $tablename_query = $self->extended_attributes_tablename_query;
-
     return {
-        'id_field'        => { 'foreign' => 'record_id', 'self' => $self->_resultset->result_source->primary_columns },
-        'key_field'       => 'field_id',
-        'schema_class'    => 'Koha::Schema::Result::AdditionalFieldValue',
+        'id_field'     => { 'foreign' => 'record_id', 'self' => $self->_resultset->result_source->primary_columns },
+        'key_field'    => 'field_id',
+        'schema_class' => 'Koha::Schema::Result::AdditionalFieldValue',
     };
 }
+
+=head3 extended_attributes_tablename_query
+
+    Returns a hash containing the tablename and operator for extended attributes.
+
+=cut
 
 sub extended_attributes_tablename_query {
     my ($self) = @_;
