@@ -557,7 +557,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 if ( !seenColumns[ label[0] ] ) return;
 
                 if ( hit.metadata[ label[0] ] ) {
-                    result += '<td class="infocol">' + hit.metadata[ label[0] ] + '</td>';
+                    result += '<td class="infocol">' + escape_str(hit.metadata[ label[0] ]) + '</td>';
                 } else {
                     result += '<td class="infocol">&nbsp;</td>';
                 }
