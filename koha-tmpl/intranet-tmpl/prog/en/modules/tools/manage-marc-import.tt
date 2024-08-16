@@ -486,19 +486,19 @@
 
                         var additional_details = "";
                         if( aData['author'] ){
-                            additional_details += " " + aData['author'] + " ";
+                            additional_details += " " + escape_str(aData['author']) + " ";
                         }
 
                         if( aData['isbn'] ){
-                            additional_details += " (" + aData['isbn'] + ") ";
+                            additional_details += " (" + escape_str(aData['isbn']) + ") ";
                         }
 
                         if( aData['issn'] ){
-                            additional_details += " (" + aData['issn'] + ") ";
+                            additional_details += " (" + escape_str(aData['issn']) + ") ";
                         }
 
                         $('td:eq(1)', nRow).html(
-                            '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a> ' + additional_details
+                            '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + escape_str(aData['citation']) + '</a> ' + additional_details
                         );
 
                         $('td:eq(2)', nRow).html(
