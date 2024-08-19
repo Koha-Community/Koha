@@ -180,7 +180,7 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve' ) {
 
     # check if we have other reserves for this document, if we have a result send the message of transfer
     # FIXME do we need to do this if we didn't take the cancel_reserve branch above?
-    my ( undef, $nextreservinfo, undef ) = CheckReserves($item);
+    my ( undef, $nextreservinfo, undef ) = CheckReserves( $item, C4::Context->preference('ConfirmFutureHolds') );
 
     if ( $userenv_branch ne $nextreservinfo->{'branchcode'} ) {
         my $patron = Koha::Patrons->find( $nextreservinfo->{'borrowernumber'} );
