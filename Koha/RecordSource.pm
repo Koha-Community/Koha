@@ -31,6 +31,21 @@ Koha::RecordSource - Koha RecordSource Object class
 
 =head1 API
 
+=head2 Class methods
+
+=head3 usage_count
+
+    my $count = $source->usage_count();
+
+This method returns the count for records using this record source.
+
+=cut
+
+sub usage_count {
+    my ($self) = @_;
+    return $self->_result->biblio_metadatas->count();
+}
+
 =head2 Internal methods
 
 =head3 _type
