@@ -769,8 +769,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     defined $e_us && defined $e_them,
                     'Delete patrons with one that cannot be deleted should raise an exception'
                 );
-                is( ref($e_us), 'DBIx::Class::Exception' )
-                  ; # FIXME This needs adjustement, we want to throw a Koha::Exception
+                is( ref($e_us), 'Koha::Exceptions::Object::FKConstraintDeletion' );
 
                 ok($not_deleted_us == 3 && $not_deleted_them == 3, 'If one patron cannot be deleted, none should have been deleted');
             };
