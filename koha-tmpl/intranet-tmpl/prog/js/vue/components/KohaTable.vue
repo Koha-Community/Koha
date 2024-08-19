@@ -94,9 +94,21 @@ export default {
                         this.actions["-1"].forEach(action => {
                             if (typeof action === "object") {
                                 let action_name = Object.keys(action)[0]
-                                content.push(
-                                    `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i> ${action[action_name].text}</a>`
-                                )
+                                let should_display = true
+
+                                if (
+                                    typeof action[action_name]
+                                        .should_display === "function"
+                                ) {
+                                    should_display =
+                                        action[action_name].should_display(row)
+                                }
+
+                                if (should_display) {
+                                    content.push(
+                                        `<a class="${action_name} btn btn-default btn-xs" role="button"><i class="${action[action_name].icon}"></i> ${action[action_name].text}</a>`
+                                    )
+                                }
                             } else if (action == "edit") {
                                 content.push(
                                     '<a class="edit btn btn-default btn-xs" role="button"><i class="fa fa-pencil"></i> ' +
