@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 use Test::NoWarnings;
 use Test::Exception;
 
@@ -2106,6 +2106,29 @@ subtest 'EmailPatronWhenHoldIsPlaced tests' => sub {
         $original_notices_count + 1,
         "EmailPatronWhenHoldIsPlaced is enabled so HOLDPLACED_PATRON email is queued"
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'current_holds with future holds' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 2 );
+    my $item    = $builder->build_sample_item;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $hold_id = AddReserve(
+        {
+            reservation_date => dt_from_string()->add( days => 1 ),
+            branchcode       => $item->homebranch,
+            borrowernumber   => $patron->id,
+            biblionumber     => $item->biblionumber,
+            itemnumber       => $item->itemnumber,
+        }
+    );
+    is( $item->biblio->current_holds->count, 1, 'Future hold was counted' );
+    t::lib::Mocks::mock_preference( 'ConfirmFutureHolds', 0 );
+    is( $item->biblio->current_holds->count, 0, 'No future hold was counted when ConfirmFutureHolds is zero' );
 
     $schema->storage->txn_rollback;
 };
