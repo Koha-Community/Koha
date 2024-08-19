@@ -33,7 +33,7 @@ use C4::Ris qw( marc2ris );
 use Koha::Biblios;
 use Koha::RecordProcessor;
 
-use List::MoreUtils qw(none);
+use List::MoreUtils qw(none any);
 
 my $query = CGI->new;
 my $op=$query->param("op")||''; #op=export is currently the only use
@@ -42,7 +42,14 @@ my $biblionumber = $query->param("bib")||0;
 $biblionumber = int($biblionumber);
 my $error = q{};
 
+my @dc_subtypes   = qw(rdfdc oaidc srwdc);
 my @valid_formats = split( ',', C4::Context->preference('OpacExportOptions') // '' );
+
+if ( any { $_ eq 'dc' } @valid_formats ) {
+    # DC enabled, add @dc_subtypes to @valid_formats
+    @valid_formats = ( @valid_formats, @dc_subtypes );
+}
+
 if ( !scalar @valid_formats || none { $format eq $_ } @valid_formats ) {
     # bad request: either the feature is disabled, or requested a format the
     # library hasn't made available
