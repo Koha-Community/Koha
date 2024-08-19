@@ -23,7 +23,8 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::RecordSources;
 
-use Try::Tiny qw( catch try );
+use Scalar::Util qw( blessed );
+use Try::Tiny    qw( catch try );
 
 =head1 API
 
@@ -121,6 +122,15 @@ sub delete {
         $source->delete;
         return $c->render_resource_deleted;
     } catch {
+        if ( blessed($_) && ref($_) eq 'Koha::Exceptions::Object::FKConstraintDeletion' ) {
+            return $c->render(
+                status  => 409,
+                openapi => {
+                    error      => 'Cannot delete record source linked to existing records',
+                    error_code => 'cannot_delete_used',
+                }
+            );
+        }
         $c->unhandled_exception($_);
     };
 }

@@ -233,6 +233,13 @@
         description: Not found
         schema:
           $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: |
+          Conflict in deleting resource. Possible `error_code` attribute values:
+
+          * `cannot_delete_used`: record source linked to a record cannot be deleted.
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
       "500":
         description: |
           Internal server error. Possible `error_code` attribute values:

@@ -136,7 +136,7 @@ subtest 'get() tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -174,6 +174,14 @@ subtest 'delete() tests' => sub {
 
     $source = $builder->build_object( { class => 'Koha::RecordSources' } );
     $id     = $source->id;
+
+    my $biblio   = $builder->build_sample_biblio();
+    my $metadata = $biblio->metadata;
+    $metadata->record_source_id( $source->id )->store();
+
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 409, 'REST3.2.4.1' );
+
+    $biblio->delete();
 
     $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 204, 'REST3.2.4' )
         ->content_is( q{}, 'REST3.3.4' );
