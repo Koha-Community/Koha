@@ -81,8 +81,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageTwo,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "40",
+                "X-Total-Count": "40",
             },
         }).as("getPageTwo");
         // Scroll the dropdown
@@ -94,8 +94,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageThree,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("getPageThree");
         // Scroll the dropdown again
@@ -193,7 +193,7 @@ describe("Infinite scroll", () => {
                 "X-Base-Total-Count": "20",
                 "X-Total-Count": "20",
             },
-        });
+        }).as("getPageOne");
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/agreements");
@@ -201,41 +201,80 @@ describe("Infinite scroll", () => {
 
         cy.get("#agreement_licenses").contains("Add new license").click();
         cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.wait("@getPageOne");
         cy.get("#license_id_0").find("li").as("options");
         cy.get("@options").should("have.length", 20);
-
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: pageTwo,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "40",
+                "X-Total-Count": "40",
             },
         }).as("getPageTwo");
         // Scroll the dropdown
-        cy.get(".vs__dropdown-menu").scrollTo("bottom");
+        cy.get(
+            "#agreement_license_0 #license_id_0 .vs__dropdown-menu"
+        ).scrollTo("bottom");
         cy.wait("@getPageTwo");
-
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: pageThree,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("finalPage");
         // Scroll the dropdown again
-        cy.get(".vs__dropdown-menu").scrollTo("bottom");
+        cy.get(
+            "#agreement_license_0 #license_id_0 .vs__dropdown-menu"
+        ).scrollTo("bottom");
         cy.wait("@finalPage");
-
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: [
+                {
+                    license_id: 50,
+                    name: "License " + 50,
+                    description: "A test license",
+                    type: "local",
+                    status: "active",
+                    started_on: dates["today_iso"],
+                    ended_on: dates["tomorrow_iso"],
+                    user_roles: [],
+                },
+            ],
+            headers: {
+                "X-Base-Total-Count": "20",
+                "X-Total-Count": "20",
+            },
+        }).as("searchFilter");
         // Select a  license that is not in the first page of results
         cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
-            "License 50{enter}",
+            "License 50",
+            { force: true }
+        );
+        cy.wait([
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+            "@searchFilter",
+        ]);
+        cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
+            "{enter}",
             { force: true }
         );
         cy.get("#agreement_license_0").contains("License 50");
 
         // Re-open the dropdown, License 50 will no longer be in the dataset but the label should still show
+        // First we will click into the notes field to ensure the dropdown is closed
+        cy.get("#license_notes_0").click();
         cy.intercept("GET", "/api/v1/erm/licenses*", {
             statusCode: 200,
             body: pageOne,
@@ -246,13 +285,50 @@ describe("Infinite scroll", () => {
         }).as("resetDropdown");
         cy.get("#license_id_0 .vs__open-indicator").click();
         cy.wait("@resetDropdown");
-        cy.get("#agreement_licenses").click();
+        // Close the dropdown
+        cy.get("#license_id_0 .vs__open-indicator").click();
+        cy.get("#license_notes_0").click();
         cy.get("#agreement_license_0").contains("License 50");
 
         // Select a different license
+        cy.intercept("GET", "/api/v1/erm/licenses*", {
+            statusCode: 200,
+            body: [
+                {
+                    license_id: 10,
+                    name: "License " + 10,
+                    description: "A test license",
+                    type: "local",
+                    status: "active",
+                    started_on: dates["today_iso"],
+                    ended_on: dates["tomorrow_iso"],
+                    user_roles: [],
+                },
+            ],
+            headers: {
+                "X-Base-Total-Count": "20",
+                "X-Total-Count": "20",
+            },
+        }).as("secondSearchFilter");
         cy.get("#license_id_0 .vs__open-indicator").click();
         cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
-            "License 10{enter}",
+            "License 10",
+            { force: true }
+        );
+        cy.wait([
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+            "@secondSearchFilter",
+        ]);
+        cy.get("#agreement_license_0 #license_id_0 .vs__search").type(
+            "{enter}",
             { force: true }
         );
         cy.get("#agreement_license_0").contains("License 10");
