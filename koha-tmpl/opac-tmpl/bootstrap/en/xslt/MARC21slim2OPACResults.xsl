@@ -1216,13 +1216,13 @@
     </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=856]">
+        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
          <div class="results_summary online_resources">
                <span class="label">Online resources: </span>
-                    <ul class="resource_list">
-                            <xsl:for-each select="marc:datafield[@tag=856]">
+                            <xsl:for-each select="marc:datafield[@tag=856 and marc:subfield[@code='u']]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
                             <xsl:if test="$OPACURLOpenInNewWindow='0'">
-			      <li><a>
+                  <a>
 			      <xsl:choose>
 			        <xsl:when test="$OPACTrackClicks='track'">
                       <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="str:encode-uri(marc:subfield[@code='u'], true())"/>&amp;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
@@ -1255,16 +1255,16 @@
 					<xsl:when test="$URLLinkText!=''">
 						<xsl:value-of select="$URLLinkText"/>
 					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>Click here to access online</xsl:text>
-					</xsl:otherwise>
+                    <xsl:otherwise>
+                        <xsl:text>Click here to access online</xsl:text>
+                    </xsl:otherwise>
 					</xsl:choose>
                                     </xsl:when>
                                     </xsl:choose>
-                                    </a></li>
+                                    </a>
                               </xsl:if>
                             <xsl:if test="$OPACURLOpenInNewWindow='1'">
-                                   <li><a target='_blank'>
+                                   <a target='_blank'>
 				   <xsl:choose>
 				     <xsl:when test="$OPACTrackClicks='track'">
                       <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="str:encode-uri(marc:subfield[@code='u'], true())"/>&amp;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
@@ -1274,7 +1274,10 @@
 				     </xsl:when>
 				     <xsl:otherwise>
 		                       <xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-				     </xsl:otherwise>
+                                <xsl:if test="not(marc:subfield[@code='u'])">
+                                    <xsl:attribute name="style">pointer-events: none; color: #202020;</xsl:attribute>
+                                </xsl:if>
+                     </xsl:otherwise>
 				   </xsl:choose>
                                     <xsl:choose>
                                     <xsl:when test="($Show856uAsImage='Results' or $Show856uAsImage='Both') and ($SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
@@ -1290,18 +1293,22 @@
 					<xsl:when test="$URLLinkText!=''">
 						<xsl:value-of select="$URLLinkText"/>
 					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>Click here to access online</xsl:text>
-					</xsl:otherwise>
+                    <xsl:otherwise>
+                        <xsl:text>Click here to access online</xsl:text>
+                    </xsl:otherwise>
 					</xsl:choose>
                                     </xsl:when>
                                     </xsl:choose>
-                                    </a></li>
+                                    </a>
                               </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
+                        <xsl:otherwise> | </xsl:otherwise>
+                    </xsl:choose>
                             </xsl:for-each>
-                            </ul>
                             </div>
                         </xsl:if>
+        </xsl:if>
 
         <!-- Availability line -->
         <div class="results_summary availability">
