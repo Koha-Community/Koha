@@ -129,7 +129,7 @@ subtest 'get() tests' => sub {
     $source->delete;
 
     $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is(404)
-        ->json_is( '/error' => 'Object not found' );
+        ->json_is( '/error' => 'Record source not found' );
 
     $schema->storage->txn_rollback;
 };
