@@ -35,6 +35,7 @@ export default {
         return {
             title: this.$__("Record sources"),
             tableOptions: {
+                options: { embed: "usage_count" },
                 columns: [
                     {
                         title: this.$__("ID"),
@@ -59,7 +60,16 @@ export default {
                     },
                 ],
                 actions: {
-                    "-1": ["edit", "delete"],
+                    "-1": [
+                        "edit",
+                        {
+                            delete: {
+                                text: this.$__("Delete"),
+                                icon: "fa fa-trash",
+                                should_display: row => row.usage_count == 0,
+                            },
+                        },
+                    ],
                 },
                 url: "/api/v1/record_sources",
             },
