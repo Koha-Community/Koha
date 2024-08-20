@@ -242,6 +242,9 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
 
     $schema->storage->txn_begin;
 
+    my $branch     = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branchcode = $branch->branchcode;
+
     my $bpid = C4::Budgets::AddBudgetPeriod(
         {
             budget_period_startdate => '2008-01-01', budget_period_enddate => '2008-12-31'
@@ -271,7 +274,7 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
     my $sample_import_batch = {
         matcher_id     => 1,
         template_id    => 1,
-        branchcode     => 'CPL',
+        branchcode     => $branchcode,
         overlay_action => 'create_new',
         nomatch_action => 'create_new',
         item_action    => 'always_add',
@@ -317,6 +320,18 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         }
     )->store;
 
+    my $basket = $builder->build_object(
+        {
+            class => "Koha::Acquisition::Baskets",
+            value => {
+                booksellerid => $bookseller->id,
+                create_items => 'ordering',
+                is_standing  => 0,
+                closedate    => undef
+            }
+        }
+    );
+
     my $client_item_fields = {
         'notforloans' => [
             '',
@@ -349,16 +364,16 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
             ''
         ],
         'homebranches' => [
-            'CPL',
-            'CPL'
+            $branchcode,
+            $branchcode
         ],
         'copynos' => [
             '',
             ''
         ],
         'holdingbranches' => [
-            'CPL',
-            'CPL'
+            $branchcode,
+            $branchcode
         ],
         'ccodes' => [
             '',
@@ -389,7 +404,7 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
     my $itemnumbers = Koha::MarcOrder::add_items_from_import_record(
         {
             record_result      => $result->{record_result},
-            basket_id          => 1,
+            basket_id          => $basket->basketno,
             vendor             => $bookseller,
             budget_id          => $budgetid,
             agent              => 'client',
@@ -397,14 +412,17 @@ subtest 'add_items_from_import_record() - addorderiso2709.pl' => sub {
         }
     );
 
-    my $orders = Koha::Acquisition::Orders->search()->unblessed;
+    my $orders =
+        Koha::Acquisition::Orders->search( { biblionumber => $result->{record_result}->{biblionumber} } )->unblessed;
 
     is(
         @{$orders}[0]->{rrp} + 0, '10',
         "Price has been read correctly"
     );
+
+    my $active_currency = Koha::Acquisition::Currencies->get_active;
     is(
-        @{$orders}[0]->{listprice} + 0, '10',
+        sprintf( "%.6f", @{$orders}[0]->{listprice} + 0 ), sprintf( "%.6f", 10 / $active_currency->rate + 0 ),
         "Listprice has been created successfully"
     );
     is(
