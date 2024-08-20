@@ -7,6 +7,7 @@
 [% USE TablesSettings %]
 [% USE AuthorisedValues %]
 [% USE KohaPlugins %]
+[% USE SafeURL %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
 [% SET CoverImagePlugins = KohaPlugins.get_plugins_opac_cover_images %]
@@ -1354,14 +1355,14 @@
                                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                     <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">[% uri | html %]</a>
                                 [% ELSE %]
-                                    <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% uri | url %]" property="url">[% uri | html %]</a>
+                                    <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% uri | safe_url %]" property="url">[% uri | html %]</a>
                                 [% END %]
                             [% END %]
                         [% ELSE %]
                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                 <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">
                             [% ELSE %]
-                                <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% ITEM_RESULT.uri | url %]" property="url">
+                                <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% ITEM_RESULT.uri | safe_url %]" property="url">
                             [% END %]
                                 [% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]
                             </a>
