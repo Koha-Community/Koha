@@ -139,7 +139,7 @@
                             [% SET ccodes = AuthorisedValues.GetAuthValueDropbox('CCODE') %]
                             [% IF ( ccodes.count > 0 ) %]
                                 <li>
-                                    <label for="ccode">Collection code: </label>
+                                    <label for="ccode">Collection: </label>
                                     <select id="ccodeloop" name="ccode">
                                         <option value="">Filter collection</option>
                                         [% FOREACH cc IN ccodes %]
@@ -288,7 +288,7 @@
                                     <th>Barcode</th>
                                     <th>Call number</th>
                                     <th>Library</th>
-                                    <th>Collection code</th>
+                                    <th>Collection</th>
                                     <th class="anti-the">Title</th>
                                     <th>Not for loan</th>
                                     <th>Lost</th>
