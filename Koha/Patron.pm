@@ -1438,7 +1438,6 @@ sub pending_checkouts {
         {},
         {
             order_by => [
-                { -desc => 'me.timestamp' },
                 { -desc => 'issuedate' },
                 { -desc => 'issue_id' }, # Sort by issue_id should be enough
             ],
