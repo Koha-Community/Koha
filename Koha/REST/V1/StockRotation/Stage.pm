@@ -48,11 +48,10 @@ sub move {
             status  => 400
         );
     }
-    else {
-        return $c->render(
-            openapi => { error => "Not found - Invalid rota or stage ID" },
-            status  => 404
-        );
+    elsif ($rota) {
+        return $c->render_resource_not_found("Stage");
+    } else {
+        return $c->render_resource_not_found("Rota");
     }
 }
 

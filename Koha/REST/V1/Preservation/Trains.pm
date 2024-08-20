@@ -228,12 +228,8 @@ sub get_item {
         { train_item_id => $train_item_id, train_id => $train_id }
     );
 
-    unless ($train_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Item")
+        unless $train_item;
 
     return try {
         Koha::Database->new->schema->txn_do(
@@ -316,10 +312,7 @@ sub add_item {
                     openapi => { error => "MissingSettings", parameter => $_->parameter }
                 );
             } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemNotFound') ) {
-                return $c->render(
-                    status  => 404,
-                    openapi => { error => "Item not found" }
-                );
+                return $c->render_resource_not_found("Item");
             } elsif ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
                 return $c->render(
                     status  => 409,
@@ -376,12 +369,10 @@ sub copy_item {
             sub {
                 my $new_train_id = delete $body->{train_id};
                 my $new_train    = Koha::Preservation::Trains->find($new_train_id);
-                unless ($train) {
-                    return $c->render(
-                        status  => 404,
-                        openapi => { error => "Train not found" }
-                    );
-                }
+
+                return $c->render_resource_not_found("Train")
+                    unless $new_train;
+
                 my $new_train_item = $new_train->add_item(
                     {
                         item_id       => $train_item->item_id,
@@ -412,10 +403,7 @@ sub copy_item {
                     openapi => { error => "MissingSettings", parameter => $_->parameter }
                 );
             } elsif ( $_->isa('Koha::Exceptions::Preservation::ItemNotFound') ) {
-                return $c->render(
-                    status  => 404,
-                    openapi => { error => "Item not found" }
-                );
+                return $c->render_resource_not_found("Item");
             } elsif ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
                 return $c->render(
                     status  => 409,

@@ -52,14 +52,14 @@ sub get {
 
     return try {
         my $rota = Koha::StockRotationRotas->find( $c->param('rota_id') );
-        unless ($rota) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Rota not found" }
-            );
-        }
 
-        return $c->render( status => 200, openapi => $rota->to_api );
+        return $c->render_resource_not_found("Rota")
+            unless $rota;
+
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api($rota),
+        );
     } catch {
         $c->unhandled_exception($_);
     }
@@ -78,7 +78,7 @@ sub add {
         $c->res->headers->location( $c->req->url->to_string . '/' . $rota->rota_id );
         return $c->render(
             status  => 201,
-            openapi => $rota->to_api
+            openapi => $c->objects->to_api($rota),
         );
     } catch {
         $c->unhandled_exception($_);
@@ -94,17 +94,16 @@ sub update {
 
     my $rota = Koha::StockRotationRotas->find( $c->param('rota_id') );
 
-    if ( not defined $rota ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Rota")
+        unless $rota;
 
     return try {
         $rota->set_from_api( $c->req->json );
         $rota->store();
-        return $c->render( status => 200, openapi => $rota->to_api );
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api($rota),
+        );
     } catch {
         $c->unhandled_exception($_);
     };
@@ -118,19 +117,13 @@ sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $rota = Koha::StockRotationRotas->find( $c->param('rota_id') );
-    if ( not defined $rota ) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+
+    return $c->render_resource_not_found("Rota")
+        unless $rota;
 
     return try {
         $rota->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

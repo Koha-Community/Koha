@@ -351,9 +351,8 @@ sub suspend {
 
     my $end_date = ($body) ? $body->{end_date} : undef;
 
-    unless ($hold) {
-        return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
-    }
+    return $c->render_resource_not_found("Hold")
+        unless $hold;
 
     return try {
         $hold->suspend_hold($end_date);

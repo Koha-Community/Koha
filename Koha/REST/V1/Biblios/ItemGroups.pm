@@ -77,12 +77,7 @@ sub get {
             );
         }
         else {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => 'Item group not found'
-                }
-            );
+            return $c->render_resource_not_found("Item group");
         }
     }
     catch {
@@ -102,10 +97,8 @@ sub add {
     return try {
 
         my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
-        return $c->render(
-            status  => 404,
-            openapi => { error => 'Object not found' }
-        ) unless $biblio;
+        return $c->render_resource_not_found("Biblio")
+            unless $biblio;
 
         my $item_group_data = $c->req->json;
         # biblio_id comes from the path
@@ -128,10 +121,7 @@ sub add {
             if (    $_->isa('Koha::Exceptions::Object::FKConstraint')
                 and $_->broken_fk eq 'biblio_id' )
             {
-                return $c->render(
-                    status  => 404,
-                    openapi => { error => "Biblio not found" }
-                );
+                return $c->render_resource_not_found("Biblio");
             }
         }
 
@@ -155,12 +145,7 @@ sub update {
         my $item_group = Koha::Biblio::ItemGroups->find( $item_group_id );
 
         unless ( $item_group && $item_group->biblio_id eq $biblio_id ) {
-            return $c->render(
-                status  => 404,
-                openapi => {
-                    error => 'Item group not found'
-                }
-            );
+            return $c->render_resource_not_found("Item group");
         }
 
         my $item_group_data = $c->req->json;

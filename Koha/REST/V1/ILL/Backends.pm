@@ -96,10 +96,7 @@ sub get {
             openapi => $embed ? { %$return, %$embed } : $return,
         );
     } catch {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "ILL backend does not exist" }
-        );
+        return $c->render_resource_not_found("ILL backend");
     };
 }
 

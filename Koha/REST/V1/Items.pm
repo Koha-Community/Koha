@@ -407,12 +407,8 @@ sub remove_from_bundle {
     $bundle_item_id = barcodedecode($bundle_item_id);
     my $bundle_item = Koha::Items->find( { itemnumber => $bundle_item_id } );
 
-    unless ($bundle_item) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Bundle item not found" }
-        );
-    }
+    return $c->render_resource_not_found("Bundle item")
+        unless $bundle_item;
 
     return try {
         $bundle_item->remove_from_bundle;

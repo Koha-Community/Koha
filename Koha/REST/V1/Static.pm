@@ -55,7 +55,7 @@ sub get {
 
         @plugins = grep { $_->api_namespace eq $namespace} @plugins;
 
-        return $c->render({ status => 404, openapi => { error => 'File not found' } }) unless scalar(@plugins) > 0;
+        return $c->render_resource_not_found("File") unless scalar(@plugins) > 0;
         return $c->render({ status => 500, openapi => { error => 'Namespace not unique' } }) unless scalar(@plugins) == 1;
 
         my $plugin = $plugins[0];
@@ -70,7 +70,7 @@ sub get {
             return $c->reply->asset($asset);
         }
         catch {
-            return $c->render({ status => 404, openapi => { error => 'File not found' } });
+            return $c->render_resource_not_found("File");
         }
 
     } else {

@@ -103,9 +103,8 @@ sub delete {
 
     my $transfer_limit = Koha::Item::Transfer::Limits->find( $c->param( 'limit_id' ) );
 
-    if ( not defined $transfer_limit ) {
-        return $c->render( status => 404, openapi => { error => "Transfer limit not found" } );
-    }
+    return $c->render_resource_not_found("Transfer limit")
+        unless $transfer_limit;
 
     return try {
         $transfer_limit->delete;

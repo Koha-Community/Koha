@@ -40,12 +40,8 @@ sub list {
 
     my $patron = Koha::Patrons->find( $c->param('patron_id') );
 
-    unless ($patron) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => 'Patron not found' }
-        );
-    }
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
 
     return try {
 

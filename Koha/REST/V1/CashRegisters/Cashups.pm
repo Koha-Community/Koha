@@ -42,14 +42,8 @@ sub list {
 
     my $register = Koha::Cash::Registers->find( $c->param('cash_register_id') );
 
-    unless ($register) {
-        return $c->render(
-            status  => 404,
-            openapi => {
-                error => "Register not found"
-            }
-        );
-    }
+    return $c->render_resource_not_found("Register")
+        unless $register;
 
     return try {
         my $cashups = $c->objects->search( $register->cashups );

@@ -458,7 +458,7 @@ subtest '*_item() tests' => sub {
     $item_2->delete;
     $t->post_ok(
         "//$userid:$password@/api/v1/preservation/trains/$train_id/items" => json => { item_id => $item_2->itemnumber }
-    )->status_is(404)->json_is( { error => 'Item not found' } );
+    )->status_is(404)->json_is( { error => 'Item not found', error_code => 'not_found' } );
 
     # batch add items
     # Nothing added (FIXME maybe not 201?)

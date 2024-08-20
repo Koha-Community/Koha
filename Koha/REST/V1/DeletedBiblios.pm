@@ -51,12 +51,8 @@ sub get {
 
     my $biblio = Koha::Old::Biblios->find( { biblionumber => $c->param('biblio_id') }, $attributes );
 
-    unless ($biblio) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found." }
-        );
-    }
+    return $c->render_resource_not_found("Biblio")
+        unless $biblio;
 
     return try {
 
