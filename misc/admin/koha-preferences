@@ -28,6 +28,8 @@ use YAML::XS;
 
 use Koha::Logger;
 
+use Koha::Database;
+
 our %NOT_SET_PREFS = map { $_, 1 } qw( Version );
 
 =head1 NAME
@@ -68,7 +70,7 @@ sub _set_preference {
 }
 
 sub GetPreferences {
-    my $dbh = C4::Context->dbh;
+    my $dbh = Koha::Database->dbh;
 
     return {
         map { $_->{variable},  $_->{value} }
@@ -83,7 +85,7 @@ sub GetPreferences {
 sub SetPreferences {
     my ( %preferences ) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh = Koha::Database->dbh;
 
     # First, a quick check to make sure all of the system preferences exist
     my $current_state = $dbh->selectall_arrayref( "
@@ -109,7 +111,7 @@ sub SetPreferences {
 sub _fetch_preference {
     my ( $preference ) = @_;
 
-    my $dbh = C4::Context->dbh;
+    my $dbh = Koha::Database->dbh;
 
     my $row = $dbh->selectrow_hashref( "
         SELECT
