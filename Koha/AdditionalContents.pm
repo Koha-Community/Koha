@@ -84,11 +84,11 @@ sub search_for_display {
     $search_params->{'additional_content.id'} = $params->{id} if $params->{id};
     $search_params->{location}                = $params->{location};
     $search_params->{branchcode}              = $params->{library_id} ? [ $params->{library_id}, undef ] : undef;
-    $search_params->{published_on}            = { '<=' => \'CAST(NOW() AS DATE)' };
-    $search_params->{expirationdate}          = [ '-or', { '>=' => \'CAST(NOW() AS DATE)' }, undef ];
-    $search_params->{category}                = $params->{category} if $params->{category};
-    $search_params->{lang}                    = 'default' if !$lang || $lang eq 'default';
-    $search_params->{-or}                     = [ { 'lang' => $lang }, '-and' => [ 'lang', 'default', \$subquery ] ]
+    $search_params->{published_on}   = { '<=' => \'CAST(NOW() AS DATE)' }                   unless $params->{id};
+    $search_params->{expirationdate} = [ '-or', { '>=' => \'CAST(NOW() AS DATE)' }, undef ] unless $params->{id};
+    $search_params->{category}       = $params->{category} if $params->{category};
+    $search_params->{lang}           = 'default'           if !$lang || $lang eq 'default';
+    $search_params->{-or}            = [ { 'lang' => $lang }, '-and' => [ 'lang', 'default', \$subquery ] ]
         if !$search_params->{lang};
 
     my $attribs = { prefetch => 'additional_content', order_by => 'additional_content.number' };
