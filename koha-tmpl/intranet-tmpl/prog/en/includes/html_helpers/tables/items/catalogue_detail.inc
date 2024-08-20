@@ -640,10 +640,12 @@
                     let nodes = '';
                     if ( row.uri.split(' \| ').length > 1 ) {
                         row.uri.split(' \| ').forEach((uri, i) => {
-                            nodes += '<a href="%s">%s</a><br/>'.format(escape_str(uri), escape_str(uri));
+                            let node = safe_link(uri,uri);
+                            nodes += node.outerHTML + "<br>";
                         });
                     } else {
-                        nodes += '<a href="%s">%s</a><br/>'.format(escape_str(row.uri), escape_str(url_link_text));
+                        let node = safe_link(row.uri,url_link_text);
+                        nodes += node.outerHTML;
                     }
                     return nodes;
                 }
@@ -840,6 +842,19 @@
         );
 
         return items_table;
+    }
+    function safe_link(uri,link_text) {
+        let node = document.createElement('a');
+        let url_str = '#';
+        try {
+            const safe_url = new URL(uri);
+            url_str = safe_url.href;
+        } catch (e) {
+            //console.error('Invalid URL:', e);
+        }
+        node.setAttribute('href',url_str);
+        node.textContent = link_text;
+        return node;
     }
 </script>
 [% END %]
