@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "35044",
@@ -14,7 +15,7 @@ return {
                         'does the field allow more than one option?' AFTER searchable
                 }
             );
-            say $out "Added repeatable column to additional_fields table";
+            say_success( $out, "Added repeatable column to additional_fields table" );
         }
 
         if ( unique_key_exists ('additional_field_values', 'field_record') ) {
@@ -39,12 +40,12 @@ return {
                         `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
                 }
             );
-            say $out "Removed UNIQUE KEY `field_record` (`field_id`,`record_id`) from the additional_field_values table";
+            say_success( $out, "Removed UNIQUE KEY `field_record` (`field_id`,`record_id`) from the additional_field_values table" );
         }
 
         my $number_of_entries = $dbh->do(q{DELETE FROM additional_field_values WHERE value = ''});
         if ( defined $number_of_entries && $number_of_entries > 0 ) {
-            say $out "Removed $number_of_entries redundant additional_field_values entries with empty value";
+            say_info( $out, "Removed $number_of_entries redundant additional_field_values entries with empty value" );
         }
     },
 };
