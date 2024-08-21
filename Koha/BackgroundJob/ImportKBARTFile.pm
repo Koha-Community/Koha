@@ -16,10 +16,7 @@ package Koha::BackgroundJob::ImportKBARTFile;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use JSON         qw( decode_json encode_json );
-use Try::Tiny    qw( catch try );
-use MIME::Base64 qw( decode_base64 );
-use POSIX        qw( floor );
+use Try::Tiny qw( catch try );
 
 use C4::Context;
 
@@ -98,8 +95,8 @@ sub process {
 
         foreach my $row ( @{$rows} ) {
             next if !$row;
-            my $new_title   = create_title_hash_from_line_data( $row, $column_headers, $invalid_columns );
-            my $title_match = check_for_matching_title( $new_title, $package_id );
+            my $new_title   = _create_title_hash_from_line_data( $row, $column_headers, $invalid_columns );
+            my $title_match = _check_for_matching_title( $new_title, $package_id );
 
             if ($title_match) {
                 $duplicate_titles++;
@@ -111,7 +108,7 @@ sub process {
                 };
             } else {
                 try {
-                    my $formatted_title = format_title($new_title);
+                    my $formatted_title = _format_title($new_title);
                     if ( !$formatted_title->{publication_title} ) {
                         push @messages, {
                             code     => 'no_title_found',
@@ -124,7 +121,7 @@ sub process {
                         my $imported_title = Koha::ERM::EHoldings::Title->new($formatted_title)
                             ->store( { create_linked_biblio => $create_linked_biblio } );
                         push( @biblio_ids, $imported_title->biblio_id ) if $create_linked_biblio;
-                        create_linked_resource(
+                        _create_linked_resource(
                             {
                                 title      => $imported_title,
                                 package_id => $package_id
@@ -192,7 +189,7 @@ sub enqueue {
     );
 }
 
-=head3 format_title
+=head3 _format_title
 
 Formats a title to fit the names of the database fields in Koha
 
@@ -201,7 +198,7 @@ Kbart field "coverage_notes" = "notes" in Koha
 
 =cut
 
-sub format_title {
+sub _format_title {
     my ($title) = @_;
 
     $title->{external_id} = $title->{title_id};
@@ -216,45 +213,7 @@ sub format_title {
     return $title;
 }
 
-=head3 read_file
-
-Reads a file to provide report headers and lines to be processed
-
-=cut
-
-sub read_file {
-    my ($file) = @_;
-
-    my $file_content = defined( $file->{file_content} ) ? decode_base64( $file->{file_content} ) : "";
-    my $delimiter    = $file->{filename} =~ /\.tsv$/    ? "\t"                                   : ",";
-    my $quote_char   = $file->{filename} =~ /\.tsv$/    ? "\""                                   : "\"";
-
-    open my $fh, "<", \$file_content or die "Could not open file $file->{filename}: $!";
-    my $csv = Text::CSV_XS->new(
-        {
-            sep_char           => $delimiter,
-            quote_char         => $quote_char,
-            binary             => 1,
-            allow_loose_quotes => 1,
-            formula            => 'empty'
-        }
-    );
-    my $headers_to_check = $csv->getline($fh);
-    my $column_headers   = rescue_EBSCO_files($headers_to_check);
-    my $lines            = $csv->getline_all( $fh, 0 );
-    close($fh);
-
-    unless ( $csv->eof() ) {
-        my ( $cde, $str, $pos ) = $csv->error_diag();
-        my $error = $cde ? "$cde, $str, $pos" : "";
-        warn $error if $error;
-        return ( $column_headers, $lines, $error );
-    }
-
-    return ( $column_headers, $lines );
-}
-
-=head3 create_title_hash_from_line_data
+=head3 _create_title_hash_from_line_data
 
 Takes a line and creates a hash of the values mapped to the column headings
 Only accepts fields that are in the list of permitted KBART fields, other fields are ignored
@@ -262,7 +221,7 @@ Only accepts fields that are in the list of permitted KBART fields, other fields
 
 =cut
 
-sub create_title_hash_from_line_data {
+sub _create_title_hash_from_line_data {
     my ( $row, $column_headers, $invalid_columns ) = @_;
 
     my %new_title;
@@ -284,13 +243,13 @@ sub create_title_hash_from_line_data {
     return \%new_title;
 }
 
-=head3 check_for_matching_title
+=head3 _check_for_matching_title
 
 Checks whether this title already exists to avoid duplicates
 
 =cut
 
-sub check_for_matching_title {
+sub _check_for_matching_title {
     my ( $title, $package_id ) = @_;
 
     my $match_parameters = {};
@@ -317,20 +276,20 @@ sub check_for_matching_title {
     return $matching_title_found;
 }
 
-=head3 create_linked_resource
+=head3 _create_linked_resource
 
 Creates a resource for a newly stored title.
 
 =cut
 
-sub create_linked_resource {
+sub _create_linked_resource {
     my ($args) = @_;
 
     my $title      = $args->{title};
     my $package_id = $args->{package_id};
 
     my $title_id = $title->title_id;
-    my ( $date_first_issue_online, $date_last_issue_online ) = get_first_and_last_issue_dates($title);
+    my ( $date_first_issue_online, $date_last_issue_online ) = _get_first_and_last_issue_dates($title);
     my $resource = Koha::ERM::EHoldings::Resource->new(
         {
             title_id   => $title_id,
@@ -343,13 +302,13 @@ sub create_linked_resource {
     return;
 }
 
-=head3 get_first_and_last_issue_dates
+=head3 _get_first_and_last_issue_dates
 
 Gets and formats a date for storing on the resource. Dates can come from files in YYYY, YYYY-MM or YYYY-MM-DD format
 
 =cut
 
-sub get_first_and_last_issue_dates {
+sub _get_first_and_last_issue_dates {
     my ($title) = @_;
 
     return ( undef, undef ) if ( !$title->date_first_issue_online && !$title->date_last_issue_online );
@@ -371,102 +330,6 @@ sub get_first_and_last_issue_dates {
         if $date_last_issue_online && $date_last_issue_online =~ /^\d{4}-\d{2}$/;
 
     return ( $date_first_issue_online, $date_last_issue_online );
-}
-
-=head3 get_valid_headers
-
-Returns a list of permitted headers in a KBART phase II file
-
-=cut
-
-sub get_valid_headers {
-    return (
-        'publication_title',
-        'print_identifier',
-        'online_identifier',
-        'date_first_issue_online',
-        'num_first_vol_online',
-        'num_first_issue_online',
-        'date_last_issue_online',
-        'num_last_vol_online',
-        'num_last_issue_online',
-        'title_url',
-        'first_author',
-        'title_id',
-        'embargo_info',
-        'coverage_depth',
-        'coverage_notes',
-        'publisher_name',
-        'publication_type',
-        'date_monograph_published_print',
-        'date_monograph_published_online',
-        'monograph_volume',
-        'monograph_edition',
-        'first_editor',
-        'parent_publication_title_id',
-        'preceding_publication_title_id',
-        'access_type',
-        'notes'
-    );
-}
-
-=head3 calculate_chunked_params_size
-
-Calculates average line size to work out how many lines to chunk a large file into
-Uses only 75% of the max_allowed_packet as an upper limit
-
-=cut
-
-sub calculate_chunked_params_size {
-    my ( $params_size, $max_allowed_packet, $number_of_rows ) = @_;
-
-    my $average_line_size = $params_size / $number_of_rows;
-    my $lines_possible    = ( $max_allowed_packet * 0.75 ) / $average_line_size;
-    my $rounded_value     = floor($lines_possible);
-    return $rounded_value;
-}
-
-=head3 is_file_too_large
-
-Calculates the final size of the background job object that will need storing to check if we exceed the max_allowed_packet
-
-=cut
-
-sub is_file_too_large {
-    my ( $params_to_store, $max_allowed_packet ) = @_;
-
-    my $json           = JSON->new->utf8(0);
-    my $encoded_params = $json->encode($params_to_store);
-    my $params_size    = length $encoded_params;
-
-    # A lot more than just the params are stored in the background job table and this is difficult to calculate
-    # We should allow for no more than 75% of the max_allowed_packet to be made up of the job params to avoid db conflicts
-    return {
-        file_too_large => 1,
-        params_size    => $params_size
-    } if $params_size > ( $max_allowed_packet * 0.75 );
-
-    return {
-        file_too_large => 0,
-        params_size    => $params_size
-    };
-}
-
-=head3 rescue_EBSCO_files
-
-EBSCO have an incorrect spelling for "preceding_publication_title_id" in all of their KBART files (preceding is spelled with a double 'e').
-This means all of their KBART files fail to import using the current methodology.
-There is no simple way of finding out who the vendor is before importing so all KBART files from any vendor are going to have to be checked for this spelling and corrected.
-
-=cut
-
-sub rescue_EBSCO_files {
-    my ($column_headers) = @_;
-
-    my ($index) = grep { @$column_headers[$_] eq 'preceeding_publication_title_id' } ( 0 .. @$column_headers - 1 );
-    @$column_headers[$index] = 'preceding_publication_title_id' if $index;
-
-    return $column_headers;
 }
 
 1;

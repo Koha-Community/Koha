@@ -255,20 +255,17 @@ sub import_from_kbart_file {
         my @invalid_columns;
         my $max_allowed_packet = C4::Context->dbh->selectrow_array(q{SELECT @@max_allowed_packet});
 
-        # Check if file is in TSV or CSV format and send an error back if not
-        if ( $file->{filename} !~ /\.csv$/ && $file->{filename} !~ /\.tsv$/ ) {
-            return $c->render(
-                status  => 201,
-                openapi => { warnings => { invalid_filetype => 1 } }
-            );
-        }
+        my ( $column_headers, $rows, $error ) = Koha::ERM::EHoldings::Title::read_file($file);
 
-        my ( $column_headers, $rows ) = Koha::BackgroundJob::ImportKBARTFile::read_file($file);
+        return $c->render(
+            status  => 201,
+            openapi => { invalid_filetype => 1 }
+        ) if $error eq 'unknown_delimiter';
 
         # Check that the column headers in the file match the standardised KBART phase II columns
         # If not, return a warning
         my $warnings      = {};
-        my @valid_headers = Koha::BackgroundJob::ImportKBARTFile::get_valid_headers();
+        my @valid_headers = Koha::ERM::EHoldings::Title::get_valid_headers();
         foreach my $header (@$column_headers) {
             if ( !grep { $_ eq $header } @valid_headers ) {
                 $header = 'Empty column' if $header eq '';
@@ -285,11 +282,11 @@ sub import_from_kbart_file {
             file_name            => $file->{filename},
             create_linked_biblio => $create_linked_biblio
         };
-        my $outcome = Koha::BackgroundJob::ImportKBARTFile::is_file_too_large( $params, $max_allowed_packet );
+        my $outcome = Koha::ERM::EHoldings::Title::is_file_too_large( $params, $max_allowed_packet );
 
         # If the file is too large, we can break the file into smaller chunks and enqueue one job per chunk
         if ( $outcome->{file_too_large} ) {
-            my $max_number_of_rows = Koha::BackgroundJob::ImportKBARTFile::calculate_chunked_params_size(
+            my $max_number_of_rows = Koha::ERM::EHoldings::Title::calculate_chunked_params_size(
                 $outcome->{params_size}, $max_allowed_packet,
                 scalar(@$rows)
             );
