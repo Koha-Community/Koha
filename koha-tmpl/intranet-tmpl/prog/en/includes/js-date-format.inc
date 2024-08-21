@@ -91,7 +91,7 @@
 
         window.$date_to_rfc3339 = function(value, options) {
             var dateformat = (options&&options.dateformat)||def_date_format;
-            let m = dayjs(value, get_date_pattern(dateformat));
+            let m = dayjs(value, get_date_pattern(dateformat), true);
             return m.format("YYYY-MM-DD");
         }
 
