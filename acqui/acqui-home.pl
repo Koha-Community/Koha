@@ -28,37 +28,43 @@ this script is the main page for acqui
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
-use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
-use C4::Budgets qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
-use C4::Members;
-use Koha::Acquisition::Currencies;
-use Koha::Patrons;
-use Koha::Suggestions;
-use Koha::DateUtils qw( dt_from_string );
+use CGI                           qw ( -utf8 );
+use C4::Auth                      qw( get_template_and_user );
+use C4::Output                    qw( output_html_with_http_headers );
+use C4::Budgets                   qw( GetBudgetHierarchy GetBudget CanUserUseBudget );
+use C4::Members                   ();
+use Koha::Acquisition::Currencies ();
+use Koha::Patrons                 ();
+use Koha::Suggestions             ();
+use Koha::DateUtils               qw( dt_from_string );
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
-    {   template_name   => 'acqui/acqui-home.tt',
-        query           => $query,
-        type            => 'intranet',
-        flagsrequired   => { acquisition => '*' },
+    {
+        template_name => 'acqui/acqui-home.tt',
+        query         => $query,
+        type          => 'intranet',
+        flagsrequired => { acquisition => '*' },
     }
 );
 
-my $status           = $query->param('status') || "ASKED";
+my $status = $query->param('status') || "ASKED";
+
 # Get current branch count and total viewable count, if they don't match then pass
 # both to template
-if( C4::Context->only_my_library ){
-    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'}, archived => 0 })->count();
+if ( C4::Context->only_my_library ) {
+    my $local_pendingsuggestions_count = Koha::Suggestions->search(
+        { status => "ASKED", branchcode => C4::Context->userenv()->{'branch'}, archived => 0 } )->count();
     $template->param( suggestions_count => $local_pendingsuggestions_count );
 } else {
-    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED", archived => 0 });
-    my $local_pendingsuggestions_count = $pendingsuggestions->search({ 'me.branchcode' => C4::Context->userenv()->{'branch'} })->count();
+    my $pendingsuggestions = Koha::Suggestions->search( { status => "ASKED", archived => 0 } );
+    my $local_pendingsuggestions_count =
+        $pendingsuggestions->search( { 'me.branchcode' => C4::Context->userenv()->{'branch'} } )->count();
     my $pendingsuggestions_count = $pendingsuggestions->count();
     $template->param(
-        all_pendingsuggestions => $pendingsuggestions_count != $local_pendingsuggestions_count ? $pendingsuggestions_count : 0,
+        all_pendingsuggestions => $pendingsuggestions_count != $local_pendingsuggestions_count
+        ? $pendingsuggestions_count
+        : 0,
         suggestions_count => $local_pendingsuggestions_count
     );
 }
@@ -71,16 +77,16 @@ my $totordered = 0;
 my $totcomtd   = 0;
 my $totavail   = 0;
 
-my $total_active        = 0;
-my $totspent_active     = 0;
-my $totordered_active   = 0;
-my $totavail_active     = 0;
+my $total_active      = 0;
+my $totspent_active   = 0;
+my $totordered_active = 0;
+my $totavail_active   = 0;
 
 my @budget_loop;
 my %patrons        = ( $loggedinuser => Koha::Patrons->find($loggedinuser) );
 my $loggedinpatron = $patrons{$loggedinuser}->unblessed;
 foreach my $budget ( @{$budget_arr} ) {
-    next unless (CanUserUseBudget($loggedinpatron, $budget, $userflags));
+    next unless ( CanUserUseBudget( $loggedinpatron, $budget, $userflags ) );
 
     if ( my $borrowernumber = $budget->{budget_owner_id} ) {
         unless ( exists $patrons{$borrowernumber} ) {
@@ -99,20 +105,20 @@ foreach my $budget ( @{$budget_arr} ) {
         $budget->{budget_ordered} = 0;
     }
     $budget->{'budget_avail'} =
-      $budget->{'budget_amount'} - ( $budget->{'budget_spent'} + $budget->{'budget_ordered'} );
+        $budget->{'budget_amount'} - ( $budget->{'budget_spent'} + $budget->{'budget_ordered'} );
     $budget->{'total_avail'} =
-      $budget->{'budget_amount'} - ( $budget->{'total_spent'} + $budget->{'total_ordered'} );
+        $budget->{'budget_amount'} - ( $budget->{'total_spent'} + $budget->{'total_ordered'} );
 
     $total      += $budget->{'budget_amount'};
     $totspent   += $budget->{'budget_spent'};
     $totordered += $budget->{'budget_ordered'};
     $totavail   += $budget->{'budget_avail'};
 
-    if ($budget->{budget_period_active}){
-	$total_active      += $budget->{'budget_amount'};
-	$totspent_active   += $budget->{'budget_spent'};
-	$totordered_active += $budget->{'budget_ordered'};
-	$totavail_active   += $budget->{'budget_avail'};    
+    if ( $budget->{budget_period_active} ) {
+        $total_active      += $budget->{'budget_amount'};
+        $totspent_active   += $budget->{'budget_spent'};
+        $totordered_active += $budget->{'budget_ordered'};
+        $totavail_active   += $budget->{'budget_avail'};
     }
 
     push @budget_loop, $budget;
@@ -139,7 +145,7 @@ $template->param(
 );
 
 my $cur = Koha::Acquisition::Currencies->get_active;
-if ( $cur ) {
+if ($cur) {
     $template->param(
         currency => $cur->currency,
     );
