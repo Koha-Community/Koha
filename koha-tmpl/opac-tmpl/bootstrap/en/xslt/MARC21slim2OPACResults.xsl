@@ -1216,10 +1216,11 @@
     </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=856]">
+        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
          <div class="results_summary online_resources">
                <span class="label">Online resources: </span>
                     <ul class="resource_list">
-                            <xsl:for-each select="marc:datafield[@tag=856]">
+                            <xsl:for-each select="marc:datafield[@tag=856 and marc:subfield[@code='u']]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
                             <xsl:if test="$OPACURLOpenInNewWindow='0'">
 			      <li><a>
@@ -1302,6 +1303,7 @@
                             </ul>
                             </div>
                         </xsl:if>
+        </xsl:if>
 
         <!-- Availability line -->
         <div class="results_summary availability">

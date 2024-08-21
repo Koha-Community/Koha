@@ -921,8 +921,9 @@
     </xsl:if>
 
     <xsl:if test="marc:datafield[@tag=856]">
+        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
         <span class="results_summary online_resources"><span class="label">Online resources: </span>
-        <xsl:for-each select="marc:datafield[@tag=856]">
+        <xsl:for-each select="marc:datafield[@tag=856 and marc:subfield[@code='u']]">
             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
             <a>
                 <xsl:attribute name="href">
@@ -961,6 +962,7 @@
 
         </xsl:for-each>
         </span>
+        </xsl:if>
     </xsl:if>
 
         <!-- 505 - Formatted contents note -->
