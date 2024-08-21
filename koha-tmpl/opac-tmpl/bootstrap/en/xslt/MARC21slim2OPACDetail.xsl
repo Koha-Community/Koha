@@ -1038,11 +1038,10 @@
 
     <!-- Image processing code added here, takes precedence over text links including y3z text   -->
     <xsl:if test="marc:datafield[@tag=856]">
-        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
         <span class="results_summary online_resources">
-                <span class="label">Online resources: </span>
+            <span class="label">Online resources: </span>
                 <ul class="resource_list">
-                    <xsl:for-each select="marc:datafield[@tag=856 and marc:subfield[@code='u']]">
+                    <xsl:for-each select="marc:datafield[@tag=856]">
                         <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
                         <li>
                             <a property="url">
@@ -1076,23 +1075,18 @@
                                             <xsl:with-param name="codes">y3z</xsl:with-param>
                                         </xsl:call-template>
                                     </xsl:when>
-                                    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-                                        <xsl:choose>
-                                            <xsl:when test="$URLLinkText!=''">
-                                                <xsl:value-of select="$URLLinkText"/>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:text>Click here to access online</xsl:text>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
+                                    <xsl:when test="$URLLinkText!=''">
+                                        <xsl:value-of select="$URLLinkText"/>
                                     </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>Click here to access online</xsl:text>
+                                    </xsl:otherwise>
                                 </xsl:choose>
                             </a>
                         </li>
                     </xsl:for-each>
                 </ul>
             </span>
-            </xsl:if>
         </xsl:if>
 
         <!--  787 Other Relationship Entry  -->
