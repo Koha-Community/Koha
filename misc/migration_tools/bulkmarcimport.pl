@@ -209,7 +209,8 @@ my $searcher = Koha::SearchEngine::Search->new(
 print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch;
-my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+# don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+my $fh = IO::File->new($input_marc_file) or die "Could not open $input_marc_file: $!";
 if (defined $format && $format =~ /XML/i) {
     # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
     # appears to try to convert incoming XML records from MARC-8
