@@ -8,7 +8,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
 use Test::NoWarnings;
-use Test::More tests => 64;
+use Test::More tests => 172;
 
 use_ok('Koha::Patron');
 
@@ -49,6 +49,27 @@ my $inheritCatCode = $builder->build(
     }
 );
 
+my $yesItypeCode = $builder->build_object({
+    class => 'Koha::ItemTypes',
+    value => {
+        checkprevcheckout => 'yes',
+    }
+});
+
+my $noItypeCode = $builder->build_object({
+    class => 'Koha::ItemTypes',
+    value  => {
+        checkprevcheckout => 'no',
+    }
+});
+
+my $inheritItypeCode = $builder->build_object({
+    class => 'Koha::ItemTypes',
+    value  => {
+        checkprevcheckout => 'inherit',
+    }
+});
+
 # Create context for some tests late on in the file.
 my $library = $builder->build( { source => 'Branch' } );
 my $staff   = $builder->build( { source => 'Borrower' } );
@@ -57,6 +78,7 @@ t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
 
 # wants_check_for_previous_checkout
 
+# We want to test the subroutine without passing the $item parameter
 # We expect the following result matrix:
 #
 # (1/0 indicates the return value of WantsCheckPrevCheckout; i.e. 1 says we
@@ -212,6 +234,108 @@ map {
         } @{ $_->{patrons} };
     } @{ $_->{categories} };
 } @{$mappings};
+
+
+# wants_check_for_previous_checkout
+
+# We want to test the subroutine by passing the $item parameter
+# We expect the following result matrix:
+#
+# (1/0 indicates the return value of WantsCheckPrevCheckout; i.e. 1 says we
+# should check whether the item was previously issued)
+#
+# | System Preference | hardyes                                                                                                   |
+# |-------------------+-----------------------------------------------------------------------------------------------------------|
+# | Item Type Setting | yes                               | no                                | inherit                           |
+# |-------------------+-----------------------------------+-----------------------------------+-----------------------------------|
+# | Category Setting  | yes       | no        | inherit   | yes       | no        | inherit   | yes       | no        | inherit   |
+# |-------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+# | Patron Setting    | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i |
+# |-------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---|
+# | Expected Result   | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+#
+#
+# | System Preference | softyes                                                                                                   |
+# |-------------------+-----------------------------------------------------------------------------------------------------------|
+# | Item Type Setting | yes                               | no                                | inherit                           |
+# |-------------------+-----------------------------------+-----------------------------------+-----------------------------------|
+# | Category Setting  | yes       | no        | inherit   | yes       | no        | inherit   | yes       | no        | inherit   |
+# |-------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+# | Patron Setting    | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i |
+# |-------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---|
+# | Expected Result   | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 1 |
+#
+#
+# | System Preference | softno                                                                                                    |
+# |-------------------+-----------------------------------------------------------------------------------------------------------|
+# | Item Type Setting | yes                               | no                                | inherit                           |
+# |-------------------+-----------------------------------+-----------------------------------+-----------------------------------|
+# | Category Setting  | yes       | no        | inherit   | yes       | no        | inherit   | yes       | no        | inherit   |
+# |-------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+# | Patron Setting    | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i |
+# |-------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---|
+# | Expected Result   | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 0 |
+#
+#
+# | System Preference | hardno                                                                                                    |
+# |-------------------+-----------------------------------------------------------------------------------------------------------|
+# | Item Type Setting | yes                               | no                                | inherit                           |
+# |-------------------+-----------------------------------+-----------------------------------+-----------------------------------|
+# | Category Setting  | yes       | no        | inherit   | yes       | no        | inherit   | yes       | no        | inherit   |
+# |-------------------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+# | Patron Setting    | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i | y | n | i |
+# |-------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---|
+# | Expected Result   | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+
+my $itypeCode = {
+    'yes' => $yesItypeCode->itemtype,
+    'no' => $noItypeCode->itemtype,
+    'inherit' => $inheritItypeCode->itemtype,
+};
+
+foreach my $syspref ('hardyes','softyes','softno','hardno'){
+    t::lib::Mocks::mock_preference( 'checkprevcheckout', $syspref );
+    foreach my $itemtype_setting ('yes','no','inherit'){ #itemtype Setting
+        my $item      = $builder->build_sample_item( { itype => $itypeCode->{$itemtype_setting} } );
+        foreach my $categorie_settings('yes','no','inherit'){
+            my $catCode = $categorie_settings . 'Cat';
+            foreach my $patron_setting('yes','no','inherit'){
+                my $result = undef;
+                $result = 1 if($syspref eq 'hardyes');
+                $result = 0 if($syspref eq 'hardno');
+                $result = 1 if(!defined $result && $itemtype_setting eq 'yes');
+                $result = 0 if(!defined $result && $itemtype_setting eq 'no');
+                $result = 1 if(!defined $result && $patron_setting eq 'yes');
+                $result = 0 if(!defined $result && $patron_setting eq 'no');
+                $result = 1 if(!defined $result && $categorie_settings eq 'yes');
+                $result = 0 if(!defined $result && $categorie_settings eq 'no');
+                $result = 1 if(!defined $result && $syspref eq 'softyes');
+                $result = 0 if(!defined $result && $syspref eq 'softno');
+                my $kpatron = $builder->build(
+                    {
+                        source => 'Borrower',
+                        value  => {
+                            checkprevcheckout => $patron_setting,
+                            categorycode      => $catCode,
+                        },
+                    }
+                );
+                my $patron = Koha::Patrons->find( $kpatron->{borrowernumber} );
+                is(
+                    $patron->wants_check_for_previous_checkout($item), $result,
+                    "Predicate with syspref "
+                        . $syspref
+                        . ", cat "
+                        . $catCode
+                        . ", patron "
+                        . $patron_setting
+                        . ", item type "
+                        . $itypeCode->{$itemtype_setting}
+                );
+            }
+        }
+    }
+}
 
 # do_check_for_previous_checkout
 

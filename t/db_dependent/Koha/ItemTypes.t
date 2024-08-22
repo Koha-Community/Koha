@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 16;
+use Test::More tests => 19;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -41,8 +41,8 @@ my $database = Koha::Database->new();
 my $schema   = $database->schema();
 $schema->txn_begin;
 
-my $builder       = t::lib::TestBuilder->new;
-my $initial_count = Koha::ItemTypes->search->count;
+my $builder        = t::lib::TestBuilder->new;
+my $initial_count1 = Koha::ItemTypes->search->count;
 
 my $parent1 = $builder->build_object( { class => 'Koha::ItemTypes', value => { description => 'description' } } );
 my $child1  = $builder->build_object(
@@ -110,7 +110,7 @@ is_deeply( $type->unblessed, $child2->unblessed, "We got back the same object" )
 t::lib::Mocks::mock_preference( 'language',      'en' );
 t::lib::Mocks::mock_preference( 'OPACLanguages', 'en' );
 my $itemtypes = Koha::ItemTypes->search_with_localization;
-is( $itemtypes->count, $initial_count + 4, 'We added 4 item types' );
+is( $itemtypes->count, $initial_count1 + 4, 'We added 4 item types' );
 my $first_itemtype = $itemtypes->next;
 is(
     $first_itemtype->translated_description,
@@ -159,5 +159,35 @@ subtest 'image_location' => sub {
         'Check path for intranet'
     );
 };
+
+# test for checkprevcheckout
+my $initial_count2 = Koha::ItemTypes->search->count;
+
+my @itypes = (
+    Koha::ItemType->new(
+        {
+            itemtype => 'ITYPE1',
+        }
+    )->store,
+    Koha::ItemType->new(
+        {
+            itemtype          => 'ITYPE2',
+            checkprevcheckout => undef,
+        }
+    )->store,
+);
+
+for my $itype (@itypes) {
+    my $retrived_itype = Koha::ItemTypes->find( $itype->itemtype );
+    is(
+        $retrived_itype->checkprevcheckout, 'inherit',
+        'Koha::ItemType->store should default checkprevcheckout to inherit'
+    );
+}
+
+is(
+    Koha::ItemTypes->search->count, $initial_count2 + 2,
+    'We added two item types with checkprevcheckout set to inherit'
+);
 
 $schema->txn_rollback;

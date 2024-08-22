@@ -47,6 +47,7 @@ use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::ILL::Requests;
+use Koha::ItemTypes;
 use Koha::Old::Checkouts;
 use Koha::OverdueRules;
 use Koha::Patron::Attributes;
@@ -837,28 +838,32 @@ Return 1 if Koha needs to perform PrevIssue checking, else 0.
 =cut
 
 sub wants_check_for_previous_checkout {
-    my ($self) = @_;
+    my ($self, $item) = @_;
     my $syspref = C4::Context->preference("checkPrevCheckout");
 
     # Simple cases
     ## Hard syspref trumps all
     return 1 if ( $syspref eq 'hardyes' );
     return 0 if ( $syspref eq 'hardno' );
-    ## Now, patron pref trumps all
+
+    # Now, item pref trumps all
+    if ($item) {
+        my $itype = Koha::ItemTypes->find( $item->effective_itemtype );
+        return 1 if ( $itype->checkprevcheckout eq 'yes' );
+        return 0 if ( $itype->checkprevcheckout eq 'no' );
+    }
+
+    # Now, item type inherits -> determine patron preference
     return 1 if ( $self->checkprevcheckout eq 'yes' );
     return 0 if ( $self->checkprevcheckout eq 'no' );
 
-    # More complex: patron inherits -> determine category preference
+    # More complex: item type inherit and patron inherits -> determine category preference
     my $checkPrevCheckoutByCat = $self->category->checkprevcheckout;
     return 1 if ( $checkPrevCheckoutByCat eq 'yes' );
     return 0 if ( $checkPrevCheckoutByCat eq 'no' );
 
     # Finally: category preference is inherit, default to 0
-    if ( $syspref eq 'softyes' ) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return $syspref eq 'softyes' ? 1 : 0;
 }
 
 =head3 do_check_for_previous_checkout

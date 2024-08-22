@@ -344,8 +344,8 @@
                             [% END %]
                         </select>
                     </li>
-                    <li
-                        ><label for="library_limitation">Library limitation: </label>
+                    <li>
+                        <label for="library_limitation">Library limitation: </label>
                         <select id="library_limitation" name="branches" multiple size="10">
                             [% PROCESS options_for_libraries libraries => Branches.all( selected => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                         </select>
@@ -357,6 +357,26 @@
                         <div class="hint">Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </div>
                         <div class="hint"><strong>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</strong> will show the link just below the title</div>
                     </li>
+                    [% IF Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' %]
+                        <li>
+                            <label for="checkprevcheckout">Check for previous checkouts: </label>
+                            <select name="checkprevcheckout" id="checkprevcheckout">
+                                [% IF itemtype.checkprevcheckout == 'yes' %]
+                                <option value="yes" selected="selected">Yes and override system preferences</option>
+                                <option value="no">No and override system preferences</option>
+                                <option value="inherit">Inherit from system preferences</option>
+                                [% ELSIF itemtype.checkprevcheckout == 'no' %]
+                                <option value="yes">Yes and override system preferences</option>
+                                <option value="no" selected="selected">No and override system preferences</option>
+                                <option value="inherit">Inherit from system preferences</option>
+                                [% ELSE %]
+                                <option value="yes">Yes and override system preferences</option>
+                                <option value="no">No and override system preferences</option>
+                                <option value="inherit" selected="selected">Inherit from system preferences</option>
+                                [% END %]
+                            </select>
+                        </li>
+                    [% END %]
                 </ol>
             </fieldset>
 
