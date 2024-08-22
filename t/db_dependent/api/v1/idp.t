@@ -107,7 +107,8 @@ my $oidc_without_email_provider_data = {
 
 my $domain_not_matching = {
     domain              => 'gmail.com',
-    auto_register       => 0,
+    auto_register_opac  => 0,
+    auto_register_staff => 0,
     update_on_auth      => 0,
     default_library_id  => undef,
     default_category_id => undef,
@@ -117,7 +118,8 @@ my $domain_not_matching = {
 
 my $domain_no_register = {
     domain              => 'some.library.com',
-    auto_register       => 0,
+    auto_register_opac  => 0,
+    auto_register_staff => 0,
     update_on_auth      => 0,
     default_library_id  => undef,
     default_category_id => undef,
@@ -130,7 +132,8 @@ my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } )
 
 my $domain_register = {
     domain              => 'some.library.com',
-    auto_register       => 1,
+    auto_register_opac  => 1,
+    auto_register_staff => 0,
     update_on_auth      => 0,
     default_library_id  => $library->branchcode,
     default_category_id => $category->categorycode,
@@ -140,7 +143,8 @@ my $domain_register = {
 
 my $domain_register_update = {
     domain              => 'some.library.com',
-    auto_register       => 1,
+    auto_register_opac  => 1,
+    auto_register_staff => 0,
     update_on_auth      => 1,
     default_library_id  => $library->branchcode,
     default_category_id => $category->categorycode,

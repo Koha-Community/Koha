@@ -13,8 +13,11 @@ properties:
     type:
       - string
       - "null"
-  auto_register:
-    description: If patrons will be generated on login if required
+  auto_register_opac:
+    description: If patrons will be generated on login if required (OPAC)
+    type: boolean
+  auto_register_staff:
+    description: If patrons will be generated on login if required (Staff interface)
     type: boolean
   update_on_auth:
     description: If patron data is updated on login
@@ -39,7 +42,8 @@ additionalProperties: false
 required:
   - identity_provider_domain_id
   - domain
-  - auto_register
+  - auto_register_opac
+  - auto_register_staff
   - update_on_auth
   - default_library_id
   - default_category_id
