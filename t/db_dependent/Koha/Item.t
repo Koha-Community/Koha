@@ -2728,9 +2728,9 @@ subtest 'find_booking' => sub {
         # Adding lead period rule
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => '*',
-                itemtype     => $item->effective_itemtype,
-                rules        => {
+                branchcode => '*',
+                itemtype   => $item->effective_itemtype,
+                rules      => {
                     bookings_lead_period => 3,
                 },
             }
