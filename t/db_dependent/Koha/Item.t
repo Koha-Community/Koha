@@ -2600,7 +2600,7 @@ subtest 'bookings' => sub {
 };
 
 subtest 'find_booking' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -2706,6 +2706,54 @@ subtest 'find_booking' => sub {
         $found_booking->booking_id, $booking2->booking_id,
         "Koha::Item->find_booking returns the current booking not a future one"
     );
+
+    subtest "Preparation period handling" => sub {
+        plan tests => 3;
+
+        # Delete current booking, is the future booking returned?
+        $booking2->delete();
+        $found_booking = $item->find_booking(
+            {
+                checkout_date => dt_from_string(),
+                due_date      => dt_from_string()->add( days => 7 ),
+            }
+        );
+
+        is(
+            $found_booking,
+            undef,
+            "Koha::Item->find_booking returns undefined when the current booking is deleted and the future booking is out of range and there's no lead period rule"
+        );
+
+        # Adding lead period rule
+        Koha::CirculationRules->set_rules(
+            {
+                branchcode   => '*',
+                itemtype     => $item->effective_itemtype,
+                rules        => {
+                    bookings_lead_period => 3,
+                },
+            }
+        );
+
+        $found_booking = $item->find_booking(
+            {
+                checkout_date => dt_from_string(),
+                due_date      => dt_from_string()->add( days => 7 ),
+            }
+        );
+
+        is(
+            ref($found_booking),
+            'Koha::Booking',
+            "Koha::Item->find_booking returns a Koha::Booking if one exists that would clash with the passed dates including lead period"
+        );
+        is(
+            $found_booking->booking_id, $booking3->booking_id,
+            "Koha::Item->find_booking returns the future booking when lead period is included"
+        );
+
+    };
 
     $schema->storage->txn_rollback;
 };

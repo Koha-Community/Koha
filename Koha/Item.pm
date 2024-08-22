@@ -586,7 +586,9 @@ sub bookings {
 
   my $booking = $item->find_booking( { checkout_date => $now, due_date => $future_date } );
 
-Find the first booking that would conflict with the passed checkout dates for this item.
+Find the first booking that would conflict with the passed checkout dates for this item.  If a booking
+lead period is configured for the itemtype we will also take that into account here, counting bookings
+that fall in that lead period as conflicts too.
 
 FIXME: This can be simplified, it was originally intended to iterate all biblio level bookings
 to catch cases where this item may be the last available to satisfy a biblio level only booking.
