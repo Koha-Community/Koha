@@ -74,6 +74,7 @@ requires 'Locale::PO', '0.24';
 requires 'Log::Log4perl', '1.29';
 requires 'MARC::Charset', '0.98';
 requires 'MARC::File::XML', 'v1.0.1';
+requires 'MARC::Lint', 'v1.52';
 requires 'MARC::Record', 'v2.0.6';
 requires 'MARC::Record::MiJ', '0.04';
 requires 'MIME::Base64', '3.07';
