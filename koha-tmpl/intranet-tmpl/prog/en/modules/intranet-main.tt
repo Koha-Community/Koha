@@ -276,7 +276,7 @@
                     </div> <!-- /.col-sm-12 -->
                 </div> <!-- /.row -->
 
-                [% SET IntranetmainUserblock = AdditionalContents.get( location => "IntranetmainUserblock", lang => lang, library => logged_in_user.branchcode || default_branch ) %]
+                [% SET IntranetmainUserblock = AdditionalContents.get( location => "IntranetmainUserblock", lang => lang, library => Branches.GetLoggedInBranchcode || default_branch ) %]
 
                 [% IF ( IntranetmainUserblock.content && IntranetmainUserblock.content.count > 0 ) %]
                     <div class="row">

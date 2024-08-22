@@ -201,7 +201,7 @@
 </div><!-- /.page-section -->
 [% END %]
 
-    [%- SET StaffAcquisitionsHome = AdditionalContents.get( location => "StaffAcquisitionsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+    [%- SET StaffAcquisitionsHome = AdditionalContents.get( location => "StaffAcquisitionsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
     [%- FOREACH block IN StaffAcquisitionsHome.content -%]
     <div class="page-section">
         [%- block.content | $raw -%]

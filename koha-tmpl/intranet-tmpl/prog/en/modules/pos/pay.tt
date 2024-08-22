@@ -168,7 +168,7 @@
         </form>
         [% END %]
 
-        [%- SET StaffPOSHome = AdditionalContents.get( location => "StaffPOSHome", lang => lang, library => logged_in_user.branchcode ) -%]
+        [%- SET StaffPOSHome = AdditionalContents.get( location => "StaffPOSHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
         [%- FOREACH block IN StaffPOSHome.content -%]
             <div class="page-section">
                 [%- block.content | $raw -%]

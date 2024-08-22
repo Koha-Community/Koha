@@ -37,7 +37,7 @@
 
                 [% INCLUDE 'serials-advsearch.inc' %]
 
-                [%- SET StaffSerialsHome = AdditionalContents.get( location => "StaffSerialsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- SET StaffSerialsHome = AdditionalContents.get( location => "StaffSerialsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
                 [%- FOREACH block IN StaffSerialsHome.content -%]
                 <div class="page-section">
                     [%- block.content | $raw -%]

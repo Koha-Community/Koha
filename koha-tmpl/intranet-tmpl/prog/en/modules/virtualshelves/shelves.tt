@@ -547,7 +547,7 @@
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs %]
 
-                [%- SET StaffListsHome = AdditionalContents.get( location => "StaffListsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- SET StaffListsHome = AdditionalContents.get( location => "StaffListsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
                 [%- FOREACH block IN StaffListsHome.content -%]
                 <div class="page-section">
                     [%- block.content | $raw -%]

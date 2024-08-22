@@ -120,7 +120,7 @@
             </form>
         [% END %]
 
-                [%- SET StaffPatronsHome = AdditionalContents.get( location => "StaffPatronsHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- SET StaffPatronsHome = AdditionalContents.get( location => "StaffPatronsHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
                 [%- FOREACH block IN StaffPatronsHome.content -%]
                 <div class="page-section">
                     [%- block.content | $raw -%]

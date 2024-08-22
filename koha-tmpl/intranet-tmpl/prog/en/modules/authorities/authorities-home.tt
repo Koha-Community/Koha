@@ -34,7 +34,7 @@
 
             <div id="merge_in_progress" class="page-section bg-info" style="display:none;"></div>
 
-            [%- SET StaffAuthoritiesHome = AdditionalContents.get( location => "StaffAuthoritiesHome", lang => lang, library => logged_in_user.branchcode ) -%]
+            [%- SET StaffAuthoritiesHome = AdditionalContents.get( location => "StaffAuthoritiesHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
             [%- FOREACH block IN StaffAuthoritiesHome.content -%]
             <div class="page-section">
                 [%- block.content | $raw -%]

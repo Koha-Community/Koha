@@ -219,7 +219,7 @@
                     </div>
                 </div>
 
-                [%- SET StaffCataloguingHome = AdditionalContents.get( location => "StaffCataloguingHome", lang => lang, library => logged_in_user.branchcode ) -%]
+                [%- SET StaffCataloguingHome = AdditionalContents.get( location => "StaffCataloguingHome", lang => lang, library => Branches.GetLoggedInBranchcode ) -%]
                 [%- FOREACH block IN StaffCataloguingHome.content -%]
                 <div class="page-section">
                     [%- block.content | $raw -%]
