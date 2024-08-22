@@ -617,7 +617,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
 };
 
 subtest 'checkouts + pending_checkouts + overdues + old_checkouts' => sub {
-    plan tests => 17;
+    plan tests => 19;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $biblionumber_1 = $builder->build_sample_biblio->biblionumber;
@@ -660,19 +660,41 @@ subtest 'checkouts + pending_checkouts + overdues + old_checkouts' => sub {
 
     t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
-    AddIssue( $patron, $item_1->barcode, DateTime->now->subtract( days => 1 ) );
-    AddIssue( $patron, $item_2->barcode, DateTime->now->subtract( days => 5 ) );
-    AddIssue( $patron, $item_3->barcode );
+    my $issue_1 = AddIssue(
+        $patron, $item_1->barcode, dt_from_string()->subtract( days => 1 ), undef,
+        dt_from_string()->subtract( days => 10 )
+    );
+    sleep(1);    # Pause to ensure timestamps differ and that they do not affect ordering
+    AddIssue(
+        $patron, $item_2->barcode, dt_from_string()->subtract( days => 5 ), undef,
+        dt_from_string()->subtract( days => 1 )
+    );
+    sleep(1);
+    AddIssue( $patron, $item_3->barcode, undef, undef, dt_from_string()->subtract( days => 5 ) );
+    sleep(1);
 
     $checkouts = $patron->checkouts;
-    is( $checkouts->count, 3, 'checkouts should return 3 issues for that patron' );
-    is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
+    is( $checkouts->count, 3,                 'checkouts should return 3 issues for that patron' );
+    is( ref($checkouts),   'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
     $pending_checkouts = $patron->pending_checkouts;
-    is( $pending_checkouts->count, 3, 'pending_checkouts should return 3 issues for that patron' );
-    is( ref($pending_checkouts), 'Koha::Checkouts', 'pending_checkouts should return a Koha::Checkouts object' );
+    is( $pending_checkouts->count, 3,                 'pending_checkouts should return 3 issues for that patron' );
+    is( ref($pending_checkouts),   'Koha::Checkouts', 'pending_checkouts should return a Koha::Checkouts object' );
+
+    my @itemnumbers = $pending_checkouts->get_column('itemnumber');
+    is_deeply(
+        \@itemnumbers, [ $item_2->itemnumber, $item_3->itemnumber, $item_1->itemnumber ],
+        "Checkouts are ordered by the date issued"
+    );
+    $issue_1->auto_renew_error("Updated")->store;
+    $pending_checkouts = $patron->pending_checkouts;
+    @itemnumbers       = $pending_checkouts->get_column('itemnumber');
+    is_deeply(
+        \@itemnumbers, [ $item_2->itemnumber, $item_3->itemnumber, $item_1->itemnumber ],
+        "Checkouts are still ordered by the date issued, updates do not reorder"
+    );
 
     my $first_checkout = $pending_checkouts->next;
-    is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_3->biblionumber, 'pending_checkouts should prefetch values from other tables (here biblio)' );
+    is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_2->biblionumber, 'pending_checkouts should prefetch values from other tables (here biblio)' );
 
     my $overdues = $patron->overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');
