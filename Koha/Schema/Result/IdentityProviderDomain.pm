@@ -47,14 +47,6 @@ Reference to provider
 
 Domain name. If null means all domains
 
-=head2 auto_register
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 0
-
-Allow user auto register
-
 =head2 update_on_auth
 
   data_type: 'tinyint'
@@ -97,6 +89,22 @@ Allow provider from opac interface
 
 Allow provider from staff interface
 
+=head2 auto_register_opac
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Allow user auto register (OPAC)
+
+=head2 auto_register_staff
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+Allow user auto register (Staff interface)
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -106,8 +114,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "domain",
   { data_type => "varchar", is_nullable => 1, size => 100 },
-  "auto_register",
-  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "update_on_auth",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "default_library_id",
@@ -117,6 +123,10 @@ __PACKAGE__->add_columns(
   "allow_opac",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "allow_staff",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "auto_register_opac",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "auto_register_staff",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -206,14 +216,15 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2022-11-08 17:35:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uUnzFzRKWAiYUsmapofXwQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-22 18:15:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GpRUQgJ3WUt9nAAS0E9qWw
 
 __PACKAGE__->add_columns(
-    '+auto_register'  => { is_boolean => 1 },
-    '+update_on_auth' => { is_boolean => 1 },
-    '+allow_opac'     => { is_boolean => 1 },
-    '+allow_staff'    => { is_boolean => 1 }
+    '+auto_register_opac'  => { is_boolean => 1 },
+    '+auto_register_staff' => { is_boolean => 1 },
+    '+update_on_auth'      => { is_boolean => 1 },
+    '+allow_opac'          => { is_boolean => 1 },
+    '+allow_staff'         => { is_boolean => 1 }
 );
 
 =head2 koha_object_class
