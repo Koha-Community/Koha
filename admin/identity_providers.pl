@@ -63,9 +63,10 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
     my $protocol    = $input->param('protocol');
 
     # Domain configuration params
-    my $allow_opac          = $input->param('allow_opac')    // 0;
-    my $allow_staff         = $input->param('allow_staff')   // 0;
-    my $auto_register       = $input->param('auto_register') // 0;
+    my $allow_opac          = $input->param('allow_opac')          // 0;
+    my $allow_staff         = $input->param('allow_staff')         // 0;
+    my $auto_register_opac  = $input->param('auto_register_opac')  // 0;
+    my $auto_register_staff = $input->param('auto_register_staff') // 0;
     my $default_category_id = $input->param('default_category_id');
     my $default_library_id  = $input->param('default_library_id');
     my $domain              = $input->param('domain');
@@ -91,7 +92,8 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
                         identity_provider_id => $provider->identity_provider_id,
                         allow_opac           => $allow_opac,
                         allow_staff          => $allow_staff,
-                        auto_register        => $auto_register,
+                        auto_register_opac   => $auto_register_opac,
+                        auto_register_staff  => $auto_register_staff,
                         default_category_id  => $default_category_id,
                         default_library_id   => $default_library_id,
                         domain               => $domain,
@@ -120,7 +122,8 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
     my $allow_opac           = $input->param('allow_opac');
     my $allow_staff          = $input->param('allow_staff');
     my $identity_provider_id = $input->param('identity_provider_id');
-    my $auto_register        = $input->param('auto_register');
+    my $auto_register_opac   = $input->param('auto_register_opac');
+    my $auto_register_staff  = $input->param('auto_register_staff');
     my $default_category_id  = $input->param('default_category_id') || undef;
     my $default_library_id   = $input->param('default_library_id')  || undef;
     my $domain               = $input->param('domain');
@@ -133,7 +136,8 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
                 allow_opac           => $allow_opac,
                 allow_staff          => $allow_staff,
                 identity_provider_id => $identity_provider_id,
-                auto_register        => $auto_register,
+                auto_register_opac   => $auto_register_opac,
+                auto_register_staff  => $auto_register_staff,
                 default_category_id  => $default_category_id,
                 default_library_id   => $default_library_id,
                 domain               => $domain,
@@ -245,7 +249,8 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
 
         my $identity_provider_id = $input->param('identity_provider_id');
         my $domain               = $input->param('domain');
-        my $auto_register        = $input->param('auto_register');
+        my $auto_register_opac   = $input->param('auto_register_opac')  // 0;
+        my $auto_register_staff  = $input->param('auto_register_staff') // 0;
         my $update_on_auth       = $input->param('update_on_auth');
         my $default_library_id   = $input->param('default_library_id')  || undef;
         my $default_category_id  = $input->param('default_category_id') || undef;
@@ -258,7 +263,8 @@ if ( !$domain_ops && $op eq 'cud-add' ) {
                 {
                     identity_provider_id => $identity_provider_id,
                     domain               => $domain,
-                    auto_register        => $auto_register,
+                    auto_register_opac   => $auto_register_opac,
+                    auto_register_staff  => $auto_register_staff,
                     update_on_auth       => $update_on_auth,
                     default_library_id   => $default_library_id,
                     default_category_id  => $default_category_id,

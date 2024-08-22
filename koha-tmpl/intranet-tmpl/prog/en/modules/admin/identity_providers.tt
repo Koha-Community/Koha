@@ -211,12 +211,20 @@
                         <div class="hint">Allow staff access to users from this domain to login with this identity provider.</div>
                     </li>
                     <li>
-                        <label for="auto_register">Auto register: </label>
-                        <select name="auto_register" id="auto_register">
-                            <option value="1">Yes</option>
-                            <option value="0" selected="selected">No</option>
+                        <label for="auto_register_opac">Auto register (OPAC): </label>
+                        <select name="auto_register_opac" id="auto_register_opac">
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
                         </select>
-                        <div class="hint">Allow users to auto register on login.</div>
+                        <span>users to auto register on login (OPAC)</span>
+                    </li>
+                    <li>
+                        <label for="auto_register_staff">Auto register (Staff interface): </label>
+                        <select name="auto_register_staff" id="auto_register_staff">
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        </select>
+                        <span>users to auto register on login (Staff interface)</span>
                     </li>
                     <li>
                         <label for="update_on_auth">Update on login: </label>

@@ -116,12 +116,20 @@
                         <span>user data on login</span>
                     </li>
                     <li>
-                        <label for="auto_register">Auto register: </label>
-                        <select name="auto_register" id="auto_register">
+                        <label for="auto_register_opac">Auto register (OPAC): </label>
+                        <select name="auto_register_opac" id="auto_register_opac">
                             <option value="1">Allow</option>
                             <option value="0" selected="selected">Don't allow</option>
                         </select>
-                        <span>users to auto register on login</span>
+                        <span>users to auto register on login (OPAC)</span>
+                    </li>
+                    <li>
+                        <label for="auto_register_staff">Auto register (Staff interface): </label>
+                        <select name="auto_register_staff" id="auto_register_staff">
+                            <option value="1">Allow</option>
+                            <option value="0" selected="selected">Don't allow</option>
+                        </select>
+                        <span>users to auto register on login (Staff interface)</span>
                     </li>
                     <li>
                         <label for="default_library_id">Default library: </label>
@@ -205,9 +213,9 @@
                         <span>user data on login</span>
                     </li>
                     <li>
-                        <label for="auto_register">Auto register: </label>
-                        <select name="auto_register" id="auto_register">
-                            [% IF identity_provider_domain.auto_register == "1" %]
+                        <label for="auto_register_opac">Auto register (OPAC): </label>
+                        <select name="auto_register_opac" id="auto_register_opac">
+                            [% IF identity_provider_domain.auto_register_opac == "1" %]
                                 <option value="1" selected="selected">Allow</option>
                                 <option value="0">Don't allow</option>
                             [% ELSE %]
@@ -215,7 +223,20 @@
                                 <option value="0" selected="selected">Don't allow</option>
                             [% END %]
                         </select>
-                        <span>users to auto register on login</span>
+                        <span>users to auto register on OPAC login</span>
+                    </li>
+                    <li>
+                        <label for="auto_register_staff">Auto register (Staff): </label>
+                        <select name="auto_register_staff" id="auto_register_staff">
+                            [% IF identity_provider_domain.auto_register_staff == "1" %]
+                                <option value="1" selected="selected">Allow</option>
+                                <option value="0">Don't allow</option>
+                            [% ELSE %]
+                                <option value="1">Allow</option>
+                                <option value="0" selected="selected">Don't allow</option>
+                            [% END %]
+                        </select>
+                        <span>users to auto register on staff interface login</span>
                     </li>
                     <li>
                         <label for="default_library_id">Default library: </label>
@@ -289,38 +310,18 @@
                     <tr>
                         <th>Domain</th>
                         <th>Update on login</th>
-                        <th>Auto register</th>
+                        <th>Auto register (OPAC)</th>
+                        <th>Auto register (Staff)</th>
                         <th>Default library</th>
                         <th>Default category</th>
                         <th>Allow OPAC</th>
                         <th>Allow staff</th>
-                        <th data-class-name="actions no-export">Actions</th>
+                        <th data-class-name="actions noExport">Actions</th>
                     </tr>
                 </thead>
             </table>
         </div>
     [% END %]
-
-    <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="delete_confirm_modal_label">Confirm deletion of identity provider domain</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="delete_confirm_dialog"></div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-danger" id="delete_confirm_modal_button" role="button" data-bs-toggle="modal">Delete</a>
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- #delete_confirm_modal -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -390,7 +391,18 @@
                     },
                     {
                         "data": function( row, type, val, meta ) {
-                            if (row.auto_register) {
+                            if (row.auto_register_opac) {
+                                return _("Yes");
+                            } else {
+                                return _("No");
+                            }
+                        },
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": function( row, type, val, meta ) {
+                            if (row.auto_register_staff) {
                                 return _("Yes");
                             } else {
                                 return _("No");
