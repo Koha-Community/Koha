@@ -683,7 +683,7 @@ else {
     while ( my $item = $items->next ) {
         my $item_info = $item->unblessed;
         $item_info->{holds_count} = $item_reserves{ $item->itemnumber };
-        if( $item_info->{holds_count} && $item_info->{holds_count} > 0 ){ $item_level_holds = 1; }
+        if ( $item_info->{holds_count} && $item_info->{holds_count} > 0 ) { $item_level_holds = 1; }
         $item_info->{priority}    = $priority{ $item->itemnumber };
 
         # Get opac_info from Additional contents for home and holding library
@@ -725,7 +725,7 @@ else {
           $itemtypes->{ $itemtype->itemtype }->{translated_description};
 
         $item_info->{checkout} = $item->checkout;
-        if( $item_info->{checkout} && $item_info->{checkout} > 0 ){ $item_checkouts = 1; }
+        if ( $item_info->{checkout} && $item_info->{checkout} > 0 ) { $item_checkouts = 1; }
 
         foreach my $field (
             qw(ccode materials enumchron copynumber itemnotes location_description uri barcode itemcallnumber))
