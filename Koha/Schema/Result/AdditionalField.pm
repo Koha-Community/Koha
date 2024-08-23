@@ -83,6 +83,14 @@ mode of operation (get or set) for marcfield
 
 is the field searchable?
 
+=head2 repeatable
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+is the field repeatable?
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -104,6 +112,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "searchable",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "repeatable",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -153,8 +163,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-03 17:19:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fnWeynuQnePWYM90CJKZ5Q
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-23 15:47:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8ZpUf0l+6h44AHDf7eV/1g
 
 __PACKAGE__->add_columns(
     '+repeatable' => { is_boolean => 1 },

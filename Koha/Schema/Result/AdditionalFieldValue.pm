@@ -80,22 +80,6 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<field_record>
-
-=over 4
-
-=item * L</field_id>
-
-=item * L</record_id>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("field_record", ["field_id", "record_id"]);
-
 =head1 RELATIONS
 
 =head2 field
@@ -114,8 +98,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-01-21 13:39:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6Y4sBMbKYSbGN7fAy7OhEQ
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-23 15:47:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0XP6wuopWZEao4nJd4PF5g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

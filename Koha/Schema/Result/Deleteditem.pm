@@ -532,8 +532,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-04-26 13:26:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:13COB8Ty6QDInmxN/zvEig
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-08-23 15:47:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YYwxdwFVXmG0NJ0oFd8bUg
 
 __PACKAGE__->add_columns(
     '+bookable'                          => { is_boolean => 1 },
