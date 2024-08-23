@@ -195,16 +195,12 @@ sub get_biblio_marcxml {
     }
     if ($record) {
 
-        #FIXME: Syspref this?
-        my $hide_record = 1;
-        if ($hide_record) {
-            my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
-            if ( $biblio->hidden_in_opac( { rules => $rules } ) ) {
-                return;
-            }
-
-            #TODO: Also hide record if OpacSuppression is in use
+        my $rules = C4::Context->yaml_preference('OpacHiddenItems') // {};
+        if ( $biblio->hidden_in_opac( { rules => $rules } ) ) {
+            return;
         }
+
+        #TODO: Also hide record if OpacSuppression is in use
     }
     if ( $record && $expanded_avs ) {
         my $frameworkcode = GetFrameworkCode($biblionumber) || '';
