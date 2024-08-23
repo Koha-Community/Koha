@@ -18,7 +18,8 @@ return {
             say_success( $out, "Added repeatable column to additional_fields table" );
         }
 
-        if ( unique_key_exists ('additional_field_values', 'field_record') ) {
+        if ( unique_key_exists( 'additional_field_values', 'field_record' ) ) {
+
             # Need to drop foreign key so that we can then drop the unique key
             $dbh->do(
                 q{
@@ -40,7 +41,10 @@ return {
                         `additional_fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
                 }
             );
-            say_success( $out, "Removed UNIQUE KEY `field_record` (`field_id`,`record_id`) from the additional_field_values table" );
+            say_success(
+                $out,
+                "Removed UNIQUE KEY `field_record` (`field_id`,`record_id`) from the additional_field_values table"
+            );
         }
 
         my $number_of_entries = $dbh->do(q{DELETE FROM additional_field_values WHERE value = ''});
