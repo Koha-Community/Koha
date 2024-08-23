@@ -540,35 +540,33 @@
                             <div id="wrong-branch-modal" tabindex="-1" class="modal modal-lg block audio-alert-action block" data-bs-backdrop="static" data-bs-keyboard="false">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <form method="post" action="returns.pl" name="mainform" id="mainform">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title">
-                                                    Cannot check in
-                                                </h1>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                        [% item.barcode | html %]: [% title | html %]
-                                                    </a>
-                                                </p>
-                                                <p>
-                                                    <strong>
-                                                        NOT CHECKED IN
-                                                    </strong>
-                                                </p>
-                                                <p>
-                                                    This item must be checked in at following library:
-                                                    <strong>
-                                                        [% Branches.GetName( rightbranch ) | html %]
-                                                    </strong>
-                                                </p>
-                                                [% INCLUDE all_checkin_messages %]
-                                            </div> <!-- /.modal-body -->
-                                            <div class="modal-footer">
-                                                <button type="button" data-bs-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                            </div>
-                                        </form> <!-- /#mainform -->
+                                        <div class="modal-header">
+                                            <h1 class="modal-title">
+                                                Cannot check in
+                                            </h1>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
+                                                    [% item.barcode | html %]: [% title | html %]
+                                                </a>
+                                            </p>
+                                            <p>
+                                                <strong>
+                                                    NOT CHECKED IN
+                                                </strong>
+                                            </p>
+                                            <p>
+                                                This item must be checked in at following library:
+                                                <strong>
+                                                    [% Branches.GetName( rightbranch ) | html %]
+                                                </strong>
+                                            </p>
+                                            [% INCLUDE all_checkin_messages %]
+                                        </div> <!-- /.modal-body -->
+                                        <div class="modal-footer">
+                                            <button type="button" data-bs-dismiss="modal" class="btn btn-primary"><i class="fa fa-check"></i> OK</button>
+                                        </div>
                                     </div> <!-- /.modal-content -->
                                 </div> <!-- /.modal-dialog -->
                             </div> <!-- /#wrong-branch-modal -->
