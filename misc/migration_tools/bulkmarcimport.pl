@@ -480,6 +480,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                     if ($@) {
                         warn "ERROR: Update authority $matched_record_id failed: $@\n";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                        next RECORD;
                     } else {
                         printlog( { id => $authid, op => "update", status => "ok" } ) if ($logfile);
                     }
@@ -500,6 +501,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 if ($@) {
                     warn "ERROR: Insert authority $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
+                    next RECORD;
                 } else {
                     printlog( { id => $authid, op => "insert", status => "ok" } ) if ($logfile);
                 }
@@ -508,7 +510,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 printlog(
                     {
                         id     => $originalid, op => "insert",
-                        status => "warning : biblio not in database and option -insert not enabled, skipping..."
+                        status => "warning : authority not in database and option -insert not enabled, skipping..."
                     }
                 ) if ($logfile);
             }
@@ -520,6 +522,8 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                     1    #@FIXME: Really always updated?
                 );
             }
+            push @search_engine_record_ids, $authid;
+            push @search_engine_records,    $record;
         } else {
             my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id );
 
