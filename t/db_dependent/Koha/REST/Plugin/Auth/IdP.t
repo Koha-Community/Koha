@@ -45,6 +45,10 @@ post '/register_user' => sub {
     } catch {
         if ( ref($_) eq 'Koha::Exceptions::Auth::Unauthorized' ) {
             $c->render( status => 401, json => { message => 'unauthorized' } );
+        } elsif ( ref($_) eq 'Koha::Exceptions::BadParameter' ) {
+            $c->render( status => 400, json => { message => 'bad parameter: ' . $_->parameter } );
+        } elsif ( ref($_) eq 'Koha::Exceptions::MissingParameter' ) {
+            $c->render( status => 400, json => { message => 'missing parameter: ' . $_->parameter } );
         } else {
             $c->render( status => 500, json => { message => 'other error' } );
         }
@@ -79,63 +83,100 @@ use Koha::Database;
 my $schema  = Koha::Database->new()->schema();
 my $builder = t::lib::TestBuilder->new;
 
+my $t = Test::Mojo->new;
+
 # FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
 # this affects the other REST api tests
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 subtest 'auth.register helper' => sub {
-    plan tests => 6;
+
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
     # generate a random patron
-    my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $userid           = $patron_to_delete->userid;
+    my $patron_to_delete_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_to_delete_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $userid_1           = $patron_to_delete_1->userid;
+    my $userid_2           = $patron_to_delete_2->userid;
 
     # delete patron
-    $patron_to_delete->delete;
+    $patron_to_delete_1->delete;
+    $patron_to_delete_2->delete;
 
     my $provider =
         $builder->build_object( { class => 'Koha::Auth::Identity::Providers', value => { matchpoint => 'email' } } );
 
-    my $domain_with_register = $builder->build_object(
+    my $domain_1 = $builder->build_object(
         {
             class => 'Koha::Auth::Identity::Provider::Domains',
-            value => { identity_provider_id => $provider->id, domain => 'domain1.com', auto_register => 1 }
+            value => {
+                identity_provider_id => $provider->id,
+                domain               => 'domain1.com',
+                auto_register_opac   => 1,
+                auto_register_staff  => 0
+            }
         }
     );
 
-    my $domain_without_register = $builder->build_object(
+    my $domain_2 = $builder->build_object(
         {
             class => 'Koha::Auth::Identity::Provider::Domains',
-            value => { identity_provider_id => $provider->id, domain => 'domain2.com', auto_register => 0 }
+            value => {
+                identity_provider_id => $provider->id,
+                domain               => 'domain2.com',
+                auto_register_opac   => 0,
+                auto_register_staff  => 1
+            }
         }
     );
 
     my $library  = $builder->build_object( { class => 'Koha::Libraries' } );
     my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
 
-    my $user_data = {
-        firstname    => 'test',
-        surname      => 'test',
-        userid       => $userid,
-        branchcode   => $library->branchcode,
-        categorycode => $category->categorycode
-    };
+    $t->post_ok(
+        '/register_user' => json => {
+            data => {
+                firstname    => 'test',
+                surname      => 'test',
+                userid       => $userid_1,
+                branchcode   => $library->branchcode,
+                categorycode => $category->categorycode
+            },
+            domain_id => $domain_1->identity_provider_domain_id,
+            interface => 'opac'
+        }
+    )->status_is(200)->json_is( '/userid', $userid_1 );
 
-    my $t = Test::Mojo->new;
+    $t->post_ok( '/register_user' => json =>
+            { data => {}, domain_id => $domain_2->identity_provider_domain_id, interface => 'opac' } )->status_is(401)
+        ->json_is( '/message', 'unauthorized' );
+
+    $t->post_ok( '/register_user' => json =>
+            { data => {}, domain_id => $domain_1->identity_provider_domain_id, interface => 'staff' } )->status_is(401)
+        ->json_is( '/message', 'unauthorized' );
 
     $t->post_ok(
         '/register_user' => json => {
-            data => $user_data, domain_id => $domain_with_register->identity_provider_domain_id, interface => 'opac'
+            data => {
+                firstname    => 'test',
+                surname      => 'test',
+                userid       => $userid_2,
+                branchcode   => $library->branchcode,
+                categorycode => $category->categorycode
+            },
+            domain_id => $domain_2->identity_provider_domain_id,
+            interface => 'staff'
         }
-    )->status_is(200)->json_has( '/firstname', 'test' );
+    )->status_is(200)->json_is( '/userid', $userid_2 );
 
-    $t->post_ok(
-        '/register_user' => json => {
-            data => $user_data, domain_id => $domain_without_register->identity_provider_domain_id, interface => 'opac'
-        }
-    )->status_is(401)->json_has( '/message', 'unauthorized' );
+    $t->post_ok( '/register_user' => json => { data => {}, domain_id => $domain_1->identity_provider_domain_id } )
+        ->status_is(400)->json_is( '/message', 'missing parameter: interface' );
+
+    $t->post_ok( '/register_user' => json =>
+            { data => {}, domain_id => $domain_1->identity_provider_domain_id, interface => 'invalid' } )
+        ->status_is(400)->json_is( '/message', 'bad parameter: interface' );
 
     $schema->storage->txn_rollback;
 };
@@ -147,7 +188,6 @@ subtest 'auth.session helper' => sub {
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $t = Test::Mojo->new;
     $t->post_ok( '/start_session' => json => { userid => $patron->userid } )->status_is(200)
         ->json_has( '/status', 'ok' );
 

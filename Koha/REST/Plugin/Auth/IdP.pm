@@ -28,6 +28,7 @@ use Koha::Patrons;
 use C4::Auth qw(create_basic_session);
 
 use CGI;
+use List::MoreUtils qw(any);
 
 =head1 NAME
 
@@ -51,14 +52,21 @@ sub register {
 =head3 auth.register
 
     my $patron = $c->auth->register(
-        {   data      => $patron_data,
+        {
+            data      => $patron_data,
             domain    => $domain,
             interface => $interface
         }
     );
 
-If no patron passed, creates a new I<Koha::Patron> if the provider is configured
-to do so for the domain.
+This helper creates a new I<Koha::Patron> using the (already) mapped data
+provided in the I<data> attribute.
+
+A check is done on the passed I<interface> and I<domain> to validate
+the provider is configured to allow auto registration.
+
+Valid values for B<interface> are I<opac> and I<staff>. An exception will be thrown
+if other values or none are passed.
 
 =cut
 
@@ -69,7 +77,15 @@ to do so for the domain.
             my $domain    = $params->{domain};
             my $interface = $params->{interface};
 
-            unless ( $interface eq 'opac' && $domain->auto_register ) {
+            Koha::Exceptions::MissingParameter->throw( parameter => 'interface' )
+                unless $interface;
+
+            Koha::Exceptions::BadParameter->throw( parameter => 'interface' )
+                unless any { $interface eq $_ } qw{ opac staff };
+
+            if (   $interface eq 'opac' && !$domain->auto_register_opac
+                || $interface eq 'staff' && !$domain->auto_register_staff )
+            {
                 Koha::Exceptions::Auth::Unauthorized->throw( code => 401 );
             }
 
