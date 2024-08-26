@@ -108,8 +108,8 @@ $(document).ready(function () {
         }
     });
 
-    var txtActivefilter = _("Show expired");
-    var txtInactivefilter = _("Hide expired");
+    var txtActivefilter = __("Show expired");
+    var txtInactivefilter = __("Hide expired");
     $("#expired_filter").on("click", function () {
         if ($(this).hasClass("filtered")) {
             filter_expired = false;
