@@ -50,7 +50,7 @@ sub catch_missing_op {
     my @lines = read_file($file);
     my @errors;
     return unless grep { $_ =~ m|<form| } @lines;
-    my ( $in_form, $closed_form, $line_open_form, $has_op, $op_value );
+    my ( $in_form, $line_open_form, $has_op, $op_value );
     my $line_number = 0;
     for my $line (@lines) {
         $line_number++;
@@ -65,7 +65,6 @@ sub catch_missing_op {
             }
         }
         if ( $in_form && $line =~ m{</form} ) {
-            $closed_form = 0;
             if ($has_op) {
                 if ( $op_value !~ m{^cud-} && $op_value !~ m{^\[%} ) {
                     push @errors, $line_open_form;
@@ -73,6 +72,7 @@ sub catch_missing_op {
             } else {
                 push @errors, $line_open_form;
             }
+            $has_op = 0;
             $in_form = 0;
         }
     }
