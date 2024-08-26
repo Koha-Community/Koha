@@ -11,6 +11,7 @@ const util = require('util');
 const stream = require('stream/promises');
 
 const sass = require('gulp-sass')(require('sass'));
+const tildeImporter = require('node-sass-tilde-importer');
 const rtlcss = require('gulp-rtlcss');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
@@ -30,6 +31,7 @@ var CSS_BASE = args.view == "opac"
     : STAFF_CSS_BASE;
 
 var sassOptions = {
+    importer: tildeImporter,
     includePaths: [
         __dirname + '/node_modules',
         __dirname + '/../node_modules'
