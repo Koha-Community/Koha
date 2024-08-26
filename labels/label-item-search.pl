@@ -85,7 +85,7 @@ if ( $op eq "do_search" ) {
         undef, undef, $query_type, undef
     );
 
-    if (!defined $error && @{$results->{biblioserver}{RECORDS}} ) {
+    if (!defined $error && defined($results) && @{$results->{biblioserver}{RECORDS}} > 0 ) {
         $show_results = grep { defined $_ } @{$results->{biblioserver}{RECORDS}};
         $marcresults = [ grep { defined $_ } @{$results->{biblioserver}{RECORDS}} ];
         $total_hits = $results->{biblioserver}{hits};
