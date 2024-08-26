@@ -58,10 +58,10 @@ sub catch_missing_op {
             $in_form        = 1;
             $line_open_form = $line_number;
         }
-        if ( $in_form && $line =~ m{name="op"} ) {
+        if ( $in_form && $line =~ m{name=('|")op('|")} ) {
             $has_op = 1;
-            if ( $line =~ m{value="(.*)"} ) {
-                $op_value = $1;
+            if ( $line =~ m{value=('|")([^'"]*)('|")} ) {
+                $op_value = $2;
             }
         }
         if ( $in_form && $line =~ m{</form} ) {
