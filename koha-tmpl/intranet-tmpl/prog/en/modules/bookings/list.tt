@@ -96,7 +96,7 @@
             function(items, bookings){
                 var itemsSet = new vis.DataSet([{
                     id: 0,
-                    content: _("Biblio level")
+                    content: _("Record level")
                 }]);
                 for (item of items[0]) {
                     itemsSet.add({
@@ -231,7 +231,7 @@
             },
             {
                 data: "",
-                title: __("Status"),
+                title: _("Status"),
                 name: "status",
                 searchable: false,
                 orderable: false,
@@ -239,10 +239,10 @@
                 render: function (data, type, row, meta) {
                     let is_expired = dayjs(row.end_date).isBefore(new Date());
                     if (is_expired) {
-                        return '<span class="badge rounded-pill bg-secondary">' + __("Expired") + '</span>';
+                        return '<span class="badge rounded-pill bg-secondary">' + _("Expired") + '</span>';
                     }
 
-                    return '<span class="badge rounded-pill bg-success">' + __("Active") + '</span>';
+                    return '<span class="badge rounded-pill bg-success">' + _("Active") + '</span>';
                 }
             },
             {
