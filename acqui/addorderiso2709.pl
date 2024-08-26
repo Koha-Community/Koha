@@ -535,7 +535,7 @@ sub import_biblios_list {
                 $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
                 $iteminfos->{copynumber} = delete $iteminfos->{copyno} if $iteminfos->{copyno};
                 # Price is handled as "itemprice" in the UI form to distinguish from MarcFieldsToOrder
-                $iteminfos->{itemprice}  = delete $iteminfos->{price}  if $iteminfos->{price};
+                $iteminfos->{itemprice}  = delete $iteminfos->{price}  if $iteminfos->{itemprice};
 
                 # Convert budge code to a budget id
                 my $item_budget_code = delete $iteminfos->{budget_code};
