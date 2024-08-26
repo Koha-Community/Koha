@@ -22,6 +22,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const errorMessage = match ? match[1] : error.message;
 
         console.error(error);
-        document.getElementById('barcode-container').innerHTML = `<p><strong>Error: </strong>${errorMessage}</p>`;
+        document.getElementById('barcode-container').innerHTML = "<p><strong>" + __("Error:") + " </strong>${errorMessage}</p>";
     }
 });
