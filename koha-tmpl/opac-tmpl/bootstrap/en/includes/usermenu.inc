@@ -173,7 +173,7 @@
                 [% ELSE %]
                     <li>
                 [% END %]
-                <a href="/cgi-bin/koha/opac-virtual-card.pl">My Virtual Card</a></li>
+                <a href="/cgi-bin/koha/opac-virtual-card.pl">My virtual card</a></li>
             [% END %]
         </ul>
     </div>
