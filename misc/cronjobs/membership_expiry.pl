@@ -24,7 +24,7 @@ membership_expiry.pl - cron script to put membership expiry reminders into the m
 
 =head1 SYNOPSIS
 
-./membership_expiry.pl -c [-v] [-n] [-branch CODE] [-before DAYS] [-after DAYS] [-where COND] [-renew] [-letter X] [-letter-renew Y] [-active|-inactive]
+./membership_expiry.pl -c [-v] [-n] [-p] [-branch CODE] [-before DAYS] [-after DAYS] [-where COND] [-renew] [-letter X] [-letter-renew Y] [-active|-inactive]
 
 or, in crontab:
 
@@ -54,8 +54,13 @@ Verbose. Without this flag set, only fatal errors are reported.
 
 =item B<-n>
 
-Do not send any email. Membership expire notices that would have been sent to
+Do not send any notices. Membership expire notices that would have been sent to
 the patrons are printed to standard out.
+
+=item B<-p>
+
+Force the generation of print notices, even if the borrower has an email address.
+Note that this flag cannot be used in combination with -n
 
 =item B<-c>
 
@@ -132,6 +137,10 @@ In the event that the C<-n> flag is passed to this program, no emails
 are sent. Instead, messages are sent on standard output from this
 program.
 
+When using the C<-p> flag, print notices are generated regardless of whether or
+not the borrower has an email address. This can be useful for libraries that
+prefer to deal with print notices.
+
 Notices can contain variables enclosed in double angle brackets like
 E<lt>E<lt>thisE<gt>E<gt>. Those variables will be replaced with values
 specific to the soon expiring members.
@@ -165,6 +174,7 @@ use Koha::Patrons;
 # These are defaults for command line options.
 my $confirm;        # -c: Confirm that the user has read and configured this script.
 my $nomail;         # -n: No mail. Will not send any emails.
+my $forceprint;     # -p: Force print notices, even if email is found
 my $verbose = 0;    # -v: verbose
 my $help    = 0;
 my $man     = 0;
@@ -186,6 +196,7 @@ GetOptions(
     'man'            => \$man,
     'c'              => \$confirm,
     'n'              => \$nomail,
+    'p'              => \$forceprint,
     'v'              => \$verbose,
     'branch:s'       => \$branch,
     'before:i'       => \$before,
@@ -253,44 +264,111 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 
 # main loop
 my ( $count_skipped, $count_renewed, $count_enqueued ) = ( 0, 0, 0 );
-while ( my $expiring_patron = $upcoming_mem_expires->next ) {
-    if ( $active && !$expiring_patron->is_active( { months => $active } ) ) {
+while ( my $recent = $upcoming_mem_expires->next ) {
+    my $patron       = Koha::Patrons->find( $recent->borrowernumber );
+    my $user_email   = $patron->notice_email_address;
+    my $from_address = $patron->library->from_email_address;
+
+    if ( $active && !$patron->is_active( { months => $active } ) ) {
         $count_skipped++;
         next;
-    } elsif ( $inactive && $expiring_patron->is_active( { months => $inactive } ) ) {
+    } elsif ( $inactive && $patron->is_active( { months => $inactive } ) ) {
         $count_skipped++;
         next;
     }
 
     my $which_notice;
     if ($renew) {
-        $expiring_patron->renew_account;
+        $patron->renew_account;
         $which_notice = $letter_renew;
         $count_renewed++;
     } else {
         $which_notice = $letter_expiry;
     }
 
-    my $from_address  = $expiring_patron->library->from_email_address;
-    my $letter_params = {
-        module         => 'members',
-        letter_code    => $which_notice,
-        branchcode     => $expiring_patron->branchcode,
-        lang           => $expiring_patron->lang,
-        borrowernumber => $expiring_patron->borrowernumber,
-        tables         => {
-            borrowers => $expiring_patron->borrowernumber,
-            branches  => $expiring_patron->branchcode,
-        },
-    };
+    if ($user_email) {
+        my $email_letter = C4::Letters::GetPreparedLetter(
+            module      => 'members',
+            letter_code => $which_notice,
+            branchcode  => $patron->branchcode,
+            lang        => $patron->lang,
+            tables      => {
+                borrowers => $patron->borrowernumber,
+                branches  => $patron->branchcode,
+            },
+            message_transport_type => 'email',
+        );
 
-    my $sending_params = {
-        letter_params => $letter_params,
-        message_name  => 'Patron_Expiry',
-    };
+        if ($nomail) {
+            print $email_letter->{'content'} . "\n";
+            next;
+        }
 
-    my $result = $expiring_patron->queue_notice($sending_params);
-    $count_enqueued++ if $result->{sent};
+        if ($email_letter) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $email_letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    from_address           => $from_address,
+                    message_transport_type => 'email',
+                }
+            );
+        }
+    }
+
+    if ( !$user_email || $forceprint ) {
+        my $print_letter = C4::Letters::GetPreparedLetter(
+            module      => 'members',
+            letter_code => $which_notice,
+            branchcode  => $patron->branchcode,
+            lang        => $patron->lang,
+            tables      => {
+                borrowers => $patron->borrowernumber,
+                branches  => $patron->branchcode,
+            },
+            message_transport_type => 'print',
+        );
+
+        if ($nomail) {
+            print $print_letter->{'content'} . "\n";
+            next;
+        }
+
+        if ($print_letter) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $print_letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'print',
+                }
+            );
+        }
+    }
+
+    $count_enqueued++;
+
+    if ( $patron->smsalertnumber ) {
+        my $sms_letter = C4::Letters::GetPreparedLetter(
+            module      => 'members',
+            letter_code => $which_notice,
+            branchcode  => $patron->branchcode,
+            lang        => $patron->lang,
+            tables      => {
+                borrowers => $patron->borrowernumber,
+                branches  => $patron->branchcode,
+            },
+            message_transport_type => 'sms',
+        );
+        if ($sms_letter) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $sms_letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'sms',
+                }
+            );
+        }
+    }
 }
 
 if ($verbose) {
