@@ -63,8 +63,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageOne,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         });
 
@@ -81,8 +81,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageTwo,
             headers: {
-                "X-Base-Total-Count": "40",
-                "X-Total-Count": "40",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("getPageTwo");
         // Scroll the dropdown
@@ -127,8 +127,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageOne,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         });
 
@@ -190,8 +190,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageOne,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("getPageOne");
 
@@ -208,8 +208,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageTwo,
             headers: {
-                "X-Base-Total-Count": "40",
-                "X-Total-Count": "40",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("getPageTwo");
         // Scroll the dropdown
@@ -245,8 +245,8 @@ describe("Infinite scroll", () => {
                 },
             ],
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("searchFilter");
         // Select a  license that is not in the first page of results
@@ -279,8 +279,8 @@ describe("Infinite scroll", () => {
             statusCode: 200,
             body: pageOne,
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("resetDropdown");
         cy.get("#license_id_0 .vs__open-indicator").click();
@@ -306,8 +306,8 @@ describe("Infinite scroll", () => {
                 },
             ],
             headers: {
-                "X-Base-Total-Count": "20",
-                "X-Total-Count": "20",
+                "X-Base-Total-Count": "60",
+                "X-Total-Count": "60",
             },
         }).as("secondSearchFilter");
         cy.get("#license_id_0 .vs__open-indicator").click();
