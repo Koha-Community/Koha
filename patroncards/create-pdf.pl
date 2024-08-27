@@ -86,12 +86,25 @@ my ($llx, $lly) = 0,0;
 
 if (@label_ids) {
     my $batch_items = $batch->get_attr('items');
+    my @borrowernumbers;
     grep {
         my $label_id = $_;
-        push(@{$items}, grep{$_->{'label_id'} == $label_id;} @{$batch_items});
+        push( @borrowernumbers, grep { $_->{'label_id'} == $label_id; } @{$batch_items} );
     } @label_ids;
+    @borrowernumbers = map { $_->{borrower_number} } @borrowernumbers;
+    @borrowernumbers =
+        map { $_->borrowernumber }
+        Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } }, { order_by => [$order_by] } )
+        ->as_list
+        if ($order_by);
+    grep { push( @{$items}, { borrower_number => $_ } ); } @borrowernumbers;
 }
 elsif (@borrower_numbers) {
+    @borrower_numbers =
+        map { $_->borrowernumber }
+        Koha::Patrons->search( { borrowernumber => { -in => \@borrower_numbers } }, { order_by => [$order_by] } )
+        ->as_list
+        if ($order_by);
     grep {
         push(@{$items}, {borrower_number => $_});
     } @borrower_numbers;
@@ -106,7 +119,16 @@ elsif ( $patronlist_id  ) {
     } @borrowerlist;
 }
 else {
-    $items = $batch->get_attr('items');
+    my $batch_items     = $batch->get_attr('items');
+    my @borrowernumbers = map { $_->{borrower_number} } @{$batch_items};
+    @borrowernumbers =
+        map { $_->borrowernumber }
+        Koha::Patrons->search( { borrowernumber => { -in => \@borrowernumbers } }, { order_by => [$order_by] } )
+        ->as_list
+        if ($order_by);
+    grep {
+        push(@{$items}, {borrower_number => $_});
+    } @borrowernumbers;
 }
 
 my $layout_xml = XMLin($layout->get_attr('layout_xml'), ForceArray => 1);

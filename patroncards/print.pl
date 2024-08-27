@@ -73,6 +73,7 @@ if ($op eq 'export') {
         $template->param(
                         batches     => \@batches,
                         referer     => $referer,
+                        order_by    => $order_by,
                         );
     }
     elsif (@borrower_numbers) {
@@ -89,6 +90,7 @@ if ($op eq 'export') {
         $template->param(
                         batches     => \@batches,
                         referer     => $referer,
+                        order_by    => $order_by,
                         );
     }
     elsif (@batch_ids) {
@@ -104,6 +106,7 @@ if ($op eq 'export') {
         $template->param(
                         batches     => \@batches,
                         referer     => $referer,
+                        order_by    => $order_by,
                         );
     }
     elsif ($patronlist_id ) {
