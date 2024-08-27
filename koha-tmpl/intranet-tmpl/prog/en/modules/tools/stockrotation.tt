@@ -302,9 +302,9 @@
                             <ul id="sortable_stages" data-rota-id="[% rota.rota_id | html %]">
                                 [% FOREACH stage IN existing_stages %]
                                     <li id="stage_[% stage.stage_id | html %]">
-                                        <span data-bs-toggle="tooltip" title="Drag and drop to move this stage to another position" data-bs-placement="right" class="stagename">
+                                        <span class="stagename">
                                             [% IF existing_stages.size > 1 %]
-                                                <i class="drag_handle fa-solid fa-fw fa-grip-vertical" aria-hidden="true"></i>
+                                                <i class="drag_handle fa-solid fa-fw fa-grip-vertical" data-bs-toggle="tooltip" title="Drag and drop to move this stage to another position" data-bs-placement="top" aria-hidden="true"></i>
                                             [% END %]
                                             [% Branches.GetName(stage.branchcode_id) | html %]
                                         </span>

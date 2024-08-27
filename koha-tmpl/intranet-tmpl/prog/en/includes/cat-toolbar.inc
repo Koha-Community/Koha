@@ -43,7 +43,7 @@
                 [% IF biblio.can_be_edited(logged_in_user) %]
                     <li><a class="dropdown-item" id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>
                 [% ELSE %]
-                    <li><a class="dropdown-item disabled" aria-disabled="true" id="editbiblio" href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="This record is locked">Edit record</a></li>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record is locked"><a class="dropdown-item disabled" aria-disabled="true" id="editbiblio" href="#">Edit record</a></li>
                 [% END %]
             [% END %]
 
@@ -75,8 +75,8 @@
                         </form>
                     </li>
                 [% ELSE %]
-                    <li>
-                        <a class="dropdown-item disabled" aria-disabled="true" id="batchedit-disabled" href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">Edit items in batch</a>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="batchedit-disabled" href="#">Edit items in batch</a>
                     </li>
                 [% END %]
             [% END %]
@@ -94,8 +94,8 @@
                         </form>
                     </li>
                 [% ELSE %]
-                    <li>
-                        <a class="dropdown-item disabled" aria-disabled="true" id="batchdelete-disabled" href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">Delete items in a batch</a>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="batchdelete-disabled" href="#">Delete items in a batch</a>
                     </li>
                 [% END %]
             [% END %]
@@ -130,12 +130,12 @@
 
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
-                    <li>
-                        <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" data-bs-toggle="tooltip" data-bs-placement="left" title="[% count | html %] item(s) are attached to this record. You must delete all items before deleting this record." href="#">Delete record</a>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% count | html %] item(s) are attached to this record. You must delete all items before deleting this record">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>
                     </li>
                 [% ELSIF ( biblio.subscriptions.count ) %]
-                    <li>
-                        <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" data-bs-toggle="tooltip" data-bs-placement="left" title="[% biblio.subscriptions.count | html %] subscription(s) are attached to this record. You must delete all subscriptions before deleting this record." href="#">Delete record</a>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% biblio.subscriptions.count | html %] subscription(s) are attached to this record. You must delete all subscriptions before deleting this record">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>
                     </li>
                 [% ELSE %]
                     <li>
@@ -162,8 +162,8 @@
                         <a class="dropdown-item" href="#" id="deleteallitems">Delete all items</a>
                     </li>
                 [% ELSE %]
-                    <li>
-                        <a class="dropdown-item disabled" aria-disabled="true" href="#" id="deleteallitems-disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">Delete all items</a>
+                    <li id="deleteallitems-disabled" data-bs-toggle="tooltip" data-bs-placement="left" title="This record has no items">
+                        <a class="dropdown-item disabled" aria-disabled="true" href="#">Delete all items</a>
                     </li>
                 [% END %]
             [% END %]

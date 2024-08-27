@@ -21,4 +21,5 @@ function popup(subscriptionid) {
     $("#mana-subscription-share").click(function() {
         window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=share";
     });
+    $('[data-bs-toggle="tooltip"]').tooltip();
  });

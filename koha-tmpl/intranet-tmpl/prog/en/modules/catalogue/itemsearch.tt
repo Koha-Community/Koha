@@ -674,6 +674,7 @@
             });
             $('#results').on('draw.dt', function (e, settings) {
                 prepSelections();
+                $('[data-bs-toggle="tooltip"]').tooltip();
                 var Sticky = $("#searchheader");
                 Sticky.hcSticky({
                     stickTo: "#results-wrapper .page-section",

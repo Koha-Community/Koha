@@ -201,7 +201,7 @@
                                 <li>
                                 <li>
                                     [% IF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
-                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library, desk and register</a>
+                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library, desk, and register</a>
                                     [% ELSIF Koha.Preference('UseCirculationDesks') %]
                                         <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
                                     [% ELSIF Koha.Preference('UseCashRegisters') %]

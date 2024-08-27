@@ -83,8 +83,8 @@
                                         </a>
                                     </li>
                                 [% ELSE %]
-                                    <li class="disabled">
-                                        <a class="dropdown-item" href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="There are no enrollments for this club yet">
+                                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="There are no enrollments for this club yet">
+                                        <a class="dropdown-item disabled" aria-disabled="true" href="#">
                                             <i class="fa fa-list-ul"></i> Enrollments
                                         </a>
                                     </li>

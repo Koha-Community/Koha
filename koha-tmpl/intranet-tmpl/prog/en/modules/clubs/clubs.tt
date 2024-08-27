@@ -200,6 +200,9 @@
                 var club_id = $(this).data("id");
                 SearchToHold( club_id );
             });
+            $('[data-bs-toggle="tooltip"]').on("click",function(e){
+                e.stopPropagation();
+            }).tooltip();
         });
 
         function ConfirmDeleteTemplate( id, name ) {

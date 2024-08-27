@@ -218,7 +218,7 @@
                         [% IF !plugin %]
                             <td>
                                 [% IF record.public %]
-                                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-bs-toggle="tooltip"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
+                                    <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-retrieve-file.pl?id=[% record.hashvalue | uri %]" class="get-file" data-bs-toggle="tooltip" data-bs-title="Copy link to this file"><i class="fa fa-link" aria-hidden="true"></i> Yes</a>
                                 [% ELSE %]
                                     No
                                 [% END %]
@@ -528,18 +528,16 @@
             });
 
             if ( window.isSecureContext ) {
+                $('[data-bs-toggle="tooltip"]').tooltip();
                 $(".get-file").on("click", function(e){
                     e.preventDefault();
                     if( navigator.clipboard && navigator.clipboard.writeText){
                         navigator.clipboard.writeText( $(this).attr("href") );
-                        $(this).attr("data-original-title", _( "Link copied to the clipboard" ) )
-                            .tooltip("show");
+                        $(this).tooltip("dispose").attr('data-bs-title', _( "Link copied to the clipboard" )).tooltip("show");
                     }
                 });
-                $(".get-file").tooltip({
-                    delay: { "show": 100, "hide": 500 }
-                }).on("hidden.bs.tooltip", function(){
-                    $(this).attr("data-original-title", _( "Copy link to this file" ) );
+                $(".get-file").tooltip().on("hidden.bs.tooltip", function(){
+                    $(this).tooltip("dispose").attr("data-bs-title", _( "Copy link to this file" ) ).tooltip();
                 });
             }
         });

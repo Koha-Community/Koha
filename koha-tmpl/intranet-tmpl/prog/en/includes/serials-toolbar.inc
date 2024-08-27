@@ -85,9 +85,13 @@
 
         [% IF Koha.Preference('Mana') == 1 and Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
             [% IF one_language_enabled==0 or mana_id %]
-                <div class="btn-group"><a data-bs-toggle="modal" data-bs-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing." data-bs-target="#mana_share_modal" class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a></div>
+                <div class="btn-group" data-bs-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing">
+                    <a data-bs-toggle="modal" data-bs-target="#mana_share_modal" class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a>
+                </div>
             [% ELSE %]
-                <div class="btn-group" id="mana-subscription-share" data-bs-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing."><a class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a></div>
+                <div class="btn-group" id="mana-subscription-share" data-bs-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing">
+                    <a class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a>
+                </div>
             [% END %]
         [% END %]
 

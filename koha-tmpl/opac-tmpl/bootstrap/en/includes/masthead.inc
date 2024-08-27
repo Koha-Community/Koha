@@ -78,7 +78,7 @@
                                                 <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;public=0" tabindex="-1" role="menuitem">View all</a>
                                             [% END %]
                                         [% ELSE %]
-                                            <a class="dropdown-item disabled" href="#" tabindex="-1" role="menuitem">No private lists</a>
+                                            <a class="dropdown-item disabled" aria-disabled="true" href="#" tabindex="-1" role="menuitem">No private lists</a>
                                         [% END %]
                                             <a class="dropdown-item listmenulink" href="/cgi-bin/koha/opac-shelves.pl?op=add_form" tabindex="-1" role="menuitem">New list</a>
                                     [% ELSE %]

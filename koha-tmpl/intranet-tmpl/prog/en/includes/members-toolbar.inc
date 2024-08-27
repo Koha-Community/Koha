@@ -58,16 +58,23 @@
         <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a class="dropdown-item" id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=[% destination | html %]&amp;reregistration=y">Renew patron</a></li>
+                    <li>
+                        <a class="dropdown-item" id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=[% destination | html %]&amp;reregistration=y">Renew patron</a>
+                    </li>
                 [% ELSE %]
-                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to renew patrons">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="renewpatron" href="#">Renew patron</a>
+                    </li>
                 [% END %]
                 [% IF ( CAN_user_permissions ) %]
-                    <li><a class="dropdown-item" id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% patron.borrowernumber | html %]">Set permissions</a></li>
+                    <li>
+                        <a class="dropdown-item" id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% patron.borrowernumber | html %]">Set permissions</a>
+                    </li>
                 [% ELSE %]
-                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to set permissions">
+                        <a class="dropdown-item disabled" aria-disabled="true" id="patronflags" href="#">Set permissions</a>
+                    </li>
                 [% END %]
-
                 [% IF ( Koha.Preference('TwoFactorAuthentication') == 'enforced' || Koha.Preference('TwoFactorAuthentication') == 'enabled' ) && logged_in_user.borrowernumber == patron.borrowernumber %]
                     <li><a class="dropdown-item" id="twofa" href="/cgi-bin/koha/members/two_factor_auth.pl">Manage two-factor authentication</a></li>
                 [% END %]
@@ -78,14 +85,20 @@
 
                 [% IF Koha.Preference('RESTOAuth2ClientCredentials') %]
                     [% IF CAN_user_superlibrarian OR loggedinusernumber == patron.borrowernumber %]
-                        <li><a class="dropdown-item" id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber | html %]">Manage API keys</a></li>
+                        <li>
+                            <a class="dropdown-item" id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber | html %]">Manage API keys</a>
+                        </li>
                     [% ELSE %]
-                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to manage API keys">
+                            <a class="dropdown-item disabled" aria-disabled="true" id="apikeys" href="#">Manage API keys</a>
+                        </li>
                     [% END %]
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a class="dropdown-item" id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome notice</a></li>
+                    <li>
+                        <a class="dropdown-item" id="sendwelcome" href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber | uri %]&op=send_welcome">Send welcome notice</a>
+                    </li>
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && patron.category.effective_reset_password %]
@@ -94,26 +107,41 @@
 
                 [% IF CAN_user_borrowers_delete_borrowers %]
                     [% IF ( patron.protected == 1 ) %]
-                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is protected" id="deletepatron" href="#">Delete</a></li>
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is protected">
+                            <a class="dropdown-item disabled" aria-disabled="true" id="deletepatron" href="#">Delete</a>
+                        </li>
                     [% ELSE %]
-                        <li><a class="dropdown-item" id="deletepatron" href="#">Delete</a></li>
+                        <li>
+                            <a class="dropdown-item" id="deletepatron" href="#">Delete</a>
+                        </li>
                     [% END %]
                 [% ELSE %]
-                    <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
+                    <li aria-disabled="true" data-bs-toggle="tooltip" data-bs-placement="left" title="You are not authorized to delete patrons">
+                        <a class="dropdown-item disabled" id="deletepatron" href="#">Delete</a>
+                    </li>
                 [% END %]
+
                 [% SET adult_categories = Categories.scalar.all(category_type => 'A') %]
                 [% IF adult_categories.count > 0 %]
                     [% IF patron.is_child %]
-                        <li><a class="dropdown-item" id="updatechild" href="#">Update child to adult patron</a></li>
+                        <li>
+                            <a class="dropdown-item" id="updatechild" href="#">Update child to adult patron</a>
+                        </li>
                     [% ELSE %]
-                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is an adult">
+                            <a class="dropdown-item disabled" aria-disabled="true" id="updatechild" href="#">Update child to adult patron</a>
+                        </li>
                     [% END %]
                 [% END %]
                 [% IF Koha.Preference('intranetreadinghistory') %]
-                    [%IF ( privacy == 2 ) %]
-                        <li class="disabled"><a class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="left" title="Not allowed by patron's privacy settings" id="exportbarcodes" href="#">Export today's checked in barcodes</a></li>
+                    [% IF ( privacy == 2 ) %]
+                        <li data-bs-toggle="tooltip" data-bs-placement="left" title="Not allowed by patron's privacy settings">
+                            <a class="dropdown-item disabled" aria-disabled="true" id="exportbarcodes" href="#">Export today's checked in barcodes</a>
+                        </li>
                     [% ELSE %]
-                        <li><a class="dropdown-item" id="exportcheckins" href="#">Export today's checked in barcodes</a></li>
+                        <li>
+                            <a class="dropdown-item" id="exportcheckins" href="#">Export today's checked in barcodes</a>
+                        </li>
                     [% END %]
                 [% END %]
             </ul>

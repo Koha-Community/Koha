@@ -172,10 +172,18 @@
                                 <option value="xml">XML</option>
                                 [% IF csv_profiles %]
                                     <option value="csv">CSV</option>
-                                [% ELSE %]
-                                    <option value="csv" disabled data-bs-toggle="tooltip" data-bs-placement="left" title="You must create a CSV profile for MARC exports to use this option.">CSV</option>
                                 [% END %]
                             </select>
+                            [% UNLESS csv_profiles %]
+                                <div class="hint">
+                                    There are no CSV profiles for MARC exports.
+                                    [% IF ( CAN_user_tools_manage_csv_profiles ) %]
+                                         <a href="/cgi-bin/koha/tools/csv-profiles.pl">Create a CSV profile to export a CSV file.</a>
+                                    [% ELSE %]
+                                        CSV export unavailable.
+                                    [% END %]
+                                </div>
+                            [% END %]
                         </li>
                         <li class="csv_profiles">
                             <label for="bibs_csv_profile">CSV profile: </label>

@@ -117,12 +117,10 @@ $(document).ready(function() {
         return false;
     });
     $("#export").remove(); // Hide embedded export form if JS menus available
-    $("#deletebiblio").tooltip();
-    $("#batchedit-disabled,#batchdelete-disabled,#deleteallitems-disabled")
-        .on("click",function(e){
-            e.stopPropagation();
-        })
-        .tooltip();
+
+    $('[data-bs-toggle="tooltip"]').on("click",function(e){
+        e.stopPropagation();
+    }).tooltip();
 
     $(".addtolist").on("click", function (e) {
         e.preventDefault();
