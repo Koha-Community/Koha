@@ -173,7 +173,7 @@ if ( $op eq 'edit_form' or $op eq 'cud-save' or $op eq 'duplicate' ) {
     }
     if ($logged_in_user->is_superlibrarian) {
         $CanUpdatePasswordExpiration = 1;
-        $CanUpdateProtectPatron = 1;
+        $CanUpdateProtectPatron      = 1;
     }
 
     $borrower_data = $patron->unblessed;
@@ -235,7 +235,7 @@ if ( $op eq 'cud-insert' || $op eq 'edit_form' || $op eq 'cud-save' || $op eq 'd
         map { qr/^$_$/ }
         grep { $_ ne 'dateexpiry' } split( /\s*\|\s*/, C4::Context->preference('BorrowerUnwantedField') || q{} );
     push @keys_to_delete, qr/^password_expiration_date$/ unless $CanUpdatePasswordExpiration;
-    push @keys_to_delete, qr/^protected$/ unless $CanUpdateProtectPatron;
+    push @keys_to_delete, qr/^protected$/                unless $CanUpdateProtectPatron;
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
             delete($newdata{$_}) if /$regexp/;
@@ -798,18 +798,18 @@ $template->param(
 );
 
 $template->param(
-  patron => $patron ? $patron : \%newdata, # Used by address include templates now
-  nodouble  => $nodouble,
-  borrowernumber  => $borrowernumber, #register number
-  relshiploop => \@relshipdata,
-  btitle=> $default_borrowertitle,
-  modify          => $modify,
-  nok     => $nok,#flag to know if an error
-  NoUpdateLogin =>  $NoUpdateLogin,
-  NoUpdateEmail =>  $NoUpdateEmail,
-  CanUpdatePasswordExpiration => $CanUpdatePasswordExpiration,
-  CanUpdateProtectPatron => $CanUpdateProtectPatron,
-  );
+    patron                      => $patron ? $patron : \%newdata,    # Used by address include templates now
+    nodouble                    => $nodouble,
+    borrowernumber              => $borrowernumber,                  #register number
+    relshiploop                 => \@relshipdata,
+    btitle                      => $default_borrowertitle,
+    modify                      => $modify,
+    nok                         => $nok,                             #flag to know if an error
+    NoUpdateLogin               => $NoUpdateLogin,
+    NoUpdateEmail               => $NoUpdateEmail,
+    CanUpdatePasswordExpiration => $CanUpdatePasswordExpiration,
+    CanUpdateProtectPatron      => $CanUpdateProtectPatron,
+);
 
 # HouseboundModule data
 $template->param(
