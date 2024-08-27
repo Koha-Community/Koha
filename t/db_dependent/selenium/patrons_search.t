@@ -394,7 +394,7 @@ subtest 'Search patrons' => sub {
         is( $patron_selected_text, "Patrons selected: 3", "Three patrons still selected" );
 
         $driver->find_element('//*[@id="patronlist-menu"]')->click;
-        $driver->find_element('//a[@class="patron-list-add"]')->click;
+        $driver->find_element('//a[@class="patron-list-add dropdown-item"]')->click;
         my $patron_list_name = "my new list";
         $driver->find_element('//input[@id="new_patron_list"]')->send_keys($patron_list_name);
         $driver->find_element('//button[@id="add_to_patron_list_submit"]')->click;

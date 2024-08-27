@@ -68,13 +68,13 @@ SKIP: {
         like( $driver->get_title, qr(Two-factor authentication), 'Must be on the page with the pref on' );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             'Status: Disabled',
             '2FA is disabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             '', # 'Status: Enabled' is not shown
             '2FA is disabled'
         );
@@ -100,13 +100,13 @@ SKIP: {
         $s->wait_for_ajax;
         $driver->get($s->base_url . q|members/two_factor_auth.pl|);
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             '', # 'Status: Disabled' is not shown
             '2FA is enabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             'Status: Enabled',
             '2FA is enabled'
         );
@@ -311,13 +311,13 @@ SKIP: {
         $driver->get( $s->base_url . q|members/two_factor_auth.pl| );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             '', # 'Status: Disabled' is not shown
             '2FA is enabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             'Status: Enabled',
             '2FA is enabled'
         );
@@ -325,13 +325,13 @@ SKIP: {
         $driver->find_element('//form[@id="two-factor-auth"]//input[@type="submit"]')->click;
 
         is(
-            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-disabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             'Status: Disabled',
             '2FA is disabled'
         );
 
         is(
-            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="two-factor-status"]' )->get_text,
+            $driver->find_element( '//div[@id="registration-status-enabled"]/div[@class="alert alert-info two-factor-status"]' )->get_text,
             '', # 'Status: Enabled' is not shown
             '2FA is disabled'
         );
