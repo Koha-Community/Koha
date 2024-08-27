@@ -17,11 +17,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         document.getElementById('barcode-container').innerHTML = svg
     } catch (error) {
-        // Use regex to find error message
-        const match = error.message.match(/: (.+)$/);
-        const errorMessage = match ? match[1] : error.message;
-
         console.error(error);
-        document.getElementById('barcode-container').innerHTML = "<p><strong>" + __("Error:") + " </strong>${errorMessage}</p>";
+
+        const p_node = document.createElement('p');
+        const strong_node = document.createElement('strong');
+        strong_node.textContent = __("Error: ");
+        const span_node = document.createElement('span');
+        span_node.textContent = __("Unable to generate barcode");
+        span_node.setAttribute('id','barcode-gen-error');
+        p_node.appendChild(strong_node);
+        p_node.appendChild(span_node);
+        document.getElementById('barcode-container').replaceChildren(p_node);
     }
 });
