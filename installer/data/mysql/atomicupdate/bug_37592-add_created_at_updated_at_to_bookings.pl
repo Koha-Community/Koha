@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => '37592',
-    description => 'Add created_at, updated_at fields to bookings table',
+    description => 'Add created_on, updated_on fields to bookings table',
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @{$args}{qw(dbh out)};
@@ -12,50 +12,50 @@ return {
             SELECT column_name
             FROM information_schema.COLUMNS
             WHERE table_name = 'bookings'
-                AND column_name IN ('created_at', 'updated_at')
+                AND column_name IN ('created_on', 'updated_on')
         SQL
         my $existing_columns = $dbh->selectcol_arrayref($columns_exist_query);
         if ( @{$existing_columns} == 2 ) {
-            say_info( $out, q{Columns 'created_at' and 'updated_at' already exist in 'bookings' table. Skipping...} );
+            say_info( $out, q{Columns 'created_on' and 'updated_on' already exist in 'bookings' table. Skipping...} );
 
             return;
         }
 
-        my $created_at_statement = <<~'SQL';
-            ALTER TABLE bookings ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'The timestamp for when a bookings was created'
+        my $created_on_statement = <<~'SQL';
+            ALTER TABLE bookings ADD COLUMN created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'The timestamp for when a bookings was created'
         SQL
-        my $updated_at_statement = <<~'SQL';
-            ALTER TABLE bookings ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'The timestamp for when a booking has been updated'
+        my $updated_on_statement = <<~'SQL';
+            ALTER TABLE bookings ADD COLUMN updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'The timestamp for when a booking has been updated'
         SQL
         if ( @{$existing_columns} == 0 ) {
-            if ( $dbh->do("$created_at_statement AFTER `end_date`") ) {
-                say_success( $out, q{Added column 'bookings.created_at'} );
+            if ( $dbh->do("$created_on_statement AFTER `end_date`") ) {
+                say_success( $out, q{Added column 'bookings.created_on'} );
             } else {
-                say_failure( $out, q{Failed to add column 'bookings.created_at': } . $dbh->errstr );
+                say_failure( $out, q{Failed to add column 'bookings.created_on': } . $dbh->errstr );
             }
 
-            if ( $dbh->do("$updated_at_statement AFTER `created_at`") ) {
-                say_success( $out, q{Added column 'bookings.updated_at'} );
+            if ( $dbh->do("$updated_on_statement AFTER `created_on`") ) {
+                say_success( $out, q{Added column 'bookings.updated_on'} );
             } else {
-                say_failure( $out, q{Failed to add column 'bookings.updated_at': } . $dbh->errstr );
+                say_failure( $out, q{Failed to add column 'bookings.updated_on': } . $dbh->errstr );
             }
 
             return;
         }
 
         if ( @{$existing_columns} == 1 ) {
-            foreach my $column ( 'created_at', 'updated_at' ) {
+            foreach my $column ( 'created_on', 'updated_on' ) {
                 if ( column_exists( 'bookings', $column ) ) {
                     next;
                 }
 
                 my $statement;
-                if ( $column eq 'created_at' ) {
-                    $statement = "$created_at_statement AFTER `end_date`";
+                if ( $column eq 'created_on' ) {
+                    $statement = "$created_on_statement AFTER `end_date`";
                 }
 
-                if ( $column eq 'updated_at' ) {
-                    $statement = "$updated_at_statement AFTER `created_at`";
+                if ( $column eq 'updated_on' ) {
+                    $statement = "$updated_on_statement AFTER `created_on`";
                 }
 
                 if ( $dbh->do($statement) ) {
