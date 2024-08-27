@@ -22,7 +22,7 @@
                 </div>
                 [% UNLESS ( basketcount OR subscriptioncount ) %]
                     <div class="btn-group">
-                        <button type="button" data-toggle="modal" data-target="#deleteVendorModal" data-booksellerid="[% booksellerid | html %]" class="btn btn-default"><i class="fa fa-trash-can"></i> Delete vendor</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#deleteVendorModal" data-booksellerid="[% booksellerid | html %]" class="btn btn-default"><i class="fa fa-trash-can"></i> Delete vendor</button>
                     </div>
                 [% END %]
             [% END %]
