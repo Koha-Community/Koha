@@ -14,7 +14,7 @@ return {
             return;
         }
 
-        my $after     = 'AFTER' . ( column_exists( 'bookings', 'updated_at' ) ? q{`updated_at`} : q{`end_date`} );
+        my $after     = 'AFTER' . ( column_exists( 'bookings', 'updated_on' ) ? q{`updated_on`} : q{`end_date`} );
         my $statement = <<~"SQL";
             ALTER TABLE `bookings`
             ADD COLUMN `status` ENUM('created', 'cancelled') NOT NULL DEFAULT 'created' COMMENT 'current status of the booking' $after;
