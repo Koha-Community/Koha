@@ -160,8 +160,11 @@
                                                                     <td>
                                                                         [% IF ( text_field.field_name == '_item_type_tbl' ) %]
                                                                             [% ItemTypes.GetDescription( text_field.field_value ) | html %]
+                                                                        [% ELSIF ( text_field.field_name == '_summary_tbl' ) %]
+                                                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% text_field.field_value.biblionumber | uri %]">[% text_field.field_value.title | html %]</a>
+                                                                            [% IF text_field.field_value.author %]| [% text_field.field_value.author | html %][% END %]
                                                                         [% ELSE %]
-                                                                            [% text_field.field_value | $raw %]
+                                                                            [% text_field.field_value | html %]
                                                                         [% END %]
                                                                     </td>
                                                                 [% END %]
