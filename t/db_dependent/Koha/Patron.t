@@ -1838,17 +1838,19 @@ subtest 'notify_library_of_registration()' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'notice_email_address' => sub {
+subtest 'notice_email_address() tests' => sub {
+
     plan tests => 3;
+
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    'OFF' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    undef );
     is(
         $patron->notice_email_address, $patron->email,
-        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off"
+        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is not defined"
     );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
@@ -1864,7 +1866,6 @@ subtest 'notice_email_address' => sub {
         "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is 'MULTI' and EmailFieldSelection is 'email,emailpro'"
     );
 
-    $patron->delete;
     $schema->storage->txn_rollback;
 };
 
