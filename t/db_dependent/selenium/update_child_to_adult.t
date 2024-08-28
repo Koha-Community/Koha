@@ -138,9 +138,9 @@ subtest 'Update child to patron' => sub {
         $driver->get( $base_url . "/members/moremember.pl?borrowernumber=$adult_borrowernumber" );
         $driver->find_element('//div[@id="toolbar"]/div[@class="btn-group"][last()]')->click; # More button group
 
-        my $update_link = $driver->find_element('//a[@id="updatechild"]');
-        is($update_link->get_attribute('data-bs-toggle', 1), 'tooltip', q|The update link should have a data-bs-toggle attribute => it's a tooltip, not clickable|);
-        $update_link->click;
+        my $update_li = $driver->find_element('//a[@id="updatechild"]/..');
+        is($update_li->get_attribute('data-bs-toggle', 1), 'tooltip', q|The parent of the update link should have a data-bs-toggle attribute => it's a tooltip, not clickable|);
+        $update_li->click;
         like( $driver->get_current_url, qr{/members/moremember\.pl\?borrowernumber=$adult_borrowernumber$}, 'After clicking the link, nothing happens, no # in the URL');
     };
 
