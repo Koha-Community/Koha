@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" id="deleteVendorModaConfirmBtn" class="btn btn-default approve"><i class="fa fa-check" aria-hidden="true"></i> Yes</button>
-                    <button type="button" id="deleteVendorModaCancelBtn"data-bs-dismiss="modal" class="btn btn-default deny"><i class="fa fa-times" aria-hidden="true"></i> No</button>
+                    <button type="button" id="deleteVendorModaCancelBtn" data-bs-dismiss="modal" class="btn btn-default deny"><i class="fa fa-times" aria-hidden="true"></i> No</button>
                 </div>
             </div>
         </div>
