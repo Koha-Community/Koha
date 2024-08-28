@@ -225,11 +225,15 @@ elsif ( $op eq 'cud-update_sql' || $op eq 'cud-update_and_run_sql' ){
                     public => $public,
                     cache_expiry => $cache_expiry,
                 } );
+        my $editsql = 1;
+        if ($op eq 'cud-update_and_run_sql') {
+            $editsql = 0;
+        }
             $template->param(
                 'save_successful'       => 1,
                 'reportname'            => $reportname,
                 'id'                    => $id,
-                'editsql'               => 1,
+                'editsql'               => $editsql,
                 'sql'                   => $sql,
                 'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
                 'notes'                 => $notes,
