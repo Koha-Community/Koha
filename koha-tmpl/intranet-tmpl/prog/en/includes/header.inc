@@ -198,18 +198,6 @@
                                 </li>
 
                                 <li id="setlibrary_panel" style="display:none"></li>
-                                <li>
-                                <li>
-                                    [% IF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
-                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library, desk, and register</a>
-                                    [% ELSIF Koha.Preference('UseCirculationDesks') %]
-                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library and desk</a>
-                                    [% ELSIF Koha.Preference('UseCashRegisters') %]
-                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library and cash register</a>
-                                    [% ELSE %]
-                                        <a class="dropdown-item" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
-                                    [% END %]
-                                </li>
                             [% ELSIF Koha.Preference('UseCirculationDesks') && Koha.Preference('UseCashRegisters') %]
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
