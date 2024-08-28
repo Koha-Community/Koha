@@ -363,12 +363,6 @@
                     return confirmDelete(_("Are you sure you want to delete this course?"));
                 [% END %]
             });
-            $(".disabled").tooltip().on("click", function(e){
-                e.preventDefault();
-                if( $(this).hasClass("checkedout") ){
-                    alert(_("This item cannot be removed. It is checked out"));
-                }
-            });
         });
     </script>
 [% END %]

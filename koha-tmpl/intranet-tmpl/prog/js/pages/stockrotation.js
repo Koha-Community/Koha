@@ -84,6 +84,4 @@ $(document).ready(function() {
         "pagingType":  "full",
         "autoWidth": false,
     }, stock_rotation_table_settings);
-
-    $('[data-bs-toggle="tooltip"]').tooltip();
 });

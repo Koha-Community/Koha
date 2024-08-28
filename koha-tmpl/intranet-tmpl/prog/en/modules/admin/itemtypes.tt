@@ -495,12 +495,13 @@
                             [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
                         [% END %]
                     [% END %]
-                    <span class="library_limitation" title="[% library_str | html %]">
+                    <span class="library_limitation" data-bs-toggle="tooltip" title="[% library_str | html %]">
                         [% IF library_limits.count > 1 %]
                             <span>[% library_limits.count | html %] library limitations</span>
                         [% ELSE %]
                             <span>[% library_limits.count | html %] library limitation</span>
                         [% END %]
+                    </span>
                 [% ELSE %]
                     <span>No limitation</span>
                 [% END %]
@@ -560,7 +561,6 @@
             $("#itemtype").on("blur",function(){
                 toUC(this);
             });
-            $(".library_limitation").tooltip();
             if( $("#icons .tab-pane.active").length < 1 ){
                 $("#icons a:first").tab("show");
             }

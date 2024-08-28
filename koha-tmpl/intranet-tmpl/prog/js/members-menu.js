@@ -39,7 +39,6 @@ $(document).ready(function(){
         return window.confirm( __("Are you sure you want to delete this message? This cannot be undone.") );
     });
 
-    $("#updatechild, #patronflags, #renewpatron, #deletepatron, #exportbarcodes").tooltip();
     $("#exportcheckins").click(function(){
         export_barcodes();
         $(".btn-group").removeClass("open");

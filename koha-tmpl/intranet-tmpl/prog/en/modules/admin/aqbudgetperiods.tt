@@ -567,8 +567,6 @@
                 $("#budgetsTabs li:eq([% tab | html %]) a").tab("show");
             [% END %]
 
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
             $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "columnDefs": [
                     { "targets": [ -1 ], "orderable": false, "searchable":  false },

@@ -1,6 +1,4 @@
 $(document).ready(function(){
-    $("#info_digests").tooltip();
-
     var message_prefs_dirty = false;
     $('#memberentry_messaging_prefs > *').change(function() {
         message_prefs_dirty = true;
@@ -78,6 +76,4 @@ $(document).ready(function(){
     $(".pmp_phone").click(function(){
         toggle_digest(Number($(this).attr("id").replace("phone", "")));
     });
-
-    $('#memberentry_messaging_prefs [data-bs-toggle="tooltip"][disabled]').tooltip();
 });

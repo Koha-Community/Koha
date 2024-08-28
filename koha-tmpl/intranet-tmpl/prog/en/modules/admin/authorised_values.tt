@@ -318,7 +318,7 @@
                                                             [% branches_str = branches_str _ "\n" _ branch.branchname _ " (" _ branch.branchcode _ ")" %]
                                                         [% END %]
                                                     [% END %]
-                                                    <span class="library_limitation" title="[% branches_str | html %]">
+                                                    <span class="library_limitation" data-bs-toggle="tooltip" title="[% branches_str | html %]">
                                                         [% IF loo.branches.size > 1 %]
                                                             <span>[% loo.branches.size | html %] library limitations</span>
                                                         [% ELSE %]
@@ -421,7 +421,6 @@
             $('#category_search').change(function() {
                 $('#category').submit();
             });
-            $(".library_limitation").tooltip();
 
             $("#delete_category").on('submit', function(){
                 return confirm(_("Are you sure you want to delete this authorized value category?"));

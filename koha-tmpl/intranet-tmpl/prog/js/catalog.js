@@ -118,10 +118,6 @@ $(document).ready(function() {
     });
     $("#export").remove(); // Hide embedded export form if JS menus available
 
-    $('[data-bs-toggle="tooltip"]').on("click",function(e){
-        e.stopPropagation();
-    }).tooltip();
-
     $(".addtolist").on("click", function (e) {
         e.preventDefault();
         var shelfnumber = $(this).data("shelfnumber");

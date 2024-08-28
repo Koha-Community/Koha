@@ -373,6 +373,7 @@ $(document).ready(function () {
         $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
     });
 
+    $('[data-bs-toggle="tooltip"]').tooltip();
 });
 
 function removeLastBorrower() {

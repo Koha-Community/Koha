@@ -263,8 +263,6 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function(){
-            $("#info_digests").tooltip();
-
             function toggle_digest(id){
                 let PhoneNotification = [% Koha.Preference('PhoneNotification') || 0 | html %];
                 let TalkingTechItivaPhoneNotification = [% Koha.Preference('TalkingTechItivaPhoneNotification') || 0 | html %];
