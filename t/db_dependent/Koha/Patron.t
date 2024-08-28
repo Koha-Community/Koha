@@ -1840,7 +1840,7 @@ subtest 'notify_library_of_registration()' => sub {
 
 subtest 'notice_email_address() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -1864,6 +1864,21 @@ subtest 'notice_email_address() tests' => sub {
     is(
         $patron->notice_email_address, $patron->email . "," . $patron->emailpro,
         "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is 'MULTI' and EmailFieldSelection is 'email,emailpro'"
+    );
+
+    my $invalid = 'potato';
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    $invalid );
+
+    my $email;
+    warning_is { $email = $patron->notice_email_address(); }
+    qq{Invalid value for EmailFieldPrimary ($invalid)},
+        'Warning correctly generated on invalid system preference';
+
+    is(
+        $email, $patron->email,
+        "Koha::Patron->notice_email_address falls back to correct value when EmailFieldPrimary is invalid"
     );
 
     $schema->storage->txn_rollback;
