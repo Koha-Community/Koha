@@ -512,7 +512,7 @@
             });
             $("#patron_batchmod_form").on("submit", function(){
                 /* Reset form fields on inactive tabs */
-                var tab = $(this).find('ul.nav-tabs li.active a').attr('href');
+                var tab = $(this).find('ul.nav-tabs li a.active').attr('href');
                 if ( tab == '#usecardnumber_panel' ) {
                     $("#borrowernumberuploadfile, #patron_list_id, #borrowernumberlist").val("");
                 } else if ( tab == '#useborrowernumber_panel' ) {

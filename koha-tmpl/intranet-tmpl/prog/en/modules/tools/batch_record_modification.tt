@@ -369,7 +369,7 @@
             });
 
             $("#record_ids_selection").on("submit", function(e) {
-                var tab = $(this).find('#batch_mod_form li.active:first a').attr('href');
+                var tab = $(this).find('#batch_mod_form li a.active:first').attr('href');
                 if (tab == '#uploadfile_tab_panel') {
                     $("#recordnumber_list, #shelf_number").val('');
                 } else if (tab == '#shelves_tab_panel') {
