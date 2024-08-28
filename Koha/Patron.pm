@@ -20,7 +20,7 @@ package Koha::Patron;
 
 use Modern::Perl;
 
-use List::MoreUtils qw( any uniq );
+use List::MoreUtils qw( any none uniq );
 use JSON qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
@@ -1641,6 +1641,11 @@ sub notice_email_address {
     my ($self) = @_;
 
     my $which_address = C4::Context->preference("EmailFieldPrimary");
+
+    if ( $which_address && ( none { $_ eq $which_address } qw{email emailpro B_email cardnumber MULTI} ) ) {
+        warn "Invalid value for EmailFieldPrimary ($which_address)";
+        $which_address = undef;
+    }
 
     # if syspref is set to 'first valid', look up email address
     return $self->first_valid_email_address
