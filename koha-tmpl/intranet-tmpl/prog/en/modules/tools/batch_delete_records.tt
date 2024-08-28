@@ -380,10 +380,10 @@
 
           $("#record_ids_selection").on("submit", function(e){
             var tab = $(this).find('#batch_del_form li a.active:first').attr('href');
-            if ( tab == '#uploadfile_tab' ) {
+            if ( tab == '#uploadfile_tab_panel' ) {
                 $("#shelf_number").empty('');
                 $("#recordnumber_list").val('');
-            } else if ( tab == '#shelves_tab' ) {
+            } else if ( tab == '#shelves_tab_panel' ) {
                 $("#uploadfile").val('')
                 $("#recordnumber_list").val('');
             } else { // enterlist
