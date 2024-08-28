@@ -1630,22 +1630,21 @@ sub return_claims {
 
 =head3 notice_email_address
 
-  my $email = $patron->notice_email_address;
+    my $email = $patron->notice_email_address;
 
 Return the email address of patron used for notices.
 Returns the empty string if no email address.
 
 =cut
 
-sub notice_email_address{
-    my ( $self ) = @_;
+sub notice_email_address {
+    my ($self) = @_;
 
     my $which_address = C4::Context->preference("EmailFieldPrimary");
 
-    # if syspref is set to 'first valid' (value == OFF), look up email address
-    if ( $which_address eq 'OFF' ) {
-        return $self->first_valid_email_address;
-    }
+    # if syspref is set to 'first valid', look up email address
+    return $self->first_valid_email_address
+        unless $which_address;
 
     # if syspref is set to 'selected addresses' (value == MULTI), look up email addresses
     if ( $which_address eq 'MULTI' ) {
@@ -1655,11 +1654,10 @@ sub notice_email_address{
             my $email_address = $self->$email_field;
             push @addresses, $email_address if $email_address;
         }
-        return join(",",@addresses);
+        return join( ",", @addresses );
     }
 
     return $self->$which_address || '';
-
 }
 
 =head3 first_valid_email_address
