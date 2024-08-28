@@ -656,6 +656,7 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
+                                    if (data === null) return '';
                                     let bsort1 = av_bsort1_map[data.toString()];
                                     return escape_str(bsort1 ? bsort1.lib : data);
                                 }
@@ -667,6 +668,7 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
+                                    if (data === null) return '';
                                     let bsort2 = av_bsort2_map[data.toString()];
                                     return escape_str(bsort2 ? bsort2.lib : data);
                                 }
