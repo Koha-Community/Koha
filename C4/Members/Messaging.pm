@@ -27,10 +27,13 @@ BEGIN {
         SetMessagingPreference
         GetMessagingOptions
         SetMessagingPreferencesFromDefaults
+        GetPatronMessagingPreferences
     );
 }
 
 use C4::Context;
+use C4::Log      qw( logaction );
+use Struct::Diff qw( diff );
 
 =head1 NAME
 
@@ -112,7 +115,7 @@ ROW: while ( my $row = $sth->fetchrow_hashref() ) {
 
 =head2 SetMessagingPreference
 
-This method defines how a user (or a default for a patron category) wants to get a certain 
+This method defines how a user (or a default for a patron category) wants to get a certain
 message delivered.  The list of valid message types can be delivered can be found in the
 C<message_attributes> table, and the list of valid message transports can be
 found in the C<message_transport_types> table.
@@ -140,8 +143,15 @@ sub SetMessagingPreference {
             return;
         }
     }
-    $params->{'days_in_advance'} = undef if !exists $params->{'days_in_advance'} || $params->{'days_in_advance'} <= 0;
-    $params->{'wants_digest'}    = 0 unless exists( $params->{'wants_digest'} );
+    $params->{'days_in_advance'} = undef unless exists( $params->{'days_in_advance'} );
+    $params->{'wants_digest'}    = 0     unless exists( $params->{'wants_digest'} );
+
+    # Get preferences before making any changes for logging
+    my $original_preference = {};
+    if ( exists $params->{borrowernumber} ) {
+        $original_preference =
+            GetPatronMessagingPreferences( $params->{borrowernumber}, $params->{message_attribute_id} );
+    }
 
     my $dbh = C4::Context->dbh();
 
@@ -150,7 +160,7 @@ DELETE FROM borrower_message_preferences
   WHERE message_attribute_id = ?
 END_SQL
     my @bind_params = ( $params->{'message_attribute_id'} );
-    if ( exists $params->{'borrowernumber'} ) {
+    if ( exists $params->{borrowernumber} ) {
         $delete_sql .= " AND borrowernumber = ? ";
         push @bind_params, $params->{borrowernumber};
     } else {
@@ -160,7 +170,8 @@ END_SQL
     my $sth     = $dbh->prepare($delete_sql);
     my $deleted = $sth->execute(@bind_params);
 
-    if ( $params->{'message_transport_types'}
+    if (   $params->{'message_transport_types'}
+        && @{ $params->{'message_transport_types'} }
         && !( $params->{'message_attribute_id'} == 2 && !$params->{'days_in_advance'} ) )
     {
         my $insert_bmp = <<'END_SQL';
@@ -195,6 +206,121 @@ END_SQL
         $sth = C4::Context->dbh()->prepare($insert_bmtp);
         foreach my $transport ( @{ $params->{'message_transport_types'} } ) {
             my $success = $sth->execute( $borrower_message_preference_id, $transport );
+        }
+    }
+
+    # Log changes if this is a patron-specific preference change
+    # Log if either: preference existed before OR preference exists now (new or modified)
+    if ( exists $params->{borrowernumber} && C4::Context->preference("BorrowersLog") ) {
+        my $new_preference =
+            GetPatronMessagingPreferences( $params->{borrowernumber}, $params->{message_attribute_id} );
+
+        # Only proceed with logging if there's data to log (original or new preference)
+        if ( keys %{$original_preference} || keys %{$new_preference} ) {
+
+            # Extract transports as sorted arrays for comparison (handle undef safely)
+            my @original_transports = sort @{ $original_preference->{transports} // [] };
+            my @new_transports      = sort @{ $new_preference->{transports}      // [] };
+
+            my $message_name = $original_preference->{message_name} // $new_preference->{message_name} // '';
+
+            # Skip logging if we can't determine message name
+            return unless $message_name;
+
+            # Normalize undefined values to 0 before diffing so "unset" and "off" are treated as the same state
+            # for comparison purposes. Log the actual raw values later so deletions appear as undef in the audit trail.
+            my $original_days_cmp =
+                defined $original_preference->{days_in_advance} ? $original_preference->{days_in_advance} : 0;
+            my $new_days_cmp = defined $new_preference->{days_in_advance} ? $new_preference->{days_in_advance} : 0;
+            my $original_digest_cmp =
+                defined $original_preference->{wants_digest} ? $original_preference->{wants_digest} : 0;
+            my $new_digest_cmp = defined $new_preference->{wants_digest} ? $new_preference->{wants_digest} : 0;
+
+            my $original_data = {
+                message_name    => $message_name,
+                days_in_advance => $original_days_cmp,
+                wants_digest    => $original_digest_cmp,
+                transports      => \@original_transports
+            };
+            my $updated_data = {
+                message_name    => $message_name,
+                days_in_advance => $new_days_cmp,
+                wants_digest    => $new_digest_cmp,
+                transports      => \@new_transports
+            };
+
+            # Only log if preferences actually changed
+            my $preference_diff = diff( $original_data, $updated_data, noU => 1 );
+            if ( keys %{$preference_diff} ) {
+
+                # Track which transports changed
+                my %changed_transports;
+                foreach my $transport ( @original_transports, @new_transports ) {
+                    my $old_has = grep { $_ eq $transport } @original_transports;
+                    my $new_has = grep { $_ eq $transport } @new_transports;
+                    if ( $old_has != $new_has ) {
+                        $changed_transports{$transport} = $new_has ? 1 : 0;
+                    }
+                }
+
+                # Aggregate all changed message transports and metadata into a single log entry.
+                my $log_updated  = {};
+                my $log_original = {};
+
+                if ( keys %changed_transports ) {
+                    foreach my $transport ( keys %changed_transports ) {
+                        my $transport_key = "$message_name.$transport";
+                        $log_updated->{$transport_key}  = $changed_transports{$transport};
+                        $log_original->{$transport_key} = $changed_transports{$transport} ? 0 : 1;
+                    }
+                }
+
+                # Log metadata changes even when the preference was deleted.
+                if ( keys %{$new_preference} || keys %{$original_preference} ) {
+
+                    # Check days_in_advance - only log if it actually changed.
+                    # Preserve raw undef values for removed entries, but keep 0 as a real value.
+                    my $original_days =
+                        exists $original_preference->{days_in_advance}
+                        ? $original_preference->{days_in_advance}
+                        : undef;
+                    my $new_days =
+                        exists $new_preference->{days_in_advance}
+                        ? $new_preference->{days_in_advance}
+                        : undef;
+                    if ( ( defined $original_days ? $original_days : 0 ) != ( defined $new_days ? $new_days : 0 ) ) {
+                        my $days_key = "$message_name.days_in_advance";
+                        $log_updated->{$days_key}  = $new_days;
+                        $log_original->{$days_key} = $original_days;
+                    }
+
+                    # Check wants_digest - only log if it actually changed.
+                    my $original_digest =
+                        exists $original_preference->{wants_digest}
+                        ? $original_preference->{wants_digest}
+                        : undef;
+                    my $new_digest =
+                        exists $new_preference->{wants_digest}
+                        ? $new_preference->{wants_digest}
+                        : undef;
+                    if ( ( defined $original_digest ? $original_digest : 0 ) !=
+                        ( defined $new_digest ? $new_digest : 0 ) )
+                    {
+                        my $digest_key = "$message_name.wants_digest";
+                        $log_updated->{$digest_key}  = $new_digest;
+                        $log_original->{$digest_key} = $original_digest;
+                    }
+                }
+
+                if ( keys %{$log_updated} ) {
+                    logaction(
+                        "MEMBERS", "MODIFY", $params->{borrowernumber},
+                        $log_updated,
+                        undef,
+                        $log_original
+                    );
+                }
+            }
         }
     }
     return;
@@ -295,6 +421,80 @@ OPTION: foreach my $option (@$messaging_options) {
         $default_pref->{borrowernumber}          = $params->{borrowernumber};
         SetMessagingPreference($default_pref);
     }
+}
+
+=head2 GetPatronMessagingPreferences
+
+  my $preference = C4::Members::Messaging::GetPatronMessagingPreferences( $borrowernumber, $message_attribute_id );
+
+Returns patron's messaging preferences for a specific message attribute.
+
+Takes two parameters:
+
+=over
+
+=item borrowernumber - the borrower ID
+
+=item message_attribute_id - the message attribute ID
+
+=back
+
+Returns a hashref with the preference data:
+
+  {
+    message_name    => 'Item_Due',
+    days_in_advance => 10,
+    wants_digest    => 1,
+    transports      => ['email', 'sms']  # empty array if no transports
+  }
+
+Returns an empty hashref if the preference does not exist.
+
+=cut
+
+sub GetPatronMessagingPreferences {
+    my ( $borrowernumber, $message_attribute_id ) = @_;
+    my $dbh = C4::Context->dbh();
+
+    # Query preference metadata
+    my $sth = $dbh->prepare(
+        "SELECT message_name, days_in_advance, wants_digest, borrower_message_preference_id,
+                message_attributes.takes_days,
+                EXISTS (
+                    SELECT 1
+                    FROM message_transports mt
+                    WHERE mt.message_attribute_id = borrower_message_preferences.message_attribute_id
+                    AND mt.is_digest = 1
+                ) AS has_digest
+         FROM borrower_message_preferences
+         INNER JOIN message_attributes ON borrower_message_preferences.message_attribute_id = message_attributes.message_attribute_id
+         WHERE borrower_message_preferences.borrowernumber = ? AND borrower_message_preferences.message_attribute_id = ?"
+    );
+    $sth->execute( $borrowernumber, $message_attribute_id );
+    my $pref = $sth->fetchrow_hashref();
+
+    return {} unless $pref;    # No preference exists
+
+    # Query transport types for this preference
+    my @transports = ();
+    if ( $pref->{borrower_message_preference_id} ) {
+        my $sth_transports = $dbh->prepare(
+            "SELECT message_transport_type FROM borrower_message_transport_preferences WHERE borrower_message_preference_id = ? ORDER BY message_transport_type"
+        );
+        $sth_transports->execute( $pref->{borrower_message_preference_id} );
+        while ( my $row = $sth_transports->fetchrow_hashref() ) {
+            push @transports, $row->{message_transport_type};
+        }
+    }
+
+    return {
+        message_name    => $pref->{message_name},
+        days_in_advance => $pref->{days_in_advance},
+        takes_days      => $pref->{takes_days} ? 1 : 0,
+        wants_digest    => $pref->{wants_digest},
+        has_digest      => $pref->{has_digest} ? 1 : 0,
+        transports      => \@transports
+    };
 }
 
 =head1 TABLES
