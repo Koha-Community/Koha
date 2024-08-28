@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -1046,16 +1046,19 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
     plan tests => 2;
 
     my $return_record = Test::MockModule->new('Koha::Biblio::Metadata');
-    $return_record->mock( 'record', sub {
-        my $self = shift;
-        Koha::Exceptions::Metadata::Invalid->throw(
-            id             => $self->id,
-            biblionumber   => $self->biblionumber,
-            format         => $self->format,
-            schema         => $self->schema,
-            decoding_error => "Error goes here",
-        );
-    } );
+    $return_record->mock(
+        'record',
+        sub {
+            my $self = shift;
+            Koha::Exceptions::Metadata::Invalid->throw(
+                id             => $self->id,
+                biblionumber   => $self->biblionumber,
+                format         => $self->format,
+                schema         => $self->schema,
+                decoding_error => "Error goes here",
+            );
+        }
+    );
 
     my $biblio             = $builder->build_sample_biblio;
     my $biblionumber       = $biblio->biblionumber;
@@ -1065,7 +1068,7 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
 
     my $success;
     warnings_like {
-        $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, '' );
+        $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, undef );
     }
     [
         qr/Invalid data, cannot decode metadata object/,
@@ -1073,7 +1076,71 @@ subtest 'UpdateTotalIssues on Invalid record' => sub {
     ],
         "Expected warning found";
 
-    ok( !$success, 'UpdateTotalIssues fails gracefully for invalid record' );
+    is( $success, -1, 'UpdateTotalIssues fails gracefully for invalid record' );
+
+};
+
+subtest 'UpdateTotalIssues tests' => sub {
+    plan tests => 5;
+
+    my $c4_biblio = Test::MockModule->new('C4::Biblio');
+    $c4_biblio->mock(
+        'GetMarcFromKohaField',
+        sub {
+            my $field = shift;
+            return ( '', '' ) if $field eq 'biblioitems.totalissues';
+            return $c4_biblio->original("GetMarcFromKohaField")->($field);
+        }
+    );
+
+    my $biblio             = $builder->build_sample_biblio;
+    my $biblionumber       = $biblio->biblionumber;
+    my $biblio_metadata_id = $biblio->metadata->id;
+
+    my $increase = 1;
+
+    my $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, undef );
+    is( $success, 0, 'UpdateTotalIssues does nothing if totalissues tag is not mapped' );
+
+    $c4_biblio->mock(
+        'GetMarcFromKohaField',
+        sub {
+            my $field = shift;
+            return ( '555', 'a' ) if $field eq 'biblioitems.totalissues';
+            return $c4_biblio->original("GetMarcFromKohaField")->($field);
+        }
+    );
+
+    $c4_biblio->mock(
+        'GetMarcSubfieldStructure',
+        sub {
+            my @params = shift;
+            my $sff    = $c4_biblio->original("GetMarcSubfieldStructure")->(@params);
+            $sff->{'biblioitems.totalissues'} = [
+                {
+                    'tagfield'    => '555',
+                    'tagsubfield' => 'a',
+                    'kohafield'   => 'biblioitems.totalissues',
+                }
+            ];
+            return $sff;
+        }
+    );
+
+    my $biblioitem = $biblio->biblioitem;
+    $biblioitem->totalissues(1)->store();
+
+    $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, undef );
+    is( $success, 1, 'UpdateTotalIssues updates when passed an increase and no value' );
+
+    $biblioitem->discard_changes;
+    is( $biblioitem->totalissues, 2, "Total issues was increased by 1" );
+
+    $success = C4::Biblio::UpdateTotalIssues( $biblio->biblionumber, $increase, 5 );
+    is( $success, 1, 'UpdateTotalIssues updates when passed a value' );
+
+    $biblioitem->discard_changes;
+    is( $biblioitem->totalissues, 5, "Total issues is set to the value when passed" );
 
 };
 
