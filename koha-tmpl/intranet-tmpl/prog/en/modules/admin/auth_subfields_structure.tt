@@ -120,9 +120,9 @@
                 [% FOREACH loo IN loop %]
                     <li role="presentation" id="tab_subfield_[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]">
                         [% IF ( loo.new_subfield ) %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">New</a>
+                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" class="nav-link" aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">New</a>
                         [% ELSE %]
-                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">[% loo.tagsubfield | html %]</a>
+                            <a href="#sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" class="nav-link"  aria-controls="sub[%- PROCESS outputsubfield subfieldanchor = loo.tagsubfield -%]field" role="tab" data-bs-toggle="tab" title="[% loo.liblibrarian | html %]">[% loo.tagsubfield | html %]</a>
                         [% END %]
                     </li>
                 [% END %]
