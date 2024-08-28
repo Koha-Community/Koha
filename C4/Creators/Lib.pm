@@ -345,8 +345,7 @@ sub get_label_summary {
         $record->{'title'} =~ s/\W*$//;  # strip off ugly trailing chars
         # FIXME contructing staff interface URLs should be done *much* higher up the stack - for the most part, C4 module code
         # should not know that it's part of a web app
-        $record->{'title'} = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $record->{'biblionumber'} . '"> ' . $record->{'title'} . '</a>';
-        $label_summary->{'_summary'} = $record->{'title'} . " | " . ($record->{'author'} ? $record->{'author'} : 'N/A');
+        $label_summary->{'_summary'} = { title => $record->{title}, author => $record->{author}, biblionumber => $record->{biblionumber} };
         $label_summary->{'_item_type'} = C4::Context->preference("item-level_itypes") ? $record->{'itype'} : $record->{'itemtype'};
         $label_summary->{'_barcode'} = $record->{'barcode'};
         $label_summary->{'_item_number'} = $item->{'item_number'};
