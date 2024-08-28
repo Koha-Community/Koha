@@ -27,6 +27,8 @@ use Koha::Libraries;
 
 use C4::Letters;
 
+use List::Util qw(any);
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -149,7 +151,35 @@ sub store {
                 $self->_assign_item_for_booking;
             }
 
-            $self = $self->SUPER::store;
+            my $is_modification = $self->in_storage;
+            my $old_booking     = $self->get_from_storage;
+            if ( $self =
+                    $self->SUPER::store
+                and $is_modification
+                and any { $old_booking->$_ ne $self->$_ } qw(pickup_library_id start_date end_date) )
+            {
+                my $patron         = $self->patron;
+                my $pickup_library = $self->pickup_library;
+
+                my $letter = C4::Letters::GetPreparedLetter(
+                    module                 => 'bookings',
+                    letter_code            => 'BOOKING_MODIFICATION',
+                    message_transport_type => 'email',
+                    branchcode             => $pickup_library->branchcode,
+                    lang                   => $patron->lang,
+                    objects                => { booking => $self },
+                );
+
+                if ($letter) {
+                    C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $patron->borrowernumber,
+                            message_transport_type => 'email',
+                        }
+                    );
+                }
+            }
         }
     );
 

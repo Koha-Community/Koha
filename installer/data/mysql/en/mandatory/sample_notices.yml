@@ -66,6 +66,30 @@ tables:
             - "<br>"
             - "[% booking.pickup_library.branchname %]"
 
+        - module: bookings
+          code: BOOKING_MODIFICATION
+          branchcode: ""
+          name: "Booking modification notice"
+          is_html: 1
+          title: "A library booking was modified"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[%- PROCESS 'html_helpers.inc' -%]"
+            - "[%- USE KohaDates -%]"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => booking.patron -%],<br>"
+            - "<br>"
+            - "Your booking of [%- INCLUDE 'biblio-title.inc' biblio=booking.biblio link = 0 -%] has been modified.<br>"
+            - "<br>"
+            - "The new details are:<br>"
+            - "<br>"
+            - "Dates: [% booking.start_date | $KohaDates %] to [% booking.end_date | $KohaDates %]<br>"
+            - "<br>"
+            - "Pickup at: [% booking.pickup_library.branchname %]<br>"
+            - "Kind regards<br>"
+            - "<br>"
+            - "[% booking.pickup_library.branchname %]"
+
         - module: catalogue
           code: TICKET_ACKNOWLEDGE
           branchcode: ""
