@@ -379,8 +379,7 @@
             <input type="hidden" name="op" value="cud-delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this item type</button>
         </form>
-        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/admin/itemtypes.pl" method="get">
             <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
