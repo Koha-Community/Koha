@@ -52,8 +52,8 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-delete" />
                                     <input type="hidden" name="id" value="[% id | html %]" />
+                                    <a class="dropdown-item submit-form-link" href="#" data-id="[% id | html %]" data-action="guided_reports.pl" data-method="post" data-op="cud-delete" data-confirmation-msg="Are you sure you want to delete this report?">Delete</a>
                                 </form>
-                                <a href="#" class="dropdown-item delete">Delete</a>
                             </li>
                         [% END %]
                     </ul>
