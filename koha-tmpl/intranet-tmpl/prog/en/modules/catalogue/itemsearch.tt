@@ -319,9 +319,9 @@
                   <option value="<">Before</option>
                 [% END %]
                 [% IF query.param('datelastborrowed_op') == '=' %]
-                  <option value="=" selected="selected">On</option>
+                  <option value="=" selected="selected">[% tp('On specific date', 'On') | html %]</option>
                 [% ELSE %]
-                  <option value="=">On</option>
+                  <option value="=">[% tp('On specific date', 'On') | html %]</option>
                 [% END %]
               </select>
               <input type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]"/>
