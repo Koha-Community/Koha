@@ -214,8 +214,7 @@
 
 
 [% IF ( else ) %]
-<form name="f" action="[% script_name | html %]" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form name="f" action="[% script_name | html %]" method="get">
 <fieldset style="padding:.5em;">
         <label for="tag_search"><strong>Search for tag:</strong> </label>
         <input type="text" name="searchfield" id="tag_search" size="4" value="[% searchfield | html %]" />

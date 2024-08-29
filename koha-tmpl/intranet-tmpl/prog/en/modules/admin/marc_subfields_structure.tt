@@ -330,10 +330,8 @@
                             </form>
 
 
-                            <form action="[% script_name | html %]" method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
+                            <form action="[% script_name | html %]" method="get">
                                 <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
-                                <input type="hidden" name="tagsubfield" value="[% mss.tagsubfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
                                 <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                             </form>
