@@ -349,7 +349,7 @@
                     </span>
                     [% IF patron_message.branchcode == Branches.GetLoggedInBranchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                         [% IF moremember %]
-                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-default btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                             <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete">
@@ -359,7 +359,7 @@
                                 <button type="submit" class="btn btn-link delete_message"><i class="fa fa-trash-can"></i> Delete</button>
                             </form>
                         [% ELSE %]
-                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-default btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                            <a id="#edit_message_form_[% patron_message.message_id | html %]" class="btn btn-link edit_message" href="#edit_message_form_[% patron_message.message_id | uri %]" data-bs-target="#edit_message_form_[% patron_message.message_id | html %]" data-bs-toggle="modal"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                             <form action="/cgi-bin/koha/circ/del_message.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete">
