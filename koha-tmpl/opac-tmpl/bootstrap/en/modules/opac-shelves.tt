@@ -999,7 +999,9 @@ $(function() {
 
     $(".deleteshelf").on("click", function(e){
         e.preventDefault();
-        var shelf_name = $(this).data("shelfname");
+        var shelf_name = $(this).data("shelfname").replace(/javascript:/gi, '').replace(/[^\w-_. ]/gi, function (c) {
+		return `&#${c.charCodeAt(0)};`;
+	});;
         var shelf_number = $(this).data("shelfnumber");
         var is_shared = $(this).data("shared");
         var count = $(this).data("count");
