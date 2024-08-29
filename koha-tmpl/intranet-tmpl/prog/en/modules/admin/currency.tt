@@ -180,8 +180,7 @@
             [% END %]
             <span>Deletion not possible</span>
         </p>
-        <form action="/cgi-bin/koha/admin/currency.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/admin/currency.pl" method="get">
             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> OK</button>
         </form>
     </div>
@@ -202,8 +201,7 @@
             <input type="hidden" name="currency_code" value="[% currency.currency | html %]" />
             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this currency</button>
         </form>
-        <form action="/cgi-bin/koha/admin/currency.pl" method="post">
-            [% INCLUDE 'csrf-token.inc' %]
+        <form action="/cgi-bin/koha/admin/currency.pl" method="get">
             <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
