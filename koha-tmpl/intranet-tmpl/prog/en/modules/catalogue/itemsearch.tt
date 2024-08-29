@@ -499,11 +499,11 @@
                     + '            <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">';
                 [% IF ( CAN_user_tools_items_batchmod ) %]
                     table += ''
-                        + '                <li> <a class="dropdown-item" href="#" data-submit="batch_item_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item modification") + '" class="batch_op send_to_item_mod">' + _("Batch item modification") + '</a> </li>';
+                        + '                <li> <a class="dropdown-item batch_op send_to_item_mod" href="#" data-submit="batch_item_modification" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item modification") + '">' + _("Batch item modification") + '</a> </li>';
                 [% END %]
                 [% IF ( CAN_user_tools_items_batchdel ) %]
                     table += ''
-                        + '                <li> <a class="dropdown-item" href="#" data-submit="batch_item_deletion" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item deletion") + '" class="batch_op send_to_item_del">' + _("Batch item deletion") + '</a> </li>';
+                        + '                <li> <a class="dropdown-item batch_op send_to_item_del"" href="#" data-submit="batch_item_deletion" data-bs-toggle="tooltip" data-bs-placement="right" title="' + _("Send selected items to batch item deletion") + '">' + _("Batch item deletion") + '</a> </li>';
                 [% END %]
                 table += ''
                     + '            </ul>'

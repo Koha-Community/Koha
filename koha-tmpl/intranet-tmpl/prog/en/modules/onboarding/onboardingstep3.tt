@@ -61,7 +61,7 @@
                             <li>
                                 <label for="cardnumber" class="required">Card number: </label>
                                 [% IF patrons && patrons > 1 %]
-                                    <input type="text" id="cardnumber" class="noEnterSubmit valid" name="cardnumber" value="[% newcardnumber | html %]" class="required" required="required">
+                                    <input type="text" id="cardnumber" class="noEnterSubmit valid required" name="cardnumber" value="[% newcardnumber | html %]" required="required">
                                 [% ELSE %]
                                     <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" class="required" required="required">
                                 [% END %]

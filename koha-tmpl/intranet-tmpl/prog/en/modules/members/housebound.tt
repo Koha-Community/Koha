@@ -24,7 +24,7 @@
     <div class="rows">
         <ol>
           <li>
-            <span class="label" class="required"> Delivery day:</span>
+            <span class="label required"> Delivery day:</span>
             [% hpd = housebound_profile.day %]
             [% IF hpd == 'any' %]<span>Any</span>
             [% ELSIF hpd == 'monday' %]<span>Monday</span>
@@ -37,7 +37,7 @@
             [% END %]
           </li>
           <li>
-            <span class="label" class="required">Frequency:</span>
+            <span class="label required">Frequency:</span>
             [% AuthorisedValues.GetByCode( 'HSBND_FREQ', housebound_profile.frequency, 0 ) || housebound_profile.frequency | html %]
           </li>
           <li>

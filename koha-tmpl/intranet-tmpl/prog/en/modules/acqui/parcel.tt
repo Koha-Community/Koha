@@ -535,9 +535,9 @@
                             result += '<button type="button" class="btn btn-default btn-xs dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false"><span class="visually-hidden">Toggle dropdown</span></button>';
 
                             result += '<ul class="dropdown-menu" aria-labelledby="view' + row.order_id + '">';
-                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '" class="previewData">[% tp("noun", "Order") | html %]</a></li>';
-                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("MARC") + '</a></li>';
-                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '" class="previewData">' + _("Card") + '</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=' + encodeURIComponent(row.order_id) + '">[% tp("noun", "Order") | html %]</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + encodeURIComponent(row.biblio_id) + '">' + _("MARC") + '</a></li>';
+                                result += '<li><a class="dropdown-item previewData" href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + encodeURIComponent(row.biblio_id) + '">' + _("Card") + '</a></li>';
                             result += '</ul>';
                             result += '</div>';
                             return result;

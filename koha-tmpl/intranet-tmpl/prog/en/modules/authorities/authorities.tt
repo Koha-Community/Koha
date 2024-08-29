@@ -462,10 +462,10 @@
                 [% IF ( duplicateauthid ) %]
                     <div class="alert alert-warning">
                         <h3>Duplicate record suspected</h3>
-                        <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
+                        <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup button" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;">[% duplicateauthvalue | html %]</a> ?</p>
 
                         <p>
-                            <a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% duplicateauthid | uri %]" class="btn btn-default" class="new"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Yes: Edit existing authority</a>
+                            <a href="/cgi-bin/koha/authorities/authorities.pl?authid=[% duplicateauthid | uri %]" class="btn btn-default new"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Yes: Edit existing authority</a>
                         </p>
                         <p>
                             <a class="btn btn-default new" onclick="confirmnotdup('items'); return false;"><i class="fa fa-save"></i> No: Save as new authority</a>

@@ -935,7 +935,7 @@
                                     <a href="#" class="btn btn-link select_all"><i class="fa fa-check"></i> Select all</a>
                                     |
                                     <a href="#" class="btn btn-link clear_all"><i class="fa fa-remove"></i> Clear all</a>
-                                    <button class="add-selected" class="btn btn-sm btn-default" type="submit">Add selected patrons</button>
+                                    <button class="add-selected btn btn-sm btn-default" type="submit">Add selected patrons</button>
                                 </div>
                             </div>
                         [% END %]

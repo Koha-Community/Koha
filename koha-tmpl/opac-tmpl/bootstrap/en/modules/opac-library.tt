@@ -110,9 +110,9 @@
                     <h1>Libraries</h1>
                     [% FOREACH library IN libraries %]
                         [% IF ( branchcode == library.branchcode ) %]
-                            <div class="section_library" id="section_[% library.branchcode | html %]" class="current">
+                            <div class="section_library current" id="section_[% library.branchcode | html %]">
                         [% ELSE %]
-                            <div class="section_library" id="section_[% library.branchcode | html %]" class="">
+                            <div class="section_library" id="section_[% library.branchcode | html %]">
                         [% END %]
                         <h2 property="name">
                             <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">

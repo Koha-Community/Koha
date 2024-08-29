@@ -144,7 +144,7 @@
                                             [% FOREACH s IN add_to_some_public_shelves %]
                                                 [% IF shelfnumber != s.shelfnumber %]
                                                     <li>
-                                                        <a class="dropdown-item" href="#" data-shelfnumber="[% s.shelfnumber | html %]" class="addtolist dropdown-item">[% s.shelfname | html %]</a>
+                                                        <a class="addtolist dropdown-item" href="#" data-shelfnumber="[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
                                                     </li>
                                                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
                                                     [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
@@ -154,11 +154,11 @@
                                         <li><hr class="dropdown-divider"></li>
                                         [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
                                             <li>
-                                                <a class="dropdown-item" href="#" class="addtolist morelists dropdown-item">More lists</a>
+                                                <a href="#" class="addtolist morelists dropdown-item">More lists</a>
                                             </li>
                                         [% END %]
                                         <li>
-                                            <a class="dropdown-item" href="#" class="addtolist newlist dropdown-item">New list</a>
+                                            <a href="#" class="dropdown-item addtolist newlist dropdown-item">New list</a>
                                         </li>
                                     </ul>
                                 </div>

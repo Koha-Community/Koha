@@ -96,14 +96,14 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#" class="delete_club" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
+                                        <a class="dropdown-item delete_club" href="#" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
                                             <i class="fa fa-trash-can"></i> Delete
                                         </a>
                                     </li>
                                 [% END %]
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a class="dropdown-item" href="#" class="club_hold_search" data-id="[% c.id | html %]">
+                                        <a class="dropdown-item club_hold_search" href="#" data-id="[% c.id | html %]">
                                             <i class="fa fa-search"></i> Search to hold
                                         </a>
                                     </li>
