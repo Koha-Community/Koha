@@ -352,6 +352,7 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'cud-delete_confirmed' ) {
     output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     C4::Context->delete_preference($searchfield);
+    $template->param( delete_confirmed => 1 );
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else {    # DEFAULT

@@ -289,8 +289,7 @@
                 <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
                 <button type="submit" class="btn btn-default approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
             </form>
-            <form class="inline" action="[% script_name | html %]" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form class="inline" action="[% script_name | html %]" method="get">
                 <button type="submit" class="btn btn-default deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
             </form>
         </div>
@@ -299,8 +298,7 @@
     [% IF ( delete_confirmed ) %]
         <div class="alert alert-info">
             <h1>Data deleted</h1>
-            <form action="[% script_name | html %]" method="post">
-                [% INCLUDE 'csrf-token.inc' %]
+            <form action="[% script_name | html %]" method="get">
                 <button type="submit">Back to system preferences</button>
             </form>
         </div>
