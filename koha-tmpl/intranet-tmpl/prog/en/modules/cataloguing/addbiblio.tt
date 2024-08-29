@@ -970,7 +970,7 @@ $(document).ready(function(){
                             [% END %]
                             <li><h6 class="dropdown-header">Change framework</h6></li>
                             <li>
-                                <a class="dropdown-item" href="#" class="change-framework" data-frameworkcode="">
+                                <a class="dropdown-item change-framework" href="#" data-frameworkcode="">
                                     [% IF ( frameworkcode ) %]
                                        <i class="fa fa-fw">&nbsp;</i>
                                     [% ELSE %]
@@ -981,7 +981,7 @@ $(document).ready(function(){
                             </li>
                             [% FOREACH framework IN frameworks%]
                                 <li>
-                                    <a class="dropdown-item" href="#" class="change-framework" data-frameworkcode="[% framework.frameworkcode | html %]">
+                                    <a class="dropdown-item change-framework" href="#" data-frameworkcode="[% framework.frameworkcode | html %]">
                                         [% IF framework.frameworkcode == frameworkcode %]
                                             <i class="fa fa-fw fa-check"></i>
                                         [% ELSE %]
