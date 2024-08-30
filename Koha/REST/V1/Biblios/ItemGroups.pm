@@ -97,7 +97,7 @@ sub add {
     return try {
 
         my $biblio = Koha::Biblios->find( $c->param('biblio_id') );
-        return $c->render_resource_not_found("Biblio")
+        return $c->render_resource_not_found("Bibliographic record")
             unless $biblio;
 
         my $item_group_data = $c->req->json;
@@ -121,7 +121,7 @@ sub add {
             if (    $_->isa('Koha::Exceptions::Object::FKConstraint')
                 and $_->broken_fk eq 'biblio_id' )
             {
-                return $c->render_resource_not_found("Biblio");
+                return $c->render_resource_not_found("Bibliographic record");
             }
         }
 

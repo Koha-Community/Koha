@@ -133,7 +133,7 @@ sub add {
         unless ($biblio) {
             return $c->render(
                 status  => 400,
-                openapi => "Biblio not found."
+                openapi => "Bibliographic record not found"
             );
         }
 

@@ -103,7 +103,7 @@ subtest 'get() tests' => sub {
     my $biblio_exist = $builder->build_sample_biblio();
     $t->get_ok( "//$userid:$password@/api/v1/deleted/biblios/"
             . $biblio_exist->biblionumber => { Accept => 'application/marc' } )->status_is(404)
-        ->json_is( '/error', 'Biblio not found' );
+        ->json_is( '/error', 'Bibliographic record not found' );
 
     subtest 'marc-in-json encoding tests' => sub {
 

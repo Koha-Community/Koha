@@ -51,7 +51,7 @@ sub get {
 
     my $biblio = Koha::Old::Biblios->find( { biblionumber => $c->param('biblio_id') }, $attributes );
 
-    return $c->render_resource_not_found("Biblio")
+    return $c->render_resource_not_found("Bibliographic record")
         unless $biblio;
 
     return try {
