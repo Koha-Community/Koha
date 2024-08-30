@@ -48,7 +48,7 @@
                 <h1>Record overlay rules</h1>
 
                 [% FOR m IN messages %]
-                <div class="dialog [% m.type | html %]">
+                <div class="alert alert-[% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'invalid_tag_regexp' %]
                       <span>Invalid regular expression "[% m.tag | html %]".</span>

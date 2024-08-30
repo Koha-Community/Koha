@@ -54,7 +54,7 @@
                 [% INCLUDE 'messages.inc' %]
 
 [% FOREACH m IN messages %]
-    <div class="dialog [% m.type | html %]" id="quote_action_result_dialog">
+    <div class="alert alert-[% m.type | html %]" id="quote_action_result_dialog">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             <span>An error occurred when updating this quote. Perhaps it already exists.</span>

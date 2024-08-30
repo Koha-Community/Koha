@@ -242,7 +242,7 @@
                             [% ELSE # IF ( delete_confirmed ) %]
 
                                 [% FOR m IN messages %]
-                                    <div class="dialog [% m.type | html %]">
+                                    <div class="alert alert-[% m.type | html %]">
                                         [% SWITCH m.code %]
                                         [% CASE 'no_email' %]
                                             <span>This vendor has no contact selected for sending orders to or is missing an e-mail address.</span>

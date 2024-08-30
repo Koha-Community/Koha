@@ -11,7 +11,7 @@
 <body id="lists_downloadshelf" class="lists" style="padding:1em;">
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
+    <div class="alert alert-[% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'unauthorized' %]
             <span>You do not have permission to view this list.</span>

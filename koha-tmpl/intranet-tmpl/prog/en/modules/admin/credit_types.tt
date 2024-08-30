@@ -60,7 +60,7 @@
                 [% INCLUDE 'messages.inc' %]
 
                 [% FOREACH m IN messages %]
-                <div class="dialog [% m.type | html %]">
+                <div class="alert alert-[% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_saving' %]
                         <span>Credit type saved successfully.</span>

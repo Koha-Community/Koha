@@ -59,7 +59,7 @@
                 [% INCLUDE 'messages.inc' %]
 
 [% FOREACH m IN messages %]
-    <div class="dialog [% m.type | html %]" id="identity_provider_action_result_dialog">
+    <div class="alert alert-[% m.type | html %]" id="identity_provider_action_result_dialog">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             <span>An error occurred trying to open the identity provider for editing. The passed ID is invalid.</span>

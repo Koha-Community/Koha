@@ -40,7 +40,7 @@
                 [% INCLUDE 'messages.inc' %]
 
         [% FOR m IN messages %]
-            <div class="dialog [% m.type | html %]">
+            <div class="alert alert-[% m.type | html %]">
                 [% SWITCH m.code %]
                 [% CASE 'letter_enqueued' %]
                     <span>The notice has been correctly enqueued.</span>

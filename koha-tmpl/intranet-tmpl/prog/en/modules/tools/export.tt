@@ -42,7 +42,7 @@
                 <h1>Export data</h1>
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
+    <div class="alert alert-[% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'invalid_mimetype' %]<span>The file used does not have a valid format. Only csv and txt are allowed.</span>
         [% CASE %][% m.code | html %]

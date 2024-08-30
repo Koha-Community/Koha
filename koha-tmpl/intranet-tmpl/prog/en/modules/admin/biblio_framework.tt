@@ -76,7 +76,7 @@
                 [% INCLUDE 'messages.inc' %]
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
+    <div class="alert alert-[% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
             <span>An error occurred when updating this framework. Perhaps it already exists.</span>

@@ -89,7 +89,7 @@
                 <h1>Housebound details for [% INCLUDE 'patron-title.inc' %]</h1>
 
             [% FOR m IN messages %]
-                <div class="dialog [% m.type | html %]">
+                <div class="alert alert-[% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'error_on_profile_store' %]
                         <span>An error occurred whilst updating this housebound profile</span>

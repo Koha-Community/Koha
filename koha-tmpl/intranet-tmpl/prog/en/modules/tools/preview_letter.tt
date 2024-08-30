@@ -15,7 +15,7 @@
             <h1>Preview notice template</h1>
             [% FOR m IN messages %]
                 [%# FIXME The message block does not appear at the top of the modal! %]
-                <div class="dialog [% m.type | html %]">
+                <div class="alert alert-[% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'no_data_for_preview' %]<span>You did not specify data for preview.</span>
                     [% CASE 'preview_not_available' %]<span>Preview is not available for letters '[% m.letter_code | html %]'.</span>

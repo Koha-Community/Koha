@@ -45,7 +45,7 @@
 
                 [% IF ( messages ) %]
                     [% FOREACH message IN messages %]
-                        <div class="dialog [% m.type | html %]">
+                        <div class="alert alert-[% m.type | html %]">
                         [%- SWITCH message.code -%]
                         [%- CASE 'limits' %]
                             <p>Cannot transfer item [% message.item.itemnumber | html %] due to transfer limits</p>

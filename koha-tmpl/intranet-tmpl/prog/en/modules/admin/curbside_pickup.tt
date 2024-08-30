@@ -47,7 +47,7 @@
                 [% INCLUDE 'messages.inc' %]
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type | html %]">
+    <div class="alert alert-[% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE %]
             <span>[% m.code | html %]</span>

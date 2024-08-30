@@ -104,7 +104,7 @@
                 [% END %]
 
                 [% FOR m IN messages %]
-                    <div class="dialog [% m.type | html %]">
+                    <div class="alert alert-[% m.type | html %]">
                         [% SWITCH m.code %]
                         [% CASE 'not_enabled' %]
                             <span>The curbside pickup feature is not enabled for this library.</span>
