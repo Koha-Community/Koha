@@ -48,11 +48,14 @@ $scriptname -h|--help
     --stop                Stop the worker daemon for the specified instances
     --restart             Restart the worker daemon for the specified instances
     --queue               Specify the queue/worker to restart - 'default' is used if not specified
-                          current queues are: default, long_tasks, elastic_index
+                          current queues are: default, long_tasks
     --status              Show the status of the worker for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
     --help|-h             Display this help message
+
+Note: There used to be a queue called elastic_index, but since the introduction
+of koha-es-indexer this queue should not be active.
 
 EOF
 }
