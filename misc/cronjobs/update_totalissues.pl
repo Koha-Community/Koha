@@ -21,17 +21,17 @@ use strict;
 use warnings;
 
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
 use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use C4::Biblio qw( UpdateTotalIssues );
-use C4::Log qw( cronlogaction );
+use C4::Log    qw( cronlogaction );
 use DateTime;
 use DateTime::Format::MySQL;
 use Time::HiRes qw( time );
-use POSIX qw( ceil strftime );
+use POSIX       qw( ceil strftime );
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -49,10 +49,10 @@ my $interval;
 my $usestats    = 0;
 my $useitems    = 0;
 my $incremental = 0;
-my $progress      = 100;
+my $progress    = 100;
 my $unit;
 
-my $command_line_options = join(" ",@ARGV);
+my $command_line_options = join( " ", @ARGV );
 
 my $result = GetOptions(
     'v|verbose'    => \$verbose,
@@ -62,7 +62,7 @@ my $result = GetOptions(
     'use-stats'    => \$usestats,
     'use-items'    => \$useitems,
     'incremental'  => \$incremental,
-    'p|progress=i'   => \$progress,
+    'p|progress=i' => \$progress,
     'h|help'       => \$want_help
 );
 
@@ -74,8 +74,7 @@ if ( defined $since && defined $interval ) {
 }
 
 if ( $useitems && $incremental ) {
-    print
-      "The --use-items and --incremental options are mutually exclusive.\n\n";
+    print "The --use-items and --incremental options are mutually exclusive.\n\n";
     $want_help = 1;
 }
 
@@ -90,7 +89,7 @@ unless ( $usestats || $useitems ) {
 
 usage() if $want_help;
 
-cronlogaction({ info => $command_line_options });
+cronlogaction( { info => $command_line_options } );
 
 my $dbh = C4::Context->dbh;
 
@@ -105,13 +104,12 @@ process_stats() if $usestats;
 
 report();
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 exit 0;
 
 sub process_items {
-    my $query =
-"SELECT items.biblionumber, SUM(items.issues) FROM items GROUP BY items.biblionumber;";
+    my $query = "SELECT items.biblionumber, SUM(items.issues) FROM items GROUP BY items.biblionumber;";
     process_query($query);
 }
 
@@ -128,15 +126,13 @@ sub process_stats {
         );
 
         $interval =~ m/([0-9]*)([hdwmy]?)$/;
-        $unit = $2 || 'd';
-        $since = DateTime::Format::MySQL->format_datetime(
-            $dt->subtract( $units{$unit} => $1 ) );
+        $unit  = $2 || 'd';
+        $since = DateTime::Format::MySQL->format_datetime( $dt->subtract( $units{$unit} => $1 ) );
     }
     my $limit = '';
     $limit = " WHERE statistics.datetime >= ?" if ( $interval || $since );
 
-    my $query =
-"SELECT biblio.biblionumber, COUNT(statistics.itemnumber) FROM biblio\
+    my $query = "SELECT biblio.biblionumber, COUNT(statistics.itemnumber) FROM biblio\
  LEFT JOIN items ON (biblio.biblionumber=items.biblionumber)\
  LEFT JOIN statistics ON (items.itemnumber=statistics.itemnumber AND statistics.type = 'issue')
  $limit\
@@ -152,8 +148,7 @@ sub process_query {
 
     if ( $since && $uselimit ) {
         $sth->execute($since);
-    }
-    else {
+    } else {
         $sth->execute();
     }
 
@@ -161,7 +156,7 @@ sub process_query {
         $num_bibs_processed++;
         $totalissues = 0 unless $totalissues;
         print "Processing bib $biblionumber ($totalissues issues)\n"
-          if $verbose;
+            if $verbose;
         if ( not $test_only ) {
             my $ret;
             if ( $incremental && $totalissues > 0 ) {
@@ -184,7 +179,7 @@ sub process_query {
 }
 
 sub report {
-    my $endtime = time();
+    my $endtime   = time();
     my $totaltime = ceil( ( $endtime - $starttime ) * 1000 );
     $starttime = strftime( '%D %T', localtime($starttime) );
     $endtime   = strftime( '%D %T', localtime($endtime) );
@@ -269,7 +264,7 @@ processing the last twenty-four hours.
 
 =item B<--progress=N>
 
-Print the progress to standart output after every N records are processed.
+Print the progress to standard output after every N records are processed.
 
 =item B<--test>
 
