@@ -219,10 +219,13 @@ sub _get_columns {
     $tablehash{'__first__'} = $first;
 	push @columns, \%tablehash;
     while ( my $data = $sth->fetchrow_arrayref() ) {
-        my %temphash;
-        $temphash{'name'}        = "$tablename.$data->[0]";
-        $temphash{'description'} = $columns->{$tablename}->{$data->[0]};
-        push @columns, \%temphash;
+        my $forbidden   = Koha::Report->new->check_columns( undef, [$data->[0]] );
+        unless ( $forbidden ) {
+            my %temphash;
+            $temphash{'name'}        = "$tablename.$data->[0]";
+            $temphash{'description'} = $columns->{$tablename}->{$data->[0]};
+            push @columns, \%temphash;
+        }
     }
     $sth->finish();
     return (@columns);
