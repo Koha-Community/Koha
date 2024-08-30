@@ -6505,8 +6505,8 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.11.00.024";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');");
-    print "Upgrade to $DBversion done (Bug 5079: Add OpacItemLocation syspref)\n";
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACItemLocation','callnum','Show the shelving location of items in the opac','callnum|ccode|location','Choice');");
+    print "Upgrade to $DBversion done (Bug 5079: Add OPACItemLocation syspref)\n";
     SetVersion ($DBversion);
 }
 
@@ -22570,9 +22570,9 @@ $DBversion = '20.06.00.021';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
         UPDATE systempreferences SET options = "callnum|ccode|location|library"
-        WHERE variable = "OpacItemLocation"
+        WHERE variable = "OPACItemLocation"
     });
-    NewVersion( $DBversion, 25871, "Add library option to OpacItemLocation");
+    NewVersion( $DBversion, 25871, "Add library option to OPACItemLocation");
 }
 
 $DBversion = '20.06.00.022';

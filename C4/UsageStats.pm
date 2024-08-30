@@ -295,7 +295,7 @@ sub _shared_preferences {
         OpacCloud
         OPACFinesTab
         OpacHoldNotes
-        OpacItemLocation
+        OPACItemLocation
         OpacPasswordChange
         OPACPatronDetails
         OPACpatronimages
