@@ -13,7 +13,7 @@ use Koha::RecordProcessor;
 
 my $biblio = Koha::Biblios->find($ARGV[0]);
 unless ( $biblio ) {
-    print "Biblio not found\n";
+    print "Bibliographic record not found\n";
     exit;
 }
 my $record = $biblio->metadata->record;

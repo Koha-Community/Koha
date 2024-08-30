@@ -88,7 +88,7 @@ sub updateMarc {
     $biblio  &&= $biblio->metadata->record;
 
     unless ($biblio) {
-        $debug and warn '[ERROR] Biblio not found.';
+        $debug and warn '[ERROR] Bibliographic record not found.';
         return;
     }
 
