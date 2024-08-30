@@ -324,10 +324,7 @@
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />
         <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
     </form>
-    <form action="[% script_name | html %]" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-        <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
-    </form>
+    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</a>
     [% END %]
 
     </div>
