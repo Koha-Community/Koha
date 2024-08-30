@@ -549,14 +549,6 @@
                     </form> <!-- /#add_notice -->
                 [% END # /IF add_form %]
 
-                [% IF ( add_validate or copy_validate) %]
-                    Data recorded
-                    <form action="[% action | html %]" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="submit" class="btn btn-primary" value="OK" />
-                    </form>
-                [% END %]
-
                 [% IF ( delete_confirm ) %]
                     <div class="alert alert-warning">
                         <h1>Delete notice?</h1>
@@ -590,14 +582,6 @@
                         </form>
                     </div>
                 [% END # /IF delete_confirm %]
-
-                [% IF ( delete_confirmed ) %]
-                    <span>Data deleted</span>
-                    <form action="[% action | html %]" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                    <input type="submit" class="btn btn-primary" value="OK" />
-                    </form>
-                [% END %]
 
     [% IF add_form or copy_form %]
             </div> <!-- /.col-md-8 -->
