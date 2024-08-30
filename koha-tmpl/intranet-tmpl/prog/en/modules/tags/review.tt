@@ -245,8 +245,8 @@
                                 <fieldset class="brief">
                                     <h4>Check lists</h4>
                                     <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
-                                       <form method="post" action="/cgi-bin/koha/tags/review.pl">
-                                            [% INCLUDE 'csrf-token.inc' %]
+                                       <form method="get" action="/cgi-bin/koha/tags/review.pl">
+                                            <input type="hidden" name="op" value="test">
                                             <input type="text" size="14" name="test" id="test" />
                                             <fieldset class="action">
                                                 <button type="submit" value="Test" class="approval_btn btn btn-default btn-md" id="test_button" name="op-test"><i class="fas fa-check-square" aria-hidden="true"></i> Test</button>
@@ -271,8 +271,7 @@
             </div> <!-- /.col-sm-10 order-sm-1 order-md-2 -->
             <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
-                    <form method="post" action="/cgi-bin/koha/tags/review.pl">
-                        [% INCLUDE 'csrf-token.inc' %]
+                    <form method="get" action="/cgi-bin/koha/tags/review.pl">
                         <fieldset class="brief">
                             <h4>Filters</h4>
                             <ol>
