@@ -200,16 +200,6 @@
     </div>
 [% END %]
 
-[% IF ( delete_confirmed ) %]
-
-  <div class="alert alert-info">  <h3>Data deleted</h3>
-    <form action="[% script_name | html %]" method="post">
-        [% INCLUDE 'csrf-token.inc' %]
-    <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
-    <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-    <input type="submit" value="OK" class="btn btn-primary" />
-    </form></div>
-[% END %]
 [% IF ( authtype_create ) %]
 
     <form action="[% script_name | html %]" method="post">
@@ -233,8 +223,7 @@
 
 [% IF ( else ) %]
 
-<form action="[% script_name | html %]" method="post">
-    [% INCLUDE 'csrf-token.inc' %]
+<form action="[% script_name | html %]" method="get">
     <fieldset>
         <label for="searchfield"><strong>Search for tag:</strong></label>
         <input type="text" id="searchfield" name="searchfield" size="4" value="[% searchfield | html %]" />
