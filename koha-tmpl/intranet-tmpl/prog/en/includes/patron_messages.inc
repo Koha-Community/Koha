@@ -379,7 +379,7 @@
         <div id="edit_message_form_[% pm.message_id | html %]" class="modal" tabindex="-1" aria-labelledby="#edit_message_form_[% patron_message.message_id | html %]" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+                    <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="edit_message_form" name="message_f">
                         [% INCLUDE 'csrf-token.inc' %]
                         <input type="hidden" name="op" value="cud-edit_message">
                         <input type="hidden" name="message_id" value="[% pm.message_id | html %]"/>
@@ -388,9 +388,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="message_type">
+                                <label for="edit_message_type">
                                     Message is for:
-                                    <select name="message_type" id="message_type" disabled>
+                                    <select name="message_type" id="edit_message_type" disabled>
                                         [% IF pm.message_type == "L" %]
                                             <option value="L" selected="selected">Staff - Internal note</option>
                                         [% ELSE %]
@@ -406,7 +406,7 @@
                                 </label>
                             </div>
                             <div class="form-group">
-                                <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" >[% pm.message | html %]</textarea>
+                                <textarea rows="3" class="modal-textarea" name="borrower_message" id="edit_borrower_message" >[% pm.message | html %]</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">

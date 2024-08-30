@@ -189,7 +189,7 @@
                     <fieldset class="action">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
                         [% IF hold_cancellation.count %]
-                            <label for="cancellation-reason">Cancellation reason: </label>
+                            <label for="modal-cancellation-reason">Cancellation reason: </label>
                             <select class="cancellation-reason" name="modal-cancellation-reason" id="modal-cancellation-reason">
                                 <option value="">No reason given</option>
                                 [% FOREACH reason IN hold_cancellation %]

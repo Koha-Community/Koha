@@ -1,8 +1,8 @@
 [% USE Koha %]
 [% IF refiner %]
-    <select class="advsearch" name="idx" id="refiner_idx">
+    <select class="advsearch" name="idx" id="refiner_idx_[% index | html %]">
 [% ELSE %]
-    <select class="advsearch" name="idx" id="idx">
+    <select class="advsearch" name="idx" id="idx_[% index | html %]">
 [% END %]
     [% IF ms_kw %]
         <option selected="selected" value="kw">Keyword</option>

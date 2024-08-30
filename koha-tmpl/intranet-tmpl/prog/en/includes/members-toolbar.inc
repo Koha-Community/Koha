@@ -46,7 +46,7 @@
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
-        <a id="addnewmessageLabel" href="#add_message_form" data-bs-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
+        <a id="toolbar_addnewmessageLabel" href="#add_message_form" data-bs-toggle="modal" class="btn btn-default"><i class="fa-solid fa-comment"></i> Add message</a>
     [% END %]
 
     [% IF Koha.Preference('CurbsidePickup') %]
@@ -129,7 +129,7 @@
                         </li>
                     [% ELSE %]
                         <li data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is an adult">
-                            <a class="dropdown-item disabled" aria-disabled="true" id="updatechild" href="#">Update child to adult patron</a>
+                            <button class="dropdown-item disabled" aria-disabled="true" id="updatechild">Update child to adult patron</button>
                         </li>
                     [% END %]
                 [% END %]
@@ -150,7 +150,7 @@
 </div>
 
 <!-- Modal -->
-<div id="add_message_form" class="modal" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel" aria-hidden="true">
+<div id="add_message_form" class="modal" tabindex="-1" role="dialog" aria-labelledby="addnewmessageLabel toolbar_addnewmessageLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">

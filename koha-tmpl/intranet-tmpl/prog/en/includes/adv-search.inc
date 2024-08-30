@@ -16,18 +16,18 @@
     [% WRAPPER tabs_nav %]
         [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
             [% WRAPPER tab_item tabname= "circ_search" bt_active= 1 %]
-                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span></a>
+                <i class="fa fa-fw fa-upload" aria-hidden="true"></i> <span class="tab-title">Check out</span>
             [% END %]
             [% WRAPPER tab_item tabname= "checkin_search" %]
-                <i class="fa fa-fw fa-download" aria-hidden="true"></i> <span class="tab-title">Check in</span></a>
+                <i class="fa fa-fw fa-download" aria-hidden="true"></i> <span class="tab-title">Check in</span>
             [% END %]
             [% WRAPPER tab_item tabname= "renew_search" %]
-                <i class="fa fa-fw fa-retweet" aria-hidden="true"></i> <span class="tab-title">Renew</span></a>
+                <i class="fa fa-fw fa-retweet" aria-hidden="true"></i> <span class="tab-title">Renew</span>
             [% END %]
         [% END %]
         [% IF ( CAN_user_borrowers_edit_borrowers ) %]
             [% WRAPPER tab_item tabname= "patron_search" %]
-                <i class="fa fa-fw fa-id-card" aria-hidden="true"></i> <span class="tab-title">Search patrons</span></a>
+                <i class="fa fa-fw fa-id-card" aria-hidden="true"></i> <span class="tab-title">Search patrons</span>
             [% END %]
         [% END %]
     [% END # /WRAPPER tabs_nav %]

@@ -208,7 +208,7 @@
                                                                 <li class="fund">
                                                                     [% IF ( close ) %]
                                                                         <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
-                                                                        <input type="hidden" size="20" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
+                                                                        <input type="hidden" name="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                                                                     [% ELSE %]
                                                                         <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
                                                                         <select id="fund_record_[% biblio.import_record_id | html %]" name="budget_id_[% biblio.import_record_id | html %]">
@@ -486,7 +486,7 @@
                                             [% IF ( close ) %]
                                                 <li>
                                                     <span class="label">Fund: </span>
-                                                    <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
+                                                    <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                                                 </li>
                                             [% ELSE %]
                                                 <li>

@@ -13,10 +13,10 @@
     [% UNLESS ( one_language_enabled ) %]
         <div id="changelanguage" class="navbar navbar-expand navbar-light bg-light">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav_lang_menu" aria-controls="nav_lang_menu" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse">
+                <div class="collapse navbar-collapse" id="nav_lang_menu">
                     <ul id="i18nMenu" class="navbar-nav me-auto">
                         [% FOREACH languages_loo IN languages_loop %]
                             [% IF ( languages_loo.group_enabled ) %]
@@ -149,7 +149,7 @@
                             <button type="button" class="btn btn-primary consentAcceptAll">Accept all cookies</button>
                             <button type="button" class="btn btn-success" id="consentAcceptSelected">Accept selected non-essential cookies</button>
                         [% END %]
-                        <a type="button" href="#" class="btn btn-secondary consentCloseModal">Cancel</a>
+                        <button type="button" class="btn btn-secondary consentCloseModal">Cancel</button>
                     </div>
                 </div>
             </div> <!-- /.modal-content -->

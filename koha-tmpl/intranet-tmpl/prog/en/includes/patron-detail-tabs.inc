@@ -90,9 +90,11 @@
             [% INCLUDE "checkouts-table.inc" %]
         [% END # /tab_panel# %]
 
-        [% WRAPPER tab_panel tabname="relatives-issues" %]
-            [% INCLUDE "relatives-issues-table.inc" %]
-        [% END # /tab_panel# %]
+        [% IF relatives_issues_count %]
+            [% WRAPPER tab_panel tabname="relatives-issues" %]
+                [% INCLUDE "relatives-issues-table.inc" %]
+            [% END # /tab_panel# %]
+        [% END %]
 
         [% IF ( guarantees_fines ) %]
             [% WRAPPER tab_panel tabname="guarantees_finesandcharges" %]
@@ -169,7 +171,7 @@
                             [% IF hold_cancellation.count %]
                                 <label for="cancellation-reason">Cancellation reason:</label>
                                 <input type="hidden" name="op" value="cud-cancelall" />
-                                <select name="cancellation-reason">
+                                <select name="cancellation-reason" id="cancellation-reason">
                                     <option value="">No reason given</option>
                                     [% FOREACH reason IN hold_cancellation %]
                                         <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>

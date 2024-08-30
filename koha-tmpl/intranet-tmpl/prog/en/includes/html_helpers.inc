@@ -395,9 +395,9 @@
     [% END %]
     [% IF ( bt_active ) %]
         [% IF (linktab) %]
-            <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
+            <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | html %]-tab">
         [% ELSE %]
-            <a class="nav-link active" href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
+            <a class="nav-link active" href="#[% tabname | uri %]_panel" id="[% tabname | html %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
         [% END %]
     [% ELSE %]
         [% IF (linktab) %]
@@ -420,9 +420,9 @@
 
 [% BLOCK tab_panel %]
     [% IF ( bt_active ) %]
-        <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]" tabindex="0">
+        <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
     [% ELSE %]
-        <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]" tabindex="0">
+        <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
     [% END %]
         [% content| $raw %]
     </div>

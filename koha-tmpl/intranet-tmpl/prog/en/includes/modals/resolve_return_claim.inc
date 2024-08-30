@@ -9,7 +9,7 @@
       <div class="modal-body">
 
           <div class="form-group">
-            <label for="claims-returned-resolved-code">Resolution</label>
+            <label for="claims-returned-resolved-modal-resolved-code">Resolution</label>
             [% SET resolutions = AuthorisedValues.GetAuthValueDropbox('RETURN_CLAIM_RESOLUTION') %]
             <select class="form-select" id="claims-returned-resolved-modal-resolved-code">
               [% FOREACH r IN resolutions %]
@@ -35,7 +35,7 @@
           <i id="claims-returned-resolved-modal-btn-submit-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i>
           Resolve claim
          </button>
-        <button class="btn btn-default deny cancel" href="#" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+        <button class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
       </div>
     </div>
   </div>
