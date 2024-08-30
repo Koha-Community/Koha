@@ -22,7 +22,7 @@
 # Batch Edit Patrons
 # Modification for patron's fields:
 # surname firstname branchcode categorycode city state zipcode country sort1
-# sort2 dateenrolled dateexpiry borrowernotes
+# sort2 dateenrolled dateexpiry borrowernotes protected
 # And for patron attributes.
 
 use Modern::Perl;
@@ -54,8 +54,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $logged_in_user = Koha::Patrons->find($loggedinuser);
 
-$template->param( CanUpdatePasswordExpiration => 1 ) if $logged_in_user->is_superlibrarian;
-
+if ( $logged_in_user->is_superlibrarian ) {
+    $template->param( CanUpdatePasswordExpiration => 1 );
+    $template->param( CanUpdateProtectPatron      => 1 );
+}
 my $dbh = C4::Context->dbh;
 
 # Show borrower informations
@@ -194,6 +196,10 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
     my @categories_option;
     push @categories_option, { value => $_->categorycode, lib => $_->description } for @patron_categories;
     unshift @categories_option, { value => "", lib => "" };
+    my @protected_option;
+    push @protected_option, { value => 1, lib => "Yes" };
+    push @protected_option, { value => 0, lib => "No" };
+    unshift @protected_option, { value => "", lib => "" };
     my $bsort1 = GetAuthorisedValues("Bsort1");
     my @sort1_option;
     push @sort1_option, { value => $_->{authorised_value}, lib => $_->{lib} } for @$bsort1;
@@ -334,7 +340,10 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
         },
     );
 
-    push @fields, { name => "password_expiration_date", type => "date" } if $logged_in_user->is_superlibrarian;
+    if ($logged_in_user->is_superlibrarian) {
+        push @fields, { name => "password_expiration_date", type => "date" } ;
+        push @fields, { name => "protected", type => "select", option => \@protected_option };
+    }
 
     $template->param( 'patron_attributes_codes',  \@patron_attributes_codes );
     $template->param( 'patron_attributes_values', \@patron_attributes_values );
@@ -349,11 +358,11 @@ if ( $op eq 'cud-do' ) {
     my @disabled = $input->multi_param('disable_input');
     my $infos;
     for my $field (
-        qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment/
+        qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment protected/
         )
     {
-        my $value = $input->param($field);
-        $infos->{$field} = $value if $value;
+        my $value = $input->param($field) if $input->param($field) ne '';
+        $infos->{$field} = $value if defined $value;
         $infos->{$field} = ""     if grep { $_ eq $field } @disabled;
     }
 
@@ -362,6 +371,7 @@ if ( $op eq 'cud-do' ) {
     }
 
     delete $infos->{password_expiration_date} unless $logged_in_user->is_superlibrarian;
+    delete $infos->{protected} unless $logged_in_user->is_superlibrarian;
 
     my @errors;
     my @borrowernumbers = $input->multi_param('borrowernumber');
