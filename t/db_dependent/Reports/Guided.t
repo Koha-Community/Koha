@@ -536,7 +536,7 @@ subtest 'Returning passwords tests' => sub {
 };
 
 subtest 'get_columns' => sub {
-    plan tests => 7;
+    plan tests => 8;
     $schema->storage->txn_begin;
     my $area    = 'foo';
     my $success = eval { C4::Reports::Guided::get_columns($area) };
@@ -549,6 +549,12 @@ subtest 'get_columns' => sub {
     ok scalar grep  { $_->{name} eq 'biblio.biblionumber' } @{ $columns->{biblio} };
     ok scalar grep  { $_->{description} =~ m{Biblio number} } @{ $columns->{biblio} };
     ok !scalar grep { $_->{name} eq 'not_a_column' } @{ $columns->{biblio} };
+
+    $columns = C4::Reports::Guided::get_columns('PAT');
+    ok(
+        !exists $columns->{password},
+        "Password is a forbidden field and should not be returned"
+    );
 
     $schema->storage->txn_rollback;
 };

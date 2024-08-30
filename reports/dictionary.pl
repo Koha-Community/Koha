@@ -79,39 +79,52 @@ elsif ( $op eq 'cud-add_form_3' ) {
 elsif ( $op eq 'cud-add_form_4' ) {
 
     # Choosing the values
-    my @columns                = $input->multi_param('columns');
-    my $columnstring           = join( ',', @columns );
+    my @columns      = $input->multi_param('columns');
+    my $columnstring = join( ',', @columns );
+    my $forbidden    = Koha::Report->new->check_columns( undef, \@columns );
     my @column_loop;
     foreach my $column (@columns) {
-        my %tmp_hash;
-        $tmp_hash{'name'} = $column;
-        my $type = get_column_type($column);
-        if ( $type eq 'distinct' ) {
-            my $values = get_distinct_values($column);
-            $tmp_hash{'values'}   = $values;
-            $tmp_hash{'distinct'} = 1;
+        unless ($forbidden) {
+            my %tmp_hash;
+            $tmp_hash{'name'} = $column;
+            my $type = get_column_type($column);
+            if ( $type eq 'distinct' ) {
+                my $values = get_distinct_values($column);
+                $tmp_hash{'values'}   = $values;
+                $tmp_hash{'distinct'} = 1;
 
+            }
+            if ( $type eq 'DATE' || $type eq 'DATETIME' ) {
+                $tmp_hash{'date'} = 1;
+            }
+            if ( $type eq 'TEXT' || $type eq 'MEDIUMTEXT' ) {
+                $tmp_hash{'text'} = 1;
+            }
+            push @column_loop, \%tmp_hash;
         }
-        if ( $type eq 'DATE' || $type eq 'DATETIME' ) {
-            $tmp_hash{'date'} = 1;
-        }
-        if ($type eq 'TEXT' || $type eq 'MEDIUMTEXT'){
-            $tmp_hash{'text'} = 1;
-        }
-
-        #		else {
-        #			warn $type;#
-        #			}
-        push @column_loop, \%tmp_hash;
     }
 
-	$template->param( 'step_4' => 1,
-		'area' => $area,
-		'definition_name' => $definition_name,
-		'definition_description' => $definition_description,
-		'columns' => \@column_loop,
-		'columnstring' => $columnstring,
-	);
+    if (@column_loop) {
+        $template->param(
+            'step_4'                 => 1,
+            'area'                   => $area,
+            'definition_name'        => $definition_name,
+            'definition_description' => $definition_description,
+            'columns'                => \@column_loop,
+            'columnstring'           => $columnstring,
+        );
+    } else {
+        my $columns = get_columns( $area, $input );
+        $template->param(
+            'step_3'                 => 1,
+            'area'                   => $area,
+            'definition_name'        => $definition_name,
+            'definition_description' => $definition_description,
+            'columns'                => \@column_loop,
+            'columnstring'           => $columnstring,
+            'passworderr'            => 1,
+        );
+    }
 }
 
 elsif ( $op eq 'cud-add_form_5' ) {
