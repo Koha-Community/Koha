@@ -129,6 +129,16 @@
 [% IF ( new_dictionary ) %]
 <h3>Add new definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+
+    [% IF ( passworderr ) %]
+        <div class="alert alert-warning">
+            <strong>The following error was encountered:</strong><br />
+            The previous column selection included a password field.<br />
+            The column cannot be used due to security risks.<br />
+            Please make a new selection and ensure no password columns have been selected.
+        </div>
+    [% END %]
+
 <fieldset class="rows"><legend>Step 1 of 5: Name the new definition</legend><ol>
 <li>
 <label for="definition_name">Definition name:</label>
