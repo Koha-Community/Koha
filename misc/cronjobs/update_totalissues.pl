@@ -49,7 +49,7 @@ my $interval;
 my $usestats    = 0;
 my $useitems    = 0;
 my $incremental = 0;
-my $commit      = 100;
+my $progress      = 100;
 my $unit;
 
 my $command_line_options = join(" ",@ARGV);
@@ -62,7 +62,7 @@ my $result = GetOptions(
     'use-stats'    => \$usestats,
     'use-items'    => \$useitems,
     'incremental'  => \$incremental,
-    'c|commit=i'   => \$commit,
+    'p|progress=i'   => \$progress,
     'h|help'       => \$want_help
 );
 
@@ -88,14 +88,11 @@ unless ( $usestats || $useitems ) {
     $want_help = 1;
 }
 
-if ( not $result or $want_help ) {
-    usage();
-}
+usage() if $want_help;
 
 cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 
 my $num_bibs_processed = 0;
 my $num_bibs_updated   = 0;
@@ -146,7 +143,6 @@ sub process_stats {
  GROUP BY biblio.biblionumber";
     process_query( $query, $limit );
 
-    $dbh->commit();
 }
 
 sub process_query {
@@ -180,12 +176,11 @@ sub process_query {
                 $num_bibs_updated++;
             }
         }
-        if ( not $test_only and ( $num_bibs_processed % $commit ) == 0 ) {
-            print_progress_and_commit($num_bibs_processed);
+        if ( not $test_only and ( $num_bibs_processed % $progress ) == 0 ) {
+            print_progress($num_bibs_processed);
         }
     }
 
-    $dbh->commit();
 }
 
 sub report {
@@ -209,9 +204,8 @@ _SUMMARY_
     print $summary;
 }
 
-sub print_progress_and_commit {
+sub print_progress {
     my $recs = shift;
-    $dbh->commit();
     print "... processed $recs records\n";
 }
 
@@ -223,7 +217,7 @@ update_totalissues.pl
 
   update_totalissues.pl --use-stats
   update_totalissues.pl --use-items
-  update_totalissues.pl --commit=1000
+  update_totalissues.pl --progress=1000
   update_totalissues.pl --since='2012-01-01'
   update_totalissues.pl --interval=30d
 
@@ -273,9 +267,9 @@ job to update popularity information during low-usage periods. If neither
 --since or --interval are specified, incremental mode will default to
 processing the last twenty-four hours.
 
-=item B<--commit=N>
+=item B<--progress=N>
 
-Commit the results to the database after every N records are processed.
+Print the progress to standart output after every N records are processed.
 
 =item B<--test>
 
