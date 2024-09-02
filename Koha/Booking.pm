@@ -153,35 +153,55 @@ sub store {
 
             my $is_modification = $self->in_storage;
             my $old_booking     = $self->get_from_storage;
-            if ( $self =
-                    $self->SUPER::store
-                and $is_modification
-                and any { $old_booking->$_ ne $self->$_ } qw(pickup_library_id start_date end_date) )
-            {
+
+            if ( $self = $self->SUPER::store ) {
                 my $patron         = $self->patron;
                 my $pickup_library = $self->pickup_library;
                 my $branch         = C4::Context->userenv->{'branch'};
 
-                my $letter = C4::Letters::GetPreparedLetter(
-                    module                 => 'bookings',
-                    letter_code            => 'BOOKING_MODIFICATION',
-                    message_transport_type => 'email',
-                    branchcode             => $branch,
-                    lang                   => $patron->lang,
-                    objects                => {
-                        old_booking => $old_booking,
-                        booking     => $self
-                    },
-                );
-
-                if ($letter) {
-                    C4::Letters::EnqueueLetter(
-                        {
-                            letter                 => $letter,
-                            borrowernumber         => $patron->borrowernumber,
-                            message_transport_type => 'email',
-                        }
+                if ( $is_modification
+                    and any { $old_booking->$_ ne $self->$_ } qw(pickup_library_id start_date end_date) )
+                {
+                    my $letter = C4::Letters::GetPreparedLetter(
+                        module                 => 'bookings',
+                        letter_code            => 'BOOKING_MODIFICATION',
+                        message_transport_type => 'email',
+                        branchcode             => $branch,
+                        lang                   => $patron->lang,
+                        objects                => {
+                            old_booking => $old_booking,
+                            booking     => $self
+                        },
                     );
+
+                    if ($letter) {
+                        C4::Letters::EnqueueLetter(
+                            {
+                                letter                 => $letter,
+                                borrowernumber         => $patron->borrowernumber,
+                                message_transport_type => 'email',
+                            }
+                        );
+                    }
+                } elsif ( !$is_modification ) {
+                    my $letter = C4::Letters::GetPreparedLetter(
+                        module                 => 'bookings',
+                        letter_code            => 'BOOKING_CONFIRMATION',
+                        message_transport_type => 'email',
+                        branchcode             => $branch,
+                        lang                   => $patron->lang,
+                        objects                => { booking => $self },
+                    );
+
+                    if ($letter) {
+                        C4::Letters::EnqueueLetter(
+                            {
+                                letter                 => $letter,
+                                borrowernumber         => $patron->borrowernumber,
+                                message_transport_type => 'email',
+                            }
+                        );
+                    }
                 }
             }
         }

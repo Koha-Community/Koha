@@ -123,7 +123,7 @@ subtest 'Relation accessor tests' => sub {
 };
 
 subtest 'store() tests' => sub {
-    plan tests => 14;
+    plan tests => 15;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
@@ -323,7 +323,7 @@ subtest 'store() tests' => sub {
         # ✓ Any (1)         |--|
     };
 
-    subtest 'notice trigger' => sub {
+    subtest 'modification notice trigger' => sub {
         plan tests => 3;
 
         my $original_notices_count = Koha::Notice::Messages->search(
@@ -402,6 +402,57 @@ subtest 'store() tests' => sub {
             {
                 end_date => $end_1->clone()->add( days => 1 )->datetime(q{ }),
             }
+        );
+    };
+
+    subtest 'confirmation notice trigger' => sub {
+        plan tests => 2;
+
+        my $original_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CONFIRMATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+
+        # Reuse previous booking to produce a clash
+        eval { $booking = Koha::Booking->new( $booking->unblessed )->store };
+
+        my $post_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CONFIRMATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_notices_count,
+            $original_notices_count,
+            'Koha::Booking->store should not have enqueued a BOOKING_CONFIRMATION email if booking creation fails'
+        );
+
+        $start_1 = dt_from_string->add( months => 1 )->truncate( to => 'day' );
+        $end_1   = $start_1->clone()->add( days => 1 );
+
+        $booking = Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $biblio->biblionumber,
+                pickup_library_id => $item_2->homebranch,
+                start_date        => $start_1->datetime(q{ }),
+                end_date          => $end_1->datetime(q{ }),
+            }
+        )->store;
+
+        $post_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CONFIRMATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_notices_count,
+            $original_notices_count + 1,
+            'Koha::Booking->store should have enqueued a BOOKING_CONFIRMATION email for a new booking'
         );
     };
 
