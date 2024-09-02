@@ -90,7 +90,7 @@
                             <td> [% suggestion.total | $Price %] </td>
                             <td class="actions">
                                 [% IF link_order %]
-                                    <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?op=link_order&amp;link_order=[% link_order | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestion.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Link suggestion') | html %]</a>
+                                    <a data-action="/cgi-bin/koha/acqui/newordersuggestion.pl" data-op="cud-link_order" data-link_order="[% link_order | uri %]" data-booksellerid="[% booksellerid | uri %]" data-basketno="[% basketno | uri %]" data-suggestionid="[% suggestion.suggestionid | uri %]" data-method="post" class="btn btn-default btn-xs submit-form-link" href="#"><i class="fa fa-plus"></i> [% tp('verb', 'Link suggestion') | html %]</a>
                                 [% ELSIF ( suggestion.biblionumber ) %]
                                     <a
                                         href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestion.suggestionid | uri %]&amp;biblio=[% suggestion.biblionumber | uri %]"

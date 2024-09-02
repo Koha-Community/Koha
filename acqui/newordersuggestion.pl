@@ -129,7 +129,7 @@ if ( $op eq 'connectDuplicate' ) {
     ConnectSuggestionAndBiblio( $suggestionid, $duplicateNumber );
 }
 
-if ( $op eq 'link_order' and $link_order ) {
+if ( $op eq 'cud-link_order' and $link_order ) {
     my $order      = Koha::Acquisition::Orders->find($link_order);
     my $suggestion = Koha::Suggestions->find($suggestionid);
     $suggestion->update( { biblionumber => $order->biblionumber } ) if $order->biblionumber;

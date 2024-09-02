@@ -815,7 +815,7 @@
                                                         <br />
                                                     [% END %]
                                                     [% UNLESS ( books_loo.suggestionid ) %]
-                                                        <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;link_order=[% books_loo.ordernumber | uri %]">[% tp('verb', 'Link suggestion') | html %]</a>
+                                                        <a data-action="/cgi-bin/koha/acqui/newordersuggestion.pl" data-booksellerid="[% booksellerid | uri %]" data-basketno="[% basketno | uri %]" data-link_order="[% books_loo.ordernumber | uri %]" data-method="post" class="submit-form-link" href="#">[% tp('verb', 'Link suggestion') | html %]</a>
                                                     [% END %]
                                                 </td>
                                             [% END %]
@@ -1106,6 +1106,7 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/acq.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     <script>
         function updateColumnsVisibility(visible) {
