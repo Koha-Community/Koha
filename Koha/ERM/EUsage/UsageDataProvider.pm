@@ -294,10 +294,10 @@ sub test_connection {
     my $status;
     if ( ref($result) eq 'ARRAY' ) {
         for my $r (@$result) {
-            $status = $r->{Service_Active};
+            $status = $r->{Service_Active} // $r->{ServiceActive};
         }
     } else {
-        $status = $result->{Service_Active};
+        $status = $result->{Service_Active} // $result->{ServiceActive};
     }
 
     if ($status) {
