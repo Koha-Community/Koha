@@ -104,7 +104,7 @@
         $(".unsubscribe").submit(function(){
             var patron = $(this).data('patron');
             var title = $(this).data('title');
-            return confirmDelete(__("Are you sure you want to unsubscribe %s from email alerts for %s?").format(patron, title));
+            return confirmDelete(_("Are you sure you want to unsubscribe %s from email alerts for %s?").format(patron, title));
         });
     });
 </script>
