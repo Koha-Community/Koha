@@ -55,10 +55,6 @@ sub TransformToNum {
     # remove the 3 last . to have a Perl number
     $version =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
 
-    # three X's at the end indicate that you are testing patch with dbrev
-    # change it into 999
-    # prevents error on a < comparison between strings (should be: lt)
-    $version =~ s/XXX$/999/;
     return $version;
 }
 
