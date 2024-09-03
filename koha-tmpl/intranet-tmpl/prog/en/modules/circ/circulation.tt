@@ -963,7 +963,7 @@
     </div> <!-- /.modal-dialog -->
 </div> <!-- /#barcodeSubmittedModal -->
 
-[% #IF waiting_holds.count > 0 %]
+[% IF waiting_holds.count > 0 %]
     <div id="circ-warnwaitingholds-modal" class="modal audio-alert-action block">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -983,7 +983,7 @@
             </div>
         </div>
     </div>
-[% #END %]
+[% END %]
 [% INCLUDE modals/cancel_booking.inc %]
 
 [% MACRO jsinclude BLOCK %]
