@@ -15,9 +15,6 @@
     [% IF ( else ) %]
         [% tx("Contracts of {vendor}", { vendor = booksellername }) | html %]
     [% END %]
-    [% IF ( add_validate ) %]
-        [% t("Data recorded") | html %]
-    [% END %]
     [% IF ( delete_confirm ) %]
         [% tx("Confirm deletion of contract '{contractnumber}'", { contractnumber = contractnumber }) | html %]
     [% END %]
@@ -65,12 +62,6 @@
                 [% WRAPPER breadcrumb_item bc_active=1 %]
                     <span>New contract</span>
                 [% END %]
-            [% END %]
-        [% END %]
-
-        [% IF ( add_validate ) %]
-            [% WRAPPER breadcrumb_item bc_active=1 %]
-                <span>Data recorded</span>
             [% END %]
         [% END %]
 
@@ -145,13 +136,7 @@
                     </form>
                 </div> <!-- /.page-section -->
             [% END %]
-            [% IF ( add_validate ) %]
-                <h1>Data recorded</h1>
-                <form action="[% script_name | html %]" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="submit" class="btn btn-primary" value="OK" />
-                </form>
-            [% END %]
+
             [% IF ( delete_confirm ) %]
                     <div class="alert alert-warning">
                         <h1>Confirm deletion of contract <em>[% contractname | html %]</em></h1>
