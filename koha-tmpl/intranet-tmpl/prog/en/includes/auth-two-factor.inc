@@ -9,7 +9,7 @@
             <p>Time based: Yes</p>
         </div>
 
-        <div id="errors" class="dialog error" style="display: none;"></div>
+        <div id="errors" class="alert alert-error" style="display: none;"></div>
 
         <fieldset class="rows">
             <input type="hidden" id="secret32" name="secret32" value="[% secret32 | html %]" />

@@ -87,7 +87,7 @@ SKIP: {
         $driver->find_element('//*[@id="pin_code"]')->send_keys('wrong_code');
         $driver->find_element('//*[@id="register-2FA"]')->click;
         $s->wait_for_ajax;
-        ok($driver->find_element('//div[@class="dialog error"][contains(text(), "Invalid PIN code")]'));
+        ok($driver->find_element('//div[@class="alert alert-error"][contains(text(), "Invalid PIN code")]'));
         is( $patron->get_from_storage->secret, undef, 'secret is not set in DB yet' );
 
         my $secret32 = $driver->find_element('//*[@id="secret32"]')->get_value();
