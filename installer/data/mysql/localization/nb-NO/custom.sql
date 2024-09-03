@@ -21,7 +21,7 @@ UPDATE systempreferences SET value = 'far|mor' WHERE variable = 'borrowerRelatio
 UPDATE systempreferences SET value = 'Fru|Frøken|Herr' WHERE variable = 'BorrowersTitles';
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurrencyFormat';
 UPDATE systempreferences SET value = 'metric' WHERE variable = 'dateformat';
-UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'language';
+UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'StaffInterfaceLanguages';
 UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = '<p>Velkommen til Koha...</p><hr />' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = '<p>Viktige lenker kan plasseres her</p>' WHERE variable = 'OpacNav';

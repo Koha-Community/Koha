@@ -40,7 +40,7 @@ UPDATE systempreferences SET value = '0' WHERE variable = 'IssueLog';
 UPDATE systempreferences SET value = 'whitespace' WHERE variable = 'itemBarcodeInputFilter';
 UPDATE systempreferences SET value = '676a' WHERE variable = 'itemcallnumber';
 UPDATE systempreferences SET value = 'koha@xxx.it' WHERE variable = 'KohaAdminEmailAddress';
-UPDATE systempreferences SET value = 'en,it-IT' WHERE variable = 'language';
+UPDATE systempreferences SET value = 'en,it-IT' WHERE variable = 'StaffInterfaceLanguages';
 UPDATE systempreferences SET value = '0' WHERE variable = 'ClaimsLog';
 UPDATE systempreferences SET value = ''  WHERE variable = 'MARCOrgCode';
 UPDATE systempreferences SET value = '5' WHERE variable = 'maxreserves';

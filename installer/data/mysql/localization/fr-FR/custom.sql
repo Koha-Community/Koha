@@ -1,7 +1,7 @@
 UPDATE systempreferences SET value = 'Père|Mère|grand-parent|Tuteur légal|Autre' WHERE variable = 'borrowerRelationship';
 UPDATE systempreferences SET value = 'M|Mme|Mlle' WHERE variable = 'BorrowersTitles';
 UPDATE systempreferences SET value = '676a' WHERE variable = 'itemcallnumber';
-UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'language';
+UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'StaffInterfaceLanguages';
 UPDATE systempreferences SET value = 'Ma bibliothèque' WHERE variable = 'LibraryName';
 UPDATE systempreferences SET value = 'fr-FR' WHERE variable = 'OPACLanguages';
 UPDATE systempreferences SET value = 1 WHERE variable = 'opaclanguagesdisplay';

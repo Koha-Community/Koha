@@ -23,7 +23,7 @@ UPDATE systempreferences SET value = 'M.|Mme|Mx' WHERE variable = 'BorrowersTitl
 UPDATE systempreferences SET value = 'FR' WHERE variable = 'CurencyFormat';
 UPDATE systempreferences SET value = 'iso' WHERE variable = 'dateformat';
 UPDATE systempreferences SET value = 'fr' WHERE variable = 'KohaManualLanguage';
-UPDATE systempreferences SET value = 'fr-CA,en' WHERE variable = 'language';
+UPDATE systempreferences SET value = 'fr-CA,en' WHERE variable = 'StaffInterfaceLanguages';
 UPDATE systempreferences SET value = 'http://www.marc21.ca/MaJ/BIB/B{FIELD}.pdf' WHERE variable = 'MarcFieldDocURL';
 UPDATE systempreferences SET value = 'pdfformat::layout3pagesfr' WHERE variable = 'OrderPdfFormat';
 UPDATE systempreferences SET value = 'fr-CA,en' WHERE variable = 'OPACLanguages';
