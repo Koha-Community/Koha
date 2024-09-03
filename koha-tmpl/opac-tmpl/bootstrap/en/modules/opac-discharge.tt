@@ -29,7 +29,7 @@
                 <div id="discharge" class="maincontent">
                     <h1>Discharge</h1>
                     [% FOR message IN messages %]
-                        <div class="dialog [% message.type | html %]">
+                        <div class="alert alert-[% message.type | html %]">
                         [% IF message.code == "unable_to_generate_pdf" %]
                             An error occurs when generating the pdf file.
                             Please contact the staff to resolve this problem.

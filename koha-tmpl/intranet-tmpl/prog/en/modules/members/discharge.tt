@@ -44,7 +44,7 @@
 
 <h1>Discharge</h1>
 [% FOR message IN messages %]
-    <div class="dialog [% message.type | html %]">
+    <div class="alert alert-[% message.type | html %]">
     [% IF message.code == "unable_to_generate_pdf" %]
         An error occurs when generating the PDF file.
         Please contact the administrator to resolve this problem.

@@ -81,7 +81,7 @@
 [% IF ( barcode_not_unique ) %]<div class="alert alert-warning"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
 [% IF ( no_next_barcode ) %]<div class="alert alert-warning"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
 [% IF ( book_on_loan ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
-[% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
+[% IF ( book_reserved ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
 [% IF ( not_same_branch ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: The items do not belong to your library.</div>[% END %]
 [% IF ( linked_analytics ) %]<div class="alert alert-warning"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;analyze=1">analytics.</a>.</div>[% END %]
 [% IF last_item_for_hold %]<div class="alert alert-warning"><strong>Cannot delete</strong>: Last item for bibliographic record with biblio-level hold on it.</div>[% END %]
