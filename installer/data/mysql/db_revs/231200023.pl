@@ -30,8 +30,10 @@ return {
                 "There were $count budget(s) without budget_period_id. They all have been updated to be under budget called 'Budget for funds without budget' (id $aqbp_id).";
         }
 
-        $dbh->do(q{ALTER TABLE aqbudgets DROP FOREIGN KEY aqbudgetperiods_ibfk_1});
-        say $out "Dropped foreign key aqbudgetperiods_ibfk_1";
+        if ( foreign_key_exists( 'aqbudgets', 'aqbudgetperiods_ibfk_1' ) ) {
+            $dbh->do(q{ALTER TABLE aqbudgets DROP FOREIGN KEY aqbudgetperiods_ibfk_1});
+            say $out "Dropped foreign key aqbudgetperiods_ibfk_1";
+        }
 
         $dbh->do(q{ALTER TABLE aqbudgets MODIFY COLUMN `budget_period_id` INT(11) NOT NULL});
         say $out "Updated aqbudgets.budget_period_id to NOT accept NULL values";
