@@ -538,7 +538,7 @@
                                     </select>
                                 </td>
                                 [% END %]
-                                <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
+                                <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="3" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /></td>
                                 [% IF Koha.Preference('UseRecalls') %]
                                     <td><input type="text" name="recalls_allowed" id="recalls_allowed" size="3"></td>
                                     <td><input type="text" name="recalls_per_record" id="recalls_per_record" size="3"></td>
