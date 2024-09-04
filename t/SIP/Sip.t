@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
 
 BEGIN {
@@ -55,3 +55,54 @@ warning_is { $invalidTest = C4::SIP::Sip::Checksum::verify_cksum("1234567") }
     'verify_cksum prints the expected warning for an invalid checksum';
 is( $invalidTest, 0, "Checksum: 1234567 is invalid as expected" );
 
+subtest 'remove_password_from_message' => sub {
+    plan tests => 8;
+
+    is(
+        C4::SIP::Sip::remove_password_from_message("INPUT MSG: '9300CNterm1|COterm1|CPCPL|'"),
+        "INPUT MSG: '9300CNterm1|CO***|CPCPL|'", "93 Login - password"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message("INPUT MSG: '9300CNterm1|COt|CPCPL|'"),
+        "INPUT MSG: '9300CNterm1|CO***|CPCPL|'", "93 Login - short password"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message("INPUT MSG: '9300CNterm1|CO%&/()=+qwerty123456|CPCPL|'"),
+        "INPUT MSG: '9300CNterm1|CO***|CPCPL|'", "93 Login - Complex password"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message("INPUT MSG: '9300CNterm1|CO1234|CPCPL|'"),
+        "INPUT MSG: '9300CNterm1|CO***|CPCPL|'", "93 Login - PIN"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message(
+            "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC1234|AD1234|BON"),
+        '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
+        "11 Checkout"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message(
+            "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC|AD1234|BON"),
+        '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
+        "11 Checkout - empty AC"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message(
+            "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC1234|AD|BON"),
+        '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
+        "11 Checkout - empty AD"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message(
+            "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC|AD|BON"),
+        '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
+        "11 Checkout - empty AC and AND"
+    );
+};
