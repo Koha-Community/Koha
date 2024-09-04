@@ -281,6 +281,33 @@
                 }
             }
         }
+
+
+        function checkBarcodeInput() {
+            var inputField = document.getElementById("barcode_input");
+            var button = document.getElementById("sci_append_button");
+
+            if (inputField.value.trim() === "") {
+                button.disabled = true;
+            } else {
+                button.disabled = false;
+            }
+        }
+
+checkBarcodeInput();
+
+document.getElementById("barcode_input").addEventListener("input", checkBarcodeInput);
+
+document.getElementById("sci_append_button").addEventListener("click", function() {
+    setTimeout(checkBarcodeInput, 10);
+});
+
+
+
+
+
+
+
     </script>
 
     [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]
