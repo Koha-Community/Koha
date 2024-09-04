@@ -226,7 +226,7 @@
                 slots_per_day[day].push(slot);
             });
 
-            $("#conf-"+branchcode).find(".pickup_hours li").remove();
+            $("#conf-"+branchcode+"_panel").find(".pickup_hours li").remove();
 
             const CalendarFirstDayOfWeek = [% Koha.Preference("CalendarFirstDayOfWeek") || 0 | html %];
             [0, 1, 2, 3, 4, 5, 6]
@@ -244,7 +244,7 @@
 
                         span_node.appendTo(li_node);
                     });
-                    li_node.appendTo($("#conf-"+branchcode).find(".pickup_hours"));
+                    li_node.appendTo($("#conf-"+branchcode+"_panel").find(".pickup_hours"));
                 });
         }
         function get_day_lib(day){
