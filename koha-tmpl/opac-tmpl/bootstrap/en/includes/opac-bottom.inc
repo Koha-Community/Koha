@@ -22,46 +22,43 @@
         [% END #/ opaccredits %]
     </div> <!-- / #wrapper in masthead.inc -->
 
-    [% IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
-        [% IF ( Koha.Preference('opaclanguagesdisplay') ) %]
-            [% IF ( languages_loop ) %]
-                [% UNLESS ( one_language_enabled ) %]
-                    <footer id="changelanguage" class="navbar navbar-expand navbar-light bg-light noprint">
-                        <div class="container-fluid">
-                            <div class="collapse navbar-collapse">
-                                [% context = "footer" %]
-                                [% INCLUDE 'langmenu.inc' %]
+    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl || ( ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
+        <footer id="changelanguage" class="navbar navbar-expand navbar-light bg-light noprint">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse">
+                    [%# Following on one line for translatability %]
+                    [% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && ( languages_loop ) && ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
+                        [% context = "footer" %]
+                        [% INCLUDE 'langmenu.inc' %]
+                    [% END # / IF opaclanguagedisplay %]
 
-                                <div class="navbar-nav flex-grow-1">
-                                    [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
-                                        <a id="report_a_problem" class="nav-link" href="/cgi-bin/koha/opac-reportproblem.pl">
-                                            <i class="fa fa-warning fa-fw fa-icon-footer" aria-hidden="true"></i>
-                                            <span class="report_a_problem_text">Report a problem</span>
-                                        </a>
-                                    [% END %]
+                    <div class="navbar-nav flex-grow-1">
+                        [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
+                            <a id="report_a_problem" class="nav-link" href="/cgi-bin/koha/opac-reportproblem.pl">
+                                <i class="fa fa-warning fa-fw fa-icon-footer" aria-hidden="true"></i>
+                                <span class="report_a_problem_text">Report a problem</span>
+                            </a>
+                        [% END %]
 
-                                    [% IF Koha.Preference( 'CookieConsent' ) %]
-                                        <a id="cookieConsentFooter" class="nav-link" href="#">
-                                            <i class="fa fa-cookie fa-fw fa-icon-footer" aria-hidden="true"></i>
-                                            <span class="cookieConsentFooter_text">Cookies</span>
-                                        </a>
-                                    [% END %]
-                                </div>
-                                    [% IF OpacKohaUrl %]
-                                        <div class="navbar-nav">
-                                            <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M7.394.75c.82-.45 1.75-.72 2.69-.75.5.015.99.1 1.45.27.92.35 1.68 1.05 2.15 1.9.53.865.76 1.875.87 2.875.25 3.315-.98 6.635-3.07 9.18-.825.82-1.835 1.52-3 1.735-.96.135-2-.07-2.775-.675-.48-.365-.67-1-.63-1.575.425.6 1.12 1.015 1.86 1.035.675.03 1.35-.275 1.8-.765.75-.825.835-2.21.12-3.08-.325-.375-.7-.715-1.15-.95-.44-.265-.95-.38-1.46-.45-.93-.06-1.9.11-2.72.57a3.22 3.22 0 0 0-1.565 2.15c-.2.7-.125 1.43-.05 2.14-.31-.81-.43-1.67-.5-2.53v-.64c.12-3.13 1.43-6.2 3.53-8.515.725-.75 1.53-1.43 2.45-1.92Zm0 0" style="stroke-width:.500008"/></svg>
-                                                <span class="koha_url_text">Powered by Koha</span>
-                                            </a>
-                                        </div>
-                                    [% END # /IF OpacKohaUrl %]
-                                </ul> <!-- /.navbar-nav -->
-                            </div> <!-- /.collapse.navbar-collapse -->
-                        </div> <!-- /.container-fluid -->
-                    </footer> <!-- / #changelanguage -->
-                [% END # / UNLESS ( one_language_enabled ) %]
-            [% END # / IF ( languages_loop && opaclanguagesdisplay ) %]
-        [% END # / IF opaclanguagesdisplay %]
+                        [% IF Koha.Preference( 'CookieConsent' ) %]
+                            <a id="cookieConsentFooter" class="nav-link" href="#">
+                                <i class="fa fa-cookie fa-fw fa-icon-footer" aria-hidden="true"></i>
+                                <span class="cookieConsentFooter_text">Cookies</span>
+                            </a>
+                        [% END %]
+                    </div>
+                        [% IF OpacKohaUrl %]
+                            <div class="navbar-nav">
+                                <a id="koha_url" class="nav-link koha_url" href="http://koha-community.org">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M7.394.75c.82-.45 1.75-.72 2.69-.75.5.015.99.1 1.45.27.92.35 1.68 1.05 2.15 1.9.53.865.76 1.875.87 2.875.25 3.315-.98 6.635-3.07 9.18-.825.82-1.835 1.52-3 1.735-.96.135-2-.07-2.775-.675-.48-.365-.67-1-.63-1.575.425.6 1.12 1.015 1.86 1.035.675.03 1.35-.275 1.8-.765.75-.825.835-2.21.12-3.08-.325-.375-.7-.715-1.15-.95-.44-.265-.95-.38-1.46-.45-.93-.06-1.9.11-2.72.57a3.22 3.22 0 0 0-1.565 2.15c-.2.7-.125 1.43-.05 2.14-.31-.81-.43-1.67-.5-2.53v-.64c.12-3.13 1.43-6.2 3.53-8.515.725-.75 1.53-1.43 2.45-1.92Zm0 0" style="stroke-width:.500008"/></svg>
+                                    <span class="koha_url_text">Powered by Koha</span>
+                                </a>
+                            </div>
+                        [% END # /IF OpacKohaUrl %]
+                    </ul> <!-- /.navbar-nav -->
+                </div> <!-- /.collapse.navbar-collapse -->
+            </div> <!-- /.container-fluid -->
+        </footer> <!-- / #changelanguage -->
     [% END # /IF OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer' %]
 [% END # / UNLESS is_popup %]
 

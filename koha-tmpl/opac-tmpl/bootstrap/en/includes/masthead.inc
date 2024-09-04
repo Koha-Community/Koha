@@ -99,7 +99,8 @@
                 </ul> <!-- / .navbar-nav -->
             [% END # /IF OpacPublic %]
             [% IF Koha.Preference( 'opacuserlogin' ) == 1 ||  Koha.Preference( 'EnableOpacSearchHistory') || Koha.Preference( 'opaclanguagesdisplay' ) %]
-                [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
+                [%# Following on one line for translatability %]
+                [% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && ( languages_loop ) && ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'top') ) %]
                     [% context = "header" %]
                     [% INCLUDE 'langmenu.inc' %]
                 [% END %]
