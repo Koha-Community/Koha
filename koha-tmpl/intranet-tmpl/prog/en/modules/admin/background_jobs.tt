@@ -260,7 +260,7 @@
             [% END %]
 
             let additional_filters = {
-                enqueued_on: function(){
+                enqueued_date: function(){
                     if ( $("#include_last_hour").is(":checked") ) {
                         return { ">": dayjs().subtract(1, 'hour').format() };
                     } else {
