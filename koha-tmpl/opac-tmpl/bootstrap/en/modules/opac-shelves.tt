@@ -833,8 +833,7 @@
     </div> <!-- / .container-fluid -->
 </div> <!-- / .main -->
 
-<form method="post" id="download_list" action="/cgi-bin/koha/opac-downloadshelf.pl">
-    [% INCLUDE 'csrf-token.inc' %]
+<form method="get" id="download_list" action="/cgi-bin/koha/opac-downloadshelf.pl">
     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
     <input type="hidden" name="format" id="download_format" value="" />
 </form>
