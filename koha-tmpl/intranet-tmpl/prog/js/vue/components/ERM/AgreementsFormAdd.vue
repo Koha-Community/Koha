@@ -132,6 +132,11 @@
                         </li>
                     </ol>
                 </fieldset>
+                <AdditionalFieldsEntry
+                    resource_type="agreement"
+                    :additional_field_values="agreement.extended_attributes"
+                    @additional-fields-changed="additionalFieldsChanged"
+                />
                 <AgreementPeriods :periods="agreement.periods" />
                 <UserRoles
                     :user_type="$__('Agreement user %s')"
@@ -174,6 +179,7 @@ import UserRoles from "./UserRoles.vue"
 import AgreementLicenses from "./AgreementLicenses.vue"
 import AgreementRelationships from "./AgreementRelationships.vue"
 import Documents from "./Documents.vue"
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
 import ButtonSubmit from "../ButtonSubmit.vue"
 import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setError, setWarning } from "../../messages"
@@ -221,6 +227,7 @@ export default {
                 agreement_licenses: [],
                 agreement_relationships: [],
                 documents: [],
+                extended_attributes: [],
             },
             initialized: false,
         }
@@ -329,6 +336,7 @@ export default {
 
             delete agreement.agreement_id
             delete agreement.vendor
+            delete agreement._strings
             agreement.is_perpetual = agreement.is_perpetual ? true : false
 
             if (agreement.vendor_id == "") {
@@ -388,6 +396,9 @@ export default {
                 this.agreement.closure_reason = ""
             }
         },
+        additionalFieldsChanged(additionalFieldValues) {
+            this.agreement.extended_attributes = additionalFieldValues
+        },
     },
     components: {
         AgreementPeriods,
@@ -397,6 +408,7 @@ export default {
         Documents,
         ButtonSubmit,
         FormSelectVendors,
+        AdditionalFieldsEntry,
     },
     name: "AgreementsFormAdd",
 }

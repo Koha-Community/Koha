@@ -25,7 +25,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Acquisition::Bookseller;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object::Mixin::AdditionalFields Koha::Object);
 
 use Koha::ERM::Agreement::Periods;
 use Koha::ERM::Agreement::Licenses;

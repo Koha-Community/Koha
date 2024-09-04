@@ -97,6 +97,7 @@ sub add {
                 my $agreement_licenses = delete $body->{agreement_licenses} // [];
                 my $agreement_relationships = delete $body->{agreement_relationships} // [];
                 my $documents = delete $body->{documents} // [];
+                my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 my $agreement = Koha::ERM::Agreement->new_from_api($body)->store;
                 $agreement->periods($periods);
@@ -104,6 +105,9 @@ sub add {
                 $agreement->agreement_licenses($agreement_licenses);
                 $agreement->agreement_relationships($agreement_relationships);
                 $agreement->documents($documents);
+
+                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                $agreement->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(
@@ -181,6 +185,7 @@ sub update {
                 my $agreement_licenses = delete $body->{agreement_licenses} // [];
                 my $agreement_relationships = delete $body->{agreement_relationships} // [];
                 my $documents = delete $body->{documents} // [];
+                my $extended_attributes = delete $body->{extended_attributes} // [];
 
                 $agreement->set_from_api($body)->store;
                 $agreement->periods($periods);
@@ -188,6 +193,9 @@ sub update {
                 $agreement->agreement_licenses($agreement_licenses);
                 $agreement->agreement_relationships($agreement_relationships);
                 $agreement->documents($documents);
+
+                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                $agreement->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
                 return $c->render(

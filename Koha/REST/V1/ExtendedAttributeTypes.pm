@@ -46,12 +46,13 @@ sub list {
 
     # FIXME: Maybe not the best place for this mapping
     my $resource_to_table = {
-        basket  => 'aqbasket',
-        credit  => 'accountlines:credit',
-        debit   => 'accountlines:debit',
-        invoice => 'aqinvoices',
-        license => 'erm_licenses',
-        order   => 'aqorders',
+        basket    => 'aqbasket',
+        credit    => 'accountlines:credit',
+        debit     => 'accountlines:debit',
+        invoice   => 'aqinvoices',
+        license   => 'erm_licenses',
+        agreement => 'erm_agreements',
+        order     => 'aqorders',
     };
 
     return try {

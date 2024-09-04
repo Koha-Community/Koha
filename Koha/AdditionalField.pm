@@ -60,6 +60,7 @@ sub to_api {
         'aqbasket'            => 'basket',
         'aqinvoices'          => 'invoice',
         'erm_licenses'        => 'license',
+        'erm_agreements'      => 'agreement',
         'aqorders'            => 'order',
     };
 

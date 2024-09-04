@@ -23,7 +23,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "agreements/" + id,
                     headers: {
                         "x-koha-embed":
-                            "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor",
+                            "periods,user_roles,user_roles.patron,agreement_licenses,agreement_licenses.license,agreement_relationships,agreement_relationships.related_agreement,documents,agreement_packages,agreement_packages.package,vendor,extended_attributes,+strings",
                     },
                 }),
             getAll: (query, params) =>

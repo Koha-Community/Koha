@@ -322,6 +322,12 @@
                     </li>
                 </ol>
             </fieldset>
+            <AdditionalFieldsDisplay
+                resource_type="agreement"
+                :additional_field_values="
+                    agreement._strings.additional_field_values
+                "
+            />
             <fieldset class="action">
                 <router-link
                     :to="{ name: 'AgreementsList' }"
@@ -339,6 +345,7 @@ import { inject } from "vue"
 import { APIClient } from "../../fetch/api-client.js"
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
 
 export default {
     setup() {
@@ -373,6 +380,8 @@ export default {
                 license_info: "",
                 periods: [],
                 user_roles: [],
+                extended_attributes: [],
+                _strings: [],
                 agreement_packages: [],
             },
             initialized: false,
@@ -425,7 +434,7 @@ export default {
             )
         },
     },
-    components: { Toolbar, ToolbarButton },
+    components: { Toolbar, ToolbarButton, AdditionalFieldsDisplay },
     name: "AgreementsShow",
 }
 </script>

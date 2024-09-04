@@ -281,6 +281,38 @@ __PACKAGE__->add_columns(
     '+is_perpetual' => { is_boolean => 1 }
 );
 
+__PACKAGE__->has_many(
+    "additional_field_values",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.agreement_id" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="erm_agreements")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->has_many(
+    "extended_attributes",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.agreement_id" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="erm_agreements")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
 sub koha_object_class {
     'Koha::ERM::Agreement';
 }

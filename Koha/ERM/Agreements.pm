@@ -24,7 +24,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::ERM::Agreement;
 use Koha::ERM::Agreement::Periods;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects::Mixin::AdditionalFields Koha::Objects);
 
 =head1 NAME
 
