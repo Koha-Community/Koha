@@ -124,6 +124,7 @@
                             <th>Fine/suspension grace period</th>
                             <th>Overdue fines cap (amount)</th>
                             <th>Cap fine at replacement price</th>
+                            <th>Expire reserve charge</th>
                             <th>Suspension in days (day)</th>
                             <th>Max. suspension duration (day)</th>
                             <th>Suspension charging interval</th>
@@ -178,6 +179,7 @@
                                     [% SET firstremind = all_rules.$c.$i.firstremind %]
                                     [% SET overduefinescap = all_rules.$c.$i.overduefinescap %]
                                     [% SET cap_fine_to_replacement_price = all_rules.$c.$i.cap_fine_to_replacement_price %]
+                                    [% SET expire_reserves_charge = all_rules.$c.$i.expire_reserves_charge %]
                                     [% SET finedays = all_rules.$c.$i.finedays %]
                                     [% SET maxsuspensiondays = all_rules.$c.$i.maxsuspensiondays %]
                                     [% SET suspension_chargeperiod = all_rules.$c.$i.suspension_chargeperiod %]
@@ -205,7 +207,7 @@
                                     [% SET recall_shelf_time = all_rules.$c.$i.recall_shelf_time %]
                                     [% SET holds_pickup_period = all_rules.$c.$i.holds_pickup_period %]
 
-                                    [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || noautorenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds || recalls_allowed || recalls_per_record || on_shelf_recalls || recall_due_date_interval || recall_overdue_fine || recall_shelf_time || holds_pickup_period %]
+                                    [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || expire_reserves_charge || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || noautorenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds || recalls_allowed || recalls_per_record || on_shelf_recalls || recall_due_date_interval || recall_overdue_fine || recall_shelf_time || holds_pickup_period %]
                                     [% IF show_rule %]
                                         [% SET row_count = row_count + 1 %]
                                         <tr row_countd="row_[% row_count | html %]">
@@ -305,6 +307,13 @@
                                                         <input type="checkbox" checked="checked" disabled="disabled" />
                                                     [% ELSE %]
                                                         <input type="checkbox" disabled="disabled" />
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                    [% IF expire_reserves_charge.defined && expire_reserves_charge != '' %]
+                                                        [% expire_reserves_charge | html %]
+                                                    [% ELSE %]
+                                                        <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=ExpireReservesMaxPickUpDelayCharge">Use global</a>
                                                     [% END %]
                                                 </td>
                                                 <td>[% finedays | html %]</td>
@@ -489,6 +498,7 @@
                                 <td><input type="text" name="firstremind" id="firstremind" size="2" /> </td>
                                 <td><input type="text" name="overduefinescap" id="overduefinescap" size="6" inputmode="decimal" pattern="^\d+(\.\d{2})?$" /> </td>
                                 <td><input type="checkbox" name="cap_fine_to_replacement_price" id="cap_fine_to_replacement_price" /></td>
+                                <td><input type="text" name="expire_reserves_charge" id="expire_reserves_charge" size="6"/></td>
                                 <td><input type="text" name="finedays" id="fined" size="3" /> </td>
                                 <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
                                 <td><input type="text" name="suspension_chargeperiod" id="suspension_chargeperiod" size="3" /> </td>
@@ -580,6 +590,7 @@
                                   <th>Fine/suspension grace period</th>
                                   <th>Overdue fines cap (amount)</th>
                                   <th>Cap fine at replacement price</th>
+                                  <th>Expire reserve charge</th>
                                   <th>Suspension in days (day)</th>
                                   <th>Max. suspension duration (day)</th>
                                   <th>Suspension charging interval</th>
@@ -1597,10 +1608,11 @@
                             // Remove potential previous input added
                             $(current_column).find("input").remove();
                             $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                        } else if ( current_input_id === "maxissueqty" || current_input_id === "maxonsiteissueqty" || current_input_id === "reservesallowed" || current_input_id === "holds_per_day" || current_input_id === "holds_per_record" || current_input_id === "holds_pickup_period" ) {
+                        } else if ( current_input_id === "maxissueqty" || current_input_id === "maxonsiteissueqty" || current_input_id === "reservesallowed" || current_input_id === "expire_reserves_charge" || current_input_id === "holds_per_day" || current_input_id === "holds_per_record" || current_input_id === "holds_pickup_period" ) {
                             // If the value is not an integer for
                             //     - "Current checkouts allowed"
                             //     - "Current on-site checkouts allowed"
+                            //     - "Expire reserve charge"
                             //     - "Holds allowed (total)"
                             //     - "Holds allowed (daily)"
                             //     - "Holds per record (count)"
