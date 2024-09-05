@@ -107,11 +107,7 @@
                             <br />
                             Your password has been changed
                         </div>
-                        <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
-                            [% INCLUDE 'csrf-token.inc' %]
-                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                            <p><input type="submit" class="btn btn-primary" value="Return to my account" /></p>
-                        </form>
+                        <a class="btn btn-primary" href="/cgi-bin/koha/opac-user.pl">Return to my account</a>
                     [% END # /IF password_updated %]
                 </div> <!-- / #userpasswd -->
             </div> <!-- / .col-10 -->
