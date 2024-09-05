@@ -135,8 +135,6 @@ BEGIN {
 
       CalculatePriority
 
-      IsItemOnHoldAndFound
-
       GetMaxPatronHoldsForRecord
 
       MergeHolds
@@ -1380,7 +1378,7 @@ sub IsAvailableForItemLevelRequest {
         return $any_available ? 0 : 1;
 
     } else {  # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
-        return $item->notforloan < 0 || $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
+        return $item->notforloan < 0 || $item->onloan || $item->holds->filter_by_found->count;
     }
 }
 
@@ -1412,7 +1410,7 @@ sub ItemsAnyAvailableAndNotRestricted {
             || $i->notforloan # items with non-zero notforloan cannot be checked out
             || $i->withdrawn
             || $i->onloan
-            || IsItemOnHoldAndFound( $i->id )
+            || $i->holds->filter_by_found->count
             || ( $i->damaged
                  && ! C4::Context->preference('AllowHoldsOnDamagedItems') )
             || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
@@ -2241,30 +2239,6 @@ sub CalculatePriority {
     );
 
     return @row ? $row[0]+1 : 1;
-}
-
-=head2 IsItemOnHoldAndFound
-
-    my $bool = IsItemFoundHold( $itemnumber );
-
-    Returns true if the item is currently on hold
-    and that hold has a non-null found status ( W, T, etc. )
-
-=cut
-
-sub IsItemOnHoldAndFound {
-    my ($itemnumber) = @_;
-
-    my $rs = Koha::Database->new()->schema()->resultset('Reserve');
-
-    my $found = $rs->count(
-        {
-            itemnumber => $itemnumber,
-            found      => { '!=' => undef }
-        }
-    );
-
-    return $found;
 }
 
 =head2 GetMaxPatronHoldsForRecord

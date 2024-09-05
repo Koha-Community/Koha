@@ -25,7 +25,7 @@ use Encode;
 
 use C4::Context;
 use C4::Stats qw( UpdateStats );
-use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsItemOnHoldAndFound IsAvailableForItemLevelRequest );
+use C4::Reserves qw( CheckReserves CanItemBeReserved MoveReserve ModReserve ModReserveMinusPriority RevertWaitingStatus IsAvailableForItemLevelRequest );
 use C4::Biblio qw( UpdateTotalIssues );
 use C4::Items qw( ModItemTransfer ModDateLastSeen CartToShelf );
 use C4::Accounts;
@@ -3105,7 +3105,7 @@ sub CanBookBeRenewed {
 
                 foreach my $other_item (@other_items) {
                   next if defined $matched_items{$other_item->itemnumber};
-                  next if IsItemOnHoldAndFound( $other_item->itemnumber );
+                  next if $other_item->holds->filter_by_found->count;
                   next unless IsAvailableForItemLevelRequest($other_item, $patron_with_reserve, undef);
                   next unless CanItemBeReserved($patron_with_reserve,$other_item,undef,{ignore_hold_counts=>1})->{status} eq 'OK';
                   # NOTE: At checkin we call 'CheckReserves' which checks hold 'policy'
