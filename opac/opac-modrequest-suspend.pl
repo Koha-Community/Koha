@@ -19,8 +19,11 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Reserves qw( CanReserveBeCanceledFromOpac ToggleSuspend SuspendAll );
+use C4::Reserves qw( ToggleSuspend SuspendAll );
 use C4::Auth qw( get_template_and_user );
+
+use Koha::Patrons;
+
 my $query = CGI->new;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -36,7 +39,10 @@ my $suspend_until = $query->param('suspend_until') || undef;
 my $reserve_id    = $query->param('reserve_id');
 
 if ( ( $op eq 'cud-suspend' || $op eq 'cud-unsuspend' ) && $reserve_id ) {
-    ToggleSuspend( $reserve_id, $suspend_until ) if CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my $hold   = $patron->holds->find($reserve_id);
+    ToggleSuspend( $reserve_id, $suspend_until )
+        if $hold && $hold->is_cancelable_from_opac;
 }
 elsif( $op eq 'cud-suspend_all' || $op eq 'cud-unsuspend_all' ) {
     SuspendAll(

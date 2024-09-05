@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 77;
+use Test::More tests => 69;
 use Test::MockModule;
 use Test::Warn;
 
@@ -32,7 +32,7 @@ use C4::Items;
 use C4::Biblio qw( GetMarcFromKohaField ModBiblio );
 use C4::HoldsQueue;
 use C4::Members;
-use C4::Reserves qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanReserveBeCanceledFromOpac CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
+use C4::Reserves qw( AddReserve AlterPriority CheckReserves ModReserve ModReserveAffect ReserveSlip CalculatePriority CanBookBeReserved IsAvailableForItemLevelRequest MoveReserve ChargeReserveFee RevertWaitingStatus CanItemBeReserved MergeHolds );
 use Koha::ActionLogs;
 use Koha::Biblios;
 use Koha::Caches;
@@ -136,24 +136,24 @@ $requesters{$branch_1} = Koha::Patron->new({
     branchcode   => $branch_1,
     categorycode => $category_2,
     surname      => "borrower from $branch_1",
-})->store->borrowernumber;
+})->store;
 for my $i ( 2 .. 5 ) {
     $requesters{"CPL$i"} = Koha::Patron->new({
         branchcode   => $branch_1,
         categorycode => $category_2,
         surname      => "borrower $i from $branch_1",
-    })->store->borrowernumber;
+    })->store;
 }
 $requesters{$branch_2} = Koha::Patron->new({
     branchcode   => $branch_2,
     categorycode => $category_2,
     surname      => "borrower from $branch_2",
-})->store->borrowernumber;
+})->store;
 $requesters{$branch_3} = Koha::Patron->new({
     branchcode   => $branch_3,
     categorycode => $category_2,
     surname      => "borrower from $branch_3",
-})->store->borrowernumber;
+})->store;
 
 # Configure rules so that $branch_1 allows only $branch_1 patrons
 # to request its items, while $branch_2 will allow its items
@@ -222,7 +222,7 @@ $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve(
     {
         branchcode     => $branch_3,
-        borrowernumber => $requesters{$branch_3},
+        borrowernumber => $requesters{$branch_3}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 1,
     }
@@ -230,7 +230,7 @@ AddReserve(
 AddReserve(
     {
         branchcode     => $branch_2,
-        borrowernumber => $requesters{$branch_2},
+        borrowernumber => $requesters{$branch_2}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 2,
     }
@@ -238,12 +238,12 @@ AddReserve(
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
+        borrowernumber => $requesters{$branch_1}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 3,
     }
 );
-ModReserveAffect($itemnum_cpl, $requesters{$branch_3}, 0);
+ModReserveAffect($itemnum_cpl, $requesters{$branch_3}->borrowernumber, 0);
 
 # Now it should have different priorities.
 my $biblio = Koha::Biblios->find( $bibnum2 );
@@ -252,16 +252,16 @@ is($holds->next->priority, 0, 'Item is correctly waiting');
 is($holds->next->priority, 1, 'Item is correctly priority 1');
 is($holds->next->priority, 2, 'Item is correctly priority 2');
 
-my @reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3} })->waiting->as_list;
+my @reserves = Koha::Holds->search({ borrowernumber => $requesters{$branch_3}->borrowernumber })->waiting->as_list;
 is( @reserves, 1, 'GetWaiting got only the waiting reserve' );
-is( $reserves[0]->borrowernumber(), $requesters{$branch_3}, 'GetWaiting got the reserve for the correct borrower' );
+is( $reserves[0]->borrowernumber(), $requesters{$branch_3}->borrowernumber, 'GetWaiting got the reserve for the correct borrower' );
 
 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve(
     {
         branchcode     => $branch_3,
-        borrowernumber => $requesters{$branch_3},
+        borrowernumber => $requesters{$branch_3}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 1,
     }
@@ -269,7 +269,7 @@ AddReserve(
 AddReserve(
     {
         branchcode     => $branch_2,
-        borrowernumber => $requesters{$branch_2},
+        borrowernumber => $requesters{$branch_2}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 2,
     }
@@ -278,7 +278,7 @@ AddReserve(
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
+        borrowernumber => $requesters{$branch_1}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => 3,
     }
@@ -293,7 +293,7 @@ my $messages;
 # requests cannot be filled by that item per policy.
 (undef, $messages, undef, undef) = AddReturn('bug10272_CPL', $branch_2);
 is( $messages->{ResFound}->{borrowernumber},
-    $requesters{$branch_1},
+    $requesters{$branch_1}->borrowernumber,
     'restrictive library\'s items only fill requests by own patrons (bug 10272)');
 
 # Return the FPL item at FPL.  The hold that should be triggered is
@@ -305,7 +305,7 @@ t::lib::Mocks::mock_preference( 'LocalHoldsPriority', '' );
 
 (undef, $messages, undef, undef) = AddReturn('bug10272_FPL', $branch_2);
 is( $messages->{ResFound}->{borrowernumber},
-    $requesters{$branch_3},
+    $requesters{$branch_3}->borrowernumber,
     'for generous library, its items fill first hold request in line (bug 10272)');
 
 $biblio = Koha::Biblios->find( $biblionumber );
@@ -320,7 +320,7 @@ $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
+        borrowernumber => $requesters{$branch_1}->borrowernumber,
         biblionumber   => $bibnum,
         priority       => 1,
     }
@@ -338,7 +338,7 @@ $resdate->add_duration(DateTime::Duration->new(days => 4));
 my $reserve_id = AddReserve(
     {
         branchcode       => $branch_1,
-        borrowernumber   => $requesters{$branch_1},
+        borrowernumber   => $requesters{$branch_1}->borrowernumber,
         biblionumber     => $bibnum,
         priority         => 1,
         reservation_date => $resdate,
@@ -372,7 +372,7 @@ my $now_holder = $builder->build_object({ class => 'Koha::Patrons', value => {
 my $now_reserve_id = AddReserve(
     {
         branchcode       => $branch_1,
-        borrowernumber   => $requesters{$branch_1},
+        borrowernumber   => $requesters{$branch_1}->borrowernumber,
         biblionumber     => $bibnum,
         priority         => 2,
         reservation_date => dt_from_string(),
@@ -391,12 +391,12 @@ ModReserve({ reserve_id => $now_reserve_id, rank => 'del', cancellation_reason =
 
 # test marking a hold as captured
 my $hold_notice_count = count_hold_print_messages();
-ModReserveAffect($item->itemnumber, $requesters{$branch_1}, 0);
+ModReserveAffect($item->itemnumber, $requesters{$branch_1}->borrowernumber, 0);
 my $new_count = count_hold_print_messages();
 is($new_count, $hold_notice_count + 1, 'patron notified when item set to waiting');
 
 # test that duplicate notices aren't generated
-ModReserveAffect($item->itemnumber, $requesters{$branch_1}, 0);
+ModReserveAffect($item->itemnumber, $requesters{$branch_1}->borrowernumber, 0);
 $new_count = count_hold_print_messages();
 is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 11445)');
 
@@ -422,7 +422,7 @@ $resdate->add_duration(DateTime::Duration->new(days => 2));
 AddReserve(
     {
         branchcode       => $branch_1,
-        borrowernumber   => $requesters{$branch_1},
+        borrowernumber   => $requesters{$branch_1}->borrowernumber,
         biblionumber     => $bibnum,
         priority         => 1,
         reservation_date => $resdate,
@@ -438,7 +438,7 @@ $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve(
     {
         branchcode       => $branch_1,
-        borrowernumber   => $requesters{$branch_1},
+        borrowernumber   => $requesters{$branch_1}->borrowernumber,
         biblionumber     => $bibnum,
         priority         => 1,
         reservation_date => $resdate,
@@ -448,7 +448,7 @@ AddReserve(
 $future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
 is( $future_holds->count, 0, 'current_holds does not return a future item level hold' );
 # 9788c: current_holds returns future wait (confirmed future hold)
-ModReserveAffect( $item->itemnumber,  $requesters{$branch_1} , 0); #confirm hold
+ModReserveAffect( $item->itemnumber,  $requesters{$branch_1}->borrowernumber, 0); #confirm hold
 $future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
 is( $future_holds->count, 1, 'current_holds returns a future wait (confirmed future hold)' );
 # End of tests for bug 9788
@@ -460,7 +460,7 @@ is($p, 4, 'CalculatePriority should now return priority 4');
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{'CPL2'},
+        borrowernumber => $requesters{'CPL2'}->borrowernumber,
         biblionumber   => $bibnum2,
         priority       => $p,
     }
@@ -475,7 +475,7 @@ is($p, 1, 'CalculatePriority should now return priority 1');
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
+        borrowernumber => $requesters{$branch_1}->borrowernumber,
         biblionumber   => $bibnum,
         priority       => $p,
         itemnumber     => $item->itemnumber,
@@ -483,14 +483,14 @@ AddReserve(
 );
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
-ModReserveAffect( $item->itemnumber,  $requesters{$branch_1} , 0);
+ModReserveAffect( $item->itemnumber,  $requesters{$branch_1}->borrowernumber, 0);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 1, 'CalculatePriority should now return priority 1');
 #add another biblio hold, no resdate
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{'CPL2'},
+        borrowernumber => $requesters{'CPL2'}->borrowernumber,
         biblionumber   => $bibnum,
         priority       => $p,
     }
@@ -504,7 +504,7 @@ $resdate->add_duration(DateTime::Duration->new(days => 1));
 AddReserve(
     {
         branchcode     => $branch_1,
-        borrowernumber => $requesters{'CPL2'},
+        borrowernumber => $requesters{'CPL2'}->borrowernumber,
         biblionumber   => $bibnum,
         priority       => $p,
         reservation_date => $resdate,
@@ -555,62 +555,6 @@ my @r2 = Koha::Holds->search({ borrowernumber => $borrowernumber_tmp_2 })->as_li
 is( $r1[0]->priority, 3, 'priority for hold in future should be correct');
 is( $r2[0]->priority, 4, 'priority for hold not in future should be correct');
 # end of tests for bug 12630
-
-# Tests for cancel reserves by users from OPAC.
-$dbh->do('DELETE FROM reserves', undef, ($bibnum));
-AddReserve(
-    {
-        branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
-        biblionumber   => $bibnum,
-        priority       => 1,
-    }
-);
-my (undef, $canres, undef) = CheckReserves( $item );
-
-is( CanReserveBeCanceledFromOpac(), undef,
-    'CanReserveBeCanceledFromOpac should return undef if called without any parameter'
-);
-is(
-    CanReserveBeCanceledFromOpac( $canres->{resserve_id} ),
-    undef,
-    'CanReserveBeCanceledFromOpac should return undef if called without the reserve_id'
-);
-is(
-    CanReserveBeCanceledFromOpac( undef, $requesters{CPL} ),
-    undef,
-    'CanReserveBeCanceledFromOpac should return undef if called without borrowernumber'
-);
-
-my $cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$branch_1});
-is($cancancel, 1, 'Can user cancel its own reserve');
-
-$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$branch_2});
-is($cancancel, 0, 'Other user cant cancel reserve');
-
-ModReserveAffect($item->itemnumber, $requesters{$branch_1}, 1);
-$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$branch_1});
-is($cancancel, 0, 'Reserve in transfer status cant be canceled');
-
-$dbh->do('DELETE FROM reserves', undef, ($bibnum));
-is( CanReserveBeCanceledFromOpac($canres->{resserve_id}, $requesters{$branch_1}), undef,
-    'Cannot cancel a deleted hold' );
-
-AddReserve(
-    {
-        branchcode     => $branch_1,
-        borrowernumber => $requesters{$branch_1},
-        biblionumber   => $bibnum,
-        priority       => 1,
-    }
-);
-(undef, $canres, undef) = CheckReserves( $item );
-
-ModReserveAffect($item->itemnumber, $requesters{$branch_1}, 0);
-$cancancel = CanReserveBeCanceledFromOpac($canres->{reserve_id}, $requesters{$branch_1});
-is($cancancel, 0, 'Reserve in waiting status cant be canceled');
-
-# End of tests for bug 12876
 
        ####
 ####### Testing Bug 13113 - Prevent juvenile/children from reserving ageRestricted material >>>

@@ -118,7 +118,6 @@ BEGIN {
       CheckReserves
       CanBookBeReserved
       CanItemBeReserved
-      CanReserveBeCanceledFromOpac
       CancelExpiredReserves
 
       AutoUnsuspendReserves
@@ -683,26 +682,6 @@ sub CanItemBeReserved {
     }
 
     return _cache { status => 'OK' };
-}
-
-=head2 CanReserveBeCanceledFromOpac
-
-    $number = CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
-
-    returns 1 if reserve can be cancelled by user from OPAC.
-    First check if reserve belongs to user, next checks if reserve is not in
-    transfer or waiting status
-
-=cut
-
-sub CanReserveBeCanceledFromOpac {
-    my ($reserve_id, $borrowernumber) = @_;
-
-    return unless $reserve_id and $borrowernumber;
-    my $reserve = Koha::Holds->find($reserve_id) or return;
-
-    return 0 unless $reserve->borrowernumber == $borrowernumber;
-    return $reserve->is_cancelable_from_opac;
 }
 
 =head2 ChargeReserveFee
