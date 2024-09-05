@@ -46,7 +46,6 @@ BEGIN {
 
       IssueSlip
 
-      DeleteUnverifiedOpacRegistrations
       DeleteExpiredOpacRegistrations
     );
 }
@@ -522,23 +521,6 @@ sub DeleteExpiredOpacRegistrations {
         $cnt++;
     }
     return $cnt;
-}
-
-=head2 DeleteUnverifiedOpacRegistrations
-
-    Delete all unverified self registrations in borrower_modifications,
-    older than the specified number of days.
-
-=cut
-
-sub DeleteUnverifiedOpacRegistrations {
-    my ( $days ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sql=qq|
-DELETE FROM borrower_modifications
-WHERE borrowernumber = 0 AND DATEDIFF( NOW(), timestamp ) > ?|;
-    my $cnt=$dbh->do($sql, undef, ($days) );
-    return $cnt eq '0E0'? 0: $cnt;
 }
 
 END { }    # module clean-up code here (global destructor)

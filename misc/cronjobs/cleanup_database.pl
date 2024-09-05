@@ -522,11 +522,17 @@ if ($pExpSelfReg) {
         say "self-registered borrowers may be deleted";
     }
 }
+
 if ($pUnvSelfReg) {
-    if ($confirm) {
-        DeleteUnverifiedSelfRegs($pUnvSelfReg);
-    } elsif ($verbose) {
-        say "unverified self-registrations may be deleted";
+    my $opac_registrations =
+        Koha::Patron::Modifications->search( { borrowernumber => 0 } )
+        ->filter_by_last_update( { days => $pUnvSelfReg } );
+    my $count = $opac_registrations->count;
+    $opac_registrations->delete if $confirm;
+    if ($verbose) {
+        say $confirm
+            ? sprintf( "Done with removing %d unverified self-registrations",      $count )
+            : sprintf( "%d unverified self-registrations would have been removed", $count );
     }
 }
 
@@ -905,11 +911,6 @@ sub PurgeCreatorBatches {
 sub DeleteExpiredSelfRegs {
     my $cnt = C4::Members::DeleteExpiredOpacRegistrations();
     print "Removed $cnt expired self-registered borrowers\n" if $verbose;
-}
-
-sub DeleteUnverifiedSelfRegs {
-    my $cnt = C4::Members::DeleteUnverifiedOpacRegistrations( $_[0] );
-    print "Removed $cnt unverified self-registrations\n" if $verbose;
 }
 
 sub DeleteSpecialHolidays {
