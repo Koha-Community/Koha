@@ -27,6 +27,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::ArticleRequests;
 use Koha::Patron;
 use Koha::Exceptions::Patron;
+use Koha::Exceptions::SysPref;
 use Koha::Patron::Categories;
 
 use base qw(Koha::Objects::Mixin::ExtendedAttributes Koha::Objects);
@@ -564,6 +565,54 @@ sub filter_by_have_permission {
         },
         { prefetch => 'user_permissions' }
     );
+}
+
+=head3 filter_by_expired_opac_registrations
+
+    my $expired_registrations = $patrons->filter_by_expired_opac_registrations;
+
+Return patrons that have not upgraded from the 'temporary' category
+
+=cut
+
+sub filter_by_expired_opac_registrations {
+    my ($self) = @_;
+
+    my $category_code = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+    Koha::Exceptions::SysPref::NotSet->throw( syspref => 'PatronSelfRegistrationDefaultCategory' )
+        unless $category_code;
+
+    my $delay = C4::Context->preference('PatronSelfRegistrationExpireTemporaryAccountsDelay');
+    Koha::Exceptions::SysPref::NotSet->throw( syspref => 'PatronSelfRegistrationExpireTemporaryAccountsDelay' )
+        unless $delay;
+
+    # DO NOT REMOVE test on delay here!
+    # Some libraries may not use a temporary category, but want to keep patrons.
+    # We should not delete patrons when the value is NULL, empty string or 0.
+
+    return $self->search(
+        {
+            categorycode => $category_code,
+        }
+    )->filter_by_last_update( { timestamp_column_name => 'dateenrolled', days => $delay } );
+}
+
+=head3 filter_by_safe_to_delete
+
+    my $safe_to_delete_patrons = $patrons->filter_by_safe_to_delete;
+
+Return the patrons that are safe to delete
+
+=cut
+
+sub filter_by_safe_to_delete {
+    my ($self) = @_;
+    my @ids;
+    while ( my $patron = $self->next ) {
+        push @ids, $patron->borrowernumber
+            if $patron->safe_to_delete;
+    }
+    return Koha::Patrons->search( { borrowernumber => \@ids } );
 }
 
 =head3 extended_attributes_config

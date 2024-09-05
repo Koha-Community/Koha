@@ -45,8 +45,6 @@ BEGIN {
       GetBorrowersToExpunge
 
       IssueSlip
-
-      DeleteExpiredOpacRegistrations
     );
 }
 
@@ -487,40 +485,6 @@ sub IssueSlip {
         repeat => \%repeat,
         loops => \%loops,
     );
-}
-
-=head2 DeleteExpiredOpacRegistrations
-
-    Delete accounts that haven't been upgraded from the 'temporary' category
-    Returns the number of removed patrons
-
-=cut
-
-sub DeleteExpiredOpacRegistrations {
-
-    my $delay = C4::Context->preference('PatronSelfRegistrationExpireTemporaryAccountsDelay');
-    my $category_code = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-
-    return 0 unless $category_code && $delay;
-        # DO NOT REMOVE test on delay here!
-        # Some libraries may not use a temporary category, but want to keep patrons.
-        # We should not delete patrons when the value is NULL, empty string or 0.
-
-    my $date_enrolled = dt_from_string();
-    $date_enrolled->subtract( days => $delay );
-
-    my $registrations_to_del = Koha::Patrons->search({
-        dateenrolled => {'<=' => $date_enrolled->ymd},
-        categorycode => $category_code,
-    });
-
-    my $cnt=0;
-    while ( my $registration = $registrations_to_del->next() ) {
-        next if $registration->checkouts->count || $registration->account->balance;
-        $registration->delete;
-        $cnt++;
-    }
-    return $cnt;
 }
 
 END { }    # module clean-up code here (global destructor)

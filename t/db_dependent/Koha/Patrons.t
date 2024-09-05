@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -2696,6 +2696,88 @@ subtest 'filter_by_have_permission' => sub {
           ->filter_by_have_permission('dont_exist.subperm');
     } 'Koha::Exceptions::ObjectNotFound';
 
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_expired_opac_registrations' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object( { class => 'Koha::Patron::Categories' } );
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationDefaultCategory', $category->categorycode );
+    my $self_reg = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                dateenrolled => '2014-01-01 01:02:03',
+                categorycode => $category->categorycode
+            }
+        }
+    );
+
+    # First test if empty PatronSelfRegistrationExpireTemporaryAccountsDelay returns an exception
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationExpireTemporaryAccountsDelay', q{} );
+    throws_ok { Koha::Patrons->filter_by_expired_opac_registrations }
+    'Koha::Exceptions::SysPref::NotSet',
+        'Attempt to filter with empty PatronSelfRegistrationExpireTemporaryAccountsDelay throws exception.';
+
+    # Test zero too
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationExpireTemporaryAccountsDelay', 0 );
+    throws_ok { Koha::Patrons->filter_by_expired_opac_registrations }
+    'Koha::Exceptions::SysPref::NotSet',
+        'Attempt to filter with PatronSelfRegistrationExpireTemporaryAccountsDelay set to 0 throws exception.';
+
+    # Also check empty category
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationDefaultCategory', q{} );
+    throws_ok { Koha::Patrons->filter_by_expired_opac_registrations }
+    'Koha::Exceptions::SysPref::NotSet',
+        'Attempt to filter with empty PatronSelfRegistrationDefaultCategory throws exception.';
+
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationExpireTemporaryAccountsDelay', 360 );
+    throws_ok { Koha::Patrons->filter_by_expired_opac_registrations }
+    'Koha::Exceptions::SysPref::NotSet',
+        'Attempt to filter with empty PatronSelfRegistrationDefaultCategory throws exception, even if PatronSelfRegistrationExpireTemporaryAccountsDelay is set.';
+
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationDefaultCategory', $category->categorycode );
+
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { borrowernumber => $self_reg->borrowernumber }
+        }
+    );
+    is(
+        Koha::Patrons->filter_by_expired_opac_registrations->filter_by_safe_to_delete->count, 0,
+        "filter_by_safe_to_delete doesn't delete borrower with checkout"
+    );
+
+    my $account_line = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $self_reg->borrowernumber,
+                amountoutstanding => 5,
+            }
+        }
+    );
+    is(
+        Koha::Patrons->filter_by_expired_opac_registrations->filter_by_safe_to_delete->count, 0,
+        "filter_by_safe_to_delete doesn't delete borrower with checkout and fine"
+    );
+
+    $checkout->delete;
+    is(
+        Koha::Patrons->filter_by_expired_opac_registrations->filter_by_safe_to_delete->count, 0,
+        "filter_by_safe_to_delete doesn't delete borrower with fine and no checkout"
+    );
+
+    $account_line->delete;
+    is(
+        Koha::Patrons->filter_by_expired_opac_registrations->filter_by_safe_to_delete->count, 1,
+        "filter_by_safe_to_delete does delete borrower with no fines and no checkouts"
+    );
 
     $schema->storage->txn_rollback;
 };

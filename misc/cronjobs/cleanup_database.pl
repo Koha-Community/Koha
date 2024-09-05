@@ -32,6 +32,7 @@ use constant DEFAULT_JOBS_PURGETYPES              => qw{ update_elastic_index };
 use constant DEFAULT_EDIFACT_MSG_PURGEDAYS        => 365;
 
 use Getopt::Long qw( GetOptions );
+use Try::Tiny;
 
 use Koha::Script -cron;
 
@@ -513,14 +514,23 @@ if ($verbose) {
     say $confirm ? sprintf( "Deleted %d patrons", $count ) : sprintf( "%d patrons would have been deleted", $count );
 }
 
-# FIXME The output for dry-run mode needs to be improved
-# But non trivial changes to C4::Members need to be done before.
 if ($pExpSelfReg) {
-    if ($confirm) {
-        DeleteExpiredSelfRegs();
-    } elsif ($verbose) {
-        say "self-registered borrowers may be deleted";
-    }
+    try {
+        my $opac_registrations = Koha::Patrons->search->filter_by_expired_opac_registrations->filter_by_safe_to_delete;
+        my $count              = $opac_registrations->count;
+        $opac_registrations->delete if $confirm;
+        if ($verbose) {
+            say $confirm
+                ? sprintf( "Done with removing %d expired self-registrations",      $count )
+                : sprintf( "%d expired self-registrations would have been removed", $count );
+        }
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::SysPref::NotSet' ) {
+            say sprintf "Self-registrations cannot be removed, system preference %s is not set", $_->syspref;
+        } else {
+            $_->rethrow;
+        }
+    };
 }
 
 if ($pUnvSelfReg) {
@@ -536,6 +546,8 @@ if ($pUnvSelfReg) {
     }
 }
 
+# FIXME The output for dry-run mode needs to be improved
+# But non trivial changes to C4::Members need to be done before.
 if ($special_holidays_days) {
     if ($confirm) {
         DeleteSpecialHolidays( abs($special_holidays_days) );
@@ -906,11 +918,6 @@ sub PurgeCreatorBatches {
         $count++;
     }
     return $count;
-}
-
-sub DeleteExpiredSelfRegs {
-    my $cnt = C4::Members::DeleteExpiredOpacRegistrations();
-    print "Removed $cnt expired self-registered borrowers\n" if $verbose;
 }
 
 sub DeleteSpecialHolidays {

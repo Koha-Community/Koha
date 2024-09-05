@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -33,7 +33,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 BEGIN {
-        use_ok('C4::Members', qw( GetBorrowersToExpunge DeleteExpiredOpacRegistrations ));
+        use_ok('C4::Members', qw( GetBorrowersToExpunge ));
 }
 
 my $schema = Koha::Database->schema;
@@ -387,61 +387,6 @@ $borrowernumber = Koha::Patron->new({ categorycode => $patron_category->{categor
 ok( $borrowernumber > 0, 'Koha::Patron->store should have inserted the patron even if no userid is given' );
 $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 ok( $borrower->{userid},  'A userid should have been generated correctly' );
-
-subtest 'purgeSelfRegistration' => sub {
-    plan tests => 7;
-
-    #purge members in temporary category
-    my $c= 'XYZ';
-    $dbh->do("INSERT IGNORE INTO categories (categorycode) VALUES ('$c')");
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $c );
-    C4::Members::DeleteExpiredOpacRegistrations();
-    my $self_reg = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => {
-            dateenrolled => '2014-01-01 01:02:03',
-            categorycode => $c
-        }
-    });
-
-    # First test if empty PatronSelfRegistrationExpireTemporaryAccountsDelay returns zero
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', q{} );
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with empty delay" );
-    # Test zero too
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 0 );
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with delay 0" );
-    # Also check empty category
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', q{} );
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 360 );
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations with empty category" );
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $c );
-
-    my $checkout     = $builder->build_object({
-        class=>'Koha::Checkouts',
-        value=>{
-            borrowernumber=>$self_reg->borrowernumber
-        }
-    });
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout");
-
-    my $account_line = $builder->build_object(
-        {
-            class => 'Koha::Account::Lines',
-            value => {
-                borrowernumber    => $self_reg->borrowernumber,
-                amountoutstanding => 5,
-            }
-        }
-    );
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout and fine");
-
-    $checkout->delete;
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with fine and no checkout");
-
-    $account_line->delete;
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 1, "DeleteExpiredOpacRegistrations does delete borrower with no fines and no checkouts");
-
-};
 
 sub _find_member {
     my ($resultset) = @_;
