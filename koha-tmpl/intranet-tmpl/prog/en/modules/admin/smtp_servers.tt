@@ -403,7 +403,8 @@
                     {
                         "data": function( row, type, val, meta ) {
                             if ( row.debug ) {
-                                return "[% tp("Active", "On") | html %]";
+                                let result = '<span class="badge text-bg-warning">' + "[% tp("Active", "On") | html %]" + '</span>';
+                                return result;
                             }
                             else {
                                 return _("");
@@ -415,7 +416,8 @@
                     {
                         "data": function( row, type, val, meta ) {
                             if ( row.is_default ) {
-                                return _("Default");
+                                let result = '<span class="badge text-bg-success">' + _("Default") + '</span>';
+                                return result;
                             } else {
                                 return "";
                             }
@@ -433,14 +435,6 @@
                         "orderable": false
                     }
                 ],
-                createdRow: function (row, data, dataIndex) {
-                    if ( data.is_default ) {
-                        $(row).addClass('default');
-                    }
-                    if ( data.debug ) {
-                        $(row).addClass('debug');
-                    }
-                },
             });
 
             $('#smtp_servers').on( "click", '.delete_server', function () {
