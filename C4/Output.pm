@@ -109,7 +109,7 @@ sub pagination_bar {
 
     # navigation bar useful only if more than one page to display !
     if ( $nb_pages > 1 ) {
-        $pagination_bar = '<ul class="pagination">';
+        $pagination_bar = '<ul class="pagination output">';
 
         # link to first page?
         if ( $current_page > 1 ) {
@@ -120,7 +120,7 @@ sub pagination_bar {
                 . $url . '1'
                 . $url_suffix
                 . '"rel="start">'
-                . '<i class="fa fa-fw fa-angle-double-left"></i> First'
+                . '<i class="fa fa-fw fa-angle-double-left"></i> '
                 . '</a></li>';
         }
 
@@ -136,7 +136,7 @@ sub pagination_bar {
                 . $previous
                 . $url_suffix
                 . '" rel="prev">'
-                . '<i class="fa fa-fw fa-angle-left"></i> Previous'
+                . '<i class="fa fa-fw fa-angle-left"></i> '
                 . '</a></li>';
         }
 
@@ -189,9 +189,7 @@ sub pagination_bar {
                 . $url
                 . $next
                 . $url_suffix
-                . '" rel="next">'
-                . 'Next <i class="fa fa-fw fa-angle-right"></i>'
-                . '</a></li>';
+                . '" rel="next"><i class="fa fa-fw fa-angle-right"></i></a></li>';
         }
 
         # link to last page?
@@ -202,8 +200,7 @@ sub pagination_bar {
                 . $nb_pages
                 . $url_suffix
                 . '" rel="last">'
-                . 'Last <i class="fa fa-fw fa-angle-double-right"></i>'
-                . '</a></li>';
+                . ' <i class="fa fa-fw fa-angle-double-right"></i></a></li>';
         }
 
         $pagination_bar .= "\n" . '</ul>';

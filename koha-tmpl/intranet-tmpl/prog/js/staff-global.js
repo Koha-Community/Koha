@@ -431,6 +431,13 @@ $(document).ready(function () {
     if ($('[data-bs-toggle="tooltip"]').length) {
         $('[data-bs-toggle="tooltip"]').tooltip();
     }
+
+    if ($(".pagination.output").length > 0) {
+        $(".output.first").append(__("First"));
+        $(".output.previous").append(__("Previous"));
+        $(".output.next").prepend(__("Next"));
+        $(".output.last").prepend(__("Last"));
+    }
 });
 
 function removeLastBorrower() {
