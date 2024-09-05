@@ -485,7 +485,7 @@
                         nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
                     }
 
-                    if ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] ) {
+                    if ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) ) {
                         let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
                         nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
                     }
@@ -525,7 +525,7 @@
                         }
                     [% END %]
 
-                    if ( ! ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
+                    if ( ! ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
                         nodes += ' <span>%s</span>'.format(_("Available"))
                     }
 
