@@ -21,7 +21,7 @@ use Modern::Perl;
 use Test::Deep qw( cmp_deeply re );
 use Test::MockTime qw/set_fixed_time set_relative_time restore_time/;
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 use DateTime;
 use File::Basename;
 use File::Spec;
@@ -510,6 +510,79 @@ subtest 'ListSets tests' => sub {
             set => { setSpec => "setSpec_7", setName => "setName_7" }
           }
         }
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Tests for OpacHiddenItems' => sub {
+
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'OAI::PMH'         => 1 );
+    t::lib::Mocks::mock_preference( 'OAI-PMH:MaxCount' => 3 );
+    t::lib::Mocks::mock_preference(
+        'OAI-PMH:ConfFile' => File::Spec->rel2abs( dirname(__FILE__) ) . '/oaiconf_items.yaml' );
+    $schema->storage->txn_begin;
+    my $builder       = t::lib::TestBuilder->new;
+    my $item          = $builder->build_sample_item();
+    my $biblio        = $item->biblio;
+    my $utc_datetime  = dt_from_string( undef, undef, 'UTC' );
+    my $utc_timestamp = $utc_datetime->ymd . 'T' . $utc_datetime->hms . 'Z';
+
+    my $get_items = {
+        verb           => 'GetRecord',
+        metadataPrefix => 'marc21',
+        identifier     => 'TEST:' . $item->biblionumber
+    };
+    my $list_items = {
+        verb           => 'ListRecords',
+        metadataPrefix => 'marc21',
+        from           => $utc_timestamp
+    };
+    my $expected = {
+        record => {
+            header => {
+                datestamp  => $utc_timestamp,
+                identifier => 'TEST:' . $item->biblionumber
+            },
+            metadata =>
+                { record => XMLin( $biblio->metadata->record( { embed_items => 1, opac => 1 } )->as_xml_record() ) }
+        }
+    };
+    my $expected_hidden = {
+        record => {
+            header => {
+                datestamp  => $utc_timestamp,
+                identifier => 'TEST:' . $item->biblionumber,
+                status     => 'deleted'
+            },
+        }
+    };
+    test_query(
+        'GetRecord - biblio with a single item',
+        $get_items,
+        { GetRecord => $expected }
+    );
+    test_query(
+        'ListRecords - biblio with a single item',
+        $list_items,
+        { ListRecords => $expected }
+    );
+
+    my $opachiddenitems = "
+        itemnumber: ['" . $item->itemnumber . "']";
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems' => $opachiddenitems );
+
+    test_query(
+        'GetRecord - biblio with a single item hidden by OpacHiddenItems returns as deleted',
+        $get_items,
+        { GetRecord => $expected_hidden }
+    );
+    test_query(
+        'ListRecords - biblio with a single item hidden by OpacHiddenItems returns as deleted',
+        $list_items,
+        { ListRecords => $expected_hidden }
     );
 
     $schema->storage->txn_rollback;
