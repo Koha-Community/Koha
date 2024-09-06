@@ -545,7 +545,7 @@ function mana_comment_close(){
 
 function showPredictionPatternTest( data ){
     $("#displayexample").html(data).show();
-    $("#page_2 > div").attr("class","col-xs-6");
+    $("#page_2 > div").attr("class","col-sm-6");
 }
 
 function hidePredcitionPatternTest(){
