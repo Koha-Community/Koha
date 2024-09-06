@@ -133,8 +133,8 @@
                     <span class="required">Required</span>
                 [% END %]
             </li>
-    <li><label for="liblibrarian">Description in staff interface: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian | html %]" size="40" maxlength="100" /></li>
-    <li><label for="libopac">Description in OPAC: </label><input type="text" id="libopac" name="libopac" value="[% libopac | html %]" size="40" maxlength="100" /></li>
+    <li><label for="liblibrarian">Description in staff interface: </label><input type="text" id="liblibrarian" name="liblibrarian" value="[% liblibrarian | html %]" size="40" maxlength="255" /></li>
+    <li><label for="libopac">Description in OPAC: </label><input type="text" id="libopac" name="libopac" value="[% libopac | html %]" size="40" maxlength="255" /></li>
     <li><label for="repeatable">Repeatable: </label>
         [% IF ( repeatable ) %]
             <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
