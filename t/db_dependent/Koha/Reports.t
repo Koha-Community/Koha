@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use Koha::Report;
 use Koha::Reports;
 use Koha::Database;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -133,6 +134,40 @@ subtest 'check_columns' => sub {
         ],
         [qw(secret mytoken hersecret password_expiry_days2)],
         'Check column_names parameter'
+    );
+};
+
+subtest '_might_add_limit' => sub {
+    plan tests => 10;
+
+    my $sql;
+
+    t::lib::Mocks::mock_preference( 'ReportsExportLimit', undef );    # i.e. no limit
+    $sql = "SELECT * FROM biblio WHERE 1";
+    is( Koha::Report->_might_add_limit($sql), $sql, 'Pref is undefined, no changes' );
+    t::lib::Mocks::mock_preference( 'ReportsExportLimit', 0 );        # i.e. no limit
+    is( Koha::Report->_might_add_limit($sql), $sql, 'Pref is zero, no changes' );
+    t::lib::Mocks::mock_preference( 'ReportsExportLimit', q{} );      # i.e. no limit
+    is( Koha::Report->_might_add_limit($sql), $sql, 'Pref is empty, no changes' );
+    t::lib::Mocks::mock_preference( 'ReportsExportLimit', 10 );
+    like( Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/, 'Limit 10 found at the end' );
+    $sql = "SELECT * FROM biblio WHERE 1 LIMIT 1000 ";
+    is( Koha::Report->_might_add_limit($sql), $sql, 'Already contains a limit' );
+    $sql = "SELECT * FROM biblio WHERE 1 LIMIT 1000,2000";
+    is( Koha::Report->_might_add_limit($sql), $sql, 'Variation, also contains a limit' );
+
+    # trying a subquery having a limit (testing the lookahead in regex)
+    $sql = "SELECT * FROM biblio WHERE biblionumber IN (SELECT biblionumber FROM reserves LIMIT 2)";
+    like( Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/, 'Subquery, limit 10 found at the end' );
+    $sql = "SELECT * FROM biblio WHERE biblionumber IN (SELECT biblionumber FROM reserves LIMIT 2, 3 ) AND 1";
+    like( Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/, 'Subquery variation, limit 10 found at the end' );
+    $sql = "select * from biblio where biblionumber in (select biblionumber from reserves limiT 3,4) and 1";
+    like( Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/, 'Subquery lc variation, limit 10 found at the end' );
+
+    $sql = "select limit, 22 from mylimits where limit between 1 and 3";
+    like(
+        Koha::Report->_might_add_limit($sql), qr/ LIMIT 10$/,
+        'Query refers to limit field, limit 10 found at the end'
     );
 };
 

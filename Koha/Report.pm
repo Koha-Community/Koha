@@ -168,7 +168,7 @@ for building batch action links in the template
 =cut
 
 sub prep_report {
-    my ( $self, $param_names, $sql_params ) = @_;
+    my ( $self, $param_names, $sql_params, $params ) = @_;    # params keys: export
     my $sql = $self->savedsql;
 
     # First we split out the placeholders
@@ -226,8 +226,33 @@ sub prep_report {
         $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
     }
 
+    $sql = $self->_might_add_limit($sql) if $params->{export};
+
     $sql = "$sql /* saved_sql.id: ${\( $self->id )} */";
     return $sql, $headers;
+}
+
+=head3 _might_add_limit
+
+    $sql = $self->_might_add_limit($sql);
+
+Depending on pref ReportsExportLimit. If there is a limit defined
+and the report does not contain a limit already, this routine adds
+a LIMIT to $sql.
+
+=cut
+
+sub _might_add_limit {
+    my ( $self, $sql ) = @_;
+    if ( C4::Context->preference('ReportsExportLimit')
+        && $sql !~ /\sLIMIT\s\d+(?![^\(]*\))/i )
+    {
+        # Note: regex tries to account for allowed limits in subqueries.
+        # This assumes that we dont have an INTO option at the end (which does
+        # not work in current Koha reporting)
+        $sql .= " LIMIT " . C4::Context->preference('ReportsExportLimit');
+    }
+    return $sql;
 }
 
 =head3 _type

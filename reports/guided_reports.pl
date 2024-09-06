@@ -630,7 +630,7 @@ elsif ($op eq 'export'){
         $reportname ? "$report_id-$reportname-reportresults.$format" : "$report_id-reportresults.$format";
     my $scrubber = C4::Scrubber->new();
 
-    ($sql, undef) = $report->prep_report( \@param_names, \@sql_params );
+    ($sql, undef) = $report->prep_report( \@param_names, \@sql_params, { export => 1 } );
     my ( $sth, $q_errors ) = execute_query( { sql => $sql, report_id => $report_id } );
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
