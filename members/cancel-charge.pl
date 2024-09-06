@@ -32,15 +32,21 @@ my $flags = {
 my $type = 'intranet';
 my ($user, $cookie) = C4::Auth::checkauth($cgi, $authnotrequired, $flags, $type);
 
-my $borrowernumber = $cgi->param('borrowernumber');
-my $accountlines_id = $cgi->param('accountlines_id');
+my $op = $cgi->param('op') // q{};
 
-my $charge = Koha::Account::Lines->find($accountlines_id);
-$charge->cancel(
-    {
-        branch   => C4::Context->userenv->{'branch'},
-        staff_id => C4::Context->userenv->{'number'}
-    }
-);
+if ( $op eq "cud-cancel" ) {
+    my $accountlines_id = $cgi->param('accountlines_id');
 
-print $cgi->redirect('/cgi-bin/koha/members/boraccount.pl?borrowernumber=' . $borrowernumber);
+    my $charge         = Koha::Account::Lines->find($accountlines_id);
+    my $borrowernumber = $charge->patron->borrowernumber;
+    $charge->cancel(
+        {
+            branch   => C4::Context->userenv->{'branch'},
+            staff_id => C4::Context->userenv->{'number'}
+        }
+    );
+    print $cgi->redirect( '/cgi-bin/koha/members/boraccount.pl?borrowernumber=' . $borrowernumber );
+    exit;
+}
+
+print $cgi->redirect('/cgi-bin/koha/errors/403.pl');
