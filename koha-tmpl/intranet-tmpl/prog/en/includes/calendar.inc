@@ -85,11 +85,11 @@
                         instance.set('allowInput',false);
                     }
                 });
-
             /* When flatpickr instance is ready, add maskito input mask */
             var thisInput = instance.input;
             let accepts_time = $(thisInput).data('flatpickr-enable-time');
             let accepts_period = $(thisInput).data('flatpickr-period');
+            let accepts_time_only = $(thisInput).data('flatpickr-time-only');
             let maskitoOptions = {};
             if ( !accepts_period ) {
                 if ( accepts_time ) {
@@ -98,6 +98,9 @@
                         timeMode: 'HH:MM',
                         dateSeparator: delimiter,
                         overwiteMode: 'replace',
+                    });
+                } else if ( accepts_time_only ) {
+                    maskitoOptions = maskitoTimeOptionsGenerator({
                     });
                 } else {
                     maskitoOptions = maskitoDateOptionsGenerator({
@@ -112,6 +115,7 @@
         onChange: function( selectedDates, dateText, instance) {
             var thisInput = instance.input;
             let accepts_time = $(thisInput).data('flatpickr-enable-time');
+            let accepts_time_only = $(thisInput).data('flatpickr-time-only');
             let accepts_period = $(thisInput).data('flatpickr-period');
             if ( !accepts_period ) {
                 if ( accepts_time ) {
@@ -234,6 +238,8 @@
             options['enableTime'] = true;
             options['noCalendar'] = true;
             options['dateFormat'] = "H:i";
+            options['defaultHour'] = "0";
+            options['defaultMinute'] = "0";
             options['altFormat'] = flatpickr_timeformat_string;
             options['plugins'] = [];
         }

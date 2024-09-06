@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% USE TablesSettings %]
 [%- USE KohaSpan -%]
+[% USE KohaTimes %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -556,7 +557,16 @@
                     </li>
                     <li>
                         <span class="label">Opening hours: </span>
-                        [% IF library.library_hours.count > 0 # Existing library %]
+                        [% SET CalendarFirstDayOfWeek = Koha.Preference("CalendarFirstDayOfWeek") %]
+                        [% SET set_hours = 0 %]
+                        [% IF library.library_hours.count > 0 %]
+                            [% FOR i IN [0..6] %]
+                                [% IF library.library_hours.as_list.$i.open_time != null || library.library_hours.as_list.$i.close_time != null %]
+                                    [% set_hours = 1 %]
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                        [% IF set_hours > 0 # Existing library %]
                             [% SET library_hours = library.library_hours.as_list %]
                             <table id="library_hours_table">
                                 <thead>
@@ -575,10 +585,10 @@
                                             <span>[% PROCESS dayname day=d %]</span>
                                         </td>
                                         <td>
-                                            <span>[% hr.open_time | html %]</span>
+                                            <span>[% IF hr.open_time != null %][% hr.open_time | $KohaTimes %][% END %]</span>
                                         </td>
                                         <td>
-                                            <span>[% hr.close_time | html %]</span>
+                                            <span>[% IF hr.close_time != null %][% hr.close_time | $KohaTimes %][% END %]</span>
                                         </td>
                                     </tr>
                                     [% END %]
@@ -757,7 +767,15 @@
                     {
                         "data": function( row, type, val, meta ) {
                             let result = '';
+                            let set_hours = 0;
                             if ( row.library_hours.length > 0 ) {
+                                for (let check_counter = 0; check_counter < 7; check_counter++) {
+                                    if ( row.library_hours[check_counter].open_time != null || row.library_hours[check_counter].close_time != null ) {
+                                        set_hours = 1;
+                                    }
+                                }
+                            }
+                            if ( set_hours > 0 ) {
                                 const daysOfWeek = [ _("Sunday"), _("Monday"), _("Tuesday"), _("Wednesday"), _("Thursday"), _("Friday"), _("Saturday") ];
 
                                 result = '<table id="library_hours_table"><thead><tr><th>Day</th><th>Open time</th><th>Close time</th></tr></thead><tbody>';
@@ -766,8 +784,12 @@
                                     const day = i % 7; // Wrap around the day using modulo operator
                                     result += '<tr id="hours_'+day+'">';
                                     result += '<td>'+daysOfWeek[day]+'</td>';
-                                    result += '<td><span>'+row.library_hours[day].open_time+'</span></td>';
-                                    result += '<td><span>'+row.library_hours[day].close_time+'</span></td>';
+                                    result += '<td><span>';
+                                    result += row.library_hours[day].open_time != null ? $kohatime(row.library_hours[day].open_time): '';
+                                    result += '</span></td>';
+                                    result += '<td><span>';
+                                    result += row.library_hours[day].close_time != null ? $kohatime(row.library_hours[day].close_time): '';
+                                    result += '</span></td>';
                                     result += '</tr>';
                                     counter++;
                                 }

@@ -34,7 +34,7 @@
         };
 
         /**
-         * A JS equivilent of the KohaDates TT Plugin. Passed an rfc3339 formatted date string,
+         * A JS equivalent of the KohaDates TT Plugin. Passed an rfc3339 formatted date string,
          * or JS Date, the function will return a date string formatted as per the koha instance config.
          * @param {String|Date} value                   rfc3339 formatted date string or a JS Date object.
          * @param {Object} [options]                    Optional set of switches for changing date handling
@@ -94,6 +94,31 @@
             let m = dayjs(value, get_date_pattern(dateformat), true);
             return m.format("YYYY-MM-DD");
         }
+
+        /**
+        * A JS equivalent of the KohaTimes TT Plugin. Passed a time in HH:MM:SS or HH:MM format
+        * the function will return a time string formatted as per the koha instance config.
+        */
+
+        window.$kohatime = function(value) {
+            if(!value) return 'invalid time';
+            var intime = value.split(':');
+            var hours = intime[0];
+            var minutes = intime[1];
+
+            if ( hours < 0 || hours > 23 || minutes < 0 || minutes > 59 ) { return 'invalid time'; }
+
+            if ( def_time_format == '12hr') {
+                var ampm = ( hours >= 12 ) ? 'pm' : 'am';
+                hours = ( hours == 0 ) ? "12" : hours;
+                hours = ( hours > 12 ) ? ( hours - 12 ) : hours;
+
+                return hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + " " + ampm;
+            } else {
+                return hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0');
+            }
+        }
+
 
     })();
 </script>
