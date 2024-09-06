@@ -139,7 +139,9 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=csv&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
                     <li><a class="dropdown-item" id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=tab&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
-                    <li><a class="dropdown-item" id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=ods&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
+                    [% IF Koha.Preference('ReportsExportFormatODS') %]
+                        <li><a class="dropdown-item" id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=ods&amp;id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
+                    [% END %]
                     [% IF processed_notice_title %]
                     <li><a class="dropdown-item" id="template" href="/cgi-bin/koha/reports/guided_reports.pl?op=export&amp;format=template&amp;id=[% id | html %]&amp;template=[% template_id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Rendered template ([% processed_notice_title | html %])</a></li>
                     [% END %]

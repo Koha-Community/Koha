@@ -663,7 +663,7 @@ elsif ($op eq 'export'){
                     }
                 }
             }
-            elsif ( $format eq 'ods' ) {
+            elsif ( $format eq 'ods' && C4::Context->preference('ReportsExportFormatODS') ) {
                 $type = 'application/vnd.oasis.opendocument.spreadsheet';
                 my $ods_fh = File::Temp->new( UNLINK => 0 );
                 my $ods_filepath = $ods_fh->filename;
