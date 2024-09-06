@@ -69,7 +69,7 @@
 [% END %]
 
 [% IF ( add_form ) %]
-    <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
+    <form action="/cgi-bin/koha/admin/oai_servers.pl" name="Aform" method="post" id="serverentry">
         [% INCLUDE 'csrf-token.inc' %]
         [% IF op == 'edit' %]
             <h1>Modify OAI repository</h1>

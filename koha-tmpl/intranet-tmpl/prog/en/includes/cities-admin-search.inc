@@ -5,7 +5,7 @@
 [% WRAPPER tabs id="header_search" %]
     [% WRAPPER tab_panels %]
         [% WRAPPER tab_panel tabname="city_search" bt_active= 1 %]
-            <form action="[% script_name | html %]" method="get">
+            <form action="/cgi-bin/koha/admin/cities.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="city_name_filter"><span class="control-text">Search cities</span> <i class="fa fa-fw fa-building" aria-hidden="true"></i></label>
                 </div>
