@@ -86,7 +86,6 @@ if( $importid ) {
 }
 
 $template->param(
-    SCRIPT_NAME      => '/cgi-bin/koha/tools/showdiffmarc.pl',
     RECORDID         => $recordid,
     IMPORTID         => $importid,
     RECORDTITLE      => $recordTitle,

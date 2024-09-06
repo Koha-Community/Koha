@@ -39,8 +39,6 @@ my $op          = $input->param('op')     || '';
 $searchfield =~ s/\,//g;
 
 
-my $script_name = "/cgi-bin/koha/admin/auth_tag_structure.pl";
-
 my $dbh = C4::Context->dbh;
 
 # open template
@@ -70,7 +68,7 @@ if (!$op or $op eq 'cud-authtype_create_confirm') {
         }
     }
 }
-$template->param(script_name  => $script_name);
+
 $template->param(authority_types => $authority_types );
 if ($op && $op ne 'cud-authtype_create_confirm') {
     $template->param($op  => 1);

@@ -103,8 +103,6 @@ my $dt = dt_from_string();
 my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
 my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
 
-$template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
-
 if ( $op eq 'cud-import' && $uploadborrowers && length($uploadborrowers) > 0 ) {
 
     my $handle   = $input->upload('uploadborrowers');

@@ -575,7 +575,7 @@
                                 <td>[% letter.name | html %]</td>
                             </tr>
                         </table>
-                        <form action="[% action | html %]" method="post">
+                        <form action="/cgi-bin/koha/tools/letter.pl" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="cud-delete_confirmed">
                             <input type="hidden" name="branchcode" value="[% letter.branchcode | html %]" />
@@ -584,7 +584,7 @@
                             <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> Yes, delete</button>
                         </form>
 
-                        <form action="[% action | html %]" method="get">
+                        <form action="/cgi-bin/koha/tools/letter.pl" method="get">
                             <button type="submit" class="btn btn-default deny"><i class="fa fa-times"></i> No, do not delete</button>
                         </form>
                     </div>

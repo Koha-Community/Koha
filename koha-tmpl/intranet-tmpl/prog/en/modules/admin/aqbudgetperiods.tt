@@ -12,7 +12,7 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
               <li>
-                  <a class="dropdown-item" href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
               </li>
             [% IF block_budget.count %]
                 <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% block_budget.count | html %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget.">
@@ -20,14 +20,14 @@
                 </li>
             [% ELSE %]
                 <li>
-                    <a class="dropdown-item" href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                    <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
                 </li>
             [% END %]
               <li>
-                  <a class="dropdown-item" href="[% script_name | url %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
+                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
               </li>
               <li>
-                  <a class="dropdown-item" href="[% script_name | url %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
+                  <a class="dropdown-item" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
             [% IF ( block_budget.budget_period_locked ) %]
                 <li data-bs-toggle="tooltip" data-bs-placement="left" title="Budget is locked">
@@ -319,7 +319,7 @@
     <!-- "delete" and "cancel" buttons    -->
     <!-- ############################################################# -->
 
-    <form action="[% script_name | html %]" method="post">
+    <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-delete_confirmed" />
         <input type="hidden" name="budget_period_id" value="[% budget_period_id | html %]" />

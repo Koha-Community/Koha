@@ -5,7 +5,7 @@
 [% WRAPPER tabs id="header_search" %]
     [% WRAPPER tab_panels %]
         [% WRAPPER tab_panel tabname="currency_search" bt_active= 1 %]
-            <form action="[% script_name | html %]" method="get">
+            <form action="/cgi-bin/koha/admin/currency.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="description"><span class="control-text">Search currencies</span> <i class="fa-solid fa-fw fa-dollar-sign" aria-hidden="true"></i></label>
                 </div>

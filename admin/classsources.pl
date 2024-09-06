@@ -30,8 +30,6 @@ use Koha::ClassSources;
 use Koha::ClassSortRules;
 use Koha::ClassSplitRules;
 
-my $script_name = "/cgi-bin/koha/admin/classsources.pl";
-
 my $input            = CGI->new;
 my $op               = $input->param('op') || 'list';
 my $cn_source        = $input->param('cn_source');
@@ -53,7 +51,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my @messages;
-$template->param( script_name => $script_name );
 
 if ( $op eq "add_source" ) {
     my $class_source =
