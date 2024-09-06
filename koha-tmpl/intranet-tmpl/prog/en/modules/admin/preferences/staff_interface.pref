@@ -126,6 +126,13 @@ Staff interface:
                   1: Highlight
                   0: Don't highlight
             - words searched for in the staff interface search results pages.
+        -
+            - pref: ReportsExportFormatODS
+              choices:
+                  1: Allow
+                  0: "Do not allow"
+            - Open Document Spreadsheet (ODS) as download format in Reports.
+
     Options:
         -
             - pref: viewMARC
@@ -190,6 +197,12 @@ Staff interface:
                   1: Show
                   0: "Don't show"
             - a search field pulldown for 'Search the catalog' boxes.
+        -
+            - Download a maximum of
+            - pref: ReportsExportLimit
+              class: integer
+            - 'records when downloading from the Reports Module.<br/>NOTE: Only a positive value will enforce a limit. A specific limit in the report overrides this setting.'
+
     Authentication:
         -
             - pref: staffShibOnly
