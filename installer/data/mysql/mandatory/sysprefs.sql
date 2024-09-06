@@ -655,6 +655,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RenewalSendNotice','0','',NULL,'YesNo'),
 ('RenewSerialAddsSuggestion','0',NULL,'If ON, adds a new suggestion at serial subscription renewal','YesNo'),
 ('RentalFeesCheckoutConfirmation', '0', NULL , 'Allow user to confirm when checking out an item with rental fees.', 'YesNo'),
+('ReportsExportFormatODS',1,NULL,'Show ODS download in Reports','YesNo'),
+('ReportsExportLimit',NULL,NULL,'Limit for report downloads','Integer'),
 ('ReplytoDefault','',NULL,'Use this email address as the replyto in emails','Free'),
 ('ReportsLog','0',NULL,'If ON, log information about reports.','YesNo'),
 ('RequireCashRegister','0',NULL,'Require a cash register when collecting a payment','YesNo'),
