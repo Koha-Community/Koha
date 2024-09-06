@@ -93,9 +93,9 @@
         </h1>
 
         [% IF ( type_upload ) %]
-            <form action="[% script_name | html %]" name="Aform" method="post" enctype="multipart/form-data">
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post" enctype="multipart/form-data">
         [% ELSE %]
-            <form action="[% script_name | html %]" name="Aform" method="post">
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post">
         [% END %]
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
@@ -282,14 +282,14 @@
                     <td>[% Tvalue | html %]</td>
                 </tr>
             </table>
-            <form class="inline" action="[% script_name | html %]" method="post">
+            <form class="inline" action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
                 [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="op" value="cud-delete_confirmed" />
                 <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
                 <input type="hidden" name="Tvalue" value="[% Tvalue | html %]" />
                 <button type="submit" class="btn btn-default approve"><i class="fa fa-check" aria-hidden="true"></i> Yes, delete</button>
             </form>
-            <form class="inline" action="[% script_name | html %]" method="get">
+            <form class="inline" action="/cgi-bin/koha/admin/systempreferences.pl" method="get">
                 <button type="submit" class="btn btn-default deny"><i class="fa fa-remove" aria-hidden="true"></i> No, do not delete</button>
             </form>
         </div>
@@ -298,7 +298,7 @@
     [% IF ( delete_confirmed ) %]
         <div class="alert alert-info">
             <h1>Data deleted</h1>
-            <form action="[% script_name | html %]" method="get">
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="get">
                 <button type="submit">Back to system preferences</button>
             </form>
         </div>
@@ -307,7 +307,7 @@
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default" id="newstopword" href="[% script_name | url %]?op=add_form"><i class="fa fa-plus"></i> New system preference</a>
+        <a class="btn btn-default" id="newstopword" href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form"><i class="fa fa-plus"></i> New system preference</a>
     </div>
 
     [% IF ( tab != 'local_use' ) %]

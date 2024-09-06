@@ -223,15 +223,9 @@ my $op = $input->param('op') || '';
 $searchfield =~ s/\,//g;
 
 if ($op) {
-    $template->param(
-        script_name => $script_name,
-        $op         => 1
-    );    # we show only the TMPL_VAR names $op
+    $template->param( $op => 1 );    # we show only the TMPL_VAR names $op
 } else {
-    $template->param(
-        script_name => $script_name,
-        else        => 1
-    );    # we show only the TMPL_VAR names $op
+    $template->param( else => 1 );    # we show only the TMPL_VAR names $op
 }
 
 if ( $op eq 'update_and_reedit' ) {
@@ -260,17 +254,11 @@ if ( $op eq 'update_and_reedit' ) {
         $value = join ' ', @currentorder;
         if ($orderchanged) {
             $op = 'add_form';
-            $template->param(
-                script_name => $script_name,
-                $op         => 1
-            );    # we show only the TMPL_VAR names $op
+            $template->param( $op => 1 );    # we show only the TMPL_VAR names $op
         } else {
             $op          = '';
             $searchfield = '';
-            $template->param(
-                script_name => $script_name,
-                else        => 1
-            );    # we show only the TMPL_VAR names $op
+            $template->param( else => 1 );    # we show only the TMPL_VAR names $op
         }
     }
     my $variable = $input->param('variable');

@@ -46,8 +46,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
     type => "intranet",
     flagsrequired => { parameters => 'manage_search_targets' },
 });
-my $script_name = "/cgi-bin/koha/admin/z3950servers.pl";
-$template->param( script_name => $script_name );
 
 my $schema = Koha::Database->new()->schema();
 

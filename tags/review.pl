@@ -197,7 +197,6 @@ $template->param(
     offset => $offset,  # req'd for EXPR
     op => $op,
     op_count => scalar(@tags),
-    script_name => $script_name,
     approved => 0,      # dummy value (also EXPR)
     tagloop => $tagloop,
     pagination_bar => pagination_bar(

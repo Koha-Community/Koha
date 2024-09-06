@@ -42,8 +42,6 @@ my $op        = $input->param('op')     || '';
 my $dspchoice = $input->cookie("marctagstructure_selectdisplay") // $input->param('select_display');
 my $pagesize = 20;
 
-my $script_name = "/cgi-bin/koha/admin/marctagstructure.pl";
-
 my $dbh = C4::Context->dbh;
 my $cache = Koha::Caches->get_instance();
 
@@ -76,7 +74,6 @@ my $framework = $frameworks->search({ frameworkcode => $frameworkcode })->next;
 $template->param(
     frameworks    => $frameworks,
     framework     => $framework,
-    script_name   => $script_name,
     ( $op || 'else' ) => 1,
 );
 
@@ -319,13 +316,11 @@ if ($op eq 'add_form') {
 		$template->param(isprevpage => $offset,
 						prevpage=> $offset-$pagesize,
 						searchfield => $searchfield,
-                        script_name => $script_name
 		);
 	}
 	if ($offset+$pagesize<$cnt) {
 		$template->param(nextpage =>$offset+$pagesize,
 						searchfield => $searchfield,
-                        script_name => $script_name
 		);
 	}
 } #---- END $OP eq DEFAULT

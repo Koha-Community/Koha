@@ -62,7 +62,6 @@ sub protected_letters {
 
 our $input       = CGI->new;
 my $searchfield = $input->param('searchfield');
-my $script_name = '/cgi-bin/koha/tools/letter.pl';
 our $branchcode  = $input->param('branchcode');
 $branchcode = '' if defined $branchcode and $branchcode eq '*';
 my $code        = $input->param('code');
@@ -91,12 +90,10 @@ our $my_branch = C4::Context->preference("IndependentBranches") && !$staffflags-
 
 $template->param(
     independant_branch => $my_branch,
-    script_name        => $script_name,
     searchfield        => $searchfield,
     branchcode         => $branchcode,
     section            => $section,
     langtab            => $langtab,
-    action             => $script_name
 );
 
 if ( $op eq 'cud-add_validate' or $op eq 'cud-copy_validate' ) {

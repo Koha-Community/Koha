@@ -56,7 +56,7 @@
             <h1>Edit basket [% basketname | html %]</h1>
         [% ELSE %]<h1>Add a basket to [% booksellername | html %]</h1>
         [% END %]
-    <form name="Aform" action="[% script_name | html %]" method="post" class="validated">
+    <form name="Aform" action="/cgi-bin/koha/acqui/basketheader.pl" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <fieldset class="rows">

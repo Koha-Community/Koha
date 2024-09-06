@@ -33,8 +33,6 @@ use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 
-my $script_name = "/cgi-bin/koha/admin/patron-attr-types.pl";
-
 our $input = CGI->new;
 my $op = $input->param('op') || '';
 
@@ -46,9 +44,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => { parameters => 'manage_patron_attributes' }
     }
 );
-
-
-$template->param(script_name => $script_name);
 
 my $code = $input->param("code");
 

@@ -38,7 +38,6 @@ my $frameworkcode = $input->param('frameworkcode');
 my $pkfield       = "tagfield";
 my $offset        = $input->param('offset');
 $offset = 0 if not defined $offset or $offset < 0;
-my $script_name   = "/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -57,7 +56,6 @@ my $framework = Koha::BiblioFrameworks->search({ frameworkcode => $frameworkcode
 
 if ($op) {
     $template->param(
-        script_name   => $script_name,
         tagfield      => $tagfield,
         frameworkcode => $frameworkcode,
         framework     => $framework,
@@ -66,7 +64,6 @@ if ($op) {
 }
 else {
     $template->param(
-        script_name   => $script_name,
         tagfield      => $tagfield,
         frameworkcode => $frameworkcode,
         framework     => $framework,
@@ -320,7 +317,6 @@ elsif ( $op eq 'delete_confirm' ) {
     );
     $template->param(
         mss => $mss,
-        delete_link   => $script_name,
     );
 
     # END $OP eq DELETE_CONFIRM

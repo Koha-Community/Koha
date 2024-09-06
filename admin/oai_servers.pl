@@ -44,10 +44,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired => { parameters => 'manage_search_targets' },
     }
 );
-my $script_name = "/cgi-bin/koha/admin/oai_servers.pl";
-my $path        = C4::Context->config('intrahtdocs') . "/prog/";
 
-$template->param( script_name => $script_name, xslt_path => $path );
+my $path = C4::Context->config('intrahtdocs') . "/prog/";
+
+$template->param( xslt_path => $path );
 
 my $schema = Koha::Database->new()->schema();
 

@@ -98,7 +98,7 @@
     [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints for field [% tagfield | html %] authority [% authtypecode | html %][% END %]
     [% ELSE %][% action | html %][% END %]</h1>
     <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
-    <form action="[% script_name | html %]" name="Aform" method="post">
+    <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" name="Aform" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
@@ -385,7 +385,7 @@
 </table>
 </div> <!-- /.page-section -->
 
-    <form action="[% script_name | html %]" method="get">
+    <form action="/cgi-bin/koha/admin/auth_subfields_structure.pl" method="get">
     <fieldset class="action"><input type="hidden" name="op" value="add_form" />
     <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
     <input type="hidden" name="authtypecode" value="[% edit_authtypecode | html %]" />

@@ -83,7 +83,7 @@
 [% END %]
 
 [% IF ( add_form ) %]
-    <form action="[% script_name | html %]" name="Aform" method="post" id="serverentry">
+    <form action="/cgi-bin/koha/admin/z3950servers.pl" name="Aform" method="post" id="serverentry">
         [% INCLUDE 'csrf-token.inc' %]
         [% IF op == 'edit' %]
             <h1>[% tx("Modify {servertype} server '{servername}'", { servertype = servertype, servername = server.servername }) | html %]</h1>

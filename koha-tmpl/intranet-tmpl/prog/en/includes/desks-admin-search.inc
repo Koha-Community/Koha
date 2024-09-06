@@ -5,7 +5,7 @@
 [% WRAPPER tabs id="header_search" %]
     [% WRAPPER tab_panels %]
         [% WRAPPER tab_panel tabname="desk_search" bt_active= 1 %]
-            <form action="[% script_name|html %]" method="get">
+            <form action="/cgi-bin/koha/admin/desks.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="search_desk_name"><span class="control-text">Search desks</span> <i class="fa fa-fw fa-desktop" aria-hidden="true"></i></label>
                 </div>

@@ -5,7 +5,7 @@
 [% WRAPPER tabs id="header_search" %]
     [% WRAPPER tab_panels %]
         [% WRAPPER tab_panel tabname="contract_description_search" bt_active= 1 %]
-            <form action="[% script_name | html %]" method="get">
+            <form action="/cgi-bin/koha/admin/aqcontract.pl" method="get">
                 <div class="form-title">
                     <label class="control-label" for="searchfield"><span class="control-text">Search contracts</span> <i class="fa-solid fa-fw fa-pen-to-square" aria-hidden="true"></i></label>
                 </div>

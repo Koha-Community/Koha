@@ -94,7 +94,7 @@
                         </h1>
                         <div class="hint">You can drag and drop the subfield tabs to change the order.</div>
 
-                        <form action="[% script_name | html %]" name="Aform" method="post">
+                        <form action="/cgi-bin/koha/admin/marc_subfields_structure.pl" name="Aform" method="post">
                             [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="op" value="cud-add_validate" />
                             <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
@@ -330,7 +330,7 @@
                             </form>
 
 
-                            <form action="[% script_name | html %]" method="get">
+                            <form action="/cgi-bin/koha/admin/marc_subfields_structure.pl" method="get">
                                 <input type="hidden" name="tagfield" value="[% mss.tagfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% mss.frameworkcode | html %]" />
                                 <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
@@ -397,7 +397,7 @@
                             </table> <!-- /#table_marcsubfieldstructure -->
                         </div><!-- /.page-section -->
 
-                        <form action="[% script_name | html %]" method="get">
+                        <form action="/cgi-bin/koha/admin/marc_subfields_structure.pl" method="get">
                             <fieldset class="action"><input type="hidden" name="op" value="add_form" />
                                 <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
                                 <input type="hidden" name="frameworkcode" value="[% edit_frameworkcode | html %]" />

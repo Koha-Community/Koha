@@ -108,7 +108,7 @@
 
 [% IF ( add_form ) %]
 
-    <form action="[% script_name | html %]" name="Aform" method="post" class="validated">
+    <form action="/cgi-bin/koha/admin/marctagstructure.pl" name="Aform" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]
 
       <fieldset class="rows">
@@ -172,7 +172,7 @@
 </ol></fieldset> 
     <fieldset class="action">
         <input type="submit" class="btn btn-primary" value="Save changes" />
-        <a class="cancel" href="[% script_name | url %]?frameworkcode=[% framework.frameworkcode | uri %]">Cancel</a>
+        <a class="cancel" href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">Cancel</a>
     </fieldset>
     </form>
 [% END %]
@@ -183,14 +183,14 @@
         <h3>[% tx("Confirm deletion of tag {searchfield}?", { searchfield = searchfield }) | html %]</h3>
         <p>Tag: [% searchfield | html %]</p>
         <p>Description: [% liblibrarian | html %]</p>
-        <form action="[% script_name | html %]" method="post">
+        <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="post">
             [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="op" value="cud-delete_confirmed" />
             <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
             <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
             <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete this tag</button>
         </form>
-        <form action="[% script_name | html %]" method="get"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
+        <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="get"><input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
             <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
         </form>
     </div>
@@ -198,7 +198,7 @@
 
 [% IF ( framework_create ) %]
 
-    <form action="[% script_name | html %]" method="post">
+    <form action="/cgi-bin/koha/admin/marctagstructure.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-framework_create_confirm" />
         <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
@@ -215,7 +215,7 @@
 
 
 [% IF ( else ) %]
-<form name="f" action="[% script_name | html %]" method="get">
+<form name="f" action="/cgi-bin/koha/admin/marctagstructure.pl" method="get">
 <fieldset style="padding:.5em;">
         <label for="tag_search"><strong>Search for tag:</strong> </label>
         <input type="text" name="searchfield" id="tag_search" size="4" value="[% searchfield | html %]" />
