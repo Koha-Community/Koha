@@ -230,37 +230,52 @@
         });
 
         $(document).ready(function() {
-            // Barcodes scanning table initially hidden
-            $("#sci_barcodes_table").hide();
-            // Control de 'append' button behaviour
-            $("#sci_append_button").on('click',function( e ){
-                // Make sure the form is not submitted by the button
-                e.preventDefault();
-                var barcode = $('#barcode_input').val();
-                //var result  = validate_barcode( barcode );
-                $('#sci_barcodes_table tbody').append(
-                        '<tr style="font-size: initial;"><td>' +
-                            barcode +
-                            '<input type="hidden" name="barcode" value="' + barcode + '" />' +
-                        '</td></tr>' );
-                // Make sure the table is now displayed
-                $("#sci_barcodes_table").show();
-                $('#sci_checkin_button').show();
-                $('#sci_refresh_button').show();
-                barcodes.push(barcode);
-                // clean the input, reset the focus
-                $('#barcode_input').val('');
-                dofocus();
-            });
+    // Barcodes scanning table initially hidden
+    $("#sci_barcodes_table").hide();
 
-            $(".helpModal-trigger").on("click",function(e){
-                e.preventDefault();
-                $("#helpModal").modal("show");
-            });
+    // Control the 'append' button behaviour
+    $("#sci_append_button").on('click', function(e) {
+        // Make sure the form is not submitted by the button
+        e.preventDefault();
 
-            // set focus at the beginning
-            dofocus();
-        });
+        var barcode = $('#barcode_input').val().trim(); // Trim whitespace from input
+
+        if (barcode !== "") {
+            // Properly escape the barcode value by using .text() for display
+            var barcodeHtml = $('<tr style="font-size: initial;"><td></td></tr>');
+            barcodeHtml.find('td').text(barcode).append(
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'barcode',
+                    value: barcode
+                })
+            );
+
+            $('#sci_barcodes_table tbody').append(barcodeHtml);
+
+            // Make sure the table is now displayed
+            $("#sci_barcodes_table").show();
+            $('#sci_checkin_button').show();
+            $('#sci_refresh_button').show();
+
+            // Add barcode to the array
+            barcodes.push(barcode);
+        }
+
+        // Clear the input and reset the focus
+        $('#barcode_input').val('');
+        dofocus();
+    });
+
+    $(".helpModal-trigger").on("click", function(e) {
+        e.preventDefault();
+        $("#helpModal").modal("show");
+    });
+
+    // Set focus at the beginning
+    dofocus();
+});
+
 
         var idleTime = 0;
         $(document).ready(function () {
