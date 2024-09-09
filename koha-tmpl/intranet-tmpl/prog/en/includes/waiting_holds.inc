@@ -59,6 +59,27 @@
                             ></span
                         >
                     [% END %]
+                    [% IF reserveloo.borrower.primary_contact_method %]
+                        <div class="label main_contact_method"
+                            >Main contact method:
+                            [% SWITCH reserveloo.borrower.primary_contact_method %]
+                            [% CASE 'phone' %]
+                                <span>Primary phone</span>
+                            [% CASE 'phonepro' %]
+                                <span>Secondary phone</span>
+                            [% CASE 'mobile' %]
+                                <span>Other phone</span>
+                            [% CASE 'email' %]
+                                <span>Primary email</span>
+                            [% CASE 'emailpro' %]
+                                <span>Secondary email</span>
+                            [% CASE 'fax' %]
+                                <span>Fax</span>
+                            [% END %]
+                        </div>
+                    [% ELSE %]
+                        <div class="main_contact_method none">Main contact method: None</div>
+                    [% END %]
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
                 <td>[% Branches.GetName( reserveloo.item.holdingbranch ) | html %][% IF (reserveloo.desk_id  ) %], [% reserveloo.desk.desk_name | html %][% END %]</td>
