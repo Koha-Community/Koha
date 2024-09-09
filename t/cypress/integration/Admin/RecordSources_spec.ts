@@ -64,9 +64,24 @@ describe("Record sources CRUD tests", () => {
         cy.intercept("GET", "/api/v1/record_sources*", {
             statusCode: 200,
             body: [
-                { record_source_id: 1, name: "Source 1", can_be_edited: true },
-                { record_source_id: 2, name: "Source 2", can_be_edited: false },
-                { record_source_id: 3, name: "Source 3", can_be_edited: true },
+                {
+                    record_source_id: 1,
+                    name: "Source 1",
+                    can_be_edited: true,
+                    usage_count: 0,
+                },
+                {
+                    record_source_id: 2,
+                    name: "Source 2",
+                    can_be_edited: false,
+                    usage_count: 1,
+                },
+                {
+                    record_source_id: 3,
+                    name: "Source 3",
+                    can_be_edited: true,
+                    usage_count: 0,
+                },
             ],
             headers: {
                 "X-Base-Total-Count": "3",
@@ -76,25 +91,51 @@ describe("Record sources CRUD tests", () => {
         cy.visit("/cgi-bin/koha/admin/record_sources");
         cy.get("#record_sources_list").contains("Showing 1 to 3 of 3 entries");
 
-        // Test true => "Yes"
-        let row_1 = cy.get(".dataTable > tbody > tr:first-child");
-        row_1.get("td:nth-child(3n+3)").contains("Yes");
-        // Test false => "No"
-        let row_2 = cy.get(".dataTable > tbody > tr:nth-child(2n+2)");
-        row_2.get("td:nth-child(3n+3)").contains("No");
+        cy.get(".dataTable > tbody > tr:first-child").within(() => {
+            // Test true => "Yes"
+            cy.get("td:nth-child(3n+3)").contains("Yes");
+            // last column
+            cy.get("td:last-child").within(() => {
+                cy.contains("Edit");
+                // usage_count = 0 then the delete button is displayed
+                cy.contains("Delete");
+            });
+        });
 
-        // Action buttons displayed
-        row_1.get("td:last-child").contains("Edit");
-        row_1.get("td:last-child").contains("Delete");
+        cy.get(".dataTable > tbody > tr:nth-child(2)").within(() => {
+            // Test false => "No"
+            cy.get("td:nth-child(3n+3)").contains("No");
+            // last column
+            cy.get("td:last-child").within(() => {
+                cy.contains("Edit");
+                // usage_count > 0 then no delete button
+                cy.should("not.contain", "Delete");
+            });
+        });
     });
 
     it("Edit", () => {
         cy.intercept("GET", "/api/v1/record_sources*", {
             statusCode: 200,
             body: [
-                { record_source_id: 1, name: "Source 1", can_be_edited: true },
-                { record_source_id: 2, name: "Source 2", can_be_edited: false },
-                { record_source_id: 3, name: "Source 3", can_be_edited: true },
+                {
+                    record_source_id: 1,
+                    name: "Source 1",
+                    can_be_edited: true,
+                    usage_count: 0,
+                },
+                {
+                    record_source_id: 2,
+                    name: "Source 2",
+                    can_be_edited: false,
+                    usage_count: 1,
+                },
+                {
+                    record_source_id: 3,
+                    name: "Source 3",
+                    can_be_edited: true,
+                    usage_count: 0,
+                },
             ],
             headers: {
                 "X-Base-Total-Count": "3",
@@ -144,9 +185,24 @@ describe("Record sources CRUD tests", () => {
         cy.intercept("GET", "/api/v1/record_sources*", {
             statusCode: 200,
             body: [
-                { record_source_id: 1, name: "Source 1", can_be_edited: true },
-                { record_source_id: 2, name: "Source 2", can_be_edited: false },
-                { record_source_id: 3, name: "Source 3", can_be_edited: true },
+                {
+                    record_source_id: 1,
+                    name: "Source 1",
+                    can_be_edited: true,
+                    usage_count: 0,
+                },
+                {
+                    record_source_id: 2,
+                    name: "Source 2",
+                    can_be_edited: false,
+                    usage_count: 0,
+                },
+                {
+                    record_source_id: 3,
+                    name: "Source 3",
+                    can_be_edited: true,
+                    usage_count: 1,
+                },
             ],
             headers: {
                 "X-Base-Total-Count": "3",
