@@ -1021,6 +1021,24 @@ sub SendQueuedMessages {
     Koha::Exceptions::BadParameter->throw("Parameter message_id cannot be empty if passed.")
         if ( exists( $params->{message_id} ) && !$params->{message_id} );
 
+    if ( C4::Context->config("enable_plugins") ) {
+        my @plugins = Koha::Plugins->new->GetPlugins({
+            method => 'before_send_messages',
+        });
+
+        if (@plugins) {
+            foreach my $plugin ( @plugins ) {
+                try {
+                    $plugin->before_send_messages($params);
+                }
+                catch {
+                    warn "$_";
+                    exit 1 if $params->{exit_on_plugin_failure};
+                };
+            }
+        }
+    }
+
     my $smtp_transports = {};
 
     my $count_messages = 0;

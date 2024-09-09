@@ -92,32 +92,6 @@ cronlogaction({ info => $command_line_options });
 # Remove empty elements, see bug 37075
 @letter_code = grep { $_ ne q{} } @letter_code;
 
-if ( C4::Context->config("enable_plugins") ) {
-    my @plugins = Koha::Plugins->new->GetPlugins({
-        method => 'before_send_messages',
-    });
-
-    if (@plugins) {
-        foreach my $plugin ( @plugins ) {
-            try {
-                $plugin->before_send_messages(
-                    {
-                        verbose     => $verbose,
-                        limit       => $limit,
-                        type        => \@type,
-                        letter_code => \@letter_code,
-                        where       => $where,
-                    }
-                );
-            }
-            catch {
-                warn "$_";
-                exit 1 if $exit_on_plugin_failure;
-            };
-        }
-    }
-}
-
 C4::Letters::SendQueuedMessages(
     {
         verbose     => $verbose,
@@ -128,6 +102,7 @@ C4::Letters::SendQueuedMessages(
         type        => \@type,
         letter_code => \@letter_code,
         where       => $where,
+        exit_on_plugin_failure => $exit_on_plugin_failure,
     }
 );
 
