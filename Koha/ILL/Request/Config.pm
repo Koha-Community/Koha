@@ -115,6 +115,7 @@ Returns a list of names for all the installed ILL backend plugins.
 sub get_backend_plugin_names {
     my ( $self ) = @_;
 
+    return () unless C4::Context->config("enable_plugins");
     my @backend_plugins = Koha::Plugins->new()->GetPlugins(
         {
             method => 'ill_backend',
