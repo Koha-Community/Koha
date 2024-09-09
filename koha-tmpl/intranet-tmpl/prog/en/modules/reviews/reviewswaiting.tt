@@ -51,19 +51,19 @@
 <!-- The manual invoice and credit buttons -->
 <div class="toptabs">
     <ul class="nav nav-tabs" role="tablist">
-        [% IF ( status ) %]
-            <li role="presentation" class="active">
-        [% ELSE %]
-            <li role="presentation">
-        [% END %]
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+        <li role="presentation" class="nav-item">
+            [% IF ( status ) %]
+                <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+            [% ELSE %]
+                <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a>
+            [% END %]
         </li>
-        [% IF ( status ) %]
-            <li role="presentation">
-        [% ELSE %]
-            <li role="presentation" class="active">
-        [% END %]
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
+        <li role="presentation" class="nav-item">
+            [% IF ( status ) %]
+                <a class="nav-link" href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
+            [% ELSE %]
+                <a class="nav-link active" href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a>
+            [% END %]
         </li>
     </ul> <!-- /.nav.nav-tabs -->
     <div class="tab-content">
