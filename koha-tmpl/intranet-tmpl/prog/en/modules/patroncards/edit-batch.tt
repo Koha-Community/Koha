@@ -210,7 +210,12 @@
         };
 
         function add_user(borrowernumber) {
-            $("#bor_num_list").val($("#bor_num_list").val()+borrowernumber+"\r\n");
+            var list = $("#bor_num_list").val();
+            if (list.indexOf(borrowernumber) == -1) {
+                $("#bor_num_list").val(list+borrowernumber+"\r\n");
+            } else {
+                return -1;
+            }
         }
 
         function DeDuplicate() {
