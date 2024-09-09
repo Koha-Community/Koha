@@ -21,34 +21,34 @@ use strict;
 use warnings;
 
 use Koha::Script -cron;
-use C4::Letters qw( SendQueuedMessages );
-use C4::Log qw( cronlogaction );
+use C4::Letters  qw( SendQueuedMessages );
+use C4::Log      qw( cronlogaction );
 use Getopt::Long qw( GetOptions );
-use Try::Tiny qw( catch try );
+use Try::Tiny    qw( catch try );
 
 my $username = undef;
 my $password = undef;
 my $limit    = undef;
-my $method = 'LOGIN';
-my $help = 0;
-my $verbose = 0;
+my $method   = 'LOGIN';
+my $help     = 0;
+my $verbose  = 0;
 my $where;
 my @type;
 my @letter_code;
 my $exit_on_plugin_failure = 0;
 
-my $command_line_options = join(" ",@ARGV);
+my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
-    'u|username:s'      => \$username,
-    'p|password:s'      => \$password,
-    'l|limit:s'         => \$limit,
-    'm|method:s'        => \$method,
-    'h|help|?'          => \$help,
-    'v|verbose'         => \$verbose,
-    't|type:s'          => \@type,
-    'c|code:s'          => \@letter_code,
-    'w|where:s'         => \$where,
+    'u|username:s'             => \$username,
+    'p|password:s'             => \$password,
+    'l|limit:s'                => \$limit,
+    'm|method:s'               => \$method,
+    'h|help|?'                 => \$help,
+    'v|verbose'                => \$verbose,
+    't|type:s'                 => \@type,
+    'c|code:s'                 => \@letter_code,
+    'w|where:s'                => \$where,
     'e|exit-on-plugin-failure' => \$exit_on_plugin_failure,
 );
 my $usage = << 'ENDUSAGE';
@@ -74,36 +74,35 @@ ENDUSAGE
 
 die $usage if $help;
 
-my $script_handler = Koha::Script->new({ script => $0 });
+my $script_handler = Koha::Script->new( { script => $0 } );
 
 try {
     $script_handler->lock_exec;
-}
-catch {
+} catch {
     my $message = "Skipping execution of $0 ($_)";
     print STDERR "$message\n"
         if $verbose;
-    cronlogaction({ info => $message });
+    cronlogaction( { info => $message } );
     exit;
 };
 
-cronlogaction({ info => $command_line_options });
+cronlogaction( { info => $command_line_options } );
 
 # Remove empty elements, see bug 37075
 @letter_code = grep { $_ ne q{} } @letter_code;
 
 C4::Letters::SendQueuedMessages(
     {
-        verbose     => $verbose,
-        username    => $username,
-        password    => $password,
-        method      => $method,
-        limit       => $limit,
-        type        => \@type,
-        letter_code => \@letter_code,
-        where       => $where,
+        verbose                => $verbose,
+        username               => $username,
+        password               => $password,
+        method                 => $method,
+        limit                  => $limit,
+        type                   => \@type,
+        letter_code            => \@letter_code,
+        where                  => $where,
         exit_on_plugin_failure => $exit_on_plugin_failure,
     }
 );
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );

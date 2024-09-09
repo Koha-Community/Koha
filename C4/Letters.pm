@@ -1027,11 +1027,10 @@ sub SendQueuedMessages {
         });
 
         if (@plugins) {
-            foreach my $plugin ( @plugins ) {
+            foreach my $plugin (@plugins) {
                 try {
                     $plugin->before_send_messages($params);
-                }
-                catch {
+                } catch {
                     warn "$_";
                     exit 1 if $params->{exit_on_plugin_failure};
                 };
