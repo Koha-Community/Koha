@@ -55,7 +55,7 @@ my $usecache = Koha::Caches->get_instance->memcached_cache;
 my $phase = $input->param('phase') // '';
 my $flagsrequired;
 if ( ( $phase eq 'Build new' ) || ( $phase eq 'Create report from SQL' ) || ( $phase eq 'Edit SQL' )
-   || ( $phase eq 'Build new from existing' ) ) {
+   || ( $phase eq 'Build new from existing' ) || ( $phase eq 'Create report from existing' ) ) {
     $flagsrequired = 'create_reports';
 }
 elsif ( $phase eq 'Use saved' ) {
@@ -63,6 +63,9 @@ elsif ( $phase eq 'Use saved' ) {
 }
 elsif ( $phase eq 'Delete Saved' ) {
     $flagsrequired = 'delete_reports';
+}
+elsif ( $phase eq 'Run this Report') {
+    $flagsrequired = 'execute_reports';
 }
 else {
     $flagsrequired = '*';
