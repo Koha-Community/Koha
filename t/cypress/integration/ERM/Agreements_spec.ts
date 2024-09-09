@@ -575,7 +575,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "remove this agreement"
         );
         cy.contains(agreement.name);
@@ -597,7 +597,7 @@ describe("Agreement CRUD operations", () => {
         cy.get("#agreements_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "remove this agreement"
         );
         cy.contains("Yes, delete").click();
@@ -634,7 +634,7 @@ describe("Agreement CRUD operations", () => {
         );
 
         cy.get("#agreements_show #toolbar").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "remove this agreement"
         );
         cy.contains("Yes, delete").click();

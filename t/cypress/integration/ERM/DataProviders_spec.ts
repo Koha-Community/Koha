@@ -319,7 +319,7 @@ describe("Data provider CRUD operations", () => {
         cy.get("#usage_data_providers_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "remove this data provider"
         );
         cy.contains(dataProvider.name);
@@ -342,7 +342,7 @@ describe("Data provider CRUD operations", () => {
         // cy.get("#usage_data_providers_list table tbody tr:first")
         //     .contains("Delete")
         //     .click();
-        // cy.get(".dialog.alert.confirmation h1").contains(
+        // cy.get(".alert-warning.confirmation h1").contains(
         //     "remove this data provider"
         // );
         cy.contains("Yes, delete").click();
@@ -386,7 +386,7 @@ describe("Data provider CRUD operations", () => {
         cy.get("#usage_data_providers_show #toolbar")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "remove this data provider"
         );
         cy.contains("Yes, delete").click();

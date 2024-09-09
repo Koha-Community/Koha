@@ -452,7 +452,7 @@ describe("Title CRUD operations", () => {
         cy.visit("/cgi-bin/koha/erm/eholdings/local/titles");
 
         cy.get("#titles_list table tbody tr:first").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains(erm_title.publication_title);
 
         // Accept the confirmation dialog, get 500
@@ -470,7 +470,7 @@ describe("Title CRUD operations", () => {
             body: null,
         });
         cy.get("#titles_list table tbody tr:first").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
             .contains("Local title")
@@ -515,7 +515,7 @@ describe("Title CRUD operations", () => {
         );
 
         cy.get("#eholdings_title_show #toolbar").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this title");
+        cy.get(".alert-warning.confirmation h1").contains("remove this title");
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show

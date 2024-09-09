@@ -161,7 +161,7 @@ describe("Record sources CRUD tests", () => {
         cy.get("#record_sources_list table tbody tr:nth-child(2n+2)")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains(
+        cy.get(".alert-warning.confirmation h1").contains(
             "Are you sure you want to delete this record source?"
         );
         cy.contains("Source 2");

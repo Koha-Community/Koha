@@ -156,7 +156,7 @@ describe("Dialog operations", () => {
             .contains("Delete")
             .click();
         cy.contains("No, do not delete").click();
-        cy.get(".dialog.alert.confirmation h1").should("not.exist");
+        cy.get(".alert-warning.confirmation h1").should("not.exist");
         cy.get("main div[class='alert alert-info']").contains(
             "Package updated"
         );
@@ -169,7 +169,9 @@ describe("Dialog operations", () => {
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this package"
+        );
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
             .contains("Local package")

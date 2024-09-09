@@ -304,7 +304,9 @@ describe("License CRUD operations", () => {
         cy.get("#licenses_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this license"
+        );
         cy.contains(license.name);
 
         // Accept the confirmation dialog, get 500
@@ -324,7 +326,9 @@ describe("License CRUD operations", () => {
         cy.get("#licenses_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this license"
+        );
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
             .contains("License")
@@ -357,7 +361,9 @@ describe("License CRUD operations", () => {
         cy.get("#licenses_show h2").contains("License #" + license.license_id);
 
         cy.get("#licenses_show #toolbar").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this license");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this license"
+        );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show

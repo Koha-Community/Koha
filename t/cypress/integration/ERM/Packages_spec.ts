@@ -299,7 +299,9 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this package"
+        );
         cy.contains(erm_package.name);
 
         // Accept the confirmation dialog, get 500
@@ -319,7 +321,9 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_list table tbody tr:first")
             .contains("Delete")
             .click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this package"
+        );
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
             .contains("Local package")
@@ -356,7 +360,9 @@ describe("Package CRUD operations", () => {
         );
 
         cy.get("#packages_show #toolbar").contains("Delete").click();
-        cy.get(".dialog.alert.confirmation h1").contains("remove this package");
+        cy.get(".alert-warning.confirmation h1").contains(
+            "remove this package"
+        );
         cy.contains("Yes, delete").click();
 
         //Make sure we return to list after deleting from show
