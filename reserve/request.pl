@@ -33,7 +33,7 @@ use List::MoreUtils qw( uniq );
 use Date::Calc qw( Date_to_Days );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Auth qw( get_template_and_user );
-use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority ToggleSuspend CanBookBeReserved GetMaxPatronHoldsForRecord CanItemBeReserved IsAvailableForItemLevelRequest );
+use C4::Reserves qw( RevertWaitingStatus AlterPriority ToggleLowestPriority CanBookBeReserved GetMaxPatronHoldsForRecord CanItemBeReserved IsAvailableForItemLevelRequest );
 use C4::Items qw( get_hostitemnumbers_of );
 use C4::Koha qw( getitemtypeimagelocation );
 use C4::Serials qw( CountSubscriptionFromBiblionumber );
@@ -120,10 +120,15 @@ elsif ( $op eq 'cud-setLowestPriority' ) {
     my $reserve_id = $input->param('reserve_id');
     ToggleLowestPriority($reserve_id);
 }
-elsif ( $op eq 'cud-toggleSuspend' ) {
+elsif ( $op eq 'cud-suspend' ) {
     my $reserve_id    = $input->param('reserve_id');
     my $suspend_until = $input->param('suspend_until');
-    ToggleSuspend( $reserve_id, $suspend_until );
+    my $hold          = Koha::Holds->find($reserve_id);
+    $hold->suspend_hold($suspend_until) if $hold;
+} elsif ( $op eq 'cud-unsuspend' ) {
+    my $reserve_id = $input->param('reserve_id');
+    my $hold       = Koha::Holds->find($reserve_id);
+    $hold->resume() if $hold;
 }
 elsif ( $op eq 'cud-cancel_bulk' ) {
     my $cancellation_reason = $input->param("cancellation-reason");

@@ -244,13 +244,15 @@
                 <td>
                     [% IF Koha.Preference('SuspendHoldsIntranet') %]
                         [% UNLESS ( hold.found ) %]
-                            <button class="btn btn-default btn-xs toggle-suspend" data-reserve-id="[% hold.reserve_id | html %]" data-biblionumber="[% hold.biblionumber | html %]">
-                                [% IF ( hold.suspend ) %]
+                            [% IF ( hold.suspend ) %]
+                                <button class="btn btn-default btn-xs unsuspend-hold" data-reserve-id="[% hold.reserve_id | html %]" data-biblionumber="[% hold.biblionumber | html %]">
                                     <i class="fa fa-play" aria-hidden="true"></i> Unsuspend
-                                [% ELSE %]
+                                </button>
+                            [% ELSE %]
+                                <button class="btn btn-default btn-xs suspend-hold" data-reserve-id="[% hold.reserve_id | html %]" data-biblionumber="[% hold.biblionumber | html %]">
                                     <i class="fa fa-pause" aria-hidden="true"></i> Suspend
-                                [% END %]
-                            </button>
+                                </button>
+                            [% END %]
 
                             [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                                 <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>

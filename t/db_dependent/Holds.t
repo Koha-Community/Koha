@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 74;
+use Test::More tests => 72;
 use Test::Exception;
 
 use MARC::Record;
@@ -15,7 +15,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Calendar;
 use C4::Items;
-use C4::Reserves qw( AddReserve CalculatePriority ModReserve ToggleSuspend AutoUnsuspendReserves SuspendAll ModReserveMinusPriority AlterPriority CanItemBeReserved CheckReserves MoveReserve );
+use C4::Reserves qw( AddReserve CalculatePriority ModReserve AutoUnsuspendReserves SuspendAll ModReserveMinusPriority AlterPriority CanItemBeReserved CheckReserves MoveReserve );
 use C4::Circulation qw( CanBookBeRenewed );
 
 use Koha::Biblios;
@@ -159,14 +159,6 @@ ModReserve({ # call without reserve_id
 });
 $hold = Koha::Holds->find( $reserve_id );
 ok( $hold->priority eq '3', "Test ModReserve, priority changed correctly" );
-
-ToggleSuspend( $reserve_id );
-$hold = Koha::Holds->find( $reserve_id );
-ok( ! $hold->suspend, "Test ToggleSuspend(), no date" );
-
-ToggleSuspend( $reserve_id, '2012-01-01' );
-$hold = Koha::Holds->find( $reserve_id );
-is( $hold->suspend_until, '2012-01-01 00:00:00', "Test ToggleSuspend(), with date" );
 
 AutoUnsuspendReserves();
 $hold = Koha::Holds->find( $reserve_id );

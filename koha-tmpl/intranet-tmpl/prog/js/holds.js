@@ -445,37 +445,56 @@ $(document).ready(function() {
         });
     });
 
-    $(".toggle-suspend").on('click', function(e) {
-        e.preventDefault();
-        let reserve_id     = $(this).data('reserve-id');
-        let biblionumber   = $(this).data('biblionumber');
-        let suspend_until  = $('#suspend_until_' + reserve_id).val();
+    function toggle_suspend(node, inputs) {
+        let reserve_id = $(node).data("reserve-id");
+        let biblionumber = $(node).data("biblionumber");
         let suspendForm = $("#hold-actions-form").attr({
-            action: 'request.pl',
-            method: 'post'
-        });
-        let sus_op = $("<input />").attr({
-            type: 'hidden',
-            name: 'op',
-            value: 'cud-toggleSuspend'
+            action: "request.pl",
+            method: "post",
         });
         let sus_bn = $("<input />").attr({
-            type: 'hidden',
-            name: 'biblionumber',
-            value: biblionumber
+            type: "hidden",
+            name: "biblionumber",
+            value: biblionumber,
         });
         let sus_ri = $("<input />").attr({
-            type: 'hidden',
-            name: 'reserve_id',
+            type: "hidden",
+            name: "reserve_id",
             value: reserve_id,
         });
-        let sus_su = $("<input />").attr({
-            type: 'hidden',
-            name: 'suspend_until',
-            value: suspend_until
-        });
-        suspendForm.append( sus_op, sus_bn, sus_ri, sus_su );
+        inputs.push(sus_bn, sus_ri);
+        suspendForm.append(inputs);
         $("#hold-actions-form").submit();
         return false;
+    }
+    $(".suspend-hold").on("click", function (e) {
+        e.preventDefault();
+        let reserve_id = $(this).data("reserve-id");
+        let suspend_until = $("#suspend_until_" + reserve_id).val();
+        let inputs = [
+            $("<input />").attr({
+                type: "hidden",
+                name: "op",
+                value: "cud-suspend",
+            }),
+            $("<input />").attr({
+                type: "hidden",
+                name: "suspend_until",
+                value: suspend_until,
+            }),
+        ];
+        return toggle_suspend(this, inputs);
     });
+    $(".unsuspend-hold").on("click", function (e) {
+        e.preventDefault();
+        let inputs = [
+            $("<input />").attr({
+                type: "hidden",
+                name: "op",
+                value: "cud-unsuspend",
+            }),
+        ];
+        return toggle_suspend(this, inputs);
+    });
+
 });

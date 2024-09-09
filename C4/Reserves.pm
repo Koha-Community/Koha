@@ -129,7 +129,6 @@ BEGIN {
       ToggleLowestPriority
 
       ReserveSlip
-      ToggleSuspend
       SuspendAll
 
       CalculatePriority
@@ -1458,28 +1457,6 @@ sub ToggleLowestPriority {
     $sth->execute( $reserve_id );
 
     _FixPriority({ reserve_id => $reserve_id, rank => '999999' });
-}
-
-=head2 ToggleSuspend
-
-  ToggleSuspend( $reserve_id );
-
-This function sets the suspend field to true if is false, and false if it is true.
-If the reserve is currently suspended with a suspend_until date, that date will
-be cleared when it is unsuspended.
-
-=cut
-
-sub ToggleSuspend {
-    my ( $reserve_id, $suspend_until ) = @_;
-
-    my $hold = Koha::Holds->find( $reserve_id );
-
-    if ( $hold->is_suspended ) {
-        $hold->resume()
-    } else {
-        $hold->suspend_hold( $suspend_until );
-    }
 }
 
 =head2 SuspendAll
