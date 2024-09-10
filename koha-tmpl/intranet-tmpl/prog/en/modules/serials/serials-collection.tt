@@ -314,7 +314,7 @@
                                                         </td>
                                                         [% IF ( routing ) %]
                                                             <td class="actions">
-                                                                <a href="/cgi-bin/koha/serials/routing-preview.pl?ok=1&amp;subscriptionid=[% serial.subscriptionid | uri %]&amp;issue=[% serial.serialseq.replace("'", "\\'") | uri %]%20([% serial.publisheddate | $KohaDates %])" class="btn btn-default btn-xs print_list"><i class="fa fa-print"></i> Print list</a>
+                                                                <a href="/cgi-bin/koha/serials/routing-preview.pl?op=print&amp;subscriptionid=[% serial.subscriptionid | uri %]&amp;issue=[% serial.serialseq.replace("'", "\\'") | uri %]%20([% serial.publisheddate | $KohaDates %])" class="btn btn-default btn-xs print_list"><i class="fa fa-print"></i> Print list</a>
                                                             </td>
                                                         [% END %]
                                                     </tr>
