@@ -16,8 +16,10 @@ package Koha::UI::Form::Builder::Item;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use feature qw(fc);
 use List::Util qw( any );
 use MARC::Record;
+
 use C4::Context;
 use C4::Biblio qw( GetFrameworkCode GetMarcStructure IsMarcStructureInternal );
 use C4::Koha qw( GetAuthorisedValues );
@@ -242,7 +244,7 @@ sub generate_subfield_form {
             my $default_source =
               C4::Context->preference("DefaultClassificationSource");
 
-            foreach my $class_source ( sort keys %$class_sources ) {
+            foreach my $class_source (sort {fc($a) cmp fc($b)} keys %$class_sources) {
                 next
                   unless $class_sources->{$class_source}->{'used'}
                   or ( $value and $class_source eq $value )
