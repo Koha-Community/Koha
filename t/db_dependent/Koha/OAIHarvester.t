@@ -18,11 +18,13 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 24;
+use Test::More tests => 28;
 use Test::Exception;
 use File::Temp qw/tempfile/;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
+
 use HTTP::OAI;
 use HTTP::OAI::Metadata::OAI_DC;
 use HTTP::OAI::Record;
@@ -39,8 +41,8 @@ $schema->storage->txn_begin;
 
 my $new_oai_biblio = Koha::OAIServer->new(
     {
-        endpoint   => 'my_host1.org',
-        oai_set    => 'set1',
+        endpoint   => C4::Context->preference('OPACBaseURL') . '/cgi-bin/koha/oai.pl',
+        oai_set    => '',
         servername => 'my_test_1',
         dataformat => 'oai_dc',
         recordtype => 'biblio',
@@ -48,7 +50,24 @@ my $new_oai_biblio = Koha::OAIServer->new(
     }
 )->store;
 
+C4::Context->set_preference( 'OAI-PMH', 1 );
+t::lib::Mocks::mock_preference(
+    'OAI-PMH:HarvestEmailReport',
+    C4::Context->preference('KohaAdminEmailAddress')
+);
+
 my $harvester = Koha::OAI::Client::Harvester->new( { server => $new_oai_biblio, verbose => 1, days => 1, force => 1 } );
+
+my $init_results = $harvester->init();
+
+like(
+    $init_results->{metadata_formats},
+    qr/oai_dc marc21 marcxml/,
+    'Got list of supported metadata formats'
+);
+is( $init_results->{is_error}, undef, 'ListRecords request worked' );
+cmp_ok( $init_results->{total}, '>', 0, 'Records have been processed' );
+isnt( $init_results->{letter_message_id}, undef, 'Report has been enqueued' );
 
 my $record =
     '<metadata xmlns="http://www.openarchives.org/OAI/2.0/"><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"><dc:title>Pièces diverses </dc:title><dc:identifier>ARCH/0320 [cote]</dc:identifier><dc:relation>FR-920509801 [RCR établissement]</dc:relation><dc:relation>Central obrera boliviana [Fonds ou collection]</dc:relation><dc:format>1 carton</dc:format><dc:date>1971/2000</dc:date><dc:type>Archives et manuscrits</dc:type></oai_dc:dc></metadata>';
@@ -80,7 +99,10 @@ is( $status, 'updated', 'When force is used, record is updated' );
 
 $harvester = Koha::OAI::Client::Harvester->new( { server => $new_oai_biblio, verbose => 1, days => 1, force => 0 } );
 $status    = $harvester->processRecord($r);
-is( $status, 'skipped', 'When force is not used, record is skipped (already up to date)' );
+is(
+    $status, 'skipped',
+    'When force is not used, record is skipped (already up to date)'
+);
 
 $r->header->datestamp('2018-05-10T09:18:13Z');
 $status = $harvester->processRecord($r);
@@ -105,7 +127,10 @@ isnt(
 
 $r->header->status('deleted');
 $status = $harvester->processRecord($r);
-is( $status, 'deleted', 'When a record is marked to be deleted, status is deleted' );
+is(
+    $status, 'deleted',
+    'When a record is marked to be deleted, status is deleted'
+);
 
 $imported_record = Koha::Import::OAI::Biblios->find( { identifier => 'oai:myarchive.org:oid-234' } );
 is( $imported_record, undef, 'Record has been deleted' );
@@ -145,7 +170,10 @@ $status = $harvester->processRecord($r);
 is( $status, 'updated', 'Authority with no date is updated' );
 
 $status = $harvester->processRecord($r);
-is( $status, 'updated', 'Authority with no date is updated even without force' );
+is(
+    $status, 'updated',
+    'Authority with no date is updated even without force'
+);
 
 $r->header->identifier('oai:myarchive.org:oid-162');
 $r->header->datestamp('2017-05-10T09:18:13Z');
@@ -158,11 +186,17 @@ is( $status, 'updated', 'When force is used, authority is updated' );
 
 $harvester = Koha::OAI::Client::Harvester->new( { server => $new_oai_auth, verbose => 1, days => 1, force => 0 } );
 $status    = $harvester->processRecord($r);
-is( $status, 'skipped', 'When force is not used, authority is skipped (already up to date)' );
+is(
+    $status, 'skipped',
+    'When force is not used, authority is skipped (already up to date)'
+);
 
 $r->header->datestamp('2018-05-10T09:18:13Z');
 $status = $harvester->processRecord($r);
-is( $status, 'updated', 'When force is not used, authority is updated if newer' );
+is(
+    $status, 'updated',
+    'When force is not used, authority is updated if newer'
+);
 
 my $imported_authority = Koha::Import::OAI::Authorities->find( { identifier => 'oai:myarchive.org:oid-162' } );
 $imported_authority->update(
@@ -183,7 +217,10 @@ isnt(
 
 $r->header->status('deleted');
 $status = $harvester->processRecord($r);
-is( $status, 'deleted', 'When an authority is marked to be deleted, status is deleted' );
+is(
+    $status, 'deleted',
+    'When an authority is marked to be deleted, status is deleted'
+);
 
 $imported_record = Koha::Import::OAI::Biblios->find( { identifier => 'oai:myarchive.org:oid-162' } );
 is( $imported_record, undef, 'Authority has been deleted' );

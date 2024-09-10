@@ -87,10 +87,10 @@ Starts harvesting
 
 sub init {
     my ( $self, $args ) = @_;
-
     $self->printlog("Starting OAI Harvest from repository");
     my $server = $self->{server};
     my $days   = $self->{days};
+    my $init_results;
 
     my $h = HTTP::OAI::Harvester->new(
         repository => HTTP::OAI::Identify->new(
@@ -117,6 +117,7 @@ sub init {
             $lmdflog .= $_->metadataPrefix . " ";
         }
         $self->printlog("Available metadata formats for this repository: $lmdflog");
+        $init_results->{metadata_formats} = $lmdflog;
     } catch {
         $self->printlog("ListMetadataFormats failed");
     };
@@ -148,7 +149,8 @@ sub init {
     );
     if ( $response->is_error ) {
         $self->printlog( "Error requesting ListRecords: " . $response->code . " " . $response->message );
-        exit;
+        $init_results->{is_error} = $response->message;
+        return $init_results;
     }
     $self->printlog( "Request URL: " . $response->requestURL );
 
@@ -164,6 +166,7 @@ sub init {
         my $status = $self->processRecord($oai_record);
         $stats{$status}++;
     }
+    $init_results->{total} = $stats{'total'};
 
     my $results = '';
     foreach my $status (@statuses) {
@@ -193,20 +196,22 @@ sub init {
             )
         ) or $self->printlog("OAI_HARVEST_REPORT letter not found");
 
-        my $success = C4::Letters::EnqueueLetter(
+        my $message_id = C4::Letters::EnqueueLetter(
             {
                 letter     => $letter,
                 to_address => C4::Context->preference("OAI-PMH:HarvestEmailReport"), message_transport_type => 'email'
             }
         );
-        if ($success) {
+        if ($message_id) {
             $self->printlog("Email report enqueued");
+            $init_results->{letter_message_id} = $message_id;
         } else {
             $self->printlog("Unable to enqueue report email");
         }
     }
 
     $self->printlog("Ending OAI Harvest from repository");
+    return $init_results;
 }
 
 =head2 processRecord
