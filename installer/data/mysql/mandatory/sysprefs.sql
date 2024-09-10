@@ -283,6 +283,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('FallbackToSMSIfNoEmail', 0, 'Enable|Disable', 'Send messages by SMS if no patron email is defined', 'YesNo'),
 ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo'),
 ('FilterBeforeOverdueReport','0','','Do not run overdue report until filter selected','YesNo'),
+('FilterSearchResultsByLoggedInBranch','0','','Option to filter location column on staff search results by logged in branch','YesNo'),
 ('FineNotifyAtCheckin','0',NULL,'If ON notify librarians of overdue fines on the items they are checking in.','YesNo'),
 ('FinePaymentAutoPopup','0',NULL,'If enabled, automatically display a print dialog for a payment receipt when making a payment.','YesNo'),
 ('finesCalendar','noFinesWhenClosed','ignoreCalendar|noFinesWhenClosed','Specify whether to use the Calendar in calculating duedates and fines','Choice'),
