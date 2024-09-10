@@ -124,5 +124,12 @@ __PACKAGE__->set_primary_key("oai_server_id");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-31 14:51:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HeQgY+4P10NKCtLqdExv+g
 
+sub koha_object_class {
+    'Koha::OAIServer';
+}
+sub koha_objects_class {
+    'Koha::OAIServers';
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
