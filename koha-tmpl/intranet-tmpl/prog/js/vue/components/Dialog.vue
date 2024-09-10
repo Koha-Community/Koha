@@ -1,70 +1,88 @@
 <template>
     <div class="alert alert-info" v-if="message" v-html="message"></div>
     <div class="alert alert-warning" v-if="error" v-html="error"></div>
-    <div class="alert alert-warning modal" v-if="warning">
-        <h1 v-html="warning"></h1>
-        <button
-            id="close_modal"
-            class="btn btn-default approve"
-            @click="removeMessages"
-        >
-            <i class="fa fa-fw fa-check"></i>
-            {{ $__("Close") }}
-        </button>
-    </div>
-    <div class="modal_centered" v-if="confirmation">
-        <div class="alert alert-warning confirmation">
-            <h1 v-html="confirmation.title"></h1>
-            <p v-html="confirmation.message"></p>
-            <div class="inputs" v-if="confirmation.inputs">
-                <form ref="confirmationform">
-                    <div
-                        class="row"
-                        v-for="input in confirmation.inputs"
-                        v-bind:key="input.id"
+    <div class="modal" role="dialog" v-if="warning">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-body alert-warning">
+                    <h1 v-html="warning"></h1>
+                    <button
+                        id="close_modal"
+                        class="btn btn-default deny cancel"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        @click="removeMessages"
                     >
-                        <div class="col-md-6">
-                            <label
-                                :for="`confirmation_input_${input.id}`"
-                                v-bind:class="{ required: input.required }"
-                                >{{ input.label }}:</label
-                            >
-                        </div>
-                        <div class="col-md-6">
-                            <flat-pickr
-                                v-if="input.type == 'Date'"
-                                :id="`confirmation_input_${input.id}`"
-                                v-model="input.value"
-                                :required="input.required"
-                                :config="fp_config"
-                            />
-                            <input
-                                v-if="input.type == 'Text'"
-                                :id="`confirmation_input_${input.id}`"
-                                v-model="input.value"
-                                :required="input.required"
-                            />
-                        </div>
-                    </div>
-                </form>
+                        <i class="fa fa-fw fa-check"></i>
+                        {{ $__("Close") }}
+                    </button>
+                </div>
             </div>
-            <button
-                v-if="accept_callback"
-                id="accept_modal"
-                class="btn btn-default approve"
-                @click="submit"
-            >
-                <i class="fa fa-fw fa-check"></i>
-                <span v-html="confirmation.accept_label"></span>
-            </button>
-            <button
-                id="close_modal"
-                class="btn btn-default deny"
-                @click="removeConfirmationMessages"
-            >
-                <i class="fa fa-fw fa-remove"></i>
-                <span v-html="confirmation.cancel_label"></span>
-            </button>
+        </div>
+    </div>
+    <div class="confirmation modal" role="dialog" v-if="confirmation">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-header alert-warning">
+                    <h1 v-html="confirmation.title"></h1>
+                </div>
+                <div class="modal-body">
+                    <p v-html="confirmation.message"></p>
+                    <div class="inputs" v-if="confirmation.inputs">
+                        <form ref="confirmationform">
+                            <div
+                                class="row"
+                                v-for="input in confirmation.inputs"
+                                v-bind:key="input.id"
+                            >
+                                <div class="col-md-6">
+                                    <label
+                                        :for="`confirmation_input_${input.id}`"
+                                        v-bind:class="{
+                                            required: input.required,
+                                        }"
+                                        >{{ input.label }}:</label
+                                    >
+                                </div>
+                                <div class="col-md-6">
+                                    <flat-pickr
+                                        v-if="input.type == 'Date'"
+                                        :id="`confirmation_input_${input.id}`"
+                                        v-model="input.value"
+                                        :required="input.required"
+                                        :config="fp_config"
+                                    />
+                                    <input
+                                        v-if="input.type == 'Text'"
+                                        :id="`confirmation_input_${input.id}`"
+                                        v-model="input.value"
+                                        :required="input.required"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <button
+                        v-if="accept_callback"
+                        id="accept_modal"
+                        class="btn btn-default approve"
+                        @click="submit"
+                    >
+                        <i class="fa fa-fw fa-check"></i>
+                        <span v-html="confirmation.accept_label"></span>
+                    </button>
+                    <button
+                        id="close_modal"
+                        class="btn btn-default deny cancel"
+                        type="button"
+                        data-bs-dismiss="modal"
+                        @click="removeConfirmationMessages"
+                    >
+                        <i class="fa fa-fw fa-remove"></i>
+                        <span v-html="confirmation.cancel_label"></span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Must be styled differently -->
@@ -168,17 +186,6 @@ export default {
     width: 10%;
 }
 
-.confirmation {
-    position: absolute;
-    top: 25%;
-    left: 40%;
-
-    width: 50%;
-    min-height: 10%;
-    margin: auto;
-    align-items: center;
-    justify-content: center;
-}
 .confirmation .inputs {
     margin-top: 0.4em;
 }
