@@ -46,7 +46,7 @@
 </fieldset>
 
 <fieldset class="action">
-    <form method="post" action="routing-preview.pl">
+    <form method="post" id="save_and_preview_form" action="routing-preview.pl">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]" />
         <input type="hidden" id="issue_escaped" name="issue_escaped" value="[% issue_escaped | html %]" />
@@ -82,6 +82,23 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+     <script>
+        $(document).ready(function(){
+            $("#save_and_preview_form").on("submit",function(e){
+                var myurl = 'routing-preview.pl?op=print&subscriptionid='+$("#subscriptionid").val()+'&issue='+$("#issue_escaped").val();
+                window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+            });
+            /*    e.preventDefault();
+                print_slip( $("#subscriptionid").val(), $("#issue_escaped").val() );
+            });
+        });
+        function print_slip(subscriptionid,issue){
+            var myurl = 'routing-preview.pl?op=print&subscriptionid='+subscriptionid+'&issue='+issue;
+            window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+            window.location.href='subscription-detail.pl?subscriptionid=' + subscriptionid;
+            */
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

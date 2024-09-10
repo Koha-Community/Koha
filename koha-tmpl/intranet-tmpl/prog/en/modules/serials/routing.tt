@@ -44,14 +44,10 @@
 <h1>Edit routing list for <em>[% title | html %]</em></h1>
 [% END %]
 
-<form method="post" action="routing.pl">
-    [% INCLUDE 'csrf-token.inc' %]
-<input type="hidden" name="op" value="cud-save" />
-<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
 <fieldset class="rows">
 	<ol>
 		<li><label for="date_selected">Issue: </label>
-<select name="date_selected" id="date_selected">
+<select name="date_selected_top" id="date_selected_top" class="date_selected_top">
     [% FOREACH date IN dates %]
         [% IF ( date.selected ) %]
             <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
@@ -85,23 +81,43 @@
                     [% END %]
                     </select>
                 </td>
-                <td><a class="btn btn-default btn-xs" href="/cgi-bin/koha/serials/routing.pl?routingid=[% member.routingid | html %]&amp;subscriptionid=[% subscriptionid | html %]&amp;op=delete"><i class="fa fa-trash-can"></i> Delete</a></td>
+                <td>
+                    <form method="post" action="routing.pl">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-delete" />
+                        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                        <input type="hidden" name="routingid" value="[% member.routingid | html %]" />
+                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash-can"></i> Delete</button>
+                    </form>
+                </td>
             </tr>
             [% END %]
         </table>
     [% END %]
     <input type="hidden" id="new_recipients" name="new_recipients" value="">
 
-    <p style="margin-left:10em;">
-        <a href="#patron_search_modal" id="add_recipients" data-toggle="modal"><i class="fa fa-plus"></i> Add recipients</a>
-        [% IF memberloop %]
-            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]&amp;op=delete"><i class="fa fa-trash-can"></i> Delete all</a>
-        [% END %]
-    </p>
+    <form method="post" action="routing.pl">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-delete" />
+        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+        <p style="margin-left:10em;">
+            <a href="#patron_search_modal" id="add_recipients" data-toggle="modal"><i class="fa fa-plus"></i> Add recipients</a>
+            [% IF memberloop %]
+                <button type="submit" class="btn"><i class="fa fa-trash-can"></i> Delete all</button>
+            [% END %]
+        </p>
+    </form>
 </li>
 
-	<li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea></li>
-	</ol>
+    <form method="post" action="routing.pl">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-save" />
+        <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+        <input type="hidden" id="date_selected" name="date_selected" value="" />
+
+        <li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea></li>
+        </ol>
+
 
 </fieldset>
 <fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Save" /></fieldset>
@@ -123,6 +139,10 @@
                 var subscriptionid = $(this).data("subscriptionid");
                 var routingid = $(this).data("routingid");
                 reorder_item( subscriptionid, routingid, $(this).val());
+            });
+            $("#date_selected").val( $("#date_selected_top").find("option:selected").val() );
+            $(".date_selected_top").on("change",function(){
+                $("#date_selected").val( $(this).val() );
             });
         });
         function reorder_item(sid,rid,rank){
