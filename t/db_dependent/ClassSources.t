@@ -36,6 +36,8 @@ subtest 'GetClassSources' => sub {
 
     plan tests => 5;
 
+    $schema->storage->txn_begin;
+
     my $class_rule = $builder->build(
         {
             source => 'ClassSortRule',
@@ -82,11 +84,16 @@ subtest 'GetClassSources' => sub {
     is( $class_sources_cached->{$source_code}, undef, "New value now present after cache cleared" );
     $class_sources_cached = GetClassSources();
     is_deeply( $class_sources, $class_sources_cached, "New cached version does match the updated fresh version" );
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'GetClassSource' => sub {
 
     plan tests => 4;
+
+    $schema->storage->txn_begin;
 
     my $class_rule = $builder->build(
         {
@@ -123,11 +130,15 @@ subtest 'GetClassSource' => sub {
     $class_source_cache = GetClassSource($source_code);
     is( $class_source_cache->{description}, $class_source_db->{description}, "Now both get the correct value" );
 
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'GetClassSortRule' => sub {
 
     plan tests => 4;
+
+    $schema->storage->txn_begin;
 
     my $class_rule_1 = $builder->build(
         {
@@ -152,5 +163,7 @@ subtest 'GetClassSortRule' => sub {
     is_deeply( $class_sort_rule_db, $class_source_object->unblessed, "DB request got updated value" );
     $class_sort_rule_cache = GetClassSortRule($sort_rule);
     is_deeply( $class_sort_rule_cache, $class_sort_rule_db, "Now both get the correct value" );
+
+    $schema->storage->txn_rollback;
 
 };
