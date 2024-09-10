@@ -50,8 +50,11 @@ sub new {
 
     my $self = {};
 
-    $self->{biblionumber} = $params->{biblionumber} =~ s/\D//gr;
-    # just in case biblionumber obtained from CGI and passed directly here contains weird characters like spaces
+    if ( exists $self->{biblionumber} ) {
+        $self->{biblionumber} = $params->{biblionumber} =~ s/\D//gr;
+
+        # just in case biblionumber obtained from CGI and passed directly here contains weird characters like spaces
+    }
 
     bless $self, $class;
     return $self;
