@@ -1,93 +1,136 @@
 <template>
-    <transition name="modal_add_to_waiting_list">
-        <div v-if="show_modal_add_to_waiting_list" class="modal">
-            <h2>{{ $__("Add items to waiting list") }}</h2>
-            <form @submit="addItemsToWaitingList($event)">
-                <div class="page-section">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label class="required" for="barcode_list"
-                                    >{{ $__("Barcode list") }}:</label
-                                >
-                                <textarea
-                                    id="barcode_list"
-                                    v-model="barcode_list"
-                                    :placeholder="$__('Barcodes')"
-                                    rows="10"
-                                    cols="50"
-                                    required
-                                />
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <input
-                            type="submit"
-                            class="btn btn-primary"
-                            :value="$__('Submit')"
-                        />
-                        <input
+    <div
+        id="add_to_waiting_list"
+        class="modal"
+        role="dialog"
+        aria-labelledby="add_to_waiting_list_label"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-lg">
+                <form @submit="addItemsToWaitingList($event)">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="add_to_waiting_list_label">
+                            {{ $__("Add items to waiting list") }}
+                        </h1>
+                        <button
                             type="button"
-                            @click="show_modal_add_to_waiting_list = false"
-                            :value="$__('Close')"
-                        />
-                    </fieldset>
-                </div>
-            </form>
-        </div>
-    </transition>
-    <transition name="modal_add_to_train">
-        <div v-if="show_modal_add_to_train" class="modal">
-            <h2>{{ $__("Add items to a train") }}</h2>
-            <form @submit="addItemsToTrain($event)">
-                <div class="page-section">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label class="required" for="train_list"
-                                    >{{ $__("Select a train") }}:</label
-                                >
-                                <v-select
-                                    id="train_id"
-                                    v-model="train_id_selected_for_add"
-                                    label="name"
-                                    :options="train_list"
-                                    :reduce="t => t.train_id"
-                                >
-                                    <template #search="{ attributes, events }">
-                                        <input
-                                            :required="
-                                                !train_id_selected_for_add
-                                            "
-                                            class="vs__search"
-                                            v-bind="attributes"
-                                            v-on="events"
-                                        />
-                                    </template>
-                                </v-select>
-                                <span class="required">{{
-                                    $__("Required")
-                                }}</span>
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <input
-                            type="submit"
-                            class="btn btn-primary"
-                            :value="$__('Submit')"
-                        />
-                        <input
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <ol>
+                                <li class="form-group form-row">
+                                    <label
+                                        class="required col-form-label"
+                                        for="barcode_list"
+                                        >{{ $__("Barcode list") }}:</label
+                                    >
+                                    <textarea
+                                        id="barcode_list"
+                                        v-model="barcode_list"
+                                        :placeholder="$__('Barcodes')"
+                                        rows="10"
+                                        cols="50"
+                                        required
+                                    />
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit">
+                            <i class="fa fa-check"></i> Save
+                        </button>
+                        <button
+                            class="btn btn-default deny cancel"
                             type="button"
-                            @click="show_modal_add_to_train = false"
-                            :value="$__('Close')"
-                        />
-                    </fieldset>
-                </div>
-            </form>
+                            data-bs-dismiss="modal"
+                        >
+                            <i class="fa fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </transition>
+    </div>
+    <div
+        id="add_to_train"
+        class="modal"
+        role="dialog"
+        aria-labelledby="add_to_train_label"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-lg">
+                <form @submit="addItemsToTrain($event)">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="add_to_train_label">
+                            {{ $__("Add items to a train") }}
+                        </h1>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <ol>
+                                <li class="form-group form-row">
+                                    <label
+                                        class="required col-form-label"
+                                        for="train_id"
+                                        >{{ $__("Select a train") }}:</label
+                                    >
+                                    <v-select
+                                        id="train_id"
+                                        v-model="train_id_selected_for_add"
+                                        label="name"
+                                        :options="train_list"
+                                        :reduce="t => t.train_id"
+                                    >
+                                        <template
+                                            #search="{ attributes, events }"
+                                        >
+                                            <input
+                                                :required="
+                                                    !train_id_selected_for_add
+                                                "
+                                                class="vs__search"
+                                                v-bind="attributes"
+                                                v-on="events"
+                                            />
+                                        </template>
+                                    </v-select>
+                                    <span class="required">{{
+                                        $__("Required")
+                                    }}</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit">
+                            <i class="fa fa-check"></i> Save
+                        </button>
+                        <button
+                            class="btn btn-default deny cancel"
+                            type="button"
+                            data-bs-dismiss="modal"
+                        >
+                            <i class="fa fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div
         v-else-if="!config.settings.not_for_loan_waiting_list_in"
@@ -98,15 +141,19 @@
     <div v-else id="waiting-list">
         <Toolbar>
             <a
+                href="#add_to_waiting_list"
                 class="btn btn-default"
-                @click="show_modal_add_to_waiting_list = true"
+                role="button"
+                data-bs-toggle="modal"
                 ><font-awesome-icon icon="plus" />
                 {{ $__("Add to waiting list") }}</a
             >
             <a
                 v-if="last_items.length > 0"
+                href="#add_to_train"
                 class="btn btn-default"
-                @click="show_modal_add_to_train = true"
+                role="button"
+                data-bs-toggle="modal"
                 ><font-awesome-icon icon="plus" />
                 {{
                     $__("Add last %s items to a train").format(
@@ -167,8 +214,6 @@ export default {
             count_waiting_list_items: 0,
             barcode_list: "",
             initialized: false,
-            show_modal_add_to_waiting_list: false,
-            show_modal_add_to_train: false,
             tableOptions: {
                 columns: this.getTableColumns(),
                 url: "/api/v1/preservation/waiting-list/items",
@@ -207,6 +252,7 @@ export default {
         },
         addItemsToTrain: function (e) {
             e.preventDefault()
+            $("#add_to_train").modal("hide")
             let item_ids = this.last_items.map(i => i.item_id)
             this.$router.push({
                 name: "TrainsFormAddItems",
@@ -218,7 +264,7 @@ export default {
         },
         addItemsToWaitingList: function (e) {
             e.preventDefault()
-            this.show_modal_add_to_waiting_list = false
+            $("#add_to_waiting_list").modal("hide")
             let items = []
             this.barcode_list
                 .split("\n")
@@ -333,22 +379,5 @@ export default {
 <style scoped>
 #waiting_list {
     display: table;
-}
-.modal {
-    position: fixed;
-    z-index: 9990;
-    top: 0;
-    left: 0;
-    width: 35%;
-    height: 30%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: table;
-    transition: opacity 0.3s ease;
-    margin: auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-    transition: all 0.3s ease;
 }
 </style>

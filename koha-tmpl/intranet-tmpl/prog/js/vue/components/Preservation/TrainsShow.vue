@@ -1,15 +1,35 @@
 <template>
-    <transition name="modal">
-        <div v-if="show_modal" class="modal">
-            <h2>{{ $__("Copy item to the following train") }}</h2>
-            <form @submit="copyItem($event)">
-                <div class="page-section">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label class="required" for="train_list"
-                                    >{{ $__("Select a train") }}:</label
-                                >
+    <div
+        id="copy_item_to_train"
+        class="modal"
+        role="dialog"
+        aria-labelledby="copy_item_to_train_label"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-lg">
+                <form @submit="copyItem($event)">
+                    <div class="modal-header">
+                        <h1 class="modal-title" id="copy_item_to_train_label">
+                            {{ $__("Copy item to the following train") }}
+                        </h1>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <ol>
+                                <li class="form-group form-row">
+                                    <label
+                                        class="required col-form-label"
+                                        for="train_list"
+                                        >{{ $__("Select a train") }}:</label
+                                    >
+                                </li>
                                 <v-select
                                     v-model="train_id_selected_for_copy"
                                     label="name"
@@ -30,21 +50,26 @@
                                 <span class="required">{{
                                     $__("Required")
                                 }}</span>
-                            </li>
-                        </ol>
-                    </fieldset>
-                    <fieldset class="action">
-                        <input type="submit" value="Copy" />
-                        <input
+                            </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit">
+                            <i class="fa fa-check"></i> Save
+                        </button>
+                        <button
+                            class="btn btn-default deny cancel"
                             type="button"
-                            @click="show_modal = false"
-                            :value="$__('Close')"
-                        />
-                    </fieldset>
-                </div>
-            </form>
+                            data-bs-dismiss="modal"
+                        >
+                            <i class="fa fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </transition>
+    </div>
+
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="trains_show">
         <Toolbar>
@@ -294,7 +319,6 @@ export default {
                 description: "",
             },
             initialized: false,
-            show_modal: false,
             item_table: {
                 display: false,
                 data: [],
@@ -498,7 +522,7 @@ export default {
             )
         },
         selectTrainForCopy(train_item_id) {
-            this.show_modal = true
+            $("#copy_item_to_train").show()
             this.train_item_id_to_copy = train_item_id
         },
         copyItem(event) {
@@ -513,7 +537,7 @@ export default {
                 .then(
                     success => {
                         this.setMessage(this.$__("Item copied successfully."))
-                        this.show_modal = false
+                        $("#copy_item_to_train").hide()
                     },
                     error => {
                         this.setWarning(
@@ -720,24 +744,6 @@ export default {
 }
 .attribute_value {
     display: block;
-}
-.modal {
-    position: fixed;
-    z-index: 9998;
-    overflow-y: inherit !important;
-    top: 0;
-    left: 0;
-    width: 35%;
-    height: 30%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: table;
-    transition: opacity 0.3s ease;
-    margin: auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-    transition: all 0.3s ease;
 }
 input[type="checkbox"] {
     float: left;
