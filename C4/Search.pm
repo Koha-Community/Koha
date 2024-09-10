@@ -1730,7 +1730,8 @@ sub searchResults {
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
 
-    my $userenv = C4::Context->userenv;
+    my $userenv        = C4::Context->userenv;
+    my $userenv_branch = $userenv->{'branch'};
     my $logged_in_user =
         ( defined $userenv and $userenv->{number} )
         ? Koha::Patrons->find( $userenv->{number} )
@@ -1828,23 +1829,26 @@ sub searchResults {
         my $onloan_items;
         my $other_items;
 
-        my $ordered_count         = 0;
-        my $available_count       = 0;
-        my $onloan_count          = 0;
-        my $longoverdue_count     = 0;
-        my $other_count           = 0;
-        my $withdrawn_count       = 0;
-        my $itemlost_count        = 0;
-        my $hideatopac_count      = 0;
-        my $itembinding_count     = 0;
-        my $itemdamaged_count     = 0;
-        my $item_in_transit_count = 0;
-        my $item_onhold_count     = 0;
-        my $notforloan_count      = 0;
-        my $item_recalled_count   = 0;
-        my $items_count           = scalar(@fields);
-        my $maxitems_pref         = C4::Context->preference('maxItemsinSearchResults');
-        my $maxitems              = $maxitems_pref ? $maxitems_pref - 1 : 1;
+        my $ordered_count          = 0;
+        my $available_count        = 0;
+        my $branch_available_count = 0;
+        my $onloan_count           = 0;
+        my $branch_onloan_count    = 0;
+        my $longoverdue_count      = 0;
+        my $other_count            = 0;
+        my $branch_other_count     = 0;
+        my $withdrawn_count        = 0;
+        my $itemlost_count         = 0;
+        my $hideatopac_count       = 0;
+        my $itembinding_count      = 0;
+        my $itemdamaged_count      = 0;
+        my $item_in_transit_count  = 0;
+        my $item_onhold_count      = 0;
+        my $notforloan_count       = 0;
+        my $item_recalled_count    = 0;
+        my $items_count            = scalar(@fields);
+        my $maxitems_pref          = C4::Context->preference('maxItemsinSearchResults');
+        my $maxitems               = $maxitems_pref ? $maxitems_pref - 1 : 1;
         my @hiddenitems;    # hidden itemnumbers based on OpacHiddenItems syspref
 
         # loop through every item
@@ -1901,8 +1905,10 @@ sub searchResults {
                 and !( $patron_category_hide_lost_items and $item->{itemlost} ) )
             {
                 $onloan_count++;
+                $branch_onloan_count++ if $item->{'branchcode'} eq $userenv_branch;
                 my $key = $prefix . $item->{onloan} . $item->{barcode};
-                $onloan_items->{$key}->{due_date} = $item->{onloan};
+                $onloan_items->{$key}->{branchonloancount} = $branch_onloan_count;
+                $onloan_items->{$key}->{due_date}          = $item->{onloan};
                 $onloan_items->{$key}->{count}++ if $item->{$hbranch};
                 $onloan_items->{$key}->{branchname}     = $item->{branchname};
                 $onloan_items->{$key}->{branchcode}     = $item->{branchcode};
@@ -2009,15 +2015,16 @@ sub searchResults {
                         . ( $item->{notforloan} // q{} );
 
                     $other_count++;
-
+                    $branch_other_count++ if $item->{branchcode} eq $userenv_branch;
                     my $key = $prefix . $item->{status};
                     foreach (qw(withdrawn itemlost damaged branchname itemcallnumber)) {
                         $other_items->{$key}->{$_} = $item->{$_};
                     }
-                    $other_items->{$key}->{branchcode} = $item->{branchcode};
-                    $other_items->{$key}->{intransit}  = ( $transfertwhen ne '' ) ? 1 : 0;
-                    $other_items->{$key}->{recalled}   = ($recallstatus)          ? 1 : 0;
-                    $other_items->{$key}->{onhold}     = ($reservestatus)         ? 1 : 0;
+                    $other_items->{$key}->{branchothercount} = $branch_other_count;
+                    $other_items->{$key}->{branchcode}       = $item->{branchcode};
+                    $other_items->{$key}->{intransit}        = ( $transfertwhen ne '' ) ? 1 : 0;
+                    $other_items->{$key}->{recalled}         = ($recallstatus)          ? 1 : 0;
+                    $other_items->{$key}->{onhold}           = ($reservestatus)         ? 1 : 0;
                     $other_items->{$key}->{notforloan} =
                         GetAuthorisedValueDesc( '', '', $item->{notforloan}, '', '', $notforloan_authorised_value )
                         if $notforloan_authorised_value and $item->{notforloan};
@@ -2035,12 +2042,14 @@ sub searchResults {
                 # item is available
                 else {
                     $available_count++;
+                    $branch_available_count++              if $item->{branchcode} eq $userenv_branch;
                     $available_items->{$prefix}->{count}++ if $item->{$hbranch};
                     foreach (qw(branchname itemcallnumber description)) {
                         $available_items->{$prefix}->{$_} = $item->{$_};
                     }
-                    $available_items->{$prefix}->{branchcode} = $item->{branchcode};
-                    $available_items->{$prefix}->{location}   = $shelflocations->{ $item->{location} }
+                    $available_items->{$prefix}->{branchavailablecount} = $branch_available_count;
+                    $available_items->{$prefix}->{branchcode}           = $item->{branchcode};
+                    $available_items->{$prefix}->{location}             = $shelflocations->{ $item->{location} }
                         if $item->{location};
                     $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation(
                         $search_context->{'interface'},
@@ -2101,7 +2110,7 @@ sub searchResults {
                 }
             );
         }
-
+        my $branch_count  = $branch_available_count + $branch_onloan_count + $branch_other_count || 0;
         my $biblio_object = Koha::Biblios->find( $oldbiblio->{biblionumber} );
         $oldbiblio->{biblio_object} = $biblio_object;
         $oldbiblio->{coins}         = eval { $biblio_object->get_coins }
@@ -2125,19 +2134,25 @@ sub searchResults {
         $oldbiblio->{onloan_items_loop}    = \@onloan_items_loop;
         $oldbiblio->{other_items_loop}     = \@other_items_loop;
         $oldbiblio->{availablecount}       = $available_count;
-        $oldbiblio->{availableplural}      = 1 if $available_count > 1;
-        $oldbiblio->{onloancount}          = $onloan_count;
-        $oldbiblio->{onloanplural}         = 1 if $onloan_count > 1;
-        $oldbiblio->{othercount}           = $other_count;
-        $oldbiblio->{otherplural}          = 1 if $other_count > 1;
-        $oldbiblio->{withdrawncount}       = $withdrawn_count;
-        $oldbiblio->{itemlostcount}        = $itemlost_count;
-        $oldbiblio->{damagedcount}         = $itemdamaged_count;
-        $oldbiblio->{intransitcount}       = $item_in_transit_count;
-        $oldbiblio->{onholdcount}          = $item_onhold_count;
-        $oldbiblio->{recalledcount}        = $item_recalled_count;
-        $oldbiblio->{orderedcount}         = $ordered_count;
-        $oldbiblio->{notforloancount}      = $notforloan_count;
+
+        $oldbiblio->{branchavailablecount} = $branch_available_count || 0;
+        $oldbiblio->{branchonloancount}    = $branch_onloan_count    || 0;
+        $oldbiblio->{branchothercount}     = $branch_other_count     || 0;
+        $oldbiblio->{branchtotalcount}     = $branch_count           || 0;
+
+        $oldbiblio->{availableplural} = 1 if $available_count > 1;
+        $oldbiblio->{onloancount}     = $onloan_count;
+        $oldbiblio->{onloanplural}    = 1 if $onloan_count > 1;
+        $oldbiblio->{othercount}      = $other_count;
+        $oldbiblio->{otherplural}     = 1 if $other_count > 1;
+        $oldbiblio->{withdrawncount}  = $withdrawn_count;
+        $oldbiblio->{itemlostcount}   = $itemlost_count;
+        $oldbiblio->{damagedcount}    = $itemdamaged_count;
+        $oldbiblio->{intransitcount}  = $item_in_transit_count;
+        $oldbiblio->{onholdcount}     = $item_onhold_count;
+        $oldbiblio->{recalledcount}   = $item_recalled_count;
+        $oldbiblio->{orderedcount}    = $ordered_count;
+        $oldbiblio->{notforloancount} = $notforloan_count;
 
         if ( C4::Context->preference("AlternateHoldingsField") && $items_count == 0 ) {
             my $fieldspec             = C4::Context->preference("AlternateHoldingsField");
