@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 54;
 
 use C4::Context;
+use Koha::Database;
 
 use t::lib::TestBuilder;
 
@@ -30,57 +31,52 @@ BEGIN {
     use_ok('Koha::Patron::Relationships');
 }
 
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
+$schema->storage->txn_begin;
+
 # Father
-my $kyle = Koha::Patrons->find(
-    $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                firstname => 'Kyle',
-                surname   => 'Hall',
-            }
+my $kyle = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Kyle',
+            surname   => 'Hall',
         }
-    )->{borrowernumber}
+    }
 );
 
 # Mother
-my $chelsea = Koha::Patrons->find(
-    $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                firstname => 'Chelsea',
-                surname   => 'Hall',
-            }
+my $chelsea = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Chelsea',
+            surname   => 'Hall',
         }
-    )->{borrowernumber}
+    }
 );
 
 # Children
-my $daria = Koha::Patrons->find(
-    $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                firstname => 'Daria',
-                surname   => 'Hall',
-            }
+my $daria = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Daria',
+            surname   => 'Hall',
         }
-    )->{borrowernumber}
+    }
 );
 
-my $kylie = Koha::Patrons->find(
-    $builder->build(
-        {
-            source => 'Borrower',
-            value  => {
-                firstname => 'Kylie',
-                surname   => 'Hall',
-            }
+my $kylie = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Kylie',
+            surname   => 'Hall',
         }
-    )->{borrowernumber}
+    }
 );
 
 Koha::Patron::Relationship->new({ guarantor_id => $kyle->id, guarantee_id => $daria->id, relationship => 'father' })->store();
@@ -152,4 +148,4 @@ is( $sibling->firstname, 'Kylie', 'Sibling from scalar first name matches correc
 is( $sibling->surname, 'Hall', 'Sibling from scalar surname matches correctly' );
 is( $sibling->id, $kylie->id, 'Sibling from scalar patron id matches correctly' );
 
-1;
+$schema->storage->txn_rollback;
