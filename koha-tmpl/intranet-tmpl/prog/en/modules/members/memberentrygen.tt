@@ -515,17 +515,17 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                                 <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
                                                                     <span class="label">Guarantor:</span>
                                                                     [% INCLUDE 'patron-title.inc' patron=r.guarantor hide_patron_infos_if_needed=1 %]
-                                                                    <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% r.guarantor_id | $raw %]"/>
+                                                                    <input type="hidden" class="new_guarantor_id relation-[% r.id %]" name="new_guarantor_id" value="[% r.guarantor_id | $raw %]"/>
                                                                 </li>
                                                                 <li>
                                                                     <span class="label">Relationship:</span>
                                                                     <span>[% r.relationship | html %]</span>
-                                                                    <input type=hidden class="new_guarantor_relationship" name="new_guarantor_relationship" value="[% r.relationship | html %]" />
+                                                                    <input type=hidden class="new_guarantor_relationship relation-[% r.id %]" name="new_guarantor_relationship" value="[% r.relationship | html %]" />
                                                                 </li>
 
                                                                 <li>
                                                                     <label for="delete_guarantor-[% r.id | uri %]">Remove: </label>
-                                                                    <input type="checkbox" id="delete_guarantor-[% r.id | uri %]" name="delete_guarantor" value="[% r.id | html %]" />
+                                                                    <input type="checkbox" id="delete_guarantor-[% r.id | uri %]" name="delete_guarantor" value="[% r.id | html %]" onclick="toggle_guarantor_field([% r.id | html %])" />
                                                                 </li>
                                                             [% END %]
                                                         </ol>
@@ -1772,6 +1772,10 @@ legend.collapsed i.fa.fa-caret-down::before {
             }
         }
         var Sticky;
+
+        function toggle_guarantor_field(rel_number){
+            $(".relation-"+rel_number).prop('disabled', (i, v) => !v);
+        }
 
         function showHideFields(){
             $("#messaging_prefs_loading, #guarantor_template").hide();
