@@ -20,11 +20,16 @@
 use Modern::Perl;
 
 use Test::More tests => 27;
+
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Labels::Profile');
 }
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $expected_profile = {
         creator         => 'Labels',
@@ -95,3 +100,4 @@ is_deeply($updated_profile, $saved_profile, "Updated layout object verify succes
 my $del_results = $updated_profile->delete();
 ok($del_results ne -1, "Profile->delete() success");
 
+$schema->storage->txn_rollback;

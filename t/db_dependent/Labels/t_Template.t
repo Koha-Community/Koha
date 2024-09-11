@@ -20,11 +20,16 @@
 use Modern::Perl;
 
 use Test::More tests => 54;
+
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Labels::Template');
 }
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $expect_template = {
         creator         =>      'Labels',
@@ -135,3 +140,4 @@ foreach my $key (keys %{$expect_conv}) {
 my $del_results = $updated_template->delete();
 ok($del_results ne -1, "Template->delete() success");
 
+$schema->storage->txn_rollback;

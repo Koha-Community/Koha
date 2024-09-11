@@ -20,11 +20,16 @@
 use Modern::Perl;
 
 use Test::More tests => 58;
+
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Labels::Layout');
 }
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $default_layout = {
     barcode_type  => 'CODE39',
@@ -118,3 +123,4 @@ is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 1
 my $del_results = $updated_layout->delete();
 ok( ! defined($del_results) , "Layout->delete() success");
 
+$schema->storage->txn_rollback;
