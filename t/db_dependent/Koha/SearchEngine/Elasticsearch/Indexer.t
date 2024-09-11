@@ -41,6 +41,8 @@ SKIP: {
     skip 'Elasticsearch configuration not available', 3
         if $@;
 
+    $schema->storage->txn_begin;
+
     my $builder = t::lib::TestBuilder->new;
     my $biblio =
         $builder->build_sample_biblio;    # create biblio before we start mocking to avoid trouble indexing on creation
@@ -157,8 +159,13 @@ SKIP: {
 
     };
 
+    $schema->storage->txn_rollback;
+
     subtest 'update_index' => sub {
+
         plan tests => 1;
+
+        $schema->storage->txn_begin;
 
         my $biblio       = $builder->build_sample_biblio;
         my $biblionumber = $biblio->biblionumber;
@@ -171,6 +178,7 @@ SKIP: {
         }
         "", "update_index called with deleted biblionumber should not crash";
 
+        $schema->storage->txn_rollback;
     };
 
 }
