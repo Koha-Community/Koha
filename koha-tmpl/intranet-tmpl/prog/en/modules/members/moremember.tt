@@ -767,7 +767,7 @@
         var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
-    [% IF Koha.Preference('ClaimReturnedLostValue') %]
+    [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
     [% Asset.js("js/holds.js") | $raw %]
