@@ -33,7 +33,7 @@
         [% END %]
     [% ELSIF ( CAN_user_acquisition_vendors_manage ) %]
         <div class="btn-group"
-            ><a class="btn btn-default" href="/cgi-bin/koha/acqui/supplier.pl?op=enter"><i class="fa fa-plus"></i> New vendor</a></div
+            ><a class="btn btn-default" href="/cgi-bin/koha/vendors"><i class="fa fa-plus"></i> New vendor</a></div
         >
     [% END %]
 </div>

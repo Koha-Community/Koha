@@ -168,6 +168,7 @@ for my $vendor (@suppliers) {
         };
 
 }
+
 $template->param(
     loop_suppliers => $loop_suppliers,
     supplier       => ( $booksellerid || $supplier ),

@@ -4,7 +4,13 @@ import { reactive, toRefs } from "vue";
 export const useVendorStore = defineStore("vendors", () => {
     const store = reactive({
         vendors: [],
-        config: { settings: {} },
+        currencies: [],
+        gstValues: [],
+        config: {
+            settings: {
+                edifact: false,
+            },
+        },
     });
 
     return {

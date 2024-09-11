@@ -1,0 +1,47 @@
+[% USE raw %]
+[% USE To %]
+[% USE Asset %]
+[% USE KohaDates %]
+[% USE TablesSettings %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% PROCESS 'patron-search.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title
+    >[% FILTER collapse %]
+        [% t("Vendors") | html %]
+        &rsaquo; [% t("Koha") | html %]
+    [% END %]</title
+>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="acq_booksellers" class="acq">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'acquisitions-search.inc' %]
+[% END %]
+
+<div id="__vendors">
+    <!-- this is closed in intranet-bottom.inc -->
+
+    [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'calendar.inc' %]
+        [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
+        [% INCLUDE 'js-patron-format.inc' %]
+        [% INCLUDE 'js-date-format.inc' %]
+        <script>
+            const userPermissions = [% To.json(user_permissions) | $raw %];
+            const currencies = [% To.json(currencies) | $raw %];
+            const gstValues = [% To.json(gst_values) | $raw %];
+            const edifact = [% To.json(edifact) | $raw %]
+            const viewBaskets = [% To.json(viewbaskets) | $raw %]
+        </script>
+        [% Asset.js("js/vue/dist/acquisitions.js") | $raw %]
+        [% INCLUDE 'select2.inc' %]
+        [% SET columns = ['cardnumber','name','category','branch','action'] %]
+        [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
+        [% PROCESS patron_search_js columns => columns, filter => erm_users, actions => ["select"], preview_on_name_click => 1 %]
+    [% END %]
+    [% INCLUDE 'intranet-bottom.inc' %]</div
+>
