@@ -244,14 +244,14 @@ sub generate_subfield_form {
             my $default_source =
               C4::Context->preference("DefaultClassificationSource");
 
-            foreach my $class_source (sort {fc($a) cmp fc($b)} keys %$class_sources) {
+            foreach my $class_source ( sort { fc($a) cmp fc($b) } keys %$class_sources ) {
                 next
-                  unless $class_sources->{$class_source}->{'used'}
-                  or ( $value and $class_source eq $value )
-                  or ( $class_source eq $default_source );
+                    unless $class_sources->{$class_source}->{'used'}
+                    or ( $value and $class_source eq $value )
+                    or ( $class_source eq $default_source );
                 push @authorised_values, $class_source;
                 $authorised_lib{$class_source} =
-                  $class_sources->{$class_source}->{'description'};
+                    $class_sources->{$class_source}->{'description'};
             }
             $value = $default_source if !$value && $prefill_with_default_values;
 
