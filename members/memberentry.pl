@@ -934,17 +934,26 @@ sub add_guarantors {
     my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
     my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
 
-    for ( my $i = 0 ; $i < scalar @new_guarantor_id; $i++ ) {
+    for ( my $i = 0 ; $i < scalar @new_guarantor_id ; $i++ ) {
         my $guarantor_id = $new_guarantor_id[$i];
         my $relationship = $new_guarantor_relationship[$i];
 
         next unless $guarantor_id;
 
-        $patron->add_guarantor(
+        my $existing_relationship_count = Koha::Patron::Relationships->search(
             {
+                guarantee_id => $patron->id,
                 guarantor_id => $guarantor_id,
-                relationship => $relationship,
             }
-        );
+        )->count;
+
+        if ( $existing_relationship_count == 0 ) {
+            $patron->add_guarantor(
+                {
+                    guarantor_id => $guarantor_id,
+                    relationship => $relationship,
+                }
+            );
+        }
     }
 }
