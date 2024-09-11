@@ -315,7 +315,7 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                    if ( $guarantor->is_child ) {
                         Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
@@ -372,7 +372,7 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                    if ( $guarantor->is_child ) {
                         Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
@@ -533,6 +533,18 @@ sub guarantor_relationships {
     return Koha::Patron::Relationships->search( { guarantee_id => $self->id } );
 }
 
+=head3 is_guarantee
+
+Returns true if the patron has a guarantor.
+
+=cut
+
+sub is_guarantee {
+    my ($self) = @_;
+    return $self->guarantor_relationships()->count();
+}
+
+
 =head3 guarantee_relationships
 
 Returns Koha::Patron::Relationships object for this patron's guarantors
@@ -556,6 +568,18 @@ sub guarantee_relationships {
         }
     );
 }
+
+=head3 is_guarantor
+
+Returns true if the patron is a guarantor.
+
+=cut
+
+sub is_guarantor {
+    my ($self) = @_;
+    return $self->guarantee_relationships()->count();
+}
+
 
 =head3 relationships_debt
 

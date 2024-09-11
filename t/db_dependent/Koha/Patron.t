@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -406,6 +406,51 @@ subtest 'add_guarantor() tests' => sub {
             'Exception is thrown for duplicated relationship';
         close STDERR;
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'guarantor checks on patron creation / update tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'guarantor' );
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { can_be_guarantee => 1, category_type => 'A' } } );
+
+    my $guarantor =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+    my $guarantee =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+
+    subtest 'patron update tests' => sub {
+        plan tests => 4;
+        ok(
+            $guarantee->add_guarantor( { guarantor_id => $guarantor->borrowernumber, relationship => 'guarantor' } ),
+            "Relationship is added, no problem"
+        );
+        is( $guarantor->guarantee_relationships->count, 1, 'Relationship added' );
+        ok( $guarantor->surname("Duck")->store(), "Updating guarantor is okay" );
+        ok( $guarantee->surname("Duck")->store(), "Updating guarantee is okay" );
+    };
+
+    subtest 'patron creation tests' => sub {
+        plan tests => 1;
+
+        my $new_guarantee = $builder->build_object(
+            { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+        my $new_guarantee_hash = $new_guarantee->unblessed;
+        $new_guarantee->delete();
+
+        delete $new_guarantee_hash->{borrowernumber};
+
+        ok(
+            Koha::Patron->new($new_guarantee_hash)->store( { guarantors => [$guarantor] } ),
+            "We can add the new patron and indicate guarantor"
+        );
+    };
 
     $schema->storage->txn_rollback;
 };

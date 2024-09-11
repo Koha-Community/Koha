@@ -280,7 +280,7 @@ if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
 }
 
 foreach my $guarantor (@guarantors) {
-    if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) && $guarantor->is_child || $guarantor->category->can_be_guarantee ) {
+    if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) && ($guarantor->is_child ) || $guarantor->is_guarantee || $patron->is_guarantor)  {
         push @errors, 'ERROR_guarantor_is_guarantee';
     }
 }
