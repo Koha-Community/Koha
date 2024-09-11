@@ -15,20 +15,27 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Test::More tests => 1;
-use Test::MockModule;
-use t::lib::Mocks;
-use t::lib::TestBuilder;
 
-use C4::Patroncards::Layout qw( save new );
+use C4::Patroncards::Layout;
+use Koha::Database;
 
-subtest '->save' => sub {
+my $schema = Koha::Database->new->schema;
+
+subtest 'save() tests' => sub {
+
     plan tests => 1;
+
+    $schema->storage->txn_begin;
+
     my $layout = C4::Patroncards::Layout->new(
         layout_name => "new patron card",
-        layout_id   => '', # The interface send an empty string
+        layout_id   => '',                  # The interface send an empty string
         layout_xml  => 'some_xml'
     );
     my $layout_id = $layout->save;
-    ok($layout_id > 0, 'A layout_id should have been returned on ->save');
+    ok( $layout_id > 0, 'A layout_id should have been returned on ->save' );
+
+    $schema->storage->txn_rollback;
 };
