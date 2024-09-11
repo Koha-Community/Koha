@@ -23,6 +23,8 @@ use Koha::Acquisition::Bookseller::Interfaces;
 use Koha::Acquisition::Bookseller::Issues;
 use Koha::Subscriptions;
 
+use C4::Contract qw( GetContracts );
+
 use base qw( Koha::Object );
 
 =head1 NAME
@@ -61,6 +63,24 @@ sub contacts {
     my ($self) = @_;
     my $contacts_rs = $self->_result->aqcontacts;
     return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic($contacts_rs);
+}
+
+=head3 contracts
+
+    my $vendor   = Koha::Acquisition::Booksellers->find( $id );
+    my @contracts = $vendor->contracts();
+
+Returns the list of contracts for the vendor
+
+=cut
+
+sub contracts {
+    my ($self) = @_;
+    return GetContracts(
+        {
+            booksellerid => $self->id,
+        }
+    );
 }
 
 =head3 subscriptions

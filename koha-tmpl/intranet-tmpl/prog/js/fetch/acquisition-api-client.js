@@ -11,7 +11,8 @@ export class AcquisitionAPIClient {
                 this.get({
                     endpoint: "vendors/" + id,
                     headers: {
-                        "x-koha-embed": "aliases",
+                        "x-koha-embed":
+                            "baskets,aliases,subscriptions,interfaces,contacts,contracts",
                     },
                 }),
             getAll: (query, params) =>
