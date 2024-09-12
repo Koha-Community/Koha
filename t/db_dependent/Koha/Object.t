@@ -763,7 +763,7 @@ subtest 'attributes_from_api() tests' => sub {
 
     subtest 'date and date-time handling tests' => sub {
 
-        plan tests => 12;
+        plan tests => 13;
 
         my $patron = Koha::Patron->new();
 
@@ -801,6 +801,28 @@ subtest 'attributes_from_api() tests' => sub {
             $attrs->{dateofbirth},
             '2019-12-27',
             'Given an rfc3339 formatted date string, a date field is converted into an SQL formatted date string'
+        );
+
+        $attrs = $patron->attributes_from_api(
+            {
+                updated_on    => { '>' => '2019-12-27T14:53:00Z' },
+                last_seen     => [ { '>' => '2019-12-27T14:53:00Z' }, { '=' => '2019-12-31T23:59:00Z' } ],
+                date_of_birth => [ { '>' => '2019-12-27' },           { '=' => '2019-12-31' } ],
+            }
+        );
+
+        is_deeply(
+            $attrs,
+            {
+                lastseen => [
+                    {
+                        '>' => '2019-12-27 14:53:00',
+                    },
+                    { '=' => '2019-12-31 23:59:00' }
+                ],
+                updated_on => { '>' => '2019-12-27 14:53:00' },
+                dateofbirth => [ { '>', '2019-12-27'}, { '=' => '2019-12-31' } ]
+            }
         );
 
         $attrs = $patron->attributes_from_api(

@@ -274,13 +274,15 @@ controller, and thus shouldn't be called twice in it.
 
             # Apply the mapping function to the passed params
             if ( defined $filtered_params ) {
-                $filtered_params =
-                  $c->build_query_params( $filtered_params, $reserved_params );
-              }
+                $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+            }
 
-            $filtered_params =
-              $c->merge_q_params( $filtered_params, $query_params,
-                $result_set );
+            if ($query_params) {
+                $filtered_params = $c->merge_q_params(
+                    $filtered_params, $query_params,
+                    $result_set
+                );
+            }
 
             $filtered_params =
                   $result_set->attributes_from_api($filtered_params);

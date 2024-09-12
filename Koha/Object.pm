@@ -832,6 +832,44 @@ Returns the passed params, converted from API naming into the model.
 
 =cut
 
+sub _recursive_fixup {
+    my ( $self, $key, $value, $column_info ) = @_;
+
+    if ( ref($value) && ref($value) eq 'HASH' ) {
+        my $hash;
+        for my $k ( keys %$value ) {
+            $hash->{$k} = $self->_recursive_fixup( $key, $value->{$k}, $column_info );
+        }
+        return $hash;
+
+    } elsif ( ref($value) && ref($value) eq 'ARRAY' ) {
+        return [ map { $self->_recursive_fixup( $key, $_, $column_info ) } @$value ];
+    } else {
+        if ( $column_info->{is_boolean} ) {
+
+            # TODO: Remove when D8 is formally deprecated
+            # Handle booleans gracefully
+            $value = ($value) ? 1 : 0;
+        } elsif ( _date_or_datetime_column_type( $column_info->{data_type} ) ) {
+            if ( defined $value ) {
+                try {
+                    my $dtf = $self->_result->result_source->storage->datetime_parser;
+                    if ( $column_info->{data_type} eq 'date' ) {
+                        my $dt = DateTime::Format::MySQL->parse_date($value);
+                        $value = $dtf->format_date($dt);
+                    } else {
+                        my $dt = Koha::DateTime::Format::RFC3339->parse_datetime($value);
+                        $value = $dtf->format_datetime($dt);
+                    }
+                } catch {
+                    Koha::Exceptions::BadParameter->throw( parameter => $key );
+                };
+            }
+        }
+        return $value;
+    }
+}
+
 sub attributes_from_api {
     my ( $self, $from_api_params ) = @_;
 
@@ -839,38 +877,14 @@ sub attributes_from_api {
 
     my $params;
     my $columns_info = $self->_result->result_source->columns_info;
-    my $dtf          = $self->_result->result_source->storage->datetime_parser;
 
-    while (my ($key, $value) = each %{ $from_api_params } ) {
+    while ( my ( $key, $value ) = each %{$from_api_params} ) {
         my $koha_field_name =
-          exists $from_api_mapping->{$key}
-          ? $from_api_mapping->{$key}
-          : $key;
+            exists $from_api_mapping->{$key}
+            ? $from_api_mapping->{$key}
+            : $key;
 
-        if ( $columns_info->{$koha_field_name}->{is_boolean} ) {
-            # TODO: Remove when D8 is formally deprecated
-            # Handle booleans gracefully
-            $value = ( $value ) ? 1 : 0;
-        }
-        elsif ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
-            if (defined $value) {
-                try {
-                    if ( $columns_info->{$koha_field_name}->{data_type} eq 'date' ) {
-                        my $dt = DateTime::Format::MySQL->parse_date($value);
-                        $value = $dtf->format_date($dt);
-                    }
-                    else {
-                        my $dt = Koha::DateTime::Format::RFC3339->parse_datetime($value);
-                        $value = $dtf->format_datetime($dt);
-                    }
-                }
-                catch {
-                    Koha::Exceptions::BadParameter->throw( parameter => $key );
-                };
-            }
-        }
-
-        $params->{$koha_field_name} = $value;
+        $params->{$koha_field_name} = $self->_recursive_fixup( $key, $value, $columns_info->{$koha_field_name} );
     }
 
     return $params;
