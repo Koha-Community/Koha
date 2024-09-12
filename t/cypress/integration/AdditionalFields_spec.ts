@@ -900,7 +900,7 @@ describe("Additional Fields operations", () => {
 
     it("Additional Fields entry - Add (agreements)", () => {
         let vendors = cy.get_vendors_to_relate();
-        let agreement_additional_fields = get_licenses_additional_fields();
+        let agreement_additional_fields = get_agreements_additional_fields();
         let av_cats = get_av_cats();
 
         //Intercept vendors request
