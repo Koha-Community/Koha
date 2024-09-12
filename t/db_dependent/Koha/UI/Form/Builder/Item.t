@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::MockModule;
 use Data::Dumper qw( Dumper );
 use utf8;
@@ -237,6 +237,33 @@ subtest 'default_branches_empty' => sub {
 
     ( $subfield ) = grep { $_->{kohafield} eq 'items.homebranch' } @$subfields;
     is( $subfield->{marc_value}->{values}->[0], "", 'empty option for branches if default_branches_empty passed' );
+};
+
+subtest 'kohafields_to_add_datepicker' => sub {
+    plan tests => 5;
+
+    my $biblio =
+      $builder->build_sample_biblio( { value => { frameworkcode => '' } } );
+    my $subfields =
+      Koha::UI::Form::Builder::Item->new(
+        { biblionumber => $biblio->biblionumber } )->edit_form;
+
+    my @itemfield_test_cases = (
+        { kohafield => 'items.dateaccessioned', expected_type => 'date' },
+        { kohafield => 'items.replacementpricedate', expected_type => 'date' },
+        { kohafield => 'items.datelastborrowed', expected_type => 'date' },
+        { kohafield => 'items.onloan', expected_type => 'date' },
+        { kohafield => 'items.datelastseen', expected_type => 'datetime' },
+    );
+
+    foreach my $itemfield_test_case (@itemfield_test_cases) {
+        my ( $subfield ) = grep { $_->{kohafield} eq $itemfield_test_case->{kohafield} } @$subfields;
+        if ( $subfield ) {
+            is( $subfield->{datetype}, $itemfield_test_case->{expected_type}, "Correct datetype for $itemfield_test_case->{kohafield}" );
+        } else {
+            ok( 0, "Subfield for $itemfield_test_case->{kohafield} not found" );
+        }
+    }
 };
 
 subtest 'kohafields_to_ignore' => sub {
