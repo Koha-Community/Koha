@@ -209,20 +209,10 @@ controller, and thus shouldn't be called twice in it.
                 }
             );
 
-            # Call the to_model function by reference, if defined
-            if ( defined $filtered_params ) {
-
-                # Apply the mapping function to the passed params
-                $filtered_params =
-                  $result_set->attributes_from_api($filtered_params);
-                $filtered_params =
-                  $c->build_query_params( $filtered_params, $reserved_params );
-            }
-
+            my $query_params;
             if (   defined $reserved_params->{q}
                 || defined $reserved_params->{query} )
             {
-                $filtered_params //= {};
 
                 my @query_params_array;
 
@@ -261,18 +251,12 @@ controller, and thus shouldn't be called twice in it.
                     }
                 }
 
-                my $query_params;
-
                 if ( scalar(@query_params_array) > 1 ) {
                     $query_params = { '-and' => \@query_params_array };
                 }
                 else {
                     $query_params = $query_params_array[0];
                 }
-
-                $filtered_params =
-                  $c->merge_q_params( $filtered_params, $query_params,
-                    $result_set );
             }
 
             # request sequence id (i.e. 'draw' Datatables parameter)
@@ -286,6 +270,20 @@ controller, and thus shouldn't be called twice in it.
 
             $c->stash('koha.pagination.base_total'   => $result_set->count);
             $c->stash('koha.pagination.query_params' => $args);
+
+
+            # Apply the mapping function to the passed params
+            if ( defined $filtered_params ) {
+                $filtered_params =
+                  $c->build_query_params( $filtered_params, $reserved_params );
+              }
+
+            $filtered_params =
+              $c->merge_q_params( $filtered_params, $query_params,
+                $result_set );
+
+            $filtered_params =
+                  $result_set->attributes_from_api($filtered_params);
 
             $c->dbic_validate_operators( { filtered_params => $filtered_params } );
 
