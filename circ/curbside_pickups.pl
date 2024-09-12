@@ -59,7 +59,7 @@ if ( $op eq 'find-patron' ) {
         }
     )->filter_by_scheduled_today;
 
-    $tab = 'schedule-pickup';
+    $tab = 'schedule-pickup_panel';
     $template->param(
         patron      => $patron,
         existing_curbside_pickups => $existing_curbside_pickups,

@@ -216,7 +216,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-staged"/>
-                                                            <input type="hidden" name="tab" value="to-be-staged"/>
+                                                            <input type="hidden" name="tab" value="to-be-staged_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-staged-and-ready-btn"><i class="fa fa-check" aria-hidden="true"></i> Mark as <i>staged & ready</i></button>
@@ -226,7 +226,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-cancel"/>
-                                                            <input type="hidden" name="tab" value="to-be-staged"/>
+                                                            <input type="hidden" name="tab" value="to-be-staged_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default cancel-btn"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
@@ -272,7 +272,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-patron-has-arrived"/>
-                                                            <input type="hidden" name="tab" value="staged-and-ready"/>
+                                                            <input type="hidden" name="tab" value="staged-and-ready_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default patron-has-arrived-btn"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Patron has arrived</button>
@@ -282,7 +282,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-delivered"/>
-                                                            <input type="hidden" name="tab" value="staged-and-ready"/>
+                                                            <input type="hidden" name="tab" value="staged-and-ready_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-delivered-btn"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Mark as <i>delivered</i></button>
@@ -292,7 +292,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-unstaged"/>
-                                                            <input type="hidden" name="tab" value="staged-and-ready"/>
+                                                            <input type="hidden" name="tab" value="staged-and-ready_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-to-be-staged-btn"><i class="fa fa-undo" aria-hidden="true"></i> Mark as <i>to be staged</i></button>
@@ -338,7 +338,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-delivered"/>
-                                                            <input type="hidden" name="tab" value="patron-is-outside"/>
+                                                            <input type="hidden" name="tab" value="patron-is-outside_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-delivered-btn"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Mark as delivered</button>
@@ -348,7 +348,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-staged"/>
-                                                            <input type="hidden" name="tab" value="patron-is-outside"/>
+                                                            <input type="hidden" name="tab" value="patron-is-outside_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-staged-and-ready-btn"><i class="fa fa-undo" aria-hidden="true"></i> Mark as <i>staged & ready</i></button>
@@ -358,7 +358,7 @@
                                                         <form method="post" class="form">
                                                             [% INCLUDE 'csrf-token.inc' %]
                                                             <input type="hidden" name="op" value="cud-mark-as-unstaged"/>
-                                                            <input type="hidden" name="tab" value="patron-is-outside"/>
+                                                            <input type="hidden" name="tab" value="patron-is-outside_panel"/>
                                                             <input type="hidden" name="id" value="[% cp.id | html %]"/>
                                                             <p>
                                                                 <button type="submit" class="btn btn-default mark-as-to-be-staged-btn"><i class="fa fa-undo" aria-hidden="true"></i> Mark as <i>to be staged</i></button>
@@ -431,7 +431,7 @@
                                         <fieldset class="rows" style="float: none;">
                                             <input type="hidden" name="borrowernumber" value="[% patron.id | html %]"/>
                                             <input type="hidden" name="op" value="cud-create-pickup"/>
-                                            <input type="hidden" name="tab" value="schedule-pickup"/>
+                                            <input type="hidden" name="tab" value="schedule-pickup_panel"/>
                                             <ol>
                                                 <li>
                                                     <label>Patron: </label>
