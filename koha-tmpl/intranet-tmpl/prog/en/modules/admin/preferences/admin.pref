@@ -189,6 +189,15 @@ Administration:
                   None: "None"
                   Common Name: Common Name
                   emailAddress: emailAddress
+    Jobs:
+        -
+            - "Use "
+            - pref: JobsNotificationMethod
+              default: STOMP
+              choices:
+                STOMP: "STOMP"
+                polling: "polling"
+            - as the preferred job worker notification method. STOMP (default) requires RabbitMQ running. Polling will be used as a fallback if RabbitMQ is not accessible.
     Google OpenID Connect:
         -
             - "Use Google OpenID Connect login in the OPAC: "
