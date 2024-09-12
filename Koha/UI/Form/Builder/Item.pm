@@ -147,6 +147,14 @@ sub generate_subfield_form {
         }
     }
 
+    if ($subfield->{kohafield} =~ /items\.(replacementpricedate|dateaccessioned|datelastborrowed|onloan)/) {
+        $subfield_data{datetype} = 'date';
+    }
+
+    if ($subfield->{kohafield} =~ /items\.(datelastseen|damaged_on|itemlost_on|withdrawn_on|deleted_on)/) {
+        $subfield_data{datetype} = 'datetime';
+    }
+
     $subfield_data{visibility} = "display:none;"
       if ( ( $subfield->{hidden} > 4 ) || ( $subfield->{hidden} <= -4 ) );
 
@@ -315,7 +323,20 @@ sub generate_subfield_form {
             authtypecode => $subfield->{authtypecode},
         };
     }
-
+    elsif ( $subfield_data{datetype} eq 'date' ) {
+        $subfield_data{marc_value} = {
+            type => 'date_field',
+            id => $subfield_data{id},
+            value => $value,
+        }
+    }
+    elsif ( $subfield_data{datetype} eq 'datetime' ) {
+        $subfield_data{marc_value} = {
+            type => 'datetime_field',
+            id => $subfield_data{id},
+            value => $value,
+        }
+    }
     # it's a plugin field
     elsif ( $subfield->{value_builder} ) {    # plugin
         require Koha::FrameworkPlugin;

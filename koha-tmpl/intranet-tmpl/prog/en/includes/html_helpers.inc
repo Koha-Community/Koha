@@ -166,6 +166,10 @@
                         [% ELSE %]
                             <textarea id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" rows="5" cols="64" >[% mv.value | html %]</textarea>
                         [% END %]
+                    [% ELSIF ( mv.type == 'date_field' ) %]
+                         <input type="text" id="[% mv.id | html %]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %] flatpickr" value="[% mv.value | html %]" class="flatpickr" />
+                    [% ELSIF ( mv.type == 'datetime_field' ) %]
+                         <input type="text" id="[% mv.id | html %]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %] flatpickr" value="[% mv.value | html %]" data-flatpickr-enable-time="true" />
                     [% END %]
 
                     [% IF subfield.kohafield == 'items.more_subfields_xml' %]
