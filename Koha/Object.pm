@@ -859,6 +859,7 @@ sub _recursive_fixup {
                         $value = $dtf->format_date($dt);
                     } else {
                         my $dt = Koha::DateTime::Format::RFC3339->parse_datetime($value);
+                        $dt->set_time_zone(C4::Context->tz);
                         $value = $dtf->format_datetime($dt);
                     }
                 } catch {
