@@ -63,6 +63,10 @@ Connect to the message broker using default guest/guest credential
 
 sub connect {
     my ( $self );
+    my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
+    return undef
+        unless $notification_method eq 'STOMP';
+
     my $hostname = 'localhost';
     my $port = '61613';
     my $config = C4::Context->config('message_broker');
@@ -77,8 +81,17 @@ sub connect {
         $credentials->{passcode} = $config->{password} if $config->{password};
         $credentials->{host} = $config->{vhost} if $config->{vhost};
     }
-    my $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
-    $stomp->connect( $credentials );
+
+    my $stomp;
+
+    try {
+        $stomp = Net::Stomp->new( { hostname => $hostname, port => $port } );
+        $stomp->connect( $credentials );
+    } catch {
+        warn "Cannot connect to broker " . $_;
+        $stomp = undef;
+    };
+
     return $stomp;
 }
 
@@ -123,12 +136,7 @@ sub enqueue {
 
     $job_args->{job_id} = $self->id;
 
-    my $conn;
-    try {
-        $conn = $self->connect;
-    } catch {
-        warn "Cannot connect to broker " . $_;
-    };
+    my $conn = $self->connect;
     return $self->id unless $conn;
 
     $json_args = $json->encode($job_args);

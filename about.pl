@@ -906,10 +906,15 @@ sub message_broker_check {
     my $template = shift;
     {
         # BackgroundJob - test connection to message broker
-        eval { Koha::BackgroundJob->connect; };
-        if ($@) {
-            warn $@;
-            $template->param( warnConnectBroker => $@ );
+        my $conn = Koha::BackgroundJob->connect;
+        if (! $conn) {
+            if (C4::Context->preference('JobsNotificationMethod') eq 'STOMP' ) {
+                $template->param( warnConnectBroker => 'Error connecting' );
+            } else {
+                $template->param(
+                    warnConnectBroker => C4::Context->preference('JobsNotificationMethod')
+                );
+            }
         }
     }
   }

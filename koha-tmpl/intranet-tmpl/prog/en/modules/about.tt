@@ -202,7 +202,9 @@
             </tr>
             <tr>
                 <th scope="row">Message broker: </th>
-                [% IF warnConnectBroker %]
+                [% IF warnConnectBroker == 'Error connecting' %]
+                    <td class="text-bg-warning"><strong>Using SQL polling (Fallback, Error connecting to RabbitMQ)</strong></td>
+                [% ELSIF warnConnectBroker %]
                     <td class="text-bg-warning"><strong>Using SQL polling</strong></td>
                 [% ELSE %]
                     <td class="text-bg-info">Using RabbitMQ</td>
