@@ -13,7 +13,7 @@
     [% END %]</title
 >
 [% Asset.css("css/mainpage.css") | $raw %]
-[% Asset.js("js/vue/dist/islands.js") | $raw %]
+[% Asset.js("js/vue/dist/islands.js", "defer" => 1, async => "1") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -335,7 +335,7 @@
 <div class="row w-25 m-auto p-4 border border-4 border-warning br-4 rounded text-center">
     <h1>🚧 Static Page with Vue Components 🚧</h1>
 
-    <div id="hello-islands" data-component="HelloIslands" data-props='{"message": "Hello from props!"}'></div>
+    <hello-islands message="This is an attribute on the web component, that's bound to a prop in the Vue component. Cool, right?" color="dodgerblue"></hello-islands>
 </div>
 <!-- /.row -->
 
@@ -348,7 +348,8 @@
             });
 
             setTimeout(() => {
-                document.getElementById("hello-islands").dataset.props = JSON.stringify({ message: "This is a delayed message! Changes to data-props currently unfortunately reset the internal state." });
+                const [firstHelloIslandsElement] = document.getElementsByTagName("hello-islands");
+                firstHelloIslandsElement.message = "This is a delayed update to the message attribute of the web commponent.";
             }, 2000);
         });
     </script>

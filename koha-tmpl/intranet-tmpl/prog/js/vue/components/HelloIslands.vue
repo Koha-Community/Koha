@@ -1,5 +1,5 @@
 <template>
-    <h2>Hello from Islands!</h2>
+    <h2 :style="{ color }">Hello from Islands!</h2>
     <p>This component is rendered as an island in a static HTML page.</p>
 
     <!-- Display message prop -->
@@ -20,7 +20,11 @@ export default {
     props: {
         message: {
             type: String,
-            default: "",
+            default: "No content",
+        },
+        color: {
+            type: String,
+            default: "crimson",
         },
     },
     data() {
