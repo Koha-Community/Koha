@@ -147,11 +147,11 @@ sub generate_subfield_form {
         }
     }
 
-    if ($subfield->{kohafield} =~ /items\.(replacementpricedate|dateaccessioned|datelastborrowed|onloan)/) {
+    if ( defined $subfield->{kohafield}  && $subfield->{kohafield} =~ /items\.(replacementpricedate|dateaccessioned|datelastborrowed|onloan)/) {
         $subfield_data{datetype} = 'date';
     }
 
-    if ($subfield->{kohafield} =~ /items\.(datelastseen|damaged_on|itemlost_on|withdrawn_on|deleted_on)/) {
+    if ( defined $subfield->{kohafield} && $subfield->{kohafield} =~ /items\.(datelastseen|damaged_on|itemlost_on|withdrawn_on|deleted_on)/) {
         $subfield_data{datetype} = 'datetime';
     }
 
@@ -323,14 +323,14 @@ sub generate_subfield_form {
             authtypecode => $subfield->{authtypecode},
         };
     }
-    elsif ( $subfield_data{datetype} eq 'date' ) {
+    elsif ( defined $subfield_data{datetype} && $subfield_data{datetype} eq 'date' ) {
         $subfield_data{marc_value} = {
             type => 'date_field',
             id => $subfield_data{id},
             value => $value,
         }
     }
-    elsif ( $subfield_data{datetype} eq 'datetime' ) {
+    elsif ( defined $subfield_data{datetype} && $subfield_data{datetype} eq 'datetime' ) {
         $subfield_data{marc_value} = {
             type => 'datetime_field',
             id => $subfield_data{id},
