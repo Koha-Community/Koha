@@ -284,8 +284,9 @@ controller, and thus shouldn't be called twice in it.
                 );
             }
 
-            $filtered_params =
-                  $result_set->attributes_from_api($filtered_params);
+            if ( defined $filtered_params ) {
+                $filtered_params = $result_set->attributes_from_api($filtered_params);
+            }
 
             $c->dbic_validate_operators( { filtered_params => $filtered_params } );
 

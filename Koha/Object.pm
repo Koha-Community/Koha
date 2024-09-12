@@ -878,13 +878,24 @@ sub attributes_from_api {
     my $params;
     my $columns_info = $self->_result->result_source->columns_info;
 
+    if ( ref($from_api_params) && ref($from_api_params) eq 'ARRAY' ) {
+        # TODO No fixup if an ARRAY is passed
+        return $from_api_params;
+    }
+
     while ( my ( $key, $value ) = each %{$from_api_params} ) {
         my $koha_field_name =
             exists $from_api_mapping->{$key}
             ? $from_api_mapping->{$key}
             : $key;
 
-        $params->{$koha_field_name} = $self->_recursive_fixup( $key, $value, $columns_info->{$koha_field_name} );
+        if ( exists $columns_info->{$koha_field_name}  ) {
+            # TODO No fixup if the name is from an embed (eg. suggester.borrowernumber)
+            # See warnings produced by t/db_dependent/Koha/REST/Plugin/Objects.t if this test is removed
+            $params->{$koha_field_name} = $self->_recursive_fixup( $key, $value, $columns_info->{$koha_field_name} );
+        } else {
+            $params->{$koha_field_name} = $value;
+        }
     }
 
     return $params;
