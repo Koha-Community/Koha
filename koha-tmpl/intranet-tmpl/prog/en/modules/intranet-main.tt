@@ -13,6 +13,7 @@
     [% END %]</title
 >
 [% Asset.css("css/mainpage.css") | $raw %]
+[% Asset.js("js/vue/dist/islands.js") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -331,6 +332,13 @@
     <!-- /.row -->
 </div>
 <!-- /#container-main.container-fluid -->
+<div class="row w-25 m-auto p-4 border border-4 border-warning br-4 rounded text-center">
+    <h1>🚧 Static Page with Vue Components 🚧</h1>
+
+    <div id="hello-islands" data-component="HelloIslands" data-props='{"message": "Hello from props!"}'></div>
+</div>
+<!-- /.row -->
+
 [% MACRO jsinclude BLOCK %]
     <script>
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this news item? This cannot be undone.");
@@ -338,6 +346,10 @@
             $(".news_delete").on("click", function () {
                 return confirmDelete(MSG_CONFIRM_DELETE);
             });
+
+            setTimeout(() => {
+                document.getElementById("hello-islands").dataset.props = JSON.stringify({ message: "This is a delayed message! Props (data-props) reflect." });
+            }, 2000);
         });
     </script>
 [% END %]

@@ -21,6 +21,7 @@ module.exports = {
             "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/preservation.ts",
         "admin/record_sources":
             "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/admin/record_sources.ts",
+        islands: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands.ts",
     },
     output: {
         filename: "[name].js",
@@ -65,6 +66,23 @@ module.exports = {
             },
         ],
     },
+    /**
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+                default: false, // Disable default cache groups to avoid affecting existing bundles
+                vendors: false, // Disable vendor caching
+                vue: {
+                    test: /[\\/]node_modules[\\/]vue[\\/]/,
+                    name: "vue",
+                    chunks: "all",
+                    enforce: true,
+                },
+            },
+        },
+    },
+    */
     plugins: [
         new VueLoaderPlugin(),
         new rspack.DefinePlugin({
