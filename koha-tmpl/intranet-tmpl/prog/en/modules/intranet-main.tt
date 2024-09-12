@@ -348,7 +348,7 @@
             });
 
             setTimeout(() => {
-                document.getElementById("hello-islands").dataset.props = JSON.stringify({ message: "This is a delayed message! Props (data-props) reflect." });
+                document.getElementById("hello-islands").dataset.props = JSON.stringify({ message: "This is a delayed message! Changes to data-props currently unfortunately reset the internal state." });
             }, 2000);
         });
     </script>
