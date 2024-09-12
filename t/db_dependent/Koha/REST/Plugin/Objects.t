@@ -23,6 +23,7 @@ use Koha::AuthorisedValues;
 use Koha::Cities;
 use Koha::Biblios;
 use Koha::Patrons;
+use Koha::DateUtils qw(dt_from_string);
 
 use Mojo::JSON qw(encode_json);
 
@@ -139,7 +140,7 @@ get '/cities/:city_id/rs' => sub {
 };
 
 # The tests
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Mojo;
 
 use t::lib::Mocks;
@@ -960,6 +961,81 @@ subtest 'objects.find_rs helper' => sub {
 
     $t->get_ok( '/cities/' . $city3->id . '/rs' )->status_is(200)
       ->json_is( '/name' => 'city3' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'date handling' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
+
+    my $now           = dt_from_string();
+    my $one_hour_ago  = $now->clone->subtract( hours => 1 );
+    my $one_day_ago   = $now->clone->subtract( days  => 1 );
+    my $one_day_later = $now->clone->add( hours => 1 );
+
+    # one hour ago job
+    my $job_1 = $builder->build_object(
+        {
+            class => 'Koha::BackgroundJobs',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                enqueued_on    => $one_hour_ago,
+                data           => '{}',
+            }
+        }
+    );
+
+    # yesterday job
+    my $job_2 = $builder->build_object(
+        {
+            class => 'Koha::BackgroundJobs',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                enqueued_on    => $one_day_ago,
+                data           => '{}',
+            }
+        }
+    );
+
+    # tomorrow job
+    my $job_3 = $builder->build_object(
+        {
+            class => 'Koha::BackgroundJobs',
+            value => {
+                borrowernumber => $patron->borrowernumber,
+                enqueued_on    => $one_day_later,
+                data           => '{}',
+            }
+        }
+    );
+
+    my $t = Test::Mojo->new('Koha::REST::V1');
+    my $q = encode_json( { enqueued_on => $one_hour_ago->rfc3339, borrowernumber => $patron->id } );
+    $t->get_ok( "//$userid:$password@/api/v1/jobs?q=" . $q )->status_is(200)->json_is( '/0/job_id' => $job_1->id );
+    my $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 1 );
+
+    $q = encode_json(
+        {
+            enqueued_on    => [ { '>' => $now->rfc3339 }, { '=' => $one_hour_ago->rfc3339 } ],
+            borrowernumber => $patron->id
+        }
+    );
+    $t->get_ok( "//$userid:$password@/api/v1/jobs?q=" . $q )->status_is(200)->json_is( '/0/job_id' => $job_1->id )
+        ->json_is( '/1/job_id' => $job_3->id );
+    $response_count = scalar @{ $t->tx->res->json };
+    is( $response_count, 2 );
 
     $schema->storage->txn_rollback;
 };
