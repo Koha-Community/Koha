@@ -241,7 +241,10 @@ on the API.
 =cut
 
 sub to_api_mapping {
-    return {};
+    return {
+        created_on => "creation_date",
+        updated_on => "modification_date"
+    };
 }
 
 =head3 delete

@@ -10,6 +10,10 @@ properties:
   booking_id:
     description: Internal booking identifier
     type: integer
+  creation_date:
+    description: Creation date and time of this booking
+    format: date-time
+    type: string
   end_date:
     description: Start date and time of this booking
     format: date-time
@@ -24,6 +28,10 @@ properties:
     type:
       - object
       - 'null'
+  modification_date:
+    description: Modification date and time of this booking
+    format: date-time
+    type: string
   patron_id:
     description: Internal patron identifier
     type: integer
