@@ -18,9 +18,7 @@
     [% IF ( delete_confirm ) %]
         [% tx("Confirm deletion of contract '{contractnumber}'", { contractnumber = contractnumber }) | html %]
     [% END %]
-    [% IF ( delete_confirmed ) %]
-        [% t("Contract deleted") | html %]
-    [% END %] &rsaquo;
+    &rsaquo;
     [% t("Contracts") | html %] &rsaquo;
     [% t("Acquisitions") | html %] &rsaquo;
     [% t("Koha") | html %]
@@ -68,12 +66,6 @@
         [% IF ( delete_confirm ) %]
             [% WRAPPER breadcrumb_item bc_active=1 %]
                 <span>Confirm deletion of contract [% contractnumber | html %]</span>
-            [% END %]
-        [% END %]
-
-        [% IF ( delete_confirmed ) %]
-            [% WRAPPER breadcrumb_item bc_active=1 %]
-                <span>Contract deleted</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -161,14 +153,6 @@
                             <button type="submit" class="btn btn-default deny"><i class="fa fa-fw fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
-            [% END %]
-            [% IF ( delete_confirmed ) %]
-                <h1>Contract deleted</h1>
-                <form action="[% script_name | html %]" method="post">
-                    [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
-                    <input type="submit" class="btn btn-primary" value="OK" />
-                </form>
             [% END %]
             [% IF ( else ) %]
                 <h1>Contract(s) of [% booksellername | html %]</h1>
