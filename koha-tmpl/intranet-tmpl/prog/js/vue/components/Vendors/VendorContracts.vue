@@ -8,8 +8,15 @@
                     <th scope="col">{{ $__("Description") }}</th>
                     <th scope="col">{{ $__("Start date") }}</th>
                     <th scope="col">{{ $__("End date") }}</th>
-                    <!-- PERMISSION CAN_user_acquisition_contracts_manage -->
-                    <th v-if="false" scope="col" class="NoSort noExport">
+                    <th
+                        v-if="
+                            isUserPermitted(
+                                'CAN_user_acquisition_contracts_manage'
+                            )
+                        "
+                        scope="col"
+                        class="NoSort noExport"
+                    >
                         {{ $__("Actions") }}
                     </th>
                 </tr>
@@ -29,8 +36,14 @@
                     <td :data-order="contract.contractenddate">
                         {{ contract.contractenddate }}
                     </td>
-                    <!-- PERMISSION CAN_user_acquisition_contracts_manage -->
-                    <td class="actions" v-if="false">
+                    <td
+                        class="actions"
+                        v-if="
+                            isUserPermitted(
+                                'CAN_user_acquisition_contracts_manage'
+                            )
+                        "
+                    >
                         <a
                             class="btn btn-default btn-xs"
                             :href="`/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${contract.contractnumber}&booksellerid=${contract.booksellerid}`"
@@ -54,9 +67,20 @@
 </template>
 
 <script>
+import { inject } from "vue";
+
 export default {
     props: {
         vendor: Object,
+    },
+    setup() {
+        const permissionsStore = inject("permissionsStore");
+
+        const { isUserPermitted } = permissionsStore;
+
+        return {
+            isUserPermitted,
+        };
     },
 };
 </script>

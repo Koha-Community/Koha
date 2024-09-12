@@ -11,7 +11,7 @@ export const routes = [
         path: "/cgi-bin/koha/acqui/booksellers.pl",
         is_default: true,
         is_base: true,
-        title: $__("Vendors"),
+        title: $__("Vendor management"),
         children: [
             {
                 path: "",
@@ -21,8 +21,8 @@ export const routes = [
             },
             {
                 path: "/cgi-bin/koha/vendors",
-                title: $__("Vendor list"),
-                icon: "fa fa-check-circle",
+                title: $__("Vendors"),
+                icon: "fa fa-shopping-cart",
                 is_end_node: true,
                 children: [
                     {

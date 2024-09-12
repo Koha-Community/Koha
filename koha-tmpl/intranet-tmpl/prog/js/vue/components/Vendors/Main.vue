@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-md-2 order-sm-2 order-md-1">
-                    <LeftMenu :title="$__('Vendors')"></LeftMenu>
+                    <LeftMenu :title="$__('Vendor management')"></LeftMenu>
                 </div>
             </div>
         </div>
@@ -44,12 +44,16 @@ export default {
 
         const { loading, loaded, setError } = mainStore;
 
+        const permissionsStore = inject("permissionsStore");
+        const { userPermissions } = storeToRefs(permissionsStore);
+
         return {
             vendorStore,
             AVStore,
             setError,
             loading,
             loaded,
+            userPermissions,
             AVStore,
         };
     },
@@ -91,6 +95,50 @@ export default {
         };
 
         fetchConfig().then(() => {
+            this.loaded();
+            this.initialized = true;
+        });
+    },
+    beforeCreate() {
+        this.loading();
+
+        const fetchConfig = () => {
+            let promises = [];
+
+            const av_client = APIClient.authorised_values;
+            const authorised_values = {
+                vendor_types: "VENDOR_TYPE",
+                vendor_interface_types: "VENDOR_INTERFACE_TYPE",
+                vendor_payment_methods: "VENDOR_PAYMENT_METHOD",
+                lang: "LANG",
+            };
+
+            let av_cat_array = Object.keys(authorised_values).map(
+                function (av_cat) {
+                    return '"' + authorised_values[av_cat] + '"';
+                }
+            );
+
+            promises.push(
+                av_client.values
+                    .getCategoriesWithValues(av_cat_array)
+                    .then(av_categories => {
+                        Object.entries(authorised_values).forEach(
+                            ([av_var, av_cat]) => {
+                                const av_match = av_categories.find(
+                                    element => element.category_name == av_cat
+                                );
+                                this.AVStore[av_var] =
+                                    av_match.authorised_values;
+                            }
+                        );
+                    })
+            );
+
+            return Promise.all(promises);
+        };
+
+        fetchConfig().then(() => {
             this.vendorStore.currencies = currencies;
             this.vendorStore.gstValues = gstValues.map(gv => {
                 return {
@@ -103,6 +151,7 @@ export default {
         });
     },
     data() {
+        this.userPermissions = userPermissions;
         return {
             initialized: true,
         };
