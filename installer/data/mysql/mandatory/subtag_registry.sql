@@ -706,6 +706,9 @@ VALUES ( 'kl', 'language', 'en', 'Greenlandic');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'kl', 'language', 'kl', 'Kalaallisut');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kl', 'language', 'de', 'Grönländisch');
+
 -- Kannada
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'kn', 'language', 'Kannada','2014-10-30');
@@ -721,6 +724,9 @@ VALUES ( 'kn', 'language', 'en', 'Kannada');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'kn', 'language', 'pl', 'Kannada');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kn', 'language', 'de', 'Kannada');
 
 -- Khmer
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -776,6 +782,9 @@ VALUES ( 'krl', 'language', 'en', 'Karelian');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'krl', 'language', 'krl', 'Karjala');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'krl', 'language', 'de', 'Karelisch');
+
 -- Kurdish
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'ku', 'language', 'Kurdish','2014-05-13');
@@ -813,6 +822,9 @@ VALUES ( 'kw', 'language', 'en', 'Cornish');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'kw', 'language', 'kw', 'Kernowek');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'kw', 'language', 'de', 'Kornisch');
 
 -- Latin
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -946,6 +958,9 @@ VALUES ( 'my', 'language', 'en', 'Burmese');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'my', 'language', 'my', 'မြန်မာစာ');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'my', 'language', 'de', 'Burmesisch');
 
 -- Norwegian (bokmål)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1082,6 +1097,9 @@ VALUES ( 'pa', 'language', 'en', 'Punjabi');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'pa', 'language', 'pa', 'پنجابی');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'pa', 'language', 'de', 'Panjabi');
+
 -- Pangwa
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'pbr', 'language', 'Pangwa','2014-10-30');
@@ -1146,6 +1164,9 @@ VALUES ( 'ps', 'language', 'en', 'Pashto');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'ps', 'language', 'ps', 'پښتو');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'ps', 'language', 'de', 'Paschtu');
+
 -- Portuguese
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'pt', 'language', 'Portuguese','2005-10-16' );
@@ -1180,6 +1201,9 @@ VALUES( 'rmf', 'language', 'fi', 'Suomen romanikieli');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'rmf', 'language', 'rmf', 'Fíntika Rómma');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'rmf', 'language', 'de', 'Finnisch Kalo');
 
 -- Romanian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1314,6 +1338,9 @@ VALUES ( 'sia', 'language', 'en', 'Akkala Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sia', 'language', 'sia', 'ču´kksuâlis');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sia', 'language', 'de', 'Akkalasamisch');
+
 -- Kildin Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sjd', 'language', 'Kildin Sami', '2017-04-21');
@@ -1326,6 +1353,9 @@ VALUES ( 'sjd', 'language', 'en', 'Kildin Sami');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sjd', 'language', 'sjd', 'Кӣллт са̄мь кӣлл');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sjd', 'language', 'de', 'Kildinsamisch');
 
 -- Ter Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1340,6 +1370,9 @@ VALUES ( 'sjt', 'language', 'en', 'Ter Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sjt', 'language', 'sjt', 'saa´mekiill');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sjt', 'language', 'de', 'Tersamisch');
+
 -- Pite Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sje', 'language', 'Pite Sami', '2017-04-21');
@@ -1352,6 +1385,9 @@ VALUES ( 'sje', 'language', 'en', 'Pite Sami');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sje', 'language', 'sje', 'Bidumsámegiella');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sje', 'language', 'de', 'Pitesamisch');
 
 -- Kemi Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1366,6 +1402,9 @@ VALUES ( 'sjk', 'language', 'en', 'Kemi Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sjk', 'language', 'sjk', 'samääškiela');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sjk', 'language', 'de', 'Kemisamisch');
+
 -- Ume Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sju', 'language', 'Ume Sami', '2017-04-21');
@@ -1379,6 +1418,9 @@ VALUES ( 'sju', 'language', 'en', 'Ume Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sju', 'language', 'sju', 'Ubmejensámien giella');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sju', 'language', 'de', 'Umesamisch');
+
 -- Southern Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sma', 'language', 'Southern Sami', '2017-04-21');
@@ -1391,6 +1433,9 @@ VALUES ( 'sma', 'language', 'en', 'Southern Sami');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sma', 'language', 'sma', 'Åarjelsaemien gïele');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sma', 'language', 'de', 'Südsamisch');
 
 -- Northern Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1411,6 +1456,9 @@ VALUES ( 'sme', 'language', 'sv', 'Nordsamiska');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sme', 'language', 'sme', 'davvisámegiella');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sme', 'language', 'de', 'Nordsamisch');
+
 -- Sami languages
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'smi', 'language', 'Sami languages', '2017-04-21');
@@ -1430,6 +1478,9 @@ VALUES ( 'smi', 'language', 'sv', 'Samiska');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'smi', 'language', 'smi', 'Saami');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'smi', 'language', 'de', 'Samische Sprachen');
+
 -- Lule Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'smj', 'language', 'Lule Sami', '2017-04-21');
@@ -1442,6 +1493,9 @@ VALUES ( 'smj', 'language', 'en', 'Lule Sami');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'smj', 'language', 'smj', 'julevsámegiella');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'smj', 'language', 'de', 'Lulesamisch');
 
 -- Inari Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1456,6 +1510,9 @@ VALUES ( 'smn', 'language', 'en', 'Inari Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'smn', 'language', 'smn', 'anarâškielâ');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'smn', 'language', 'de', 'Inarisamisch');
+
 -- Skolt Sami
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sms', 'language', 'Skolt Sami', '2017-04-21');
@@ -1469,6 +1526,9 @@ VALUES ( 'sms', 'language', 'en', 'Skolt Sami');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sms', 'language', 'sms', 'sääʹmǩiõll');
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'sms', 'language', 'de', 'Skoltsamisch');
+
 -- Somali
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'so', 'language', 'Somali', '2017-04-21');
@@ -1481,6 +1541,9 @@ VALUES ( 'so', 'language', 'en', 'Somali');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'so', 'language', 'so', 'Af-Soomaali');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'so', 'language', 'de', 'Somali');
 
 -- Albanian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1535,6 +1598,9 @@ VALUES ( 'st', 'language', 'en', 'Sotho');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'st', 'language', 'st', 'Sesotho');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'st', 'language', 'de', 'Sotho');
 
 -- Swedish
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -1756,6 +1822,9 @@ VALUES ( 'vot', 'language', 'en', 'Votic');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'vot', 'language', 'vot', 'vađđa ceeli');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'vot', 'language', 'de', 'Wotisch');
 
 -- Chinese
 INSERT INTO language_subtag_registry( subtag, type, description, added)
