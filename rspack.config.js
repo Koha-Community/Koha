@@ -29,7 +29,7 @@ module.exports = {
             __dirname,
             "koha-tmpl/intranet-tmpl/prog/js/vue/dist/"
         ),
-        chunkFilename: "[name].js",
+        chunkFilename: "[name].[contenthash].js",
         globalObject: "window",
     },
     module: {
