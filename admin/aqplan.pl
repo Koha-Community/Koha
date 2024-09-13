@@ -119,18 +119,7 @@ my $budgets_ref = GetBudgetHierarchy(
 );
 
 # build categories list
-my $sth = $dbh->prepare("select distinct category from authorised_values where category like 'A%' ");
-$sth->execute;
-
-# the list
 my @category_list;
-
-# a hash, to check that some hardcoded categories exist.
-my %categories;
-while ( my ($category) = $sth->fetchrow_array ) {
-    push( @category_list, $category );
-    $categories{$category} = 1;
-}
 
 # push koha system categories
 push( @category_list, 'MONTHS' );
