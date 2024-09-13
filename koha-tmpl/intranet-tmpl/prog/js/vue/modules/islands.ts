@@ -16,16 +16,46 @@ export const componentRegistry: Map<string, () => Promise<Component>> = new Map(
                 return module.default;
             },
         ],
+        [
+            "hello-world",
+            async () => {
+                const module = await import(
+                    /* webpackChunkName: "hello-world" */ "../components/HelloWorld.vue"
+                );
+                return module.default;
+            },
+        ],
     ]
 );
 
-// Register and define custom elements
-window.requestIdleCallback(async () => {
-    componentRegistry.forEach(async (importFn, name) => {
-        const component = await importFn();
-        customElements.define(
-            name,
-            defineCustomElement(component as any, { shadowRoot: false })
+/**
+ * Hydrates custom elements by scanning the document and loading only necessary components.
+ * @returns {void}
+ */
+export function hydrate(): void {
+    window.requestIdleCallback(async () => {
+        const islandTagNames = Array.from(componentRegistry.keys()).join(", ");
+        const requestedIslands = new Set(
+            Array.from(document.querySelectorAll(islandTagNames)).map(element =>
+                element.tagName.toLowerCase()
+            )
         );
+
+        requestedIslands.forEach(async name => {
+            const importFn = componentRegistry.get(name);
+            if (!importFn) {
+                return;
+            }
+
+            const component = await importFn();
+            customElements.define(
+                name,
+                defineCustomElement(component as any, {
+                    shadowRoot: false,
+                })
+            );
+        });
     });
-});
+}
+
+hydrate();
