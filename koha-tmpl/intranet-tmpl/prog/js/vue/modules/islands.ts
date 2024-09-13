@@ -1,17 +1,25 @@
 import { Component, defineCustomElement } from "vue";
-import HelloIslands from "../components/HelloIslands.vue";
 
 /**
  * A registry for Vue components.
- * @type {Map<string, string>}
+ * @type {Map<string, () => Promise<Component>>}
  */
 export const componentRegistry: Map<string, () => Promise<Component>> = new Map(
-    [["hello-islands", HelloIslands]]
+    [
+        [
+            "hello-islands",
+            async () => {
+                const module = await import("../components/HelloIslands.vue");
+                return module.default;
+            },
+        ],
+    ]
 );
 
 // Register and define custom elements
-window.requestIdleCallback(() => {
-    componentRegistry.forEach((component, name) => {
+window.requestIdleCallback(async () => {
+    componentRegistry.forEach(async (importFn, name) => {
+        const component = await importFn();
         customElements.define(
             name,
             defineCustomElement(component as any, { shadowRoot: false })
