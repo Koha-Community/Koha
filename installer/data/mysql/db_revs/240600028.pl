@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "37757",
-    description => "More robust handling of EmailFieldPrimary syspref values",
+    description => "More robust handling of EmailFieldPrimary system preference values",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
