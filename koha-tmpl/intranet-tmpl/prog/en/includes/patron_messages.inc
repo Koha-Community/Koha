@@ -101,7 +101,7 @@
 
         [% IF ( odues ) %]
             <li class="odues blocker">
-                <span class="circ-hlt">Overdues:</span>  Patron has ITEMS OVERDUE <a href="#checkouts">See highlighted items below</a>
+                <span class="circ-hlt">Overdues:</span>  Patron has ITEMS OVERDUE <a href="#checkouts_panel" onclick="$('#issues-table-load-immediately').click(); $('#issues-table-load-immediately').click();">See highlighted items below </a>
             </li>
         [% END %]
 
