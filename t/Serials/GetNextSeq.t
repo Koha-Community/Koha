@@ -259,6 +259,6 @@ sub _next_seq {
         $seq,                        $subscription->{lastvalue1}, $subscription->{lastvalue2},
         $subscription->{lastvalue3}, $subscription->{innerloop1},
         $subscription->{innerloop2}, $subscription->{innerloop3}
-    ) = GetNextSeq( $subscription, $pattern, undef, undef, $count_forward );
+    ) = GetNextSeq( $subscription, $pattern, undef, undef, undef, $count_forward );
     return $seq;
 }
