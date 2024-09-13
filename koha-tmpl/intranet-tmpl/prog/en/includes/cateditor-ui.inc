@@ -878,7 +878,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             $("#macro-toolbar").prepend($convert);
         }
         let options = {
-            url: "/api/v1/advanced_editor/macros/",
+            url: "/api/v1/advanced_editor/macros/?_per_page=-1",
             method: "GET",
             contentType: "application/json",
         };
