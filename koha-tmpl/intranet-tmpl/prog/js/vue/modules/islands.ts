@@ -9,7 +9,10 @@ export const componentRegistry: Map<string, () => Promise<Component>> = new Map(
         [
             "hello-islands",
             async () => {
-                const module = await import("../components/HelloIslands.vue");
+                const module = await import(
+                    /* webpackChunkName: "hello-islands" */
+                    "../components/HelloIslands.vue"
+                );
                 return module.default;
             },
         ],
