@@ -106,7 +106,7 @@ describe("CSRF", () => {
         cy.get("#Aform").contains("Submit").click();
 
         cy.get(".main")
-            .find(".message")
+            .find(".alert")
             .contains(/Library added successfully/);
 
         cy.get("select[name='libraries_length']").select("-1");
@@ -162,7 +162,7 @@ describe("CSRF", () => {
         cy.contains("Yes, delete").click();
 
         cy.get(".main")
-            .find(".message")
+            .find(".alert")
             .contains(/Library deleted successfully/);
 
         cy.query(
