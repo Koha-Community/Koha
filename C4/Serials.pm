@@ -810,7 +810,7 @@ sub GetPreviousSerialid {
     my (
         $nextseq,       $newlastvalue1, $newlastvalue2, $newlastvalue3,
         $newinnerloop1, $newinnerloop2, $newinnerloop3
-    ) = GetNextSeq( $subscription, $pattern, $frequency, $planneddate, $count_forward );
+    ) = GetNextSeq( $subscription, $pattern, $frequency, $planneddate, $nextpublisheddate, $count_forward );
 
 $subscription is a hashref containing all the attributes of the table
 'subscription'.
@@ -818,13 +818,14 @@ $pattern is a hashref containing all the attributes of the table
 'subscription_numberpatterns'.
 $frequency is a hashref containing all the attributes of the table 'subscription_frequencies'
 $planneddate is a date string in iso format.
+$nextpublishedddate is a date string in iso format.
 $count_forward is the number of issues to count forward, defaults to 1 if omitted
 This function get the next issue for the subscription given on input arg
 
 =cut
 
 sub GetNextSeq {
-    my ( $subscription, $pattern, $frequency, $planneddate, $count_forward ) = @_;
+    my ( $subscription, $pattern, $frequency, $planneddate, $nextpublisheddate, $count_forward ) = @_;
 
     return unless ( $subscription and $pattern );
 
@@ -915,7 +916,7 @@ sub GetNextSeq {
             $calculated =~ s/\{Z\}/$newlastvalue3string/g;
         }
 
-        my $dt = dt_from_string($planneddate);
+        my $dt = dt_from_string($nextpublisheddate);
         $calculated =~ s/\{Month\}/$dt->month/eg;
         $calculated =~ s/\{MonthName\}/$dt->month_name/eg;
         $calculated =~ s/\{Year\}/$dt->year/eg;
@@ -1167,15 +1168,16 @@ sub ModSerialStatus {
         my $pattern      = C4::Serials::Numberpattern::GetSubscriptionNumberpattern( $subscription->{numberpattern} );
         my $frequency    = C4::Serials::Frequency::GetSubscriptionFrequency( $subscription->{periodicity} );
 
+        # next date (calculated from actual date & frequency parameters)
+        my $nextpublisheddate = GetNextDate( $subscription, $publisheddate, $frequency, 1 );
+        my $nextpubdate       = $nextpublisheddate;
+
         # next issue number
         my (
             $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3
-        ) = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate, $count );
+        ) = GetNextSeq( $subscription, $pattern, $frequency, $publisheddate, $nextpublisheddate, $count );
 
-        # next date (calculated from actual date & frequency parameters)
-        my $nextpublisheddate = GetNextDate( $subscription, $publisheddate, $frequency, 1 );
-        my $nextpubdate       = $nextpublisheddate;
         $query =
             "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
                     WHERE  subscriptionid = ?";
