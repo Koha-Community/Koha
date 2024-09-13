@@ -102,7 +102,15 @@
                                         <td>[% sr.result.description | html %]</td>
                                         <td>[% sr.repo.name | html %]</td>
                                         <td>[% sr.result.tag_name | html %]</td>
-                                        <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
+                                        <td>
+                                            <form method="post" action="/cgi-bin/koha/plugins/plugins-upload.pl">
+                                                [% INCLUDE 'csrf-token.inc' %]
+                                                <input type="hidden" name="op" value="cud-Upload" />
+                                                <input type="hidden" name="uploadfile" value="[% sr.result.install_name | html %]" />
+                                                <input type="hidden" name="uploadlocation" value="[% sr.result.install_url | url %]" />
+                                                <button type="submit" value="Install" class="btn btn-default btn-sm btn-install-plugin"><i class="fa fa-download"></i> Install</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 [% END %]
                             </table>
