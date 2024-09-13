@@ -46,7 +46,7 @@ my $interface = 'opac';
 # Mock few preferences
 t::lib::Mocks::mock_preference('OPACBaseURL', 'testopac.com' );
 t::lib::Mocks::mock_preference('StaffClientBaseURL', 'teststaff.com' );
-t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', '' );
 t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'emailpro' );
 
 # Mock Context: config, tz and interface
