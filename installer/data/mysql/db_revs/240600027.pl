@@ -1,14 +1,15 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "27490",
-    description => "Changing language syspref to StaffInterfaceLanguages",
+    description => "Change language syspref to StaffInterfaceLanguages",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         $dbh->do(q{UPDATE systempreferences SET variable='StaffInterfaceLanguages' WHERE variable='language'});
 
-        say $out "Updated system preference 'Change language to StaffInterfaceLanguages'";
+        say_success( $out, "Updated system preference 'language' to 'StaffInterfaceLanguages'" );
     },
 };
