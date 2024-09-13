@@ -82,14 +82,20 @@ if ( $op eq 'cud-gennext' && @subscriptionid ) {
             my $pattern   = C4::Serials::Numberpattern::GetSubscriptionNumberpattern( $subscription->{numberpattern} );
             my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency( $subscription->{periodicity} );
             my $expected  = GetNextExpected($subscriptionid);
-            my (
-                $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
-                $newinnerloop1, $newinnerloop2, $newinnerloop3
-            ) = GetNextSeq( $subscription, $pattern, $frequency, $expected->{publisheddate}, $count_forward );
 
             ## We generate the next publication date
             my $nextpublisheddate = GetNextDate( $subscription, $expected->{publisheddate}, $frequency, 1 );
-            my $planneddate       = $date_received_today ? dt_from_string : $nextpublisheddate;
+
+            my (
+                $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
+                $newinnerloop1, $newinnerloop2, $newinnerloop3
+                )
+                = GetNextSeq(
+                $subscription, $pattern, $frequency, $expected->{publisheddate}, $nextpublisheddate,
+                $count_forward
+                );
+
+            my $planneddate = $date_received_today ? dt_from_string : $nextpublisheddate;
             ## Creating the new issue
             NewIssue(
                 $newserialseq,   $subscriptionid, $subscription->{'biblionumber'},

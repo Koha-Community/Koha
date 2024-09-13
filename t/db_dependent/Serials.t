@@ -727,14 +727,16 @@ subtest "test numbering pattern with dates in GetSeq GetNextSeq" => sub {
         'GetSeq correctly calculates numbering from first aqui date, leap year'
     );
 
-    my $planneddate = '1970-11-01';
-    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate );
-    is( $numbering, '1970 1 Sunday 11 November', 'GetNextSeq correctly calculates numbering from planned date' );
-    $planneddate = '2024-02-29';
-    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate );
+    my $planneddate       = '1970-10-01';
+    my $nextpublisheddate = '1970-11-01';
+    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate, $nextpublisheddate );
+    is( $numbering, '1970 1 Sunday 11 November', 'GetNextSeq correctly calculates numbering from next published date' );
+    $planneddate       = '2024-01-29';
+    $nextpublisheddate = '2024-02-29';
+    ($numbering) = GetNextSeq( $subscription, $pattern, undef, $planneddate, $nextpublisheddate );
     is(
         $numbering, '2024 29 Thursday 2 February',
-        'GetNextSeq correctly calculates numbering from planned date, leap year'
+        'GetNextSeq correctly calculates numbering from next published date, leap year'
     );
 
 };
