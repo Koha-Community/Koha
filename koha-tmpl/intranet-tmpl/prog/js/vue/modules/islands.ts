@@ -4,54 +4,51 @@ import { useMainStore } from "../stores/main";
 import { useNavigationStore } from "../stores/navigation";
 
 /**
- * A registry for Vue components.
- * @type {Map<string, () => Promise<Component>>}
+ * Represents a web component with an import function and optional configuration.
+ * @typedef {Object} WebComponentDynamicImport
+ * @property {function(): Promise<Component>} importFn - A function that imports the component dynamically.
+ * @property {Object} [config] - An optional configuration object for the web component.
+ * @property {Array<string>} [config.stores] - An optional array of strings representing store names associated with the component.
  */
-interface WebComponent {
+type WebComponentDynamicImport = {
     importFn: () => Promise<Component>;
-    config?: {
-        stores: string[];
-    };
-}
-export const componentRegistry: Map<string, WebComponent> = new Map([
-    [
-        "hello-islands",
-        {
-            importFn: async () => {
-                const module = await import(
-                    /* webpackChunkName: "hello-islands" */
-                    "../components/HelloIslands.vue"
-                );
-                return module.default;
-            },
-            config: {
-                stores: ["mainStore", "navigationStore"],
-            },
-        },
-    ],
-    [
-        "hello-world",
-        {
-            importFn: async () => {
-                const module = await import(
-                    /* webpackChunkName: "hello-world" */
-                    "../components/HelloWorld.vue"
-                );
-                return module.default;
-            },
-        },
-    ],
-]);
-
-const pinia = createPinia();
-
-const mainStore = useMainStore(pinia);
-const navigationStore = useNavigationStore(pinia);
-
-const storesMatrix = {
-    mainStore,
-    navigationStore,
+    config?: Record<"stores", Array<string>>;
 };
+
+/**
+ * A registry for Vue components.
+ * @type {Map<string, WebComponentDynamicImport>}
+ */
+export const componentRegistry: Map<string, WebComponentDynamicImport> =
+    new Map([
+        [
+            "hello-islands",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "hello-islands" */
+                        "../components/HelloIslands.vue"
+                    );
+                    return module.default;
+                },
+                config: {
+                    stores: ["mainStore", "navigationStore"],
+                },
+            },
+        ],
+        [
+            "hello-world",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "hello-world" */
+                        "../components/HelloWorld.vue"
+                    );
+                    return module.default;
+                },
+            },
+        ],
+    ]);
 
 /**
  * Hydrates custom elements by scanning the document and loading only necessary components.
@@ -59,6 +56,12 @@ const storesMatrix = {
  */
 export function hydrate(): void {
     window.requestIdleCallback(async () => {
+        const pinia = createPinia();
+        const storesMatrix = {
+            mainStore: useMainStore(pinia),
+            navigationStore: useNavigationStore(pinia),
+        };
+
         const islandTagNames = Array.from(componentRegistry.keys()).join(", ");
         const requestedIslands = new Set(
             Array.from(document.querySelectorAll(islandTagNames)).map(element =>
@@ -79,7 +82,7 @@ export function hydrate(): void {
                     shadowRoot: false,
                     ...(config && {
                         configureApp(app) {
-                            if (config.stores && config.stores.length > 0) {
+                            if (config.stores?.length > 0) {
                                 app.use(pinia);
                                 config.stores.forEach(store => {
                                     app.provide(store, storesMatrix[store]);
