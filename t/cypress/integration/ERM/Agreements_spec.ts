@@ -555,7 +555,7 @@ describe("Agreement CRUD operations", () => {
         // AV's libs displayed
         // Tables for periods and users
     });
-    it.only("Delete agreement", () => {
+    it("Delete agreement", () => {
         let agreement = cy.get_agreement();
         let agreements = [agreement];
 
