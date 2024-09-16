@@ -53,7 +53,7 @@
                                 <h3 id="facet-places">Places</h3>
                             [% CASE 'Series' %]
                                 <h3 id="facet-series">Series</h3>
-                            [% CASE 'ItemTypes' %]
+                            [% CASE 'Item types' %]
                                 <h3 id="facet-itemtypes">Item types</h3>
                             [% CASE 'Home libraries' %]
                                 <h3 id="facet-home-libraries">Home libraries</h3>
@@ -114,7 +114,7 @@
                                         [% aria_label = t("Show more places") %]
                                     [% CASE 'Series' %]
                                         [% aria_label = t("Show more series") %]
-                                    [% CASE 'ItemTypes' %]
+                                    [% CASE 'Item types' %]
                                         [% aria_label = t("Show more item types") %]
                                     [% CASE 'Home libraries' %]
                                         [% aria_label = t("Show more home libraries") %]
