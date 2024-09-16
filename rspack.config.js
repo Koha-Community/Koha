@@ -21,6 +21,7 @@ module.exports = {
             "koha-tmpl/intranet-tmpl/prog/js/vue/dist/"
         ),
         chunkFilename: "[name].js",
+        globalObject: "window",
     },
     module: {
         rules: [
@@ -63,4 +64,12 @@ module.exports = {
             __VUE_PROD_DEVTOOLS__: false,
         }),
     ],
+    externals: {
+        jquery: "jQuery",
+        "datatables.net": "DataTable",
+        "datatables.net-buttons": "DataTable",
+        "datatables.net-buttons/js/buttons.html5": "DataTable",
+        "datatables.net-buttons/js/buttons.print": "DataTable",
+        "datatables.net-buttons/js/buttons.colVis": "DataTable",
+    },
 };
