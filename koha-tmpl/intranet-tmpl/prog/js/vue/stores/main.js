@@ -13,6 +13,7 @@ export const useMainStore = defineStore("main", () => {
         displayed_already: false,
         is_submitting: false,
         is_loading: false,
+        stringFromStore: "Hello from main store",
     });
 
     const actions = {

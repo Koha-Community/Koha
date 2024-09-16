@@ -5,6 +5,10 @@
     <!-- Display message prop -->
     <p v-if="message">{{ message }}</p>
 
+    <!-- Display store data -->
+    <p v-if="stringFromStore">{{ stringFromStore }}</p>
+    <p v-if="anotherStoreString">{{ anotherStoreString }}</p>
+
     <!-- Reactive counter example -->
     <p>Counter: {{ count }}</p>
     <!-- Koha's bootstrap works in here! -->
@@ -15,6 +19,7 @@
 
 <script>
 import { ref } from "vue";
+import { inject } from "vue";
 
 export default {
     props: {
@@ -26,6 +31,16 @@ export default {
             type: String,
             default: "crimson",
         },
+    },
+    setup() {
+        const mainStore = inject("mainStore");
+        const { stringFromStore } = mainStore;
+        const navigationStore = inject("navigationStore");
+        const { anotherStoreString } = navigationStore;
+        return {
+            stringFromStore,
+            anotherStoreString,
+        };
     },
     data() {
         return {
