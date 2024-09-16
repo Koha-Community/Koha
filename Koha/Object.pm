@@ -851,7 +851,7 @@ sub _recursive_fixup {
             # Handle booleans gracefully
             $value = ($value) ? 1 : 0;
         } elsif ( _date_or_datetime_column_type( $column_info->{data_type} ) ) {
-            if ( defined $value ) {
+            if ( defined $value && $value !~ m{^%|%$} ) {
                 try {
                     my $dtf = $self->_result->result_source->storage->datetime_parser;
                     if ( $column_info->{data_type} eq 'date' ) {
