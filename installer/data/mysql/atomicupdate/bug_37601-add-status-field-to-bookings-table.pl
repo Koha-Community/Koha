@@ -18,7 +18,7 @@ return {
             'AFTER' . ( column_exists( 'bookings', 'modification_date' ) ? q{`modification_date`} : q{`end_date`} );
         my $statement = <<~"SQL";
             ALTER TABLE `bookings`
-            ADD COLUMN `status` ENUM('new', 'cancelled') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking' $after;
+            ADD COLUMN `status` ENUM('new', 'cancelled', 'completed') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking' $after;
         SQL
         if ( $dbh->do($statement) ) {
             say_success( $out, q{Added column 'bookings.status'} );
