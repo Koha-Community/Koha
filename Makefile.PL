@@ -404,6 +404,7 @@ my $target_map = {
     'cypress.config.ts' => 'NONE',
     'tsconfig.json'     => 'NONE',
     'webpack.config.js' => 'NONE',
+    'rspack.config.js'  => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
