@@ -1480,8 +1480,7 @@
         }
 
         let build_items_table_drawncallback = function (table) {
-            let tab_id = table.parents('.tab-pane').attr('id');
-            verify_cover_images($("#" + tab_id + '_table'));
+            verify_cover_images(table);
         };
 
         function removeLocalImage(imagenumber) {
