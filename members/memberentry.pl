@@ -290,12 +290,12 @@ foreach my $guarantor (@guarantors) {
     }
 }
 
-my @valid_relationships = split(/\|/, C4::Context->preference('borrowerRelationship'), -1);
+my @valid_relationships = split( /\|/, C4::Context->preference('borrowerRelationship'), -1 );
 if (@valid_relationships) {
     my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
     my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
 
-    for ( my $i = 0 ; $i < scalar @new_guarantor_id; $i++ ) {
+    for ( my $i = 0 ; $i < scalar @new_guarantor_id ; $i++ ) {
         my $guarantor_id = $new_guarantor_id[$i];
         my $relationship = $new_guarantor_relationship[$i];
 
