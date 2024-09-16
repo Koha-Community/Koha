@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 use Data::Dumper qw( Dumper );
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Context;
 use C4::Log qw( logaction cronlogaction );
@@ -177,7 +177,7 @@ subtest 'Reduce log size by unblessing Koha objects' => sub {
     is( $logs->count, 1, 'Action found' );
     is( length($logs->next->info), length($str), 'Length exactly identical' );
 
-    logaction( 'CATALOGUING', 'MODIFY', $item->itemnumber, $item, 'opac' );
+    logaction( 'CATALOGUING', 'MODIFY', $item->itemnumber, $item, 'opac', $item );
     $logs = Koha::ActionLogs->search({ module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber });
     is( substr($logs->next->info, 0, 5), 'item ', 'Prefix item' );
     is( length($logs->reset->next->info), 5+length($str), 'Length + 5' );
@@ -216,6 +216,25 @@ subtest 'Test storing diff of objects' => sub {
         Koha::ActionLogs->search( { module => 'MY_MODULE', action => 'TEST02', object => $item->itemnumber } )->next;
     $diff = decode_json( $logs->diff );
     is( $diff->{D}->{barcode}->{N}, '_MY_TEST_BARCODE_', 'Diff of changes logged successfully' );
+};
+
+subtest 'Test storing original version of an item' => sub {
+    plan tests => 1;
+
+    $Data::Dumper::Sortkeys = 1;
+    my $builder  = t::lib::TestBuilder->new;
+    my $item     = $builder->build_sample_item;
+    my $original = $item->get_from_storage;
+
+    # make sure that $item->...->store logs the update
+    t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
+    $item->barcode('_MY_OTHER_BARCODE_')->store();
+
+    # update was logged under CATALOGUING / MODIFY so we can retrieve the log now
+    my $log =
+        Koha::ActionLogs->search( { module => 'CATALOGUING', action => 'MODIFY', object => $item->itemnumber } )->next;
+    my $info = $log->info;
+    is( $info, "item " . Dumper( $original->unblessed ), 'Original version of item logged successfully' );
 };
 
 $schema->storage->txn_rollback;
