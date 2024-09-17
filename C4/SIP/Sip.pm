@@ -187,10 +187,15 @@ sub boolspace {
 #
 
 sub write_msg {
-    my ($self, $msg, $file, $terminator, $encoding) = @_;
+    my ($self, $msg, $server) = @_;
+    my $terminator = $server->{account}->{terminator};
+    my $encoding = $server->{account}->{encoding};
 
     $terminator ||= q{};
     $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
+
+    my $separator = $server->{account}->{convert_nonprinting_characters};
+    $msg =~ s/[^[:print:]]/$separator/g if defined $separator;
 
     $msg = encode($encoding, $msg) if ( $encoding );
 
@@ -206,15 +211,9 @@ sub write_msg {
         $msg .= sprintf('%04.4X', $cksum);
     }
 
-
-    if ($file) {
-        $file->autoflush(1);
-        print $file $msg, $terminator;
-    } else {
-        STDOUT->autoflush(1);
-        print $msg, $terminator;
-        siplog("LOG_INFO", "OUTPUT MSG: '$msg'");
-    }
+    STDOUT->autoflush(1);
+    print $msg, $terminator;
+    siplog("LOG_INFO", "OUTPUT MSG: '$msg'");
 
     $last_response = $msg;
 }
