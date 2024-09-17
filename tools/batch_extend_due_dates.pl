@@ -46,7 +46,7 @@ my @issue_ids;
 if ( $op eq 'form' ) {
     $template->param( view => 'form', );
 }
-elsif ( $op eq 'list' ) {
+elsif ( $op eq 'cud-list' ) {
 
     my @categorycodes     = $input->multi_param('categorycodes');
     my @itemtypecodes     = $input->multi_param('itemtypecodes');
