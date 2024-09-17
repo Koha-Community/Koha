@@ -21,7 +21,7 @@ import { routes as routesDef } from "../routes/vendors";
 
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
-import { useAVStore } from "../stores/authorised-values";
+import { useAVStore } from "../stores/authorisedValues/authorised-values";
 import { useNavigationStore } from "../stores/navigation";
 import { usePermissionsStore } from "../stores/permissions";
 import i18n from "../i18n";

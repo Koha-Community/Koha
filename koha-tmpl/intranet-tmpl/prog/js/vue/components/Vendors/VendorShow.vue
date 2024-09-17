@@ -67,13 +67,9 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
-        // const AVStore = inject("AVStore")
-        // const { get_lib_from_av } = AVStore
-
         return {
             format_date,
             patron_to_html,
-            // get_lib_from_av,
             setConfirmationDialog,
             setMessage,
         };

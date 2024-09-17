@@ -7,7 +7,9 @@
             <legend>{{ vi.name }}</legend>
             <li>
                 <label>{{ $__("Type") }}:</label>
-                <span> NEED AUTHORISED VALUES </span>
+                <span>
+                    {{ get_lib_from_av("vendor_interface_types", vi.type) }}
+                </span>
             </li>
             <li v-if="vi.uri">
                 <label>{{ $__("URI") }}:</label>

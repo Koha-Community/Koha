@@ -7,7 +7,7 @@
             <li>
                 <label>{{ $__("Type") }}:</label>
                 <span>
-                    {{ vendor.type }}
+                    {{ get_lib_from_av("vendor_types", vendor.type) }}
                 </span>
             </li>
             <li>
@@ -68,9 +68,19 @@
 </template>
 
 <script>
+import { inject } from "vue";
+
 export default {
     props: {
         vendor: Object,
+    },
+    setup() {
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
+
+        return {
+            get_lib_from_av,
+        };
     },
 };
 </script>
