@@ -16,7 +16,7 @@
                         <button
                             type="button"
                             class="btn-close"
-                            @click="closeModal"
+                            data-bs-dismiss="modal"
                             aria-label="Close"
                         ></button>
                     </div>
@@ -60,7 +60,7 @@
                         <button
                             class="btn btn-default deny cancel"
                             type="button"
-                            @click="closeModal"
+                            data-bs-dismiss="modal"
                         >
                             <i class="fa fa-times"></i> Cancel
                         </button>
@@ -522,7 +522,7 @@ export default {
             )
         },
         selectTrainForCopy(train_item_id) {
-            $("#copy_item_to_train").show()
+            $("#copy_item_to_train").modal("show")
             this.train_item_id_to_copy = train_item_id
         },
         copyItem(event) {
@@ -537,7 +537,7 @@ export default {
                 .then(
                     success => {
                         this.setMessage(this.$__("Item copied successfully."))
-                        this.closeModal()
+                        $("#copy_item_to_train").modal("hide")
                     },
                     error => {
                         this.setWarning(
@@ -547,9 +547,6 @@ export default {
                         )
                     }
                 )
-        },
-        closeModal() {
-            $("#copy_item_to_train").hide()
         },
         clearAll() {
             this.selected_items = []
