@@ -4,8 +4,10 @@
     <div class="modal" role="dialog" v-if="warning">
         <div class="modal-dialog">
             <div class="modal-content modal-lg">
-                <div class="modal-body alert-warning">
-                    <h1 v-html="warning"></h1>
+                <div class="modal-header">
+                    <h1 class="modal-title" v-html="warning"></h1>
+                </div>
+                <div class="modal-footer border-top-0">
                     <button
                         id="close_modal"
                         class="btn btn-default deny cancel"
@@ -26,7 +28,10 @@
                 <div class="modal-header alert-warning">
                     <h1 v-html="confirmation.title"></h1>
                 </div>
-                <div class="modal-body">
+                <div
+                    class="modal-body"
+                    v-if="confirmation.message || confirmation.inputs"
+                >
                     <p v-html="confirmation.message"></p>
                     <div class="inputs" v-if="confirmation.inputs">
                         <form ref="confirmationform">
@@ -62,6 +67,15 @@
                             </div>
                         </form>
                     </div>
+                </div>
+                <div
+                    class="modal-footer"
+                    :class="{
+                        'border-top-0': !(
+                            confirmation.message || confirmation.inputs
+                        ),
+                    }"
+                >
                     <button
                         v-if="accept_callback"
                         id="accept_modal"
@@ -85,7 +99,6 @@
             </div>
         </div>
     </div>
-    <!-- Must be styled differently -->
 
     <div class="modal_centered" v-if="is_submitting">
         <div class="spinner alert alert-warning">
