@@ -187,9 +187,9 @@ sub boolspace {
 #
 
 sub write_msg {
-    my ($self, $msg, $server) = @_;
+    my ( $self, $msg, $server ) = @_;
     my $terminator = $server->{account}->{terminator};
-    my $encoding = $server->{account}->{encoding};
+    my $encoding   = $server->{account}->{encoding};
 
     $terminator ||= q{};
     $terminator = ( $terminator eq 'CR' ) ? $CR : $CRLF;
@@ -197,23 +197,23 @@ sub write_msg {
     my $separator = $server->{account}->{convert_nonprinting_characters};
     $msg =~ s/[^[:print:]]/$separator/g if defined $separator;
 
-    $msg = encode($encoding, $msg) if ( $encoding );
+    $msg = encode( $encoding, $msg ) if ($encoding);
 
     my $cksum;
 
     # $msg = encode_utf8($msg);
     if ($error_detection) {
-        if (defined($self->{seqno})) {
+        if ( defined( $self->{seqno} ) ) {
             $msg .= 'AY' . $self->{seqno};
         }
         $msg .= 'AZ';
         $cksum = checksum($msg);
-        $msg .= sprintf('%04.4X', $cksum);
+        $msg .= sprintf( '%04.4X', $cksum );
     }
 
     STDOUT->autoflush(1);
     print $msg, $terminator;
-    siplog("LOG_INFO", "OUTPUT MSG: '$msg'");
+    siplog( "LOG_INFO", "OUTPUT MSG: '$msg'" );
 
     $last_response = $msg;
 }
