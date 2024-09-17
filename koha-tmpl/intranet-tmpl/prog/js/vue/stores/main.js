@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { APIClient } from "../fetch/api-client.js";
 
 export const useMainStore = defineStore("main", {
     state: () => ({
@@ -12,6 +13,7 @@ export const useMainStore = defineStore("main", {
         displayed_already: false,
         _is_submitting: false,
         _is_loading: false,
+        authorisedValues: {},
     }),
     actions: {
         setMessage(message, displayed = false) {
@@ -89,6 +91,60 @@ export const useMainStore = defineStore("main", {
         },
         loaded() {
             this._is_loading = false;
+        },
+        get_lib_from_av(arr_name, av) {
+            if (this.authorisedValues[arr_name] === undefined) {
+                console.warn(
+                    "The authorised value category for '%s' is not defined.".format(
+                        arr_name
+                    )
+                );
+                return;
+            }
+            let o = this.authorisedValues[arr_name].find(e => e.value == av);
+            return o ? o.description : av;
+        },
+        map_av_dt_filter(arr_name) {
+            return this.authorisedValues[arr_name].map(e => {
+                e["_id"] = e["value"];
+                e["_str"] = e["description"];
+                return e;
+            });
+        },
+        async loadAuthorisedValues(authorisedValues) {
+            console.log(authorisedValues);
+            const AVsToFetch = Object.keys(authorisedValues).reduce(
+                (acc, avKey) => {
+                    if (Array.isArray(authorisedValues[avKey])) return acc;
+                    acc[avKey] = authorisedValues[avKey];
+                    return acc;
+                },
+                {}
+            );
+
+            const AVCatArray = Object.keys(AVsToFetch).map(avCat => {
+                return '"' + AVsToFetch[avCat] + '"';
+            });
+
+            const promises = [];
+            const AVClient = APIClient.authorised_values;
+            promises.push(
+                AVClient.values
+                    .getCategoriesWithValues(AVCatArray)
+                    .then(AVCategories => {
+                        Object.entries(AVsToFetch).forEach(
+                            ([AVName, AVCat]) => {
+                                const AVMatch = AVCategories.find(
+                                    element => element.category_name == AVCat
+                                );
+                                this.authorisedValues[AVName] =
+                                    AVMatch.authorised_values;
+                            }
+                        );
+                    })
+            );
+
+            return Promise.all(promises);
         },
     },
     getters: {

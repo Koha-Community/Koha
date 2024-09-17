@@ -77,6 +77,9 @@ export default {
 
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
+        const { authorisedValues } = inject("ERMStore");
+        console.log(authorisedValues);
+
         const table = ref();
 
         const filters = reactive({

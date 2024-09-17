@@ -21,7 +21,6 @@ import { routes as routesDef } from "../routes/erm";
 
 import { useMainStore } from "../stores/main";
 import { useVendorStore } from "../stores/vendors";
-import { useAVStore } from "../stores/authorised-values";
 import { useERMStore } from "../stores/erm";
 import { useNavigationStore } from "../stores/navigation";
 import { useReportsStore } from "../stores/usage-reports";
@@ -30,7 +29,6 @@ import i18n from "../i18n";
 const pinia = createPinia();
 
 const mainStore = useMainStore(pinia);
-const AVStore = useAVStore(pinia);
 const navigationStore = useNavigationStore(pinia);
 const routes = navigationStore.setRoutes(routesDef);
 
@@ -52,7 +50,6 @@ const rootComponent = app
 app.config.unwrapInjectedRef = true;
 app.provide("vendorStore", useVendorStore(pinia));
 app.provide("mainStore", mainStore);
-app.provide("AVStore", AVStore);
 app.provide("navigationStore", navigationStore);
 const ERMStore = useERMStore(pinia);
 app.provide("ERMStore", ERMStore);
