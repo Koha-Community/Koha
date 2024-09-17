@@ -705,7 +705,7 @@ function patron_autocomplete(node, options) {
                     " " +
                     (item.other_name ? "(" + item.other_name.escapeHtml() + ")" : "") +
                     cardnumber.escapeHtml() +
-                    " <small>" +
+                    " " +
                     (item.date_of_birth
                         ? $date(item.date_of_birth) +
                           '<span class="age_years"> (' +
@@ -721,15 +721,19 @@ function patron_autocomplete(node, options) {
                     }) +
                     " " +
                     (!singleBranchMode
-                        ? '<span class="ac-library">' +
+                        ? '<span class="badge ac-library">' +
                           item.library.name.escapeHtml() +
                           "</span>"
                         : "") +
-                    "</small>" +
                     (expired
-                        ? '<small><span class="circ-hlt">' +
-                          __("expired") +
-                          "</span></small>"
+                        ? '<span class="badge text-bg-warning">' +
+                          __("Expired") +
+                          "</span>"
+                        : "") +
+                    (item.restricted
+                        ? '<span class="badge text-bg-danger">' +
+                          __("Restricted") +
+                          "</span>"
                         : "") +
                     "</a>"
             )
