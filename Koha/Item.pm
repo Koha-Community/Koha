@@ -222,15 +222,16 @@ sub store {
 
     my $original = Koha::Items->find( $self->itemnumber );    # $original will be undef if $action eq 'create'
     my $result = $self->SUPER::store;
+    $self->discard_changes;
     if ( $log_action && C4::Context->preference("CataloguingLog") ) {
         $action eq 'create'
-            ? logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
+            ? logaction( "CATALOGUING", "ADD", $self->itemnumber, 'item', undef, $self )
             : logaction( "CATALOGUING", "MODIFY", $self->itemnumber, $self, undef, $original );
     }
     my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
     $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" )
         unless $params->{skip_record_index};
-    $self->get_from_storage->_after_item_action_hooks({ action => $action });
+    $self->_after_item_action_hooks({ action => $action });
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
         {

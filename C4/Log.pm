@@ -118,9 +118,18 @@ sub logaction {
     }
     my $trace = @trace ? to_json( \@trace, { utf8 => 1, pretty => 0 } ) : undef;
 
+    my $is_object = blessed($original) && $original->isa('Koha::Object');
+
+    if ( $actionname =~ /^(ADD|CREATE)$/ ) {
+        # Log diff against empty hashref for newly created objects
+        $updated = $is_object ? $original->unblessed : $original;
+        $original = {};
+    } else {
+        # Log diff against hashref of pre-modified object if passed in
+        $original = $is_object ? $original->unblessed : $original;
+    }
+
     my $diff = undef;
-    $diff = encode_json( diff( $original->unblessed, $updated, noU => 1 ) )
-        if blessed($original) && $original->isa('Koha::Object');
     $diff //= encode_json( diff( $original, $updated, noU => 1 ) )
         if $original && ref $updated eq 'HASH';
 
