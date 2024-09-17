@@ -121,10 +121,17 @@ sub logaction {
     my $is_object = blessed($original) && $original->isa('Koha::Object');
 
     if ( $actionname =~ /^(ADD|CREATE)$/ ) {
+
         # Log diff against empty hashref for newly created objects
-        $updated = $is_object ? $original->unblessed : $original;
+        $updated  = $is_object ? $original->unblessed : $original;
         $original = {};
+    } elsif ( $actionname eq 'DELETE' ) {
+
+        # Log diff for deleted objects against empty hashref
+        $original = $is_object ? $original->unblessed : $original;
+        $updated  = {};
     } else {
+
         # Log diff against hashref of pre-modified object if passed in
         $original = $is_object ? $original->unblessed : $original;
     }

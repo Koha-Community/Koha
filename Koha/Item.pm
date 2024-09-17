@@ -283,7 +283,7 @@ sub delete {
 
     $self->_after_item_action_hooks({ action => 'delete' });
 
-    logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item" )
+    logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item", undef, $self )
       if C4::Context->preference("CataloguingLog");
 
     Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue(
