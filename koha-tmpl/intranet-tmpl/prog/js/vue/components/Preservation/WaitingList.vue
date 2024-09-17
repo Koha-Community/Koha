@@ -78,7 +78,7 @@
                             aria-label="Close"
                         ></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body position-relative overflow-visible">
                         <fieldset>
                             <ol>
                                 <li class="form-group form-row">
