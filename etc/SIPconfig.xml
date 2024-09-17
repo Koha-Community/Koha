@@ -59,6 +59,7 @@
       <login id="lpl-sc" password="1234" institution="LPL" allow_fields="AO,AA,AE"/>
       <!-- allow_fields hides all fields not in the list, it is the inverse of hide_fields ( hide_fields takes precedence ) -->
       <login id="lpl-sc-beacock" password="xyzzy"
+             convert_nonprinting_characters=" "
              delimiter="|" error-detect="enabled" institution="LPL"
              send_patron_home_library_in_af="1"
              cv_send_00_on_success="1"
@@ -84,6 +85,7 @@
              lost_status_for_missing="4"
              blocked_item_types="VM|MU"
              seen_on_item_information="mark_found"> <!-- could be "keep_lost", empty to disable -->
+             <!-- convert_nonprinting_characters: Convert control and non-space separator characters into the given string -->
              <!-- show_checkin_message: If enabled, successful checking responses will contain an AF screen message -->
              <!-- lost_block_checkout sets flag if patron has more than the given current checkouts that are lost ( itemlost > 0 by default ) -->
              <!-- lost_block_checkout_value determines the minimum lost item value to count ( that is, the value in items.itemlost ) -->
