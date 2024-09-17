@@ -16,7 +16,7 @@
                         <button
                             type="button"
                             class="btn-close"
-                            data-bs-dismiss="modal"
+                            @click="closeModal"
                             aria-label="Close"
                         ></button>
                     </div>
@@ -60,7 +60,7 @@
                         <button
                             class="btn btn-default deny cancel"
                             type="button"
-                            data-bs-dismiss="modal"
+                            @click="closeModal"
                         >
                             <i class="fa fa-times"></i> Cancel
                         </button>
@@ -537,7 +537,7 @@ export default {
                 .then(
                     success => {
                         this.setMessage(this.$__("Item copied successfully."))
-                        $("#copy_item_to_train").hide()
+                        this.closeModal()
                     },
                     error => {
                         this.setWarning(
@@ -547,6 +547,9 @@ export default {
                         )
                     }
                 )
+        },
+        closeModal() {
+            $("#copy_item_to_train").hide()
         },
         clearAll() {
             this.selected_items = []
