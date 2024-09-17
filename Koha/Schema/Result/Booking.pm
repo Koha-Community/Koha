@@ -82,6 +82,33 @@ the start date of the booking
 
 the end date of the booking
 
+=head2 creation_date
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+the timestamp for when a booking was created
+
+=head2 modification_date
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
+the timestamp for when a booking has been updated
+
+=head2 status
+
+  data_type: 'enum'
+  default_value: 'created'
+  extra: {list => ["created","cancelled"]}
+  is_nullable: 0
+
+current status of the booking
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -116,6 +143,27 @@ __PACKAGE__->add_columns(
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
+  },
+  "creation_date",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
+  "modification_date",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
+  "status",
+  {
+    data_type => "enum",
+    default_value => "created",
+    extra => { list => ["created", "cancelled"] },
+    is_nullable => 0,
   },
 );
 
@@ -199,8 +247,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-03 13:13:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgq1xPy2zo3pdkJb801djA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-17 10:13:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3v9+L1G6GK0Um3fF0t251w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
