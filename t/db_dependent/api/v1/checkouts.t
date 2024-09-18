@@ -517,12 +517,8 @@ subtest 'add checkout' => sub {
             ->status_is(401)->json_is( { error => "Authentication failure." } );
 
         $t->post_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
-                { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)->json_is(
-            {
-                error                => "Authorization failure. Missing required permission(s).",
-                required_permissions => undef
-            }
-                );
+                { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)
+            ->json_is( { error => "Unprivileged user cannot access another user's resources" } );
 
         $t->post_ok( "//$useridp:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
                 { item_id => $item1_id, patron_id => $patron_id } )->status_is(201);
