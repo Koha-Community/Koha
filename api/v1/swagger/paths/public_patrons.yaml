@@ -60,8 +60,6 @@
         description: Under maintenance
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-    x-koha-authorization:
-      allow-owner: true
 "/public/patrons/{patron_id}/checkouts":
   post:
     x-mojo-to: Checkouts#add
