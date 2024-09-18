@@ -90,29 +90,24 @@ sub set_public {
 
     my $user = $c->stash('koha.user');
 
-    unless ( $user->borrowernumber == $patron_id ) {
-        return $c->render(
-            status  => 403,
-            openapi => { error => "Changing other patron's password is forbidden" }
-        );
-    }
-
-    unless ( $user->category->effective_change_password ) {
-        return $c->render(
-            status  => 403,
-            openapi => { error => "Changing password is forbidden" }
-        );
-    }
-
-    my $old_password = $body->{old_password};
-    my $password     = $body->{password};
-    my $password_2   = $body->{password_repeated};
-
-    unless ( $password eq $password_2 ) {
-        return $c->render( status => 400, openapi => { error => "Passwords don't match" } );
-    }
-
     return try {
+        $c->auth->public($patron_id);
+
+        unless ( $user->category->effective_change_password ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => "Changing password is forbidden" }
+            );
+        }
+
+        my $old_password = $body->{old_password};
+        my $password     = $body->{password};
+        my $password_2   = $body->{password_repeated};
+
+        unless ( $password eq $password_2 ) {
+            return $c->render( status => 400, openapi => { error => "Passwords don't match" } );
+        }
+
         unless ( checkpw_internal( $user->userid, $old_password ) ) {
             return $c->render(
                 status  => 400,
@@ -130,9 +125,11 @@ sub set_public {
                 status  => 400,
                 openapi => { error => "$_" }
             );
+        } elsif ( blessed $_ and $_->isa('Koha::Exceptions::REST::Public::Unauthorized') ) {
+            return $c->render( status => 403, json => { error => "Changing other patron's password is forbidden" } );
+        } else {
+            $c->unhandled_exception($_);
         }
-
-        $c->unhandled_exception($_);
     };
 }
 
