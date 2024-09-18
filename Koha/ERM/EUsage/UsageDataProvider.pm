@@ -398,6 +398,7 @@ sub _build_url_query {
     $url .= '&api_key=' . $self->api_key           if $self->api_key;
     $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
     $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
+    $url .= '&platform=' . $self->service_platform if $self->service_platform;
 
     return $url;
 }
