@@ -73,22 +73,23 @@ Controller function that handles cancelling a patron's Koha::ArticleRequest obje
 sub patron_cancel {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->param('patron_id') );
-
-    return $c->render_resource_not_found("Patron")
-        unless $patron;
-
-    # patron_id has been validated by the allow-owner check, so the following call to related
-    # article requests covers the case of article requests not belonging to the patron
-    my $article_request = $patron->article_requests->find( $c->param('article_request_id') );
-
-    return $c->render_resource_not_found("Article request")
-        unless $article_request;
-
-    my $reason = $c->param('cancellation_reason');
-    my $notes  = $c->param('notes');
-
+    my $patron_id = $c->param('patron_id');
     return try {
+        $c->auth->public($patron_id);
+        my $patron = Koha::Patrons->find($patron_id);
+
+        return $c->render_resource_not_found("Patron")
+            unless $patron;
+
+        # patron_id has been validated by the $c->auth->public check, so the following call to related
+        # article requests covers the case of article requests not belonging to the patron
+        my $article_request = $patron->article_requests->find( $c->param('article_request_id') );
+
+        return $c->render_resource_not_found("Article request")
+            unless $article_request;
+
+        my $reason = $c->param('cancellation_reason');
+        my $notes  = $c->param('notes');
 
         $article_request->cancel(
             {
