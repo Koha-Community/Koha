@@ -67,6 +67,22 @@ sub register {
                         error_code => 'invalid_query',
                     }
                 );
+            } elsif ( blessed $exception
+                && ref($exception) eq 'Koha::Exceptions::REST::Public::Authentication::Required' )
+            {
+                return $c->render(
+                    status => 401,
+                    json   => {
+                        error => $exception->error,
+                    }
+                );
+            } elsif ( blessed $exception && ref($exception) eq 'Koha::Exceptions::REST::Public::Unauthorized' ) {
+                return $c->render(
+                    status => 403,
+                    json   => {
+                        error => $exception->error,
+                    }
+                );
             }
 
             if ( blessed $exception ) {

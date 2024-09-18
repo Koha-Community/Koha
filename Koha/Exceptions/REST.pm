@@ -8,6 +8,12 @@ use Exception::Class (
     'Koha::Exceptions::REST' => {
         isa => 'Koha::Exception',
     },
+    'Koha::Exceptions::REST::Public::Authentication::Required' => {
+        description => "This public route requires authentication",
+    },
+    'Koha::Exceptions::REST::Public::Unauthorized' => {
+        description => "Unprivileged user cannot access another user's resources",
+    },
     'Koha::Exceptions::REST::Query::InvalidOperator' => {
         description => "Invalid operator found in query",
         fields      => ['operator']
