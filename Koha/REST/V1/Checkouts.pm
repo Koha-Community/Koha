@@ -153,7 +153,16 @@ sub get_availability {
     my $c = shift->openapi->valid_input or return;
     my $user = $c->stash('koha.user');
 
-    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+    my $patron_id = $c->param('patron_id');
+
+    return if try {
+        $c->auth->public($patron_id) if $c->stash('is_public');
+        return 0;    # authorization successful, do not "return" after try-catch
+    } catch {
+        return $c->unhandled_exception($_);
+    };
+
+    my $patron = Koha::Patrons->find($patron_id);
     my $item   = Koha::Items->find( $c->param('item_id') );
 
     my ( $impossible, $confirmation, $warnings ) =
