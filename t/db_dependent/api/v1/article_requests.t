@@ -84,7 +84,7 @@ subtest 'cancel() tests' => sub {
 
 subtest 'patron_cancel() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
@@ -116,10 +116,14 @@ subtest 'patron_cancel() tests' => sub {
 
     my $article_request_2 = $builder->build_object({ class => 'Koha::ArticleRequests', value => { borrowernumber => $another_patron_id } });
 
+    # delete another patron's request when unauthorized
+    $t->delete_ok( "/api/v1/public/patrons/$another_patron_id/article_requests/" . $article_request_2->id )
+        ->status_is(401)->json_is( '/error' => "Authentication failure." );
+
     # delete another patron's request
     $t->delete_ok("//$userid:$password@/api/v1/public/patrons/$another_patron_id/article_requests/" . $article_request_2->id)
       ->status_is(403)
-      ->json_is( '/error' => 'Authorization failure. Missing required permission(s).' );
+      ->json_is( '/error' => "Unprivileged user cannot access another user's resources" );
 
     my $another_article_request = $builder->build_object(
         {
