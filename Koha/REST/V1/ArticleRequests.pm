@@ -89,6 +89,8 @@ sub patron_cancel {
         );
     }
 
+    $c->auth->public($patron->id);
+
     # patron_id has been validated by the allow-owner check, so the following call to related
     # article requests covers the case of article requests not belonging to the patron
     my $article_request = $patron->article_requests->find( $c->validation->param('article_request_id') );
