@@ -130,8 +130,6 @@
         description: Under maintenance
         schema:
           $ref: "../swagger.yaml#/definitions/error"
-    x-koha-authorization:
-      allow-owner: true
 "/public/patrons/{patron_id}/guarantors/can_see_charges":
   put:
     x-mojo-to: Patrons#guarantors_can_see_charges
