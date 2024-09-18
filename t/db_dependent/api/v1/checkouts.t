@@ -554,8 +554,7 @@ subtest 'add checkout' => sub {
         $t->post_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/checkouts" => json =>
                 { item_id => $item1_id, patron_id => $patron_id } )->status_is(403)->json_is(
             {
-                error                => "Authorization failure. Missing required permission(s).",
-                required_permissions => undef
+                error => "Unprivileged user cannot access another user's resources"
             }
                 );
 

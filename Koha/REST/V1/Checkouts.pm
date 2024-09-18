@@ -27,6 +27,7 @@ use Koha::Checkouts;
 use Koha::Old::Checkouts;
 use Koha::Token;
 
+use Scalar::Util qw( blessed );
 use Try::Tiny qw( catch try );
 
 =head1 NAME
@@ -191,18 +192,6 @@ sub add {
     my $onsite    = $body->{onsite_checkout};
     my $barcode   = $body->{external_id};
 
-    if ( $c->stash('is_public')
-        && !C4::Context->preference('OpacTrustedCheckout') )
-    {
-        return $c->render(
-            status  => 405,
-            openapi => {
-                error      => 'Feature disabled',
-                error_code => 'FEATURE_DISABLED'
-            }
-        );
-    }
-
     return try {
 
         unless ( $item_id or $barcode ) {
@@ -213,6 +202,18 @@ sub add {
                     error_code => 'MISSING_OR_WRONG_PARAMETERS',
                 }
             );
+        }
+
+        if ( $c->stash('is_public') ) {
+            $c->auth->public($patron_id);
+
+            return $c->render(
+                status  => 405,
+                openapi => {
+                    error      => 'Feature disabled',
+                    error_code => 'FEATURE_DISABLED'
+                }
+            ) if !C4::Context->preference('OpacTrustedCheckout');
         }
 
         my $item;
