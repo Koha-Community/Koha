@@ -30,7 +30,7 @@
                     [% END %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '#' _ tablename %]
+                            [% SET table_id = pagename _ '_' _ tablename %]
                             <div class="datatable_config" id="[% table_id | html %]">
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
@@ -369,7 +369,7 @@
 
                 <div class="col-md-2 order-sm-2 order-md-1">
                         <aside>
-                                [% INCLUDE 'admin-menu.inc' %]
+                            [% INCLUDE 'admin-menu.inc' %]
                         </aside>
                 </div> <!-- /.col-md-2.order-md-1 -->
         </div> <!-- /.row -->
@@ -380,12 +380,12 @@
     [%- IF ( panel.defined ) -%]
         <script>
             $(document).ready( function() {
-                $("#[% panel | uri %]Toggle").click();
+                $("#[% panel | uri %]_panel").collapse("show");
                 [%- IF page.defined -%]
                     $("#[% panel | uri %]_panel").on('shown.bs.collapse', function () {
                         $('html, body').animate({
                             [%- IF table.defined -%]
-                                scrollTop: ($("#[% page | uri %]#[% table | uri %]").offset().top)
+                                scrollTop: ($("#[% page | uri %]_[% table | uri %]").offset().top)
                             [%- ELSE -%]
                                 scrollTop: ($("#[% page | uri %]").offset().top)
                             [%- END -%]
