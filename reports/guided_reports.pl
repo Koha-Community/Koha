@@ -646,6 +646,10 @@ elsif ($op eq 'export'){
             if ( $format eq 'csv' ) {
                 my $delimiter = C4::Context->csv_delimiter;
                 $type = 'application/csv';
+
+                # Add BOM for UTF-8 encoded CSV
+                $content .= "\xEF\xBB\xBF";
+
                 my $csv = Text::CSV::Encoded->new({ encoding_out => 'UTF-8', sep_char => $delimiter});
                 $csv or die "Text::CSV::Encoded->new({binary => 1}) FAILED: " . Text::CSV::Encoded->error_diag();
                 if ( $csv->combine( header_cell_values($sth) ) ) {
