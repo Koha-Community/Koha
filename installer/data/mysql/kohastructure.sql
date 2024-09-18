@@ -3215,6 +3215,7 @@ CREATE TABLE `erm_usage_data_providers` (
   `requestor_name` varchar(80) DEFAULT NULL COMMENT 'requestor name',
   `requestor_email` varchar(80) DEFAULT NULL COMMENT 'requestor email',
   `report_types` varchar(255) DEFAULT NULL COMMENT 'report types provided by the harvester',
+  `service_platform` varchar(80) DEFAULT NULL COMMENT 'platform if provider requires it',
   PRIMARY KEY (`erm_usage_data_provider_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -119,6 +119,15 @@
                             />
                         </li>
                         <li>
+                            <label for="usage_data_provider_service_platform"
+                                >{{ $__("Service platform") }}:
+                            </label>
+                            <input
+                                id="usage_data_provider_service_platform"
+                                v-model="usage_data_provider.service_platform"
+                            />
+                        </li>
+                        <li>
                             <label
                                 class="required"
                                 for="usage_data_provider_report_types"
