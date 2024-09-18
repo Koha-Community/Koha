@@ -396,6 +396,8 @@ sub guarantors_can_see_charges {
     my $c = shift->openapi->valid_input or return;
 
     return try {
+        $c->auth->public( $c->param('patron_id') );
+
         if ( C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor') ) {
             my $patron = $c->stash( 'koha.user' );
             my $privacy_setting = ($c->req->json->{allowed}) ? 1 : 0;
@@ -432,6 +434,8 @@ sub guarantors_can_see_checkouts {
     my $c = shift->openapi->valid_input or return;
 
     return try {
+        $c->auth->public( $c->param('patron_id') );
+
         if ( C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') ) {
             my $patron = $c->stash( 'koha.user' );
             my $privacy_setting = ( $c->req->json->{allowed} ) ? 1 : 0;

@@ -893,7 +893,7 @@ subtest 'delete() tests' => sub {
 
 subtest 'guarantors_can_see_charges() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
@@ -901,12 +901,21 @@ subtest 'guarantors_can_see_charges() tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy_guarantor_fines => 0 } });
+    my $other_patron_id = $builder->build_object( { class => 'Koha::Patrons' } )->borrowernumber;
     my $password = 'thePassword123';
     $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
     my $patron_id = $patron->borrowernumber;
 
     t::lib::Mocks::mock_preference( 'AllowPatronToSetFinesVisibilityForGuarantor', 0 );
+
+    $t->put_ok(
+        "/api/v1/public/patrons/$other_patron_id/guarantors/can_see_charges" => json => { allowed => Mojo::JSON->true }
+    )->status_is(401)->json_is( { error => "Authentication failure." } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$other_patron_id/guarantors/can_see_charges" => json =>
+            { allowed => Mojo::JSON->true } )->status_is(403)
+        ->json_is( { error => "Unprivileged user cannot access another user's resources" } );
 
     $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_charges" => json => { allowed => Mojo::JSON->true } )
       ->status_is( 403 )
@@ -931,7 +940,7 @@ subtest 'guarantors_can_see_charges() tests' => sub {
 
 subtest 'guarantors_can_see_checkouts() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 17;
 
     t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
@@ -939,10 +948,18 @@ subtest 'guarantors_can_see_checkouts() tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy_guarantor_checkouts => 0 } });
+    my $other_patron_id = $builder->build_object( { class => 'Koha::Patrons' } )->borrowernumber;
     my $password = 'thePassword123';
     $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
     my $patron_id = $patron->borrowernumber;
+
+    $t->put_ok( "/api/v1/public/patrons/$other_patron_id/guarantors/can_see_checkouts" => json =>
+            { allowed => Mojo::JSON->true } )->status_is(401)->json_is( { error => "Authentication failure." } );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$other_patron_id/guarantors/can_see_checkouts" => json =>
+            { allowed => Mojo::JSON->true } )->status_is(403)
+        ->json_is( { error => "Unprivileged user cannot access another user's resources" } );
 
     t::lib::Mocks::mock_preference( 'AllowPatronToSetCheckoutsVisibilityForGuarantor', 0 );
 
