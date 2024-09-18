@@ -30,6 +30,8 @@ return {
         }
 
         $sth->execute( 'Collections', 'ccode', 'collection-code' );
+        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary' );
+        $sth->execute( 'Home libraries',    'homebranch',    'homelibrary' );
 
         # Deal with DisplayLibraryFacets
         my ($DisplayLibraryFacets) = $dbh->selectrow_array(
@@ -45,9 +47,24 @@ return {
             $holdingbranch = 1;
         } elsif ( $DisplayLibraryFacets eq 'home' ) {
             $homebranch = 1;
+
         }
-        $sth->execute( 'Holding libraries', 'holdingbranch', 'holdinglibrary' ) if $holdingbranch;
-        $sth->execute( 'Home libraries',    'homebranch',    'homelibrary' )    if $homebranch;
+        my $faceted_search_field = $dbh->selectall_arrayref(
+            q{SELECT * FROM search_field WHERE facet_order IS NOT NULL ORDER BY facet_order},
+            { Slice => {} }
+        );
+        my $facet_order = 1;
+        $dbh->do(q{UPDATE search_field SET facet_order = NULL});
+        for my $f (@$faceted_search_field) {
+            next
+                if $f->{name} eq 'homebranch' && !$homebranch;
+            next
+                if $f->{name} eq 'holdingbranch' && !$holdingbranch;
+
+            $dbh->do( q{UPDATE search_field SET facet_order = ? WHERE name = ?}, undef, $facet_order, $f->{name} );
+
+            $facet_order++;
+        }
 
         say $out "Updated DisplayLibraryFacets and search field configuration";
     },
