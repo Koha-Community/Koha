@@ -78,37 +78,30 @@ $( document ).ready( function() {
             var link = $( "a[title='" + tgt.text() + "']", row );
             if( link.length == 1) link.click();
             row.find('ul.dropdown-menu').hide();
+            return;
         } else {
-            event.stopPropagation();
-            /* Remove the "open" class from all dropup menus in case one is open */
-            $(".dropup").removeClass("open");
-            /* Create a clone of the Bootstrap dropup menu in the "Actions" column */
-            var menu_clone = $(".dropdown-menu", row)
-                .clone()
-                .addClass("menu-clone")
-                .css({
-                    "display" : "block",
-                    "position" : "absolute",
-                    "top" : "auto",
-                    "bottom" : "100%",
-                    "right" : "auto",
-                    "left" : "0",
-                });
-            /* Append the menu clone to the table cell which was clicked.
-                The menu must first be wrapped in a block-level div to clear
-                the table cell's text contents and then a relative-positioned
-                div to allow the menu to be positioned correctly */
-            if( tgt.prop('nodeName') != 'TD' ) {
-                // handling click on caret to improve menu position
-                tgt = tgt.closest('td');
-            }
-            tgt.append(
-                $('<div/>', {'class': 'btn-wrapper'}).append(
-                    $('<div/>', {'class': 'btn-group'}).append(
-                        menu_clone
+            if( tgt.prop('nodeName') == 'TD' && !tgt.hasClass("actions") ){
+                /* Create a clone of the Bootstrap dropup menu in the "Actions" column */
+                var menu_clone = $(".dropdown-menu", row)
+                    .clone()
+                    .addClass("show")
+                    .css({
+                        "display" : "block",
+                        "position" : "absolute",
+                        "top" : "auto",
+                        "bottom" : "100%",
+                        "right" : "auto",
+                        "left" : "0",
+                    });
+
+                tgt.append(
+                    $('<div/>', {'class': 'btn-wrapper'}).append(
+                        $('<div/>', {'class': 'btn-group'}).append(
+                            menu_clone
+                        )
                     )
-                )
-            );
+                );
+            }
         }
     });
 
