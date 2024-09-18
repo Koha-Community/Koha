@@ -21,6 +21,8 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Patrons;
 
+use Try::Tiny;
+
 =head1 NAME
 
 Koha::REST::V1::Patrons::Holds
@@ -77,6 +79,8 @@ sub delete_public {
     my $c = shift->openapi->valid_input or return;
 
     return try {
+        $c->auth->public( $c->param('patron_id') );
+
         my $hold = $c->objects->find_rs( Koha::Holds->new, $c->param('hold_id') );
 
         unless ( $hold and $c->param('patron_id') == $hold->borrowernumber ) {

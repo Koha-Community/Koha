@@ -72,7 +72,7 @@ subtest 'list() tests' => sub {
 
 subtest 'delete_public() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -92,10 +92,19 @@ subtest 'delete_public() tests' => sub {
     my $deleted_hold_id = $hold_to_delete->id;
     $hold_to_delete->delete;
 
+    $t->delete_ok( "/api/v1/public/patrons/" . $patron->id . '/holds/' . $deleted_hold_id )->status_is(401)
+        ->json_is( { error => 'Authentication failure.' } );
+
     $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $deleted_hold_id )
         ->status_is(404);
 
     my $another_user_hold = $builder->build_object( { class => 'Koha::Holds' } );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/"
+            . $another_user_hold->borrowernumber
+            . '/holds/'
+            . $another_user_hold->id )
+        ->json_is( { error => "Unprivileged user cannot access another user's resources" } );
 
     $t->delete_ok( "//$userid:$password@/api/v1/public/patrons/" . $patron->id . '/holds/' . $another_user_hold->id )
         ->status_is( 404, 'Invalid patron_id and hold_id combination yields 404' );
