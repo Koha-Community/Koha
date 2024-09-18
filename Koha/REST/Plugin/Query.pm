@@ -195,7 +195,10 @@ is raised.
             my $match = $reserved_params->{_match} // 'contains';
 
             foreach my $param ( keys %{$filtered_params} ) {
-                if ( $match eq 'contains' ) {
+                if ( $match eq 'exact' || $filtered_params->{$param} =~ m[^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}]) {
+                    $params->{$param} = $filtered_params->{$param};
+                }
+                elsif ( $match eq 'contains' ) {
                     $params->{$param} =
                       { like => '%' . $filtered_params->{$param} . '%' };
                 }
@@ -204,9 +207,6 @@ is raised.
                 }
                 elsif ( $match eq 'ends_with' ) {
                     $params->{$param} = { like => '%' . $filtered_params->{$param} };
-                }
-                elsif ( $match eq 'exact' ) {
-                    $params->{$param} = $filtered_params->{$param};
                 }
                 else {
                     # We should never reach here, because the OpenAPI plugin should
