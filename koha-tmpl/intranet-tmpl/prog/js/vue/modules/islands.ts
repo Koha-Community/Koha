@@ -1,5 +1,6 @@
 import { Component, defineCustomElement } from "vue";
 import { createPinia } from "pinia";
+import { $__ } from "../i18n";
 import { useMainStore } from "../stores/main";
 import { useNavigationStore } from "../stores/navigation";
 
@@ -27,7 +28,7 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                 importFn: async () => {
                     const module = await import(
                         /* webpackChunkName: "hello-islands" */
-                        "../components/HelloIslands.vue"
+                        "../components/Islands/HelloIslands.vue"
                     );
                     return module.default;
                 },
@@ -42,9 +43,24 @@ export const componentRegistry: Map<string, WebComponentDynamicImport> =
                 importFn: async () => {
                     const module = await import(
                         /* webpackChunkName: "hello-world" */
-                        "../components/HelloWorld.vue"
+                        "../components/Islands/HelloWorld.vue"
                     );
                     return module.default;
+                },
+            },
+        ],
+        [
+            "dialog-island",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "vue-dialog" */
+                        "../components/Islands/DialogIsland.vue"
+                    );
+                    return module.default;
+                },
+                config: {
+                    stores: ["mainStore"],
                 },
             },
         ],
@@ -88,6 +104,7 @@ export function hydrate(): void {
                                     app.provide(store, storesMatrix[store]);
                                 });
                             }
+                            app.config.globalProperties.$__ = $__;
                             // Further config options can be added here as we expand this further
                         },
                     }),
@@ -97,4 +114,6 @@ export function hydrate(): void {
     });
 }
 
-hydrate();
+if (parseInt(document?.currentScript?.getAttribute("init") ?? "0", 10)) {
+    hydrate();
+}

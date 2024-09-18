@@ -347,8 +347,23 @@
 </div>
 <!-- /.row -->
 
+<div class="row w-25 m-auto p-4 border border-4 border-warning br-5 rounded text-center mt-4">
+    <dialog-island id="surprise"></dialog-island>
+    <button id="surprise-button" class="btn btn-primary">Click me for a surprise!</button>
+</div>
+
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/vue/dist/islands.js", "type" => "module") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
+    [% Asset.js("js/vue/dist/islands.js", "init" => "1") | $raw %]
+    <!--
+    [% SET islands = Asset.js("js/vue/dist/islands.esm.js").match('(src="([^"]+)")').1 %]
+    <script src="[% islands %]" type="module">
+</script>
+    <script type="module">
+        import { hydrate } from "[% islands %]";
+        hydrate();
+    </script>
+    -->
     <script>
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this news item? This cannot be undone.");
         $(document).ready(function () {
@@ -360,6 +375,10 @@
                 const [firstHelloIslandsElement] = document.getElementsByTagName("hello-islands");
                 firstHelloIslandsElement.message = "This is a delayed update to the message attribute of the web commponent.";
             }, 2000);
+
+            $("#surprise-button").on("click", () => {
+                $("#surprise").attr("warning", `<span>Yes, this is <span class="font-monospace">Dialog.vue</span> (in a wrapper component)!</span><span class="d-none">${Math.random()}</span>`);
+            });
         });
     </script>
 [% END %]
