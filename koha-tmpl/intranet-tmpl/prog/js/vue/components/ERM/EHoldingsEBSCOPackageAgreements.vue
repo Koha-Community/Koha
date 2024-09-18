@@ -1,14 +1,42 @@
 <template>
-    <transition name="modal">
-        <div v-if="showModal" class="add_agreement_modal">
-            <AgreementsList :embedded="true" @select-agreement="addAgreement" />
-            <input
-                type="button"
-                @click="showModal = false"
-                :value="$__('Close')"
-            />
+    <div
+        id="add_agreement"
+        class="modal"
+        role="dialog"
+        aria-labelledby="add_agreement_label"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content modal-xl">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="add_agreement_label">
+                        {{ $__("Add agreement") }}
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body position-relative overflow-visible">
+                    <AgreementsList
+                        :embedded="true"
+                        @select-agreement="addAgreement"
+                    />
+                </div>
+                <div class="modal-footer">
+                    <button
+                        class="btn btn-default deny cancel"
+                        type="button"
+                        data-bs-dismiss="modal"
+                    >
+                        {{ $__("Close") }}
+                    </button>
+                </div>
+            </div>
         </div>
-    </transition>
+    </div>
     <div id="package_agreements">
         <div
             v-for="(
@@ -33,7 +61,7 @@
                 ><i class="fa fa-trash"></i
             ></a>
         </div>
-        <a class="btn btn-default btn-xs" @click="showModal = true"
+        <a class="btn btn-default btn-xs" @click="showAddAgreementModal()"
             ><font-awesome-icon icon="plus" /> {{ $__("Add new agreement") }}</a
         >
     </div>
@@ -45,9 +73,7 @@ import { APIClient } from "../../fetch/api-client.js"
 import { setWarning, removeMessages } from "../../messages"
 
 export default {
-    data() {
-        return { showModal: false }
-    },
+    data() {},
     beforeCreate() {},
     methods: {
         serializeAgreement() {
@@ -72,9 +98,12 @@ export default {
             )
             return erm_package
         },
+        showAddAgreementModal() {
+            $("#add_agreement").modal("show")
+        },
         addAgreement(agreement_id) {
             removeMessages()
-            this.showModal = false
+            $("#add_agreement").modal("hide")
             let erm_package = this.serializeAgreement()
             // Only add if it does not exist
             if (
@@ -135,34 +164,13 @@ export default {
 }
 </script>
 <style>
-.add_agreement_modal {
-    position: fixed;
-    z-index: 9998;
-    top: 0;
-    left: 0;
-    width: 80%;
-    height: 80%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: table;
-    transition: opacity 0.3s ease;
-    margin: auto;
-    padding: 20px 30px;
-    background-color: #fff;
-    border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-    transition: all 0.3s ease;
-    font-family: Helvetica, Arial, sans-serif;
-}
-</style>
-
-<style>
-.add_agreement_modal #agreements_list table {
+#add_agreement #agreements_list table {
     display: table;
 }
-.add_agreement_modal .filters label {
+#add_agreement .filters label {
     float: none !important;
 }
-.add_agreement_modal .filters input[type="checkbox"] {
+#add_agreement .filters input[type="checkbox"] {
     margin-left: 0 !important;
 }
 </style>
