@@ -103,8 +103,8 @@ the timestamp for when a booking has been updated
 =head2 status
 
   data_type: 'enum'
-  default_value: 'created'
-  extra: {list => ["created","cancelled"]}
+  default_value: 'new'
+  extra: {list => ["new","cancelled","completed"]}
   is_nullable: 0
 
 current status of the booking
@@ -161,8 +161,8 @@ __PACKAGE__->add_columns(
   "status",
   {
     data_type => "enum",
-    default_value => "created",
-    extra => { list => ["created", "cancelled"] },
+    default_value => "new",
+    extra => { list => ["new", "cancelled", "completed"] },
     is_nullable => 0,
   },
 );
@@ -247,8 +247,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-17 10:13:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3v9+L1G6GK0Um3fF0t251w
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-18 08:58:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3ctwNEgFUMhV+uR/UGSWag
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
