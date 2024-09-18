@@ -32,6 +32,12 @@
                     {{ usage_data_provider.report_types }}
                 </span>
             </li>
+            <li>
+                <label>{{ $__("Service platform") }}:</label>
+                <span id="service_platform">
+                    {{ usage_data_provider.service_platform }}
+                </span>
+            </li>
         </ol>
     </fieldset>
     <legend>{{ $__("SUSHI credentials") }}</legend>
