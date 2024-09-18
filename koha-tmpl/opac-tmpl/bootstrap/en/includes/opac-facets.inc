@@ -143,7 +143,7 @@
                                         [% aria_label = t("Show fewer places") %]
                                     [% CASE 'Series' %]
                                         [% aria_label = t("Show fewer series") %]
-                                    [% CASE 'ItemTypes' %]
+                                    [% CASE 'Item types' %]
                                         [% aria_label = t("Show fewer item types") %]
                                     [% CASE 'Home libraries' %]
                                         [% aria_label = t("Show fewer home libraries") %]
