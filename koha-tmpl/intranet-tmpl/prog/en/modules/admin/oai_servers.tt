@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE I18N %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
@@ -52,17 +53,17 @@
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
 
 [% IF msg_deleted %]
-    <div class="dialog alert">OAI repository deleted ([% msg_add | html %])</div>
+    <div class="alert alert-warning">OAI repository deleted ([% msg_add | html %])</div>
 [% ELSIF msg_updated %]
-    <div class="dialog message">OAI repository updated ([% msg_add | html %])</div>
+    <div class="alert alert-info">OAI repository updated ([% msg_add | html %])</div>
 [% ELSIF msg_added %]
-    <div class="dialog message">OAI repository added ([% msg_add | html %])</div>
+    <div class="alert alert-info">OAI repository added ([% msg_add | html %])</div>
 [% ELSIF msg_notfound %]
-    <div class="dialog alert">Error: Server with ID [% msg_add | html %] not found</div>
+    <div class="alert alert-warning">Error: Server with ID [% msg_add | html %] not found</div>
 [% END %]
 
 [% IF ( add_form ) %]
@@ -149,14 +150,14 @@
             </td>
             <td>
                 <div class="btn-group dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown" href="#">
-                        Actions <b class="caret"></b>
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown" href="#">
+                        Actions
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
-                        <li><a href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=edit&amp;id=[% loo.oai_server_id | uri %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a></li>
+                        <li><a class="dropdown-item" href="/cgi-bin/koha/admin/oai_servers.pl?op=add&amp;id=[% loo.oai_server_id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
                         <li>
-                            <a href="#" class="delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
+                            <a href="#" class="dropdown-item delete" data-formid="server_row_[% loo.oai_server_id | uri %]" data-servername="[% loo.servername | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                             <form id="server_row_[% loo.oai_server_id | uri %]" action="/cgi-bin/koha/admin/oai_servers.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_confirmed">
@@ -175,13 +176,13 @@
 [% END %]
 
             </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-sm-2 col-sm-pull-10">
+        <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% INCLUDE 'admin-menu.inc' %]
             </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.col-md-2.order-md-1 -->
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
