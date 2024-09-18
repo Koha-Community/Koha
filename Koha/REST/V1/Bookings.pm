@@ -77,6 +77,7 @@ sub add {
     return try {
         my $booking = Koha::Booking->new_from_api( $c->req->json );
         $booking->store;
+        $booking->discard_changes;
         $c->res->headers->location( $c->req->url->to_string . '/' . $booking->booking_id );
         return $c->render(
             status  => 201,
@@ -118,6 +119,7 @@ sub update {
     return try {
         $booking->set_from_api( $c->req->json );
         $booking->store();
+        $booking->discard_changes;
         return $c->render( status => 200, openapi => $c->objects->to_api($booking) );
     } catch {
         $c->unhandled_exception($_);
