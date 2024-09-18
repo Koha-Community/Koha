@@ -166,6 +166,7 @@ sub startup {
     $self->plugin( 'Koha::REST::Plugin::Objects' );
     $self->plugin( 'Koha::REST::Plugin::Exceptions' );
     $self->plugin( 'Koha::REST::Plugin::Auth::IdP' );
+    $self->plugin( 'Koha::REST::Plugin::Auth::PublicRoutes' );
     $self->plugin( 'Mojolicious::Plugin::OAuth2' => $oauth_configuration );
 }
 
