@@ -44,14 +44,13 @@ my $usage = << 'ENDUSAGE';
 
 This script starts an OAI Harvest
 
-This script has the following parameters :
+This script has the following parameters:
     -h --help: this message
     -v --verbose
     -r --repository: id of the OAI repository
     -d --days: number of days to harvest from (optional)
     -l --list: list the OAI repositories
     -f --force: force harvesting (ignore records datestamps)
-
 ENDUSAGE
 
 if ($help) {
@@ -60,10 +59,10 @@ if ($help) {
 }
 
 if ($list) {
-    my $servers = Koha::OAIServers->search( {}, { order_by => { -asc => 'id' } } )->unblessed;
+    my $servers = Koha::OAIServers->search( {}, { order_by => { -asc => 'oai_server_id' } } )->unblessed;
     print "The following repositories are available: \n\n";
     foreach my $server (@$servers) {
-        print $server->{'id'} . ": "
+        print $server->{'oai_server_id'} . ": "
             . $server->{'servername'}
             . ", endpoint: "
             . $server->{'endpoint'}
@@ -79,6 +78,7 @@ if ($list) {
 if ( !$id ) {
     print "The repository parameter is mandatory.\n";
     print $usage . "\n";
+    exit;
 }
 
 my $server = Koha::OAIServers->find($id);
