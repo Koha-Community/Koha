@@ -1,7 +1,7 @@
 <template>
     <div class="alert alert-info" v-if="message" v-html="message"></div>
     <div class="alert alert-warning" v-if="error" v-html="error"></div>
-    <div class="modal" role="dialog" v-if="warning">
+    <div class="modal" role="dialog" v-if="warning" id="warning">
         <div class="modal-dialog">
             <div class="modal-content modal-lg">
                 <div class="modal-header">
@@ -22,7 +22,12 @@
             </div>
         </div>
     </div>
-    <div class="confirmation modal" role="dialog" v-if="confirmation">
+    <div
+        class="confirmation modal"
+        role="dialog"
+        v-if="confirmation"
+        id="confirmation"
+    >
         <div class="modal-dialog">
             <div class="modal-content modal-lg">
                 <div class="modal-header alert-warning confirmation">
@@ -111,7 +116,7 @@
 </template>
 
 <script>
-import { inject } from "vue"
+import { inject, watch, nextTick } from "vue"
 import { storeToRefs } from "pinia"
 import flatPickr from "vue-flatpickr-component"
 export default {
@@ -132,7 +137,11 @@ export default {
             ) {
                 this.$refs.confirmationform.reportValidity()
             } else {
-                this.accept_callback()
+                this.accept_callback().then(() => {
+                    nextTick(() => {
+                        $("#confirmation.modal").modal("hide")
+                    })
+                })
             }
         },
     },
@@ -148,6 +157,27 @@ export default {
             is_loading,
         } = storeToRefs(mainStore)
         const { removeMessages, removeConfirmationMessages } = mainStore
+
+        watch(warning, newWarning => {
+            if (!newWarning) {
+                $("#warning.modal").modal("hide")
+                return
+            }
+            nextTick(() => {
+                $("#warning.modal").modal("show")
+            })
+        })
+
+        watch(confirmation, newConfirmation => {
+            if (!newConfirmation) {
+                $("#confirmation.modal").modal("hide")
+                return
+            }
+            nextTick(() => {
+                $("#confirmation.modal").modal("show")
+            })
+        })
+
         return {
             message,
             error,

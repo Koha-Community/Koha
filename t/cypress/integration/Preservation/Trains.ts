@@ -532,7 +532,7 @@ describe("Trains", () => {
         cy.get("#barcode").type("bc_1");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
         cy.contains("Submit").click();
-        cy.get("div[class='modal']").contains(
+        cy.get("#warning.modal").contains(
             "Cannot find item with this barcode. It must be in the waiting list."
         );
         cy.get("#close_modal").click();
@@ -642,7 +642,7 @@ describe("Trains", () => {
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
         cy.contains("Save").click();
         cy.wait("@get-items");
-        cy.get("main div[class='modal']").contains(
+        cy.get("#warning.modal").contains(
             "2 new items added. 1 items not found."
         );
         cy.get("#close_modal").click();
