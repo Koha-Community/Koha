@@ -11,7 +11,7 @@ export const routes = [
         path: "/cgi-bin/koha/acqui/booksellers.pl",
         is_default: true,
         is_base: true,
-        title: $__("Vendor management"),
+        title: $__("Acquisitions"),
         children: [
             {
                 path: "",
