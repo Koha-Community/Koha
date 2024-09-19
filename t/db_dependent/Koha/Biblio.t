@@ -1387,15 +1387,26 @@ subtest 'host_items() tests' => sub {
     is( $host_items->count, 0 );
 
     subtest 'test host_items param in items()' => sub {
-        plan tests => 4;
+        plan tests => 5;
+
+        t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
 
         my $items = $biblio->items;
         is( $items->count, 1, "Without host_items param we only get the items on the biblio");
+
         $items = $biblio->items({ host_items => 1 });
         is( $items->count, 3, "With param host_items we get the biblio items plus analytics");
         is( ref($items), 'Koha::Items', "We correctly get an Items object");
         is_deeply( [ $items->get_column('itemnumber') ],
             [ $item_1->itemnumber, $host_item_1->itemnumber, $host_item_2->itemnumber ] );
+
+        t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
+
+        $items = $biblio->items( { host_items => 1 } );
+        is(
+            $items->count, 1,
+            "With host_items param but EasyAnalyticalRecords disabled we only get the items on the biblio"
+        );
     };
 
     $schema->storage->txn_rollback;
