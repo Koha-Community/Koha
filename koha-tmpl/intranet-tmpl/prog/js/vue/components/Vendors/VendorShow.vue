@@ -26,15 +26,16 @@
         </h1>
         <div class="row">
             <div class="col-sm-6">
-                <VendorDetails :vendor="vendor" />
-                <VendorOrderingInformation :vendor="vendor" />
+                <VendorDetails :vendor="vendor" :display="true" />
+                <VendorOrderingInformation :vendor="vendor" :display="true" />
                 <VendorInterfaces
                     :vendor="vendor"
                     v-if="vendor.interfaces.length > 0"
+                    :display="true"
                 />
             </div>
             <div class="col-sm-6">
-                <VendorContacts :vendor="vendor" />
+                <VendorContacts :vendor="vendor" :display="true" />
                 <VendorSubscriptions :vendor="vendor" />
             </div>
         </div>

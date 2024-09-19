@@ -3,6 +3,7 @@ import { markRaw } from "vue";
 import Home from "../components/Vendors/Home.vue";
 import VendorList from "../components/Vendors/VendorList.vue";
 import VendorShow from "../components/Vendors/VendorShow.vue";
+import VendorFormAdd from "../components/Vendors/VendorFormAdd.vue";
 
 import { $__ } from "../i18n";
 
@@ -35,6 +36,18 @@ export const routes = [
                         name: "VendorShow",
                         component: markRaw(VendorShow),
                         title: $__("Show vendor"),
+                    },
+                    {
+                        path: "add",
+                        name: "VendorFormAdd",
+                        component: markRaw(VendorFormAdd),
+                        title: $__("Add vendor"),
+                    },
+                    {
+                        path: "edit/:vendor_id",
+                        name: "VendorFormAddEdit",
+                        component: markRaw(VendorFormAdd),
+                        title: $__("Edit vendor"),
                     },
                 ],
             },

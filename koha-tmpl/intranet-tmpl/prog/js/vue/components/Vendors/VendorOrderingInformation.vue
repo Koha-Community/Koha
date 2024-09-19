@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows">
+    <fieldset class="rows" v-if="display">
         <h2>
             {{ $__("Ordering information") }}
         </h2>
@@ -13,31 +13,31 @@
             <li>
                 <label>{{ $__("List prices are") }}:</label>
                 <span>
-                    {{ vendor.listprice }}
+                    {{ vendor.list_currency }}
                 </span>
             </li>
             <li>
                 <label>{{ $__("Invoice prices are") }}:</label>
                 <span>
-                    {{ vendor.invoiceprice }}
+                    {{ vendor.invoice_currency }}
                 </span>
             </li>
             <li v-if="vendor.tax_rate">
                 <label>{{ $__("Tax number registered") }}:</label>
                 <span>
-                    {{ vendor.gstreg ? $__("Yes") : $__("No") }}
+                    {{ vendor.gst ? $__("Yes") : $__("No") }}
                 </span>
             </li>
             <li v-if="vendor.tax_rate">
                 <label>{{ $__("List item price includes tax") }}:</label>
                 <span>
-                    {{ vendor.listincgst ? $__("Yes") : $__("No") }}
+                    {{ vendor.list_includes_gst ? $__("Yes") : $__("No") }}
                 </span>
             </li>
             <li v-if="vendor.tax_rate">
                 <label>{{ $__("Invoice item price includes tax") }}:</label>
                 <span>
-                    {{ vendor.invoiceincgst ? $__("Yes") : $__("No") }}
+                    {{ vendor.invoice_includes_gst ? $__("Yes") : $__("No") }}
                 </span>
             </li>
             <li>
@@ -62,14 +62,184 @@
             </li>
         </ol>
     </fieldset>
+    <fieldset class="rows" v-else>
+        <legend>{{ $__("Ordering information") }}</legend>
+        <ol>
+            <li>
+                <label for="activestatus">{{ $__("Vendor is") }}:</label>
+                <input
+                    type="radio"
+                    name="active"
+                    id="activestatus_active"
+                    :value="true"
+                    v-model="vendor.active"
+                />
+                <label class="radio" for="activestatus_active"
+                    >{{ $__("Active") }}
+                </label>
+                <input
+                    type="radio"
+                    name="active"
+                    id="activestatus_inactive"
+                    :value="false"
+                    v-model="vendor.active"
+                />
+                <label class="radio" for="activestatus_inactive"
+                    >{{ $__("Inactive") }}
+                </label>
+            </li>
+            <li>
+                <label for="list_currency">{{ $__("List prices are") }}:</label>
+                <v-select
+                    id="list_currency"
+                    v-model="vendor.list_currency"
+                    label="currency"
+                    :reduce="av => av.currency"
+                    :options="currencies"
+                />
+            </li>
+            <li>
+                <label for="invoice_currency"
+                    >{{ $__("Invoice prices are") }}:</label
+                >
+                <v-select
+                    id="invoice_currency"
+                    v-model="vendor.invoice_currency"
+                    label="currency"
+                    :reduce="av => av.currency"
+                    :options="currencies"
+                />
+            </li>
+            <li>
+                <label for="gst">{{ $__("Tax number registered") }}:</label>
+                <input
+                    type="radio"
+                    name="gst"
+                    id="gst_yes"
+                    :value="true"
+                    v-model="vendor.gst"
+                />
+                <label class="radio" for="gst_yes">{{ $__("Yes") }} </label>
+                <input
+                    type="radio"
+                    name="gst"
+                    id="gst_no"
+                    :value="false"
+                    v-model="vendor.gst"
+                />
+                <label class="radio" for="gst_no">{{ $__("No") }} </label>
+            </li>
+            <li>
+                <label for="invoice_gst">{{ $__("Invoice prices") }}:</label>
+                <input
+                    type="radio"
+                    name="invoice_gst"
+                    id="invoice_gst_yes"
+                    :value="true"
+                    v-model="vendor.invoice_includes_gst"
+                />
+                <label class="radio" for="invoice_gst_yes"
+                    >{{ $__("Include tax") }}
+                </label>
+                <input
+                    type="radio"
+                    name="invoice_gst"
+                    id="invoice_gst_no"
+                    :value="false"
+                    v-model="vendor.invoice_includes_gst"
+                />
+                <label class="radio" for="invoice_gst_no"
+                    >{{ $__("Don't include tax") }}
+                </label>
+            </li>
+            <li>
+                <label for="list_gst">{{ $__("List prices") }}:</label>
+                <input
+                    type="radio"
+                    name="list_gst"
+                    id="list_gst_yes"
+                    :value="true"
+                    v-model="vendor.list_includes_gst"
+                />
+                <label class="radio" for="list_gst_yes"
+                    >{{ $__("Include tax") }}
+                </label>
+                <input
+                    type="radio"
+                    name="list_gst"
+                    id="list_gst_no"
+                    :value="false"
+                    v-model="vendor.list_includes_gst"
+                />
+                <label class="radio" for="list_gst_no"
+                    >{{ $__("Don't include tax") }}
+                </label>
+            </li>
+            <li>
+                <label for="tax_rate">{{ $__("Tax rate") }}:</label>
+                <v-select
+                    id="tax_rate"
+                    v-model="vendor.tax_rate"
+                    label="label"
+                    :reduce="av => av.value"
+                    :options="gstValues"
+                />
+            </li>
+            <li>
+                <label for="discount">{{ $__("Discount") }}: </label>
+                <input
+                    type="text"
+                    size="6"
+                    id="discount"
+                    name="discount"
+                    v-model="vendor.discount"
+                />
+                %
+            </li>
+            <li>
+                <label for="deliverytime">{{ $__("Delivery time") }}: </label>
+                <input
+                    type="text"
+                    size="6"
+                    id="deliverytime"
+                    name="deliverytime"
+                    v-model="vendor.deliverytime"
+                />
+                {{ $__("days") }}
+            </li>
+            <li>
+                <label for="notes">{{ $__("Notes") }}:</label>
+                <textarea
+                    id="notes"
+                    v-model="vendor.notes"
+                    cols="40"
+                    rows="3"
+                />
+            </li>
+        </ol>
+    </fieldset>
 </template>
 
 <script>
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+
 export default {
     props: {
         vendor: Object,
+        display: Boolean,
+    },
+    setup() {
+        const vendorStore = inject("vendorStore");
+        const { currencies, gstValues } = storeToRefs(vendorStore);
+
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av } = AVStore;
+
+        return {
+            currencies,
+            gstValues,
+        };
     },
 };
 </script>
-
-<style></style>

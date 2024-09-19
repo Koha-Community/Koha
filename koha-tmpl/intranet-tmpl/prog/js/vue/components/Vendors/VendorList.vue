@@ -3,7 +3,7 @@
     <div v-else id="vendors_list">
         <Toolbar>
             <ToolbarButton
-                :to="{ name: 'VendorList' }"
+                :to="{ name: 'VendorFormAdd' }"
                 icon="plus"
                 :title="$__('New vendor')"
             />
@@ -28,10 +28,9 @@
 import flatPickr from "vue-flatpickr-component";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
-import { inject, ref, reactive } from "vue";
+import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { storeToRefs } from "pinia";
-import { build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
 
 export default {
@@ -45,11 +44,6 @@ export default {
 
         const table = ref();
 
-        // const filters = reactive({
-        //     by_expired: false,
-        //     max_expiration_date: "",
-        //     by_mine: false,
-        // })
         return {
             vendors,
             get_lib_from_av,
@@ -58,7 +52,6 @@ export default {
             setConfirmationDialog,
             setMessage,
             escape_str,
-            // filters,
         };
     },
     data() {
@@ -69,7 +62,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: { embed: "aliases,baskets,subscriptions" },
-                url: () => this.table_url(),
+                url: () => this.tableURL(),
                 add_filters: true,
                 filters_options: {
                     1: [
@@ -104,19 +97,20 @@ export default {
                 error => {}
             );
         },
-        doShow: function ({ id }, dt, event) {
+        doShow({ id }, dt, event) {
             event.preventDefault();
             this.$router.push({
                 name: "VendorShow",
                 params: { vendor_id: id },
             });
         },
-        doEdit: function ({ id }, dt, event) {
+        doEdit({ id }, dt, event) {
             this.$router.push({
-                name: "Home",
+                name: "VendorFormAddEdit",
+                params: { vendor_id: id },
             });
         },
-        doDelete: function (vendor, dt, event) {
+        doDelete(vendor, dt, event) {
             this.setConfirmationDialog(
                 {
                     title: this.$__(
@@ -143,15 +137,15 @@ export default {
                 }
             );
         },
-        doSelect: function (vendor, dt, event) {
+        doSelect(vendor, dt, event) {
             this.$emit("select-vendor", vendor.id);
             this.$emit("close");
         },
-        table_url: function () {
+        tableURL() {
             let url = "/api/v1/acquisitions/vendors";
             return url;
         },
-        getTableColumns: function () {
+        getTableColumns() {
             const escape_str = this.escape_str;
             const get_lib_from_av = this.get_lib_from_av;
 
@@ -161,7 +155,7 @@ export default {
                     data: "me.name:me.id",
                     searchable: true,
                     orderable: true,
-                    render: function (data, type, row, meta) {
+                    render(data, type, row, meta) {
                         return (
                             '<a href="/cgi-bin/koha/vendors/' +
                             row.id +
@@ -176,7 +170,7 @@ export default {
                     data: "active",
                     searchable: true,
                     orderable: true,
-                    render: function (data, type, row, meta) {
+                    render(data, type, row, meta) {
                         return escape_str(
                             row.active ? __("Active") : __("Inactive")
                         );
@@ -202,7 +196,7 @@ export default {
                     data: "baskets",
                     searchable: false,
                     orderable: true,
-                    render: function (data, type, row, meta) {
+                    render(data, type, row, meta) {
                         return row.baskets.length
                             ? '<a href="/cgi-bin/koha/vendors/' +
                                   row.id +
@@ -219,7 +213,7 @@ export default {
                     data: "subscriptions",
                     searchable: false,
                     orderable: true,
-                    render: function (data, type, row, meta) {
+                    render(data, type, row, meta) {
                         return row.subscriptions.length
                             ? '<a href="/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=' +
                                   row.name +

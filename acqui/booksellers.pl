@@ -62,6 +62,7 @@ use C4::Context;
 
 use Koha::Acquisition::Booksellers;
 use Koha::Patrons;
+use Koha::Acquisition::Currencies;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(

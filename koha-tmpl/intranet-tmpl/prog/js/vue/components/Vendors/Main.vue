@@ -94,11 +94,18 @@ export default {
 
         fetchConfig().then(() => {
             this.loaded();
+            this.userPermissions = userPermissions;
+            this.vendorStore.currencies = currencies;
+            this.vendorStore.gstValues = gstValues.map(gv => {
+                return {
+                    label: `${(gv.option * 100).toFixed(2)}%`,
+                    value: gv.option,
+                };
+            });
             this.initialized = true;
         });
     },
     data() {
-        this.userPermissions = userPermissions;
         return {
             initialized: false,
         };

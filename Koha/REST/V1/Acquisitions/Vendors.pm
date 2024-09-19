@@ -85,14 +85,27 @@ Controller function that handles adding a new Koha::Acquisition::Bookseller obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
+    my $vendor     = $c->req->json;
+    my $contacts   = delete $vendor->{contacts};
+    my $interfaces = delete $vendor->{interfaces};
+    my $aliases    = delete $vendor->{aliases};
+
+    my $vendor_to_store = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 
     return try {
-        $vendor->store;
-        $c->res->headers->location( $c->req->url->to_string . '/' . $vendor->id );
+        $vendor_to_store->store;
+
+        foreach my $contact (@$contacts) {
+            $contact->{booksellerid} = $vendor_to_store->id;
+            Koha::Acquisition::Bookseller::Contact->new($contact)->store;
+        }
+        $vendor_to_store->aliases($aliases)       if scalar($aliases) > 0;
+        $vendor_to_store->interfaces($interfaces) if scalar($interfaces) > 0;
+
+        $c->res->headers->location( $c->req->url->to_string . '/' . $vendor_to_store->id );
         return $c->render(
             status  => 201,
-            openapi => $c->objects->to_api($vendor),
+            openapi => $c->objects->to_api($vendor_to_store),
         );
     } catch {
         $c->unhandled_exception($_);

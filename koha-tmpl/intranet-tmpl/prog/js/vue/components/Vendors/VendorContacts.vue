@@ -1,5 +1,5 @@
 <template>
-    <fieldset class="rows">
+    <fieldset class="rows" v-if="display">
         <h2>
             {{ $__("Contact") }}
         </h2>
@@ -84,12 +84,215 @@
             </li>
         </ol>
     </fieldset>
+    <fieldset class="rows" v-else>
+        <legend>{{ $__("Contacts") }}</legend>
+        <fieldset
+            class="rows"
+            v-for="(contact, i) in vendor.contacts"
+            v-bind:key="i"
+            :id="`contact_${i}`"
+        >
+            <legend>{{ $__("Contact details") }}</legend>
+            <ol>
+                <li>
+                    <label :for="`contact_${i}_name`"
+                        >{{ $__("Contact name") }}:</label
+                    >
+                    <input :id="`contact_${i}_name`" v-model="contact.name" />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_position`"
+                        >{{ $__("Position") }}:</label
+                    >
+                    <input
+                        :id="`contact_${i}_position`"
+                        v-model="contact.position"
+                    />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_phone`"
+                        >{{ $__("Phone") }}:</label
+                    >
+                    <input :id="`contact_${i}_phone`" v-model="contact.phone" />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_altphone`"
+                        >{{ $__("Alternative phone") }}:</label
+                    >
+                    <input
+                        :id="`contact_${i}_altphone`"
+                        v-model="contact.altphone"
+                    />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_fax`">{{ $__("Fax") }}:</label>
+                    <input :id="`contact_${i}_fax`" v-model="contact.fax" />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_email`"
+                        >{{ $__("Email") }}:</label
+                    >
+                    <input :id="`contact_${i}_email`" v-model="contact.email" />
+                </li>
+                <li>
+                    <label :for="`contact_${i}_notes`"
+                        >{{ $__("Notes") }}:</label
+                    >
+                    <textarea
+                        :id="`contact_${i}_notes`"
+                        v-model="contact.notes"
+                        cols="40"
+                        rows="3"
+                    />
+                </li>
+            </ol>
+            <div style="display: flex">
+                <div>
+                    <fieldset class="rows">
+                        <legend>Acquisitions options</legend>
+                        <ol class="radio">
+                            <li>
+                                <label>
+                                    <input
+                                        v-if="contact.acqprimary"
+                                        type="checkbox"
+                                        :id="`contact_acqprimary_${i}`"
+                                        class="contact_acqprimary"
+                                        checked="checked"
+                                        v-model="contact.acqprimary"
+                                    />
+                                    <input
+                                        v-else
+                                        type="checkbox"
+                                        :id="`contact_acqprimary_${i}`"
+                                        class="contact_acqprimary"
+                                        v-model="contact.acqprimary"
+                                    />
+                                    {{ $__("Primary acquisitions contact") }}
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input
+                                        v-if="contact.orderacquisition"
+                                        type="checkbox"
+                                        :id="`contact_orderacquisition_${i}`"
+                                        class="contact_orderacquisition"
+                                        checked="checked"
+                                        v-model="contact.orderacquisition"
+                                    />
+                                    <input
+                                        v-else
+                                        type="checkbox"
+                                        :id="`contact_orderacquisition_${i}`"
+                                        class="contact_orderacquisition"
+                                        v-model="contact.orderacquisition"
+                                    />
+                                    {{ $__("Contact when ordering") }}
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input
+                                        v-if="contact.claimacquisition"
+                                        type="checkbox"
+                                        :id="`contact_claimacquisition_${i}`"
+                                        class="contact_claimacquisition"
+                                        checked="checked"
+                                        v-model="contact.claimacquisition"
+                                    />
+                                    <input
+                                        v-else
+                                        type="checkbox"
+                                        :id="`contact_claimacqu isition_${i}`"
+                                        class="contact_claimacqu isition"
+                                        v-model="contact.claimacquisition"
+                                    />
+                                    {{ $__("Contact about late orders") }}
+                                </label>
+                            </li>
+                        </ol>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="rows">
+                        <legend>Serials options</legend>
+                        <ol class="radio">
+                            <li>
+                                <label>
+                                    <input
+                                        v-if="contact.serialsprimary"
+                                        type="checkbox"
+                                        :id="`contact_serialsprimary_${i}`"
+                                        class="contact_serialsprimary"
+                                        checked="checked"
+                                        v-model="contact.serialsprimary"
+                                    />
+                                    <input
+                                        v-else
+                                        type="checkbox"
+                                        :id="`contact_serialsprimary_${i}`"
+                                        class="contact_serialsprimary"
+                                        v-model="contact.serialsprimary"
+                                    />
+                                    {{ $__("Primary serials contact") }}
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input
+                                        v-if="contact.claimissues"
+                                        type="checkbox"
+                                        :id="`contact_claimissues_${i}`"
+                                        class="contact_claimissues"
+                                        checked="checked"
+                                        v-model="contact.claimissues"
+                                    />
+                                    <input
+                                        v-else
+                                        type="checkbox"
+                                        :id="`contact_claimissues_${i}`"
+                                        class="contact_claimissues"
+                                        v-model="contact.claimissues"
+                                    />
+                                    {{ $__("Contact about late issues") }}
+                                </label>
+                            </li>
+                        </ol>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+        <span class="btn btn-default" @click="addContact"
+            ><font-awesome-icon icon="plus" />
+            {{ $__("Add new contact") }}</span
+        >
+    </fieldset>
 </template>
 
 <script>
 export default {
     props: {
         vendor: Object,
+        display: Boolean,
+    },
+    methods: {
+        addContact() {
+            this.vendor.contacts.push({
+                name: "",
+                position: "",
+                email: "",
+                phone: "",
+                notes: "",
+                altphone: "",
+                fax: "",
+                acqprimary: false,
+                orderacquisition: false,
+                claimacquisition: false,
+                serialsprimary: false,
+                claimissues: false,
+            });
+        },
     },
 };
 </script>
