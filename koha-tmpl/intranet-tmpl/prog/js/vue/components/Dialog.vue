@@ -25,7 +25,7 @@
     <div class="confirmation modal" role="dialog" v-if="confirmation">
         <div class="modal-dialog">
             <div class="modal-content modal-lg">
-                <div class="modal-header alert-warning">
+                <div class="modal-header alert-warning confirmation">
                     <h1 v-html="confirmation.title"></h1>
                 </div>
                 <div
