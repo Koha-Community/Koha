@@ -517,6 +517,24 @@ my $fa_duedatespec        = $input->param('duedatespec');
 
 my $userflags = 'edit_catalogue';
 
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "cataloguing/addbiblio.tt",
+        query           => $input,
+        type            => "intranet",
+        flagsrequired   => { editcatalogue => $userflags },
+    }
+);
+
+$frameworkcode = &GetFrameworkCode($biblionumber)
+  if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
+
+if ($frameworkcode eq 'FA'){
+    $userflags = 'fast_cataloging';
+}
+
+$frameworkcode = '' if ( $frameworkcode eq 'Default' );
+
 # Set default values for global variable
 $tagslib           = &GetMarcStructure( 1, $frameworkcode );
 $usedTagsLib       = &GetUsedMarcStructure($frameworkcode);
@@ -529,23 +547,6 @@ if ( $op eq 'cud-change-framework' ) {
     $op = $input->param('original_op');
     $changed_framework = 1;
 }
-
-$frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
-
-if ($frameworkcode eq 'FA'){
-    $userflags = 'fast_cataloging';
-}
-
-$frameworkcode = '' if ( $frameworkcode eq 'Default' );
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "cataloguing/addbiblio.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { editcatalogue => $userflags },
-    }
-);
 
 my $logged_in_patron = Koha::Patrons->find($loggedinuser);
 my $biblio;
