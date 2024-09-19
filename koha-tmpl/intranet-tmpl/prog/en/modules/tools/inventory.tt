@@ -490,7 +490,7 @@
                 $("input:checked").each(function() {
                     param += "|" + $(this).attr('name');
                 });
-                $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param });
+                $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param, op: 'cud-seen', csrf_token: $('meta[name="csrf-token"]').attr("content") });
                 inventorydt.fnPageChange( 'next' );
                 return false;
             });
@@ -503,7 +503,7 @@
                 $.ajax({
                   type: 'POST',
                   url: '/cgi-bin/koha/tools/ajax-inventory.pl',
-                  data: { seen: param},
+                  data: { seen: param, op: 'cud-seen', csrf_token: $('meta[name="csrf-token"]').attr("content") },
                   async: false
                 });
                 document.location.href = '/cgi-bin/koha/tools/inventory.pl';

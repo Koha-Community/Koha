@@ -11,13 +11,16 @@ my $input = CGI->new;
 my ($status, $cookie, $sessionId) = C4::Auth::check_api_auth($input, { tools => 'inventory' });
 exit unless ($status eq "ok");
 
+my $op = $input->param('op') // q{};
 
-my $seen = $input->param('seen');
-my @seent = split(/\|/, $seen);
+if ( $op eq 'cud-seen' ) {
+    my $seen  = $input->param('seen');
+    my @seent = split( /\|/, $seen );
 
-# mark seen if applicable (ie: coming form mark seen checkboxes)
-foreach ( @seent ) {
-    /SEEN-(.+)/ and &ModDateLastSeen($1);
+    # mark seen if applicable (ie: coming form mark seen checkboxes)
+    foreach (@seent) {
+        /SEEN-(.+)/ and &ModDateLastSeen($1);
+    }
 }
 
 print $input->header('application/json');
