@@ -211,7 +211,7 @@
                         url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
                         type     : 'POST',
                         dataType : 'json',
-                        data     : { op: 'cud-toggle', id: id, branch: $branch },
+                        data     : { op: 'cud-toggle', id: id, branch: $branch, csrf_token: $('meta[name="csrf-token"]').attr("content") },
                         success  : function(response){
                             if ($branch == '*' && response.classes.match(/default/)) {
                                 td.html(disabledForAll);
