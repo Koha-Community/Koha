@@ -958,6 +958,9 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'nb', 'language', 'nb', 'Norsk bokmål');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nb', 'language', 'no', 'Norsk bokmål');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'nb', 'language', 'en', 'Norwegian bokmål');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
@@ -1024,6 +1027,9 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'nn', 'language', 'nn', 'Norsk nynorsk');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'nn', 'language', 'no', 'Norsk nynorsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'nn', 'language', 'en', 'Norwegian nynorsk');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
@@ -1034,6 +1040,34 @@ VALUES ( 'nn', 'language', 'de', 'Norwegisch nynorsk');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'nn', 'language', 'pl', 'Norweski nynorsk');
+
+-- Norwegian (inclusive)
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'no', 'language', 'Norwegian','2024-09-19' );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'no','nor');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'nb', 'Norsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'nn', 'Norsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'no', 'Norsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'en', 'Norwegian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'fr', 'Norvégien');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'de', 'Norwegisch');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'no', 'language', 'pl', 'Norweski');
 
 -- Punjabi
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -2237,6 +2271,9 @@ VALUES ( 'NO', 'region', 'ne', 'Noreg');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'NO', 'region', 'nn', 'Noreg');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'NO', 'region', 'no', 'Noreg');
 
 -- New Zealand
 INSERT INTO language_subtag_registry( subtag, type, description, added)
