@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -38,6 +38,10 @@ my $builder = t::lib::TestBuilder->new;
 my $sushi_response_errors = {
     'invalid_date_arguments' => '{"message":"Invalid Date Arguments","code":3020,"severity":"Error"}',
     'invalid_api_key'        => '{"Code": 2020, "Severity": "Error", "Message": "API Key Invalid"}',
+};
+
+my $sushi_response_exceptions = {
+    'multiple_exceptions'    => '{"Created":"2024-09-06T10:41:02Z","Created_By":"Test Services","Customer_ID":"Test_customer_id","Report_ID":"TR_J1","Release":"5","Report_Name":"Journal Requests (Excluding OA_Gold)","Institution_Name":"Test Institution","Report_Filters":[{"Name":"Begin_Date","Value":"2024-06-01"},{"Name":"End_Date","Value":"2024-08-31"}],"Exceptions":[{"Code":3050,"Severity":"Warning","Message":"Parameter Not Recognized in this Context","Data":"Parameter api_key is not recognized"},{"Code":3070,"Severity":"Error","Message":"Required ReportFilter Missing","Data":"Required parameter Platform is missing and should be one of:sd|sc|ev|em|ck"}]}',
 };
 
 subtest 'enqueue() tests' => sub {
@@ -162,6 +166,43 @@ subtest 'invalid_api_key() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'multiple_exceptions() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $ua = Test::MockModule->new('LWP::UserAgent');
+    $ua->mock('simple_request', sub {
+            return mock_sushi_response({'exception'=>'multiple_exceptions'});
+    });
+
+    my $usage_data_provider = $builder->build_object(
+        { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
+
+    my $job_args = {
+            ud_provider_id   => $usage_data_provider->erm_usage_data_provider_id,
+            report_type      => 'TR_J1',
+            begin_date       => '2023-08-01',
+            end_date         => '2023-09-30',
+            ud_provider_name => $usage_data_provider->name,
+        };
+
+    my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue($job_args);
+    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job_args );
+
+    is( $job->{messages}[0]->{message}, decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[0]->{Message} . ' - ' . decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[0]->{Data},'SUSHI exceptions multiple_exceptions are stored on job messages correctly' );
+    is( $job->{messages}[0]->{type},'error','SUSHI error multiple_exceptions are stored on job messages correctly' );
+    is( $job->{messages}[0]->{code},decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[0]->{Code},'SUSHI error multiple_exceptions are stored on job messages correctly' );
+
+    is( $job->{messages}[1]->{message}, decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[1]->{Message} . ' - ' . decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[1]->{Data},'SUSHI exceptions multiple_exceptions are stored on job messages correctly' );
+    is( $job->{messages}[1]->{type},'error','SUSHI error multiple_exceptions are stored on job messages correctly' );
+    is( $job->{messages}[1]->{code},decode_json($sushi_response_exceptions->{multiple_exceptions})->{Exceptions}[1]->{Code},'SUSHI error multiple_exceptions are stored on job messages correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
 sub mock_sushi_response {
     my ($args) = @_;
     my $response = Test::MockObject->new();
@@ -187,7 +228,9 @@ sub mock_sushi_response {
     $response->mock(
         'decoded_content',
         sub {
-            return $sushi_response_errors->{ $args->{error} };
+            return $args->{error}
+                ? $sushi_response_errors->{ $args->{error} }
+                : $sushi_response_exceptions->{ $args->{exception} };
         }
     );
 }
