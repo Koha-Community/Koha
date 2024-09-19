@@ -488,7 +488,7 @@ sub _sushi_errors {
         return 1;
     }
 
-    if ( scalar @{ $decoded_response->{Report_Items} } == 0 ) {
+    if ( $decoded_response->{Report_Items} && scalar @{ $decoded_response->{Report_Items} } == 0 ) {
         $self->{job_callbacks}->{add_message_callback}->(
             {
                 type => 'error',
