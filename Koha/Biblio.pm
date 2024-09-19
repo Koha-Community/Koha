@@ -557,7 +557,8 @@ sub items {
 
     my $items_rs = $self->_result->items;
 
-    return Koha::Items->_new_from_dbic( $items_rs ) unless $params->{host_items};
+    return Koha::Items->_new_from_dbic($items_rs)
+        unless $params->{host_items} && C4::Context->preference('EasyAnalyticalRecords');
 
     my @itemnumbers = $items_rs->get_column('itemnumber')->all;
     my $host_itemnumbers = $self->_host_itemnumbers();
