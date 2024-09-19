@@ -76,7 +76,7 @@ describe("WaitingList", () => {
         });
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
-        cy.contains("Submit").click();
+        cy.get("#add_to_waiting_list .approve").click();
         cy.get("main div[class='alert alert-warning']").contains(
             "Something went wrong: Error: Internal Server Error"
         );
@@ -95,9 +95,9 @@ describe("WaitingList", () => {
         ]);
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
-        cy.contains("Submit").click();
+        cy.get("#add_to_waiting_list .approve").click();
         cy.wait("@get-items");
-        cy.get("main div[class='alert alert-warning modal']").contains(
+        cy.get("main div[class='modal']").contains(
             "2 new items added. 1 items not found."
         );
     });

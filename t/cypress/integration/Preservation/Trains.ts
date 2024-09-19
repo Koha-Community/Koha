@@ -532,7 +532,7 @@ describe("Trains", () => {
         cy.get("#barcode").type("bc_1");
         cy.intercept("GET", "/api/v1/preservation/waiting-list/items*", []);
         cy.contains("Submit").click();
-        cy.get("div[class='alert alert-warning modal']").contains(
+        cy.get("div[class='modal']").contains(
             "Cannot find item with this barcode. It must be in the waiting list."
         );
         cy.get("#close_modal").click();
@@ -632,7 +632,7 @@ describe("Trains", () => {
 
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2");
-        cy.contains("Submit").click();
+        cy.contains("Save").click();
         cy.wait("@get-items");
         cy.get("main div[class='alert alert-info']").contains(
             "2 new items added."
@@ -640,9 +640,9 @@ describe("Trains", () => {
 
         cy.get("#waiting-list").contains("Add to waiting list").click();
         cy.get("#barcode_list").type("bc_1\nbc_2\nbc_3");
-        cy.contains("Submit").click();
+        cy.contains("Save").click();
         cy.wait("@get-items");
-        cy.get("main div[class='alert alert-warning modal']").contains(
+        cy.get("main div[class='modal']").contains(
             "2 new items added. 1 items not found."
         );
         cy.get("#close_modal").click();
@@ -668,7 +668,7 @@ describe("Trains", () => {
                 });
             }
         );
-        cy.contains("Submit").click(); // Select train
+        cy.get("#add_to_train .approve").click();
         train.items = get_train_items().filter(
             train_item => train_item.item_id == 1 || train_item.item_id == 2
         );
