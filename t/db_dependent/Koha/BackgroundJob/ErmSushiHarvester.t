@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -36,6 +36,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 my $sushi_response_errors = {
+    'invalid_date_arguments' => '{"message":"Invalid Date Arguments","code":3020,"severity":"Error"}',
     'invalid_api_key'        => '{"Code": 2020, "Severity": "Error", "Message": "API Key Invalid"}',
 };
 
@@ -63,6 +64,39 @@ subtest 'enqueue() tests' => sub {
     is( $job->size,   1,            'Size is correct' );
     is( $job->status, 'new',        'Initial status set correctly' );
     is( $job->queue,  'long_tasks', 'ErmSushiHarvester should use the long_tasks queue' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'invalid_date_arguments() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $ua = Test::MockModule->new('LWP::UserAgent');
+    $ua->mock('simple_request', sub {
+            return mock_sushi_response({'error'=>'invalid_date_arguments'});
+    });
+
+    my $usage_data_provider = $builder->build_object(
+        { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
+
+    my $job_args = {
+            ud_provider_id   => $usage_data_provider->erm_usage_data_provider_id,
+            report_type      => 'TR_J1',
+            begin_date       => '2023-08-01',
+            end_date         => '2023-09-30',
+            ud_provider_name => $usage_data_provider->name,
+        };
+
+    my $job_id = Koha::BackgroundJob::ErmSushiHarvester->new->enqueue($job_args);
+    my $job = Koha::BackgroundJobs->find($job_id)->_derived_class;
+    $job->process( $job_args );
+
+    is( $job->{messages}[0]->{message}, decode_json($sushi_response_errors->{invalid_date_arguments})->{severity} . ' - ' . decode_json($sushi_response_errors->{invalid_date_arguments})->{message},'SUSHI error invalid_date_arguments is stored on job messages correctly' );
+    is( $job->{messages}[0]->{type},'error','SUSHI error invalid_date_arguments is stored on job messages correctly' );
+    is( $job->{messages}[0]->{code},decode_json($sushi_response_errors->{invalid_date_arguments})->{code},'SUSHI error invalid_date_arguments is stored on job messages correctly' );
 
     $schema->storage->txn_rollback;
 };
