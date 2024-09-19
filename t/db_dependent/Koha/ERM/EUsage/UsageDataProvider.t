@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Koha::ERM::EUsage::UsageDataProvider;
 use Koha::Database;
+use Test::MockModule;
+use Test::MockObject;
 
 use t::lib::TestBuilder;
 
@@ -107,4 +109,38 @@ subtest '_build_url_query' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'test_connection() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $ua = Test::MockModule->new('LWP::UserAgent');
+    $ua->mock('simple_request', sub {
+            my $response = Test::MockObject->new();
+
+            $response->mock('code', sub {
+                return 200;
+            });
+            $response->mock('is_error', sub {
+                return 0;
+            });
+            $response->mock('is_redirect', sub {
+                return 0;
+            });
+            $response->mock('decoded_content', sub {
+                return '{"Description":"COUNTER Usage Reports for Test platform.","ServiceActive":true,"RegistryURL":"https://www.whatever.com"}';
+            });
+            $response->{_rc} = 200;
+            return $response;
+    });
+
+    my $usage_data_provider = $builder->build_object(
+        { class => 'Koha::ERM::EUsage::UsageDataProviders', value => { name => 'TestProvider' } } );
+
+    is( $usage_data_provider->test_connection, 1);
+
+    $schema->storage->txn_rollback;
 };
