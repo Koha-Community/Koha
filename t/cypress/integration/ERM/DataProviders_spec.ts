@@ -714,7 +714,7 @@ describe("Data providers action buttons", () => {
         cy.get("#usage_data_providers_list table tbody tr:first")
             .contains("Run now")
             .click();
-        cy.get(".modal_centered p").contains(dataProvider.name);
+        cy.get(".modal.confirmation p").contains(dataProvider.name);
 
         cy.intercept(
             "POST",
