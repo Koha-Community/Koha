@@ -458,12 +458,16 @@ Additionally, adds background job report message(s) if that is the case
 sub _sushi_errors {
     my ( $self, $decoded_response ) = @_;
 
-    if ( $decoded_response->{Severity} ) {
+    my $severity = $decoded_response->{Severity} // $decoded_response->{severity};
+    my $message = $decoded_response->{Message} // $decoded_response->{message};
+    my $code = $decoded_response->{Code} // $decoded_response->{code};
+
+    if ( $severity ) {
         $self->{job_callbacks}->{add_message_callback}->(
             {
                 type    => 'error',
-                code    => $decoded_response->{Code},
-                message => $decoded_response->{Severity} . ' - ' . $decoded_response->{Message},
+                code    => $code,
+                message => $severity . ' - ' . $message,
             }
         ) if $self->{job_callbacks};
         return 1;
