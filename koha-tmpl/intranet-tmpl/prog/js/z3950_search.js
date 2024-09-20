@@ -77,7 +77,7 @@ $( document ).ready( function() {
         if( tgt.hasClass("z3950actions")  ) { // direct button click
             var link = $( "a[title='" + tgt.text() + "']", row );
             if( link.length == 1) link.click();
-            row.find('ul.dropdown-menu').hide();
+            row.find('ul.dropdown-menu').attr("style","");
             return;
         } else {
             if( tgt.prop('nodeName') == 'TD' && !tgt.hasClass("actions") ){
