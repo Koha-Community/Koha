@@ -426,12 +426,16 @@ subtest 'guarantor checks on patron creation / update tests' => sub {
         $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
 
     subtest 'patron update tests' => sub {
-        plan tests => 4;
+        plan tests => 7;
         ok(
             $guarantee->add_guarantor( { guarantor_id => $guarantor->borrowernumber, relationship => 'guarantor' } ),
             "Relationship is added, no problem"
         );
-        is( $guarantor->guarantee_relationships->count, 1, 'Relationship added' );
+        is( $guarantor->is_guarantor, 1, 'Is a guarantor' );
+        is( $guarantor->is_guarantee, 0, 'Is no guarantee' );
+        is( $guarantee->is_guarantor, 0, 'Is no guarantor' );
+        is( $guarantee->is_guarantee, 1, 'Is a guarantee' );
+
         ok( $guarantor->surname("Duck")->store(), "Updating guarantor is okay" );
         ok( $guarantee->surname("Duck")->store(), "Updating guarantee is okay" );
     };
