@@ -406,6 +406,7 @@ $template->param(
     patronupdate               => $patronupdate,
     OpacRenewalAllowed         => C4::Context->preference("OpacRenewalAllowed"),
     userview                   => 1,
+    tab                        => $query->param('tab');
     SuspendHoldsOpac           => C4::Context->preference('SuspendHoldsOpac'),
     AutoResumeSuspendedHolds   => C4::Context->preference('AutoResumeSuspendedHolds'),
     OpacHoldNotes              => C4::Context->preference('OpacHoldNotes'),

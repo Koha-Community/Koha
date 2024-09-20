@@ -1388,6 +1388,10 @@
                 return confirmDelete(_("Are you sure you want to dismiss this message?"));
             });
 
+            [% IF ( tab ) %]
+                $("#opac-user-views #[% tab %]-tab").tab("show");
+            [% END %]
+
             if( $("#opac-user-views .tab-pane.active").length < 1 ){
                 $("#opac-user-views a:first").tab("show");
             }
