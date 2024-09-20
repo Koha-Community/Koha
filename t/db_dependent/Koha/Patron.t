@@ -2129,27 +2129,49 @@ subtest 'test patron_consent' => sub {
 
 subtest 'update_lastseen tests' => sub {
 
-    plan tests => 24;
+    plan tests => 26;
     $schema->storage->txn_begin;
+
+    my $cache = Koha::Caches->get_instance();
+
+    t::lib::Mocks::mock_preference(
+        'TrackLastPatronActivityTriggers',
+        'creation,login,connection,check_in,check_out,renewal,hold,article'
+    );
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $userid = $patron->userid;
-
     $patron->lastseen(undef);
-    $patron->store();
+    my $patron_info = $patron->unblessed;
+    delete $patron_info->{borrowernumber};
+    $patron->delete();
+    $patron = Koha::Patron->new($patron_info)->store();
 
-    my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "track_activity_" . $patron->borrowernumber;
-    $cache->clear_from_cache($cache_key);
+    my $now   = dt_from_string();
+    my $today = $now->ymd();
+
+    is(
+        dt_from_string( $patron->lastseen )->ymd(), $today,
+        'Patron should have last seen when newly created if requested'
+    );
+
+    my $cache_key   = "track_activity_" . $patron->borrowernumber;
+    my $cache_value = $cache->get_from_cache($cache_key);
+    is( $cache_value, $today, "Cache was updated as expected" );
+
+    $patron->delete();
 
     t::lib::Mocks::mock_preference(
         'TrackLastPatronActivityTriggers',
         'login,connection,check_in,check_out,renewal,hold,article'
     );
 
-    is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
+    $patron    = Koha::Patron->new($patron_info)->store();
+    $cache_key = "track_activity_" . $patron->borrowernumber;
 
-    my $now = dt_from_string();
+    is( $patron->lastseen, undef, 'Patron should have not last seen when newly created if trigger not set' );
+
+    $now = dt_from_string();
     Time::Fake->offset( $now->epoch );
 
     $patron->update_lastseen('login');

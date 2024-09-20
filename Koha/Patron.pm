@@ -335,6 +335,9 @@ sub store {
 
                 $self->add_enrolment_fee_if_needed(0);
 
+                $self->discard_changes;
+                $self->update_lastseen('creation');
+
                 logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
                     if C4::Context->preference("BorrowersLog");
             } else {    #ModMember
