@@ -282,7 +282,9 @@ if (   ( $op eq 'save' || $op eq 'insert' )
 }
 
 foreach my $guarantor (@guarantors) {
-    if ( ( $op eq 'save' || $op eq 'insert' ) && ($guarantor->is_child ) || $guarantor->is_guarantee || $patron->is_guarantor)  {
+    if (   ( $op eq 'save' || $op eq 'insert' )
+        && ( $guarantor->is_child || $guarantor->is_guarantee || ( $patron && $patron->is_guarantor ) ) )
+    {
         push @errors, 'ERROR_guarantor_is_guarantee';
     }
 }
