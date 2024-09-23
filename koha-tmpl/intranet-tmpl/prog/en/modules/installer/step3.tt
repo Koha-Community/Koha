@@ -291,8 +291,7 @@
                             </ol>
                         </div>
 
-                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
+                        <form action="/cgi-bin/koha/installer/install.pl" method="get">
                             <input type="hidden" name="step" value="3" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                         </form>
