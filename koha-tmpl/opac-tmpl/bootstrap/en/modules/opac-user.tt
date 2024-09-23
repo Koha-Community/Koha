@@ -1389,7 +1389,7 @@
             });
 
             [% IF ( tab ) %]
-                $("#opac-user-views #[% tab %]-tab").tab("show");
+                $("#opac-user-views #[% tab | html %]-tab").tab("show");
             [% END %]
 
             if( $("#opac-user-views .tab-pane.active").length < 1 ){
