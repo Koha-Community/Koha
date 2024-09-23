@@ -133,6 +133,15 @@
                 }
             }
         },
+        onOpen: function( selectedDates, dateText, instance) {
+            var thisInput = instance.input;
+            let set_to_today = $(thisInput).data('flatpickr-set-to-today');
+            if ( set_to_today ) {
+                if ( thisInput.value === '' ) {
+                    instance.setDate( new Date() );
+                }
+            }
+        },
         onClose: function( selectedDates, dateText, instance) {
             validate_date( dateText, instance );
             var thisInput = instance.input;
