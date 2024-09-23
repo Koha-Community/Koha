@@ -1973,6 +1973,12 @@ sub _get_tt_params {
             plural   => 'train_items',
             pk       => 'train_item_id'
         },
+        problem_reports => {
+            module   => 'Koha::ProblemReports',
+            singluar => 'problemreport',
+            plural   => 'problemreports',
+            pk       => 'reportid'
+        },
     };
 
     my $dbh = C4::Context->dbh;
