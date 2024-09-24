@@ -148,7 +148,6 @@ use C4::Languages qw( getlanguage getLanguages );
 use C4::Koha qw( getitemtypeimagelocation GetAuthorisedValues );
 use URI::Escape;
 use POSIX qw(ceil floor);
-use C4::Search qw( searchResults enabled_staff_search_views z3950_search_args new_record_from_zebra );
 
 use Koha::ItemTypes;
 use Koha::Library::Groups;
