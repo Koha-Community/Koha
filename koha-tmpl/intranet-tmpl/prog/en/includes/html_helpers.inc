@@ -465,7 +465,7 @@
         <ol class="breadcrumb">
             [%# Include the Home link every time %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/mainpage.pl" title="Home">Home</a>
+                <a href="/cgi-bin/koha/mainpage.pl" title="Home"><span class="visually-hidden-focusable">Home</span></a>
             [% END %]
             [% content | $raw %]
         </ol>
