@@ -1352,16 +1352,7 @@ sub checkauth {
                     $session->param( 'sco_user',      $is_sco_user );
                 }
                 $session->param( 'cas_ticket', $cas_ticket ) if $cas_ticket;
-                C4::Context->set_userenv(
-                    $session->param('number'),       $session->param('id'),
-                    $session->param('cardnumber'),   $session->param('firstname'),
-                    $session->param('surname'),      $session->param('branch'),
-                    $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('shibboleth'),
-                    $session->param('desk_id'),      $session->param('desk_name'),
-                    $session->param('register_id'),  $session->param('register_name')
-                );
-
+                C4::Context->set_userenv_from_session($session);
             }
 
             # $return: 0 = invalid user
@@ -1830,15 +1821,7 @@ sub check_api_auth {
                 $session->param( 'interface',    'api' );
             }
             $session->param( 'cas_ticket', $cas_ticket );
-            C4::Context->set_userenv(
-                $session->param('number'),       $session->param('id'),
-                $session->param('cardnumber'),   $session->param('firstname'),
-                $session->param('surname'),      $session->param('branch'),
-                $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('shibboleth'),
-                $session->param('desk_id'),      $session->param('desk_name'),
-                $session->param('register_id'),  $session->param('register_name')
-            );
+            C4::Context->set_userenv_from_session($session);
             return ( "ok", $cookie, $sessionID );
         } else {
             return ( "failed", undef, undef );
@@ -1958,15 +1941,8 @@ sub check_cookie_auth {
                     # No need to override the interface, most often set by get_template_and_user
                     C4::Context->interface( $session->param('interface') );
                 }
-                C4::Context->set_userenv(
-                    $session->param('number'),       $session->param('id') // '',
-                    $session->param('cardnumber'),   $session->param('firstname'),
-                    $session->param('surname'),      $session->param('branch'),
-                    $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('shibboleth'),
-                    $session->param('desk_id'),      $session->param('desk_name'),
-                    $session->param('register_id'),  $session->param('register_name')
-                );
+
+                C4::Context->set_userenv_from_session($session);
                 if ( C4::Context->preference('TwoFactorAuthentication') ne 'disabled' ) {
                     return ( "additional-auth-needed", $session )
                         if $session->param('waiting-for-2FA');
