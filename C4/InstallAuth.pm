@@ -254,17 +254,7 @@ sub checkauth {
 
     if ($session) {
         if ( $session->param('cardnumber') ) {
-            C4::Context->set_userenv(
-                $session->param('number'),
-                $session->param('id'),
-                $session->param('cardnumber'),
-                $session->param('firstname'),
-                $session->param('surname'),
-                $session->param('branch'),
-                $session->param('branchname'),
-                $session->param('flags'),
-                $session->param('emailaddress')
-            );
+            C4::Context->set_userenv_from_session($session);
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',
                 -value    => $session->id,

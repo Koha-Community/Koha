@@ -666,6 +666,20 @@ sub userenv {
     return $context->{userenv};
 }
 
+sub set_userenv_from_session {
+    my ( $class, $session ) = @_;
+    return $class->set_userenv(
+        $session->param('number'),       $session->param('id') // '',
+        $session->param('cardnumber'),   $session->param('firstname'),
+        $session->param('surname'),      $session->param('branch'),
+        $session->param('branchname'),   $session->param('flags'),
+        $session->param('emailaddress'), $session->param('shibboleth'),
+        $session->param('desk_id'),      $session->param('desk_name'),
+        $session->param('register_id'),  $session->param('register_name'),
+        $session->id,
+    );
+}
+
 =head2 set_userenv
 
   C4::Context->set_userenv($usernum, $userid, $usercnum,
@@ -685,10 +699,10 @@ set_userenv is called in Auth.pm
 sub set_userenv {
     shift @_;
     my (
-        $usernum,      $userid,     $usercnum,   $userfirstname,
-        $usersurname,  $userbranch, $branchname, $userflags,
-        $emailaddress, $shibboleth, $desk_id,    $desk_name,
-        $register_id,  $register_name
+        $usernum,      $userid,        $usercnum,   $userfirstname,
+        $usersurname,  $userbranch,    $branchname, $userflags,
+        $emailaddress, $shibboleth,    $desk_id,    $desk_name,
+        $register_id,  $register_name, $session_id,
     ) = @_;
 
     my $cell = {
@@ -707,7 +721,8 @@ sub set_userenv {
         "desk_id"       => $desk_id,
         "desk_name"     => $desk_name,
         "register_id"   => $register_id,
-        "register_name" => $register_name
+        "register_name" => $register_name,
+        "session_id"    => $session_id,
     };
     $context->{userenv} = $cell;
     return $cell;

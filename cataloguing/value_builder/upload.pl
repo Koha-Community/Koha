@@ -32,9 +32,10 @@ use Modern::Perl;
 
 use CGI      qw ( -utf8 );
 use C4::Auth qw( check_cookie_auth );
+use C4::Context;
 my $input = CGI->new;
 my ($auth_status) =
-    check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => 1 } );
+    check_cookie_auth( C4::Context->userenv->{session_id}, { catalogue => 1 } );
 if ( $auth_status ne "ok" ) {
     print $input->header( -type => 'text/plain', -status => '403 Forbidden' );
     exit 0;
