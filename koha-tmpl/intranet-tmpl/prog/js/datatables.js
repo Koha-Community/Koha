@@ -774,16 +774,24 @@ function _dt_buttons(params){
     return buttons;
 }
 
-function _dt_visibility(node, table_settings, settings){
+function _dt_visibility(table_settings, settings, node){
     var counter = 0;
     let hidden_ids = [];
     let included_ids = [];
     if ( table_settings ) {
         var columns_settings = table_settings['columns'];
         $(columns_settings).each( function() {
-            let selector = '#' + node.attr('id');
-            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
-            var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
+            let used_id = counter;
+            if ( settings.bKohaColumnsUseNames ) {
+                if (!node){
+                    console.err("settings.bKohaColumnsUseNames is set but node not passed");
+                    return;
+                }
+                let selector = '#' + node.attr('id');
+                var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
+                used_id = named_id;
+            }
+
             if ( used_id == -1 ) return;
 
             if ( this['is_hidden'] == "1" ) {
@@ -969,7 +977,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
         }
 
         let hidden_ids, included_ids;
-        [hidden_ids, included_ids] = _dt_visibility(this, table_settings, settings)
+        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, this)
 
         settings["buttons"] = _dt_buttons({included_ids, settings, table_settings});
 
