@@ -78,24 +78,30 @@ export default {
                             searchable: false,
                             orderable: false,
                         },
-                        {
-                            title: __("Actions"),
-                            data: "contractnumber",
-                            searchable: false,
-                            orderable: false,
-                            render: function (data, type, row, meta) {
-                                return (
-                                    `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
-                                    " " +
-                                    __("Edit") +
-                                    "</a>" +
-                                    `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
-                                    " " +
-                                    __("Delete") +
-                                    "</a>"
-                                );
-                            },
-                        },
+                        ...(isUserPermitted(
+                            "CAN_user_acquisition_contracts_manage"
+                        )
+                            ? [
+                                  {
+                                      title: __("Actions"),
+                                      data: "contractnumber",
+                                      searchable: false,
+                                      orderable: false,
+                                      render: function (data, type, row, meta) {
+                                          return (
+                                              `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
+                                              " " +
+                                              __("Edit") +
+                                              "</a>" +
+                                              `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
+                                              " " +
+                                              __("Delete") +
+                                              "</a>"
+                                          );
+                                      },
+                                  },
+                              ]
+                            : []),
                     ],
                 })
             );
