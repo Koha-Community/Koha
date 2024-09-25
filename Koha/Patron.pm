@@ -2208,17 +2208,22 @@ sub extended_attributes {
                 }
 
                 # Check globally mandatory types
-                my @required_attribute_types =
-                    Koha::Patron::Attribute::Types->search(
-                        {
-                            mandatory => 1,
-                            category_code => [ undef, $self->categorycode ],
-                            'borrower_attribute_types_branches.b_branchcode' =>
-                              undef,
-                        },
-                        { join => 'borrower_attribute_types_branches' }
-                    )->get_column('code');
-                for my $type ( @required_attribute_types ) {
+                my $interface = C4::Context->interface;
+                my $params = {
+                    mandatory                                        => 1,
+                    category_code                                    => [ undef, $self->categorycode ],
+                    'borrower_attribute_types_branches.b_branchcode' => undef,
+                };
+
+                if ( $interface eq 'opac' ) {
+                    $params->{opac_editable} = 1;
+                }
+
+                my @required_attribute_types = Koha::Patron::Attribute::Types->search(
+                    $params,
+                    { join => 'borrower_attribute_types_branches' }
+                )->get_column('code');
+                for my $type (@required_attribute_types) {
                     Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
                         type => $type,
                     ) if !$new_types->{$type};
