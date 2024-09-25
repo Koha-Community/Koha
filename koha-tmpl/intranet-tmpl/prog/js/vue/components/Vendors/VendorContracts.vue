@@ -1,73 +1,13 @@
 <template>
     <h2>{{ $__("Contract(s)") }}</h2>
     <div class="dataTables_wrapper no-footer">
-        <table id="contractst">
-            <thead>
-                <tr>
-                    <th scope="col">{{ $__("Name") }}</th>
-                    <th scope="col">{{ $__("Description") }}</th>
-                    <th scope="col">{{ $__("Start date") }}</th>
-                    <th scope="col">{{ $__("End date") }}</th>
-                    <th
-                        v-if="
-                            isUserPermitted(
-                                'CAN_user_acquisition_contracts_manage'
-                            )
-                        "
-                        scope="col"
-                        class="NoSort noExport"
-                    >
-                        {{ $__("Actions") }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(contract, i) in vendor.contracts" :key="i">
-                    <td>
-                        <a
-                            :href="`/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${contract.contractnumber}&booksellerid=${contract.booksellerid}`"
-                            >{{ contract.contractname }}</a
-                        >
-                    </td>
-                    <td>{{ contract.contractdescription }}</td>
-                    <td :data-order="contract.contractstartdate">
-                        {{ contract.contractstartdate }}
-                    </td>
-                    <td :data-order="contract.contractenddate">
-                        {{ contract.contractenddate }}
-                    </td>
-                    <td
-                        class="actions"
-                        v-if="
-                            isUserPermitted(
-                                'CAN_user_acquisition_contracts_manage'
-                            )
-                        "
-                    >
-                        <a
-                            class="btn btn-default btn-xs"
-                            :href="`/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${contract.contractnumber}&booksellerid=${contract.booksellerid}`"
-                            ><i
-                                class="fa-solid fa-pencil"
-                                aria-hidden="true"
-                            ></i>
-                            {{ $__("Edit") }}</a
-                        >
-                        <a
-                            class="btn btn-default btn-xs"
-                            :href="`/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${contract.contractnumber}&booksellerid=${contract.booksellerid}`"
-                            ><i class="fa fa-trash-can"></i>
-                            {{ $__("Delete") }}</a
-                        >
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <table :id="table_id"></table>
     </div>
 </template>
 
 <script>
 import { inject } from "vue";
+import { useDataTable } from "../../composables/datatables";
 
 export default {
     props: {
@@ -75,12 +15,99 @@ export default {
     },
     setup() {
         const permissionsStore = inject("permissionsStore");
-
         const { isUserPermitted } = permissionsStore;
+
+        const table_id = "vendor_contracts_table";
+        useDataTable(table_id);
 
         return {
             isUserPermitted,
+            table_id,
         };
+    },
+    methods: {
+        buildDatatable() {
+            let contracts = this.vendor.contracts;
+            let table_id = this.table_id;
+            let isUserPermitted = this.isUserPermitted;
+
+            $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
+                search => search.name != "apply_filter"
+            );
+            $("#" + table_id).dataTable(
+                $.extend(true, {}, dataTablesDefaults, {
+                    data: contracts,
+                    embed: [],
+                    ordering: false,
+                    dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
+                    aLengthMenu: [
+                        [10, 20, 50, 100],
+                        [10, 20, 50, 100],
+                    ],
+                    autoWidth: false,
+                    columns: [
+                        {
+                            title: __("Name"),
+                            data: "contractname",
+                            searchable: false,
+                            orderable: false,
+                            render(data, type, row, meta) {
+                                return (
+                                    `<a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=${row.booksellerid}&contractnumber=${row.contractnumber}">` +
+                                    escape_str(row.contractname) +
+                                    "</a>"
+                                );
+                            },
+                        },
+                        {
+                            title: __("Description"),
+                            data: "contractdescription",
+                            searchable: false,
+                            orderable: false,
+                        },
+                        {
+                            title: __("Start date"),
+                            data: "contractstartdate",
+                            searchable: false,
+                            orderable: false,
+                        },
+                        {
+                            title: __("End date"),
+                            data: "contractenddate",
+                            searchable: false,
+                            orderable: false,
+                        },
+                        ...(isUserPermitted(
+                            "CAN_user_acquisition_contracts_manage"
+                        )
+                            ? [
+                                  {
+                                      title: __("Actions"),
+                                      data: "contractnumber",
+                                      searchable: false,
+                                      orderable: false,
+                                      render(data, type, row, meta) {
+                                          return (
+                                              `<a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-pencil" aria-hidden="true"></i>` +
+                                              " " +
+                                              __("Edit") +
+                                              "</a>" +
+                                              `<a style="margin-left: 5px;" class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&contractnumber=${row.contractnumber}&booksellerid=${row.booksellerid}"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>` +
+                                              " " +
+                                              __("Delete") +
+                                              "</a>"
+                                          );
+                                      },
+                                  },
+                              ]
+                            : []),
+                    ],
+                })
+            );
+        },
+    },
+    mounted() {
+        this.buildDatatable();
     },
 };
 </script>
