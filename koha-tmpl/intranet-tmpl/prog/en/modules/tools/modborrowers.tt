@@ -410,6 +410,9 @@
                                                 <span class="required">Required fields cannot be cleared</span>
                                             [% ELSE %]
                                                 <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name | html %]" />
+                                                [% IF ( field.type == 'message_type' ) %]
+                                                    <span class="hint">NOTE: Checking this box will remove ALL messages</span>
+                                                [% END %]
                                             [% END %]
                                         </li>
                                         [% END %]
