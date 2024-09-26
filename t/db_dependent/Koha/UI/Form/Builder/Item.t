@@ -259,7 +259,7 @@ subtest 'kohafields_to_add_datepicker' => sub {
     foreach my $itemfield_test_case (@itemfield_test_cases) {
         my ( $subfield ) = grep { $_->{kohafield} eq $itemfield_test_case->{kohafield} } @$subfields;
         if ( $subfield ) {
-            is( $subfield->{datetype}, $itemfield_test_case->{expected_type}, "Correct datetype for $itemfield_test_case->{kohafield}" );
+            is( $subfield->{data_type}, $itemfield_test_case->{expected_type}, "Correct datetype for $itemfield_test_case->{kohafield}" );
         } else {
             ok( 0, "Subfield for $itemfield_test_case->{kohafield} not found" );
         }
