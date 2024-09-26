@@ -8,11 +8,13 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        if( !column_exists( 'erm_usage_data_providers', 'service_platform' ) ) {
-          $dbh->do(q{
+        if ( !column_exists( 'erm_usage_data_providers', 'service_platform' ) ) {
+            $dbh->do(
+                q{
               ALTER TABLE erm_usage_data_providers ADD COLUMN `service_platform` varchar(80) DEFAULT NULL COMMENT 'platform if provider requires it' AFTER `report_types`
-          });
-          say_info( $out, "Bug 37856 - Added service_platform column to table 'erm_usage_data_providers'" );
+          }
+            );
+            say_info( $out, "Bug 37856 - Added service_platform column to table 'erm_usage_data_providers'" );
         }
         say_success( $out, "Bug 37856 - Done" );
     },
