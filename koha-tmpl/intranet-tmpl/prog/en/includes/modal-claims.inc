@@ -26,6 +26,12 @@
                             Charge lost fee
                             </label>
                         </div>
+                        <div class="checkbox">
+                            <label for="claims-returned-refund-lost-fee">
+                            <input id="claims-returned-refund-lost-fee" type="checkbox" value="1">
+                            Refund previous lost fee
+                            </label>
+                        </div>
                         </div>
                     [% END %]
 
@@ -63,7 +69,8 @@
     $(document).on("click", '#claims-returned-modal-btn-submit', function(e){
         let itemnumber = $('#claims-returned-itemnumber').val();
         let notes = $('#claims-returned-notes').val();
-        let fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
+        let charge_lost_fee = $('#claims-returned-charge-lost-fee').prop('checked') ? true : false;
+        let refund_lost_fee = $('#claims-returned-refund-lost-fee').prop('checked') ? true : false;
 
         $('#claims-returned-modal').modal('hide');
 
@@ -74,7 +81,8 @@
         params = {
             item_id: itemnumber,
             notes: notes,
-            charge_lost_fee: fee,
+            charge_lost_fee,
+            refund_lost_fee,
             created_by: logged_in_user_borrowernumber,
         };
 

@@ -182,10 +182,14 @@ sub generate_subfield_form {
         if ( $subfield->{authorised_value} eq "LOST" ) {
             my $ClaimReturnedLostValue =
               C4::Context->preference('ClaimReturnedLostValue');
-            my $item_is_return_claim =
-                 $ClaimReturnedLostValue
-              && exists $item->{itemlost}
-              && $ClaimReturnedLostValue eq $item->{itemlost};
+            my $claim = Koha::Checkouts::ReturnClaims->find(
+                {
+                    itemnumber => $item->{itemnumber},
+                    resolution => undef,
+                }
+            );
+            my $item_is_return_claim = $ClaimReturnedLostValue
+                && $claim;
             $subfield_data{IS_RETURN_CLAIM} = $item_is_return_claim;
 
             $subfield_data{IS_LOST_AV} = 1;
