@@ -6068,7 +6068,7 @@ CREATE TABLE `subscription` (
   `subscriptionid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique key for this subscription',
   `librarian` varchar(100) DEFAULT '' COMMENT 'the librarian''s username from borrowers.userid',
   `startdate` date DEFAULT NULL COMMENT 'start date for this subscription',
-  `aqbooksellerid` int(11) DEFAULT 0 COMMENT 'foreign key for aqbooksellers.id to link to the vendor',
+  `aqbooksellerid` int(11) DEFAULT NULL COMMENT 'foreign key for aqbooksellers.id to link to the vendor',
   `cost` int(11) DEFAULT 0,
   `aqbudgetid` int(11) DEFAULT 0,
   `weeklength` int(11) DEFAULT 0 COMMENT 'subscription length in weeks (will not be filled in if monthlength or numberlength is set)',
@@ -6113,9 +6113,11 @@ CREATE TABLE `subscription` (
   KEY `subscription_ibfk_1` (`periodicity`),
   KEY `subscription_ibfk_2` (`numberpattern`),
   KEY `subscription_ibfk_3` (`biblionumber`),
+  KEY `subscription_ibfk_4` (`aqbooksellerid`),
   CONSTRAINT `subscription_ibfk_1` FOREIGN KEY (`periodicity`) REFERENCES `subscription_frequencies` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `subscription_ibfk_2` FOREIGN KEY (`numberpattern`) REFERENCES `subscription_numberpatterns` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `subscription_ibfk_3` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `subscription_ibfk_3` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subscription_ibfk_4` FOREIGN KEY (`aqbooksellerid`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
