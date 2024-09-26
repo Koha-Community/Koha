@@ -475,8 +475,8 @@ sub _sushi_errors {
     }
 
     my $exceptions = $decoded_response->{Report_Header}->{Exceptions} // $decoded_response->{Exceptions};
-    if ( $exceptions ) {
-        foreach my $exception ( @{ $exceptions } ) {
+    if ($exceptions) {
+        foreach my $exception ( @{$exceptions} ) {
             $self->{job_callbacks}->{add_message_callback}->(
                 {
                     type    => 'error',
