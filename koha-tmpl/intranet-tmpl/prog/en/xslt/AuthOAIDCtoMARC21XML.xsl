@@ -19,6 +19,9 @@
 
     <xsl:template match="oai_dc:dc">
         <record>
+            <xsl:element name="leader">
+                <xsl:value-of select="concat('     a','z','  ','a22     o  4500')"/>
+            </xsl:element>
 
             <xsl:variable name="FamilyName" select="dc:FamilyName"/>
             <xsl:variable name="GivenName" select="dc:GivenName"/>
