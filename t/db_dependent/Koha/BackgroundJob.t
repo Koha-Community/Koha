@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 use Encode;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Exception;
 
@@ -297,3 +297,18 @@ subtest 'decoded_data() and set_encoded_data() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'decoded_data() and set_encoded_data() tests' => sub {
+    plan tests => 2;
+
+    $ENV{KOHA_STOMP_HOSTNAME} = "not_localhost";
+    $ENV{KOHA_STOMP_PORT} = "99999";
+
+    t::lib::Mocks::mock_preference('JobsNotificationMethod', 'STOMP');
+    my $job = Koha::BackgroundJob->connect();
+    is( $job, undef, "Return undef if unable to connect when using stomp" );
+
+    t::lib::Mocks::mock_preference('JobsNotificationMethod', 'polling');
+    $job = Koha::BackgroundJob->connect();
+    is( $job, undef, "Return undef if using polling" );
+}

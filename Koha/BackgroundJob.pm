@@ -67,8 +67,9 @@ sub connect {
     return undef
         unless $notification_method eq 'STOMP';
 
-    my $hostname = 'localhost';
-    my $port = '61613';
+    my $hostname = $ENV{KOHA_STOMP_HOSTNAME} // 'localhost';
+    my $port     = $ENV{KOHA_STOMP_PORT}     // '61613';
+
     my $config = C4::Context->config('message_broker');
     my $credentials = {
         login => 'guest',
