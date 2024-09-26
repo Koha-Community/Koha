@@ -1441,39 +1441,58 @@ subtest 'password expiration tests' => sub {
     plan tests => 5;
 
     $schema->storage->txn_begin;
-    my $date = dt_from_string();
-    my $category = $builder->build_object({ class => 'Koha::Patron::Categories', value => {
-            password_expiry_days => 10,
-            require_strong_password => 0,
-            force_password_reset_when_set_by_staff => 0,
+    my $date     = dt_from_string();
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                password_expiry_days                   => 10,
+                require_strong_password                => 0,
+                force_password_reset_when_set_by_staff => 0,
+            }
         }
-    });
-    my $patron = $builder->build_object({ class=> 'Koha::Patrons', value => {
-            categorycode => $category->categorycode,
-            password => 'hats'
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode,
+                password     => 'hats'
+            }
         }
-    });
+    );
 
-    $patron->delete()->store()->discard_changes(); # Make sure we are storing a 'new' patron
+    $patron->delete()->store()->discard_changes();    # Make sure we are storing a 'new' patron
 
-    is( $patron->password_expiration_date(), $date->add( days => 10 )->ymd() , "Password expiration date set correctly on patron creation");
+    is(
+        $patron->password_expiration_date(), $date->add( days => 10 )->ymd(),
+        "Password expiration date set correctly on patron creation"
+    );
 
-    $patron = $builder->build_object({ class => 'Koha::Patrons', value => {
-            categorycode => $category->categorycode,
-            password => undef
+    $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode,
+                password     => undef
+            }
         }
-    });
+    );
     $patron->delete()->store()->discard_changes();
 
-    is( $patron->password_expiration_date(), undef, "Password expiration date is not set if patron does not have a password");
+    is(
+        $patron->password_expiration_date(), undef,
+        "Password expiration date is not set if patron does not have a password"
+    );
 
     $category->password_expiry_days(undef)->store();
-    $patron = $builder->build_object({ class => 'Koha::Patrons', value => {
-            categorycode => $category->categorycode
-        }
-    });
+    $patron =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
     $patron->delete()->store()->discard_changes();
-    is( $patron->password_expiration_date(), undef, "Password expiration date is not set if category does not have expiry days set");
+    is(
+        $patron->password_expiration_date(), undef,
+        "Password expiration date is not set if category does not have expiry days set"
+    );
 
     $schema->storage->txn_rollback;
 
@@ -1483,18 +1502,16 @@ subtest 'password expiration tests' => sub {
 
         $schema->storage->txn_begin;
         my $date = dt_from_string();
-        $patron = $builder->build_object({ class => 'Koha::Patrons', value => {
-                password_expiration_date => undef
-            }
-        });
-        is( $patron->password_expired, 0, "Patron with no password expiration date, password not expired");
-        $patron->password_expiration_date( $date )->store;
+        $patron =
+            $builder->build_object( { class => 'Koha::Patrons', value => { password_expiration_date => undef } } );
+        is( $patron->password_expired, 0, "Patron with no password expiration date, password not expired" );
+        $patron->password_expiration_date($date)->store;
         $patron->discard_changes();
-        is( $patron->password_expired, 1, "Patron with password expiration date of today, password expired");
+        is( $patron->password_expired, 1, "Patron with password expiration date of today, password expired" );
         $date->subtract( days => 1 );
-        $patron->password_expiration_date( $date )->store;
+        $patron->password_expiration_date($date)->store;
         $patron->discard_changes();
-        is( $patron->password_expired, 1, "Patron with password expiration date in past, password expired");
+        is( $patron->password_expired, 1, "Patron with password expiration date in past, password expired" );
 
         $schema->storage->txn_rollback;
     };
@@ -1506,26 +1523,33 @@ subtest 'password expiration tests' => sub {
         $schema->storage->txn_begin;
 
         my $date = dt_from_string();
-        my $category = $builder->build_object({ class => 'Koha::Patron::Categories', value => {
-                password_expiry_days => 10
+        my $category =
+            $builder->build_object( { class => 'Koha::Patron::Categories', value => { password_expiry_days => 10 } } );
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode             => $category->categorycode,
+                    password_expiration_date => $date->subtract( days => 1 )
+                }
             }
-        });
-        my $patron = $builder->build_object({ class => 'Koha::Patrons', value => {
-                categorycode => $category->categorycode,
-                password_expiration_date =>  $date->subtract( days => 1 )
-            }
-        });
-        is( $patron->password_expired, 1, "Patron password is expired");
+        );
+        is( $patron->password_expired, 1, "Patron password is expired" );
 
         $date = dt_from_string();
-        $patron->set_password({ password => "kitten", skip_validation => 1 })->discard_changes();
-        is( $patron->password_expired, 0, "Patron password no longer expired when new password set");
-        is( $patron->password_expiration_date(), $date->add( days => 10 )->ymd(), "Password expiration date set correctly on patron creation");
+        $patron->set_password( { password => "kitten", skip_validation => 1 } )->discard_changes();
+        is( $patron->password_expired, 0, "Patron password no longer expired when new password set" );
+        is(
+            $patron->password_expiration_date(), $date->add( days => 10 )->ymd(),
+            "Password expiration date set correctly on patron creation"
+        );
 
-
-        $category->password_expiry_days( undef )->store();
-        $patron->set_password({ password => "puppies", skip_validation => 1 })->discard_changes();
-        is( $patron->password_expiration_date(), undef, "Password expiration date is unset if category does not have expiry days");
+        $category->password_expiry_days(undef)->store();
+        $patron->set_password( { password => "puppies", skip_validation => 1 } )->discard_changes();
+        is(
+            $patron->password_expiration_date(), undef,
+            "Password expiration date is unset if category does not have expiry days"
+        );
 
         $schema->storage->txn_rollback;
     };
@@ -1537,33 +1561,40 @@ subtest 'force_password_reset_when_set_by_staff tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $category = $builder->build_object({
-        class => 'Koha::Patron::Categories',
-        value => {
-            force_password_reset_when_set_by_staff => 1,
-            require_strong_password => 0,
+    my $category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => {
+                force_password_reset_when_set_by_staff => 1,
+                require_strong_password                => 0,
+            }
         }
-    });
+    );
 
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value => {
-            categorycode => $category->categorycode,
-            password => 'hats'
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $category->categorycode,
+                password     => 'hats'
+            }
         }
-    });
+    );
 
     $patron->delete()->store()->discard_changes();
-    is($patron->password_expired, 1, "Patron forced into changing password, password expired.");
+    is( $patron->password_expired, 1, "Patron forced into changing password, password expired." );
 
     $patron->category->force_password_reset_when_set_by_staff(0)->store();
     $patron->delete()->store()->discard_changes();
-    is($patron->password_expired, 0, "Patron not forced into changing password, password not expired.");
+    is( $patron->password_expired, 0, "Patron not forced into changing password, password not expired." );
 
     $patron->category->force_password_reset_when_set_by_staff(1)->store();
-    t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $patron->categorycode);
+    t::lib::Mocks::mock_preference( 'PatronSelfRegistrationDefaultCategory', $patron->categorycode );
     $patron->delete()->store()->discard_changes();
-    is($patron->password_expired, 0, "Patron forced into changing password but patron is self registered, password not expired.");
+    is(
+        $patron->password_expired, 0,
+        "Patron forced into changing password but patron is self registered, password not expired."
+    );
 
     $schema->storage->txn_rollback;
 };

@@ -403,12 +403,12 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-17 17:34:19
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SZoU95HraPfIzszljOSHyQ
 
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 sub koha_object_class {
     'Koha::Patron::Category';
 }
+
 sub koha_objects_class {
     'Koha::Patron::Categories';
 }
