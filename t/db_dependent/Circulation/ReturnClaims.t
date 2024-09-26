@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
@@ -141,6 +141,46 @@ subtest 'Test Koha::Checkout::claim_returned, mark as returned' => sub {
     is( $checkout2, undef, "Checkout is not longer in the issues table");
     $checkout2 = Koha::Old::Checkouts->find( $checkout->id );
     is( $checkout2->id, $checkout->id, "Checkout was found in the old_issues table");
+};
+
+subtest 'Test Koha::Checkout::claim_returned, should refund a previous lost fee if refund_lost_fee is set' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue',  1 );
+    t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', q{claim_returned} );
+    my $item       = $builder->build_sample_item;
+    my $itemnumber = $item->itemnumber;
+    my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout   = AddIssue( $patron, $item->barcode );
+
+    my $line = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            itemnumber        => $itemnumber,
+            debit_type_code   => "LOST",
+            status            => "NULL",
+            amount            => 10,
+            amountoutstanding => 10,
+            interface         => 'commandline',
+        }
+    )->store;
+
+    my $claim = $checkout->claim_returned(
+        {
+            created_by      => $patron->borrowernumber,
+            notes           => "Test note",
+            refund_lost_fee => 1
+        }
+    );
+
+    my $updated_line = Koha::Account::Lines->find( { accountlines_id => $line->accountlines_id } );
+    is( $updated_line->amountoutstanding + 0, 0,       "Line amount outstanding is 0" );
+    is( $updated_line->status,                'FOUND', "Line has been struck off as 'FOUND'" );
+
+    my $credit =
+        Koha::Account::Lines->find( { borrowernumber => $patron->borrowernumber, credit_type_code => 'LOST_FOUND' } );
+    is( $credit->amount + 0,  -10,                      "Credit amount is 10" );
+    is( $credit->description, "Item found $itemnumber", "Credit has been marked as relating to the item being found" );
 };
 
 subtest 'Test Koha::Checkout::claim_returned should not update the itemlost status if it is already set' => sub {

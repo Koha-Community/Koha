@@ -72,6 +72,7 @@ subtest 'claim_returned() tests' => sub {
         "//$userid:$password@/api/v1/return_claims" => json => {
             item_id         => $item->itemnumber,
             charge_lost_fee => Mojo::JSON->false,
+            refund_lost_fee => Mojo::JSON->false,
             created_by      => $librarian->id,
             notes           => "This is a test note."
         }
@@ -88,6 +89,7 @@ subtest 'claim_returned() tests' => sub {
             "//$userid:$password@/api/v1/return_claims" => json => {
                 item_id         => $item->itemnumber,
                 charge_lost_fee => Mojo::JSON->false,
+                refund_lost_fee => Mojo::JSON->false,
                 created_by      => $librarian->id,
                 notes           => "This is a test note."
             }
@@ -101,6 +103,7 @@ subtest 'claim_returned() tests' => sub {
         "//$userid:$password@/api/v1/return_claims" => json => {
             item_id         => $item->itemnumber,
             charge_lost_fee => Mojo::JSON->false,
+            refund_lost_fee => Mojo::JSON->false,
             created_by      => $librarian->id,
             notes           => "This is a test note."
         }
