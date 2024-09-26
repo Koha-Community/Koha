@@ -309,7 +309,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/agreements/' +
                             row.agreement_id +
                             '" class="show">' +
-                            escape_str(`(#${row.agreement_id})`) +
+                            escape_str(`${row.agreement_id}`) +
                             "</a>"
                         );
                     },

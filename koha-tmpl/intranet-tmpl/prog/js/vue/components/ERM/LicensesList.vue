@@ -200,7 +200,7 @@ export default {
                             '<a href="/cgi-bin/koha/erm/licenses/' +
                             row.license_id +
                             '" class="show">' +
-                            escape_str(`(#${row.license_id})`) +
+                            escape_str(`${row.license_id}`) +
                             "</a>"
                         );
                     },
