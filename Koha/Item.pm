@@ -146,6 +146,11 @@ sub store {
 
         $action = 'modify';
 
+        # refund lost fee if a return claim has been made on an item previously marked as lost
+        if ( $params->{refund_lost_fee} ) {
+            $self->_set_found_trigger( $self->get_from_storage );
+        }
+
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
 
@@ -1453,7 +1458,6 @@ Internal function, not exported, called only by Koha::Item->store.
 
 sub _set_found_trigger {
     my ( $self, $pre_mod_item ) = @_;
-
     # Reverse any lost item charges if necessary.
     my $no_refund_after_days =
       C4::Context->preference('NoRefundOnLostReturnedItemsAge');

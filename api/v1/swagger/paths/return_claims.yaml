@@ -27,6 +27,10 @@
               description: Charge a lost fee if true and Koha is set to allow a choice.
                 Ignored otherwise.
               type: boolean
+            refund_lost_fee:
+              description: Refund a lost fee if true and a lost fee has previously been charged for the item.
+                Ignored otherwise.
+              type: boolean
           additionalProperties: false
     produces:
       - application/json

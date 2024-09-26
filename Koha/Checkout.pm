@@ -242,6 +242,7 @@ sub claim_returned {
     my ( $self, $params ) = @_;
 
     my $charge_lost_fee = $params->{charge_lost_fee};
+    my $refund_lost_fee = $params->{refund_lost_fee};
 
     try {
         $self->_result->result_source->schema->txn_do(
@@ -271,6 +272,10 @@ sub claim_returned {
                 }
                 elsif ( C4::Context->preference( 'MarkLostItemsAsReturned' ) =~ m/claim_returned/ ) {
                     C4::Circulation::MarkIssueReturned( $self->borrowernumber, $self->itemnumber, undef, $self->patron->privacy );
+                }
+
+                if ($refund_lost_fee) {
+                    $self->item->store( { refund_lost_fee => $refund_lost_fee } );
                 }
 
                 return $claim;

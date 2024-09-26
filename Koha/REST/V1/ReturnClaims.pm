@@ -45,6 +45,7 @@ sub claim_returned {
     return try {
         my $itemnumber      = $body->{item_id};
         my $charge_lost_fee = $body->{charge_lost_fee} ? 1 : 0;
+        my $refund_lost_fee = $body->{refund_lost_fee} ? 1 : 0;
         my $created_by      = $body->{created_by};
         my $notes           = $body->{notes};
 
@@ -59,6 +60,7 @@ sub claim_returned {
         my $claim = $checkout->claim_returned(
             {
                 charge_lost_fee => $charge_lost_fee,
+                refund_lost_fee => $refund_lost_fee,
                 created_by      => $created_by,
                 notes           => $notes,
             }
