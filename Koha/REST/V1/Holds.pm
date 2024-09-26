@@ -462,11 +462,12 @@ sub pickup_locations {
             $ps_set = $hold->biblio->pickup_locations( { patron => $hold->patron } );
         }
 
-        my $pickup_locations = $c->objects->search( $ps_set );
+        my $pickup_locations;
         my @response = ();
 
         if ( C4::Context->preference('AllowHoldPolicyOverride') ) {
 
+            $pickup_locations = $ps_set->as_list;
             my $libraries_rs = Koha::Libraries->search( { pickup_location => 1 } );
             my $libraries    = $c->objects->search($libraries_rs);
 
@@ -487,6 +488,7 @@ sub pickup_locations {
             );
         }
 
+        $pickup_locations = $c->objects->search( $ps_set );
         @response = map { $_->{needs_override} = Mojo::JSON->false; $_; } @{$pickup_locations};
 
         return $c->render(
