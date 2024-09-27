@@ -43,7 +43,7 @@
                     {{ vendor.fax }}
                 </span>
             </li>
-            <li v-if="vendor.url">
+            <li v-if="vendor.url" id="vendorWebsite">
                 <label>{{ $__("Website") }}:</label>
                 <ToolbarButton
                     :to="{
