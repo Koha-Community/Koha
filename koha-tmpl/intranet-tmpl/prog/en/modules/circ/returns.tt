@@ -174,7 +174,7 @@
 
                             <!-- Patron has added an issue note -->
                             [% IF ( issue.note) %]
-                                <div class="alert alert-info">
+                                <div class="alert alert-info issue-note">
                                     <h1>Patron note</h1>
                                     <p>[% issue.notedate | $KohaDates %]</p>
                                     <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber | uri %]"> [% title | html %]</a> [% author | html %]</p>
@@ -184,7 +184,7 @@
 
                             <!-- Patron has fines -->
                             [% IF ( fines ) %]
-                                <div class="alert alert-warning">
+                                <div class="alert alert-warning patron-fines">
                                     <h3>Patron has outstanding fines of [% fines | html %].</h3>
                                     <p><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% fineborrowernumber | uri %]">Make payment</a>.</p>
                                 </div>
