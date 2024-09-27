@@ -44,7 +44,7 @@ subtest '_build_url_query' => sub {
             class => 'Koha::ERM::EUsage::UsageDataProviders',
             value => {
                 service_url => $service_url, api_key => $api_key, requestor_id => $requestor_id,
-                customer_id => $customer_id, name    => $name
+                customer_id => $customer_id, name    => $name, service_platform => undef
             }
         }
     );
