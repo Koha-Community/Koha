@@ -195,9 +195,16 @@ if ( $sftp->put( $fh, basename($file) ) ) {
 if ($email) {
     $status_email = C4::Letters::GetPreparedLetter(
         module                 => 'commandline',
-        letter_code            => "SFTP_$sftp_status",             #SFTP_SUCCESS, SFTP_FAILURE
+        letter_code            => "SFTP_$sftp_status",    #SFTP_SUCCESS, SFTP_FAILURE
         message_transport_type => 'email',
-        substitute             => { sftp_error => $sftp->error }
+        substitute             => {
+            sftp_error => $sftp->error,
+            email      => $email,
+            file       => $file,
+            host       => $host,
+            upload_dir => $upload_dir,
+            user       => $user,
+        }
     );
 
     C4::Letters::EnqueueLetter(
