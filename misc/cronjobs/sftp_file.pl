@@ -32,19 +32,19 @@ sftp_file.pl - SFTP a file to a remote server
 
 =head1 SYNOPSIS
 
-sftp_file.pl [ -h | -m ] [ -v ] host user pass upload_dir port file email
+sftp_file.pl [ --help | --man ] [ -v ] -h host -u user -p pass -d upload_dir --port port -f file -e email
 
  Options:
-   -h --help       brief help message
+   --help       brief help message
    -m --man        full documentation, same as --help --verbose
    -v --verbose    verbose output
-   --host          SFTP host to upload to
-   --user          SFTP user
-   --pass          SFTP password
-   --upload_dir    Directory on SFTP host to upload to
-   --port          SFTP upload port to use - falls back to port 22
-   --file          File to SFTP to host
-   --email         Email address to receive confirmation of SFTP upload success or failure
+   -h --host          SFTP host to upload to
+   -u --user          SFTP user
+   -p --pass          SFTP password
+   -u --upload_dir    Directory on SFTP host to upload to
+   -P --port          SFTP upload port to use - falls back to port 22
+   -f --file          File to SFTP to host
+   -e --email         Email address to receive confirmation of SFTP upload success or failure
 
 =head1 OPTIONS
 
@@ -129,16 +129,16 @@ my $sftp_status          = undef;
 my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
-    'help|?'       => \$help,
-    'man'          => \$man,
-    'verbose'      => \$verbose,
-    'host=s'       => \$host,
-    'user=s'       => \$user,
-    'pass=s'       => \$pass,
-    'upload_dir=s' => \$upload_dir,
-    'port=s'       => \$port,
-    'file=s'       => \$file,
-    'email=s'      => \$email,
+    'help|?'         => \$help,
+    'm|man'          => \$man,
+    'v|verbose'      => \$verbose,
+    'h|host=s'       => \$host,
+    'u|user=s'       => \$user,
+    'p|pass=s'       => \$pass,
+    'd|upload_dir=s' => \$upload_dir,
+    'port=s'         => \$port,
+    'f|file=s'       => \$file,
+    'e|email=s'      => \$email,
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ( $help and $verbose );
