@@ -697,7 +697,8 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>)."
+            - "[% borrower.firstname %] [% borrower.surname %] has added a note to the item [% biblio.title %] by [% biblio.author %] ([% item.barcode %]):"
+            - "[% checkout.note %]"
 
         - module: circulation
           code: DUE

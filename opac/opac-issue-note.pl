@@ -84,6 +84,8 @@ if ( $op eq 'cud-issuenote' && C4::Context->preference('AllowCheckoutNotes') && 
                 tables      => {
                     'biblio'    => $biblio->biblionumber,
                     'borrowers' => $borrowernumber,
+                    'issues'    => $issue->itemnumber,
+                    'items'     => $issue->itemnumber,
                 },
             );
 
