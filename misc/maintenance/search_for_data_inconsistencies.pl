@@ -331,25 +331,28 @@ use C4::Biblio qw( GetMarcFromKohaField );
     my $schema = Koha::Database->new->schema;
 
     # Loop over all the DBIx::Class classes
-    for my $class ( sort values %{$schema->{class_mappings}} ) {
+    for my $class ( sort values %{ $schema->{class_mappings} } ) {
+
         # Retrieve the resultset so we can access the columns info
-        my $rs = $schema->resultset($class);
+        my $rs      = $schema->resultset($class);
         my $columns = $rs->result_source->columns_info;
 
         # Loop over the columns
         while ( my ( $column, $info ) = each %$columns ) {
+
             # Next if data type is not date/datetime/timestamp
             my $data_type = $info->{data_type};
             next unless grep { $data_type =~ m{^$_$} } qw( timestamp datetime date );
 
             # Count the invalid dates
-            my $invalid_dates = $rs->search({ $column => '0000-00-00' })->count;
+            my $invalid_dates = $rs->search( { $column => '0000-00-00' } )->count;
 
             next unless $invalid_dates;
 
-            new_section("Column " . $rs->result_source->name . "." . $column . " contains $invalid_dates invalid dates");
+            new_section(
+                "Column " . $rs->result_source->name . "." . $column . " contains $invalid_dates invalid dates" );
 
-            if ($invalid_dates > 0) {
+            if ( $invalid_dates > 0 ) {
                 new_hint("You may change the dates with script: misc/cronjobs/fix_invalid_dates.pl (-c -v)");
             }
 
