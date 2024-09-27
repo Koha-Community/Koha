@@ -19,8 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
 use List::MoreUtils qw( any );
-use Scalar::Util qw( reftype );
-use JSON qw( decode_json );
+use Scalar::Util    qw( reftype );
+use JSON            qw( decode_json );
 
 use Koha::Exceptions;
 use Koha::Exceptions::REST;
@@ -58,17 +58,15 @@ Generates the DBIC query from the query parameters.
             my $filtered_params;
             my $path_params;
 
-            my $reserved_words = _reserved_words();
-            my @query_param_names = keys %{$c->req->params->to_hash};
+            my $reserved_words    = _reserved_words();
+            my @query_param_names = keys %{ $c->req->params->to_hash };
 
             foreach my $param ( keys %{$params} ) {
                 if ( grep { $param eq $_ } @{$reserved_words} ) {
                     $reserved_params->{$param} = $params->{$param};
-                }
-                elsif ( grep { $param eq $_ } @query_param_names ) {
+                } elsif ( grep { $param eq $_ } @query_param_names ) {
                     $filtered_params->{$param} = $params->{$param};
-                }
-                else {
+                } else {
                     $path_params->{$param} = $params->{$param};
                 }
             }
@@ -97,11 +95,12 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
             );
             my @order_by_params;
 
-            foreach my $order_by_style ( @order_by_styles ) {
-                if ( defined $args->{params}->{$order_by_style} and ref($args->{params}->{$order_by_style}) eq 'ARRAY' )  {
-                    push( @order_by_params, @{$args->{params}->{$order_by_style} });
-                }
-                else {
+            foreach my $order_by_style (@order_by_styles) {
+                if ( defined $args->{params}->{$order_by_style}
+                    and ref( $args->{params}->{$order_by_style} ) eq 'ARRAY' )
+                {
+                    push( @order_by_params, @{ $args->{params}->{$order_by_style} } );
+                } else {
                     push @order_by_params, $args->{params}->{$order_by_style}
                         if defined $args->{params}->{$order_by_style};
                 }
@@ -109,18 +108,18 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
 
             my @THE_order_by;
 
-            foreach my $order_by_param ( @order_by_params ) {
+            foreach my $order_by_param (@order_by_params) {
                 my $order_by;
-                $order_by = [ split(/,/, $order_by_param) ]
-                    if ( !reftype($order_by_param) && index(',',$order_by_param) == -1);
+                $order_by = [ split( /,/, $order_by_param ) ]
+                    if ( !reftype($order_by_param) && index( ',', $order_by_param ) == -1 );
 
                 if ($order_by) {
                     if ( reftype($order_by) and reftype($order_by) eq 'ARRAY' ) {
-                        my @order_by = map { _build_order_atom({ string => $_, result_set => $result_set }) } @{ $order_by };
-                        push( @THE_order_by, @order_by);
-                    }
-                    else {
-                        push @THE_order_by, _build_order_atom({ string => $order_by, result_set => $result_set });
+                        my @order_by =
+                            map { _build_order_atom( { string => $_, result_set => $result_set } ) } @{$order_by};
+                        push( @THE_order_by, @order_by );
+                    } else {
+                        push @THE_order_by, _build_order_atom( { string => $order_by, result_set => $result_set } );
                     }
                 }
             }
@@ -145,16 +144,16 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
             my ( $c, $args ) = @_;
             my $attributes = $args->{attributes};
             my $result_set = $args->{result_set};
-            my $embed = $c->stash('koha.embed');
+            my $embed      = $c->stash('koha.embed');
             return unless defined $embed;
 
             my @prefetches;
-            foreach my $key (sort keys(%{$embed})) {
-                my $parsed = _parse_prefetch($key, $embed, $result_set);
+            foreach my $key ( sort keys( %{$embed} ) ) {
+                my $parsed = _parse_prefetch( $key, $embed, $result_set );
                 push @prefetches, $parsed if defined $parsed;
             }
 
-            if(scalar(@prefetches)) {
+            if ( scalar(@prefetches) ) {
                 $attributes->{prefetch} = \@prefetches;
             }
         }
@@ -195,24 +194,20 @@ is raised.
             my $match = $reserved_params->{_match} // 'contains';
 
             foreach my $param ( keys %{$filtered_params} ) {
-                if ( $match eq 'exact' || $filtered_params->{$param} =~ m[^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}]) {
+                if ( $match eq 'exact' || $filtered_params->{$param} =~ m[^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}] ) {
                     $params->{$param} = $filtered_params->{$param};
-                }
-                elsif ( $match eq 'contains' ) {
+                } elsif ( $match eq 'contains' ) {
                     $params->{$param} =
-                      { like => '%' . $filtered_params->{$param} . '%' };
-                }
-                elsif ( $match eq 'starts_with' ) {
+                        { like => '%' . $filtered_params->{$param} . '%' };
+                } elsif ( $match eq 'starts_with' ) {
                     $params->{$param} = { like => $filtered_params->{$param} . '%' };
-                }
-                elsif ( $match eq 'ends_with' ) {
+                } elsif ( $match eq 'ends_with' ) {
                     $params->{$param} = { like => '%' . $filtered_params->{$param} };
-                }
-                else {
+                } else {
+
                     # We should never reach here, because the OpenAPI plugin should
                     # prevent invalid params to be passed
-                    Koha::Exceptions::WrongParameter->throw(
-                        "Invalid value for _match param ($match)");
+                    Koha::Exceptions::WrongParameter->throw("Invalid value for _match param ($match)");
                 }
             }
 
@@ -235,10 +230,10 @@ Merges parameters from $q_params into $filtered_params.
 
             $q_params = decode_json($q_params) unless reftype $q_params;
 
-            my $params = _parse_dbic_query($q_params, $result_set);
+            my $params = _parse_dbic_query( $q_params, $result_set );
 
-            return $params unless scalar(keys %{$filtered_params});
-            return {'-and' => [$params, $filtered_params ]};
+            return $params unless scalar( keys %{$filtered_params} );
+            return { '-and' => [ $params, $filtered_params ] };
         }
     );
 
@@ -264,23 +259,21 @@ Unwraps and stashes the x-koha-embed headers for use later query construction
                 next unless $param->{name} eq 'x-koha-embed';
                 $embed_spec = $param->{items}->{enum};
             }
-            Koha::Exceptions::BadParameter->throw(
-                "Embedding objects is not allowed on this endpoint.")
-              unless defined($embed_spec);
+            Koha::Exceptions::BadParameter->throw("Embedding objects is not allowed on this endpoint.")
+                unless defined($embed_spec);
 
             if ($embed_header) {
                 my $THE_embed = {};
                 foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
                     if ( $embed_req eq '+strings' ) {    # special case
                         $c->stash( 'koha.strings' => 1 );
-                    }
-                    else {
+                    } else {
                         _merge_embed( _parse_embed($embed_req), $THE_embed );
                     }
                 }
 
                 $c->stash( 'koha.embed' => $THE_embed )
-                  if $THE_embed;
+                    if $THE_embed;
             }
 
             return $c;
@@ -308,7 +301,7 @@ reference: https://metacpan.org/changes/distribution/JSON-Validator#L14
     $app->helper(
         'stash_overrides' => sub {
 
-            my ( $c ) = @_;
+            my ($c) = @_;
 
             my $override_header = $c->req->headers->header('x-koha-override') || q{};
 
@@ -349,27 +342,28 @@ according to the following rules:
 =cut
 
 sub _build_order_atom {
-    my ( $args )   = @_;
+    my ($args)     = @_;
     my $string     = $args->{string};
     my $result_set = $args->{result_set};
 
     my $param = $string;
     $param =~ s/^(\+|\-|\s)//;
-    if ( $result_set ) {
-        my $model_param = _from_api_param($param, $result_set);
+    if ($result_set) {
+        my $model_param = _from_api_param( $param, $result_set );
         $param = $model_param if defined $model_param;
     }
 
-    if ( $string =~ m/^\+/ or
-         $string =~ m/^\s/ ) {
+    if (   $string =~ m/^\+/
+        or $string =~ m/^\s/ )
+    {
         # asc order operator present
         return { -asc => $param };
-    }
-    elsif ( $string =~ m/^\-/ ) {
+    } elsif ( $string =~ m/^\-/ ) {
+
         # desc order operator present
         return { -desc => $param };
-    }
-    else {
+    } else {
+
         # no order operator present
         return $param;
     }
@@ -390,19 +384,16 @@ sub _parse_embed {
     my $result;
     my ( $curr, $next ) = split /\s*\.\s*/, $string, 2;
 
-    if ( $next ) {
-        $result->{$curr} = { children => _parse_embed( $next ) };
-    }
-    else {
+    if ($next) {
+        $result->{$curr} = { children => _parse_embed($next) };
+    } else {
         if ( $curr =~ m/^(?<relation>.*)[\+|:]count/ ) {
             my $key = $+{relation} . "_count";
             $result->{$key} = { is_count => 1 };
-        }
-        elsif ( $curr =~ m/^(?<relation>.*)\+strings/ ) {
+        } elsif ( $curr =~ m/^(?<relation>.*)\+strings/ ) {
             my $key = $+{relation};
             $result->{$key} = { strings => 1 };
-        }
-        else {
+        } else {
             $result->{$curr} = {};
         }
     }
@@ -421,20 +412,21 @@ Merges the hash referenced by I<$parsed_embed> into I<$global_embed>.
 sub _merge_embed {
     my ( $structure, $embed ) = @_;
 
-    my ($root) = keys %{ $structure };
+    my ($root) = keys %{$structure};
 
-    if ( any { $root eq $_ } keys %{ $embed } ) {
+    if ( any { $root eq $_ } keys %{$embed} ) {
+
         # Recurse
         _merge_embed( $structure->{$root}, $embed->{$root} );
-    }
-    else {
+    } else {
+
         # Embed
         $embed->{$root} = $structure->{$root};
     }
 }
 
 sub _parse_prefetch {
-    my ( $key, $embed, $result_set) = @_;
+    my ( $key, $embed, $result_set ) = @_;
 
     my $pref_key = $key;
     $pref_key =~ s/_count$// if $embed->{$key}->{is_count};
@@ -444,26 +436,26 @@ sub _parse_prefetch {
     return $pref_key unless defined $embed->{$key}->{children} && defined $ko_class;
 
     my @prefetches;
-    foreach my $child (sort keys(%{$embed->{$key}->{children}})) {
-        my $parsed = _parse_prefetch($child, $embed->{$key}->{children}, $ko_class->new);
+    foreach my $child ( sort keys( %{ $embed->{$key}->{children} } ) ) {
+        my $parsed = _parse_prefetch( $child, $embed->{$key}->{children}, $ko_class->new );
         push @prefetches, $parsed if defined $parsed;
     }
 
     return $pref_key unless scalar(@prefetches);
 
-    return {$pref_key => $prefetches[0]} if scalar(@prefetches) eq 1;
+    return { $pref_key => $prefetches[0] } if scalar(@prefetches) eq 1;
 
-    return {$pref_key => \@prefetches};
+    return { $pref_key => \@prefetches };
 }
 
 sub _from_api_param {
-    my ($key, $result_set) = @_;
+    my ( $key, $result_set ) = @_;
 
-    if($key =~ /\./) {
+    if ( $key =~ /\./ ) {
 
-        my ($curr, $next) = split /\s*\.\s*/, $key, 2;
+        my ( $curr, $next ) = split /\s*\.\s*/, $key, 2;
 
-        return $curr.'.'._from_api_param($next, $result_set) if $curr eq 'me';
+        return $curr . '.' . _from_api_param( $next, $result_set ) if $curr eq 'me';
 
         my $ko_class = $result_set->prefetch_whitelist->{$curr};
 
@@ -472,10 +464,16 @@ sub _from_api_param {
 
         $result_set = $ko_class->new;
 
-        if ($next =~ /\./) {
-            return _from_api_param($next, $result_set);
+        if ( $next =~ /\./ ) {
+            return _from_api_param( $next, $result_set );
         } else {
-            return $curr.'.'.($result_set->from_api_mapping && defined $result_set->from_api_mapping->{$next} ? $result_set->from_api_mapping->{$next}:$next);
+            return
+                $curr . '.'
+                . (
+                  $result_set->from_api_mapping && defined $result_set->from_api_mapping->{$next}
+                ? $result_set->from_api_mapping->{$next}
+                : $next
+                );
         }
     } else {
         return defined $result_set->from_api_mapping->{$key} ? $result_set->from_api_mapping->{$key} : $key;
@@ -483,21 +481,21 @@ sub _from_api_param {
 }
 
 sub _parse_dbic_query {
-    my ($q_params, $result_set) = @_;
+    my ( $q_params, $result_set ) = @_;
 
-    if(reftype($q_params) && reftype($q_params) eq 'HASH') {
+    if ( reftype($q_params) && reftype($q_params) eq 'HASH' ) {
         my $parsed_hash;
-        foreach my $key (keys %{$q_params}) {
-            if($key =~ /-?(not_?)?bool/i ) {
-                $parsed_hash->{$key} = _from_api_param($q_params->{$key}, $result_set);
+        foreach my $key ( keys %{$q_params} ) {
+            if ( $key =~ /-?(not_?)?bool/i ) {
+                $parsed_hash->{$key} = _from_api_param( $q_params->{$key}, $result_set );
                 next;
             }
-            my $k = _from_api_param($key, $result_set);
-            $parsed_hash->{$k} = _parse_dbic_query($q_params->{$key}, $result_set);
+            my $k = _from_api_param( $key, $result_set );
+            $parsed_hash->{$k} = _parse_dbic_query( $q_params->{$key}, $result_set );
         }
         return $parsed_hash;
-    } elsif (reftype($q_params) && reftype($q_params) eq 'ARRAY') {
-        my @mapped = map{ _parse_dbic_query($_, $result_set) } @$q_params;
+    } elsif ( reftype($q_params) && reftype($q_params) eq 'ARRAY' ) {
+        my @mapped = map { _parse_dbic_query( $_, $result_set ) } @$q_params;
         return \@mapped;
     } else {
         return $q_params;
