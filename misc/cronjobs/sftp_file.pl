@@ -20,10 +20,10 @@ use C4::Context;
 use Net::SFTP::Foreign;
 use C4::Log qw( cronlogaction );
 use Koha::Email;
-use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
-use Carp qw( carp );
-use C4::Letters qw( GetPreparedLetter EnqueueLetter );
+use Getopt::Long   qw( GetOptions );
+use Pod::Usage     qw( pod2usage );
+use Carp           qw( carp );
+use C4::Letters    qw( GetPreparedLetter EnqueueLetter );
 use File::Basename qw( basename );
 
 =head1 NAME
@@ -106,10 +106,6 @@ B<sftp_file.pl --host test.com --user test --pass 123cne --upload_dir uploads --
 
 In this example the script will upload /tmp/test.mrc on the Koha server to the test.com remote host using the username:password of test:123cne. The file will be SFTP to the uploads directory.
 
-=head1 TO DO
-
-=back
-
 =cut
 
 # These variables can be set by command line options,
@@ -130,25 +126,25 @@ my $status_email         = undef;
 my $status_email_message = undef;
 my $sftp_status          = undef;
 
-my $command_line_options = join(" ",@ARGV);
+my $command_line_options = join( " ", @ARGV );
 
 GetOptions(
-    'help|?'         => \$help,
-    'man'            => \$man,
-    'verbose'        => \$verbose,
-    'host=s'         => \$host,
-    'user=s'         => \$user,
-    'pass=s'         => \$pass,
-    'upload_dir=s'   => \$upload_dir,
-    'port=s'         => \$port,
-    'file=s'         => \$file,
-    'email=s'        => \$email,
+    'help|?'       => \$help,
+    'man'          => \$man,
+    'verbose'      => \$verbose,
+    'host=s'       => \$host,
+    'user=s'       => \$user,
+    'pass=s'       => \$pass,
+    'upload_dir=s' => \$upload_dir,
+    'port=s'       => \$port,
+    'file=s'       => \$file,
+    'email=s'      => \$email,
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
-pod2usage( -verbose => 2 ) if ($help and $verbose);
+pod2usage( -verbose => 2 ) if ( $help and $verbose );
 pod2usage(1) if $help;
 
-cronlogaction({ info => $command_line_options });
+cronlogaction( { info => $command_line_options } );
 
 # Check we have all the SFTP details we need
 if ( !$user || !$pass || !$host || !$upload_dir ) {
@@ -164,58 +160,54 @@ my $sftp = Net::SFTP::Foreign->new(
     timeout        => 10,
     stderr_discard => 1,
 );
-$sftp->die_on_error( "Cannot ssh to $host" . $sftp->error );
+$sftp->die_on_error( "Cannot ssh to $host " . $sftp->error );
 
 # Change to remote directory
-$sftp->setcwd( $upload_dir )
-    or return warn "Cannot change remote dir : $sftp->error\n";
+$sftp->setcwd($upload_dir)
+    or $sftp->die_on_error( "Cannot change remote dir : " . $sftp->error );
 
 # If the --email parameter is defined then prepare sending an email confirming the success
 # or failure of the SFTP
-if ( $email ) {
+if ($email) {
     if ( C4::Context->preference('KohaAdminEmailAddress') ) {
         $admin_address = C4::Context->preference('KohaAdminEmailAddress');
     }
 
     if ( !Koha::Email->is_valid($email) ) {
-        return warn "The email address you defined in the --email parameter is invalid\n";
+        die "The email address you defined in the --email parameter is invalid\n";
     }
 }
 
 # Do the SFTP upload
 open my $fh, '<', $file;
-if (
-    $sftp->put(
-        $fh, basename($file)
-    )
-) {
+if ( $sftp->put( $fh, basename($file) ) ) {
+
     # Send success email
     $sftp_status = 'SUCCESS';
     close $fh;
 } else {
+
     # Send failure email
     $sftp_status = 'FAILURE';
 }
 
 # Send email confirming the success or failure of the SFTP
-if ( $email ) {
-    $status_email =  C4::Letters::GetPreparedLetter (
-        module => 'commandline',
-        letter_code => "SFTP_$sftp_status", #SFTP_SUCCESS, SFTP_FAILURE
+if ($email) {
+    $status_email = C4::Letters::GetPreparedLetter(
+        module                 => 'commandline',
+        letter_code            => "SFTP_$sftp_status",             #SFTP_SUCCESS, SFTP_FAILURE
         message_transport_type => 'email',
-        substitute => {
-            sftp_error => $sftp->error
-        }
+        substitute             => { sftp_error => $sftp->error }
     );
 
     C4::Letters::EnqueueLetter(
         {
-            letter                  => $status_email,
-            to_address              => $email,
-            from_address            => $admin_address,
-            message_transport_type  => 'email'
+            letter                 => $status_email,
+            to_address             => $email,
+            from_address           => $admin_address,
+            message_transport_type => 'email'
         }
     ) or warn "can't enqueue letter " . $status_email->{code};
 }
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
