@@ -74,8 +74,20 @@ export default {
                     }),
                 },
                 actions: {
-                    0: ["show"],
-                    "-1": ["edit", "delete"],
+                    "-1": [
+                        "edit",
+                        {
+                            delete: {
+                                text: this.$__("Delete"),
+                                icon: "fa fa-trash",
+                                should_display: row =>
+                                    (!row.baskets ||
+                                        row.baskets.length === 0) &&
+                                    (!row.subscriptions ||
+                                        row.subscriptions.length === 0),
+                            },
+                        },
+                    ],
                 },
             },
             before_route_entered: false,
@@ -121,7 +133,7 @@ export default {
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    const client = APIClient.erm;
+                    const client = APIClient.acquisition;
                     client.vendors.delete(vendor.id).then(
                         success => {
                             this.setMessage(
