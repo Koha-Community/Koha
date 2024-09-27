@@ -74,7 +74,7 @@
                     .addClass("clear_date")
                     .on("click", function(e){
                         e.preventDefault();
-                        instance.input.flatpickr().clear();
+                        instance.setDate('');
                     })
                     .addClass("fa fa-fw fa-times")
                     .attr("aria-hidden", true)
