@@ -85,10 +85,13 @@ Controller function that handles adding a new Koha::Acquisition::Bookseller obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor     = $c->req->json;
-    my $contacts   = delete $vendor->{contacts};
-    my $interfaces = delete $vendor->{interfaces};
-    my $aliases    = delete $vendor->{aliases};
+    my $vendor        = $c->req->json;
+    my $contacts      = delete $vendor->{contacts};
+    my $interfaces    = delete $vendor->{interfaces};
+    my $aliases       = delete $vendor->{aliases};
+    my $subscriptions = delete $vendor->{subscriptions};
+    my $baskets       = delete $vendor->{baskets};
+    my $contracts     = delete $vendor->{contracts};
 
     my $vendor_to_store = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 
@@ -121,14 +124,30 @@ Controller function that handles updating a Koha::Acquisition::Bookseller object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor = Koha::Acquisition::Booksellers->find( $c->param('vendor_id') );
+    my $vendor_id = $c->param('vendor_id');
+    my $vendor    = Koha::Acquisition::Booksellers->find($vendor_id);
 
     return $c->render_resource_not_found("Vendor")
         unless $vendor;
 
     return try {
-        $vendor->set_from_api( $c->req->json );
+        my $vendor_update = $c->req->json;
+        my $contacts      = delete $vendor_update->{contacts};
+        my $interfaces    = delete $vendor_update->{interfaces};
+        my $aliases       = delete $vendor_update->{aliases};
+        my $subscriptions = delete $vendor_update->{subscriptions};
+        my $baskets       = delete $vendor_update->{baskets};
+        my $contracts     = delete $vendor_update->{contracts};
+
+        $vendor->set_from_api($vendor_update);
         $vendor->store();
+
+        foreach my $contact (@$contacts) {
+            $contact->{booksellerid} = $vendor_id;
+            Koha::Acquisition::Bookseller::Contact->new($contact)->store;
+        }
+        $vendor->aliases($aliases)       if scalar($aliases) > 0;
+        $vendor->interfaces($interfaces) if scalar($interfaces) > 0;
 
         return $c->render(
             status  => 200,
