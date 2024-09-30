@@ -24,6 +24,7 @@ use C4::Biblio qw(
     LinkBibHeadingsToAuthorities
     ModBiblio
 );
+use C4::Log qw( cronlogaction );
 use Koha::Biblios;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
@@ -53,6 +54,7 @@ my $commit = 100;
 my $tagtolink;
 my $allowrelink = C4::Context->preference("LinkerRelink") // '';
 
+my $command_line_options = join(" ", @ARGV);
 my $result = GetOptions(
     'v|verbose'      => \$verbose,
     't|test'         => \$test_only,
@@ -69,6 +71,8 @@ binmode( STDOUT, ":encoding(UTF-8)" );
 if ( not $result or $want_help ) {
     usage();
 }
+
+cronlogaction( { info => $command_line_options } );
 
 my $linker_module =
   "C4::Linker::" . ( C4::Context->preference("LinkerModule") || 'Default' );
