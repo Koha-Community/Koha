@@ -7,12 +7,14 @@ use Time::HiRes qw( gettimeofday );
 
 use Koha::Script -cron;
 use C4::AuthoritiesMarc qw( GetAuthority merge );
+use C4::Log qw( cronlogaction );
 use Koha::Authority::MergeRequests;
 
 use constant RESET_HOURS => 24;
 use constant REMOVE_DAYS => 30;
 
 my ( $params );
+my $command_line_options = join(" ", @ARGV);
 GetOptions(
     'h' => \$params->{help},
     'v' => \$params->{verbose},
@@ -21,6 +23,7 @@ GetOptions(
 
 $|=1; # flushes output
 if ( $params->{batch} ) {
+    cronlogaction( { info => $command_line_options } );
     handle_batch($params);
 } else {
     pod2usage(1);

@@ -25,12 +25,14 @@ use Modern::Perl;
 use Koha::Script;
 use C4::Context;
 use C4::AuthoritiesMarc qw( DelAuthority );
+use C4::Log qw( cronlogaction );
 use Getopt::Long qw( GetOptions );
 
 use Koha::SearchEngine::Search;
 
 my @authtypes;
 my ($confirm, $test, $want_help);
+my $command_line_options = join(" ", @ARGV);
 GetOptions(
     'aut|authtypecode:s' => \@authtypes,
     'c|confirm'          => \$confirm,
@@ -42,6 +44,9 @@ if ( $want_help || !($test || $confirm) ) {
     print_usage();
     exit 0;
 }
+
+cronlogaction( { info => $command_line_options } );
+
 if ($test) {
     print "*** Testing only, authorities will not be deleted. ***\n";
 }
