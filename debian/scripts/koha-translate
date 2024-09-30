@@ -86,7 +86,7 @@ print_installed()
     ( ls -1 $KOHA_HOME/$OPAC_TMPL/bootstrap/ ; \
         ls -1 $KOHA_HOME/$OPAC_TMPL/prog/ 2> /dev/null ) | \
         sort | uniq | \
-        grep -v -e images -e itemtypeimg -x -e en -e css -e js -e less -e lib
+        grep -v -e images -e itemtypeimg -x -e en -e css -e js -e less -e lib -e sound
 }
 
 install_lang()
