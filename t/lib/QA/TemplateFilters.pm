@@ -144,6 +144,7 @@ sub process_tt_block {
         # Already escaped with a special filter
         # We could escape it but should be safe
         or $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*$}
+        or $tt_block =~ m{\s?\|\s?\$KohaTimes[^\|]*$}
         or $tt_block =~ m{\s?\|\s?\$Price[^\|]*$}
         or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*$}
         or $tt_block =~ m{\s?\|\s?\$HtmlId[^\|]*$}
