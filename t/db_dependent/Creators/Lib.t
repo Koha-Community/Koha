@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 use Graphics::Magick;
-use Test::More tests => 647;
+use Test::More tests => 653;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -903,12 +903,14 @@ my $summary1        = $record_title . " | " . ( $b_author1 ? $b_author1 : 'N/A' 
 my $itemtypes_pref  = C4::Context->preference("item-level_itypes");
 my $record_itemtype = $itemtypes_pref ? $i_itype1 : $bi_itemtype1;
 
-is( $labels->[0]->{_label_number}, 1,                '_label_number  is good' );
-is( $labels->[0]->{_summary},      $summary1,        '_summary       is good' );
-is( $labels->[0]->{_item_type},    $record_itemtype, '_item_type     is good' );
-is( $labels->[0]->{_barcode},      $i_barcode1,      '_barcode       is good' );
-is( $labels->[0]->{_item_number},  $i_itemnumber1,   '_item_number   is good' );
-is( $labels->[0]->{_label_id},     $c_label_id1,     '_label_id      is good' );
+is( $labels->[0]->{_label_number},            1,                '_label_number            is good' );
+is( $labels->[0]->{_summary}->{author},       $b_author1,       '_summary->{author}       is good' );
+is( $labels->[0]->{_summary}->{biblionumber}, $b_biblionumber1, '_summary->{biblionumber} is good' );
+is( $labels->[0]->{_summary}->{title},        $b_title1,        '_summary->{title}        is good' );
+is( $labels->[0]->{_item_type},               $record_itemtype, '_item_type               is good' );
+is( $labels->[0]->{_barcode},                 $i_barcode1,      '_barcode                 is good' );
+is( $labels->[0]->{_item_number},             $i_itemnumber1,   '_item_number             is good' );
+is( $labels->[0]->{_label_id},                $c_label_id1,     '_label_id                is good' );
 
 # record without author
 @items = [
@@ -931,12 +933,14 @@ my $summary2 = $record_title . " | " . ( $b_author2 ? $b_author2 : 'N/A' );
 $itemtypes_pref = C4::Context->preference("item-level_itypes");
 $record_itemtype = $itemtypes_pref ? $i_itype2 : $bi_itemtype2;
 
-is( $labels->[0]->{_label_number}, 1,                '_label_number  is good' );
-is( $labels->[0]->{_summary},      $summary2,        '_summary       is good' );
-is( $labels->[0]->{_item_type},    $record_itemtype, '_item_type     is good' );
-is( $labels->[0]->{_barcode},      $i_barcode2,      '_barcode       is good' );
-is( $labels->[0]->{_item_number},  $i_itemnumber2,   '_item_number   is good' );
-is( $labels->[0]->{_label_id},     $c_label_id2,     '_label_id      is good' );
+is( $labels->[0]->{_label_number},            1,                '_label_number            is good' );
+is( $labels->[0]->{_summary}->{author},       $b_author2,       '_summary->{author}       is good' );
+is( $labels->[0]->{_summary}->{biblionumber}, $b_biblionumber2, '_summary->{biblionumber} is good' );
+is( $labels->[0]->{_summary}->{title},        $b_title2,        '_summary->{title}        is good' );
+is( $labels->[0]->{_item_type},               $record_itemtype, '_item_type               is good' );
+is( $labels->[0]->{_barcode},                 $i_barcode2,      '_barcode                 is good' );
+is( $labels->[0]->{_item_number},             $i_itemnumber2,   '_item_number             is good' );
+is( $labels->[0]->{_label_id},                $c_label_id2,     '_label_id                is good' );
 
 #Mocking C4::Context->preference("item-level_itypes")
 {
@@ -963,12 +967,15 @@ is( $labels->[0]->{_label_id},     $c_label_id2,     '_label_id      is good' );
     my $itemtypes_pref  = C4::Context->preference("item-level_itypes");
     my $record_itemtype = $itemtypes_pref ? $i_itype1 : $bi_itemtype1;
 
-    is( $labels->[0]->{_label_number}, 1,                '_label_number  is good' );
-    is( $labels->[0]->{_summary},      $summary1,        '_summary       is good' );
-    is( $labels->[0]->{_item_type},    $record_itemtype, '_item_type     is good' );
-    is( $labels->[0]->{_barcode},      $i_barcode1,      '_barcode       is good' );
-    is( $labels->[0]->{_item_number},  $i_itemnumber1,   '_item_number   is good' );
-    is( $labels->[0]->{_label_id},     $c_label_id1,     '_label_id      is good' );
+    is( $labels->[0]->{_label_number},            1,                '_label_number            is good' );
+    is( $labels->[0]->{_summary}->{author},       "Author 1",       '_summary->{author}       is good' );
+    is( $labels->[0]->{_summary}->{biblionumber}, $b_biblionumber1, '_summary->{biblionumber} is good' );
+    is( $labels->[0]->{_summary}->{title},        "Title 1",        '_summary->{title}        is good' );
+    is( $labels->[0]->{_item_type},               $record_itemtype, '_item_type               is good' );
+    is( $labels->[0]->{_barcode},                 $i_barcode1,      '_barcode                 is good' );
+    is( $labels->[0]->{_item_number},             $i_itemnumber1,   '_item_number             is good' );
+    is( $labels->[0]->{_label_id},                $c_label_id1,     '_label_id                is good' );
+
 }
 
 # ---------- Testing get_card_summary ---------------------
