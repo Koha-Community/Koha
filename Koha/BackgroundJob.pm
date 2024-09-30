@@ -63,8 +63,10 @@ Connect to the message broker using default guest/guest credential
 
 sub connect {
     my ( $self );
+
     my $notification_method = C4::Context->preference('JobsNotificationMethod') // 'STOMP';
-    return undef
+
+    return
         unless $notification_method eq 'STOMP';
 
     my $hostname = $ENV{KOHA_STOMP_HOSTNAME} // 'localhost';
