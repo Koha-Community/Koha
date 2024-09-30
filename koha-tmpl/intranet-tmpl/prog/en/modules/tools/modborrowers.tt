@@ -426,7 +426,8 @@
             [% IF borrowers %]
                 let patron_table = KohaTable("borrowerst", {
                     "order": [[ 1, "asc" ]],
-                    "autoWidth": false,
+                    "autoWidth": true,
+                    "scrollX": true,
                 }, table_settings);
 
                 $("#selectallbutton").click(function() {
