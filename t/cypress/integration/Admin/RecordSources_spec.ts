@@ -31,7 +31,6 @@ describe("Record sources CRUD tests", () => {
 
     it("Add", () => {
         cy.visit("/cgi-bin/koha/admin/admin-home.pl");
-        cy.wait(500);
         cy.contains("Record sources").click();
         cy.contains("New record source").click();
         cy.get("#name").type("Poop");
@@ -58,7 +57,6 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources");
-        cy.wait(500);
         cy.get("#record_sources_list").contains(
             "There are no record sources defined"
         );
@@ -91,7 +89,6 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources");
-        cy.wait(500);
         cy.get("#record_sources_list").contains("Showing 1 to 3 of 3 entries");
 
         cy.get(".dataTable > tbody > tr:first-child").within(() => {
@@ -154,7 +151,6 @@ describe("Record sources CRUD tests", () => {
                 can_be_edited: true,
             },
         });
-        cy.wait(500);
         cy.get("#record_sources_list table tbody tr:first")
             .contains("Edit")
             .click();
@@ -170,7 +166,6 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources/edit/1");
-        cy.wait(500);
         cy.get("#name").should("have.value", "Source 1");
         cy.get("#can_be_edited").should("not.be.checked");
 
@@ -215,7 +210,6 @@ describe("Record sources CRUD tests", () => {
             },
         });
         cy.visit("/cgi-bin/koha/admin/record_sources");
-        cy.wait(500);
         cy.intercept("DELETE", "/api/v1/record_sources/2", {
             statusCode: 204,
             body: {},
