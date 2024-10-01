@@ -93,6 +93,20 @@ sub account_lines {
     return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
 }
 
+=head3 overdue_fines
+
+  my $fines = $checkout->overdue_fines;
+
+Return the account lines for just the overdue fines
+
+=cut
+
+sub overdue_fines {
+    my ( $self ) = @_;
+    my $account_lines_rs = $self->_result->account_lines->search( { debit_type_code => 'OVERDUE' } );
+    return Koha::Account::Lines->_new_from_dbic( $account_lines_rs );
+}
+
 =head3 library
 
 my $library = $checkout->library;
