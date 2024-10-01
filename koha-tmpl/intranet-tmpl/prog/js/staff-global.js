@@ -381,7 +381,10 @@ $(document).ready(function () {
         $("#setlibrary_panel").removeClass("setlibrary_panel_open").html("").hide();
     });
 
-    $('[data-bs-toggle="tooltip"]').tooltip();
+    if ( $('[data-bs-toggle="tooltip"]').length ) {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    }
+
 });
 
 function removeLastBorrower() {
