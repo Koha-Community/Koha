@@ -689,89 +689,62 @@ foreach my $code ( keys %$messages ) {
     if ( $code eq 'BadBarcode' ) {
         $err{badbarcode} = 1;
         $err{msg}        = $messages->{'BadBarcode'};
-    }
-    elsif ( $code eq 'NotIssued' ) {
+    } elsif ( $code eq 'NotIssued' ) {
         $err{notissued} = 1;
-        $err{msg} = '';
-    }
-    elsif ( $code eq 'LocalUse' ) {
+        $err{msg}       = '';
+    } elsif ( $code eq 'LocalUse' ) {
         $err{localuse} = 1;
-    }
-    elsif ( $code eq 'WasLost' ) {
+    } elsif ( $code eq 'WasLost' ) {
         $err{waslost} = 1;
-    }
-    elsif ( $code eq 'LostItemFeeRefunded' ) {
+    } elsif ( $code eq 'LostItemFeeRefunded' ) {
         $template->param( LostItemFeeRefunded => 1 );
-    }
-    elsif ( $code eq 'LostItemPaymentNotRefunded' ) {
+    } elsif ( $code eq 'LostItemPaymentNotRefunded' ) {
         $template->param( LostItemPaymentNotRefunded => 1 );
-    }
-    elsif ( $code eq 'LostItemFeeCharged' ) {
+    } elsif ( $code eq 'LostItemFeeCharged' ) {
         $template->param( LostItemFeeCharged => 1 );
-    }
-    elsif ( $code eq 'LostItemFeeRestored' ) {
+    } elsif ( $code eq 'LostItemFeeRestored' ) {
         $template->param( LostItemFeeRestored => 1 );
-    }
-    elsif ( $code eq 'ProcessingFeeRefunded' ) {
+    } elsif ( $code eq 'ProcessingFeeRefunded' ) {
         $template->param( ProcessingFeeRefunded => 1 );
-    }
-    elsif ( $code eq 'ResFound' ) {
+    } elsif ( $code eq 'ResFound' ) {
         ;    # FIXME... anything to do here?
-    }
-    elsif ( $code eq 'WasReturned' ) {
+    } elsif ( $code eq 'WasReturned' ) {
         ;    # FIXME... anything to do here?
-    }
-    elsif ( $code eq 'WasTransfered' ) {
+    } elsif ( $code eq 'WasTransfered' ) {
         ;    # FIXME... anything to do here?
-    }
-    elsif ( $code eq 'TransferTo' ) {
+    } elsif ( $code eq 'TransferTo' ) {
         ;    # Handled above, along with WasTransfered
-    }
-    elsif ( $code eq 'withdrawn' ) {
+    } elsif ( $code eq 'withdrawn' ) {
         $err{withdrawn} = 1;
-    }
-    elsif ( $code eq 'WrongTransfer' ) {
+    } elsif ( $code eq 'WrongTransfer' ) {
         ;    # FIXME... anything to do here?
-    }
-    elsif ( $code eq 'WrongTransferItem' ) {
+    } elsif ( $code eq 'WrongTransferItem' ) {
         ;    # FIXME... anything to do here?
-    }
-    elsif ( $code eq 'NeedsTransfer' ) {
-    }
-    elsif ( $code eq 'TransferTrigger' ) {
+    } elsif ( $code eq 'NeedsTransfer' ) {
+    } elsif ( $code eq 'TransferTrigger' ) {
         ;    # Handled alongside NeedsTransfer
-    }
-    elsif ( $code eq 'TransferArrived' ) {
+    } elsif ( $code eq 'TransferArrived' ) {
         $err{transferred} = $messages->{'TransferArrived'};
-    }
-    elsif ( $code eq 'Wrongbranch' ) {
-    }
-    elsif ( $code eq 'Debarred' ) {
+    } elsif ( $code eq 'Wrongbranch' ) {
+    } elsif ( $code eq 'Debarred' ) {
         $err{debarred}            = $messages->{'Debarred'};
         $err{debarcardnumber}     = $borrower->{cardnumber};
         $err{debarborrowernumber} = $borrower->{borrowernumber};
         $err{debarname}           = "$borrower->{firstname} $borrower->{surname}";
-    }
-    elsif ( $code eq 'PrevDebarred' ) {
-        $err{prevdebarred}        = $messages->{'PrevDebarred'};
-    }
-    elsif ( $code eq 'ForeverDebarred' ) {
-        $err{foreverdebarred}        = $messages->{'ForeverDebarred'};
-    }
-    elsif ( $code eq 'ItemLocationUpdated' ) {
+    } elsif ( $code eq 'PrevDebarred' ) {
+        $err{prevdebarred} = $messages->{'PrevDebarred'};
+    } elsif ( $code eq 'ForeverDebarred' ) {
+        $err{foreverdebarred} = $messages->{'ForeverDebarred'};
+    } elsif ( $code eq 'ItemLocationUpdated' ) {
         $err{ItemLocationUpdated} = $messages->{ItemLocationUpdated};
-    }
-    elsif ( $code eq 'NotForLoanStatusUpdated' ) {
+    } elsif ( $code eq 'NotForLoanStatusUpdated' ) {
         $err{NotForLoanStatusUpdated} = $messages->{NotForLoanStatusUpdated};
-    }
-    elsif ( $code eq 'DataCorrupted' ) {
+    } elsif ( $code eq 'DataCorrupted' ) {
         $err{data_corrupted} = 1;
-    }
-    elsif ( $code eq 'ReturnClaims' ) {
+    } elsif ( $code eq 'ReturnClaims' ) {
         $template->param( ReturnClaims => $messages->{ReturnClaims} );
-    }
-      elsif ( $code eq 'ClaimAutoResolved' ) {
-          $template->param( ClaimAutoResolved => $messages->{ClaimAutoResolved} );
+    } elsif ( $code eq 'ClaimAutoResolved' ) {
+        $template->param( ClaimAutoResolved => $messages->{ClaimAutoResolved} );
     } elsif ( $code eq 'RecallFound' ) {
         ;
     } elsif ( $code eq 'RecallNeedsTransfer' ) {
@@ -782,7 +755,7 @@ foreach my $code ( keys %$messages ) {
         $template->param( InBundle => $messages->{InBundle} );
     } else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
-        # This forces the issue of staying in sync w/ Circulation.pm
+                                           # This forces the issue of staying in sync w/ Circulation.pm
     }
     if (%err) {
         push( @errmsgloop, \%err );
