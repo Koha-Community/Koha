@@ -149,6 +149,14 @@
                 [% END %]
             </li>
             <li>
+                <label for="p_cs_precedes">Currency symbol precedes value: </label>
+                [% IF currency.p_cs_precedes %]
+                    <input type="checkbox" id="p_cs_precedes" name="p_cs_precedes" value="1" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="p_cs_precedes" name="p_cs_precedes" value="1" />
+                [% END %]
+            </li>
+            <li>
                 <label for="active">Active: </label>
                 [% IF currency.active %]
                 <input type="checkbox" id="active" name="active" value="1" checked="checked" />

@@ -127,7 +127,8 @@ sub _format_params {
     }
 
 
-    $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
+    $format_params{p_cs_precedes} =
+        defined $p_cs_precedes ? $p_cs_precedes : ( $currency and $currency->p_cs_precedes ) ? 1 : 0;
     $format_params{p_sep_by_space} = ( $currency and $currency->p_sep_by_space ) ? 1 : 0;
 
     return \%format_params;
