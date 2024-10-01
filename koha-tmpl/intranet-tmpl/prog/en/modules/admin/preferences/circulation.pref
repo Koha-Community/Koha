@@ -433,23 +433,6 @@ Circulation:
                   0: "don't ask"
             - "for confirmation."
         -
-            - Set the default patron categories to receive overdues to
-            - pref: DefaultLongOverduePatronCategories
-              choices: patron-categories
-              class: multiple
-            - <br>Leave this field empty if you want to process overdues for all patron categories.
-            - <br>(Used when the longoverdue.pl script is called without the --category parameter)
-            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipPatronCategories is empty.
-            - <br>
-            - Set the default patron categories to <i>not</i> receive overdues to
-            - pref: DefaultLongOverdueSkipPatronCategories
-              choices: patron-categories
-              class: multiple
-            - <br>Leave this field empty if you want to process overdues for all patron categories.
-            - <br>(Used when the longoverdue.pl script is called without the --skip-category parameter)
-            - <br>WARNING - This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
-        -
             - "When checking out an item, "
             - pref: RecordStaffUserOnCheckout
               choices:
@@ -583,6 +566,23 @@ Circulation:
               source: LOST
             - <br>Leave this field empty if you don't want to charge the patron for lost items.
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+        -
+            - Set the default patron categories to receive overdues to
+            - pref: DefaultLongOverduePatronCategories
+              choices: patron-categories
+              class: multiple
+            - <br>Leave this field empty if you want to process overdues for all patron categories.
+            - <br>(Used when the longoverdue.pl script is called without the --category parameter)
+            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipPatronCategories is empty.
+            - <br>
+            - Set the default patron categories to <i>not</i> receive overdues to
+            - pref: DefaultLongOverdueSkipPatronCategories
+              choices: patron-categories
+              class: multiple
+            - <br>Leave this field empty if you want to process overdues for all patron categories.
+            - <br>(Used when the longoverdue.pl script is called without the --skip-category parameter)
+            - <br>WARNING - This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
