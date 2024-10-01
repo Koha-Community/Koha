@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 36;
+use Test::More tests => 37;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -151,4 +151,31 @@ subtest 'Changes for format' => sub { # See also bug 18736
     like( Koha::Number::Price->new( 2**53/100 )->format,
         qr/\d\.\d{2}$/, 'This price still seems to be formatted' );
         # Note that the comparison with MAX_INT is already subject to rounding
+};
+
+subtest 'Changes for default currency symbol position' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'CurrencyFormat', 'FR' );
+    $currency = Koha::Acquisition::Currency->new(
+        {
+            currency       => 'PLN',
+            symbol         => 'zł',
+            rate           => 1,
+            active         => 1,
+            p_sep_by_space => 1,
+            p_cs_precedes  => 1,
+        }
+    );
+    is(
+        Koha::Number::Price->new('123456.78')->format( { with_symbol => 1 } ),
+        'zł 123 456,78',
+        'PLN: format 123 456,78 with symbol before'
+    );
+    $currency->p_cs_precedes(0);
+    is(
+        Koha::Number::Price->new('123456.78')->format( { with_symbol => 1 } ),
+        '123 456,78 zł',
+        'PLN: format 123 456,78 with symbol after'
+    );
 };
