@@ -51,6 +51,7 @@
                 [% WRAPPER tab_item tabname= "tabrecord${record.recordid}" %]
                     [% record.recordid | html %]
                     [% IF record.reference %]<span>(ref)</span>[% END %]
+                    <span>([% record.frameworktext | html %])</span>
                 [% END %]
             [% END %]
         [% END # /WRAPPER tabs_nav %]
@@ -69,7 +70,7 @@
 [% END %]
 
 [% BLOCK mergetarget %]
-    <h2>Destination record</h2>
+    <h2>Destination record ([% authtypetext | html %])</h2>
     <div id="result" class="page-section">
         <ul id="resultul"></ul>
     </div> <!-- // #result -->

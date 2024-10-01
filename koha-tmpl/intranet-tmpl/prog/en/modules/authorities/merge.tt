@@ -102,7 +102,7 @@ div#result { margin-top: 1em; }
 [% PROCESS mergesource sourcerecords=records %]
 </div>
         <div class="col-sm-6">
-[% PROCESS mergetarget %]
+[% PROCESS mergetarget authtypetext=frameworktext %]
 </div>
 </div>
 
@@ -110,6 +110,10 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="recordid2" value="[% recordid2 | html %]" />
 <input type="hidden" name="mergereference" value="[% mergereference | html %]" />
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
+
+[% IF multipleauthtypes %]
+    <div class="dialog alert multiple-auth-types">Multiple authority types are used. There may be data loss when merging.</div>
+[% END %]
 
 <fieldset class="action"><input type="submit" name="merge" class="btn btn-primary" value="Merge" /></fieldset>
 </form>

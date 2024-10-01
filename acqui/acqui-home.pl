@@ -50,10 +50,10 @@ my $status           = $query->param('status') || "ASKED";
 # Get current branch count and total viewable count, if they don't match then pass
 # both to template
 if( C4::Context->only_my_library ){
-    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'} })->count();
+    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'}, archived => 0 })->count();
     $template->param( suggestions_count => $local_pendingsuggestions_count );
 } else {
-    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED" });
+    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED", archived => 0 });
     my $local_pendingsuggestions_count = $pendingsuggestions->search({ 'me.branchcode' => C4::Context->userenv()->{'branch'} })->count();
     my $pendingsuggestions_count = $pendingsuggestions->count();
     $template->param(

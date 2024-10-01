@@ -156,30 +156,39 @@ else {
                 ($recordObj1, $recordObj2) = ($recordObj2, $recordObj1);
             }
 
+            # Getting frameworktext
+            my $frameworktext1           = Koha::Authority::Types->find( $recordObj1->authtypecode );
+            my $frameworktext2           = Koha::Authority::Types->find( $recordObj2->authtypecode );
+            my $frameworktextdestination = Koha::Authority::Types->find($framework);
+
             # Creating a loop for display
 
             my @records = (
                 {
-                    recordid => $mergereference,
-                    record => $recordObj1->record,
+                    recordid      => $mergereference,
+                    record        => $recordObj1->record,
                     frameworkcode => $recordObj1->authtypecode,
-                    display => $recordObj1->createMergeHash($tagslib),
-                    reference => 1,
+                    frameworktext => $frameworktext1->authtypetext,
+                    display       => $recordObj1->createMergeHash($tagslib),
+                    reference     => 1,
                 },
                 {
-                    recordid => $notreference,
-                    record => $recordObj2->record,
+                    recordid      => $notreference,
+                    record        => $recordObj2->record,
                     frameworkcode => $recordObj2->authtypecode,
-                    display => $recordObj2->createMergeHash($tagslib),
+                    frameworktext => $frameworktext2->authtypetext,
+                    display       => $recordObj2->createMergeHash($tagslib),
                 },
             );
 
             # Parameters
             $template->param(
-                recordid1        => $mergereference,
-                recordid2        => $notreference,
-                records        => \@records,
-                framework      => $framework,
+                recordid1         => $mergereference,
+                recordid2         => $notreference,
+                records           => \@records,
+                framework         => $framework,
+                frameworktext     => $frameworktextdestination->authtypetext,
+                multipleauthtypes => ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) ? 1 : 0,
             );
         }
         else {
@@ -194,10 +203,14 @@ else {
             );
             if ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) {
                 my $authority_types = Koha::Authority::Types->search( { authtypecode => { '!=' => '' } }, { order_by => ['authtypetext'] } );
+                my $frameworktext1 = Koha::Authority::Types->find( $recordObj1->authtypecode );
+                my $frameworktext2 = Koha::Authority::Types->find( $recordObj2->authtypecode );
                 $template->param(
                     frameworkselect => $authority_types->unblessed,
                     frameworkcode1  => $recordObj1->authtypecode,
                     frameworkcode2  => $recordObj2->authtypecode,
+                    frameworklabel1 => $frameworktext1->authtypetext,
+                    frameworklabel2 => $frameworktext2->authtypetext,
                 );
             }
         }
