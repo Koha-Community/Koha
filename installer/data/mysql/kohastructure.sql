@@ -2538,6 +2538,7 @@ CREATE TABLE `currency` (
   `active` tinyint(1) DEFAULT NULL,
   `archived` tinyint(1) DEFAULT 0,
   `p_sep_by_space` tinyint(1) DEFAULT 0,
+  `p_cs_precedes` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
