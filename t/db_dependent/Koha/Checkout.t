@@ -19,13 +19,68 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use t::lib::TestBuilder;
 
 use Koha::Database;
 
 my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;
+
+subtest 'overdue_fines' => sub {
+    plan tests => 4;
+
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+        }
+    );
+
+    my $overdueline = Koha::Account::Line->new(
+        {
+            issue_id          => $checkout->id,
+            borrowernumber    => $checkout->borrowernumber,
+            itemnumber        => $checkout->itemnumber,
+            branchcode        => $checkout->branchcode,
+            date              => \'NOW()',
+            debit_type_code   => 'OVERDUE',
+            status            => 'UNRETURNED',
+            interface         => 'cli',
+            amount            => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            issue_id          => $checkout->id,
+            borrowernumber    => $checkout->borrowernumber,
+            itemnumber        => $checkout->itemnumber,
+            branchcode        => $checkout->branchcode,
+            date              => \'NOW()',
+            debit_type_code   => 'LOST',
+            status            => '',
+            interface         => 'cli',
+            amount            => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    my $overdue_fines = $checkout->overdue_fines;
+    is( ref($overdue_fines), 'Koha::Account::Lines',
+        'Koha::Checkout->overdue_fines should return a Koha::Account::Lines' );
+    is( $overdue_fines->count, 1, "Koha::Checkout->overdue_fines returns only overdue fines");
+
+    my $overdue = $overdue_fines->next;
+    is( ref($overdue), 'Koha::Account::Line',
+        'next returns a Koha::Account::Line' );
+
+    is(
+        $overdueline->id,
+        $overdue->id,
+        'Koha::Checkout->overdue_fines should return the correct overdue_fines'
+    );
+};
 
 subtest 'library() tests' => sub {
 
