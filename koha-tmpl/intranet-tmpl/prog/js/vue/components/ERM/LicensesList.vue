@@ -227,7 +227,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return row.vendor_id != undefined
-                            ? '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=' +
+                            ? '<a href="/cgi-bin/koha/vendors/' +
                                   row.vendor_id +
                                   '">' +
                                   escape_str(row.vendor.name) +

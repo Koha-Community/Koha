@@ -58,7 +58,7 @@
                     <tr>
                         <td>[% subscription.biblio.biblioitem.issn | html %]</td>
                         <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">[% subscription.biblio.title | html %] (#[% subscription.subscriptionid | html %])</a></td>
-                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id | uri %]">[% subscription.vendor.name | html %]</a></td>
+                        <td><a href="/cgi-bin/koha/vendors/[% subscription.vendor.id | uri %]">[% subscription.vendor.name | html %]</a></td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => subscription.location ) | html %]</td>
                         <td>[% Branches.GetName(subscription.branchcode) | html %]</td>
                         <td>[% ItemTypes.GetDescription( subscription.itemtype ) | html %]</td>

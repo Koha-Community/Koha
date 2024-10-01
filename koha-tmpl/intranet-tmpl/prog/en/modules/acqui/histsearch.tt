@@ -131,7 +131,7 @@
                                             <br />[% order.author | html %] <br />
                                             [% order.isbn | html %]
                                         </td>
-                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
+                                        <td><a href="/cgi-bin/koha/vendors/[% order.id | uri %]">[% order.name | html %]</a></td>
                                         <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
                                         <td data-order="[% order.datereceived | html %]"> [% order.datereceived | $KohaDates %] </td>
                                         <td>[% order.quantityreceived | html %]</td>

@@ -33,7 +33,7 @@
                         <label>{{ $__("Vendor") }}:</label>
                         <span v-if="license.vendor_id">
                             <a
-                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${license.vendor_id}`"
+                                :href="`/cgi-bin/koha/vendors/${license.vendor_id}`"
                             >
                                 {{ license.vendor.name }}
                             </a>

@@ -110,7 +110,7 @@
                             <ol>
                                 <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
                                 <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
-                                <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
+                                <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/vendors/[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
                                 <li>
                                     <span class="label">Bibliographic record:</span>
                                     [%- INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 1 -%] <em>([% subscription.biblionumber | html %])</em>

@@ -31,7 +31,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
+            <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a>
         [% END %]
         [% IF ( add_form ) %]
             [% IF ( basketno ) %]
@@ -156,7 +156,7 @@
                 [% IF ( basketno ) %]
                     <a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Cancel</a>
                 [% ELSE %]
-                    <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a>
+                    <a class="cancel" href="/cgi-bin/koha/vendors/[% booksellerid | html %]">Cancel</a>
                 [% END %]
             </fieldset>
         </form>

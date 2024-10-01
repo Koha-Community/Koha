@@ -600,7 +600,7 @@
                                     [% SET vendor = basket.bookseller %]
                                     <tr>
                                         <td>
-                                            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
+                                            <a href="/cgi-bin/koha/vendors/[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
                                         </td>
                                         <td>
                                             [% IF order.invoiceid %]

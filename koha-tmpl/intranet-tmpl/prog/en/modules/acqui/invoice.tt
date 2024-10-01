@@ -55,7 +55,7 @@
         </div>
     [% END %]
 
-    <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
+    <p>Vendor: <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% suppliername | html %]</a></p>
 
     <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
         [% INCLUDE 'csrf-token.inc' %]

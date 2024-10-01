@@ -39,7 +39,7 @@
         [% END %]
         [% UNLESS blocking_error %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+                <a href="/cgi-bin/koha/vendors/[% vendor.id | uri %]">[% vendor.name | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item %]
                 <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketno | html %]</a>
@@ -130,7 +130,7 @@
                 <br />[% order.author | html %] <br />
                 [% order.isbn | html %]
             </td>
-            <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
+            <td><a href="/cgi-bin/koha/vendors/[% order.id | uri %]">[% order.name | html %]</a></td>
             <td data-order="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</td>
             <td data-order="[% order.datereceived | html %]"> [% order.datereceived | $KohaDates %] </td>
             <td>[% order.quantityreceived | html %]</td>

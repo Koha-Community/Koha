@@ -174,7 +174,7 @@
         [% IF ( enter ) %]
             [% IF ( booksellerid ) %]
                 [% WRAPPER breadcrumb_item %]
-                    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a>
+                    <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% name | html %]</a>
                 [% END %]
                 [% WRAPPER breadcrumb_item bc_active= 1 %]
                     [% tx("Modify vendor '{vendor}'", { vendor = name }) | html %]
@@ -210,7 +210,7 @@
             <div id="toolbar" class="btn-toolbar sticky">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
                 [% IF ( booksellerid ) %]
-                    [% SET a_href = '/cgi-bin/koha/acqui/supplier.pl?booksellerid=' _ booksellerid %]
+                    <a class="btn btn-default cancel" href="/cgi-bin/koha/vendors/[% booksellerid | html %]"> </a>
                 [% ELSE %]
                     [% SET a_href = '/cgi-bin/koha/acqui/acqui-home.pl' %]
                 [% END %]

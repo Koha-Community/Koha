@@ -20,7 +20,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id | uri %]">[% basket.bookseller.name | html %]</a>
+            <a href="/cgi-bin/koha/vendors/[% basket.bookseller.id | uri %]">[% basket.bookseller.name | html %]</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
             <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketname | html %] ([% basket.basketno | html %]) for [% basket.bookseller.name | html %]</a>

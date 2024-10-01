@@ -59,7 +59,7 @@
                     </td>
                     <td class="cell"> [% order.ordernumber | html %] </td>
                     <td class="cell">
-                        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
+                        <a href="/cgi-bin/koha/vendors/[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
                     </td>
                     <td class="cell">
                         <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>

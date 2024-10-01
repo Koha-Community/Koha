@@ -12,13 +12,13 @@
                     <li><a class="dropdown-item" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid | uri %]">Contract</a></li>
                 [% END %]
                 [% IF ( CAN_user_acquisition_vendors_manage ) %]
-                    <li><a class="dropdown-item" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">Vendor</a></li>
+                    <li><a class="dropdown-item" href="/cgi-bin/koha/vendors/add">Vendor</a></li>
                 [% END %]
             </ul>
         </div>
         [% IF ( CAN_user_acquisition_vendors_manage ) %]
             <div class="btn-group">
-                <a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&amp;op=enter"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor</a>
+                <a class="btn btn-default" id="editsupplier" href="/cgi-bin/koha/vendors/[% booksellerid | html %]&amp;op=enter"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit vendor</a>
             </div>
             [% UNLESS ( basketcount OR subscriptioncount ) %]
                 <div class="btn-group">

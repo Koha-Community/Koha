@@ -38,7 +38,7 @@
 
 [% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
     <h1>Files for invoice: [% invoicenumber | html %]</h1>
-    <p><strong>Vendor: </strong><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
+    <p><strong>Vendor: </strong><a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% suppliername | html %]</a></p>
     <br />
     [% IF errors %]
         <div class="alert alert-warning">

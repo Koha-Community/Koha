@@ -39,7 +39,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+            <a href="/cgi-bin/koha/vendors/[% vendor.id | uri %]">[% vendor.name | html %]</a>
         [% END %]
         [% IF op == 'list' %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]

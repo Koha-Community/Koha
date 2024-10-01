@@ -140,9 +140,9 @@
                         "render": function(data, type, row, meta) {
                             let link;
                             if ( row.vendor ) {
-                               link = '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid='+row.vendor_id+'">'+row.vendor.name+'</a>';
+                               link = '<a href="/cgi-bin/koha/vendors/'+row.vendor_id+'">'+row.vendor.name+'</a>';
                             } else {
-                               link = '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid='+row.vendor_id+'">'+row.vendor_id+'</a>';
+                               link = '<a href="/cgi-bin/koha/vendors/'+row.vendor_id+'">'+row.vendor_id+'</a>';
                             }
                             return link;
                         }

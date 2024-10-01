@@ -86,7 +86,7 @@
                                             [% END %]
                                             <td><input type="checkbox" class="select-invoice" value="[% invoice.invoiceid | html %]" /></td>
                                             <td><a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoice.invoiceid | uri %]">[% invoice.invoicenumber | html %]</a></td>
-                                            <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% invoice.booksellerid | uri %]">[% invoice.suppliername | html %]</a></td>
+                                            <td><a href="/cgi-bin/koha/vendors/[% invoice.booksellerid | uri %]">[% invoice.suppliername | html %]</a></td>
                                             <td data-order="[% invoice.shipmentdate | html %]"> [% invoice.shipmentdate | $KohaDates %] </td>
                                             <td data-order="[% invoice.billingdate | html %]"> [% invoice.billingdate | $KohaDates %] </td>
                                             <td>[% invoice.receivedbiblios | html %]</td>

@@ -30,7 +30,7 @@
         [% END %]
         [% IF ( booksellername ) %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
+                <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a>
             [% END %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
                 <span>Uncertain prices for vendor [% booksellername | html %]</span>
@@ -51,7 +51,7 @@
         <meta http-equiv="Refresh" content="[% metacontent | html %]" />
     [% ELSE %]
         [% IF ( booksellername ) %]
-            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
+            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
 
             <div class="page-section">
                 <h2>Contact information</h2>

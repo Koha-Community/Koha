@@ -35,7 +35,7 @@
                         <label>{{ $__("Vendor") }}:</label>
                         <span v-if="agreement.vendor_id">
                             <a
-                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${agreement.vendor_id}`"
+                                :href="`/cgi-bin/koha/vendors/${agreement.vendor_id}`"
                             >
                                 {{ agreement.vendor.name }}
                             </a>

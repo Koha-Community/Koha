@@ -51,7 +51,7 @@
             <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
+            <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             [% UNLESS ( basketno ) %]
@@ -282,8 +282,8 @@
                         </div>
                         <a href="booksellers.pl">Go back to vendor page</a>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a>
-                        <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
+                        <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a>
+                        <a href="/cgi-bin/koha/vendors" class="btn btn-default btn-sm">Show all active baskets</a>
                     [% END # /IF (cannotdelbiblios) %]
                 [% ELSE # IF ( delete_confirmed ) %]
 
@@ -740,7 +740,7 @@
                                                     <p>
                                                         Transferred from basket:
                                                         <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
-                                                        (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | uri %]">[% bookseller.name | html %]</a>) on
+                                                        (<a href="/cgi-bin/koha/vendors/[% bookseller.id | uri %]">[% bookseller.name | html %]</a>) on
                                                         <span title="[% timestamp | $KohaDates with_hours = 1 %]"> [% timestamp | $KohaDates %] </span>
                                                     </p>
                                                 [% END %]
@@ -914,7 +914,7 @@
                                                     <p
                                                         >Transferred to basket:
                                                         <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
-                                                        (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | uri %]">[% bookseller.name | html %]</a>) on
+                                                        (<a href="/cgi-bin/koha/vendors/[% bookseller.id | uri %]">[% bookseller.name | html %]</a>) on
                                                         <span title="[% timestamp | $KohaDates with_hours = 1 %]"> [% timestamp | $KohaDates %] </span>
                                                     </p>
                                                 [% END %]
