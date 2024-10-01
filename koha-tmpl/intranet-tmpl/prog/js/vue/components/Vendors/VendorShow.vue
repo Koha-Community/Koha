@@ -2,12 +2,12 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="vendors_show">
         <Toolbar>
-            <ToolbarButton
+            <ButtonLink
                 :to="{ name: 'VendorFormAdd' }"
                 icon="plus"
                 :title="$__('New vendor')"
             />
-            <ToolbarButton
+            <ButtonLink
                 :to="{
                     name: 'VendorFormAddEdit',
                     params: { vendor_id: vendor.id },
@@ -22,6 +22,7 @@
                 }"
                 icon="plus"
                 :title="$__('Receive shipments')"
+                callback="redirect"
             />
         </Toolbar>
         <h1>
@@ -53,7 +54,6 @@
 
 <script>
 import Toolbar from "../Toolbar.vue";
-import ToolbarButton from "../ToolbarButton.vue";
 import { inject } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import ToolbarButton from "../ToolbarButton.vue";

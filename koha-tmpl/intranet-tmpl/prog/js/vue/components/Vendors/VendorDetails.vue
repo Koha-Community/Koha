@@ -51,6 +51,7 @@
                     }"
                     class=""
                     :title="vendor.url"
+                    callback="redirect"
                 />
             </li>
             <li v-if="vendor.accountnumber">

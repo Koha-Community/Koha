@@ -19,6 +19,7 @@
                     }"
                     class=""
                     :title="vi.uri"
+                    callback="redirect"
                 />
             </li>
             <li v-if="vi.login">
