@@ -839,7 +839,7 @@ If you have registered a password with the library, and you have a renewal avail
 
 The following item(s) is/are currently overdue:
 
-<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>></item>
+<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>>, Fine: <<items.fine>></item>
 
 <<items.content>>
 
@@ -889,6 +889,7 @@ EOF
 
         # historic syntax
         my $tt_template = <<EOF;
+[%- USE Price -%]
 Dear [% borrower.firstname %] [% borrower.surname %],
 
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
@@ -906,7 +907,7 @@ The following item(s) is/are currently overdue:
 
 [% FOREACH overdue IN overdues %]
 [%~ SET item = overdue.item ~%]
-"[% item.biblio.title %]" by [% item.biblio.author %], [% item.itemcallnumber %], Barcode: [% item.barcode %]
+"[% item.biblio.title %]" by [% item.biblio.author %], [% item.itemcallnumber %], Barcode: [% item.barcode %], Fine: [% overdue.overdue_fines.total_outstanding | \$Price %]
 [% END %]
 [% FOREACH overdue IN overdues %]
 [%~ SET item = overdue.item ~%]
