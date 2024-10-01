@@ -568,21 +568,23 @@ Circulation:
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
-            - Set the default patron categories to receive overdues to
+            - The long overdue process affects patrons in the
             - pref: DefaultLongOverduePatronCategories
               choices: patron-categories
               class: multiple
-            - <br>Leave this field empty if you want to process overdues for all patron categories.
+            - categories.
+            - <br>Leave this field empty if you want to process long overdues for all patron categories.
             - <br>(Used when the longoverdue.pl script is called without the --category parameter)
-            - <br>WARNING — This preference will be active only if DefaultLongOverdueSkipPatronCategories is empty.
+            - <br><strong>WARNING:</strong> This preference will be active only if DefaultLongOverdueSkipPatronCategories is empty.
             - <br>
-            - Set the default patron categories to <i>not</i> receive overdues to
+            - The long overdue process <i>does not</i> affect patrons in the
             - pref: DefaultLongOverdueSkipPatronCategories
               choices: patron-categories
               class: multiple
-            - <br>Leave this field empty if you want to process overdues for all patron categories.
+            - categories.
+            - <br>Leave this field empty if you want to process long overdues for all patron categories.
             - <br>(Used when the longoverdue.pl script is called without the --skip-category parameter)
-            - <br>WARNING - This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
+            - <br><strong>WARNING:</strong> This preference overrides the DefaultLongOverduePatronCategories preference, so the DefaultLongOverduePatronCategories filter will not take effect.
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
