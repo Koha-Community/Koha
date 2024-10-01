@@ -135,10 +135,6 @@ export default {
             ]
         }
 
-        $(
-            ".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table"
-        ).tooltip()
-
         if (this.add_filters) {
             this.options.orderCellsTop = true
         }

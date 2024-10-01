@@ -230,8 +230,6 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         deactivate_filters(id_selector);
     }
 
-    $(".dt_button_clear_filter, .columns_controls, .export_controls, .dt_button_configure_table").tooltip();
-
     return table;
 }
 
