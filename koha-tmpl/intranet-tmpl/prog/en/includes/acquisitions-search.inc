@@ -6,7 +6,7 @@
 
         [% WRAPPER tab_panels %]
             [% WRAPPER tab_panel tabname="supplier_search" bt_active= 1 %]
-                <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="get">
+                <form name="findsupplier" action="/cgi-bin/koha/vendors" method="get">
                     <div class="form-title">
                         <label class="control-label" for="supplier"><span class="control-text">Vendor search</span> <i class="fa fa-fw fa-upload" aria-hidden="true"></i></label>
                     </div>

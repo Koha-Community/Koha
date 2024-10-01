@@ -59,6 +59,7 @@ export default {
             fp_config: flatpickr_defaults,
             vendor_count: 0,
             initialized: false,
+            searchTerm: null,
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: { embed: "aliases,baskets,subscriptions" },
@@ -97,6 +98,9 @@ export default {
     beforeRouteEnter(to, from, next) {
         next(vm => {
             vm.getVendorCount().then(() => (vm.initialized = true));
+            if (to.query.supplier) {
+                vm.searchTerm = to.query.supplier;
+            }
         });
     },
     methods: {
@@ -155,6 +159,9 @@ export default {
         },
         tableURL() {
             let url = "/api/v1/acquisitions/vendors";
+            if (this.searchTerm) {
+                url += "?name=" + this.searchTerm;
+            }
             return url;
         },
         getTableColumns() {

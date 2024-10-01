@@ -64,7 +64,6 @@ describe("Vendor CRUD operations", () => {
 
     it("should list vendors", () => {
         cy.visit("/cgi-bin/koha/acqui/acqui-home.pl");
-        cy.get("#acqui_acqui_home_order").contains("Vendor list").click();
 
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", []);
         cy.visit("/cgi-bin/koha/vendors");
@@ -282,9 +281,9 @@ describe("External URLs", () => {
 
     it("should navigate to the receive shipments page", () => {
         cy.visit("/cgi-bin/koha/acqui/acqui-home.pl");
-        cy.get("#acqui_acqui_home_order").contains("Vendor list").click();
 
         const vendor = getVendor();
+
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
             statusCode: 200,
             body: [vendor],
@@ -293,13 +292,14 @@ describe("External URLs", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/acquisitions/vendors/*", vendor);
         cy.visit("/cgi-bin/koha/vendors");
         const name_link = cy.get(
             "#vendors_list table tbody tr:first td:first a"
         );
         name_link.should("have.text", vendor.name + " (#" + vendor.id + ")");
         name_link.click();
+        cy.wait(500);
+        cy.get("#vendors_show h1").contains(vendor.name);
 
         cy.get("#vendors_show").contains("Receive shipments").click();
         cy.get("h1").contains("Receive shipment from vendor " + vendor.name);
