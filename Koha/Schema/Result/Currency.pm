@@ -72,6 +72,12 @@ __PACKAGE__->table("currency");
   default_value: 0
   is_nullable: 1
 
+=head2 p_cs_precedes
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -96,6 +102,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "p_sep_by_space",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "p_cs_precedes",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -173,8 +181,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-03-06 16:45:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FmTABTXRmT/kwlkKkO/0pw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-01 10:59:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:C7BtR3ceUVovrYitKh55bA
 
 
 sub koha_object_class {
