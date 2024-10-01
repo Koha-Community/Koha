@@ -3,16 +3,19 @@
     <div v-else id="vendors_show">
         <Toolbar>
             <ToolbarButton
-                :to="{ name: 'VendorList' }"
+                :to="{ name: 'VendorFormAdd' }"
                 icon="plus"
                 :title="$__('New vendor')"
             />
             <ToolbarButton
-                :to="{ name: 'VendorList' }"
+                :to="{
+                    name: 'VendorFormAddEdit',
+                    params: { vendor_id: vendor.id },
+                }"
                 icon="pencil"
                 :title="$__('Edit vendor')"
             />
-            <ExternalLinkButton
+            <ToolbarButton
                 :to="{
                     path: '/cgi-bin/koha/acqui/parcels.pl',
                     query: { booksellerid: vendor.id },
@@ -53,7 +56,7 @@ import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import { inject } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
-import ExternalLinkButton from "../ExternalLinkButton.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 import VendorDetails from "./VendorDetails.vue";
 import VendorOrderingInformation from "./VendorOrderingInformation.vue";
 import VendorInterfaces from "./VendorInterfaces.vue";
@@ -101,7 +104,7 @@ export default {
     components: {
         Toolbar,
         ToolbarButton,
-        ExternalLinkButton,
+        ToolbarButton,
         VendorDetails,
         VendorOrderingInformation,
         VendorInterfaces,

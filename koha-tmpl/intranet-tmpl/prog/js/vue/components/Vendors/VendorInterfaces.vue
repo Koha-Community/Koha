@@ -13,9 +13,13 @@
             </li>
             <li v-if="vi.uri">
                 <label>{{ $__("URI") }}:</label>
-                <span>
-                    <a :href="vi.uri" target="_blank">{{ vi.uri }}</a>
-                </span>
+                <ToolbarButton
+                    :to="{
+                        path: vi.uri,
+                    }"
+                    class=""
+                    :title="vi.uri"
+                />
             </li>
             <li v-if="vi.login">
                 <label>{{ $__("Login") }}:</label>
@@ -137,6 +141,7 @@
 <script>
 import { inject } from "vue";
 import { storeToRefs } from "pinia";
+import ToolbarButton from "../ToolbarButton.vue";
 
 export default {
     props: {
@@ -166,6 +171,9 @@ export default {
         deleteInterface(interfaceIndex) {
             this.vendor.interfaces.splice(interfaceIndex, 1);
         },
+    },
+    components: {
+        ToolbarButton,
     },
 };
 </script>
