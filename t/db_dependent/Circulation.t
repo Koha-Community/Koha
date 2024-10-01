@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 75;
+use Test::More tests => 76;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -6882,8 +6882,8 @@ subtest 'NoRefundOnLostFinesPaidAge' => sub {
             date              => '1970-01-01 14:00:01',
             amountoutstanding => 0,
             amount            => -5,
-            interface        => 'commandline',
-            credit_type_code => 'PAYMENT'
+            interface         => 'commandline',
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     my $offset = Koha::Account::Offset->new(

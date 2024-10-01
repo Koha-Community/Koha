@@ -2313,13 +2313,13 @@ sub AddReturn {
             my @object_messages = @{ $updated_item->object_messages };
             for my $message (@object_messages) {
                 $messages->{'LostItemFeeRefunded'} = 1
-                  if $message->message eq 'lost_refunded';
+                    if $message->message eq 'lost_refunded';
                 $messages->{'ProcessingFeeRefunded'} = 1
-                  if $message->message eq 'processing_refunded';
+                    if $message->message eq 'processing_refunded';
                 $messages->{'LostItemFeeRestored'} = 1
-                  if $message->message eq 'lost_restored';
+                    if $message->message eq 'lost_restored';
                 $messages->{'LostItemPaymentNotRefunded'} = 1
-                  if $message->message eq 'payment_not_refunded';
+                    if $message->message eq 'payment_not_refunded';
 
                 if ( $message->message eq 'lost_charge' ) {
                     $issue //= Koha::Old::Checkouts->search(
