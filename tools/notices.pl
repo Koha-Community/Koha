@@ -39,47 +39,45 @@ unless ( C4::Context->preference('NoticesManagement') ) {
 
 my $op = $query->param('op');
 
-if ( $op and $op eq 'cud-search' ) {
-    my $letter_code  = $query->param('letter_code')  || undef;
-    my $categorycode = $query->param('categorycode') || undef;
-    my $branchcode   = $query->param('branchcode')   || undef;
-    my $from         = $query->param('from')         || undef;
-    my $to           = $query->param('to')           || undef;
-    my $status       = $query->param('status')       || undef;
+my $letter_code  = $query->param('letter_code')  || undef;
+my $categorycode = $query->param('categorycode') || undef;
+my $branchcode   = $query->param('branchcode')   || undef;
+my $from         = $query->param('from')         || undef;
+my $to           = $query->param('to')           || undef;
+my $status       = $query->param('status')       || undef;
 
-    my %where = ();
-    $where{'me.letter_code'}              = $letter_code  if ($letter_code);
-    $where{'borrowernumber.categorycode'} = $categorycode if ($categorycode);
-    $where{'borrowernumber.branchcode'}   = $branchcode   if ($branchcode);
-    if ($from) {
-        if ($to) {
-            $where{'me.time_queued'} = [
-                -and => { '<=', $to },
-                { '>=', $from }
-            ];
-        } else {
-            $where{'me.time_queued'} = { '>=', $from };
-        }
-    } elsif ($to) {
-        $where{'me.time_queued'} = { '<=', $to };
+my %where = ();
+$where{'me.letter_code'}              = $letter_code  if ($letter_code);
+$where{'borrowernumber.categorycode'} = $categorycode if ($categorycode);
+$where{'borrowernumber.branchcode'}   = $branchcode   if ($branchcode);
+if ($from) {
+    if ($to) {
+        $where{'me.time_queued'} = [
+            -and => { '<=', $to },
+            { '>=', $from }
+        ];
+    } else {
+        $where{'me.time_queued'} = { '>=', $from };
     }
-    $where{'me.status'} = $status if ($status);
-
-    my $notices = Koha::Notice::Messages->search_limited(
-        {%where},
-        { order_by => { -desc => 'time_queued' } }
-    );
-
-    $template->param(
-        notices      => $notices,
-        letter_code  => $letter_code,
-        categorycode => $categorycode,
-        branchcode   => $branchcode,
-        from         => $from,
-        to           => $to,
-        status       => $status,
-    );
+} elsif ($to) {
+    $where{'me.time_queued'} = { '<=', $to };
 }
+$where{'me.status'} = $status if ($status);
+
+my $notices = Koha::Notice::Messages->search_limited(
+    {%where},
+    { order_by => { -desc => 'time_queued' } }
+);
+
+$template->param(
+    notices      => $notices,
+    letter_code  => $letter_code,
+    categorycode => $categorycode,
+    branchcode   => $branchcode,
+    from         => $from,
+    to           => $to,
+    status       => $status,
+);
 
 $template->param(
     letters => Koha::Notice::Templates->search(

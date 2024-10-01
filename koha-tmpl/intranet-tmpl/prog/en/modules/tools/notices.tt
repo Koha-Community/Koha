@@ -7,10 +7,6 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% PROCESS "patron-search.inc" %]
-[% SET libraries = Branches.all %]
-[% SET categories = Categories.all.unblessed %]
-[% SET columns = ['name', 'cardnumber', 'dateofbirth', 'category', 'branch', 'address', 'phone'] %]
 <title
     >[% FILTER collapse %]
         [% t("Notices management") | html %]
@@ -51,9 +47,11 @@
 
                 <h1>Notices management</h1>
 
-                <div class="dialog message">Printing a notice will mark it as sent.</div>
+                <div class="page-section bg-warning">Printing a notice will mark it as sent.</div>
 
-                [% IF notices && notices.count > 0 %]
+                [% IF notices.count == 0 %]
+                    <div class="page-section bg-info"> No sent notices were found with those search parameters. </div>
+                [% ELSE %]
                     <div class="page-section">
                         <span id="checkbox_actions"
                             ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
@@ -101,23 +99,6 @@
                             <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
                         </form>
                     </div>
-                [% ELSE %]
-                    Use the search form on the left to find sent notices, or go directly to a patron's notices.
-                    [% WRAPPER tabs id= "notices_patronsearch" %]
-                        [% WRAPPER tabs_nav %]
-                            [% WRAPPER tab_item tabname= "notices_patronsearch_pane" bt_active= 1 %]<span>Patrons</span>[% END %]
-                        [% END %]
-                        [% WRAPPER tab_panels %]
-                            [% WRAPPER tab_panel tabname="notices_patronsearch_pane" bt_active= 1 %]
-                                [% PROCESS patron_search_filters_simple %]
-                                [% PROCESS patron_search_table table_id => 'table_borrowers', open_on_row_click => 1 %]
-                            [% END %]
-                        [% END %]
-                    [% END %]
-
-                    [% IF notices && notices.count == 0 %]
-                        <div class="dialog message"> No sent notices were found with those search parameters. </div>
-                    [% END %]
                 [% END %]
             </main>
         </div>
@@ -126,9 +107,7 @@
         <div class="col-md-2 order-md-1 order-sm-1">
             <aside>
                 <fieldset class="sidebar brief">
-                    <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-search" />
+                    <form id="notices-search" action="/cgi-bin/koha/tools/notices.pl" method="get">
                         <h3>Search filters</h3>
                         <ol>
                             <li>
@@ -252,65 +231,54 @@
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
         <script>
-            table_settings = [% TablesSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %];
-            $(document).ready(function() {
-                $("#notices").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { 'bSortable': false, 'aTargets': [ 'nosort' ] }
-                    ],
-                    "aaSorting": [[1, "desc" ]],
-                    "sPaginationType": "full"
-                }));
+            $(document).ready(function () {
+                $("#notices").dataTable(
+                    $.extend(true, {}, dataTablesDefaults, {
+                        aoColumnDefs: [{ bSortable: false, aTargets: ["nosort"] }],
+                        aaSorting: [[1, "desc"]],
+                        sPaginationType: "full",
+                    })
+                );
 
-                $("#notices").on("click", ".notice-title", function(e){
+                $("#notices").on("click", ".notice-title", function (e) {
                     e.preventDefault();
                     var title = $(this).text();
                     var noticeid = $(this).data("noticeid");
-                    var body = $("#notice" + noticeid ).attr("srcdoc");
-                    $("#noticeModalLabel").text( title );
-                    $("#noticeModal .modal-body").html( body );
+                    var body = $("#notice" + noticeid).attr("srcdoc");
+                    $("#noticeModalLabel").text(title);
+                    $("#noticeModal .modal-body").html(body);
                     $("#noticeModal").modal("show");
                 });
 
-                $("#noticeModal").on("hide.bs.modal", function(){
+                $("#noticeModal").on("hide.bs.modal", function () {
                     $("#noticeModalLabel").text("");
                     $("#noticeModal .modal-body").html("");
                 });
 
-                $("#notices_patronsearch").on("submit", filter);
-                [% UNLESS notices %]
-                    [% IF ( Koha.Preference('PatronAutoComplete') ) %]
-                        patron_autocomplete($(".search_patron_filter"), { 'link-to': 'notices' });
-                    [% END %]
-                [% END %]
-
-                $("#print_multiple_button").click(function(e){
+                $("#print_multiple_button").click(function (e) {
                     var selected_notices = $("#print_multiple").find("input[name='message_ids']:checked");
-                    if ( selected_notices.length == 0 ) {
+                    if (selected_notices.length == 0) {
                         alert(_("Please select at least one sent notice."));
                         e.preventDefault();
                         return false;
                     }
                 });
 
-                $(".select_all").click(function(e){
+                $(".select_all").click(function (e) {
                     e.preventDefault();
-                    $("input[name='message_ids']").each(function(){
+                    $("input[name='message_ids']").each(function () {
                         $(this).prop("checked", true);
                     });
                 });
 
-                $(".clear_all").click(function(e){
+                $(".clear_all").click(function (e) {
                     e.preventDefault();
-                    $("input[name='message_ids']").each(function(){
+                    $("input[name='message_ids']").each(function () {
                         $(this).prop("checked", false);
                     });
                 });
             });
         </script>
-        [% SET search_results_block_id = 'notices_patronsearch_pane_panel' %]
-        [%# adjusting variable for patron-search.inc %]
-        [% PROCESS patron_search_js table_id => 'table_borrowers', categories => categories, libraries => libraries, columns => columns, open_on_row_click => 1, on_click_url => '/cgi-bin/koha/members/notices.pl?', redirect_if_one_result => 1, redirect_url => '/cgi-bin/koha/members/notices.pl?', redirect_if_attribute_equal => 'cardnumber' %]
     [% END %]
 
     [% INCLUDE 'intranet-bottom.inc' %]</div
