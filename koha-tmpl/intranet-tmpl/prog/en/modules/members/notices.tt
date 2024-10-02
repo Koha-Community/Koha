@@ -44,117 +44,117 @@
 
     [% IF ( QUEUED_MESSAGES ) %]
         <div class="page-section">
-            <table id="noticestable">
-                <thead>
-                    <tr>
-                        <th>Notice</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Updated on</th>
-                        <th>Time created</th>
-                        <th>Delivery note</th>
-                        [% IF CAN_user_tools_view_generated_notices %]
-                            <th>Actions</th>
-                        [% END %]
-                    </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
+            <span id="checkbox_actions"
+                ><a href="#" class="select_all"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="clear_all"><i class="fa fa-remove"></i> Clear all</a></span
+            >
+            <form id="print_multiple" action="/cgi-bin/koha/tools/print_notice.pl" method="post" target="_blank">
+                [% INCLUDE 'csrf-token.inc' %]
+
+                <table id="noticestable">
+                    <thead>
                         <tr>
-                            <td>
-                                <a
-                                    class="notice-title"
-                                    data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"
-                                    href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
-                                    >[% QUEUED_MESSAGE.subject | html %]</a
-                                >
-                                <div style="display:none;" class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]">[% QUEUED_MESSAGE.html_content | html %]</div>
-                            </td>
-                            <td>
-                                [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]
-                                    <span>email</span>
-                                [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]
-                                    <span>print</span>
-                                [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]
-                                    <span>feed</span>
-                                [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]
-                                    <span>sms</span>
-                                [% ELSE %]
-                                    [% QUEUED_MESSAGE.message_transport_type | html %]
-                                [% END %]
-                            </td>
-                            <td>
-                                [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]
-                                    <span>sent</span>
-                                [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]
-                                    <span>pending</span>
-                                [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]
-                                    <span>failed</span>
-                                [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]
-                                    <span>deleted</span>
-                                [% ELSE %]
-                                    [% QUEUED_MESSAGE.status | html %]
-                                [% END %]
-                                [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
-                                    <div class="notice">
-                                        <form id="resend_notice[% QUEUED_MESSAGE.message_id | html %]" action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | html %]" method="POST">
-                                            [% INCLUDE 'csrf-token.inc' %]
-                                            <input type="hidden" name="op" value="cud-resend_notice" />
-                                            <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                                            <input type="hidden" name="message_id" value="[% QUEUED_MESSAGE.message_id | html %]" />
-                                        </form>
-                                    </div>
-                                [% END %]
-                            </td>
-                            <td data-order="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</td>
-                            <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
-                            <td>
-                                [% IF ( QUEUED_MESSAGE.failure_code ) %]
-                                    [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]
-                                        <span class="clearfix">Invalid borrowernumber [% borrowernumber | html %]</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]
-                                        <span class="clearfix">Unable to find an email address for this patron</span>
-                                    [% ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
-                                        <span class="clearfix">Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]
-                                        <span class="clearfix">Missing from email address</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]
-                                        <span class="clearfix">Missing SMS number</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]
-                                        <span class="clearfix">Message is duplicate</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]
-                                        <span class="clearfix">No notes from SMS driver</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]
-                                        <span class="clearfix">The SMS driver could not be loaded</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]
-                                        <span class="clearfix">Unhandled email failure, check the logs for further details</span>
-                                    [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]
-                                        <span class="clearfix">Unknown error</span>
+                            <th class="nosort">&nbsp;</th>
+                            <th>Time created</th>
+                            <th>Notice</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Updated on</th>
+                            <th>Delivery note</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
+                            <tr>
+                                <td><input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" [% IF QUEDUE_MESSAGE.status == 'pending' %]disabled="disabled"[% END %] /></td>
+                                <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
+                                <td>
+                                    <a
+                                        class="notice-title"
+                                        data-noticeid="[% QUEUED_MESSAGE.message_id | html %]"
+                                        data-status="[% QUEUED_MESSAGE.status | html %]"
+                                        data-borrowernumber="[% borrowernumber | html %]"
+                                        href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber | uri %]&amp;noticeid=[% QUEUED_MESSAGE.message_id | uri %]"
+                                        >[% QUEUED_MESSAGE.subject | html %]</a
+                                    >
+                                    <div style="display:none;" class="notice" id="notice[% QUEUED_MESSAGE.message_id | html %]">[% QUEUED_MESSAGE.html_content | html %]</div>
+                                </td>
+                                <td>
+                                    [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]
+                                        <span>email</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]
+                                        <span>print</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]
+                                        <span>feed</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]
+                                        <span>sms</span>
                                     [% ELSE %]
-                                        <span class="clearfix">Message failed to send with the following error: [% QUEUED_MESSAGE.failure_code | html %]</span>
+                                        [% QUEUED_MESSAGE.message_transport_type | html %]
                                     [% END %]
-                                [% END %]
-                                [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]
-                                    [% IF ( QUEUED_MESSAGE.from_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
-                                        <span class="clearfix"><span class="label">From:</span> [% QUEUED_MESSAGE.from_address | html %]</span>
+                                </td>
+                                <td>
+                                    [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]
+                                        <span>sent</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]
+                                        <span>pending</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]
+                                        <span>failed</span>
+                                    [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]
+                                        <span>deleted</span>
+                                    [% ELSE %]
+                                        [% QUEUED_MESSAGE.status | html %]
                                     [% END %]
-                                    [% IF ( QUEUED_MESSAGE.to_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
-                                        <span class="clearfix"><span class="label">To:</span> [% QUEUED_MESSAGE.to_address | html %]</span>
+                                </td>
+                                <td data-order="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</td>
+                                <td>
+                                    [% IF ( QUEUED_MESSAGE.failure_code ) %]
+                                        [% IF ( QUEUED_MESSAGE.failure_code == "INVALID_BORNUMBER" ) %]
+                                            <span class="clearfix">Invalid borrowernumber [% borrowernumber | html %]</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_EMAIL' ) %]
+                                            <span class="clearfix">Unable to find an email address for this patron</span>
+                                        [% ELSIF (matches = QUEUED_MESSAGE.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
+                                            <span class="clearfix">Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_FROM' ) %]
+                                            <span class="clearfix">Missing from email address</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'MISSING_SMS' ) %]
+                                            <span class="clearfix">Missing SMS number</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'DUPLICATE_MESSAGE' ) %]
+                                            <span class="clearfix">Message is duplicate</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'NO_NOTES' ) %]
+                                            <span class="clearfix">No notes from SMS driver</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]
+                                            <span class="clearfix">The SMS driver could not be loaded</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == 'SENDMAIL' ) %]
+                                            <span class="clearfix">Unhandled email failure, check the logs for further details</span>
+                                        [% ELSIF ( QUEUED_MESSAGE.failure_code == "UNKNOWN_ERROR" ) %]
+                                            <span class="clearfix">Unknown error</span>
+                                        [% ELSE %]
+                                            <span class="clearfix">Message failed to send with the following error: [% QUEUED_MESSAGE.failure_code | html %]</span>
+                                        [% END %]
                                     [% END %]
-                                    [% IF ( QUEUED_MESSAGE.cc_address && QUEUED_MESSAGE.message_transport_type != 'print') %]
-                                        <span class="clearfix"><span class="label">CC:</span> [% QUEUED_MESSAGE.cc_address | html %]</span>
+                                    [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
+                                        [% IF ( QUEUED_MESSAGE.from_address ) %]
+                                            <span class="clearfix"><span class="label">From:</span> [% QUEUED_MESSAGE.from_address | html %]</span>
+                                        [% END %]
+                                        [% IF ( QUEUED_MESSAGE.to_address ) %]
+                                            <span class="clearfix"><span class="label">To:</span> [% QUEUED_MESSAGE.to_address | html %]</span>
+                                        [% END %]
+                                        [% IF ( QUEUED_MESSAGE.cc_address ) %]
+                                            <span class="clearfix"><span class="label">CC:</span> [% QUEUED_MESSAGE.cc_address | html %]</span>
+                                        [% END %]
                                     [% END %]
-                                [% END %]
-                            </td>
-                            [% IF CAN_user_tools_view_generated_notices %]
+                                </td>
                                 <td class="actions"
                                     ><a target="_blank" class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/print_notice.pl?message_ids=[% QUEUED_MESSAGE.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
                                 >
-                            [% END %]
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+                <fieldset class="action">
+                    <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
+                </fieldset>
+            </form>
         </div>
         <!-- /.page-section -->
     [% ELSE %]
@@ -171,8 +171,14 @@
             </div>
             <div class="modal-body"> ... </div>
             <div class="modal-footer">
-                <button type="button" id="resend-notice" class="btn btn-default" style="display:none"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
-                <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" style="display:none">
+                    [% INCLUDE 'csrf-token.inc' %]
+                    <input type="hidden" name="op" value="cud-resend_notice" />
+                    <input type="hidden" name="borrowernumber" value="" />
+                    <input type="hidden" name="message_id" value="" />
+                    <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
+                </form>
+                <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -196,7 +202,6 @@
                 $("#noticeModalLabel").text(title);
 
                 var noticeid = $(this).data("noticeid");
-
                 // Sanitize before rendering in the shadow DOM
                 var srcdoc = $("#notice" + noticeid).text();
                 var sanitized = DOMPurify.sanitize(srcdoc, { WHOLE_DOCUMENT: true });
@@ -208,24 +213,44 @@
                 $("#noticeModal .modal-body").html("");
                 $("#noticeModal .modal-body")[0].appendChild(shadowHost);
 
-                if ($("#resend_notice" + noticeid).length) {
-                    $("#resend-notice").data("noticeid", noticeid);
-                    $("#resend-notice").show();
+                if ($(this).data("status") !== "pending") {
+                    let borrowerNumber = $(this).data("borrowernumber");
+                    $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
+                    $('#resend_notice input[name="message_id"]').val(noticeid);
+                    $("#resend_notice").show();
                 }
-
                 $("#noticeModal").modal("show");
             });
 
-            $("#resend-notice").on("click", function (e) {
-                e.preventDefault();
-                var noticeid = $(this).data("noticeid");
-                $("#resend_notice" + noticeid).submit();
-            });
-
             $("#noticeModal").on("hide.bs.modal", function () {
-                $("#resend-notice").removeData("noticeid").hide();
+                $('#resend_notice input[name="borrowernumber"]').val("");
+                $('#resend_notice input[name="message_id"]').val("");
+                $("#resend_notice").hide();
                 $("#noticeModalLabel").text("");
                 $("#noticeModal .modal-body").html("");
+            });
+
+            $("#print_multiple_button").click(function (e) {
+                var selected_notices = $("#print_multiple").find("input[name='message_ids']:checked");
+                if (selected_notices.length == 0) {
+                    alert(_("Please select at least one sent notice."));
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $(".select_all").click(function (e) {
+                e.preventDefault();
+                $("input[name='message_ids']").each(function () {
+                    $(this).prop("checked", true);
+                });
+            });
+
+            $(".clear_all").click(function (e) {
+                e.preventDefault();
+                $("input[name='message_ids']").each(function () {
+                    $(this).prop("checked", false);
+                });
             });
         });
     </script>

@@ -47,7 +47,7 @@
 
                 <h1>Notices management</h1>
 
-                <div class="page-section bg-warning">Printing a notice will mark it as sent.</div>
+                <div class="alert alert-warning">Printing a notice will mark it as sent.</div>
 
                 [% IF notices.count == 0 %]
                     <div class="page-section bg-info"> No sent notices were found with those search parameters. </div>
@@ -68,6 +68,7 @@
                                         <th>Type</th>
                                         <th>Status</th>
                                         <th>Updated on</th>
+                                        <th>Delivery note</th>
                                         <th class="nosort">Actions</th>
                                     </tr>
                                 </thead>
@@ -75,20 +76,84 @@
                                     [% FOREACH notice IN notices %]
                                         <tr>
                                             <td><input type="checkbox" name="message_ids" value="[% notice.message_id | html %]" /></td>
-                                            <td>[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
+                                            <td data-order="[% notice.time_queued | html %]">[% notice.time_queued | $KohaDates with_hours = 1 %]</td>
                                             <td>[% INCLUDE 'patron-title.inc' patron=notice.patron hide_patron_infos_if_needed=1 %]</td>
                                             <td>
                                                 <a
                                                     class="notice-title"
                                                     data-noticeid="[% notice.message_id | html %]"
+                                                    data-status="[% notice.status | html %]"
+                                                    data-borrowernumber="[% notice.borrowernumber | html %]"
                                                     href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% notice.borrowernumber | uri %]&amp;noticeid=[% notice.message_id | uri %]"
                                                     >[% notice.subject | html %]</a
                                                 >
                                                 <iframe class="notice" id="notice[% notice.message_id | html %]" srcdoc="[% notice.html_content | html %]"></iframe>
                                             </td>
-                                            <td>[% notice.message_transport_type | html %]</td>
-                                            <td>[% notice.status | html %]</td>
-                                            <td>[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
+                                            <td>
+                                                [% IF ( notice.message_transport_type == 'email' ) %]
+                                                    <span>email</span>
+                                                [% ELSIF ( notice.message_transport_type == 'print' ) %]
+                                                    <span>print</span>
+                                                [% ELSIF ( notice.message_transport_type == 'feed' ) %]
+                                                    <span>feed</span>
+                                                [% ELSIF ( notice.message_transport_type == 'sms' ) %]
+                                                    <span>sms</span>
+                                                [% ELSE %]
+                                                    [% notice.message_transport_type | html %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF ( notice.status == 'sent' ) %]
+                                                    <span>sent</span>
+                                                [% ELSIF ( notice.status == 'pending' ) %]
+                                                    <span>pending</span>
+                                                [% ELSIF ( notice.status == 'failed' ) %]
+                                                    <span>failed</span>
+                                                [% ELSIF ( notice.status == 'deleted' ) %]
+                                                    <span>deleted</span>
+                                                [% ELSE %]
+                                                    [% notice.status | html %]
+                                                [% END %]
+                                            </td>
+                                            <td data-order="[% noice.updated_on | html %]">[% notice.updated_on | $KohaDates with_hours = 1 %]</td>
+                                            <td>
+                                                [% IF ( notice.failure_code ) %]
+                                                    [% IF ( notice.failure_code == "INVALID_BORNUMBER" ) %]
+                                                        <span class="clearfix">Invalid borrowernumber [% notice.borrowernumber | html %]</span>
+                                                    [% ELSIF ( notice.failure_code == 'NO_EMAIL' ) %]
+                                                        <span class="clearfix">Unable to find an email address for this patron</span>
+                                                    [% ELSIF ( matches = notice.failure_code.match('INVALID_EMAIL:(\w+)') ) %]
+                                                        <span class="clearfix">Invalid [% matches.0 | html %] email address found [% borrowernumber | html %]</span>
+                                                    [% ELSIF ( notice.failure_code == 'NO_FROM' ) %]
+                                                        <span class="clearfix">Missing from email address</span>
+                                                    [% ELSIF ( notice.failure_code == 'MISSING_SMS' ) %]
+                                                        <span class="clearfix">Missing SMS number</span>
+                                                    [% ELSIF ( notice.failure_code == 'DUPLICATE_MESSAGE' ) %]
+                                                        <span class="clearfix">Message is duplicate</span>
+                                                    [% ELSIF ( notice.failure_code == 'NO_NOTES' ) %]
+                                                        <span class="clearfix">No notes from SMS driver</span>
+                                                    [% ELSIF ( notice.failure_code == 'SMS_SEND_DRIVER_MISSING' ) %]
+                                                        <span class="clearfix">The SMS driver could not be loaded</span>
+                                                    [% ELSIF ( notice.failure_code == 'SENDMAIL' ) %]
+                                                        <span class="clearfix">Unhandled email failure, check the logs for further details</span>
+                                                    [% ELSIF ( notice.failure_code == "UNKNOWN_ERROR" ) %]
+                                                        <span class="clearfix">Unknown error</span>
+                                                    [% ELSE %]
+                                                        <span class="clearfix">Message failed to send with the following error: [% notice.failure_code | html %]</span>
+                                                    [% END %]
+                                                [% END %]
+                                                [% IF ( notice.status == 'sent' ) %]
+                                                    [% IF ( notice.from_address ) %]
+                                                        <span class="clearfix"><span class="label">From:</span> [% notice.from_address | html %]</span>
+                                                    [% END %]
+                                                    [% IF ( notice.to_address ) %]
+                                                        <span class="clearfix"><span class="label">To:</span> [% notice.to_address | html %]</span>
+                                                    [% END %]
+                                                    [% IF ( notice.cc_address ) %]
+                                                        <span class="clearfix"><span class="label">CC:</span> [% notice.cc_address | html %]</span>
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
                                             <td class="actions"
                                                 ><a target="_blank" class="btn btn-default btn-xs print" href="/cgi-bin/koha/tools/print_notice.pl?message_ids=[% notice.message_id | uri %]"><i class="fa fa-print"></i> Print</a></td
                                             >
@@ -96,7 +161,9 @@
                                     [% END %]
                                 </tbody>
                             </table>
-                            <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
+                            <fieldset class="action">
+                                <input type="submit" class="btn btn-primary" value="Print selected notices" id="print_multiple_button" />
+                            </fieldset>
                         </form>
                     </div>
                 [% END %]
@@ -210,14 +277,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title" id="noticeModalLabel">Notice</h5>
+                    <h1 class="modal-title" id="noticeModalLabel">Notice</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body"> ... </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default deny cancel" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
+                    <form id="resend_notice" action="/cgi-bin/koha/members/notices.pl" method="POST" style="display:none">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-resend_notice" />
+                        <input type="hidden" name="borrowernumber" value="" />
+                        <input type="hidden" name="message_id" value="" />
+                        <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
+                    </form>
+                    <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -245,18 +317,27 @@
                     var title = $(this).text();
                     var noticeid = $(this).data("noticeid");
                     var body = $("#notice" + noticeid).attr("srcdoc");
+                    if ($(this).data("status") !== "pending") {
+                        let borrowerNumber = $(this).data("borrowernumber");
+                        $('#resend_notice input[name="borrowernumber"]').val(borrowerNumber);
+                        $('#resend_notice input[name="message_id"]').val(noticeid);
+                        $("#resend_notice").show();
+                    }
                     $("#noticeModalLabel").text(title);
                     $("#noticeModal .modal-body").html(body);
                     $("#noticeModal").modal("show");
                 });
 
                 $("#noticeModal").on("hide.bs.modal", function () {
+                    $('#resend_notice input[name="borrowernumber"]').val("");
+                    $('#resend_notice input[name="message_id"]').val("");
+                    $("#resend_notice").hide();
                     $("#noticeModalLabel").text("");
                     $("#noticeModal .modal-body").html("");
                 });
 
                 $("#print_multiple_button").click(function (e) {
-                    var selected_notices = $("#print_multiple").find("input[name='message_ids']:checked");
+                    var selected_notices = $("#notices").find("input[name='message_ids']:checked");
                     if (selected_notices.length == 0) {
                         alert(_("Please select at least one sent notice."));
                         e.preventDefault();
