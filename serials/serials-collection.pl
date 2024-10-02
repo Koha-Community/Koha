@@ -181,7 +181,7 @@ if (@subscriptionid) {
     output_and_exit( $query, $cookie, $template, 'unknown_subscription' ) unless @subscriptioninformation;
 
     $template->param( closed => $closed );
-    $subscriptions     = PrepareSerialsData( \@subscriptioninformation );
+    $subscriptions     = PrepareSerialsData( \@subscriptioninformation, 1 );
     $subscriptioncount = CountSubscriptionFromBiblionumber( $subscriptiondescs->[0]{'biblionumber'} );
 } else {
     $subscriptiondescs = GetSubscriptionsFromBiblionumber($biblionumber);
@@ -192,7 +192,7 @@ if (@subscriptionid) {
         $s->{numberpattern} = $numberpattern;
     }
     my $subscriptioninformation = GetFullSubscriptionsFromBiblionumber($biblionumber);
-    $subscriptions = PrepareSerialsData($subscriptioninformation);
+    $subscriptions = PrepareSerialsData( $subscriptioninformation, 1 );
 }
 
 my $title = $subscriptiondescs->[0]{bibliotitle};
