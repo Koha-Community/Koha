@@ -117,4 +117,15 @@
     </div> <!-- / .main -->
 
 [% INCLUDE 'opac-bottom.inc' is_popup=1 %]
-[% BLOCK jsinclude %][% END %]
+[% BLOCK jsinclude %]
+<script>
+         $(document).ready(function() {
+            [% IF WINDOW_PARENT_RELOAD %]
+                opener.location.reload();
+            [% END %]
+            [% IF WINDOW_CLOSE %]
+                window.close();
+            [% END %]
+        });
+</script>
+[% END %]
