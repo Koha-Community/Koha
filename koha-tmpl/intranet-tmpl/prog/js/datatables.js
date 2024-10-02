@@ -1029,12 +1029,13 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
         let th = $(table_node).find(
             "thead tr:eq(1) th:eq(%s)".format(visible_i)
         );
-        var is_searchable = columns[i].bSearchable;
-        $(th)
+        var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
+        $(this)
             .removeClass("sorting")
             .removeClass("sorting_asc")
             .removeClass("sorting_desc");
-        if (is_searchable) {
+        $(this).data("th-id", i);
+        if (is_searchable || $(this).data("filter") || filters_options[i]) {
             let input_type = "input";
             let existing_search = column.search();
             if ($(th).data("filter") || filters_options.hasOwnProperty(i)) {
