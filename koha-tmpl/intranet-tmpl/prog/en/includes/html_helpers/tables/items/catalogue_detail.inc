@@ -220,6 +220,9 @@
                 });
         const item_types_notforloan = new Map(all_item_types.map( it => [it.itemtype, it.notforloan] ));
 
+        const statuses = {checked_out: _("Checked out"), local_use: _("On-site checkout"), in_transit: _("In transit"), lost: _("Lost"), withdrawn: _("Withdrawn"), damaged:_("Damaged"), not_for_loan: _("Not for loan"), on_hold: _("On hold"), recalled: _("Recalled"), available: _("Available"), restricted: _("Restricted")};
+        const all_statuses = Object.keys(statuses).map(k => {return {_id: k, _str: statuses[k]}});
+
         const can_edit_items_from = [% To.json(can_edit_items_from || []) | $raw %];
         const item_type_image_locations = [% To.json(item_type_image_locations) | $raw %];
         const av_loc = new Map([% To.json(AuthorisedValues.Get('LOC')) | $raw %].map( av => [av.authorised_value, av.lib]));
@@ -319,12 +322,17 @@
                 items_selection[tab_id] = [];
             }
 
+            default_filters._status = function(){
+                return $("#" + tab_id + "_status select").val();
+            };
+
             let offset = 2;
             [% UNLESS Koha.Preference('LocalCoverImages') %]offset--;[% END %]
             let filters_options = {
                 [offset]   : () => all_item_types,
                 [offset+1] : () => all_libraries,
                 [offset+2] : () => all_libraries,
+                [offset+7] : () => all_statuses,
             };
 
             var items_table = $("#" + tab_id + '_table').kohaTable({
@@ -497,9 +505,9 @@
                     }
                 },
                 {
-                    data: "me._status",
+                    data: "",
                     className: "status",
-                    searchable: false, // FIXME We are losing the ability to search on the status
+                    searchable: false,
                     orderable: false,
                     render: function (data, type, row, meta) {
                         let nodes = "";
@@ -523,11 +531,11 @@
 
                             }
                             if ( status == 'in_transit' ) {
-                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.datesent)));
-                            }
-
-                            if ( status == 'transit_pending' ) {
-                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.daterequested)));
+                                if ( row.transfer.datesent ) {
+                                    nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.datesent)));
+                                } else {
+                                    nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.daterequested)));
+                                }
                             }
 
                             if ( status == 'lost' ) {

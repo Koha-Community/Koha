@@ -1446,11 +1446,7 @@ sub _status {
             push @statuses, "local_use";
         }
     } elsif ( my $transfer = $self->transfer ) {
-        if ( $transfer->datesent ) {
-            push @statuses, "in_transit";
-        } else {
-            push @statuses, "transit_pending";
-        }
+        push @statuses, "in_transit";
     }
     if ( $self->itemlost ) {
         push @statuses, 'lost';
