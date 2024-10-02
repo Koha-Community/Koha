@@ -4,9 +4,16 @@ var bookings_table;
 $(document).ready(function () {
     // Determine whether we have a filtered list
     let filter_expired = $("#expired_filter").hasClass("filtered");
-
+    // Load bookings table on page load
+    if (window.location.hash === "#bookings_panel") {
+        loadBookingsTable();
+    }
     // Load bookings table on tab selection
     $("#bookings-tab").on("click", function () {
+        loadBookingsTable();
+    });
+
+    function loadBookingsTable() {
         let additional_filters = {
             patron_id: patron_borrowernumber,
             end_date: function () {
@@ -131,7 +138,7 @@ $(document).ready(function () {
                 additional_filters
             );
         }
-    });
+    }
 
     var txtActivefilter = __("Show expired");
     var txtInactivefilter = __("Hide expired");
