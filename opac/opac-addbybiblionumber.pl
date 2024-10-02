@@ -67,12 +67,11 @@ if ($newvirtualshelf) {
             for my $biblionumber (@biblionumbers) {
                 $shelf->add_biblio( $biblionumber, $loggedinuser );
             }
-
-            #Reload the page where you came from
-            print $query->header;
-            print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
-            exit;
         }
+        $template->param(
+            WINDOW_CLOSE         => 1,
+            WINDOW_PARENT_RELOAD => 1,
+        );
     }
 } elsif ($shelfnumber) {
     my $shelfnumber = $query->param('shelfnumber');
@@ -81,11 +80,9 @@ if ($newvirtualshelf) {
         for my $biblionumber (@biblionumbers) {
             $shelf->add_biblio( $biblionumber, $loggedinuser );
         }
-
-        #Close this page and return
-        print $query->header;
-        print "<html><meta http-equiv=\"refresh\" content=\"0\" /><body onload=\"self.close();\"></body></html>";
-        exit;
+        $template->param(
+            WINDOW_CLOSE         => 1,
+        );
     } else {
         $authorized = 0;
     }
