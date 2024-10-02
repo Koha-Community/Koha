@@ -341,6 +341,14 @@ collection code to assign to serial items
 
 Template Toolkit syntax to generate the default "Published on (text)" field when receiving an issue this serial
 
+=head2 preselect_issues_in_collections_table
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+yes / no if the subscription should preselect issues in the collections table
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -434,6 +442,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "published_on_template",
   { data_type => "text", is_nullable => 1 },
+  "preselect_issues_in_collections_table",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -586,8 +596,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 14:57:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1Ht7Nfl870dv1NOs4vr04g
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-05-09 08:07:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TZz+AyW1pPFbUMdo2mneuw
 
 __PACKAGE__->has_many(
   "additional_field_values",
@@ -604,10 +614,11 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->add_columns(
-    '+closed'          => { is_boolean => 1 },
-    '+manualhistory'   => { is_boolean => 1 },
-    '+serialsadditems' => { is_boolean => 1 },
-    '+skip_serialseq'  => { is_boolean => 1 },
+    '+closed'                                => { is_boolean => 1 },
+    '+manualhistory'                         => { is_boolean => 1 },
+    '+serialsadditems'                       => { is_boolean => 1 },
+    '+skip_serialseq'                        => { is_boolean => 1 },
+    '+preselect_issues_in_collections_table' => { is_boolean => 1 },
 );
 
 1;

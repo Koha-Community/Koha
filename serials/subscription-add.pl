@@ -326,29 +326,30 @@ sub redirect_add_subscription {
     my $subtype   = $query->param('subtype');
     my $sublength = $query->param('sublength');
     my ( $numberlength, $weeklength, $monthlength ) = GetSubscriptionLength( $subtype, $sublength );
-    my $add1                  = $query->param('add1');
-    my $lastvalue1            = $query->param('lastvalue1');
-    my $innerloop1            = $query->param('innerloop1');
-    my $innerloop2            = $query->param('innerloop2');
-    my $lastvalue2            = $query->param('lastvalue2');
-    my $lastvalue3            = $query->param('lastvalue3');
-    my $innerloop3            = $query->param('innerloop3');
-    my $status                = 1;
-    my $biblionumber          = $query->param('biblionumber');
-    my $callnumber            = $query->param('callnumber');
-    my $notes                 = $query->param('notes');
-    my $internalnotes         = $query->param('internalnotes');
-    my $letter                = $query->param('letter');
-    my $manualhistory         = $query->param('manualhist') ? 1 : 0;
-    my $serialsadditems       = $query->param('serialsadditems');
-    my $staffdisplaycount     = $query->param('staffdisplaycount');
-    my $opacdisplaycount      = $query->param('opacdisplaycount');
-    my $location              = $query->param('location');
-    my $itemtype              = $query->param('itemtype');
-    my $previousitemtype      = $query->param('previousitemtype');
-    my $skip_serialseq        = $query->param('skip_serialseq');
-    my $ccode                 = $query->param('ccode');
-    my $published_on_template = $query->param('published_on_template');
+    my $add1                                  = $query->param('add1');
+    my $lastvalue1                            = $query->param('lastvalue1');
+    my $innerloop1                            = $query->param('innerloop1');
+    my $innerloop2                            = $query->param('innerloop2');
+    my $lastvalue2                            = $query->param('lastvalue2');
+    my $lastvalue3                            = $query->param('lastvalue3');
+    my $innerloop3                            = $query->param('innerloop3');
+    my $status                                = 1;
+    my $biblionumber                          = $query->param('biblionumber');
+    my $callnumber                            = $query->param('callnumber');
+    my $notes                                 = $query->param('notes');
+    my $internalnotes                         = $query->param('internalnotes');
+    my $letter                                = $query->param('letter');
+    my $manualhistory                         = $query->param('manualhist') ? 1 : 0;
+    my $serialsadditems                       = $query->param('serialsadditems');
+    my $staffdisplaycount                     = $query->param('staffdisplaycount');
+    my $opacdisplaycount                      = $query->param('opacdisplaycount');
+    my $location                              = $query->param('location');
+    my $itemtype                              = $query->param('itemtype');
+    my $previousitemtype                      = $query->param('previousitemtype');
+    my $skip_serialseq                        = $query->param('skip_serialseq');
+    my $ccode                                 = $query->param('ccode');
+    my $published_on_template                 = $query->param('published_on_template');
+    my $preselect_issues_in_collections_table = $query->param('preselect_issues_in_collections_table') ? 1 : 0;
 
     my $mana_id;
     if ( $query->param('mana_id') ne "" ) {
@@ -376,7 +377,8 @@ sub redirect_add_subscription {
         join( ";", @irregularity ), $numberpattern,    $locale,         $callnumber,
         $manualhistory,             $internalnotes,    $serialsadditems,
         $staffdisplaycount,         $opacdisplaycount, $graceperiod, $location, $enddate,
-        $skip_serialseq,            $itemtype,         $previousitemtype, $mana_id, $ccode, $published_on_template
+        $skip_serialseq,            $itemtype,         $previousitemtype, $mana_id, $ccode, $published_on_template,
+        $preselect_issues_in_collections_table
     );
     if (    ( C4::Context->preference('Mana') == 1 )
         and ( grep { $_ eq "subscription" } split( /,/, C4::Context->preference('AutoShareWithMana') ) ) )
@@ -435,29 +437,30 @@ sub redirect_mod_subscription {
     my $subtype   = $query->param('subtype');
     my $sublength = $query->param('sublength');
     my ( $numberlength, $weeklength, $monthlength ) = GetSubscriptionLength( $subtype, $sublength );
-    my $locale                = $query->param('locale');
-    my $lastvalue1            = $query->param('lastvalue1');
-    my $innerloop1            = $query->param('innerloop1');
-    my $lastvalue2            = $query->param('lastvalue2');
-    my $innerloop2            = $query->param('innerloop2');
-    my $lastvalue3            = $query->param('lastvalue3');
-    my $innerloop3            = $query->param('innerloop3');
-    my $status                = 1;
-    my $callnumber            = $query->param('callnumber');
-    my $notes                 = $query->param('notes');
-    my $internalnotes         = $query->param('internalnotes');
-    my $letter                = $query->param('letter');
-    my $manualhistory         = $query->param('manualhist') ? 1 : 0;
-    my $serialsadditems       = $query->param('serialsadditems');
-    my $staffdisplaycount     = $query->param('staffdisplaycount');
-    my $opacdisplaycount      = $query->param('opacdisplaycount');
-    my $graceperiod           = $query->param('graceperiod') || 0;
-    my $location              = $query->param('location');
-    my $itemtype              = $query->param('itemtype');
-    my $previousitemtype      = $query->param('previousitemtype');
-    my $skip_serialseq        = $query->param('skip_serialseq');
-    my $ccode                 = $query->param('ccode');
-    my $published_on_template = $query->param('published_on_template');
+    my $locale                                = $query->param('locale');
+    my $lastvalue1                            = $query->param('lastvalue1');
+    my $innerloop1                            = $query->param('innerloop1');
+    my $lastvalue2                            = $query->param('lastvalue2');
+    my $innerloop2                            = $query->param('innerloop2');
+    my $lastvalue3                            = $query->param('lastvalue3');
+    my $innerloop3                            = $query->param('innerloop3');
+    my $status                                = 1;
+    my $callnumber                            = $query->param('callnumber');
+    my $notes                                 = $query->param('notes');
+    my $internalnotes                         = $query->param('internalnotes');
+    my $letter                                = $query->param('letter');
+    my $manualhistory                         = $query->param('manualhist') ? 1 : 0;
+    my $serialsadditems                       = $query->param('serialsadditems');
+    my $staffdisplaycount                     = $query->param('staffdisplaycount');
+    my $opacdisplaycount                      = $query->param('opacdisplaycount');
+    my $graceperiod                           = $query->param('graceperiod') || 0;
+    my $location                              = $query->param('location');
+    my $itemtype                              = $query->param('itemtype');
+    my $previousitemtype                      = $query->param('previousitemtype');
+    my $skip_serialseq                        = $query->param('skip_serialseq');
+    my $ccode                                 = $query->param('ccode');
+    my $published_on_template                 = $query->param('published_on_template');
+    my $preselect_issues_in_collections_table = $query->param('preselect_issues_in_collections_table') ? 1 : 0;
 
     my $mana_id;
     if ( $query->param('mana_id') ne "" ) {
@@ -494,7 +497,8 @@ sub redirect_mod_subscription {
         $status,           $biblionumber,   $callnumber,       $notes,      $letter,
         $manualhistory,    $internalnotes,  $serialsadditems,  $staffdisplaycount,
         $opacdisplaycount, $graceperiod,    $location,         $enddate, $subscriptionid,
-        $skip_serialseq,   $itemtype,       $previousitemtype, $mana_id, $ccode, $published_on_template
+        $skip_serialseq,   $itemtype,       $previousitemtype, $mana_id, $ccode, $published_on_template,
+        $preselect_issues_in_collections_table
     );
 
     my @additional_fields =

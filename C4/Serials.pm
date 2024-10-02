@@ -325,7 +325,8 @@ sub GetFullSubscription {
             aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid
+            subscription.subscriptionid AS subscriptionid,
+            subscription.preselect_issues_in_collections_table AS preselect_issues_in_collections_table
   FROM      serial 
   LEFT JOIN subscription ON 
           (serial.subscriptionid=subscription.subscriptionid )
@@ -370,7 +371,9 @@ sub PrepareSerialsData {
 
     foreach my $subs ( @{$lines} ) {
         $subs->{ "status" . $subs->{'status'} } = 1;
-        if ( grep { $_ == $subs->{status} } ( EXPECTED, LATE, MISSING_STATUSES, CLAIMED ) ) {
+        if ( $subs->{preselect_issues_in_collections_table} && grep { $_ == $subs->{status} }
+            ( EXPECTED, LATE, MISSING_STATUSES, CLAIMED ) )
+        {
             $subs->{"checked"} = 1;
         }
         if ($add_itemnumbers) {
@@ -470,7 +473,8 @@ sub GetFullSubscriptionsFromBiblionumber {
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
             subscription.subscriptionid AS subscriptionid,
-            subscription.location AS location
+            subscription.location AS location,
+            subscription.preselect_issues_in_collections_table AS preselect_issues_in_collections_table
   FROM      serial 
   LEFT JOIN subscription ON 
           (serial.subscriptionid=subscription.subscriptionid)
@@ -1343,58 +1347,59 @@ returns the number of rows affected
 
 sub ModSubscription {
     my (
-        $auser,         $branchcode,       $aqbooksellerid,    $cost,          $aqbudgetid, $startdate,
-        $periodicity,   $firstacquidate,   $irregularity,      $numberpattern, $locale,
-        $numberlength,  $weeklength,       $monthlength,       $lastvalue1,    $innerloop1,
-        $lastvalue2,    $innerloop2,       $lastvalue3,        $innerloop3,    $status,
-        $biblionumber,  $callnumber,       $notes,             $letter,        $manualhistory,
-        $internalnotes, $serialsadditems,  $staffdisplaycount, $opacdisplaycount,
-        $graceperiod,   $location,         $enddate,           $subscriptionid, $skip_serialseq,
-        $itemtype,      $previousitemtype, $mana_id,           $ccode,          $published_on_template
+        $auser,         $branchcode,      $aqbooksellerid,    $cost,          $aqbudgetid, $startdate,
+        $periodicity,   $firstacquidate,  $irregularity,      $numberpattern, $locale,
+        $numberlength,  $weeklength,      $monthlength,       $lastvalue1,    $innerloop1,
+        $lastvalue2,    $innerloop2,      $lastvalue3,        $innerloop3,    $status,
+        $biblionumber,  $callnumber,      $notes,             $letter,        $manualhistory,
+        $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
+        $graceperiod,   $location,        $enddate,           $subscriptionid, $skip_serialseq,
+        $itemtype, $previousitemtype, $mana_id, $ccode, $published_on_template, $preselect_issues_in_collections_table
     ) = @_;
 
     my $subscription = Koha::Subscriptions->find($subscriptionid);
     $subscription->set(
         {
-            librarian             => $auser,
-            branchcode            => $branchcode,
-            aqbooksellerid        => $aqbooksellerid,
-            cost                  => $cost,
-            aqbudgetid            => $aqbudgetid,
-            biblionumber          => $biblionumber,
-            startdate             => $startdate,
-            periodicity           => $periodicity,
-            numberlength          => $numberlength,
-            weeklength            => $weeklength,
-            monthlength           => $monthlength,
-            lastvalue1            => $lastvalue1,
-            innerloop1            => $innerloop1,
-            lastvalue2            => $lastvalue2,
-            innerloop2            => $innerloop2,
-            lastvalue3            => $lastvalue3,
-            innerloop3            => $innerloop3,
-            status                => $status,
-            notes                 => $notes,
-            letter                => $letter,
-            firstacquidate        => $firstacquidate,
-            irregularity          => $irregularity,
-            numberpattern         => $numberpattern,
-            locale                => $locale,
-            callnumber            => $callnumber,
-            manualhistory         => $manualhistory,
-            internalnotes         => $internalnotes,
-            serialsadditems       => $serialsadditems,
-            staffdisplaycount     => $staffdisplaycount,
-            opacdisplaycount      => $opacdisplaycount,
-            graceperiod           => $graceperiod,
-            location              => $location,
-            enddate               => $enddate,
-            skip_serialseq        => $skip_serialseq,
-            itemtype              => $itemtype,
-            previousitemtype      => $previousitemtype,
-            mana_id               => $mana_id,
-            ccode                 => $ccode,
-            published_on_template => $published_on_template,
+            librarian                             => $auser,
+            branchcode                            => $branchcode,
+            aqbooksellerid                        => $aqbooksellerid,
+            cost                                  => $cost,
+            aqbudgetid                            => $aqbudgetid,
+            biblionumber                          => $biblionumber,
+            startdate                             => $startdate,
+            periodicity                           => $periodicity,
+            numberlength                          => $numberlength,
+            weeklength                            => $weeklength,
+            monthlength                           => $monthlength,
+            lastvalue1                            => $lastvalue1,
+            innerloop1                            => $innerloop1,
+            lastvalue2                            => $lastvalue2,
+            innerloop2                            => $innerloop2,
+            lastvalue3                            => $lastvalue3,
+            innerloop3                            => $innerloop3,
+            status                                => $status,
+            notes                                 => $notes,
+            letter                                => $letter,
+            firstacquidate                        => $firstacquidate,
+            irregularity                          => $irregularity,
+            numberpattern                         => $numberpattern,
+            locale                                => $locale,
+            callnumber                            => $callnumber,
+            manualhistory                         => $manualhistory,
+            internalnotes                         => $internalnotes,
+            serialsadditems                       => $serialsadditems,
+            staffdisplaycount                     => $staffdisplaycount,
+            opacdisplaycount                      => $opacdisplaycount,
+            graceperiod                           => $graceperiod,
+            location                              => $location,
+            enddate                               => $enddate,
+            skip_serialseq                        => $skip_serialseq,
+            itemtype                              => $itemtype,
+            previousitemtype                      => $previousitemtype,
+            mana_id                               => $mana_id,
+            ccode                                 => $ccode,
+            published_on_template                 => $published_on_template,
+            preselect_issues_in_collections_table => $preselect_issues_in_collections_table,
         }
     )->store;
 
@@ -1427,58 +1432,59 @@ the id of this new subscription
 
 sub NewSubscription {
     my (
-        $auser,           $branchcode,        $aqbooksellerid,   $cost,          $aqbudgetid, $biblionumber,
-        $startdate,       $periodicity,       $numberlength,     $weeklength,    $monthlength,
-        $lastvalue1,      $innerloop1,        $lastvalue2,       $innerloop2,    $lastvalue3,
-        $innerloop3,      $status,            $notes,            $letter,        $firstacquidate, $irregularity,
-        $numberpattern,   $locale,            $callnumber,       $manualhistory, $internalnotes,
-        $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,
-        $location,        $enddate,           $skip_serialseq,   $itemtype, $previousitemtype, $mana_id, $ccode,
-        $published_on_template,
+        $auser,                 $branchcode,        $aqbooksellerid,   $cost,          $aqbudgetid, $biblionumber,
+        $startdate,             $periodicity,       $numberlength,     $weeklength,    $monthlength,
+        $lastvalue1,            $innerloop1,        $lastvalue2,       $innerloop2,    $lastvalue3,
+        $innerloop3,            $status,            $notes,            $letter,        $firstacquidate, $irregularity,
+        $numberpattern,         $locale,            $callnumber,       $manualhistory, $internalnotes,
+        $serialsadditems,       $staffdisplaycount, $opacdisplaycount, $graceperiod,
+        $location,              $enddate,           $skip_serialseq,   $itemtype, $previousitemtype, $mana_id, $ccode,
+        $published_on_template, $preselect_issues_in_collections_table
     ) = @_;
     my $dbh = C4::Context->dbh;
 
     my $subscription = Koha::Subscription->new(
         {
-            librarian             => $auser,
-            branchcode            => $branchcode,
-            aqbooksellerid        => $aqbooksellerid,
-            cost                  => $cost,
-            aqbudgetid            => $aqbudgetid,
-            biblionumber          => $biblionumber,
-            startdate             => $startdate,
-            periodicity           => $periodicity,
-            numberlength          => $numberlength,
-            weeklength            => $weeklength,
-            monthlength           => $monthlength,
-            lastvalue1            => $lastvalue1,
-            innerloop1            => $innerloop1,
-            lastvalue2            => $lastvalue2,
-            innerloop2            => $innerloop2,
-            lastvalue3            => $lastvalue3,
-            innerloop3            => $innerloop3,
-            status                => $status,
-            notes                 => $notes,
-            letter                => $letter,
-            firstacquidate        => $firstacquidate,
-            irregularity          => $irregularity,
-            numberpattern         => $numberpattern,
-            locale                => $locale,
-            callnumber            => $callnumber,
-            manualhistory         => $manualhistory,
-            internalnotes         => $internalnotes,
-            serialsadditems       => $serialsadditems,
-            staffdisplaycount     => $staffdisplaycount,
-            opacdisplaycount      => $opacdisplaycount,
-            graceperiod           => $graceperiod,
-            location              => $location,
-            enddate               => $enddate,
-            skip_serialseq        => $skip_serialseq,
-            itemtype              => $itemtype,
-            previousitemtype      => $previousitemtype,
-            mana_id               => $mana_id,
-            ccode                 => $ccode,
-            published_on_template => $published_on_template,
+            librarian                             => $auser,
+            branchcode                            => $branchcode,
+            aqbooksellerid                        => $aqbooksellerid,
+            cost                                  => $cost,
+            aqbudgetid                            => $aqbudgetid,
+            biblionumber                          => $biblionumber,
+            startdate                             => $startdate,
+            periodicity                           => $periodicity,
+            numberlength                          => $numberlength,
+            weeklength                            => $weeklength,
+            monthlength                           => $monthlength,
+            lastvalue1                            => $lastvalue1,
+            innerloop1                            => $innerloop1,
+            lastvalue2                            => $lastvalue2,
+            innerloop2                            => $innerloop2,
+            lastvalue3                            => $lastvalue3,
+            innerloop3                            => $innerloop3,
+            status                                => $status,
+            notes                                 => $notes,
+            letter                                => $letter,
+            firstacquidate                        => $firstacquidate,
+            irregularity                          => $irregularity,
+            numberpattern                         => $numberpattern,
+            locale                                => $locale,
+            callnumber                            => $callnumber,
+            manualhistory                         => $manualhistory,
+            internalnotes                         => $internalnotes,
+            serialsadditems                       => $serialsadditems,
+            staffdisplaycount                     => $staffdisplaycount,
+            opacdisplaycount                      => $opacdisplaycount,
+            graceperiod                           => $graceperiod,
+            location                              => $location,
+            enddate                               => $enddate,
+            skip_serialseq                        => $skip_serialseq,
+            itemtype                              => $itemtype,
+            previousitemtype                      => $previousitemtype,
+            mana_id                               => $mana_id,
+            ccode                                 => $ccode,
+            published_on_template                 => $published_on_template,
+            preselect_issues_in_collections_table => $preselect_issues_in_collections_table,
         }
     )->store;
     $subscription->discard_changes;

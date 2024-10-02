@@ -6497,6 +6497,7 @@ CREATE TABLE `subscription` (
   `mana_id` int(11) DEFAULT NULL,
   `ccode` varchar(80) DEFAULT NULL COMMENT 'collection code to assign to serial items',
   `published_on_template` text DEFAULT NULL COMMENT 'Template Toolkit syntax to generate the default "Published on (text)" field when receiving an issue this serial',
+  `preselect_issues_in_collections_table` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'yes / no if the subscription should preselect issues in the collections table',
   PRIMARY KEY (`subscriptionid`),
   KEY `subscription_ibfk_1` (`periodicity`),
   KEY `subscription_ibfk_2` (`numberpattern`),

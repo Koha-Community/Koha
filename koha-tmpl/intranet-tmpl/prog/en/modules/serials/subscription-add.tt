@@ -286,6 +286,15 @@
                                 [% END %]
                             </div>
                         </li>
+                        <li>
+                            <label for="preselect_issues_in_collections_table">Pre-select issues in the collections table:</label>
+                            [% IF (preselect_issues_in_collections_table) %]
+                                <input type="checkbox" id="preselect_issues_in_collections_table" name="preselect_issues_in_collections_table" checked="checked" />
+                            [% ELSE %]
+                                <input type="checkbox" id="preselect_issues_in_collections_table" name="preselect_issues_in_collections_table" />
+                            [% END %]
+                            <div class="hint">Determines whether the checkboxes in the left hand column of the collections table will be automatically checked based on the issue's status.</div>
+                        </li>
                     </ol>
                 </fieldset>
                 <fieldset class="action">
