@@ -247,7 +247,7 @@
         [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
         [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
         let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-        let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
+        let embed = ["+strings,_status,home_library,holding_library,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
         [% IF Koha.Preference('LocalCoverImages') %]
             embed.push('cover_image_ids');
         [% END %]
@@ -497,82 +497,84 @@
                     }
                 },
                 {
-                    data: "me.lost_status",
+                    data: "me._status",
                     className: "status",
                     searchable: false, // FIXME We are losing the ability to search on the status
                     orderable: false,
                     render: function (data, type, row, meta) {
                         let nodes = "";
-                        if ( row.checkout ) {
-                            [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
-                            row.checkout.patron.library = { name: libraries_names.get(row.checkout.patron.library_id) };
+                        row._status.split(",").forEach( status => {
+                            if ( status == 'checked_out' || status == 'local_use') {
+                                nodes += '<span>';
 
-                            nodes += '<span>';
-                            if ( row.checkout.onsite_checkout ) {
+                                [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
+                                row.checkout.patron.library = { name: libraries_names.get(row.checkout.patron.library_id) };
                                 let patron_to_html = $patron_to_html(row.checkout.patron, { url: true, display_cardnumber: true, hide_patron_name });
-                                nodes += _("Currently in local use by %s").format(patron_to_html);
-                            } else {
-                                nodes += '<span class="holding_status datedue">';
-                                let patron_to_html = $patron_to_html(row.checkout.patron, { url: true, display_cardnumber: true, hide_patron_name });
-                                nodes += _("Checked out to %s").format(patron_to_html);
-                            }
-                            nodes += ': ';
-                            nodes += _("due %s").format($date(row.checkout.due_date, { as_due_date: true }));
-                            nodes += "</span>"
-                        } else if ( row.transfer ) {
-                            if ( row.transfer.datesent ) {
-                                nodes += '<span class="holding_status intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.datesent)));
-                            } else {
-                                nodes += '<span class="holding_status transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.daterequested)));
-                            }
-                        }
 
-                        if ( row.lost_status ) {
-                            let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
-                            nodes += '<span class="holding_status lost">%s</span>'.format(escape_str(lost_lib));
-                            [% IF Koha.Preference('ClaimReturnedLostValue') %]
-                                const hasReturnClaims = row.return_claims.filter(rc => !rc.resolution).length > 0 ? true : false
+                                if ( status == 'local_use' ) {
+                                    nodes += _("Currently in local use by %s").format(patron_to_html);
+                                } else {
+                                    nodes += '<span class="datedue">';
+                                    nodes += _("Checked out to %s").format(patron_to_html);
+                                }
+                                nodes += ': ';
+                                nodes += _("due %s").format($date(row.checkout.due_date, { as_due_date: true }));
+                                nodes += "</span>"
+
+                            }
+                            if ( status == 'in_transit' ) {
+                                nodes += '<span class="intransit">%s</span>'.format(_("In transit from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.datesent)));
+                            }
+
+                            if ( status == 'transit_pending' ) {
+                                nodes += '<span class="transitrequested">%s</span>'.format(_("Transit pending from %s to %s since %s").format(escape_str(row.transfer._strings.from_library.str), escape_str(row.transfer._strings.to_library.str), $date(row.transfer.daterequested)));
+                            }
+
+                            if ( status == 'lost' ) {
+                                let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
+                                nodes += '<span class="lost">%s</span>'.format(escape_str(lost_lib));
+
+                                const hasReturnClaims = row.return_claims && row.return_claims.filter(rc => !rc.resolution).length > 0 ? true : false
                                 if(hasReturnClaims) {
                                     nodes += '<span class="holding_status claimed_returned">' + _("(Claimed returned)") + '</span>';
                                 }
-                            [% END %]
-                        }
-
-                        if ( row.withdrawn ) {
-                            let withdrawn_lib = av_withdrawn.get(row.withdrawn.toString()) || _("Withdrawn");
-                            nodes += '<span class="holding_status wdn">%s</span>'.format(escape_str(withdrawn_lib));
-                        }
-
-                        if ( row.damaged_status ) {
-                            let damaged_lib = av_damaged.get(row.damaged_status.toString()) || _("Damaged");
-                            nodes += '<span class="holding_status dmg">%s</span>'.format(escape_str(damaged_lib));
-                        }
-
-                        if ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) ) {
-                            let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
-                            nodes += '<span class="holding_status notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
-                        }
-
-                        if ( row.first_hold ) {
-                            if ( row.first_hold.waiting_date ) {
-                                if ( row.first_hold.desk ) {
-                                    nodes += '<span class="holding_status waitingat">%s</span>'.format(_("Waiting at %s, %s since %s.").format(row.first_hold._strings.pickup_library_id.str, row.first_hold.desk.desk_name, $date(row.first_hold.waiting_date)));
-                                } else {
-                                    nodes += '<span class="holding_status waitingat">%s</span>'.format(_("Waiting at %s since %s.").format(row.first_hold._strings.pickup_library_id.str, $date(row.first_hold.waiting_date)));
-                                }
-                                [% IF Koha.Preference('canreservefromotherbranches') %]
-                                    if ( row.first_hold.waiting_date || row.first_hold.priority == 1 ) {
-                                        [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
-                                        row.first_hold.patron.library = { name: libraries_names.get(row.first_hold.patron.library_id) };
-
-                                        let patron_to_html = $patron_to_html(row.first_hold.patron, { url: true, display_cardnumber: true, hide_patron_name });
-                                        nodes += ' <span class="holding_status heldfor">%s</span>'.format(_("Hold for: %s").format(patron_to_html));
-                                    }
-                                [% END %]
-                            } else {
-                                nodes += ' <span class="holding_status holdonitem">%s</span>'.format(_("There is an item level hold on this item (priority = %s).").format(row.first_hold.priority));
                             }
-                        }
+
+                            if ( status == 'withdrawn' ) {
+                                let withdrawn_lib = av_withdrawn.get(row.withdrawn.toString()) || _("Withdrawn");
+                                nodes += '<span class="wdn">%s</span>'.format(escape_str(withdrawn_lib));
+                            }
+
+                            if ( status == 'damaged' ) {
+                                let damaged_lib = av_damaged.get(row.damaged_status.toString()) || _("Damaged");
+                                nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
+                            }
+
+                            if ( status == 'not_for_loan' ) {
+                                let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
+                                nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
+                            }
+
+                            if ( status == 'on_hold') {
+                                if ( row.first_hold.waiting_date ) {
+                                    if ( row.first_hold.desk ) {
+                                        nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s, %s since %s.".format(row.first_hold._strings.pickup_library_id.str, row.first_hold.desk.desk_name, $date(row.first_hold.waiting_date))));
+                                    } else {
+                                        nodes += '<span class="waitingat">%s</span>'.format(_("Waiting at %s since %s.".format(row.first_hold._strings.pickup_library_id.str, $date(row.first_hold.waiting_date))));
+                                    }
+                                    [% IF Koha.Preference('canreservefromotherbranches') %]
+                                        if ( row.first_hold.waiting_date || row.first_hold.priority == 1 ) {
+                                            [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
+                                            row.first_hold.patron.library = { name: libraries_names.get(row.first_hold.patron.library_id) };
+
+                                            let patron_to_html = $patron_to_html(row.first_hold.patron, { url: true, display_cardnumber: true, hide_patron_name });
+                                            nodes += ' <span class="heldfor">%s</span>'.format(_("Hold for: %s").format(patron_to_html));
+                                        }
+                                    [% END %]
+                                } else {
+                                    nodes += ' <span class="holdonitem">%s</span>'.format(_("There is an item level hold on this item (priority = %s).").format(row.first_hold.priority));
+                                }
+                            }
 
                         [% IF Koha.Preference('UseRecalls') %]
                             if ( row.recall && ( row.item_id === row.recall.item_id ) ) {
@@ -587,18 +589,17 @@
                                 }
                             }
                         [% END %]
+                            if ( status == 'available' ) {
+                                nodes += ' <span>%s</span>'.format(_("Available"))
+                            }
 
-                        if ( ! ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || ( row.recall && ( row.item_id === row.recall.item_id ) ) )) {
-                            nodes += ' <span class="holding_status available">%s</span>'.format(_("Available"))
-                        }
-
-                        if ( row.restricted_status ) {
-                            nodes += '<span class="holding_status restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
-                        }
-
-                        if ( row.in_bundle ) {
-                            nodes += '<span class="holding_status bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
-                        }
+                            if ( status == 'restricted') {
+                                nodes += '<span class="restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
+                            }
+                            if ( status == 'in_bundle') {
+                                nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
+                            }
+                        });
                         return nodes;
                     }
                 },

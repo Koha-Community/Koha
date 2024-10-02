@@ -1435,6 +1435,57 @@ sub columns_to_str {
     return $values;
 }
 
+sub _status {
+    my ($self) = @_;
+
+    my @statuses;
+    if ( my $checkout = $self->checkout ) {
+        unless ( $checkout->onsite_checkout ) {
+            push @statuses, "checked_out";
+        } else {
+            push @statuses, "local_use";
+        }
+    } elsif ( my $transfer = $self->transfer ) {
+        if ( $transfer->datesent ) {
+            push @statuses, "in_transit";
+        } else {
+            push @statuses, "transit_pending";
+        }
+    }
+    if ( $self->itemlost ) {
+        push @statuses, 'lost';
+    }
+    if ( $self->withdrawn ) {
+        push @statuses, 'withdrawn';
+    }
+    if ( $self->damaged ) {
+        push @statuses, 'damaged';
+    }
+    if ( $self->notforloan || $self->item_type->notforloan ) {
+
+        # TODO on a big Koha::Items loop we are going to join with item_type too often, use a cache
+        push @statuses, 'not_for_loan';
+    }
+    if ( $self->first_hold ) {
+        push @statuses, 'on_hold';
+    }
+    if ( C4::Context->preference('UseRecalls') && $self->recall ) {
+        push @statuses, 'recalled';
+    }
+
+    unless (@statuses) {
+        push @statuses, 'available';
+    }
+
+    if ( $self->restricted ) {
+        push @statuses, 'restricted';
+    }
+
+    # TODO in_bundle?
+
+    return join ',', @statuses;
+}
+
 =head3 additional_attributes
 
     my $attributes = $item->additional_attributes;
