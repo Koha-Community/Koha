@@ -5,7 +5,9 @@ properties:
     type: integer
     description: Internal identifier for the basket
   name:
-    type: string
+    type:
+      - string
+      - "null"
     description: Basket name
   internal_note:
     type:
@@ -18,7 +20,9 @@ properties:
       - "null"
     description: Vendor note
   contract_id:
-    type: integer
+    type:
+      - integer
+      - "null"
     description: Internal identifier of the linked contract
   creation_date:
     type:
@@ -35,7 +39,7 @@ properties:
   vendor_id:
     type: integer
     description: Internal identifier for the vendor
-  authorised_by:
+  creator_id:
     type:
       - integer
       - "null"
@@ -45,12 +49,12 @@ properties:
       - integer
       - "null"
     description: links this basket to its group (aqbasketgroups.id)
-  delivery_library:
+  delivery_library_id:
     type:
       - string
       - "null"
     description: basket delivery place
-  billing_library:
+  billing_library_id:
     type:
       - string
       - "null"
@@ -63,12 +67,23 @@ properties:
   standing:
     type: boolean
     description: If the orders in this basket are standing
+  closed:
+    type: boolean
+    description: Is the basket closed
+  note:
+    type:
+      - string
+      - "null"
+    description: basket notes
   create_items:
-    type: string
+    type:
+      - string
+      - "null"
     enum:
       - ordering
       - receiving
       - cataloguing
+      - null
     description: "When items should be created for orders in this basket (Options:
       'ordering', 'receiving', 'cataloguing'. Null means system wide config)"
 additionalProperties: false

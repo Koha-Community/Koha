@@ -1,4 +1,53 @@
 ---
+/acquisitions/baskets:
+  get:
+    x-mojo-to: Acquisitions::Baskets#list
+    operationId: listBaskets
+    description: This resource returns a list of baskets
+    summary: List of baskets
+    tags:
+      - baskets
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of baskets
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/basket"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        acquisition: order_manage
 /acquisitions/baskets/managers:
   get:
     x-mojo-to: Acquisitions::Baskets#list_managers

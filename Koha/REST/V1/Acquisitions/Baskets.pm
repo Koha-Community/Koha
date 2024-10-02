@@ -59,4 +59,28 @@ sub list_managers {
     };
 }
 
+=head3 list
+
+Return a list of baskets
+
+=cut
+
+sub list {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+
+        my $baskets_rs = Koha::Acquisition::Baskets->new;
+        my $baskets    = $c->objects->search( $baskets_rs );
+
+        return $c->render(
+            status  => 200,
+            openapi => $baskets
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 1;
