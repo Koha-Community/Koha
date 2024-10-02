@@ -151,6 +151,11 @@ sub after_hold_create {
     Koha::Exception->throw("after_hold_create called with parameter " . ref($param) );
 }
 
+sub before_send_messages {
+    my ( $self, $param ) = @_;
+    Koha::Exception->throw("before_send_messages called");
+}
+
 sub before_biblio_action {
     my ( $self, $params ) = @_;
 

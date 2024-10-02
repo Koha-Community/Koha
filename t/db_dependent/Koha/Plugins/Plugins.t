@@ -257,6 +257,7 @@ subtest 'Koha::Plugin::Test' => sub {
     ok( $plugin->can('intranet_catalog_biblio_enhancements_toolbar_button'), 'Test plugin can intranet_catalog_biblio_enhancements_toolbar_button' );
     ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
     ok( $plugin->can('after_hold_create'), 'Test plugin can after_hold_create' );
+    ok( $plugin->can('before_send_messages'), 'Test plugin can before_send_messages' );
     ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
     ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
     ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );

@@ -68,6 +68,7 @@ subtest 'after_hold_create() hook tests' => sub {
     $test_plugin->mock( 'after_biblio_action', undef );
     $test_plugin->mock( 'item_barcode_transform', undef );
     $test_plugin->mock( 'after_hold_action', undef );
+    $test_plugin->mock( 'before_send_messages', undef );
 
     my $biblio = $builder->build_sample_biblio();
     my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
