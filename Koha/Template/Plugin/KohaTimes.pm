@@ -26,7 +26,7 @@ sub filter {
     return "" unless $text;
 
     my ( $hours, $minutes, $seconds ) = split( ':', $text );
-    if ( C4::Context->preference('TimeFormat') == "12hr" ) {
+    if ( C4::Context->preference('TimeFormat') eq "12hr" ) {
         my $ampm = ( $hours >= 12 ) ? 'pm' : 'am';
         $hours = ( $hours == 0 ) ? "12"            : $hours;
         $hours = ( $hours > 12 ) ? ( $hours - 12 ) : $hours;
