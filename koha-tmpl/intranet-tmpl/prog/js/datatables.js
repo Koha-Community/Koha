@@ -58,7 +58,7 @@ var dataTablesDefaults = {
     initComplete: function( settings ) {
         var tableId = settings.nTable.id
         var state =  settings.oLoadedState;
-        state && toggledClearFilter(state.search.search, tableId);
+        state && state.search && toggledClearFilter(state.search.search, tableId);
 
         if (settings.ajax) {
             let table_node = $("#" + tableId);
@@ -1012,31 +1012,38 @@ function _dt_get_saved_state( localstorage_config, columns_settings ){
 
         if ( table_settings ) {
 
-            var table_key =
-                'DataTables_' +
-                table_settings['module'] +'_' +
-                table_settings['page'] +'_' +
-                table_settings['table'];
+            let columns_settings = table_settings["columns"];
+            let table_key = 'DataTables_%s_%s_%s'.format(
+                table_settings["module"],
+                table_settings["page"],
+                table_settings["table"]);
 
-            settings["stateSave"] = true;
-            settings["stateSaveCallback"] = function( settings, data ) {
-                localStorage.setItem( table_key, JSON.stringify(data) )
+            let default_save_state        = table_settings.default_save_state;
+            let default_save_state_search = table_settings.default_save_state_search;
+
+            if ( default_save_state ) {
+                settings["stateSave"] = true;
+                settings["stateSaveCallback"] = function( settings, data ) {
+                    if (!default_save_state_search ) {
+                        delete data.search;
+                        data.columns.forEach(c => delete c.search );
+                    }
+                    localStorage.setItem( table_key, JSON.stringify(data) )
+                }
+                settings["stateLoadCallback"] = function(settings) {
+                    return JSON.parse( localStorage.getItem(table_key) )
+                }
+                let local_settings = localStorage.getItem(table_key);
+                columns_settings = _dt_get_saved_state(local_settings, columns_settings);
+            } else {
+                localStorage.removeItem(table_key);
             }
-            settings["stateLoadCallback"] = function(settings) {
-                return JSON.parse( localStorage.getItem(table_key) )
-            }
-            var local_settings = localStorage.getItem(table_key);
-            var system_settings = table_settings["columns"];
-            var columns_settings = _dt_get_saved_state(local_settings, system_settings);
 
             if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
                 settings["pageLength"] = table_settings['default_display_length'];
             }
             if ( table_settings.hasOwnProperty('default_sort_order') && table_settings['default_sort_order'] != null ) {
                 settings["order"] = [[ table_settings['default_sort_order'], 'asc' ]];
-            }
-            if ( table_settings.hasOwnProperty('default_save_state') && table_settings['default_save_state'] === 0 ) {
-                localStorage.removeItem(table_key);
             }
         }
 

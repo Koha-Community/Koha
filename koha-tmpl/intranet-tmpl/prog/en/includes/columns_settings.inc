@@ -12,25 +12,34 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
 
     if ( table_settings ) {
 
-        var table_key =
-          'DataTables_' +
-          table_settings['module'] +'_' +
-          table_settings['page'] +'_' +
-          table_settings['table'];
+        let columns_settings = table_settings["columns"];
 
-        // enable stateSave
-        dt_parameters['stateSave']         = true;
-        dt_parameters['stateSaveCallback'] = function( settings, data ) {
-            localStorage.setItem( table_key, JSON.stringify(data) )
-        }
-        dt_parameters['stateLoadCallback'] = function(settings) {
-            return JSON.parse( localStorage.getItem(table_key) )
+        let table_key = 'DataTables_%s_%s_%s'.format(
+            table_settings["module"],
+            table_settings["page"],
+            table_settings["table"]);
+
+        let default_save_state        = table_settings.default_save_state;
+        let default_save_state_search = table_settings.default_save_state_search;
+
+        if ( default_save_state ) {
+            dt_parameters["stateSave"] = true;
+            dt_parameters["stateSaveCallback"] = function( settings, data ) {
+                if (!default_save_state_search ) {
+                    delete data.search;
+                    data.columns.forEach(c => delete c.search );
+                }
+                localStorage.setItem( table_key, JSON.stringify(data) )
+            }
+            dt_parameters["stateLoadCallback"] = function(settings) {
+                return JSON.parse( localStorage.getItem(table_key) )
+            }
+            let local_settings = localStorage.getItem(table_key);
+            columns_settings = get_columns_saved_state(local_settings, columns_settings);
+        } else {
+            localStorage.removeItem(table_key);
         }
 
-        // merge stateSave for column settings
-        var local_settings = localStorage.getItem(table_key);
-        var system_settings = table_settings['columns'];
-        var columns_settings = get_columns_saved_state(local_settings, system_settings);
 
         $(columns_settings).each( function() {
             var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
