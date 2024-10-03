@@ -41,8 +41,14 @@ $(document).ready(function() {
         `)
         win.document.write( title );
         win.document.write( contents );
+        win.document.close();
+        win.addEventListener("afterprint", function () {
+            win.addEventListener("focus", function () {
+                win.close();
+            });
+            win.close();
+        });
         win.print();
-        win.close();
     }
 
     // Set focused on printable modals on open and autoprint if required
