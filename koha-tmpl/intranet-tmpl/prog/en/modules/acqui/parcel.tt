@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE TablesSettings %]
 [% USE Price %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
@@ -669,7 +670,9 @@
                 "orderable": false
             });
 
-            var pending_orders_table = $("#pending_orders").kohaTable(options, {}, 1, { "basket.vendor_id": [% booksellerid | html %] });
+            let table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'parcel', 'pending_orders', 'json' ) | $raw %];
+
+            var pending_orders_table = $("#pending_orders").kohaTable(options, table_settings, 1, { "basket.vendor_id": [% booksellerid | html %] });
 
             var api = pending_orders_table.api();
             api.on('draw', function () {
