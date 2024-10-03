@@ -951,10 +951,8 @@ function _dt_get_saved_state( localstorage_config, columns_settings ){
                 columns_settings[ index ].is_hidden = stateSave_column_visibility[ index ];
             }
         });
-        return columns_settings;
-    } else {
-        return columns_settings;
     }
+    return columns_settings;
 }
 
 (function($) {
