@@ -13,5 +13,12 @@ return {
             });
             say $out "Added column 'tables_settings.default_save_state'";
         }
+        if ( !column_exists( 'tables_settings', 'default_save_state_search' ) ) {
+            $dbh->do(q{
+                ALTER TABLE tables_settings
+                  ADD COLUMN default_save_state_search tinyint(1) DEFAULT 0 AFTER default_save_state
+            });
+            say $out "Added column 'tables_settings.default_save_state_search'";
+        }
     },
 };

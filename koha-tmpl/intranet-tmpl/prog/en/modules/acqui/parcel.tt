@@ -374,7 +374,7 @@
 
             if ( $("#receivedt").length ) {
                 var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "stateSave": true,
+                    "stateSave": true, // We do not have table settings on this table
                     "pageLength": 10,
                     "lengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
                     "columnDefs": [
@@ -413,7 +413,6 @@
                     "current_item_level_holds+count",
                     "items"
                 ],
-                "stateSave": true, // remember state on page reload
                 "columns": [
                     { "data": "basket.name",
                       "searchable": true,

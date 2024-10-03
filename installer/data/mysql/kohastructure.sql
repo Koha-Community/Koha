@@ -6297,6 +6297,7 @@ CREATE TABLE `tables_settings` (
   `default_display_length` smallint(6) DEFAULT NULL,
   `default_sort_order` varchar(255) DEFAULT NULL,
   `default_save_state` tinyint(1) DEFAULT 1,
+  `default_save_state_search` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`module`(191),`page`(191),`tablename`(191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
