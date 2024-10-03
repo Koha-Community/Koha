@@ -4,10 +4,9 @@
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @show="doShow"
-                @edit="doEdit"
-                @delete="doDelete"
-                @select="doSelect"
+                @addToBasket="addToBasket"
+                @closeBasket="closeBasket"
+                @uncertainPrices="uncertainPrices"
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
@@ -23,6 +22,9 @@ import KohaTable from "../KohaTable.vue";
 
 export default {
     setup() {
+        const patronToHTML = $patron_to_html;
+        const formatDate = $date;
+
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
@@ -36,6 +38,8 @@ export default {
             setConfirmationDialog,
             setMessage,
             escape_str,
+            patronToHTML,
+            formatDate,
         };
     },
     data() {
@@ -44,79 +48,53 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
+                options: { embed: "orders,creator,basket_group" },
                 url: () => this.tableURL(),
                 add_filters: true,
-                // filters_options: {
-                //     1: [
-                //         { _id: 0, _str: this.$__("Inactive") },
-                //         { _id: 1, _str: this.$__("Active") },
-                //     ],
-                //     ...(this.map_av_dt_filter("vendor_types").length && {
-                //         2: () => this.map_av_dt_filter("vendor_types"),
-                //     }),
-                // },
                 actions: {
-                    "-1": ["edit", "delete"],
+                    "-1": [
+                        {
+                            addToBasket: {
+                                text: this.$__("Add to basket"),
+                                icon: "fa fa-plus",
+                            },
+                        },
+                        {
+                            closeBasket: {
+                                text: this.$__("Close basket"),
+                                icon: "fa fa-close",
+                                should_display: row =>
+                                    row.orders.length > 0 && !row.standing,
+                            },
+                        },
+                        {
+                            uncertainPrices: {
+                                text: this.$__("Uncertain prices"),
+                                icon: "fa fa-question",
+                                should_display: row =>
+                                    row.orders.filter(o => o.uncertain_price)
+                                        .length > 0,
+                            },
+                        },
+                    ],
                 },
             },
-            before_route_entered: false,
-            building_table: false,
         };
     },
     methods: {
-        doShow({ id }, dt, event) {
+        addToBasket({ agreement_id }, dt, event) {
             event.preventDefault();
-            this.$router.push({
-                name: "VendorShow",
-                params: { vendor_id: id },
-            });
-        },
-        doEdit({ id }, dt, event) {
-            this.$router.push({
-                name: "VendorFormAddEdit",
-                params: { vendor_id: id },
-            });
-        },
-        doDelete(vendor, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this vendor?"
-                    ),
-                    message: vendor.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.acquisition;
-                    client.vendors.delete(vendor.id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Vendor %s deleted").format(
-                                    vendor.name
-                                ),
-                                true
-                            );
-                            dt.draw();
-                        },
-                        error => {}
-                    );
-                }
-            );
-        },
-        doSelect(vendor, dt, event) {
-            this.$emit("select-vendor", vendor.id);
-            this.$emit("close");
         },
         tableURL() {
             let url =
                 "/api/v1/acquisitions/baskets?q=" +
-                JSON.stringify({ vendor_id: this.vendorId });
+                JSON.stringify({ "me.vendor_id": this.vendorId });
             return url;
         },
         getTableColumns() {
             const escape_str = this.escape_str;
-            const get_lib_from_av = this.get_lib_from_av;
+            const patronToHTML = this.patronToHTML;
+            const formatDate = this.formatDate;
 
             return [
                 {
@@ -126,7 +104,7 @@ export default {
                     orderable: true,
                     render(data, type, row, meta) {
                         return (
-                            '<a href="/cgi-bin/koha/acqui/basket.pl?basket_id=' +
+                            '<a href="/cgi-bin/koha/acqui/basket.pl?basketno=' +
                             row.basket_id +
                             '" class="show">' +
                             escape_str(`${row.name} (#${row.basket_id})`) +
@@ -137,59 +115,111 @@ export default {
                 {
                     title: __("Item count"),
                     data: "name",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
+
                     render(data, type, row, meta) {
-                        return escape_str(row.name);
+                        let count = row.orders.length;
+                        const cancelledOrders = row.orders.filter(
+                            o => o.status == "cancelled"
+                        ).length;
+                        if (cancelledOrders) {
+                            count +=
+                                " (" + cancelledOrders + _(" cancelled") + ")";
+                        }
+                        return count;
                     },
                 },
                 {
                     title: __("Bibliographic record count"),
                     data: "name",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
                     render(data, type, row, meta) {
-                        return escape_str(row.name);
+                        const recordCount = row.orders.reduce(
+                            (acc, order) => {
+                                if (
+                                    !acc.cancelledBibs.includes(
+                                        order.biblio_id
+                                    ) &&
+                                    order.status == "cancelled"
+                                ) {
+                                    acc.cancelledBibs.push(order.biblio_id);
+                                }
+                                if (acc.bibNumbers.includes(order.biblio_id)) {
+                                    return acc;
+                                }
+                                acc.bibNumbers.push(order.biblio_id);
+                                return acc;
+                            },
+                            {
+                                bibNumbers: [],
+                                cancelledBibs: [],
+                            }
+                        );
+                        let count = recordCount.bibNumbers.length;
+                        if (recordCount.cancelledBibs.length) {
+                            count +=
+                                " (" +
+                                recordCount.cancelledBibs.length +
+                                _(" cancelled") +
+                                ")";
+                        }
+                        return count;
                     },
                 },
                 {
                     title: __("Items expected"),
                     data: "name",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
                     render(data, type, row, meta) {
-                        return escape_str(row.name);
+                        return row.orders.filter(
+                            o => !o.date_received && !o.cancellation_date
+                        ).length;
                     },
                 },
                 {
                     title: __("Created by"),
                     data: "creator_id",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
+                    render(data, type, row, meta) {
+                        return patronToHTML(row.creator);
+                    },
                 },
                 {
                     title: __("Date"),
                     data: "creation_date",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
+                    render(data, type, row, meta) {
+                        return formatDate(row.creation_date);
+                    },
                 },
                 {
                     title: __("Basket group"),
                     data: "basket_group_id",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
+                    render(data, type, row, meta) {
+                        return row.basket_group ? row.basket_group.name : "";
+                    },
                 },
                 {
                     title: __("Internal note"),
                     data: "note",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
                 },
                 {
-                    title: __("Close"),
+                    title: __("Closed"),
                     data: "close_date",
-                    searchable: true,
+                    searchable: false,
                     orderable: true,
+                    render(data, type, row, meta) {
+                        return formatDate(row.close_date);
+                    },
                 },
             ];
         },

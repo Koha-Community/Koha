@@ -73,6 +73,22 @@ properties:
       - string
       - "null"
     description: basket notes
+  orders:
+    type: array
+    description: List of orderlines for the basket
+    items:
+      $ref: "order.yaml"
+  creator:
+    type:
+      - object
+      - "null"
+    description: Creator for the basket
+    $ref: "patron.yaml"
+  basket_group:
+    type:
+      - object
+      - "null"
+    description: Basket group
   create_items:
     type:
       - string

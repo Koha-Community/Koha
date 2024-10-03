@@ -20,7 +20,7 @@
                     path: '/cgi-bin/koha/acqui/parcels.pl',
                     query: { booksellerid: vendor.id },
                 }"
-                icon="plus"
+                icon="inbox"
                 :title="$__('Receive shipments')"
                 callback="redirect"
             />
@@ -76,14 +76,9 @@ import VendorBaskets from "./VendorBaskets.vue";
 
 export default {
     setup() {
-        const format_date = $date;
-        const patron_to_html = $patron_to_html;
-
         const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         return {
-            format_date,
-            patron_to_html,
             setConfirmationDialog,
             setMessage,
         };
