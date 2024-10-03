@@ -99,9 +99,12 @@
                         dateSeparator: delimiter,
                         overwiteMode: 'replace',
                     });
-                } else if ( accepts_time_only ) {
-                    maskitoOptions = maskitoTimeOptionsGenerator({
-                    });
+               } else if ( accepts_time_only ) {
+                    maskitoOptions = {
+                        [% IF Koha.Preference('TimeFormat') == '12hr' -%] mask: [/\d/, /\d/, ':', /\d/, /\d/, ' ', /(a|A|p|P)/, /(m|M)/]
+                        [%- ELSE -%]mask: [/\d/, /\d/, ':', /\d/, /\d/]
+                        [%- END %],
+                    };
                 } else {
                     maskitoOptions = maskitoDateOptionsGenerator({
                         mode: altinput_dateformat,
