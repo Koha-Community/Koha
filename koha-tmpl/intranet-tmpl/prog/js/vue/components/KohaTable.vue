@@ -37,37 +37,10 @@ export default {
         }
 
         if (this.table_settings) {
-            let columns_settings = this.table_settings["columns"]
-            let table_key = "DataTables_%s_%s_%s".format(
-                this.table_settings.module,
-                this.table_settings.page,
-                this.table_settings.table
-            )
-
-            let default_save_state = this.table_settings.default_save_state
-            let default_save_state_search =
-                this.table_settings.default_save_state_search
-
-            if (default_save_state) {
-                this.options.stateSave = true
-                this.options.stateSaveCallback = function (settings, data) {
-                    if (!default_save_state_search) {
-                        delete data.search
-                        data.columns.forEach(c => delete c.search)
-                    }
-                    localStorage.setItem(table_key, JSON.stringify(data))
-                }
-                this.options.stateLoadCallback = function (settings) {
-                    return JSON.parse(localStorage.getItem(table_key))
-                }
-                let local_settings = localStorage.getItem(table_key)
-                columns_settings = _dt_get_saved_state(
-                    local_settings,
-                    columns_settings
-                )
-            } else {
-                localStorage.removeItem(table_key)
-            }
+            let state_settings = _dt_save_restore_state(this.table_settings)
+            this.options.stateSave = state_settings.stateSave
+            this.options.stateSaveCallback = state_settings.stateSaveCallback
+            this.options.stateLoadCallback = state_settings.stateLoadCallback
 
             if (
                 this.table_settings.hasOwnProperty("default_display_length") &&

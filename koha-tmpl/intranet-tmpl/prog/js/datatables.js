@@ -938,21 +938,35 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
     });
 }
 
-function _dt_get_saved_state( localstorage_config, columns_settings ){
-    var tables = JSON.parse( localstorage_config );
-    // if a table configuration was found in local storage, parse it
-    if( tables ){
-        var stateSave_column_visibility = [];
-        $(tables.columns).each(function(){
-            stateSave_column_visibility.push( this.visible === true ? 0 : 1 );
-        });
-        $.each( columns_settings, function( index, key ){
-            if( stateSave_column_visibility[ index ] !== columns_settings[key] ){
-                columns_settings[ index ].is_hidden = stateSave_column_visibility[ index ];
-            }
-        });
+function _dt_save_restore_state(table_settings){
+
+    let table_key = 'DataTables_%s_%s_%s'.format(
+        table_settings.module,
+        table_settings.page,
+        table_settings.table);
+
+    let default_save_state        = table_settings.default_save_state;
+    let default_save_state_search = table_settings.default_save_state_search;
+
+    let stateSaveCallback = function( settings, data ) {
+        localStorage.setItem( table_key, JSON.stringify(data) )
     }
-    return columns_settings;
+    let stateLoadCallback = function(settings) {
+        if (!default_save_state) return {};
+
+        let state = localStorage.getItem(table_key);
+        if (!state) return {};
+
+        state = JSON.parse(state);
+
+        if (!default_save_state_search ) {
+            delete state.search;
+            state.columns.forEach(c => delete c.search );
+        }
+        return state;
+    }
+
+    return {stateSave: true, stateSaveCallback, stateLoadCallback};
 }
 
 (function($) {
@@ -1009,33 +1023,8 @@ function _dt_get_saved_state( localstorage_config, columns_settings ){
         }
 
         if ( table_settings ) {
-
-            let columns_settings = table_settings["columns"];
-            let table_key = 'DataTables_%s_%s_%s'.format(
-                table_settings["module"],
-                table_settings["page"],
-                table_settings["table"]);
-
-            let default_save_state        = table_settings.default_save_state;
-            let default_save_state_search = table_settings.default_save_state_search;
-
-            if ( default_save_state ) {
-                settings["stateSave"] = true;
-                settings["stateSaveCallback"] = function( settings, data ) {
-                    if (!default_save_state_search ) {
-                        delete data.search;
-                        data.columns.forEach(c => delete c.search );
-                    }
-                    localStorage.setItem( table_key, JSON.stringify(data) )
-                }
-                settings["stateLoadCallback"] = function(settings) {
-                    return JSON.parse( localStorage.getItem(table_key) )
-                }
-                let local_settings = localStorage.getItem(table_key);
-                columns_settings = _dt_get_saved_state(local_settings, columns_settings);
-            } else {
-                localStorage.removeItem(table_key);
-            }
+            let state_settings = _dt_save_restore_state(table_settings);
+            settings = {...settings, ...state_settings};
 
             if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
                 settings["pageLength"] = table_settings['default_display_length'];
