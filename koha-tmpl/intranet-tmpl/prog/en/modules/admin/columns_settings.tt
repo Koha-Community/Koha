@@ -23,14 +23,14 @@
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 1 %]
                         Jump to table:
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '#' _ tablename %]
+                            [% SET table_id = pagename _ '|' _ tablename %]
                             <a href="#[% table_id | uri %]">[% tablename | html %]</a>
                             [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
                         [% END %]
                     [% END %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% SET table_id = pagename _ '_' _ tablename %]
+                            [% SET table_id = pagename _ '|' _ tablename %]
                             <div class="datatable_config" id="[% table_id | html %]">
                                 <input type="hidden" name="table_id" value="[% table_id| html %]" />
                                 [% IF pagename == 'additem' AND tablename == 'itemst' %]
@@ -57,7 +57,7 @@
                                     </thead>
                                     <tbody>
                                         [% FOR column IN tables.$pagename.$tablename.columns %]
-                                            [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
+                                            [% SET value = pagename _ '|' _ tablename _ '|' _ column.columnname %]
                                             <tr>
                                                 <td>
                                                     [% column.columnname | html %]
@@ -137,7 +137,7 @@
                                 [% IF table_settings.default_sort_order.defined %]
                                     <p>
                                         Default sort order:
-                                        <select name="[% pagename | html %]#[% tablename | html %]_default_sort_order">
+                                        <select name="[% pagename | html %]|[% tablename | html %]_default_sort_order">
                                             [% FOR column IN tables.$pagename.$tablename.columns %]
                                                 [% IF table_settings.default_sort_order == loop.count - 1 %]
                                                     <option value="[% loop.count - 1 %]" selected="selected">[% column.columnname | html %]</option>

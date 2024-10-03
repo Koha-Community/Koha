@@ -24,7 +24,7 @@ if ( $op eq 'cud-save' ) {
     my @columnids = $input->multi_param("columnid");
     my @columns;
     for my $columnid (@columnids) {
-        next unless $columnid =~ m|^([^#]*)#([^#]*)#(.*)$|;
+        next unless $columnid =~ m{^([^\|]*)\|([^\|]*)\|(.*)$};
         my $is_hidden = $input->param( $columnid . '_hidden' ) // 0;
         my $cannot_be_toggled =
           $input->param( $columnid . '_cannot_be_toggled' ) // 0;
@@ -47,7 +47,7 @@ if ( $op eq 'cud-save' ) {
 
     my @table_ids = $input->multi_param('table_id');
     for my $table_id (@table_ids) {
-        next unless $table_id =~ m|^([^#]*)#(.*)$|;
+        next unless $table_id =~ m{^([^\|]*)\|(.*)$};
         my $default_display_length = $input->param( $table_id . '_default_display_length' );
         my $default_sort_order     = $input->param( $table_id . '_default_sort_order' );
 
