@@ -57,14 +57,17 @@ sub get_columns {
     my $columns = $list->{modules}{$module}{$page}{$tablename}{columns} || [];
 
     # Assign default value if does not exist
-    $columns = [ map {
-        {
-            cannot_be_toggled => exists $_->{cannot_be_toggled} ? $_->{cannot_be_toggled} : 0,
-            cannot_be_modified => exists $_->{cannot_be_modified} ? $_->{cannot_be_modified} : 0,
-            is_hidden => exists $_->{is_hidden} ? $_->{is_hidden} : 0,
-            columnname => $_->{columnname},
-        }
-    } @$columns ];
+    $columns = [
+        map {
+            {
+                cannot_be_toggled  => exists $_->{cannot_be_toggled}  ? $_->{cannot_be_toggled}  : 0,
+                cannot_be_modified => exists $_->{cannot_be_modified} ? $_->{cannot_be_modified} : 0,
+                is_hidden          => exists $_->{is_hidden}          ? $_->{is_hidden}          : 0,
+                default_save_state => exists $_->{default_save_state} ? $_->{default_save_state} : 1,
+                columnname         => $_->{columnname},
+            }
+        } @$columns
+    ];
 
     return $columns;
 }
@@ -100,12 +103,15 @@ sub get_table_settings {
     )->next;
 
     return {
-        default_display_length => $rs ? $rs->default_display_length
-        : $list->{modules}{$module}{$page}{$tablename}{default_display_length},
-        default_sort_order => $rs ? $rs->default_sort_order
-        : $list->{modules}{$module}{$page}{$tablename}{default_sort_order},
-        default_save_state => $rs ? $rs->default_save_state
-        : $list->{modules}{$module}{$page}{$tablename}{default_save_state},
+        default_display_length => $rs
+            ? $rs->default_display_length
+            : $list->{modules}{$module}{$page}{$tablename}{default_display_length},
+        default_sort_order => $rs
+            ? $rs->default_sort_order
+            : $list->{modules}{$module}{$page}{$tablename}{default_sort_order},
+        default_save_state => $rs
+            ? $rs->default_save_state
+            : 1,
     };
 }
 

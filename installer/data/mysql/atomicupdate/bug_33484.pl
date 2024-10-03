@@ -9,7 +9,7 @@ return {
         if ( !column_exists( 'tables_settings', 'default_save_state' ) ) {
             $dbh->do(q{
                 ALTER TABLE tables_settings
-                  ADD COLUMN default_save_state tinyint(1) DEFAULT NULL AFTER default_sort_order
+                  ADD COLUMN default_save_state tinyint(1) DEFAULT 1 AFTER default_sort_order
             });
             say $out "Added column 'tables_settings.default_save_state'";
         }
