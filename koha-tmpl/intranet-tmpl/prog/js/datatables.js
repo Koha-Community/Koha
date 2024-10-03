@@ -56,12 +56,13 @@ var dataTablesDefaults = {
     "pageLength": 20,
     "fixedHeader": true,
     initComplete: function( settings ) {
-        var tableId = settings.nTable.id
-        var state =  settings.oLoadedState;
+        var tableId = settings.nTable.id;
+        let table_node = $("#" + tableId);
+
+        state =  settings.oLoadedState;
         state && state.search && toggledClearFilter(state.search.search, tableId);
 
         if (settings.ajax) {
-            let table_node = $("#" + tableId);
             if ( typeof this.api === 'function' ) {
                 _dt_add_delay(this.api(), table_node);
             } else {
@@ -757,6 +758,28 @@ function _dt_buttons(params){
         }
     );
 
+    buttons.push(
+        {
+            autoClose: true,
+            fade: 100,
+            className: "copyConditions_controls",
+            titleAttr: __("Copy conditions"),
+            text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
+            action: function (e, dt, node, config) {
+                let state = JSON.stringify(dt.state());
+                delete state.time;
+                let searchParams = new URLSearchParams(window.location.search);
+                let table_id = dt.table().node().id;
+                searchParams.set(table_id + '_state', btoa(state));
+                let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
+                if( navigator.clipboard && navigator.clipboard.writeText){
+                    navigator.clipboard.writeText( url );
+                    // TODO Add tooltip "State copied to the clipboard"
+                }
+            },
+        }
+    );
+
     if ( table_settings && CAN_user_parameters_manage_column_config ) {
         buttons.push(
             {
@@ -952,6 +975,14 @@ function _dt_save_restore_state(table_settings){
         localStorage.setItem( table_key, JSON.stringify(data) )
     }
     let stateLoadCallback = function(settings) {
+
+        // Load state from URL
+        const url = new URL(window.location.href);
+        let state_from_url = url.searchParams.get( settings.nTable.id + '_state');
+        if ( state_from_url ) {
+            return JSON.parse(atob(state_from_url));
+        }
+
         if (!default_save_state) return {};
 
         let state = localStorage.getItem(table_key);
