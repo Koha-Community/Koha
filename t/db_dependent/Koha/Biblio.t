@@ -1613,7 +1613,7 @@ subtest 'opac_summary_html' => sub {
 
 subtest 'can_be_edited() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -1640,6 +1640,24 @@ subtest 'can_be_edited() tests' => sub {
     );
 
     ok( $biblio->can_be_edited($patron), "Patron with 'edit_catalogue' can edit" );
+
+    my $fa_biblio = $builder->build_sample_biblio( { frameworkcode => 'FA' } );
+    my $fa_patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+
+    # Add editcatalogue => edit_catalog subpermission
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $fa_patron->id,
+                module_bit     => 9,                   # editcatalogue
+                code           => 'fast_cataloging',
+            },
+        }
+    );
+
+    ok( !$biblio->can_be_edited($fa_patron),   "Fast add permissions are not enough" );
+    ok( $fa_biblio->can_be_edited($fa_patron), "Fast add user can edit FA records" );
 
     # Mock the record source doesn't allow direct editing
     $source_allows_editing = 0;
