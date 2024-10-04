@@ -326,9 +326,6 @@
                                         [% IF ( errmsgloo.badbarcode ) %]
                                             <p class="problem ret_badbarcode">No item with barcode: [% errmsgloo.msg | html %]</p>
                                         [% END %]
-                                        [% IF ( errmsgloo.ispermanent ) %]
-                                            <p class="problem ret_ispermenant">Please return item to: [% Branches.GetName( errmsgloo.msg ) | html %]</p>
-                                        [% END %]
                                         [% IF ( errmsgloo.notissued ) %]
                                             <p class="problem ret_notissued">Not checked out.</p>
                                         [% END %]
