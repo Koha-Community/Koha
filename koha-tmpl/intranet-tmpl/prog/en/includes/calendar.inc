@@ -74,7 +74,7 @@
                     .addClass("clear_date")
                     .on("click", function(e){
                         e.preventDefault();
-                        instance.setDate('');
+                        instance.clear();
                     })
                     .addClass("fa fa-fw fa-times")
                     .attr("aria-hidden", true)
@@ -110,6 +110,10 @@
             new Maskito( instance.altInput, maskitoOptions );
         },
         onChange: function( selectedDates, dateText, instance) {
+            if (selectedDates.length === 0) {
+                return;
+            }
+
             var thisInput = instance.input;
             let accepts_time = $(thisInput).data('flatpickr-enable-time');
             let accepts_period = $(thisInput).data('flatpickr-period');
