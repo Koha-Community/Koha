@@ -119,13 +119,8 @@
     <h1>Jobs</h1>
 
     <div>
-        <input type="checkbox" id="only_current" checked />
+        <input type="checkbox" id="only_current" />
         <label for="only_current">Current jobs only</label>
-    </div>
-
-    <div>
-        <input type="checkbox" id="include_last_hour" checked />
-        <label for="include_last_hour">Only include jobs enqueued in the last hour</label>
     </div>
 
     <div class="page-section">
@@ -259,16 +254,6 @@
                 $("#job_details").show();
             [% END %]
 
-            let additional_filters = {
-                enqueued_date: function(){
-                    if ( $("#include_last_hour").is(":checked") ) {
-                        return { ">": dayjs().subtract(1, 'hour').format() };
-                    } else {
-                        return { "<": dayjs().format()};
-                    }
-                }
-            };
-
             let only_current_filter = function(){
                 if ( $("#only_current").is(":checked") ) {
                     return 'only_current=1';
@@ -281,7 +266,7 @@
                 "ajax": {
                     "url": "/api/v1/jobs?" + only_current_filter()
                 },
-                "order": [[ 1, "desc" ]],
+                "order": [[ 4, "desc" ]],
                 "columns": [
                     {
                         "data": "job_id",
@@ -348,12 +333,7 @@
                         "orderable": false
                     }
                 ]
-            }, null, 1, additional_filters);
-
-            $("#include_last_hour").on("change", function(){
-                jobs_table.DataTable().draw();
-                return false;
-            });
+            }, null, 1);
 
             $("#only_current").on("change", function(){
                 jobs_table.DataTable().ajax.url("/api/v1/jobs?" + only_current_filter()).load();
