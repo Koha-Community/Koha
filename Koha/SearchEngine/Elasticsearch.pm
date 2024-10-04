@@ -534,8 +534,32 @@ sub _process_mappings {
 
         $values = [ grep(!/^$/, @{$values}) ];
 
+        # 4 bytes is the max size of a UTF-8 char.
+        # 32766 bytes is the max size of the data ES can add to an index
+        # 32766 / 4 =~ 8191
+        my $MAX_SIZE = 8191;
+
+        my @chunks;
+
+        foreach my $value ( @{$values} ) {
+            while ( length($value) > $MAX_SIZE ) {
+                $value =~ s/^\s*//;
+                # Match up to MAX_SIZE characters, stopping at the last full word before MAX_SIZE
+                if ( $value =~ /\G(.{1,$MAX_SIZE})(?:\s|$)/g ) {
+                    push @chunks, $1;
+                    $value = substr( $value, length($1) );
+                } else {
+
+                    # Catch-all for very long words
+                    push @chunks, substr( $value, 0, $MAX_SIZE );
+                    $value = substr( $value, $MAX_SIZE );
+                }
+            }
+            push @chunks, $value if length($value);
+        }
+
         $record_document->{$target} //= [];
-        push @{$record_document->{$target}}, @{$values};
+        push @{ $record_document->{$target} }, @chunks;
     }
 }
 
