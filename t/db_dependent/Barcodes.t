@@ -141,11 +141,7 @@ subtest 'Test generation of incremental barcodes from DB values' => sub {
     $builder->schema->resultset('Item')->delete_all;
     my $barcodeobj;
 
-    my $item_1 = $builder->build_sample_item(
-        {
-            barcode => '1000000000000000'
-        }
-    );
+    my $item_1 = $builder->build_sample_item( { barcode => '1000000000000000' } );
 
     $barcodeobj = C4::Barcodes->new('incremental');
 
