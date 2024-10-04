@@ -152,11 +152,14 @@ sub do_checkout {
 
     if ( $no_block_due_date ) {
         $overridden_duedate = $no_block_due_date;
-        ProcessOfflineIssue({
+        my ( $msg, $checkout ) = ProcessOfflineIssue({
             cardnumber => $patron->cardnumber,
             barcode    => $barcode,
             timestamp  => $no_block_due_date,
+            due_date   => $no_block_due_date,
+            timestamp  => dt_from_string,
         });
+        $self->{due} = $self->duedatefromissue( $checkout, $itemnumber );
     } else {
         # can issue
         my $recall_id;
