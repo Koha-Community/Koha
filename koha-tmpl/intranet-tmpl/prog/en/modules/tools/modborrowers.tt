@@ -414,6 +414,13 @@
                                                     There is no value defined for [% field.name | html %]
                                                 [% END %]
                                             [% END %]
+                                            [% IF ( field.type == 'bool' ) %]
+                                                <select name="[% field.name | html %]" >
+                                                    <option value=""></option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            [% END %]
                                             [% IF ( field.type == 'date' ) %]
                                                 <input type="text" name="[% field.name | html %]" id="[% field.name | html %]" value="" size="10" maxlength="10" class="flatpickr" />
                                                 <a href="#"  class="clear-date" id="clear-date-[% field.name | html %]" ><i class="fa fa-fw fa-trash-can"></i> Clear</a>

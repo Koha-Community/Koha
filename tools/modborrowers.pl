@@ -196,10 +196,6 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
     my @categories_option;
     push @categories_option, { value => $_->categorycode, lib => $_->description } for @patron_categories;
     unshift @categories_option, { value => "", lib => "" };
-    my @protected_option;
-    push @protected_option, { value => 1, lib => "Yes" };
-    push @protected_option, { value => 0, lib => "No" };
-    unshift @protected_option, { value => "", lib => "" };
     my $bsort1 = GetAuthorisedValues("Bsort1");
     my @sort1_option;
     push @sort1_option, { value => $_->{authorised_value}, lib => $_->{lib} } for @$bsort1;
@@ -340,9 +336,9 @@ if ( $op eq 'cud-show' || $op eq 'show' ) {
         },
     );
 
-    if ($logged_in_user->is_superlibrarian) {
-        push @fields, { name => "password_expiration_date", type => "date" } ;
-        push @fields, { name => "protected", type => "select", option => \@protected_option };
+    if ( $logged_in_user->is_superlibrarian ) {
+        push @fields, { name => "password_expiration_date", type => "date" };
+        push @fields, { name => "protected",                type => "bool" };
     }
 
     $template->param( 'patron_attributes_codes',  \@patron_attributes_codes );
@@ -361,8 +357,8 @@ if ( $op eq 'cud-do' ) {
         qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile fax sort1 sort2 dateenrolled dateexpiry password_expiration_date borrowernotes opacnote debarred debarredcomment protected/
         )
     {
-        my $value = $input->param($field) if $input->param($field) ne '';
-        $infos->{$field} = $value if defined $value;
+        my $value = $input->param($field);
+        $infos->{$field} = $value if $value;
         $infos->{$field} = ""     if grep { $_ eq $field } @disabled;
     }
 
@@ -371,7 +367,7 @@ if ( $op eq 'cud-do' ) {
     }
 
     delete $infos->{password_expiration_date} unless $logged_in_user->is_superlibrarian;
-    delete $infos->{protected} unless $logged_in_user->is_superlibrarian;
+    delete $infos->{protected}                unless $logged_in_user->is_superlibrarian;
 
     my @errors;
     my @borrowernumbers = $input->multi_param('borrowernumber');
