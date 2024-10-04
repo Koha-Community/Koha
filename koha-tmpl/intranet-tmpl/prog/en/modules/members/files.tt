@@ -47,6 +47,7 @@
                     <div class="alert alert-warning">
                         [% IF errors.empty_upload %]The file you are attempting to upload has no contents.[% END %]
                         [% IF errors.no_file %]You did not select a file to upload.[% END %]
+                        [% IF errors.upload_failed %]The upload failed. More information may be in the system logs.[% END %]
                     </div>
                 [% END %]
 
