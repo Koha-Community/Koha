@@ -87,12 +87,13 @@ else {
                     $file_content .= $_;
                 }
 
-                $bf->AddFile(
+                my $rv = $bf->AddFile(
                     name    => $filename,
                     type    => $mimetype,
                     content => $file_content,
                     description => scalar $cgi->param('description'),
                 );
+                $errors{upload_failed} = 1 unless $rv;
             }
         }
         else {
@@ -103,9 +104,7 @@ else {
     }
 
     $template->param(
-        files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )
-          ->GetFilesInfo(),
-
+        files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )->GetFilesInfo(),
         errors => \%errors,
     );
     output_html_with_http_headers $cgi, $cookie, $template->output;
