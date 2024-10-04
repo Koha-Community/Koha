@@ -515,14 +515,13 @@ my $fa_branch             = $input->param('branch');
 my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
-my $userflags = 'edit_catalogue';
-
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
 
-if ($frameworkcode eq 'FA'){
-    $userflags = 'fast_cataloging';
-}
+my $userflags =
+    $frameworkcode eq 'FA'
+    ? [ 'fast_cataloging', 'edit_catalogue' ]
+    : 'edit_catalogue';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
