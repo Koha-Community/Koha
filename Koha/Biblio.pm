@@ -263,7 +263,10 @@ sub can_be_edited {
     Koha::Exceptions::MissingParameter->throw( error => "The patron parameter is missing or invalid" )
         unless $patron && ref($patron) eq 'Koha::Patron';
 
-    my $editcatalogue = $self->frameworkcode eq 'FA' ? 'fast_cataloging' : 'edit_catalogue';
+    my $editcatalogue =
+        $self->frameworkcode eq 'FA'
+        ? [ 'fast_cataloging', 'edit_catalogue' ]
+        : 'edit_catalogue';
 
     return (
         ( $self->metadata->source_allows_editing && $patron->has_permission( { editcatalogue => $editcatalogue } ) )
