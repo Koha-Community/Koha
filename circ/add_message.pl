@@ -97,7 +97,7 @@ if ( $op eq 'cud-edit_message' && $message_id ) {
 
 my $url = $input->referer;
 if ($url) {
-    if ( $url =~ m|circulation\.pl$| ) {
+    if ( $url =~ m/(circulation\.pl|members\/files\.pl)$/ ) {
 
         # Trick for POST form from batch checkouts
         $url .= "?borrowernumber=$borrowernumber";
