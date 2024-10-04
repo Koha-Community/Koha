@@ -43,7 +43,7 @@ foreach my $message_id (@message_ids) {
     push @slips, {
         content => $message->content,
         is_html => $message->is_html,
-        style   => $template ? $template->{style} : undef,
+        style   => $template ? $template->style : undef,
         id      => $message_id,
     };
 
