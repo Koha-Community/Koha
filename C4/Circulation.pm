@@ -4442,7 +4442,7 @@ sub ProcessOfflineOperation {
     if ( $operation->{action} eq 'return' ) {
         $report = ProcessOfflineReturn($operation);
     } elsif ( $operation->{action} eq 'issue' ) {
-        $report = ProcessOfflineIssue($operation);
+        ($report) = ProcessOfflineIssue($operation);
     } elsif ( $operation->{action} eq 'payment' ) {
         $report = ProcessOfflinePayment($operation);
     }
@@ -4513,15 +4513,15 @@ sub ProcessOfflineIssue {
                 $operation->{timestamp},
             );
         }
-        AddIssue(
+        my $checkout = AddIssue(
             $patron,
-            $operation->{'barcode'},
-            undef,
+            $operation->{barcode},
+            $operation->{due_date},
             undef,
             $operation->{timestamp},
             undef,
         );
-        return "Success.";
+        return ( "Success.", $checkout );
     } else {
         return "Borrower not found.";
     }
