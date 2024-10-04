@@ -82,12 +82,13 @@ subtest 'Tests moved from t' => sub {
 };
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 18;
+    plan tests => 20;
     $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference('Reference_NFL_Statuses', '1|2');
     t::lib::Mocks::mock_preference( 'OPACResultsLibrary', 'holdingbranch' );
     t::lib::Mocks::mock_preference( 'OPACResultsMaxItems', '2' );
+    t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', '0' );
 
     my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
@@ -151,6 +152,17 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     $item->damaged(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
     like($xml,qr{<substatus>Damaged</substatus>},"Damaged status takes precedence over Lost");
+
+    my $item2 = $builder->build_sample_item( { itype => $itype->itemtype } );
+    $item2->holdingbranch( $holdinglibrary->branchcode )->store;
+    $item2->biblioitem->itemtype( $itemtype->itemtype )->store;
+    $item2->damaged(1)->store;
+
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item2->biblionumber, [] );
+    like( $xml, qr{<status>other</status>}, "Damaged status with AllowHoldsOnDamagedItems = 0 results in 'other'" );
+    t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', '1' );
+    $xml = C4::XSLT::buildKohaItemsNamespace( $item2->biblionumber, [] );
+    like( $xml, qr{<status>available</status>}, "Damaged status with AllowHoldsOnDamagedItems results in 'available'" );
 
     $builder->build({ source => "Branchtransfer", value => {
         itemnumber  => $item->itemnumber,
