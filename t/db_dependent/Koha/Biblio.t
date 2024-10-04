@@ -1744,7 +1744,7 @@ subtest 'opac_summary_html' => sub {
 
 subtest 'can_be_edited() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -1789,6 +1789,7 @@ subtest 'can_be_edited() tests' => sub {
 
     ok( !$biblio->can_be_edited($fa_patron),   "Fast add permissions are not enough" );
     ok( $fa_biblio->can_be_edited($fa_patron), "Fast add user can edit FA records" );
+    ok( $fa_biblio->can_be_edited($patron),    "edit_catalogue user can edit FA records" );
 
     # Mock the record source doesn't allow direct editing
     $source_allows_editing = 0;
