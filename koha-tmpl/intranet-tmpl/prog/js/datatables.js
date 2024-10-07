@@ -830,18 +830,7 @@ function _dt_visibility(table_settings, settings, node){
 }
 
 function _dt_on_visibility(add_filters, table_node, table_dt){
-    if ( add_filters ) {
-        let visible_columns = table_dt.columns().visible();
-        $(table_node).find('thead tr:eq(1) th').each( function (i) {
-            let th_id = $(this).data('th-id');
-            if ( visible_columns[th_id] == false ) {
-                $(this).hide();
-            } else {
-                $(this).show();
-            }
-        });
-    }
-
+    // FIXME REPLACE ME
     if( typeof columnsInit == 'function' ){
         // This function can be created separately and used to trigger
         // an event after the DataTable has loaded AND column visibility
@@ -851,24 +840,25 @@ function _dt_on_visibility(add_filters, table_node, table_dt){
 }
 
 function _dt_add_filters(table_node, table_dt, filters_options = {}) {
+
+    $(table_node).find('thead tr:eq(1)').remove(); // Remove if one exists already
     $(table_node).find('thead tr').clone().appendTo( $(table_node).find('thead') );
 
-    let j = -1;
-    $(table_node).find('thead tr:eq(1) th').each( function (i) {
-        j++
-        var is_visible = table_dt.settings()[0].aoColumns[j].bVisible;
-        if ( !is_visible ) { j++ }
-        i = j;
-
-        var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
-        $(this).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
-        $(this).data('th-id', i);
+    let visibility = table_dt.columns().visible();
+    let columns = table_dt.settings()[0].aoColumns;
+    table_dt.columns().every( function () {
+        var column = this;
+        let i = column.index();
+        var visible_i = table_dt.column.index('fromData', i);
+        let th = $(table_node).find('thead tr:eq(1) th:eq(%s)'.format(visible_i));
+        var is_searchable = columns[i].bSearchable;
+        $(th).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
         if ( is_searchable ) {
             let input_type = 'input';
-            if ( $(this).data('filter') || filters_options.hasOwnProperty(i)) {
+            if ( $(th).data('filter') || filters_options.hasOwnProperty(i)) {
                 input_type = 'select'
-                let filter_type = $(this).data('filter');
-                let existing_search = table_dt.column(i).search();
+                let filter_type = $(th).data('filter');
+                let existing_search = column.search();
                 let select = $('<select class="dt-select-filter"><option value=""></option></select');
 
                 // FIXME eval here is bad and dangerous, how do we workaround that?
@@ -879,20 +869,20 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 }
                 $(filters_options[i]).each(function(){
                     let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
-                    if ( existing_search === this._id ) {
+                    if ( existing_search === this._id || (existing_search && this._id.match(existing_search)) ) {
                         o.prop("selected", "selected");
                     }
                     o.appendTo(select);
                 });
-                $(this).html( select );
+                $(th).html( select );
             } else {
-                var title = $(this).text();
+                var title = $(th).text();
                 var existing_search = table_dt.column(i).search();
                 if ( existing_search ) {
-                    $(this).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
+                    $(th).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
                 } else {
                     var search_title = __("%s search").format(title);
-                    $(this).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
+                    $(th).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
                 }
             }
 
@@ -907,7 +897,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 };
             }
 
-            $(input_type, this).on('keyup change', (delay(function () {
+            $(input_type, th).on('keyup change', (delay(function () {
                 if (table_dt.column(i).search() !== this.value) {
                     if (input_type == "input") {
                         table_dt
@@ -923,7 +913,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 }
             }, 500)));
         } else {
-            $(this).html('');
+            $(th).html('');
         }
     } );
 }
@@ -974,6 +964,15 @@ function _dt_save_restore_state(table_settings){
     let stateSaveCallback = function( settings, data ) {
         localStorage.setItem( table_key, JSON.stringify(data) )
     }
+
+    function set_default(table_settings, settings){
+        let columns = new Array(table_settings.columns.length).fill({visible: true});
+        let hidden_ids, included_ids;
+        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, $("#"+settings.nTable.id));
+        hidden_ids.forEach((id, i) => { columns[id] = { visible: false } } );
+        // State is not loaded if time is not passed
+        return { columns, time: new Date() };
+    }
     let stateLoadCallback = function(settings) {
 
         // Load state from URL
@@ -983,10 +982,10 @@ function _dt_save_restore_state(table_settings){
             return JSON.parse(atob(state_from_url));
         }
 
-        if (!default_save_state) return {};
+        if (!default_save_state) return set_default(table_settings, settings);
 
         let state = localStorage.getItem(table_key);
-        if (!state) return {};
+        if (!state) return set_default(table_settings, settings);
 
         state = JSON.parse(state);
 
@@ -1072,8 +1071,11 @@ function _dt_save_restore_state(table_settings){
             _dt_add_filters(this, table_dt, filters_options);
         }
 
-        table_dt.on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
-            .columns( hidden_ids ).visible( false );
+        table_dt.on("column-visibility.dt", function(){
+            if ( add_filters ) {
+                _dt_add_filters(this, table_dt, filters_options);
+            }
+        });
 
         table_dt.on( 'search.dt', function ( e, settings ) {
             // When the DataTables search function is triggered,
