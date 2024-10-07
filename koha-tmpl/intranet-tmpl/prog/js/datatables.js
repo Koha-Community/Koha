@@ -59,12 +59,6 @@ var dataTablesDefaults = {
         var tableId = settings.nTable.id
         var state =  settings.oLoadedState;
         state && toggledClearFilter(state.search.search, tableId);
-        // When the DataTables search function is triggered,
-        // enable or disable the "Clear filter" button based on
-        // the presence of a search string
-        $(this).on( 'search.dt', function ( e, settings ) {
-            toggledClearFilter(settings.oPreviousSearch.sSearch, tableId);
-        });
 
         if (settings.ajax) {
             let table_node = $("#" + tableId);
@@ -999,8 +993,15 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
             _dt_add_filters(this, table_dt, filters_options);
         }
 
-        table.DataTable().on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
+        table_dt.on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
             .columns( hidden_ids ).visible( false );
+
+        table_dt.on( 'search.dt', function ( e, settings ) {
+            // When the DataTables search function is triggered,
+            // enable or disable the "Clear filter" button based on
+            // the presence of a search string
+            toggledClearFilter(settings.oPreviousSearch.sSearch, settings.nTable.id);
+        });
 
         return table;
     };
