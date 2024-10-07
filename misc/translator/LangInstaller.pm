@@ -225,7 +225,7 @@ sub get_translated_pref {
             my $value = $syspref->{$key};
 
             my $translated_value = $value;
-            if (($key eq 'choices' || $key eq 'multiple') && ref($value) eq 'HASH') {
+            if (($key eq 'choices' || $key eq 'multiple' || $key eq 'multiple_sortable') && ref($value) eq 'HASH') {
                 $translated_value = {
                     map {
                         my $msgid = sprintf('%s#%s# %s', $file, $pref_name, $value->{$_});
