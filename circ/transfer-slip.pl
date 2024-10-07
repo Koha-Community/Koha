@@ -60,6 +60,7 @@ $template->param(
     caller => 'cud-transfer',
     stylesheet => C4::Context->preference("SlipCSS"),
     style      => $style,
+    id         => 'transfer_slip',
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
