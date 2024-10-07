@@ -993,7 +993,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <li>
                                             <label for="categorycode_entry" class="required">Category: </label>
                                             <select id="categorycode_entry" name="categorycode">
-                                                [% FOREACH category_type IN patron_categories.keys %]
+                                                [% FOREACH category_type IN patron_categories.keys.sort %]
                                                     [% SWITCH category_type %]
                                                     [% CASE 'C' %]
                                                         <optgroup label="Child">
