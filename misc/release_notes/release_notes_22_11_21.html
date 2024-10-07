@@ -1,0 +1,444 @@
+<h1 id="releasenotesforkoha22.11.21">RELEASE NOTES FOR KOHA 22.11.21</h1>
+
+<p>07 oct. 2024</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 22.11.21 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-22.11.21.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 22.11.21 is a bugfix/maintenance release.</p>
+
+<p>It includes 12 bugfixes.</p>
+
+<p><strong>System requirements</strong></p>
+
+<p>You can learn about the system components (like OS and database) needed for running Koha on the <a href="https://wiki.koha-community.org/wiki/System_requirements_and_recommendations">community wiki</a>.</p>
+
+<h2 id="bugfixes">Bugfixes</h2>
+
+<h3 id="about">About</h3>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37003">37003</a> Release team 24.11</p>
+
+<blockquote>
+  <p>This updates the About Koha > Koha team with the release team members for Koha 22.11.</li>
+  </ul></p>
+  
+  <h3 id="acquisitions">Acquisitions</h3>
+</blockquote>
+
+<h4 id="criticalbugsfixed">Critical bugs fixed</h4>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=34444">34444</a> Statistic 1/2 not saving when updating fund after receipt</li>
+</ul>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30493">30493</a> Pending archived suggestions appear on staff interface home page</p>
+
+<blockquote>
+  <p>This fixes the list of pending suggestions to remove archived suggestions with a "Pending" status. If suggestions were archived and their status was left as "Pending", they were still appearing as suggestions to manage on the staff interface and acquisitions home pages.</li>
+  </ul></p>
+  
+  <h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35294">35294</a> Typo in comment in C4 circulation: barocode</p>
+
+<blockquote>
+  <p>This fixes spelling errors in catalog code comments (barocode => barcode, and preproccess => preprocess).</li>
+  </ul></p>
+  
+  <h3 id="cataloging">Cataloging</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=25387">25387</a> Merging different authority types creates no warning</p>
+
+<blockquote>
+  <p>This improves merging authorities of different types so that:</p>
+  
+  <ol>
+  <li>When selecting the reference record, the authority record number and type are displayed next to each record.</li>
+  <li>When merging authority records of different types:
+  . the authority type is now displayed in the tab heading, and
+  . a warning is also displayed "Multiple authority types are used. There may be a data loss while merging.".</li>
+  </ol>
+  
+  <p>Previously, no warning was given when merging authority records with different types - this could result in undesirable outcomes, data loss, and extra work required to clean up.</li>
+  </ul></p>
+  
+  <h3 id="developerdocumentation">Developer documentation</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37198">37198</a> POD for GetPreparedLetter doesn't include 'objects'</p>
+
+<blockquote>
+  <p>This updates the GetPreparedLetter documentation for developers (it was not updated when changes were made in Bug 19966 - Add ability to pass objects directly to slips and notices).</li>
+  </ul></p>
+  
+  <h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36879">36879</a> Spurious warnings in QueryBuilder</p>
+
+<blockquote>
+  <p>This fixes the cause of a warning message in the log files. Changing the sort order for search results in the staff interface (for example, from Relevance to Author (A-Z)) would generate an unnecessary warning message in plack-intranet-error.log: [WARN] Use of uninitialized value $f in hash element at /kohadevbox/koha/Koha/SearchEngine/Elasticsearch/QueryBuilder.pm line 72    5.</li>
+  </ul></p>
+  
+  <h3 id="selfcheckout">Self checkout</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=37044">37044</a> OPAC message from SCO missing library branch</p>
+
+<blockquote>
+  <p>This fixes the self checkout "Messages for you" section for a patron so that any OPAC messages added by library staff now include the library name. Previously, "Written on DD/MM/YYYY by " was displayed after the message without including the library name.</li>
+  </ul></p>
+  
+  <h3 id="staffinterface">Staff interface</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36930">36930</a> Item search gives irrelevant results when using 2+ added filter criteria</p>
+
+<blockquote>
+  <p>This fixes the item search so that it returns the correct results when two or more additional filters are used (such as publisher and publication date). It was working correctly with one filter, but was not using any filters if two or more were used in a query.</li>
+  </ul></p>
+  
+  <h3 id="templates">Templates</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=35240">35240</a> Missing form field ids in rotating collection edit form</p>
+
+<blockquote>
+  <p>This adds missing IDs to the rotating collections edit form (Tools > Rotating collections > edit a rotating collection (Actions > Edit)).</li>
+  </ul></p>
+  
+  <h3 id="testsuite">Test Suite</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=36937">36937</a> api/v1/password_validation.t generates warnings</p>
+
+<blockquote>
+  <p>This fixes the cause of a warning for the t/db_dependent/api/v1/password_validation.t tests (warning fixed: Use of uninitialized value $status in numeric eq (==)).</li>
+  </ul></p>
+  
+  <h3 id="transactionlogs">Transaction logs</h3>
+</blockquote>
+
+<h4 id="otherbugsfixed">Other bugs fixed</h4>
+
+<p><ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=30715">30715</a> Terminology: Logs should use staff interface and not intranet for the interface</p>
+
+<blockquote>
+  <p>This fixes the log viewer so that 'Staff interface' is used instead of 'Intranet' for the filtering option and the value displayed in the log entries interface column.</p>
+  
+  <p>Note: This does not fix the underlying value recorded in the action_log table (these are added as 'intranet' to the interface column), or the values shown in CSV exports.</li>
+  </ul></p>
+  
+  <h2 id="documentation">Documentation</h2>
+</blockquote>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha
+documentation is</p>
+
+<ul>
+<li><p><a href="http://koha-community.org/documentation/">Koha Documentation</a>
+As of the date of these release notes, the Koha manual is available in the following languages:</p></li>
+<li><p><a href="https://koha-community.org/manual/22.11/zh_Hant/html/">Chinese (Traditional)</a> (78%)</p></li>
+<li><a href="https://koha-community.org/manual/22.11//html/">English</a> (100%)</li>
+<li><a href="https://koha-community.org/manual/22.11/en/html/">English (USA)</a></li>
+<li><a href="https://koha-community.org/manual/22.11/fr/html/">French</a> (50%)</li>
+<li><a href="https://koha-community.org/manual/22.11/de/html/">German</a> (39%)</li>
+<li><a href="https://koha-community.org/manual/22.11//html/">Greek</a> (73%)</li>
+<li><a href="https://koha-community.org/manual/22.11/hi/html/">Hindi</a> (75%)</li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<div style="column-count: 2;">
+
+- Arabic (ar_ARAB) (90%)
+- Armenian (hy_ARMN) (100%)
+- Bulgarian (bg_CYRL) (100%)
+- Chinese (Simplified) (96%)
+- Chinese (Traditional) (81%)
+- Czech (72%)
+- Dutch (89%)
+- English (100%)
+- English (New Zealand) (69%)
+- English (USA)
+- English (United Kingdom) (99%)
+- Finnish (96%)
+- French (100%)
+- French (Canada) (96%)
+- German (100%)
+- German (Switzerland) (56%)
+- Greek (63%)
+- Hindi (99%)
+- Italian (92%)
+- Norwegian Bokmål (69%)
+- Persian (fa_ARAB) (76%)
+- Polish (100%)
+- Portuguese (Brazil) (99%)
+- Portuguese (Portugal) (88%)
+- Russian (94%)
+- Slovak (67%)
+- Spanish (100%)
+- Swedish (88%)
+- Telugu (77%)
+- Turkish (90%)
+- Ukrainian (79%)
+- hyw_ARMN (generated) (hyw_ARMN) (70%)
+</div>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 22.11.21 is</p>
+
+<ul>
+<li><p>Release Manager: Katrin Fischer</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Tomás Cohen Arazi</li>
+<li>Martin Renvoize</li>
+<li>Jonathan Druart</li>
+</ul></li>
+<li><p>QA Manager: Martin Renvoize</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Marcel de Rooy</li>
+<li>Kyle M Hall</li>
+<li>Emily Lamancusa</li>
+<li>Nick Clemens</li>
+<li>Lucas Gass</li>
+<li>Tomás Cohen Arazi</li>
+<li>Julian Maurice</li>
+<li>Victor Grousset</li>
+<li>Aleisha Amohia</li>
+<li>David Cook</li>
+<li>Laura Escamilla</li>
+<li>Jonathan Druart</li>
+<li>Pedro Amorim</li>
+<li>Matt Blenkinsop</li>
+<li>Thomas Klausner</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>UI Design -- Owen Leonard</li>
+<li>Zebra -- Fridolin Somers</li>
+<li>ERM -- Matt Blenkinsop</li>
+<li>ILL -- Pedro Amorim</li>
+<li>SIP2 -- Matthias Meusburger</li>
+<li>CAS -- Matthias Meusburger</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Aleisha Amohia</li>
+<li>Jacob O'Mara</li>
+</ul></li>
+<li><p>Packaging Managers:</p>
+
+<ul>
+<li>Mason James</li>
+<li>Tomás Cohen Arazi</li>
+</ul></li>
+<li><p>Documentation Manager: Philip Orr</p></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Aude Charillon</li>
+<li>Caroline Cyr La Rose</li>
+<li>Lucy Vaux-Harvey</li>
+<li>Emmanuel Bétemps</li>
+<li>Marie-Luce Laflamme</li>
+<li>Kelly McElligott</li>
+<li>Rasa Šatinskienė</li>
+<li>Heather Hernandez</li>
+</ul></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Thomas Dukleth</li>
+<li>George Williams</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>24.05 -- Lucas Gass</li>
+<li>23.11 -- Fridolin Somers</li>
+<li>23.05 -- Wainui Witika-Park</li>
+<li>22.11 -- Frédéric Demians</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following individuals who contributed patches to Koha 22.11.21</p>
+
+<div style="column-count: 2;">
+
+- Matt Blenkinsop (1)
+- Nick Clemens (2)
+- Frédéric Demians (1)
+- Marion Durand (1)
+- Katrin Fischer (4)
+- Eric Garcia (1)
+- Andreas Jonsson (1)
+- Janusz Kaczmarek (1)
+- Emily Lamancusa (1)
+- Sam Lau (1)
+- Brendan Lawlor (1)
+- David Nind (1)
+- Martin Renvoize (3)
+- Baptiste Wojtkowski (1)
+</div>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 22.11.21</p>
+
+<div style="column-count: 2;">
+
+- [BibLibre](https://www.biblibre.com) (2)
+- Bibliotheksservice-Zentrum Baden-Württemberg (BSZ) (4)
+- [ByWater Solutions](https://bywatersolutions.com) (2)
+- [Cape Libraries Automated Materials Sharing](https://info.clamsnet.org) (1)
+- David Nind (1)
+- Independant Individuals (3)
+- Kreablo AB (1)
+- [Montgomery County Public Libraries](montgomerycountymd.gov) (1)
+- [PTFS Europe](https://ptfs-europe.com) (4)
+- Tamil (1)
+</div>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha</p>
+
+<div style="column-count: 2;">
+
+- Pedro Amorim (1)
+- Matt Blenkinsop (1)
+- Nick Clemens (2)
+- Chris Cormack (1)
+- Frédéric Demians (16)
+- Jonathan Druart (1)
+- Katrin Fischer (9)
+- Lucas Gass (14)
+- Kyle M Hall (1)
+- Emily Lamancusa (2)
+- Owen Leonard (2)
+- David Nind (4)
+- Martin Renvoize (2)
+- Marcel de Rooy (1)
+- Fridolin Somers (12)
+- wainuiwitikapark (16)
+</div>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to koha-devel@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the main branch of:</p>
+
+<ul>
+<li><a href="https://git.koha-community.org/koha-community/koha">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 22.11.x-security.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 07 oct. 2024 17:56:06.</p>
