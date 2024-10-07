@@ -1,0 +1,46 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+    [% UNLESS notices && notices.size %]
+        [% SET notices = [{content => notice, is_html => is_html, style => style, id => id }] %]
+    [% END %]
+    <title>[% FILTER collapse %]
+        [% IF notices.size > 1 %]
+        [% t("Print notices") | html %] &rsaquo;
+        [% ELSE %]
+        [% t("Print notice") | html %] &rsaquo;
+        [% END %]
+        [% t("Patrons") | html %] &rsaquo;
+        [% t("Koha") | html %]
+    [% END %]</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% Asset.css("css/print.css") | $raw %]
+    [% IF ( Koha.Preference('AllNoticeCSS') ) %]
+    <style>[% Koha.Preference('AllNoticeCSS') | $raw %]</style>
+    [% END %]
+    [% FOR style IN styles %]
+    <style>[% style | $raw %]</style>
+    [% END %]
+    [% FOR notice IN notices %]
+        [% IF notice.style %]<style>[% notice.style.replace('([^\{\}]+?)\s*\{', '#notice_' _ notice.id _ ' $1 {') | $raw %]</style>[% END %]
+    [% END %]
+</head>
+<body id="members_printnotice" class="member">
+[% FOR notice IN notices %]
+    <div id="notice_[% notice.id | html %]" class="type_[% notice.type | html %]">
+        [% IF notice.is_html %]
+            [% IF ( notice.content ) %][% notice.content | $raw %][% ELSE %]No notice template found[% END %]
+        [% ELSE %]
+            <pre>[% IF ( notice.content ) %][% notice.content | html %][% ELSE %]No notice template found[% END %]</pre>
+        [% END %]
+    </div>
+    [% IF notices.size > 1 && !loop.last%]<div class="pagebreak"></div>[% END %]
+[% END %]
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

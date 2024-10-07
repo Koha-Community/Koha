@@ -27,33 +27,40 @@ my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name => "circ/printslip.tt",
+        template_name => "members/print_notice.tt",
         query         => $input,
         type          => "intranet",
         flagsrequired => { tools => 'view_generated_notices' },
     }
 );
 
+my $types_seen = {};
+my @scoped_styles;
 my @message_ids = $input->multi_param('message_ids');
-my @slips;
+my @notices;
 foreach my $message_id (@message_ids) {
     my $message  = Koha::Notice::Messages->find($message_id);
     my $template = $message->template;
 
-    push @slips, {
+    push @notices, {
         content => $message->content,
         is_html => $message->is_html,
         style   => $template ? $template->style : undef,
         id      => $message_id,
+        type    => $message->message_transport_type,
     };
+
+    unless ( $types_seen->{ $message->message_transport_type } ) {
+        push @scoped_styles, $message->scoped_style;
+        $types_seen->{ $message->message_transport_type } = 1;
+    }
 
     $message->update( { status => 'sent' } );
 }
 $template->param(
-    slips                 => \@slips,
-    caller                => 'notice_mgmt',
-    stylesheet            => C4::Context->preference("SlipCSS"),
-    IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS'),
+    notices    => \@notices,
+    stylesheet => C4::Context->preference("AllNoticeStylesheet"),
+    styles     => \@scoped_styles
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

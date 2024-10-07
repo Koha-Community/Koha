@@ -184,6 +184,53 @@ sub template {
     return Koha::Notice::Template->_new_from_dbic($template_rs);
 }
 
+=head3 scoped_style
+
+  my $scoped_style = $message->scoped_style;
+
+Returns a string of all the scoped styles for the message
+
+=cut
+
+sub scoped_style {
+    my ($self)       = @_;
+    my $type         = $self->message_transport_type;
+    my $scoped_class = ".type_$type";
+    my $css_content;
+
+    if ( $self->message_transport_type eq 'email' ) {
+        $css_content = C4::Context->preference("EmailNoticeCSS");
+    } elsif ( $self->message_transport_type eq 'print' ) {
+        $css_content = C4::Context->preference("PrintNoticeCSS");
+    }
+
+    # Modify the CSS content, handling @media, @supports, @document
+    $css_content =~ s!
+        (@(media|supports|-moz-document)[^\{]+\{)  # Match the at-rule start
+        (                                         # Capture group for block content
+          (?:                                     # Non-capturing group
+            [^{]+\{[^}]*\}                        # Match CSS rules within the at-rule block
+          )*
+        )
+        \}
+    !
+        my $header = $1;
+        my $inner_rules = $2;                     # Capture the rules within the at-rule block
+
+        # Apply the scoped class to the inner rules
+        $inner_rules =~ s/([^{]+)\{/ $scoped_class $1\{/g;
+
+        # Return the modified block
+        "$header$inner_rules"
+
+    !egx;
+
+    $css_content =~ s/([^{]+)\{/$scoped_class $1\{/g
+        unless $css_content =~ /\@(media|supports|-moz-document)/;
+
+    return $css_content;
+}
+
 =head3 _type
 
 =cut
