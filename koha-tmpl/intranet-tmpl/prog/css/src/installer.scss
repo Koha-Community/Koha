@@ -1,7 +1,9 @@
-// scss-docs-start import-stack
-// Configuration
-@import "~bootstrap/scss/_functions";
+@import "~bootstrap/scss/mixins/_banner";
+@include bsBanner("");
 
+// scss-docs-start import-stack
+@import "~bootstrap/scss/_functions";
+// Configuration
 // Include any default variable overrides here
 @import "_variables";
 
@@ -13,20 +15,42 @@ $enable-dark-mode: false;
 
 @import "~bootstrap/scss/_maps";
 @import "~bootstrap/scss/_utilities";
+
+// Layout & components
 @import "~bootstrap/scss/_root";
 @import "~bootstrap/scss/_reboot";
 @import "~bootstrap/scss/_type";
+@import "~bootstrap/scss/_images";
 @import "~bootstrap/scss/_containers";
 @import "~bootstrap/scss/_grid";
+@import "~bootstrap/scss/_tables";
 @import "~bootstrap/scss/_forms";
 @import "~bootstrap/scss/_buttons";
 @import "~bootstrap/scss/_transitions";
+@import "~bootstrap/scss/_dropdown";
+@import "~bootstrap/scss/_button-group";
+@import "~bootstrap/scss/_nav";
+@import "~bootstrap/scss/_navbar";
 @import "~bootstrap/scss/_breadcrumb";
+@import "~bootstrap/scss/_pagination";
 @import "~bootstrap/scss/_badge";
 @import "~bootstrap/scss/_alert";
+@import "~bootstrap/scss/_progress";
+@import "~bootstrap/scss/_list-group";
+@import "~bootstrap/scss/_close";
+@import "~bootstrap/scss/_placeholders";
+
+// Helpers
 @import "~bootstrap/scss/_helpers";
-@import "~bootstrap/scss/_utilities/api";
+
+// Utilities
+@import "~bootstrap/scss/utilities/_api";
+// scss-docs-end import-stack
+
+@import "_mixins";
+@import "_tables";
 @import "_flatpickr";
+@import "_fonts";
 
 body {
     background-color: #EEE;
@@ -277,4 +301,19 @@ span.breadcrumbs {
 .hint {
     color: #727272;
     font-size: 90%;
+}
+
+.fa-svg-icon {
+    &.checkbox-square {
+        &::before {
+            background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3C!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath d='M384 80c8.8 0 16 7.2 16 16l0 320c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16L48 96c0-8.8 7.2-16 16-16l320 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z'/%3E%3C/svg%3E") 50% 50% no-repeat;
+            background-size: 12px;
+            content: "";
+            display: inline-block;
+            float: none;
+            height: .8em;
+            margin-right: .3rem;
+            width: .8em;
+        }
+    }
 }
