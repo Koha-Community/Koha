@@ -70,6 +70,7 @@ $template->param(
     plain  => !$is_html,
     caller => 'recall',
     style  => $style,
+    id     => 'recall_request_det',
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
