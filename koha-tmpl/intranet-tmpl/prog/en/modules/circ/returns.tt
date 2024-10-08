@@ -1263,7 +1263,7 @@
                                     [% FOREACH riloo IN riloop %]
                                         <tr>
                                             <td class="ci-duedate">
-                                                [% IF ( riloo.not_returned ) %]
+                                                [% IF ( riloo.not_returned AND riloo.duedate ) %]
                                                     <span class="problem not_returned">Item was not checked in</span>
                                                 [% END %]
                                                 [% IF ( riloo.duedate ) %]
