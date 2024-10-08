@@ -871,6 +871,7 @@
             let table_dt = patrons_table.DataTable();
             let loaded_from_state = table_dt.settings()[0].loaded_from_state;
             if ( !loaded_from_state ) {
+                table_dt.search("").columns().search("");
                 [% FOR c IN columns %]
                     [% SWITCH c %]
                     [% CASE 'branch' %]
@@ -883,8 +884,8 @@
                         table_dt.column([% loop.count - 1 %]).search(category_id ? '^'+category_id+'$' : '');
                     [% END %]
                 [% END %]
-                table_dt.search("");
             }
+            table_dt.settings()[0].loaded_from_state = false;
             first_draw = 1; // Only redirect if we are coming from here
             table_dt.draw();
             [% IF display_search_description %]
