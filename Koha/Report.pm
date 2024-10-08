@@ -194,6 +194,12 @@ sub prep_report {
     }
 
     my %lookup;
+    unless ( scalar @$param_names ) {
+        my @placeholders = $sql =~ /<<([^<>]+)>>/g;
+        foreach my $placeholder (@placeholders) {
+            push @$param_names, $placeholder unless grep { $_ eq $placeholder } @$param_names;
+        }
+    }
     @lookup{@$param_names} = @$sql_params;
     @split = split /<<|>>/, $sql;
     for ( my $i = 0 ; $i < $#split / 2 ; $i++ ) {

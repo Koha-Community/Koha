@@ -66,8 +66,8 @@ subtest 'prep_report' => sub {
     ($sql, undef) = $report->prep_report( ['Test|list','Another'],["1\n12\n\r243",'the other'] );
     is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and names');
 
-    ($sql, undef) = $report->prep_report( [],["1\n12\n\r243",'the other',"42\n32\n22\n12"] );
-    is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('42','32','22','12') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and no names');
+    ($sql, undef) = $report->prep_report( [],["1\n12\n\r243",'the other'] );
+    is( $sql, qq{SELECT * FROM items WHERE itemnumber IN ('1','12','243') AND 'the other' AND ('1','12','243') /* saved_sql.id: $id */},'Expected sql generated correctly with multiple params and no names');
 
     $report->savedsql(
         q{SELECT  i.itemnumber, i.itemnumber as Exemplarnummber, [[i.itemnumber| itemnumber for batch]] FROM items})
