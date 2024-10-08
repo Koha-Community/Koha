@@ -979,6 +979,7 @@ function _dt_save_restore_state(table_settings){
         const url = new URL(window.location.href);
         let state_from_url = url.searchParams.get( settings.nTable.id + '_state');
         if ( state_from_url ) {
+            settings.loaded_from_state = true;
             return JSON.parse(atob(state_from_url));
         }
 
@@ -993,6 +994,7 @@ function _dt_save_restore_state(table_settings){
             delete state.search;
             state.columns.forEach(c => delete c.search );
         }
+        settings.loaded_from_state = true;
         return state;
     }
 
@@ -1040,6 +1042,7 @@ function _dt_save_restore_state(table_settings){
                             'emptyTable': (options.emptyTable) ? options.emptyTable : __("No data available in table")
                         },
                         'ajax': _dt_default_ajax({default_filters, options}),
+                        loaded_from_state: false,
                     }, options);
         }
 
