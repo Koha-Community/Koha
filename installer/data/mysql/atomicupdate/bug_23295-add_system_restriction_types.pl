@@ -8,10 +8,11 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
         try {
-            $dbh->do(q{INSERT IGNORE INTO restriction_types (code, display_text, is_system, is_default) VALUES ('NOTICE_FAILURE_SUSPENSION', 'Notice failure suspension', 1, 0)});
+            $dbh->do(
+                q{INSERT IGNORE INTO restriction_types (code, display_text, is_system, is_default) VALUES ('NOTICE_FAILURE_SUSPENSION', 'Notice failure suspension', 1, 0)}
+            );
             say_success( $out, "Added a new system restriction_types 'NOTICE_FAILURE_SUSPENSION'" );
-        }
-        catch {
+        } catch {
             say_failure( $out, "Database modification failed with errors: $_" );
         };
     },
