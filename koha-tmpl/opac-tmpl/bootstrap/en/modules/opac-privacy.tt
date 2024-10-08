@@ -96,6 +96,7 @@
                                         </select>
                                     </div> <!-- /.col-6 -->
                                 </div> <!-- /.form-group.row -->
+                                <div id="never-warning" class="alert alert-danger">This option will delete all previous checkout history immediately.</div>
 
                                 [% IF has_guarantor_flag && (Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
                                     [% IF Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
