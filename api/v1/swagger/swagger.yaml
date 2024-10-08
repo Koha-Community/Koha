@@ -178,6 +178,8 @@ definitions:
     $ref: ./definitions/search_filter.yaml
   smtp_server:
     $ref: ./definitions/smtp_server.yaml
+  sftp_server:
+    $ref: ./definitions/sftp_server.yaml
   suggestion:
     $ref: ./definitions/suggestion.yaml
   ticket:
@@ -319,6 +321,10 @@ paths:
     $ref: ./paths/config_smtp_servers.yaml#/~1config~1smtp_servers
   "/config/smtp_servers/{smtp_server_id}":
     $ref: "./paths/config_smtp_servers.yaml#/~1config~1smtp_servers~1{smtp_server_id}"
+  /config/sftp_servers:
+    $ref: ./paths/config_sftp_servers.yaml#/~1config~1sftp_servers
+  "/config/sftp_servers/{sftp_server_id}":
+    $ref: "./paths/config_sftp_servers.yaml#/~1config~1sftp_servers~1{sftp_server_id}"
   "/deleted/biblios":
     $ref: "./paths/deleted_biblios.yaml#/~1deleted~1biblios"
   "/deleted/biblios/{biblio_id}":
@@ -575,6 +581,8 @@ paths:
     $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}"
   "/rotas/{rota_id}/stages/{stage_id}/position":
     $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}~1stages~1{stage_id}~1position"
+  "/sftp_server/{sftp_server_id}/test_connection":
+    $ref: "./paths/test_sftp_servers.yaml#/~1sftp_server~1{sftp_server_id}~1test_connection"
   /suggestions:
     $ref: ./paths/suggestions.yaml#/~1suggestions
   "/suggestions/{suggestion_id}":
@@ -955,6 +963,12 @@ parameters:
     name: smtp_server_id
     required: true
     type: integer
+  sftp_server_id_pp:
+    description: FTP/SFTP server internal identifier
+    in: path
+    name: sftp_server_id
+    required: true
+    type: integer
   suggestion_id_pp:
     description: Internal suggestion identifier
     in: path
@@ -1305,6 +1319,9 @@ tags:
   - description: "Manage SMTP servers configurations\n"
     name: smtp_servers
     x-displayName: SMTP servers
+  - description: "Manage FTP/SFTP servers configurations\n"
+    name: sftp_servers
+    x-displayName: FTP/SFTP servers
   - description: "Manage tickets\n"
     name: tickets
     x-displayName: Tickets

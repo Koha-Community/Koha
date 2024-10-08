@@ -1,0 +1,236 @@
+---
+/config/sftp_servers:
+  get:
+    x-mojo-to: Config::SFTP::Servers#list
+    operationId: listSFTPServers
+    tags:
+      - sftp_servers
+    summary: List FTP/SFTP servers
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    responses:
+      "200":
+        description: A list of FTP/SFTP servers
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/sftp_server"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_sftp_servers
+  post:
+    x-mojo-to: Config::SFTP::Servers#add
+    operationId: addSFTPServer
+    tags:
+      - sftp_servers
+    summary: Add FTP/SFTP server
+    parameters:
+      - name: body
+        in: body
+        description: A JSON object representing a new FTP/SFTP server configuration
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/sftp_server"
+    produces:
+      - application/json
+    responses:
+      "201":
+        description: An FTP/SFTP server object
+        schema:
+          $ref: "../swagger.yaml#/definitions/sftp_server"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_sftp_servers
+"/config/sftp_servers/{sftp_server_id}":
+  get:
+    x-mojo-to: Config::SFTP::Servers#get
+    operationId: getSFTPServer
+    tags:
+      - sftp_servers
+    summary: Get FTP/SFTP server
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sftp_server_id_pp"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An FTP/SFTP server object
+        schema:
+          $ref: "../swagger.yaml#/definitions/sftp_server"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Object not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Conflict updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_sftp_servers
+  put:
+    x-mojo-to: Config::SFTP::Servers#update
+    operationId: updateSFTPServer
+    tags:
+      - sftp_servers
+    summary: Update FTP/SFTP server
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sftp_server_id_pp"
+      - name: body
+        in: body
+        description: An FTP/SFTP server object
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/sftp_server"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: An FTP/SFTP server object
+        schema:
+          $ref: "../swagger.yaml#/definitions/sftp_server"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Object not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_sftp_servers
+  delete:
+    x-mojo-to: Config::SFTP::Servers#delete
+    operationId: deleteSFTPServer
+    tags:
+      - sftp_servers
+    summary: Delete FTP/SFTP server
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sftp_server_id_pp"
+    produces:
+      - application/json
+    responses:
+      "204":
+        description: FTP/SFTP server deleted
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Object not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        parameters: manage_sftp_servers

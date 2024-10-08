@@ -1,0 +1,963 @@
+[% USE raw %]
+[% USE Asset %]
+[% PROCESS 'i18n.inc' %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% FILTER collapse %]
+    [% IF op == 'add_form' %]
+        [% t("New FTP/SFTP server") | html %] &rsaquo;
+    [% ELSIF op == 'edit_form' %]
+        [% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %] &rsaquo;
+    [% ELSIF op == 'test_form' %]
+        [% tx("Test FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %] &rsaquo;
+    [% END %]
+    [% t("FTP/SFTP Servers") | html %] &rsaquo;
+    [% t("Administration") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style>
+    #testOutput {
+        font-size: 1.25rem;
+    }
+
+    #testOutput .pending-loading {
+        font-size: 1.5rem;
+        margin-left: 1.25rem;
+    }
+
+    #testOutput code {
+        font-size: 87.5%;
+        color: #e83e8c;
+        background: transparent;
+        word-break: break-word;
+    }
+</style>
+
+</head>
+
+<body id="admin_sftp_servers" class="admin">
+[% WRAPPER 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+[% END %]
+
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+        [% END %]
+
+        [% IF op == 'add_form' || op == 'edit_form' || op == 'test_form' %]
+            [% WRAPPER breadcrumb_item %]
+                <a href="/cgi-bin/koha/admin/sftp_servers.pl">FTP/SFTP servers</a>
+            [% END %]
+        [% END %]
+
+        [% IF op == 'add_form' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>New FTP/SFTP server</span>
+            [% END %]
+
+        [% ELSIF op == 'edit_form' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
+            [% END %]
+
+        [% ELSIF op == 'test_form' %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                [% tx("Test FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]
+            [% END %]
+
+        [% ELSE %]
+            [% WRAPPER breadcrumb_item bc_active= 1 %]
+                <span>FTP/SFTP servers</span>
+            [% END %]
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 order-md-2 order-sm-1">
+            <main>
+                [% INCLUDE 'messages.inc' %]
+
+[% FOREACH m IN messages %]
+    <div class="alert alert-[% m.type | html %]" id="sftp_action_result_dialog">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_insert' %]
+            <span>An error occurred when adding the server. The passed ID already exists.</span>
+        [% CASE 'error_on_update' %]
+            <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
+        [% CASE 'error_on_edit' %]
+            <span>An error occurred trying to open the server for editing. The passed ID is invalid.</span>
+        [% CASE 'error_on_test' %]
+            <span>An error occurred when connecting to this server. Please see the text below for more information.</span>
+        [% CASE 'success_on_update' %]
+            <span>Server updated successfully.</span>
+        [% CASE 'success_on_insert' %]
+            <span>Server added successfully.</span>
+        [% CASE %]
+            <span>[% m.code | html %]</span>
+        [% END %]
+    </div>
+[% END %]
+
+    <div class="alert alert-info"    id="sftp_delete_success" style="display: none;"></div>
+    <div class="alert alert-warning" id="sftp_delete_error"   style="display: none;"></div>
+
+[% IF op == 'add_form' %]
+    <!-- Modal -->
+    <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal_message" class="alert alert-warning">Because you are using the SFTP transport, please run a test of this connection to accept the server's host key.</div>
+                        <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
+                        <table class="mx-4 mb-3">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Host</strong></td>
+                                    <td id="modal_host"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Port</strong></td>
+                                    <td id="modal_port"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td id="modal_transport"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Username</strong></td>
+                                    <td id="modal_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication mode</strong></td>
+                                    <td id="modal_auth_mode"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>If you are ready to progress with these details, please click Save.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                        <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END Modal -->
+
+    <h1>New FTP/SFTP server</h1>
+
+    <form action="/cgi-bin/koha/admin/sftp_servers.pl" id="add" name="add" class="validated" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-add" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="sftp_name" class="required">Name: </label>
+                    <input type="text" name="sftp_name" id="sftp_name" size="60" class="required focus" required="required" />
+                    <span class="required">Required</span>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="sftp_host" class="required">Host: </label>
+                    <input type="text" value="localhost" name="sftp_host" id="sftp_host" size="60" class="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_port" class="required">Port: </label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" value="22" name="sftp_port" id="sftp_port" size="20" class="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_transport" class="required">Transport: </label>
+                    <select name="sftp_transport" id="sftp_transport" class="required">
+                        <option value="ftp">FTP</option>
+                        <option value="sftp" selected="selected">SFTP</option>
+                    </select>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_passive">Passive mode: </label>
+                    <select name="sftp_passive" id="sftp_passive" disabled="disabled">
+                        <option value="1" selected="selected">On (Recommended)</option>
+                        <option value="0">Off</option>
+                    </select>
+                    <span class="hint">Only applies to FTP connections</span>
+                </li>
+                <li>
+                    <label for="sftp_auth_mode">Authentication mode: </label>
+                    <select name="sftp_auth_mode" id="sftp_auth_mode">
+                        <option value="password" selected="selected">Password-based</option>
+                        <option value="key_file">Key file-based</option>
+                        <option value="noauth">No authentication</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="sftp_user_name" class="required">Username: </label>
+                    <input type="text" name="sftp_user_name" id="sftp_user_name" size="60" autocomplete="off" class="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_password">Password: </label>
+                    <input type="password" name="sftp_password" id="sftp_password" size="60" autocomplete="off" />
+                </li>
+                <li>
+                    <label for="sftp_key_file">Key file: </label>
+                    <textarea name="sftp_key_file" id="sftp_key_file" rows="10" cols="58"></textarea>
+                    <span class="hint">Only applies to SFTP connections</span>
+                </li>
+                <li>
+                    <label for="sftp_download_directory" >Remote download directory: </label>
+                    <input type="text" name="sftp_download_directory" id="sftp_download_directory" size="60" autocomplete="off" /><br />
+                    <span class="hint">The path on the remote server where we will download from</span>
+                </li>
+                <li>
+                    <label for="sftp_upload_directory" >Remote upload directory: </label>
+                    <input type="text" name="sftp_upload_directory" id="sftp_upload_directory" size="60" autocomplete="off" /><br />
+                    <span class="hint">The path on the remote server where we will upload to</span>
+                </li>
+                <input type="hidden" value="" name="sftp_status" id="sftp_status">
+                <li>
+                    <label for="sftp_debug_mode">Debug mode: </label>
+                    <select name="sftp_debug_mode" id="sftp_debug_mode">
+                        <option value="1">Enabled</option>
+                        <option value="0" selected="selected">Disabled</option>
+                    </select>
+                    <span class="hint">Enables additional debug output in the logs</span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
+            <a class="cancel" href="/cgi-bin/koha/admin/sftp_servers.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'edit_form' && !messages %]
+    <!-- Modal -->
+    <div id="confirm_key_accept" class="modal" tabindex="-1" role="dialog" aria-labelledby="confirm_key_accept_submit" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal_message" class="alert alert-warning">Because you are using the SFTP transport, please run a test of this connection to accept the server's host key.</div>
+                        <p>Before saving, please check the following details again to make sure you are certain they are correct. Sending or receiving data from an unknown source potentially puts your system at risk.</p>
+                        <table class="mx-4 mb-3">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Host</strong></td>
+                                    <td id="modal_host"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Port</strong></td>
+                                    <td id="modal_port"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Transport</strong></td>
+                                    <td id="modal_transport"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Username</strong></td>
+                                    <td id="modal_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Authentication mode</strong></td>
+                                    <td id="modal_auth_mode"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>If you are ready to progress with these details, please click Save.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
+                        <button class="btn btn-default deny cancel" type="button" data-bs-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END Modal -->
+
+    <h1>[% tx("Modify FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]</h1>
+
+    <form action="/cgi-bin/koha/admin/sftp_servers.pl" id="edit_save" name="edit_save" class="validated" method="post">
+        [% INCLUDE 'csrf-token.inc' %]
+        <input type="hidden" name="op" value="cud-edit_save" />
+        <input type="hidden" name="sftp_server_id" value="[%- sftp_server.id | html -%]" />
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="sftp_name" class="required">Name: </label>
+                    <input type="text" value="[% sftp_server.name | html %]" name="sftp_name" id="sftp_name" size="60" class="required focus" required="required" />
+                    <span class="required">Required</span>
+                </li>
+            </ol>
+        </fieldset>
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <label for="sftp_host" class="required">Host: </label>
+                    <input type="text" value="[% sftp_server.host | html %]" name="sftp_host" id="sftp_host" size="60" class="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_port" class="required">Port: </label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" value="[% sftp_server.port | html %]" name="sftp_port" id="sftp_port" size="20" class="required"/>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_transport" class="required">Transport: </label>
+                    <select name="sftp_transport" id="sftp_transport" class="required">
+                        [% IF sftp_server.transport == 'ftp' %]
+                        <option value="ftp" selected="selected">FTP</option>
+                        [% ELSE %]
+                        <option value="ftp">FTP</option>
+                        [% END %]
+                        [% IF sftp_server.transport == 'sftp' %]
+                        <option value="sftp" selected="selected">SFTP</option>
+                        [% ELSE %]
+                        <option value="sftp">SFTP</option>
+                        [% END %]
+                    </select>
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_passive">Passive mode: </label>
+                    <select name="sftp_passive" id="sftp_passive" disabled="disabled">
+                        [% IF sftp_server.passive == 1 %]
+                        <option value="1" selected="selected">Enabled (Recommended)</option>
+                        [% ELSE %]
+                        <option value="1">Enabled (Recommended)</option>
+                        [% END %]
+                        [% IF sftp_server.passive == 0 %]
+                        <option value="0" selected="selected">Disabled</option>
+                        [% ELSE %]
+                        <option value="0">Disabled</option>
+                        [% END %]
+                    </select>
+                    <span class="hint">Only applies to FTP connections</span>
+                </li>
+                <li>
+                    <label for="sftp_auth_mode">Authentication mode: </label>
+                    <select name="sftp_auth_mode" id="sftp_auth_mode">
+                        [% IF sftp_server.auth_mode == 'password' %]
+                        <option value="password" selected="selected">Password-based</option>
+                        [% ELSE %]
+                        <option value="password">Password-based</option>
+                        [% END %]
+                        [% IF sftp_server.auth_mode == 'key_file' %]
+                        <option value="key_file" selected="selected">Key file-based</option>
+                        [% ELSE %]
+                        <option value="key_file">Key file-based</option>
+                        [% END %]
+                        [% IF sftp_server.auth_mode == 'noauth' %]
+                        <option value="noauth" selected="selected">No authentication</option>
+                        [% ELSE %]
+                        <option value="noauth">No authentication</option>
+                        [% END %]
+                    </select>
+                </li>
+                <li>
+                    <label for="sftp_user_name" class="required">Username: </label>
+                    <input type="text" value="[% sftp_server.user_name | html %]" name="sftp_user_name" id="sftp_user_name" size="60" autocomplete="off" class="required" />
+                    <span class="required">Required</span>
+                </li>
+                <li>
+                    <label for="sftp_password">Password: </label>
+                    <input type="password" value="[% sftp_server_plain_text_password | html %]" name="sftp_password" id="sftp_password" size="60" autocomplete="off" />
+                </li>
+                <li>
+                    <label for="sftp_key_file">Key file path: </label>
+                    <textarea name="sftp_key_file" id="sftp_key_file" rows="10" cols="58">[% sftp_server_plain_text_key | html %]</textarea>
+                    <span class="hint">Only applies to SFTP connections</span>
+                </li>
+                <li>
+                    <label for="sftp_download_directory" >Remote download directory: </label>
+                    <input type="text" value="[% sftp_server.download_directory | html %]" name="sftp_download_directory" id="sftp_download_directory" size="60" autocomplete="off" /><br />
+                    <span class="hint">The path on the remote server where we will download from</span>
+                </li>
+                <li>
+                    <label for="sftp_upload_directory" >Remote upload directory: </label>
+                    <input type="text" value="[% sftp_server.upload_directory | html %]" name="sftp_upload_directory" id="sftp_upload_directory" size="60" autocomplete="off" /><br />
+                    <span class="hint">The path on the remote server where we will upload to</span>
+                </li>
+                <input type="hidden" value="" name="sftp_status" id="sftp_status">
+                <li>
+                    <label for="sftp_debug_mode">Debug mode: </label>
+                    <select name="sftp_debug_mode" id="sftp_debug_mode">
+                        [% IF sftp_server.debug == 1 %]
+                        <option value="1" selected="selected">Enabled</option>
+                        [% ELSE %]
+                        <option value="1">Enabled</option>
+                        [% END %]
+                        [% IF sftp_server.debug == 0 %]
+                        <option value="0" selected="selected">Disabled</option>
+                        [% ELSE %]
+                        <option value="0">Disabled</option>
+                        [% END %]
+                    </select>
+                    <span class="hint">Enables additional debug output in the logs</span>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="action">
+            <a id="confirm_key_accept_submit" data-bs-target="#confirm_key_accept" class="btn btn-primary" data-bs-toggle="modal">Submit</a>
+            <a class="cancel" href="/cgi-bin/koha/admin/sftp_servers.pl">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'test_form' %]
+
+    <h1>[% tx("Test FTP/SFTP server '{sftp_server}'", { sftp_server = sftp_server.name }) | html %]</h1>
+    [% IF sftp_server.id %]
+    <div class="page-section">
+        [% IF sftp_server.transport == 'sftp' %]
+        <div class="alert alert-warning">
+            <strong>For your information:</strong> As the transport in use for this server is SFTP, please be aware that running a test attempt will also accept the current host key fingerprint of the destination server. If you have doubts about the authenticity of this server, remove its host key from your authorized_keys file immediately, and contact your System Administrator.
+        </div>
+        [% END %]
+        <div class="row">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <h3>Test results</h3>
+                <div id="testOutput">
+                    <!-- tests will appear here -->
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 order-0 order-lg-1">
+                <h3>Test details</h3>
+                <p>Connection details are as follows:</p>
+                <table class="mx-4 mb-3">
+                    <thead></thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Host</strong></td>
+                            <td>[% sftp_server.host | html %]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Port</strong></td>
+                            <td>[% sftp_server.port | html %]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transport</strong></td>
+                            <td>[% sftp_server.transport FILTER upper | html %]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Username</strong></td>
+                            <td>[% sftp_server.user_name | html %]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authentication mode</strong></td>
+                            <td>
+                                [% IF sftp_server.auth_mode == 'password' %]
+                                Password-based
+                                [% ELSE %]
+                                Key file-based
+                                [% END %]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td>
+                                [% SWITCH sftp_server.status %]
+                                [% CASE 'tests_ok' %]
+                                    Tests passing
+                                [% CASE 'tests_failed' %]
+                                    Tests failing
+                                [% CASE %]
+                                    <em>Never used</em>
+                                [% END %]
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <fieldset class="action">
+        <a href="/cgi-bin/koha/admin/sftp_servers.pl?op=edit_form&sftp_server_id=[% sftp_server.id | uri %]" class="btn btn-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
+        <a href="/cgi-bin/koha/admin/sftp_servers.pl?op=test_form&sftp_server_id=[% sftp_server.id | uri %]" class="cancel">Reset</a>
+    </fieldset>
+    [% ELSE %]
+    <div class="page-section">
+        <h3>Oops &ndash; Not Found</h3>
+        <p>An FTP/SFTP server with that ID was not found. Please go back and try again.</p>
+    </div>
+    [% END %]
+[% END %]
+
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="new_sftp_server" href="/cgi-bin/koha/admin/sftp_servers.pl?op=add_form"><i class="fa fa-plus"></i> New FTP/SFTP server</a>
+    </div>
+
+    <h1>FTP/SFTP servers</h1>
+
+    [% IF servers_count < 1 %]
+        <div class="alert alert-info" id="dno_servers_message">
+            <p>
+                <em>There are no FTP/SFTP servers defined.</em><br />
+                To create one, use the <strong>new FTP/SFTP server</strong> button above.
+            </p>
+        </div>
+    [% ELSE %]
+        <div class="page-section">
+            <table id="sftp_servers">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Transport</th>
+                        <th>Authentication mode</th>
+                        <th>Username</th>
+                        <th>Download directory</th>
+                        <th>Upload directory</th>
+                        <th>Status</th>
+                        <th>Debug</th>
+                        <th data-class-name="actions noExport">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div> <!-- /.page-section -->
+    [% END %]
+[% END %]
+
+            <div id="delete_confirm_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete_confirm_modal_label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title" id="delete_confirm_modal_label">Delete server</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="delete_confirm_dialog"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" id="delete_confirm_modal_button" data-bs-toggle="modal">Delete</button>
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- #delete_confirm_modal -->
+
+            </main>
+        </div> <!-- /.col-md-10.order-md-2 -->
+
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-md-2.order-md-1 -->
+     </div> <!-- /.row -->
+
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+
+            var sftp_servers_url = '/api/v1/config/sftp_servers';
+            window.sftp_servers = $("#sftp_servers").kohaTable({
+                "ajax": {
+                    "url": sftp_servers_url
+                },
+                "language": {
+                    "emptyTable": "<div class=\"alert alert-info\">"+_("There are no FTP/SFTP servers defined.")+"</div>"
+                },
+                "columnDefs": [ {
+                    "targets": [0,1],
+                    "render": function(data, type, row, meta) {
+                        if (type == "display") {
+                            if(data != null) {
+                                return data.escapeHtml();
+                            } else {
+                                return "Default";
+                            }
+                        }
+                        return data;
+                    }
+                } ],
+                "columns": [
+                    {
+                        "data": "name",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "host",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "port",
+                        "searchable": true,
+                        "orderable": false
+                    },
+                    {
+                        "data": "transport",
+                        "render": function(data, type, row, meta) {
+                            return data.toUpperCase();
+                        },
+                        "searchable": true,
+                        "orderable": false
+                    },
+                    {
+                        "data": "auth_mode",
+                        "render": function(data, type, row, meta) {
+                            if(data == "password") {
+                                return _("Password-based");
+                            } else if(data == "key_file") {
+                                return _("Key file-based");
+                            } else {
+                                return _("No authentication");
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "user_name",
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "download_directory",
+                        "render": function(data, type, row, meta) {
+                            if(data) {
+                                return data;
+                            } else {
+                                return "<em>" + _("Not specified") + "</em>";
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "upload_directory",
+                        "render": function(data, type, row, meta) {
+                            if(data) {
+                                return data;
+                            } else {
+                                return "<em>" + _("Not specified") + "</em>";
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "status",
+                        "render": function(data, type, row, meta) {
+                            if (data == "tests_ok") {
+                                return _("Tests passing");
+                            } else if (data == "tests_failed") {
+                                return _("Tests failing");
+                            } else {
+                                return "<em>" + _("Never used") + "</em>";
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": "debug",
+                        "render": function(data, type, row, meta) {
+                            if(data == true) {
+                                return "[% tp("Active", "On") | html %]";
+                            }
+                            else {
+                                return _("Off");
+                            }
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    },
+                    {
+                        "data": function(row, type, val, meta) {
+                            var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/sftp_servers.pl?op=test_form&amp;sftp_server_id='+ encodeURIComponent(row.sftp_server_id) +'"><i class="fa-solid fa-vial" aria-hidden="true"></i> '+_("Test")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/sftp_servers.pl?op=edit_form&amp;sftp_server_id='+ encodeURIComponent(row.sftp_server_id) +'"><i class="fa-solid fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</a>'+"\n";
+                            result += '<a class="btn btn-default btn-xs delete_server" role="button" href="#" data-bs-toggle="modal" data-bs-target="#delete_confirm_modal" data-sftp-server-id="'+ encodeURIComponent(row.sftp_server_id) +'" data-sftp-server-name="'+ encodeURIComponent(row.name.escapeHtml()) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Delete")+'</a>';
+                            return result;
+                        },
+                        "searchable": false,
+                        "orderable": false
+                    }
+                ],
+                createdRow: function(row, data, dataIndex) {
+                    if(data.is_default) {
+                        $(row).addClass('default warn');
+                    }
+                    if(data.debug) {
+                        $(row).addClass('debug');
+                    }
+                },
+            });
+
+            $('#sftp_servers').on("click", '.delete_server', function() {
+                var sftp_server_id   = $(this).data('sftp-server-id');
+                var sftp_server_name = decodeURIComponent($(this).data('sftp-server-name'));
+
+                $("#delete_confirm_dialog").html(
+                    _("You are about to delete the '%s' FTP/SFTP server.").format(sftp_server_name)
+                );
+                $("#delete_confirm_modal_button").data('sftp-server-id', sftp_server_id);
+                $("#delete_confirm_modal_button").data('sftp-server-name', sftp_server_name);
+            });
+
+            $("#delete_confirm_modal_button").on("click", function() {
+
+                var sftp_server_id   = $(this).data('sftp-server-id');
+                var sftp_server_name = $(this).data('sftp-server-name');
+
+                $.ajax({
+                    method: "DELETE",
+                    url: "/api/v1/config/sftp_servers/"+sftp_server_id
+                }).success(function() {
+                    window.sftp_servers.api().ajax.reload(function(data) {
+                        $("#sftp_action_result_dialog").hide();
+                        $("#sftp_delete_success").html(_("Server '%s' deleted successfully.").format(sftp_server_name)).show();
+                    });
+                }).fail(function() {
+                    $("#sftp_delete_error").html(_("Error deleting server '%s'. Please ensure all linked EDI accounts are unlinked or deleted. Check the logs for details.").format(sftp_server_name)).show();
+                }).done(function() {
+                    $("#delete_confirm_modal").modal('hide');
+                });
+            });
+
+            transportChange();
+            $("#sftp_transport").on("change", function(event) {
+                transportChange();
+            });
+
+            authModeChange();
+            $("#sftp_auth_mode").on("change", function(event) {
+                authModeChange();
+            });
+
+            $('#confirm_key_accept_submit').on('click', function(event) {
+                event.preventDefault();
+
+                if ( $('#add').length > 0 ) {
+                    if( $('#add').valid() == true ) {
+                        modalChange();
+                        $('#confirm_key_accept').modal('show');
+                    } else {
+                        $('#confirm_key_accept').modal('hide');
+                    }
+                }
+
+                if ( $('#edit_save').length > 0 ) {
+                    if( $('#edit_save').valid() == true ) {
+                        modalChange();
+                        $('#confirm_key_accept').modal('show');
+                    } else {
+                        $('#confirm_key_accept').modal('hide');
+                    }
+                }
+
+            });
+
+            $('#confirm_key_accept .approve').on('click', function() {
+                $('#confirm_key_accept .deny').click();
+
+                if ( $('#add').length > 0 ) {
+                    $('#add').submit();
+                }
+
+                if ( $('#edit_save').length > 0 ) {
+                    $('#edit_save').submit();
+                }
+            });
+
+        });
+
+        function transportChange() {
+            let sftp_transport = $("#sftp_transport");
+
+            if(sftp_transport.val() == "ftp") {
+                $("#sftp_host").removeAttr("disabled");
+                $("#sftp_port").removeAttr("disabled");
+                $("#sftp_passive").removeAttr("disabled");
+                $("#sftp_auth_mode").removeAttr("disabled");
+                $("#sftp_user_name").removeAttr("disabled");
+                $("#sftp_password").removeAttr("disabled");
+                $("#sftp_key_file").attr("disabled", "disabled");
+
+                $("#sftp_auth_mode option[value='password']").removeAttr("disabled");
+                $("#sftp_auth_mode option[value='key_file']").attr("disabled", "disabled");
+                $("#sftp_auth_mode option[value='noauth']").removeAttr("disabled");
+                if($("#sftp_auth_mode option:selected").val() == "key_file") {
+                    $("#sftp_auth_mode option[value='password']").prop("selected", true);
+                }
+
+                let sftp_port = $("#sftp_port").val();
+                if(sftp_port == 22) $("#sftp_port").val("21");
+
+                authModeChange();
+            } else if(sftp_transport.val() == "sftp") {
+                $("#sftp_host").removeAttr("disabled");
+                $("#sftp_port").removeAttr("disabled");
+                $("#sftp_passive").attr("disabled", "disabled");
+                $("#sftp_auth_mode").removeAttr("disabled");
+                $("#sftp_user_name").removeAttr("disabled");
+                $("#sftp_password").removeAttr("disabled");
+                $("#sftp_key_file").removeAttr("disabled");
+
+                $("#sftp_auth_mode option[value='password']").removeAttr("disabled");
+                $("#sftp_auth_mode option[value='key_file']").removeAttr("disabled");
+                $("#sftp_auth_mode option[value='noauth']").removeAttr("disabled");
+                $("#sftp_passive option[value='1']").prop("selected", true);
+
+                let sftp_port = $("#sftp_port").val();
+                if(sftp_port == 21) $("#sftp_port").val("22");
+
+                return authModeChange();
+            }
+        }
+
+        function authModeChange() {
+            let sftp_auth_mode = $("#sftp_auth_mode").val();
+
+            if(sftp_auth_mode == "password") {
+                $("#sftp_password").removeAttr("disabled");
+                $("#sftp_key_file").attr("disabled", "disabled");
+            } else if(sftp_auth_mode == "key_file") {
+                $("#sftp_password").attr("disabled", "disabled");
+                $("#sftp_key_file").removeAttr("disabled");
+            } else {
+                $("#sftp_password").attr("disabled", "disabled");
+                $("#sftp_key_file").attr("disabled", "disabled");
+            }
+        }
+
+        function modalChange() {
+            $('#modal_message').hide();
+            if ( $('#sftp_transport').val() == 'sftp' ) $('#modal_message').show();
+
+            $('#modal_host').text( $('#sftp_host').val() );
+            $('#modal_port').text( $('#sftp_port').val() );
+            $('#modal_transport').text( $('#sftp_transport option:selected').text() );
+            $('#modal_user_name').text( $('#sftp_user_name').val() );
+            $('#modal_auth_mode').text( $('#sftp_auth_mode option:selected').text() );
+        }
+    </script>
+
+    [% IF op == 'test_form' %]
+    <script>
+        $(document).ready(function() {
+            handleTests();
+        });
+
+        function handleTests() {
+            var testOutput = $('#testOutput');
+            var runTests   = $('#runTests');
+
+            runTests.addClass('disabled');
+            testOutput.html('<div class="spinner-border text-warning" style="height:1.5rem;width:1.5rem" role="status"><span class="sr-only">Loading...</span></div><span class="pending-loading">' + _("Running tests . . . ") + '</span>');
+
+            return $.ajax({
+                url: "/api/v1/sftp_server/[% sftp_server.id | html %]/test_connection",
+            })
+            .done(function(data) {
+                testOutput.text('');
+
+                for ( let [key, value] of Object.entries( data ) ) {
+                    var title;
+                    switch(key) {
+                        case '1_sftp_conn':
+                            title = _("Testing SFTP connectivity");
+                            break;
+                        case '1_ftp_conn':
+                            title = _("Testing FTP connectivity");
+                            break;
+                        case '2_ftp_login':
+                            title = _("Testing we can log in");
+                            break;
+                        case '2a_sftp_cwd_dl':
+                        case '3a_ftp_cwd_dl':
+                            title = _("Testing we can cwd to download directory");
+                            break;
+                        case '2b_sftp_ls_dl':
+                        case '3b_ftp_ls_dl':
+                            title = _("Testing we can list download directory");
+                            break;
+                        case '2c_sftp_cwd_ul':
+                        case '3c_ftp_cwd_ul':
+                            title = _("Testing we can cwd to upload directory");
+                            break;
+                        case '2d_sftp_ls_ul':
+                        case '3d_ftp_ls_ul':
+                            title = _("Testing we can list upload directory");
+                            break;
+                        case '3_sftp_write':
+                        case '4_ftp_write':
+                            title = _("Testing we can write a test file");
+                            break;
+                        case '4_sftp_del':
+                        case '5_ftp_del':
+                            title = _("Testing we can delete test file");
+                            break;
+                        default:
+                            title = key
+                    }
+
+                    if ( value.passed ) {
+                        testOutput.append(
+                            '<i class="text-success fa-solid fa-circle-check"></i> '
+                            + title
+                            + '... <span class="text-success">'
+                            + _("Passed")
+                            + '</span><br />'
+                        );
+                        if( value.msg ) testOutput.append( _("Message: ") + '<code>' + value.msg + '</code><br />' );
+                    } else {
+                        testOutput.append(
+                            '<i class="text-danger fa-solid fa-circle-xmark"></i> '
+                            + title
+                            + '... <span class="text-danger">'
+                            + _("Failed")
+                            + '</span><br />'
+                        );
+                        if( value.err ) testOutput.append( _("Error message: ") + '<code>' + value.err + '</code><br />' );
+                    }
+                    testOutput.append( '<br />' );
+                }
+            })
+            .fail(function(data) {
+                if( data.status == 404 ) {
+                    return testOutput.text( '<i class="text-success fa-solid fa-circle-check"></i> ' + _("FTP/SFTP Server not found") );
+                } else {
+                    return testOutput.text( '<i class="text-success fa-solid fa-circle-check"></i> ' + _("Internal Server Error. Please check the server logs") );
+                }
+            })
+            .always(function(data) {
+                runTests.removeClass('disabled');
+            });
+        }
+    </script>
+    [% END %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
