@@ -766,7 +766,9 @@
                 parent_block.find(".searchpattern").parent().hide();
             });
 
-            if ( !defer_loading ) {
+            let table_dt = patrons_table.DataTable();
+            let loaded_from_state = table_dt.settings()[0].loaded_from_state;
+            if ( !defer_loading || loaded_from_state ) {
                 patron_search_form.submit();
             }
 
