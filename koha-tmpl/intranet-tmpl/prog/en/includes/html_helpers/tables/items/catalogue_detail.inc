@@ -122,6 +122,25 @@
         }
     }
 
+    function update_columns_visibility(settings){
+        let table = settings.oInstance.api();
+        table.columns().visible(true);
+        table.columns().every(function(i){
+            let is_empty = true;
+            let nodes = this.nodes();
+            nodes.each((td, ii) => {
+                if ( $(td).html() !== '' ) {
+                    is_empty = false;
+                    return;
+                }
+            });
+            if ( is_empty ) {
+                table.columns(i).visible(false);
+            }
+        });
+    }
+
+
     $(document).ready(function() {
 
         $(".SelectAll").on("click",function(e){
@@ -769,20 +788,6 @@
             [% END %]
             ],
             initComplete: function( settings, json ){
-                let table = settings.oInstance.api();
-                table.columns().every(function(i){
-                    let is_empty = true;
-                    let nodes = this.nodes();
-                    nodes.each((td, ii) => {
-                        if ( $(td).html() !== '' ) {
-                            is_empty = false;
-                            return;
-                        }
-                    });
-                    if ( is_empty ) {
-                        table.columns(i).visible(false);
-                    }
-                });
                 itemSelectionBuildActionLinks(tab_id);
             },
             drawCallback: function(settings){
@@ -821,6 +826,8 @@
                         openWindow(link,"Print spine label",400,400);
                     });
                 [% END %]
+
+                update_columns_visibility(settings);
 
                 if ( drawcallback ) { drawcallback(this); }
             },
