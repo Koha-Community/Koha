@@ -115,7 +115,7 @@ sub restrict_patron_when_notice_fails {
     AddDebarment(
         {
             borrowernumber => $self->borrowernumber,
-            type           => 'SUSPENSION',
+            type           => 'NOTICE_FAILURE_SUSPENSION',
             comment        => $comment,
             expiration     => undef,
         }
