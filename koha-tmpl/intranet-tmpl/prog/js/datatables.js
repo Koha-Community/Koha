@@ -843,7 +843,7 @@ function _dt_on_visibility(add_filters, table_node, table_dt){
 
 function _dt_add_filters(table_node, table_dt, filters_options = {}) {
 
-    if (!table_node.length) return;
+    if (!$(table_node).length) return;
 
     $(table_node).find('thead tr:eq(1)').remove(); // Remove if one exists already
     $(table_node).find('thead tr').clone().appendTo( $(table_node).find('thead') );
