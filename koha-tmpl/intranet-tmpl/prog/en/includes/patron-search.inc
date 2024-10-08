@@ -786,8 +786,7 @@
                     searched += paron_search_form.find("select[name='sort2_filter']").val();
                 }
             }
-            patron_search_form.find(".searchpattern").text(searched);
-            patron_search_form.find(".searchpattern").parent().show();
+            parent_block.find(".searchpattern").text(searched).parent().show();
         }
 
         function filter() {
