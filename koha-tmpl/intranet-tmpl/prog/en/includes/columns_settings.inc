@@ -26,11 +26,29 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         dt_parameters.stateSaveCallback = function( settings, data ) {
             localStorage.setItem( table_key, JSON.stringify(data) )
         }
+
+        function set_default(table_settings, settings){
+            let columns = new Array(table_settings.columns.length).fill({visible: true});
+            let hidden_ids, included_ids;
+            [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, $("#"+settings.nTable.id));
+            hidden_ids.forEach((id, i) => { columns[id] = { visible: false } } );
+            // State is not loaded if time is not passed
+            return { columns, time: new Date() };
+        }
         dt_parameters.stateLoadCallback = function(settings) {
-            if (!default_save_state) return {};
+
+            // Load state from URL
+            const url = new URL(window.location.href);
+            let state_from_url = url.searchParams.get( settings.nTable.id + '_state');
+            if ( state_from_url ) {
+                settings.loaded_from_state = true;
+                return JSON.parse(atob(state_from_url));
+            }
+
+            if (!default_save_state) return set_default(table_settings, settings);
 
             let state = localStorage.getItem(table_key);
-            if (!state) return {};
+            if (!state) return set_default(table_settings, settings);
 
             state = JSON.parse(state);
 
@@ -38,6 +56,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
                 delete state.search;
                 state.columns.forEach(c => delete c.search );
             }
+            settings.loaded_from_state = true;
             return state;
         }
 
@@ -193,6 +212,30 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         }
     );
 
+    if ( table_settings ) {
+        dt_parameters["buttons"].push(
+            {
+                autoClose: true,
+                fade: 100,
+                className: "copyConditions_controls",
+                titleAttr: __("Copy conditions"),
+                text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
+                action: function (e, dt, node, config) {
+                    let state = JSON.stringify(dt.state());
+                    delete state.time;
+                    let searchParams = new URLSearchParams(window.location.search);
+                    let table_id = dt.table().node().id;
+                    searchParams.set(table_id + '_state', btoa(state));
+                    let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
+                    if( navigator.clipboard && navigator.clipboard.writeText){
+                        navigator.clipboard.writeText( url );
+                        // TODO Add tooltip "State copied to the clipboard"
+                    }
+                },
+            }
+        );
+    }
+
     if ( table_settings && CAN_user_parameters_manage_column_config ) {
         dt_parameters[ "buttons" ].push(
             {
@@ -232,6 +275,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
             new_parameters["aoColumnDefs"].push(this);
         });
     }
+
+    new_parameters["loaded_from_state"] = false;
 
     if ( table_settings ) {
         if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {

@@ -758,27 +758,29 @@ function _dt_buttons(params){
         }
     );
 
-    buttons.push(
-        {
-            autoClose: true,
-            fade: 100,
-            className: "copyConditions_controls",
-            titleAttr: __("Copy conditions"),
-            text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
-            action: function (e, dt, node, config) {
-                let state = JSON.stringify(dt.state());
-                delete state.time;
-                let searchParams = new URLSearchParams(window.location.search);
-                let table_id = dt.table().node().id;
-                searchParams.set(table_id + '_state', btoa(state));
-                let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
-                if( navigator.clipboard && navigator.clipboard.writeText){
-                    navigator.clipboard.writeText( url );
-                    // TODO Add tooltip "State copied to the clipboard"
-                }
-            },
-        }
-    );
+    if ( table_settings ) {
+        buttons.push(
+            {
+                autoClose: true,
+                fade: 100,
+                className: "copyConditions_controls",
+                titleAttr: __("Copy conditions"),
+                text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
+                action: function (e, dt, node, config) {
+                    let state = JSON.stringify(dt.state());
+                    delete state.time;
+                    let searchParams = new URLSearchParams(window.location.search);
+                    let table_id = dt.table().node().id;
+                    searchParams.set(table_id + '_state', btoa(state));
+                    let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
+                    if( navigator.clipboard && navigator.clipboard.writeText){
+                        navigator.clipboard.writeText( url );
+                        // TODO Add tooltip "State copied to the clipboard"
+                    }
+                },
+            }
+        );
+    }
 
     if ( table_settings && CAN_user_parameters_manage_column_config ) {
         buttons.push(
