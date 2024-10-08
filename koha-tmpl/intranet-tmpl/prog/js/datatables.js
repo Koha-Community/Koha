@@ -767,11 +767,15 @@ function _dt_buttons(params){
                 titleAttr: __("Copy conditions"),
                 text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
                 action: function (e, dt, node, config) {
+                    let table_key = 'DataTables_%s_%s_%s'.format(
+                        table_settings.module,
+                        table_settings.page,
+                        table_settings.table);
+
                     let state = JSON.stringify(dt.state());
                     delete state.time;
                     let searchParams = new URLSearchParams(window.location.search);
-                    let table_id = dt.table().node().id;
-                    searchParams.set(table_id + '_state', btoa(state));
+                    searchParams.set(table_key + '_state', btoa(state));
                     let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
                     if( navigator.clipboard && navigator.clipboard.writeText){
                         navigator.clipboard.writeText( url );
@@ -983,7 +987,7 @@ function _dt_save_restore_state(table_settings){
 
         // Load state from URL
         const url = new URL(window.location.href);
-        let state_from_url = url.searchParams.get( settings.nTable.id + '_state');
+        let state_from_url = url.searchParams.get( table_key + '_state');
         if ( state_from_url ) {
             settings.loaded_from_state = true;
             return JSON.parse(atob(state_from_url));
