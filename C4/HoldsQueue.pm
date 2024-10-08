@@ -421,7 +421,7 @@ sub _allocateWithTransportCostMatrix {
     my @remaining_items = grep { !exists $allocated_items->{ $_->{itemnumber} } && $_->{holdallowed} ne 'not_allowed'; }
         @$available_items;
 
-    my @requests  = grep { !defined $_->{itemnumber} } @$hold_requests;
+    my @requests  = grep { !defined $_->{itemnumber} && !defined $_->{allocated} } @$hold_requests;
     my @remaining = ();
 
     my $num_agents = scalar(@remaining_items);
