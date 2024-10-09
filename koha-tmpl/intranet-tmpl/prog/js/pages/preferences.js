@@ -213,6 +213,7 @@ $("table.preferences").dataTable(
         dom: "t",
         columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
         paging: false,
+        fixedHeader: false,
     })
 );
 
