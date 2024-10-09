@@ -228,7 +228,7 @@
     [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
     [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
     let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-    let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
+    let embed = ["+strings,home_library,holding_library,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
     [% IF Koha.Preference('LocalCoverImages') %]
         embed.push('cover_image_ids');
     [% END %]
@@ -376,7 +376,7 @@
             },
             [% END %]
             {
-                data: "me.holding_library_id",
+                data: "me.holding_library_id:holding_library.name",
                 className: "location",
                 searchable: true,
                 orderable: true,
@@ -385,7 +385,7 @@
                 }
             },
             {
-                data: "me.home_library_id",
+                data: "me.home_library_id:home_library.name",
                 className: "homebranch",
                 searchable: true,
                 orderable: true,
