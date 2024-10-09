@@ -1225,6 +1225,69 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
     };
 }
 
+function update_search_description(
+    table_node,
+    table_dt,
+    additional_search_descriptions
+) {
+    let description_node = additional_search_descriptions.node;
+    let description_fns =
+        additional_search_descriptions.additional_search_descriptions;
+    let description = [];
+    let global_search = table_dt.search();
+    if (global_search.length) {
+        description.push(__("Anywhere: %s").format(global_search));
+    }
+    let additional_searches = [];
+    for (f in description_fns) {
+        let d = description_fns[f]();
+        if (d.length) {
+            additional_searches.push(d);
+        }
+    }
+    if (additional_searches.length) {
+        description.push(additional_searches.join(", "));
+    }
+    let column_searches = [];
+    table_dt
+        .columns()
+        .search()
+        .each((search, i) => {
+            if (search.length) {
+                // Retrieve the value from the dropdown list if there is one
+                var visible_i = table_dt.column.index("fromData", i);
+                let option = $(table_node).find(
+                    "thead tr:eq(1) th:eq(%s) select option:selected".format(
+                        visible_i
+                    )
+                );
+                if (option.length) {
+                    search = $(option).text();
+                }
+
+                column_searches.push(
+                    "%s=%s".format(
+                        table_dt.column(i).header().innerHTML,
+                        search
+                    )
+                );
+            }
+        });
+    if (column_searches.length) {
+        description.push(column_searches.join(", "));
+    }
+
+    if (description.length) {
+        let display = description.length ? "block" : "none";
+        let description_str = $(description_node)
+            .data("prefix")
+            .format(description.join("<br/>"));
+        $(description_node).html(description_str).show();
+    } else {
+        $(description_node).html("").hide();
+    }
+}
+
 (function ($) {
     /**
      * Create a new dataTables instance that uses the Koha RESTful API's as a data source
@@ -1239,6 +1302,12 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
      *                                                available from the columns_settings template toolkit include
      * @param  {Boolean} add_filters                  Add a filters row as the top row of the table
      * @param  {Object}  default_filters              Add a set of default search filters to apply at table initialisation
+     * @param  {Object}  filters_options              Build selects for the filters row, and pass their value.
+     *                                                eg. { 1 => vendors } will build a select with the vendor list in the second column
+     * @param  {Object}  show_search_descriptions     Whether or not display the search descriptions when the table is drawn
+     *                                                Expect a node in which to place the descriptions. It must have a data-prefix attribute to build the description properly.
+     * @param  {Object}  aditional_search_descriptions Pass additional descriptions
+     *                                                 eg. { surname => () => { 'Surname with '.format($("#surname_form").val()) } }
      * @return {Object}                               The dataTables instance
      */
     $.fn.kohaTable = function (
@@ -1247,7 +1316,9 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
         add_filters,
         default_filters,
         filters_options,
-        external_filter_nodes
+        external_filter_nodes,
+        show_search_descriptions,
+        additional_search_descriptions
     ) {
         var settings = null;
 
@@ -1332,6 +1403,19 @@ function _dt_save_restore_state(table_settings, external_filter_nodes = {}) {
             // the presence of a search string
             toggledClearFilter(table_dt.search(), settings.nTable.id);
         });
+
+        if (show_search_descriptions !== undefined) {
+            table_dt.on("draw", function (e, settings) {
+                update_search_description(table, table_dt, {
+                    node: show_search_descriptions,
+                    additional_search_descriptions,
+                });
+            });
+            update_search_description(table, table_dt, {
+                node: show_search_descriptions,
+                additional_search_descriptions,
+            });
+        }
 
         return table;
     };

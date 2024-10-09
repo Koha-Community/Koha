@@ -147,7 +147,7 @@
         [% END %]
     </div>
 
-    <h3 style="display: none;">Patrons found for: <span class="searchpattern"></span></h3>
+    <h3 style="display: none;" class="search_description" data-prefix="[% I18N.t("Patrons found for: %s") %]"></h3>
 
     <div id="[% table_id | html %]_search_results" style="display:none;">
         <div class="info alert alert-info" style="display: none; margin: 1em 0;"></div>
@@ -420,6 +420,52 @@
                         searchfieldstype_filter: '.searchfieldstype_filter',
                         categorycode_filter: '.categorycode_filter',
                         branchcode_filter: '.branchcode_filter'
+                    };
+                [% END %]
+
+                let additional_search_descriptions = {};
+                [% IF display_search_description %]
+                    additional_search_descriptions = {
+                        main: function(){
+                            let parent_block = $("#[% search_results_block_id | html %]");
+                            let patron_search_form = get_patron_search_form();
+                            let searched = "";
+                            let pattern = patron_search_form.find(".search_patron_filter").val();
+                            if ( pattern ) {
+                                let field = patron_search_form.find(".searchfieldstype_filter").find("option:selected").text();
+                                if ( patron_search_form.find(".searchtype_filter").val() == 'starts_with' ) {
+                                    searched += _("%s starting with '%s'".format(field, pattern));
+                                } else {
+                                    searched += _("%s containing '%s'".format(field, pattern));
+                                }
+                            }
+
+                            if ( patron_search_form.find("select[name='sort1_filter']").val() ) {
+                                searched += _(" with sort1 ")
+                                if ( patron_search_form.find("select[name='sort1_filter']") ) {
+                                    searched += patron_search_form.find("select[name='sort1_filter'] option:selected").text();
+                                }
+                                else {
+                                    searched += paron_search_form.find("select[name='sort1_filter']").val();
+                                }
+                            }
+                            if ( patron_search_form.find("select[name='sort2_filter']").val() ) {
+                                searched += _(" with sort2 ")
+                                if ( patron_search_form.find("select[name='sort2_filter']") ) {
+                                    searched += patron_search_form.find("select[name='sort2_filter'] option:selected").text();
+                                }
+                                else {
+                                    searched += paron_search_form.find("select[name='sort2_filter']").val();
+                                }
+                            }
+                            return searched;
+                        },
+                        surname: function(){
+                            let parent_block = $("#[% search_results_block_id | html %]");
+                            let start_with = parent_block.find(".firstletter_filter").val()
+                            if (!start_with) return "";
+                            return _("Surname begins with '%s'".format(start_with));
+                        },
                     };
                 [% END %]
 
@@ -735,7 +781,7 @@
                         },
                     [% END %]
                     fixedHeader: false,
-                }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters, undefined, external_filter_nodes);
+                }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters, undefined, external_filter_nodes, parent_block.find(".search_description"), additional_search_descriptions );
 
                 patron_search_form.on('submit', filter);
                 patron_search_form.on('submit', update_search_type);
@@ -781,7 +827,6 @@
                 patron_search_form.find(".clear_search").on("click",function(e){
                     e.preventDefault();
                     clearFilters();
-                    parent_block.find(".searchpattern").parent().hide();
                 });
 
                 let loaded_from_state = patrons_table.data('loaded_from_state');
@@ -812,51 +857,6 @@
 
             function update_search_type(){
                 $("#searchtype").val($("#searchtype_filter").val());
-            }
-
-            function update_search_description(){
-                let parent_block = $("#[% search_results_block_id | html %]");
-                let patron_search_form = get_patron_search_form();
-                var searched = patron_search_form.find(".searchfieldstype_filter").find("option:selected").text();
-                let pattern = patron_search_form.find(".search_patron_filter").val();
-                if ( pattern ) {
-                    if ( patron_search_form.find(".searchtype_filter").val() == 'starts_with' ) {
-                        searched += _(" starting with ");
-                    } else {
-                        searched += _(" containing ");
-                    }
-                    searched += "'" + pattern + "'";
-                }
-                let firstletter_filter = parent_block.find(".firstletter_filter").val();
-                if ( firstletter_filter ) {
-                    searched += _(" begins with ") + "'" + firstletter_filter +"'";
-                }
-
-                if ( patron_search_form.find(".categorycode_filter").val() ) {
-                    searched += _(" with category ") + "'" + patron_search_form.find(".categorycode_filter option:selected").text() + "'";
-                }
-                if ( patron_search_form.find(".branchcode_filter").val() ) {
-                    searched += _(" in library ") + patron_search_form.find(".branchcode_filter option:selected").text();
-                }
-                if ( patron_search_form.find("select[name='sort1_filter']").val() ) {
-                    searched += _(" with sort1 ")
-                    if ( patron_search_form.find("select[name='sort1_filter']") ) {
-                        searched += patron_search_form.find("select[name='sort1_filter'] option:selected").text();
-                    }
-                    else {
-                        searched += paron_search_form.find("select[name='sort1_filter']").val();
-                    }
-                }
-                if ( patron_search_form.find("select[name='sort2_filter']").val() ) {
-                    searched += _(" with sort2 ")
-                    if ( patron_search_form.find("select[name='sort2_filter']") ) {
-                        searched += patron_search_form.find("select[name='sort2_filter'] option:selected").text();
-                    }
-                    else {
-                        searched += paron_search_form.find("select[name='sort2_filter']").val();
-                    }
-                }
-                parent_block.find(".searchpattern").text(searched).parent().show();
             }
 
             function filter() {
@@ -907,9 +907,6 @@
                 patrons_table.data('loaded_from_state', false);
                 first_draw = 1; // Only redirect if we are coming from here
                 table_dt.draw();
-                [% IF display_search_description %]
-                    update_search_description();
-                [% END %]
                 return false;
             }
 
@@ -929,9 +926,6 @@
                     history.pushState( {}, null, window.location.href.split("?" )[0]);
                 [% END %]
                 $("#[% table_id | html %]_search_results").hide();
-                [% IF display_search_description %]
-                    update_search_description();
-                [% END %]
             }
 
             // User has clicked on a letter
@@ -948,9 +942,6 @@
                 [% END %]
 
                 patrons_table.DataTable().draw();
-                [% IF display_search_description %]
-                    update_search_description();
-                [% END %]
             }
 
             // modify parent window owner element
