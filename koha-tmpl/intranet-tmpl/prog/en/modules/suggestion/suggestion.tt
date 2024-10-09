@@ -1536,13 +1536,15 @@
     [% IF op == 'save' %]
         [% PROCESS patron_search_modal columns => columns, modal_title => t("Select suggester"), patron_search_modal_id => 'patron_search_modal_suggester', table_id => 'patron_search_modal_suggester_table' %]
         [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_suggester_table', callback => 'select_suggester' %]
+        [% SET filter = "suggestions_managers" %]
         [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager', table_id => 'patron_search_modal_manager_table' %]
-        [% PROCESS patron_search_js columns => columns, filter => 'suggestions_managers', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table', callback => 'select_manager' %]
+        [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table', callback => 'select_manager' %]
     [% ELSIF op == 'else' %]
         [% FOREACH suggestion IN suggestions %]
             <script>tab = [% loop.count | html %];</script>
+            [% SET filter = "suggestions_managers" %]
             [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager_' _ loop.count, table_id => 'patron_search_modal_manager_table_' _ loop.count %]
-            [% PROCESS patron_search_js columns => columns, filter => 'suggestions_managers', actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ loop.count, callback => 'select_manager' %]
+            [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ loop.count, callback => 'select_manager' %]
         [% END %]
     [% END %]
 
