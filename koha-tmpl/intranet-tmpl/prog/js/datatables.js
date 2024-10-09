@@ -855,10 +855,10 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
         $(th).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
         if ( is_searchable ) {
             let input_type = 'input';
+            let existing_search = column.search();
             if ( $(th).data('filter') || filters_options.hasOwnProperty(i)) {
                 input_type = 'select'
                 let filter_type = $(th).data('filter');
-                let existing_search = column.search();
                 let select = $('<select class="dt-select-filter"><option value=""></option></select');
 
                 // FIXME eval here is bad and dangerous, how do we workaround that?
@@ -869,6 +869,9 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 }
                 $(filters_options[i]).each(function(){
                     let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
+                    // Compare with lc, or selfreg won't match ^SELFREG$ for instance, see bug 32517
+                    // This is only for category, we might want to apply it only in this case.
+                    existing_search = existing_search.toLowerCase()
                     if ( existing_search === this._id || (existing_search && this._id.match(existing_search)) ) {
                         o.prop("selected", "selected");
                     }
@@ -877,7 +880,6 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 $(th).html( select );
             } else {
                 var title = $(th).text();
-                var existing_search = table_dt.column(i).search();
                 if ( existing_search ) {
                     $(th).html( '<input type="text" value="%s" style="width: 100%" />'.format(existing_search) );
                 } else {
