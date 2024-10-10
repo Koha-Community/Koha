@@ -61,13 +61,7 @@ sub dbh {
     my $driver = db_scheme2dbi($config->get('db_scheme'));
     my $user = $config->get("user"),
     my $pass = $config->get("pass"),
-    my $dsn = sprintf(
-        'dbi:%s:database=%s;host=%s;port=%s',
-        $driver,
-        $config->get("database_test") || $config->get("database"),
-        $config->get("hostname"),
-        $config->get("port") || '',
-    );
+    my $dsn = generate_dsn($config);
 
     my $attr = {
         RaiseError => 1,
@@ -75,16 +69,6 @@ sub dbh {
     };
 
     if ($driver eq 'mysql') {
-        my $tls = $config->get("tls");
-        if ($tls && $tls eq 'yes') {
-            $dsn .= sprintf(
-                ';mysql_ssl=1;mysql_ssl_client_key=%s;mysql_ssl_client_cert=%s;mysql_ssl_ca_file=%s',
-                $config->get('key'),
-                $config->get('cert'),
-                $config->get('ca'),
-            );
-        }
-
         $attr->{mysql_enable_utf8} = 1;
     }
 
@@ -195,6 +179,55 @@ other scheme is supplied it defaults to 'mysql'.
 sub db_scheme2dbi {
     my $scheme = shift // '';
     return $scheme eq 'Pg' ? $scheme : 'mysql';
+}
+
+=head2 generate_dsn
+
+    my $dsn = Koha::Database::generate_dsn($config);
+
+Returns a data source name (DSN) for a database connection
+from the config instance.
+
+=cut
+
+sub generate_dsn {
+    my ($config) = @_;
+    my $driver = db_scheme2dbi( $config->get('db_scheme') );
+
+    my $dsn = sprintf(
+        'dbi:%s:database=%s;host=%s;port=%s',
+        $driver,
+        $config->get("database_test") || $config->get("database"),
+        $config->get("hostname"),
+        $config->get("port") || '',
+    );
+
+    if ( $driver eq 'mysql' ) {
+        my $tls = $config->get("tls");
+        if ( $tls && $tls eq 'yes' ) {
+
+            $dsn .= ';mysql_ssl=1';
+
+            my $mysql_ssl_client_key  = $config->get('key');
+            my $mysql_ssl_client_cert = $config->get('cert');
+            my $mysql_ssl_ca_file     = $config->get('ca');
+
+            if ( $mysql_ssl_client_key && $mysql_ssl_client_key ne '__DB_TLS_CLIENT_KEY__' ) {
+                $dsn .= sprintf( ';mysql_ssl_client_key=%s', $mysql_ssl_client_key );
+            }
+
+            if ( $mysql_ssl_client_cert && $mysql_ssl_client_cert ne '__DB_TLS_CLIENT_CERTIFICATE__' ) {
+                $dsn .= sprintf( ';mysql_ssl_client_cert=%s', $mysql_ssl_client_cert );
+            }
+
+            if ( $mysql_ssl_ca_file && $mysql_ssl_ca_file ne '__DB_TLS_CA_CERTIFICATE__' ) {
+                $dsn .= sprintf( ';mysql_ssl_ca_file=%s', $mysql_ssl_ca_file );
+            }
+        }
+
+    }
+
+    return $dsn;
 }
 
 =head2 EXPORT
