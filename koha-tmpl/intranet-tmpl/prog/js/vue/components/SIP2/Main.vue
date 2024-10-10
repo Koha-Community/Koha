@@ -12,7 +12,6 @@
                         <router-view />
                     </main>
                 </div>
-
                 <div class="col-md-2 order-sm-2 order-md-1">
                     <LeftMenu :title="$__('SIP2')"></LeftMenu>
                 </div>
