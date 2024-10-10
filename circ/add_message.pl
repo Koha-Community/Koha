@@ -81,7 +81,10 @@ if ( $op eq 'cud-edit_message' && $message_id ) {
                 module      => 'add_message',
                 letter_code => $letter_code,
                 lang        => $patron->lang,
-                tables      => { 'borrowers' => $borrowernumber },
+                tables      => {
+                    'borrowers' => $borrowernumber,
+                    'branches'  => $branchcode,
+                },
             );
         }
 
