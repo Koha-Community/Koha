@@ -158,5 +158,31 @@ __PACKAGE__->add_unique_constraint("institution_name", ["name"]);
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-10 15:04:08
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5QP4sj2sL+LQ+uc8+WCG6A
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+checkin' => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+checkout" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+offline" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+renewal" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+status_update" => { is_boolean => 1 }
+);
+
+sub koha_objects_class {
+    'Koha::SIP2::Institutions';
+}
+sub koha_object_class {
+    'Koha::SIP2::Institution';
+}
+
 1;
