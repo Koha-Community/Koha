@@ -6048,6 +6048,56 @@ CREATE TABLE `sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `file_transports`
+--
+
+DROP TABLE IF EXISTS `file_transports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_transports` (
+  `file_transport_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL,
+  `host` varchar(80) NOT NULL DEFAULT 'localhost',
+  `port` int(11) NOT NULL DEFAULT 22,
+  `transport` enum('ftp','sftp') NOT NULL DEFAULT 'sftp',
+  `passive` tinyint(1) NOT NULL DEFAULT 1,
+  `user_name` varchar(80) DEFAULT NULL,
+  `password` mediumtext DEFAULT NULL,
+  `key_file` mediumtext DEFAULT NULL,
+  `auth_mode` enum('password','key_file','noauth') NOT NULL DEFAULT 'password',
+  `download_directory` mediumtext DEFAULT NULL,
+  `upload_directory` mediumtext DEFAULT NULL,
+  `status` longtext DEFAULT NULL,
+  `debug` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`file_transport_id`),
+  KEY `host_idx` (`host`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sip_institutions`
+--
+
+DROP TABLE IF EXISTS `sip_institutions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_institutions` (
+  `sip_institution_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL COMMENT 'Unique varchar identifier. Previously "id" in SIPconfig.xml',
+  `implementation` varchar(80) NOT NULL DEFAULT 'ILS',
+  `checkin` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `checkout` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `offline` tinyint(1) NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `renewal` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `retries` int(11) NOT NULL DEFAULT 5 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `status_update` tinyint(1) NULL COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  `timeout` int(11) NOT NULL DEFAULT 100 COMMENT 'Previously attribute of "policy" in SIPconfig.xml',
+  PRIMARY KEY (`sip_institution_id`),
+  UNIQUE KEY `institution_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sms_providers`
 --
 
