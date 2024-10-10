@@ -368,6 +368,16 @@
         [% END %]
 
         [% WRAPPER accordion_item %]
+            [% WRAPPER accordion_heading panel_id="sip2" %]
+                <span>SIP2</span>
+            [% END %]
+            [% WRAPPER accordion_panel panel_id="sip2" %]
+                <h3>SIP2 tables</h3>
+                [% PROCESS pagelist module=modules.sip2 modulename="sip2" %]
+            [% END %]
+        [% END %]
+
+        [% WRAPPER accordion_item %]
             [% WRAPPER accordion_heading panel_id="reports" %]
                 <span>Reports</span>
             [% END %]
