@@ -180,6 +180,8 @@ definitions:
     $ref: ./definitions/rota.yaml
   search_filter:
     $ref: ./definitions/search_filter.yaml
+  sip2_institution:
+    $ref: ./definitions/sip2_institution.yaml
   smtp_server:
     $ref: ./definitions/smtp_server.yaml
   file_transport:
@@ -597,6 +599,10 @@ paths:
     $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}"
   "/rotas/{rota_id}/stages/{stage_id}/position":
     $ref: "./paths/rotas.yaml#/~1rotas~1{rota_id}~1stages~1{stage_id}~1position"
+  /sip2/institutions:
+    $ref: ./paths/sip2_institutions.yaml#/~1sip2~1institutions
+  "/sip2/institutions/{sip_institution_id}":
+    $ref: "./paths/sip2_institutions.yaml#/~1sip2~1institutions~1{sip_institution_id}"
   /suggestions:
     $ref: ./paths/suggestions.yaml#/~1suggestions
   "/suggestions/{suggestion_id}":
@@ -982,6 +988,12 @@ parameters:
     in: query
     name: seen
     required: false
+    type: integer
+  sip_institution_id_pp:
+    description: SIP2 institution internal identifier
+    in: path
+    name: sip_institution_id
+    required: true
     type: integer
   smtp_server_id_pp:
     description: SMTP server internal identifier

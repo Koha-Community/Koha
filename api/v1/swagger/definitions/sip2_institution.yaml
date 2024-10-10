@@ -1,0 +1,39 @@
+---
+type: object
+properties:
+  sip_institution_id:
+    type: integer
+    description: unique identifier
+    readOnly: true
+  name:
+    description: unique string institution's name
+    type: string
+  implementation:
+    description: institution's implementation, defaults to 'ILS'
+    type: string
+  checkin:
+    description: institution's policy for checkin
+    type: boolean
+  checkout:
+    description: institution's policy for checkout
+    type: boolean
+  offline:
+    description: institution's policy for offline
+    type: boolean
+  renewal:
+    description: institution's policy for renewal
+    type: boolean
+  retries:
+    description: institution's policy for retries
+    type: integer
+  status_update:
+    description: institution's policy for status_update
+    type: boolean
+  timeout:
+    description: institution's policy for timeout
+    type: integer
+
+additionalProperties: false
+required:
+  - sip_institution_id
+  - name
