@@ -567,7 +567,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return $date(row.last_seen_date);
+                    return $datetime(row.last_seen_date);
                 }
             },
             {
