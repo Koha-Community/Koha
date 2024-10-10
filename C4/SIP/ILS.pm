@@ -18,7 +18,13 @@ use C4::SIP::ILS::Transaction::Renew;
 use C4::SIP::ILS::Transaction::RenewAll;
 use C4::SIP::ILS::Transaction;
 use C4::SIP::Sip qw( siplog );
+
+use Koha::Account;
+use Koha::Account::Lines;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Items;
+use Koha::Libraries;
+use Koha::Number::Price;
 
 my %supports = (
     'magnetic media'        => 1,
