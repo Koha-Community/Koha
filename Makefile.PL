@@ -362,6 +362,7 @@ my $target_map = {
     './rotating_collections'                           => 'INTRANET_CGI_DIR',
     './serials'                                        => 'INTRANET_CGI_DIR',
     './services'                                       => 'INTRANET_CGI_DIR',
+    './sip2'                                           => 'INTRANET_CGI_DIR',
     './skel'                                           => 'NONE',
     './skel/var/lock/koha'                             => { target => 'LOCK_DIR',       trimdir => -1 },
     './skel/var/log/koha'                              => { target => 'LOG_DIR',        trimdir => -1 },

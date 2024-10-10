@@ -27,6 +27,7 @@ module.exports = [
             acquisitions:
                 "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/acquisitions.ts",
             islands: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/islands.ts",
+            sip2: "./koha-tmpl/intranet-tmpl/prog/js/vue/modules/sip2.ts",
         },
         output: {
             filename: "[name].js",
