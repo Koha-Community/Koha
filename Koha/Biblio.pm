@@ -52,6 +52,7 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Checkouts;
+use Koha::Old::Holds;
 use Koha::Ratings;
 use Koha::Recalls;
 use Koha::RecordProcessor;
@@ -706,6 +707,21 @@ sub holds {
     $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
+}
+
+=head3 old_holds
+
+my $old_holds = $biblio->old_holds();
+
+return the historic holds placed on this record
+
+=cut
+
+sub old_holds {
+    my ( $self, $params, $attributes ) = @_;
+    $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
+    my $old_hold_rs = $self->_result->old_reserves->search( $params, $attributes );
+    return Koha::Old::Holds->_new_from_dbic($old_hold_rs);
 }
 
 =head3 current_holds
