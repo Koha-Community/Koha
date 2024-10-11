@@ -141,7 +141,10 @@ my @auto_renews = Koha::Checkouts->search(
         auto_renew                   => 1,
         'patron.autorenew_checkouts' => 1,
     },
-    { join => [ 'patron', 'item' ] }
+    {
+        join     => [ 'patron', 'item' ],
+        order_by => 'patron.borrowernumber',
+    }
 )->as_list;
 print "found " . scalar @auto_renews . " auto renewals\n" if $verbose;
 
