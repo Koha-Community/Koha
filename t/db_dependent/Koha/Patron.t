@@ -1073,12 +1073,14 @@ subtest 'extended_attributes' => sub {
 
     subtest 'globally mandatory attributes tests' => sub {
 
-        plan tests => 5;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
         Koha::Patron::Attribute::Types->search->delete;
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $context = Test::MockModule->new('C4::Context');
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
         my $attribute_type_1 = $builder->build_object(
             {
@@ -1094,17 +1096,33 @@ subtest 'extended_attributes' => sub {
             }
         );
 
+        my $attribute_type_3 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 1, class => 'a', category_code => undef, opac_editable => 1 }
+            }
+        );
+
+        my $attribute_type_4 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 0, class => 'a', category_code => undef, opac_editable => 1 }
+            }
+        );
+
+        #Staff interface tests
+        $context->mock( 'interface', sub { return "intranet" } );
         is( $patron->extended_attributes->count, 0, 'Patron has no extended attributes' );
 
-        throws_ok
-            {
-                $patron->extended_attributes(
-                    [
-                        { code => $attribute_type_2->code, attribute => 'b' }
-                    ]
-                );
-            }
-            'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+        throws_ok {
+            $patron->extended_attributes(
+                [
+                    { code => $attribute_type_2->code, attribute => 'b' },
+                    { code => $attribute_type_3->code, attribute => 'b' },
+                ]
+            );
+        }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
             'Exception thrown on missing mandatory attribute type';
 
         is( $@->type, $attribute_type_1->code, 'Exception parameters are correct' );
@@ -1113,11 +1131,30 @@ subtest 'extended_attributes' => sub {
 
         $patron->extended_attributes(
             [
-                { code => $attribute_type_1->code, attribute => 'b' }
+                { code => $attribute_type_1->code, attribute => 'b' },
+                { code => $attribute_type_3->code, attribute => 'b' },
             ]
         );
 
-        is( $patron->extended_attributes->count, 1, 'Extended attributes succeeded' );
+        is( $patron->extended_attributes->count, 2, 'Extended attributes succeeded' );
+
+        # OPAC interface tests
+        $context->mock( 'interface', sub { return "opac" } );
+
+        is( $patron->extended_attributes->count, 2, 'Patron still has 2 extended attributes in OPAC' );
+
+        throws_ok {
+            $patron->extended_attributes(
+                [
+                    { code => $attribute_type_1->code, attribute => 'b' },
+                    { code => $attribute_type_2->code, attribute => 'b' },
+                ]
+            );
+        }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+            'Exception thrown on missing mandatory OPAC-editable attribute';
+
+        is( $@->type, $attribute_type_3->code, 'Exception parameters are correct for OPAC-editable attribute' );
 
         $schema->storage->txn_rollback;
 
