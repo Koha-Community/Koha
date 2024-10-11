@@ -5,7 +5,10 @@
     },
     "extends": [
         "eslint:recommended",
-        "prettier"
+        "eslint-config-prettier"
+    ],
+    "plugins": [
+        "eslint-plugin-prettier"
     ],
     "rules": {
         "indent": [
@@ -19,7 +22,9 @@
         "semi": [
             "error",
             "always"
+        ],
+        "prettier/prettier": [
+            "error"
         ]
-    },
-    "prettier/prettier": "error"
+    }
 }
