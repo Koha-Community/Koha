@@ -2,11 +2,11 @@ use Modern::Perl;
 use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
-    bug_number => "30648",
+    bug_number  => "30648",
     description => "Store biblionumber of deleted record in old reserves",
-    up => sub {
+    up          => sub {
         my ($args) = @_;
-        my ($dbh, $out) = @$args{qw(dbh out)};
+        my ( $dbh, $out ) = @$args{qw(dbh out)};
         if ( !column_exists( 'reserves', 'deleted_biblionumber' ) ) {
 
             $dbh->do(

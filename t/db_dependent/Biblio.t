@@ -712,7 +712,7 @@ subtest 'DelBiblio' => sub {
             }
         );
 
-        C4::Biblio::DelBiblio($biblio->biblionumber);
+        C4::Biblio::DelBiblio( $biblio->biblionumber );
         $old_hold->discard_changes();
         $hold = Koha::Old::Holds->find( $hold->reserve_id );
         ok( $hold, "Hold has been successfully cancelled on deletion of biblio" );
