@@ -4,4 +4,5 @@
     var JOB_PROGRESS_STARTED     = _("Started");
     var JOB_PROGRESS_FINISHED    = _("Finished");
     var JOB_PROGRESS_FAILED      = _("Failed");
+    var JOB_PROGRESS_PERCENT     = _("%");
 </script>
