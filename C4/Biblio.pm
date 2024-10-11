@@ -554,6 +554,9 @@ sub DelBiblio {
 
     # We delete any existing holds
     my $holds = $biblio->holds;
+    $holds->update({ deleted_biblionumber =>  $biblionumber }, { no_triggers => 1 });
+    my $old_holds = $biblio->old_holds;
+    $old_holds->update({ deleted_biblionumber =>  $biblionumber }, { no_triggers => 1 });
     while ( my $hold = $holds->next ) {
         # no need to update the holds queue on each step, we'll do it at the end
         $hold->cancel({ skip_holds_queue => 1 });
