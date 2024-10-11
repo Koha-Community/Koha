@@ -676,9 +676,40 @@ subtest 'deletedbiblio_metadata' => sub {
 
 subtest 'DelBiblio' => sub {
 
-    plan tests => 10;
+    plan tests => 11;
 
     t::lib::Mocks::mock_preference( 'RealTimeHoldsQueue', 0 );
+
+    subtest 'DelBiblio holds handling' => sub {
+
+        plan tests => 3;
+        my $biblio = $builder->build_sample_biblio;
+        my $hold   = $builder->build_object(
+            {
+                class => 'Koha::Holds',
+                value => { biblionumber => $biblio->biblionumber }
+            }
+        );
+        my $old_hold = $builder->build_object(
+            {
+                class => 'Koha::Old::Holds',
+                value => { biblionumber => $biblio->biblionumber }
+            }
+        );
+
+        C4::Biblio::DelBiblio($biblio->biblionumber);
+        $old_hold->discard_changes();
+        $hold = Koha::Old::Holds->find( $hold->reserve_id );
+        ok( $hold, "Hold has been successfully cancelled on deletion of biblio" );
+        is(
+            $old_hold->deleted_biblionumber, $biblio->biblionumber,
+            "Biblionumber has been successfully recorded during deletion for old holds"
+        );
+        is(
+            $hold->deleted_biblionumber, $biblio->biblionumber,
+            "Biblionumber has been successfully recorded during deletion for existing hold that was cancelled"
+        );
+    };
 
     my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio(MARC::Record->new, '');
     my $deleted = C4::Biblio::DelBiblio( $biblionumber );
