@@ -406,10 +406,10 @@
                             [% END %]
                         [% END %]
                         <p>
-                            <form id="delete_rota_[% rota.rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
+                            <form id="delete_rota_[% rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_rota" />
-                                <input type="hidden" name="rota_id" value="[% rota.rota_id | html %]" />
+                                <input type="hidden" name="rota_id" value="[% rota_id | html %]" />
                                 <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
                             </form>
                             <a class="btn btn-default btn-xs deny" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa fa-fw fa-times"></i> No</a>
