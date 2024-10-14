@@ -355,18 +355,18 @@ sub edititem {
     my $stage = $other->{stage};
     if ( !$stage || $stage eq 'init' ) {
 
-        my $attrs = $params->{request}->extended_attributes->unblessed;
+        my $attrs = $params->{request}->extended_attributes;
 
         # We need to identify which parameters are custom, and pass them
         # to the template in a predefined form
         my $custom_keys = [];
         my $custom_vals = [];
-        foreach my $attr ( @{$attrs} ) {
-            if ( !$core->{ $attr->{type} } ) {
-                push @{$custom_keys}, $attr->{type};
-                push @{$custom_vals}, $attr->{value};
+        while ( my $attr = $attrs->next ) {
+            if ( !$core->{ $attr->type } ) {
+                push @{$custom_keys}, $attr->type;
+                push @{$custom_vals}, $attr->value;
             } else {
-                $other->{ $attr->{type} } = $attr->{value};
+                $other->{ $attr->type } = $attr->value;
             }
         }
         $other->{'custom_key'}   = join "\0", @{$custom_keys};
