@@ -23,6 +23,7 @@ use File::Basename qw( dirname );
 use C4::Installer;
 
 use Koha::DateUtils qw/ dt_from_string /;
+use Koha::I18N      qw(__);
 use Koha::ILL::Requests;
 use Koha::ILL::Request::Attribute;
 use C4::Biblio  qw( AddBiblio );
@@ -168,8 +169,8 @@ sub status_graph {
         MIG => {
             prev_actions   => [ 'NEW', 'REQ', 'GENREQ', 'REQREV', 'QUEUED', 'CANCREQ', ],
             id             => 'MIG',
-            name           => 'Switched provider',
-            ui_method_name => 'Switch provider',
+            name           => __('Switched provider'),
+            ui_method_name => __('Switch provider'),
             method         => 'migrate',
             next_actions   => [],
             ui_method_icon => 'fa-search',
@@ -177,8 +178,8 @@ sub status_graph {
         EDITITEM => {
             prev_actions   => ['NEW'],
             id             => 'EDITITEM',
-            name           => 'Edited item metadata',
-            ui_method_name => 'Edit item metadata',
+            name           => __('Edited item metadata'),
+            ui_method_name => __('Edit item metadata'),
             method         => 'edititem',
             next_actions   => [],
             ui_method_icon => 'fa-edit',
@@ -912,35 +913,35 @@ Return a hashref of core fields
 
 sub _get_core_fields {
     return {
-        article_author  => 'Article author',
-        article_title   => 'Article title',
-        associated_id   => 'Associated ID',
-        author          => 'Author',
-        chapter_author  => 'Chapter author',
-        chapter         => 'Chapter',
-        conference_date => 'Conference date',
-        doi             => 'DOI',
-        editor          => 'Editor',
-        institution     => 'Institution',
-        isbn            => 'ISBN',
-        issn            => 'ISSN',
-        issue           => 'Issue',
-        item_date       => 'Date',
-        pages           => 'Pages',
-        pagination      => 'Pagination',
-        paper_author    => 'Paper author',
-        paper_title     => 'Paper title',
-        part_edition    => 'Part / Edition',
-        publication     => 'Publication',
-        published_date  => 'Publication date',
-        published_place => 'Place of publication',
-        publisher       => 'Publisher',
-        sponsor         => 'Sponsor',
-        title           => 'Title',
-        type            => 'Type',
-        venue           => 'Venue',
-        volume          => 'Volume',
-        year            => 'Year'
+        article_author  => __('Article author'),
+        article_title   => __('Article title'),
+        associated_id   => __('Associated ID'),
+        author          => __('Author'),
+        chapter_author  => __('Chapter author'),
+        chapter         => __('Chapter'),
+        conference_date => __('Conference date'),
+        doi             => __('DOI'),
+        editor          => __('Editor'),
+        institution     => __('Institution'),
+        isbn            => __('ISBN'),
+        issn            => __('ISSN'),
+        issue           => __('Issue'),
+        item_date       => __('Date'),
+        pages           => __('Pages'),
+        pagination      => __('Pagination'),
+        paper_author    => __('Paper author'),
+        paper_title     => __('Paper title'),
+        part_edition    => __('Part / Edition'),
+        publication     => __('Publication'),
+        published_date  => __('Publication date'),
+        published_place => __('Place of publication'),
+        publisher       => __('Publisher'),
+        sponsor         => __('Sponsor'),
+        title           => __('Title'),
+        type            => __('Type'),
+        venue           => __('Venue'),
+        volume          => __('Volume'),
+        year            => __('Year'),
     };
 }
 
