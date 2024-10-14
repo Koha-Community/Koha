@@ -143,7 +143,7 @@ that we do not consider to be metadata
 
 sub metadata {
     my ( $self, $request ) = @_;
-    my $attrs       = $request->illrequestattributes;
+    my $attrs       = $request->extended_attributes;
     my $metadata    = {};
     my @ignore      = ( 'requested_partners', 'type', 'type_disclaimer_value', 'type_disclaimer_date' );
     my $core_fields = _get_core_fields();
@@ -355,7 +355,7 @@ sub edititem {
     my $stage = $other->{stage};
     if ( !$stage || $stage eq 'init' ) {
 
-        my $attrs = $params->{request}->illrequestattributes->unblessed;
+        my $attrs = $params->{request}->extended_attributes->unblessed;
 
         # We need to identify which parameters are custom, and pass them
         # to the template in a predefined form
@@ -696,7 +696,7 @@ sub migrate {
 
         my @default_attributes = (qw/title type author year volume isbn issn article_title article_author pages/);
         my $original_attributes =
-            $original_request->illrequestattributes->search( { type => { '-in' => \@default_attributes } } );
+            $original_request->extended_attributes->search( { type => { '-in' => \@default_attributes } } );
 
         my $request_details =
             { map { $_->type => $_->value } ( $original_attributes->as_list ) };
@@ -727,7 +727,7 @@ sub migrate {
     # Cleanup any outstanding work, close the request.
     elsif ( $stage eq 'emigrate' ) {
         my $new_request = $params->{request};
-        my $from_id     = $new_request->illrequestattributes->find( { type => 'migrated_from' } )->value;
+        my $from_id     = $new_request->extended_attributes->find( { type => 'migrated_from' } )->value;
         my $request     = Koha::ILL::Requests->find($from_id);
 
         # Just cancel the original request now it's been migrated away
