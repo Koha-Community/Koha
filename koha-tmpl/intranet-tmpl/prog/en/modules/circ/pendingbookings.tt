@@ -16,31 +16,28 @@
 </head>
 
 <body id="circ_pendingbookings" class="circ">
-    [% INCLUDE 'header.inc' %]
+[% WRAPPER 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
+[% END %]
 
-    <nav id="breadcrumbs" aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-            <li>
-                <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-            </li>
-            <li>
-                <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page">
-                Bookings to collect
-            </a>
-            </li>
-        </ol>
-    </nav>
+[% WRAPPER 'sub-header.inc' %]
+    [% WRAPPER breadcrumbs %]
+        [% WRAPPER breadcrumb_item %]
+            <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            <span>Bookings to collect</span>
+        [% END %]
+    [% END #/ WRAPPER breadcrumbs %]
+[% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
         <div class="row">
 
             <!-- Results -->
-            <div class="col-sm-10 col-sm-push-2">
+            <div class="col-md-10 order-md-2 order-sm1">
                 <main>
+                    [% INCLUDE 'messages.inc' %]
                     <h1>Items required for bookings between <span id="from_date">[% from | $KohaDates %]</span> and <span id="to_date">[% to | $KohaDates %]</span></h1>
                     <h2>Reported on [% todaysdate | $KohaDates %]</h2>
                     <p>The following items have not been collected for bookings. Please retrieve them
@@ -52,7 +49,7 @@
             </div>
 
             <!-- Filters & Navigation -->
-            <div class="col-sm-2 col-sm-pull-10">
+            <div class="col-md-2 order-sm-2 order-md-1">
                 <aside>
                     <div id="filters">
                         <form id="bookingsf">
@@ -60,7 +57,7 @@
                                 <h4>Refine results</h4>
                                 <ol>
                                     <li>
-                                        <label for="library">Library:</label>
+                                        <label for="library">Holding library:</label>
                                         <select name="library" id="library">
                                             [% SET libraries = Branches.all( only_from_group => 1 ) %]
                                             [% IF libraries.size != 1 %]
@@ -76,11 +73,11 @@
                                         </select>
                                     </li>
                                     <li>
-                                        <label for="from">Start date: </label>
+                                        <label for="from">Starts after: </label>
                                         <input type="text" size="10" id="from" name="from" value="[% from | html %]" class="flatpickr" data-date_to="to"/>
                                     </li>
                                     <li>
-                                        <label for="to">End date: </label>
+                                        <label for="to">Starts before: </label>
                                         <input type="text" size="10" id="to" name="to" value="[% to | html %]" class="flatpickr"/>
                                     </li>
                                 </ol>
