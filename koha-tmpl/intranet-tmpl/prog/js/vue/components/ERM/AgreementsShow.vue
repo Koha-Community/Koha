@@ -8,7 +8,7 @@
             />
             <ToolbarButton
                 action="delete"
-                @delete_resource="delete_agreement"
+                @delete-resource="doResourceDelete"
             />
         </Toolbar>
 
@@ -396,36 +396,6 @@ export default {
                     this.initialized = true;
                 },
                 error => {}
-            );
-        },
-        delete_agreement: function () {
-            let agreement_id = this.agreement.agreement_id;
-            let agreement_name = this.agreement.name;
-
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this agreement?"
-                    ),
-                    message: agreement_name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.agreements.delete(agreement_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Agreement %s deleted").format(
-                                    agreement_name
-                                ),
-                                true
-                            );
-                            this.$router.push({ name: "AgreementsList" });
-                        },
-                        error => {}
-                    );
-                }
             );
         },
     },
