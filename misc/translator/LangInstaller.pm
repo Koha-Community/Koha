@@ -28,7 +28,6 @@ use Locale::PO;
 use FindBin qw( $Bin );
 use File::Path qw( make_path );
 use File::Copy;
-use File::Slurp qw( read_file );
 
 sub set_lang {
     my ($self, $lang) = @_;
@@ -53,7 +52,7 @@ sub new {
     $self->{po}              = {};
     $self->{domain}          = 'Koha';
     $self->{msgfmt}          = `which msgfmt`;
-    $self->{po2json}         = "yarn run po2json";
+    $self->{po2json}         = "$Bin/po2json";
     $self->{gzip}            = `which gzip`;
     $self->{gunzip}          = `which gunzip`;
     chomp $self->{msgfmt};
@@ -455,12 +454,7 @@ sub install_messages {
     make_path($modir);
     system "$self->{msgfmt} -o $mofile $pofile";
 
-    my $tmp_po = sprintf '/tmp/%s-messages.po', $self->{lang};
-    my $po2json_cmd = sprintf '%s %s %s', $self->{po2json}, $js_pofile, $tmp_po;
-    `$po2json_cmd`;
-    my $json = read_file($tmp_po);
-
-    my $js_locale_data = sprintf 'var json_locale_data = {"Koha":%s};', $json;
+    my $js_locale_data = 'var json_locale_data = {"Koha":' . `$self->{po2json} $js_pofile` . '};';
     my $progdir = C4::Context->config('intrahtdocs') . '/prog';
     mkdir "$progdir/$self->{lang}/js";
     open my $fh, '>', "$progdir/$self->{lang}/js/locale_data.js";
