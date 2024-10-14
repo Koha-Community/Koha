@@ -6071,6 +6071,62 @@ CREATE TABLE `file_transports` (
   `debug` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`file_transport_id`),
   KEY `host_idx` (`host`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sip_accounts`
+--
+
+DROP TABLE IF EXISTS `sip_accounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sip_accounts` (
+  `sip_account_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sip_institution_id` int(11) NOT NULL COMMENT 'Foreign key to sip_institutions.sip_institution_id',
+  `ae_field_template` varchar(255) NULL,
+  `allow_additional_materials_checkout` tinyint(1) NULL,
+  `allow_empty_passwords` tinyint(1) NULL,
+  `allow_fields` varchar(255) NULL,
+  `av_field_template` varchar(255) NULL,
+  `blocked_item_types` varchar(255) NULL,
+  `checked_in_ok` tinyint(1) NULL,
+  `convert_nonprinting_characters` varchar(10) NULL,
+  `cr_item_field` varchar(255) NULL,
+  `ct_always_send` tinyint(1) NULL,
+  `cv_send_00_on_success` tinyint(1) NULL,
+  `cv_triggers_alert` tinyint(1) NULL,
+  `da_field_template` varchar(255) NULL,
+  `delimiter` varchar(10) NULL,
+  `disallow_overpayment` tinyint(1) NULL,
+  `encoding` varchar(10) NULL,
+  `error_detect` tinyint(1) NULL,
+  `format_due_date` tinyint(1) NULL,
+  `hide_fields` varchar(255) NULL,
+  `holds_block_checkin` tinyint(1) NULL,
+  `holds_get_captured` tinyint(1) NULL,
+  `inhouse_item_types` varchar(255) NULL,
+  `inhouse_patron_categories` varchar(255) NULL,
+  `login_id` varchar(255) NOT NULL COMMENT 'PREVIOUSLY id in Sipconfig.xml',
+  `login_password` varchar(255) NULL,
+  `lost_block_checkout` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
+  `lost_block_checkout_value` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
+  `lost_status_for_missing` tinyint(1) NULL COMMENT 'actual tinyint, not boolean',
+  `overdues_block_checkout` tinyint(1) NULL,
+  `payment_type_writeoff` varchar(10) NULL,
+  `prevcheckout_block_checkout` tinyint(1) NULL,
+  `register_id` int(11) NULL COMMENT 'Foreign key to cash_registers.id',
+  `seen_on_item_information` varchar(255) NULL,
+  `send_patron_home_library_in_af` tinyint(1) NULL,
+  `show_checkin_message` tinyint(1) NULL,
+  `show_outstanding_amount` tinyint(1) NULL,
+  `terminator` enum('CR','CRLF') NULL,
+  PRIMARY KEY (`sip_account_id`),
+  UNIQUE KEY `account_login_id` (`login_id`),
+  KEY `sip_accounts_ibfk_1` (`sip_institution_id`),
+  KEY `sip_accounts_ibfk_2` (`register_id`),
+  CONSTRAINT `sip_accounts_ibfk_1` FOREIGN KEY (`sip_institution_id`) REFERENCES `sip_institutions` (`sip_institution_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `sip_accounts_ibfk_2` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
