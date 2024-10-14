@@ -1148,7 +1148,7 @@
         <!-- 530 -->
         <xsl:if test="marc:datafield[@tag=530]">
             <span class="results_summary additionalforms">
-                <span class="label">Available additional physical forms:</span>
+                <span class="label">Available additional physical forms: </span>
                 <ul class="resource_list">
                     <xsl:for-each select="marc:datafield[@tag=530]">
                         <li>

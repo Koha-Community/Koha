@@ -343,7 +343,7 @@
                 <xsl:with-param name="label">Edition: </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
-        
+
         <xsl:if test="marc:datafield[@tag=250]">
         <span class="results_summary edition"><span class="label">Edition: </span>
             <xsl:for-each select="marc:datafield[@tag=250]">
@@ -368,7 +368,7 @@
                 <xsl:with-param name="label">Description: </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
-        
+
         <xsl:if test="marc:datafield[@tag=300]">
         <span class="results_summary description"><span class="label">Description: </span>
             <xsl:for-each select="marc:datafield[@tag=300]">
@@ -1065,7 +1065,7 @@
         <!-- 530 -->
         <xsl:if test="marc:datafield[@tag=530]">
             <span class="results_summary additionalforms">
-                <span class="label">Available additional physical forms:</span>
+                <span class="label">Available additional physical forms: </span>
                 <xsl:for-each select="marc:datafield[@tag=530]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">abcd</xsl:with-param>
