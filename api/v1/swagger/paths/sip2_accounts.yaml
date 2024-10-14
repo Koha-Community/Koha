@@ -1,0 +1,272 @@
+---
+/sip2/accounts:
+  get:
+    x-mojo-to: SIP2::Accounts#list
+    operationId: listSip2Accounts
+    tags:
+      - sip2_accounts
+    summary: List accounts
+    produces:
+      - application/json
+    parameters:
+      - description: Case insensitive search on account sip_account_id
+        in: query
+        name: sip_account_id
+        required: false
+        type: string
+      - name: x-koha-embed
+        in: header
+        required: false
+        description: Embed list sent as a request header
+        type: array
+        items:
+          type: string
+          enum:
+            - institution
+        collectionFormat: csv
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+    responses:
+      200:
+        description: A list of SIP2 accounts
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_account"
+          type: array
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  post:
+    x-mojo-to: SIP2::Accounts#add
+    operationId: addSip2Accounts
+    tags:
+      - sip2_accounts
+    summary: Add accounts
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - description: A JSON object containing information about the new account
+        in: body
+        name: body
+        required: true
+        schema:
+            $ref: "../swagger.yaml#/definitions/sip2_account"
+    responses:
+      201:
+        description: A successfully created account
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_account"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in creating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+"/sip2/accounts/{sip_account_id}":
+  get:
+    x-mojo-to: SIP2::Accounts#get
+    operationId: getSip2Accounts
+    tags:
+      - sip2_accounts
+    summary: Get SIP2 account
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_account_id_pp"
+    responses:
+      200:
+        description: A SIP2 account
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_account"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  put:
+    x-mojo-to: SIP2::Accounts#update
+    operationId: updateSip2Accounts
+    tags:
+      - sip2_accounts
+    summary: Update account
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_account_id_pp"
+      - name: body
+        in: body
+        description: A JSON object containing new information about existing account
+        required: true
+        schema:
+          $ref: "../swagger.yaml#/definitions/sip2_account"
+    responses:
+      200:
+        description: A successfully updated account
+        schema:
+          items:
+            $ref: "../swagger.yaml#/definitions/sip2_account"
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Ressource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in updating resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      413:
+        description: Payload too large
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only
+  delete:
+    x-mojo-to: SIP2::Accounts#delete
+    operationId: deleteSip2Accounts
+    tags:
+      - sip2_accounts
+    summary: Delete account
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/sip_account_id_pp"
+    responses:
+      204:
+        description: Account deleted
+      400:
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      401:
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      403:
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      404:
+        description: Resource not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      409:
+        description: Conflict in deleting resource
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      500:
+        description: |-
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      503:
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        superlibrarian: 1 # TODO: Fix this, currently for superlibrarians only

@@ -1,0 +1,206 @@
+---
+type: object
+properties:
+  sip_account_id:
+    type: integer
+    description: unique account identifier
+    readOnly: true
+  sip_institution_id:
+    type: integer
+    description: unique institution identifier
+  ae_field_template:
+    description: ae field template
+    type:
+    - string
+    - 'null'
+  allow_additional_materials_checkout:
+    description: allow additional materials checkout
+    type:
+    - boolean
+    - 'null'
+  allow_empty_passwords:
+    description: allow empty passwords
+    type:
+    - boolean
+    - 'null'
+  allow_fields:
+    description: allow fields
+    type:
+    - string
+    - 'null'
+  av_field_template:
+    description: av field template
+    type:
+    - string
+    - 'null'
+  blocked_item_types:
+    description: blocked item types
+    type:
+    - string
+    - 'null'
+  checked_in_ok:
+    description: checked in ok
+    type:
+    - boolean
+    - 'null'
+  convert_nonprinting_characters:
+    description: convert nonprinting characters
+    type:
+    - string
+    - 'null'
+  cr_item_field:
+    description: cr item field
+    type:
+    - string
+    - 'null'
+  ct_always_send:
+    description: ct always send
+    type:
+    - boolean
+    - 'null'
+  cv_send_00_on_success:
+    description: cv send 00 on success
+    type:
+    - boolean
+    - 'null'
+  cv_triggers_alert:
+    description: cv triggers alert
+    type:
+    - boolean
+    - 'null'
+  da_field_template:
+    description: da field template
+    type:
+    - string
+    - 'null'
+  delimiter:
+    description: delimiter
+    type:
+    - string
+    - 'null'
+  disallow_overpayment:
+    description: disallow overpayment
+    type:
+    - boolean
+    - 'null'
+  encoding:
+    description: encoding
+    type:
+    - string
+    - 'null'
+  error_detect:
+    description: error detect
+    type:
+    - boolean
+    - 'null'
+  format_due_date:
+    description: format due date
+    type:
+    - boolean
+    - 'null'
+  hide_fields:
+    description: hide fields
+    type:
+    - string
+    - 'null'
+  holds_block_checkin:
+    description: holds block checkin
+    type:
+    - boolean
+    - 'null'
+  holds_get_captured:
+    description: holds get captured
+    type:
+    - boolean
+    - 'null'
+  inhouse_item_types:
+    description: inhouse item types
+    type:
+    - string
+    - 'null'
+  inhouse_patron_categories:
+    description: inhouse patron categories
+    type:
+    - string
+    - 'null'
+  login_id:
+    description: login id
+    type: string
+  login_password:
+    description: login password
+    type: string
+  lost_block_checkout:
+    description: lost status for missing
+    type:
+    - integer
+    - 'null'
+  lost_block_checkout_value:
+    description: lost status for missing
+    type:
+    - integer
+    - 'null'
+  lost_status_for_missing:
+    description: lost status for missing
+    type:
+    - integer
+    - 'null'
+  overdues_block_checkout:
+    description: overdues block checkout
+    type:
+    - boolean
+    - 'null'
+  payment_type_writeoff:
+    description: payment type writeoff
+    type:
+    - string
+    - 'null'
+  prevcheckout_block_checkout:
+    description: prevcheckout block checkout
+    type:
+    - boolean
+    - 'null'
+  register_id:
+    description: register id
+    type:
+    - integer
+    - 'null'
+  seen_on_item_information:
+    description: seen on item information
+    type:
+    - string
+    - 'null'
+  send_patron_home_library_in_af:
+    description: send patron home library in af
+    type:
+    - boolean
+    - 'null'
+  show_checkin_message:
+    description: show checkin message
+    type:
+    - boolean
+    - 'null'
+  show_outstanding_amount:
+    description: show outstanding amount
+    type:
+    - boolean
+    - 'null'
+  institution:
+    description: Related institution embed
+    type:
+    - object
+    - 'null'
+  terminator:
+    description: terminator
+    type:
+      - string
+      - "null"
+    enum:
+      - CR
+      - CRLF
+      - null
+
+additionalProperties: false
+required:
+  - sip_account_id
+  - login_id
+  - login_password
