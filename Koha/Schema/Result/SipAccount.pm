@@ -366,5 +366,75 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZyPf+EtRduqZRzWInkTgTA
 
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+allow_additional_materials_checkout' => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+allow_empty_passwords" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+checked_in_ok" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+ct_always_send" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+cv_send_00_on_success" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+cv_triggers_alert" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+disallow_overpayment" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+error_detect" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+format_due_date" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+holds_block_checkin" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+holds_get_captured" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+overdues_block_checkout" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+prevcheckout_block_checkout" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+send_patron_home_library_in_af" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+show_checkin_message" => { is_boolean => 1 }
+);
+
+__PACKAGE__->add_columns(
+    "+show_outstanding_amount" => { is_boolean => 1 }
+);
+
+sub koha_objects_class {
+    'Koha::SIP2::Accounts';
+}
+sub koha_object_class {
+    'Koha::SIP2::Account';
+}
+
 1;
