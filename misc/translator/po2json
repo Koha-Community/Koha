@@ -72,6 +72,8 @@ sub main
 
     foreach my $po (@$pos)
     {
+        next if $po->fuzzy;
+
         my $qmsgid1 = $po->msgid;
         my $msgid1 = $po->dequote( $qmsgid1 );
 
