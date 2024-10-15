@@ -736,7 +736,7 @@
                                         <a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a>
                                     </p>
 
-                                    <table id="table_[% loop.count | html %]" class="sorted">
+                                    <table id="table_[% loop.count | html %]" class="sorted" data-table-number=[% loop.count | html %]>
                                         <thead>
                                             <tr>
                                                 <th class="NoSort noExport">&nbsp;</th>
@@ -1299,8 +1299,8 @@
     [% INCLUDE 'calendar.inc' %]
 
     <script>
-        var tab = '';
         function select_manager(borrowernumber, borrower) {
+            let tab = $('#suggestiontabs .active table').data('table-number');
             var managedby_name = $("#managedby_name"+tab);
             var managedby = $("#managedby"+tab);
             managedby_name.empty();
@@ -1541,7 +1541,6 @@
         [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table', callback => 'select_manager' %]
     [% ELSIF op == 'else' %]
         [% FOREACH suggestion IN suggestions %]
-            <script>tab = [% loop.count | html %];</script>
             [% SET filter = "suggestions_managers" %]
             [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager_' _ loop.count, table_id => 'patron_search_modal_manager_table_' _ loop.count %]
             [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ loop.count, callback => 'select_manager' %]
