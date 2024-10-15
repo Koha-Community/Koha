@@ -773,7 +773,7 @@
             patron_search_form.find(".clear_search").on("click",function(e){
                 e.preventDefault();
                 clearFilters();
-                patron_search_form.find(".searchpattern").parent().hide();
+                parent_block.find(".searchpattern").parent().hide();
             });
 
             if ( !defer_loading ) {
