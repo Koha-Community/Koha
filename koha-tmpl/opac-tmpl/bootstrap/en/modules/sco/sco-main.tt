@@ -214,11 +214,18 @@
                     [% END %]
 
                     [% IF ( issued ) %]
-                        [% FOREACH barcode IN newissues.split(',') %]
-                        <span class="sco-alert-success issue"></span>
-                        <div class="alert alert-info">
-                            <p>Item checked out <i>([% barcode | html %])</i></p>
-                        </div>
+                        [% IF batch_checkouts_allowed %]
+                            [% FOREACH barcode IN newissues.split(',') %]
+                                <span class="sco-alert-success issue"></span>
+                                <div class="alert alert-info">
+                                    <p>Item checked out <i>([% barcode | html %])</i></p>
+                                </div>
+                            [% END %]
+                        [% ELSE %]
+                            <span class="sco-alert-success issue"></span>
+                                <div class="alert alert-info">
+                                    <p>Item checked out <i>([% newissues.split(',').last | html %])</i></p>
+                                </div>
                         [% END %]
                     [% ELSIF ( renewed ) %]
                         <span class="sco-alert-success renew"></span>
