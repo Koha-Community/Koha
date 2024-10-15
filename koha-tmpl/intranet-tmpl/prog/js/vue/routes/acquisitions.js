@@ -50,6 +50,12 @@ export const routes = [
                         component: markRaw(VendorFormAdd),
                         title: $__("Edit vendor"),
                     },
+                    {
+                        path: ":vendor_id/baskets",
+                        name: "VendorShowBaskets",
+                        component: markRaw(VendorShow),
+                        title: $__("Baskets"),
+                    },
                 ],
             },
         ],
