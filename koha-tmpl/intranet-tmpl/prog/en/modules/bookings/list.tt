@@ -91,15 +91,16 @@
     var update_success = 0;
     var bookings_table;
     var timeline;
+    let biblionumber = "[% biblionumber | uri %]";
     $(document).ready(function(){
 
         var items = $.ajax({
-            url: '/api/v1/biblios/[% biblionumber | uri %]/items?bookable=1',
+            url: '/api/v1/biblios/%s/items?bookable=1'.format(biblionumber),
             dataType: 'json',
             type: 'GET'
         });
         var bookings = $.ajax({
-            url: '/api/v1/biblios/[% biblionumber | uri %]/bookings?_per_page=-1',
+            url: '/api/v1/biblios/%s/bookings?_per_page=-1'.format(biblionumber),
             headers: { 'x-koha-embed': 'patron' },
             dataType: 'json',
             type: 'GET',
@@ -247,7 +248,7 @@
             },
         };
 
-        var bookings_table_url = "/api/v1/biblios/[% biblionumber | uri %]/bookings";
+        var bookings_table_url = "/api/v1/biblios/%s/bookings".format(biblionumber);
         bookings_table = $('#bookings_table').kohaTable({
             "ajax": {
                 "url": bookings_table_url
@@ -386,8 +387,8 @@
                     let is_cancelled = row.status === "cancelled";
                     [% IF CAN_user_circulate_manage_bookings %]
                     if (!is_cancelled) {
-                        result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="'+row.booking_id+'" data-biblionumber="[% biblionumber | uri %]" data-itemnumber="'+row.item_id+'" data-patron="'+row.patron_id+'" data-pickup_library="'+row.pickup_library_id+'" data-start_date="'+row.start_date+'" data-end_date="'+row.end_date+'"><i class="fa fa-pencil" aria-hidden="true"></i> '+_("Edit")+'</button>';
-                        result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-bs-toggle="modal" data-bs-target="#cancelBookingModal" data-booking="'+row.booking_id+'"><i class="fa fa-trash" aria-hidden="true"></i> '+_("Cancel")+'</button>';
+                        result += '<button type="button" class="btn btn-default btn-xs edit-action" data-bs-toggle="modal" data-bs-target="#placeBookingModal" data-booking="%s" data-biblionumber="%s" data-itemnumber="%s" data-patron="%s" data-pickup_library="%s" data-start_date="%s" data-end_date="%s"><i class="fa fa-pencil" aria-hidden="true"></i> %s</button>'.format(row.booking_id, biblionumber, row.item_id,  row.patron_id, row.pickup_library_id, row.start_date, row.end_date, _("Edit"));
+                        result += '<button type="button" class="btn btn-default btn-xs cancel-action" data-bs-toggle="modal" data-bs-target="#cancelBookingModal" data-booking="%s"><i class="fa fa-trash" aria-hidden="true"></i> %s</button>'.format(row.booking_id, _("Cancel"));
                     }
                     [% END %]
                     return result;
