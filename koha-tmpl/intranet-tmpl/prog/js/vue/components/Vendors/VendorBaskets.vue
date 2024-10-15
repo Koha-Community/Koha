@@ -82,8 +82,22 @@ export default {
         };
     },
     methods: {
-        addToBasket({ agreement_id }, dt, event) {
+        addToBasket({ basket_id }, dt, event) {
             event.preventDefault();
+            location.href =
+                "/cgi-bin/koha/acqui/basket.pl?basketno=" + basket_id;
+        },
+        closeBasket({ basket_id }, dt, event) {
+            event.preventDefault();
+            location.href =
+                "/cgi-bin/koha/acqui/basket.pl?basketno=" + basket_id;
+        },
+        uncertainPrices({ basket_id }, dt, event) {
+            event.preventDefault();
+            location.href =
+                "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=" +
+                basket_id +
+                "&owner=1";
         },
         tableURL() {
             let url =
