@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 use Test::Warn;
 
@@ -434,6 +434,71 @@ subtest 'delete() tests' => sub {
         ->content_is( '', 'SWAGGER3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/bookings/$booking_id")->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'patch() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }     # no additional permissions
+        }
+    );
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $librarian->borrowernumber,
+                module_bit     => 1,
+                code           => 'manage_bookings',
+            },
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $unauth_userid = $patron->userid;
+
+    my $booking_id = $builder->build_object( { class => 'Koha::Bookings' } )->id;
+
+    # Unauthorized attempt to partial update via PATCH
+    $t->patch_ok(
+        "//$unauth_userid:$password@/api/v1/bookings/$booking_id" => json => { status => 'cancelled' }
+    )->status_is(403);
+
+    my $biblio         = $builder->build_sample_biblio;
+    my $item           = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );
+    my $pickup_library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Authorized attempt to write invalid data
+    my $booking_with_invalid_field = {
+        blah => "Booking Blah",
+    };
+
+    $t->patch_ok( "//$userid:$password@/api/v1/bookings/$booking_id" => json => $booking_with_invalid_field )
+        ->status_is(400)->json_is(
+        "/errors" => [
+            {
+                message => "Properties not allowed: blah.",
+                path    => "/body"
+            }
+        ]
+        );
 
     $schema->storage->txn_rollback;
 };

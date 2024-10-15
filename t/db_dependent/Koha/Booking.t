@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 3;
+use Test::More tests => 6;
 
 use Test::Exception;
 
@@ -460,7 +460,7 @@ subtest 'store() tests' => sub {
 };
 
 subtest 'delete() tests' => sub {
-    plan tests => 3;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -500,6 +500,77 @@ subtest 'delete() tests' => sub {
         'Koha::Booking->delete should have deleted the booking'
     );
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'edit() tests' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio  = $builder->build_sample_biblio;
+    my $item_1  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $start_0 = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
+    my $end_0   = $start_0->clone->add( days => 6 );
+
+    $item_1->bookable(1)->store;
+
+    my $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0,
+        }
+    )->store;
+
+    my $booking_to_edit = Koha::Bookings->find( $booking->booking_id );
+    $booking_to_edit->edit( { status => 'completed' } );
+
+    is(
+        $booking_to_edit->unblessed->{status}, 'completed',
+        'Koha::Booking->edit should edit booking with passed params'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cancel() tests' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron                 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio                 = $builder->build_sample_biblio;
+    my $item_1                 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $start_0                = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
+    my $end_0                  = $start_0->clone->add( days => 6 );
+    my $original_notices_count = Koha::Notice::Messages->search(
+        {
+            letter_code    => 'BOOKING_CANCELLATION',
+            borrowernumber => $patron->borrowernumber,
+        }
+    )->count;
+
+    $item_1->bookable(1)->store;
+
+    my $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0,
+        }
+    )->store;
+
+    my $booking_to_cancel = Koha::Bookings->find( $booking->booking_id );
+    $booking_to_cancel->cancel( { send_letter => 1 } );
+
     subtest 'notice trigger' => sub {
         plan tests => 1;
 
@@ -512,8 +583,61 @@ subtest 'delete() tests' => sub {
         is(
             $post_notices_count,
             $original_notices_count + 1,
-            'Koha::Booking->delete should have enqueued a BOOKING_CANCELLATION email'
+            'Koha::Booking->cancel should have enqueued a BOOKING_CANCELLATION email'
         );
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_status() tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio  = $builder->build_sample_biblio;
+    my $item_1  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $start_0 = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
+    my $end_0   = $start_0->clone->add( days => 6 );
+
+    $item_1->bookable(1)->store;
+
+    my $booking = Koha::Booking->new(
+        {
+            patron_id         => $patron->borrowernumber,
+            biblio_id         => $biblio->biblionumber,
+            item_id           => $item_1->itemnumber,
+            pickup_library_id => $item_1->homebranch,
+            start_date        => $start_0,
+            end_date          => $end_0,
+            status            => 'new',
+        }
+    )->store;
+
+    my $booking_with_old_status = Koha::Bookings->find( $booking->booking_id );
+    $booking_with_old_status->set_status('completed');
+    is( $booking_with_old_status->unblessed->{status}, 'completed', 'Booking status is now "completed"' );
+
+    $booking_with_old_status->set_status('cancelled');
+    is( $booking_with_old_status->unblessed->{status}, 'cancelled', 'Booking status is now "cancelled"' );
+
+    subtest 'unauthorized status' => sub {
+        plan tests => 2;
+
+        eval { $booking_with_old_status->set_status('blah'); };
+
+        if ($@) {
+            like(
+                $@, qr/Invalid status: blah/,
+                'An error is raised for unauthorized status'
+            );
+        } else {
+            fail('Expected an error but none was raised');
+        }
+
+        # Status unchanged
+        is( $booking_with_old_status->unblessed->{status}, 'cancelled', 'Booking status is still "cancelled"' );
     };
 
     $schema->storage->txn_rollback;
