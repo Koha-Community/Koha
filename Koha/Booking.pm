@@ -306,32 +306,82 @@ sub to_api_mapping {
 
 sub delete {
     my ($self) = @_;
+    my $deleted = $self->SUPER::delete($self);
+    return $deleted;
+}
+
+=head3 edit
+
+This method adds possibility to edit a booking
+
+=cut
+
+sub edit {
+    my ( $self, $params ) = @_;
+
+    if ( $params->{status} ) {
+        if ( $params->{status} eq 'cancelled' ) {
+            $self->cancel( { send_letter => 1 } );
+        }
+        $self->_set_status( $params->{status} );
+    }
+    $self->store();
+
+    return $self;
+}
+
+=head3 cancel
+
+This method adds possibility of cancelling a booking (kept in table but flagged with 'cancelled' status)
+Also adds param to send a letter to the borrower affected by the cancellation
+
+=cut
+
+sub cancel {
+    my ( $self, $params ) = @_;
 
     my $branch         = C4::Context->userenv->{'branch'};
     my $patron         = $self->patron;
     my $pickup_library = $self->pickup_library;
 
-    my $letter = C4::Letters::GetPreparedLetter(
-        module                 => 'bookings',
-        letter_code            => 'BOOKING_CANCELLATION',
-        message_transport_type => 'email',
-        branchcode             => $branch,
-        lang                   => $patron->lang,
-        objects                => { booking => $self }
-    );
-
-    if ($letter) {
-        C4::Letters::EnqueueLetter(
-            {
-                letter                 => $letter,
-                borrowernumber         => $patron->borrowernumber,
-                message_transport_type => 'email',
-            }
+    if ( $params->{send_letter} ) {
+        my $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'bookings',
+            letter_code            => 'BOOKING_CANCELLATION',
+            message_transport_type => 'email',
+            branchcode             => $branch,
+            lang                   => $patron->lang,
+            objects                => { booking => $self }
         );
+
+        if ($letter) {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $patron->borrowernumber,
+                    message_transport_type => 'email',
+                }
+            );
+        }
+    }
+}
+
+
+=head3 set_status
+
+This method changes the status of a booking
+
+=cut
+
+sub _set_status {
+    my ( $self, $new_status ) = @_;
+
+    my @valid_statuses = qw(pending completed cancelled);
+    unless ( grep { $_ eq $new_status } @valid_statuses ) {
+        die "Invalid status: $new_status";
     }
 
-    my $deleted = $self->SUPER::delete($self);
-    return $deleted;
+    $self->status($new_status);
 }
 
 =head2 Internal methods

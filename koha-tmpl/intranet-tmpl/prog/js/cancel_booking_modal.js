@@ -10,12 +10,15 @@ $("#cancelBookingForm").on('submit', function(e) {
     var booking_id = $('#cancel_booking_id').val();
     var url = '/api/v1/bookings/'+booking_id;
 
-    var deleting = $.ajax({
-        'method': "DELETE",
-        'url': url
+    var cancelling = $.ajax({
+        'method': "PATCH",
+        'url': url,
+        'data': JSON.stringify({"status": "cancelled"}),
+        'contentType': "application/json"
     });
 
-    deleting.done(function(data) {
+
+    cancelling.done(function(data) {
         cancel_success = 1;
         if (bookings_table) {
             bookings_table.api().ajax.reload();
@@ -27,7 +30,7 @@ $("#cancelBookingForm").on('submit', function(e) {
         $('#cancelBookingModal').modal('hide');
     });
 
-    deleting.fail(function(data) {
+    cancelling.fail(function(data) {
         $('#cancel_booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+__("Failure")+'</div>');
     });
 });

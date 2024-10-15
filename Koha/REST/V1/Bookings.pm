@@ -37,7 +37,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $bookings = $c->objects->search( Koha::Bookings->new );
+        my $bookings = $c->objects->search( Koha::Bookings->filter_by_active );
         return $c->render( status => 200, openapi => $bookings );
     } catch {
         $c->unhandled_exception($_);
@@ -143,6 +143,31 @@ sub delete {
     return try {
         $booking->delete;
         return $c->render_resource_deleted;
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 edit
+
+Controller function that editing an existing booking
+
+=cut
+
+sub edit {
+    my $c    = shift->openapi->valid_input or return;
+    my $body = $c->req->json;
+
+    my $booking = Koha::Bookings->find( $c->param('booking_id') );
+    return $c->render_resource_not_found("Booking")
+        unless $booking;
+
+    return try {
+        $booking->edit($body);
+        return $c->render(
+            status  => 200,
+            openapi => $c->objects->to_api($booking),
+        );
     } catch {
         $c->unhandled_exception($_);
     };
