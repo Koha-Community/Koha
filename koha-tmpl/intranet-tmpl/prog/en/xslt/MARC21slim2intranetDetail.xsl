@@ -1094,6 +1094,7 @@
                         <xsl:when test="@ind1=2"><xsl:text>Scope and content: </xsl:text></xsl:when>
                         <xsl:when test="@ind1=3"><xsl:text>Abstract: </xsl:text></xsl:when>
                         <xsl:when test="@ind1=4"><xsl:text>Content advice: </xsl:text></xsl:when>
+                        <xsl:when test="@ind1=8"><xsl:text></xsl:text></xsl:when>
                         <xsl:otherwise><xsl:text>Summary: </xsl:text></xsl:otherwise>
                     </xsl:choose>
                 </span>
