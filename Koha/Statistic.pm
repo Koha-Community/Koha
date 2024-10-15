@@ -149,7 +149,7 @@ Generate a pesudonymized version of the statistic.
 sub pseudonymize {
     my ($self) = @_;
 
-    return unless ( $self->borrowernumber && grep { $_ eq $self->type } qw(renew issue return onsite_checkout) );
+    return unless ( $self->borrowernumber && grep { $_ eq $self->type } @Koha::Statistic::pseudonymization_types );
 
     # FIXME When getting the object from svc/renewal we get a DateTime object
     # normally we just fetch from DB to clear this, but statistics has no primary key
@@ -160,6 +160,14 @@ sub pseudonymize {
     Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $unblessed } );
 
 }
+
+=head2 Pseudonymization types
+
+=head3 @pseudonymization_types
+
+=cut
+
+our @pseudonymization_types = qw(renew issue return onsite_checkout);
 
 =head2 Internal methods
 

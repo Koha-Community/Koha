@@ -61,8 +61,7 @@ subtest 'new() tests' => sub {
 
 subtest 'pseudonymize() tests' => sub {
 
-    my @pseudonymization_types = qw(renew issue return onsite_checkout);
-    plan tests => scalar(@pseudonymization_types) + 2;
+    plan tests => scalar(@Koha::Statistic::pseudonymization_types) + 2;
 
     $schema->storage->txn_begin;
 
@@ -73,10 +72,10 @@ subtest 'pseudonymize() tests' => sub {
 
     my @statistics = ();
 
-    ok( scalar(@pseudonymization_types) > 0, 'some pseudonymization_types are defined' );
+    ok( scalar(@Koha::Statistic::pseudonymization_types) > 0, 'some pseudonymization_types are defined' );
 
     my $sub_days = 0;    # TestBuilder does not handle many rows of Koha::Statistics very intuitively
-    foreach my $type (@pseudonymization_types) {
+    foreach my $type (@Koha::Statistic::pseudonymization_types) {
         push(
             @statistics,
             $builder->build_object(
