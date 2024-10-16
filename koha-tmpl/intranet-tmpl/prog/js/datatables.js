@@ -62,14 +62,14 @@ var dataTablesDefaults = {
         state =  settings.oLoadedState;
         state && state.search && toggledClearFilter(state.search.search, tableId);
 
-        if (settings.ajax) {
-            if ( typeof this.api === 'function' ) {
-                _dt_add_delay(this.api(), table_node);
-            } else {
-                let dt = $(table_node).DataTable();
-                _dt_add_delay(dt, table_node);
-            }
-        }
+        //if (settings.ajax) {
+        //    if ( typeof this.api === 'function' ) {
+        //        _dt_add_delay(this.api(), table_node);
+        //    } else {
+        //        let dt = $(table_node).DataTable();
+        //        _dt_add_delay(dt, table_node);
+        //    }
+        //}
     }
 };
 
@@ -79,32 +79,6 @@ function toggledClearFilter(searchText, tableId){
     } else {
         $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").removeClass("disabled");
     }
-}
-
-// List of unbind keys (Ctrl, Alt, Direction keys, etc.)
-// These keys must not launch filtering
-var blacklist_keys = new Array(0, 16, 17, 18, 37, 38, 39, 40);
-
-// Add a filtering delay on general search and on all input (with a class 'filter')
-jQuery.fn.dataTableExt.oApi.fnAddFilters = function ( oSettings, sClass, iDelay ) {
-    var table = this;
-    var filterTimerId = null;
-    $(table).find("input."+sClass).keyup(function(event) {
-      if (blacklist_keys.indexOf(event.keyCode) != -1) {
-        return this;
-      }else if ( event.keyCode == '13' ) {
-        table.fnFilter( $(this).val(), $(this).attr('data-column_num') );
-      } else {
-        window.clearTimeout(filterTimerId);
-        var input = this;
-        filterTimerId = window.setTimeout(function() {
-          table.fnFilter($(input).val(), $(input).attr('data-column_num'));
-        }, iDelay);
-      }
-    });
-    $(table).find("select."+sClass).on('change', function() {
-        table.fnFilter($(this).val(), $(this).attr('data-column_num'));
-    });
 }
 
 // Sorting on html contains
@@ -854,69 +828,51 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                     $(th).html( '<input type="text" placeholder="%s" style="width: 100%" />'.format(search_title) );
                 }
             }
-
-            function delay(callback, ms) {
-                var timer = 0;
-                return function () {
-                    var context = this, args = arguments;
-                    clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        callback.apply(context, args);
-                    }, ms || 0);
-                };
-            }
-
-            $(input_type, th).on('keyup change', (delay(function () {
-                if (table_dt.column(i).search() !== this.value) {
-                    if (input_type == "input") {
-                        table_dt
-                            .column(i)
-                            .search(this.value)
-                            .draw();
-                    } else {
-                        table_dt
-                            .column(i)
-                            .search( this.value.length ? '^'+this.value+'$' : '', true, false )
-                            .draw();
-                    }
-                }
-            }, 500)));
         } else {
             $(th).html('');
         }
     } );
+    _dt_add_delay_filters(table_dt, table_node);
 }
 
-// List of unbind keys (Ctrl, Alt, Direction keys, etc.)
-// These keys must not launch filtering
-var blacklist_keys = new Array(0, 16, 17, 18, 37, 38, 39, 40);
+function _dt_add_delay(table_dt, table_node) {
 
-function _dt_add_delay(table_dt, table_node, delay_ms) {
+    let delay_ms = 500;
 
-    delay = (typeof delay == 'undefined') ? 500 : delay;
+    let search = DataTable.util.debounce(function (val) {
+        table_dt.search(val);
+        table_dt.draw();
+    }, delay_ms);
 
-    var previousSearch = null;
-    var timerId = null;
-    $("#"+table_node.attr('id')+"_wrapper").find(".dataTables_filter input")
-    .unbind()
-    .bind("keyup", function(event) {
-        var input = $(this);
-        if (blacklist_keys.indexOf(event.keyCode) != -1) {
-            return;
-        } else if ( event.keyCode == '13' ) {
-            table_dt.search($(input).val()).draw();
-        } else {
-            let val = $(input).val();
-            if (previousSearch === null || previousSearch != val){
-                window.clearTimeout(timerId);
-                previousSearch = val;
-                timerId = window.setTimeout(function(){
-                    table_dt.search($(input).val()).draw();
-                }, delay);
-            }
-        }
+    $("#"+table_node.attr('id')+"_wrapper").find(".dt-input")
+        .unbind()
+        .bind("keyup", search(this.value));
+}
 
-        return;
+function _dt_add_delay_filters(table_dt, table_node) {
+
+    let delay_ms = 500;
+
+    let col_input_search = DataTable.util.debounce(function (i, val) {
+        table_dt.column(i).search(val).draw();
+    }, delay_ms);
+    let col_select_search = DataTable.util.debounce(function (i, val) {
+        table_dt.column(i).search(val, true, false).draw();
+    }, delay_ms);
+
+    $(table_node).find('thead tr:eq(1) th').each( function (i) {
+        $(this).find("input")
+            .unbind()
+            .bind("keyup change", function(){
+                col_input_search(i, this.value)
+            });
+
+        $(this).find("select")
+            .unbind()
+            .bind("keyup change", function(){
+                let value = this.value.length ? '^'+this.value+'$' : '';
+                col_select_search(i, this.value)
+            });
     });
 }
 

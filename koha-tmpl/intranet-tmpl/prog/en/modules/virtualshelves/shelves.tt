@@ -678,8 +678,7 @@
                     "processing": true,
                     "orderCellsTop":  true
                 }));
-
-                dtListResults.fnAddFilters("filter", 750);
+                _dt_add_delay_filters(dtListResults.api(), $("#listresultst"));
 
                 /* Select correct tab based on URL parameter */
                 if( public == 0 ){
