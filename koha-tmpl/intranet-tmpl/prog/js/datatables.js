@@ -830,7 +830,13 @@ function _dt_on_visibility(add_filters, table_node, table_dt){
 function _dt_add_filters(table_node, table_dt, filters_options = {}) {
     $(table_node).find('thead tr').clone().appendTo( $(table_node).find('thead') );
 
+    let j = -1;
     $(table_node).find('thead tr:eq(1) th').each( function (i) {
+        j++
+        var is_visible = table_dt.settings()[0].aoColumns[j].bVisible;
+        if ( !is_visible ) { j++ }
+        i = j;
+
         var is_searchable = table_dt.settings()[0].aoColumns[i].bSearchable;
         $(this).removeClass('sorting').removeClass("sorting_asc").removeClass("sorting_desc");
         $(this).data('th-id', i);
