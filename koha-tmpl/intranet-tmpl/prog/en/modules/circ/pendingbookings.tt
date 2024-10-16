@@ -120,7 +120,11 @@
                          isoTo = todate.get(0)._flatpickr.selectedDates[0].toISOString().substring(0,10);
                        }
 
-                       return { '>=': isoFrom, '<=': isoTo };
+                       if ( isoFrom || isoTo ) {
+                         return { '>=': isoFrom, '<=': isoTo };
+                       } else {
+                         return
+                       }
                     },
                     'item.holding_library_id': function() {
                        let library = $("#library").find(":selected").val();
