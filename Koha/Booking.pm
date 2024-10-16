@@ -167,7 +167,10 @@ sub store {
                     message_transport_type => 'email',
                     branchcode             => $pickup_library->branchcode,
                     lang                   => $patron->lang,
-                    objects                => { booking => $self },
+                    objects                => {
+                        old_booking => $old_booking,
+                        booking     => $self
+                    },
                 );
 
                 if ($letter) {
