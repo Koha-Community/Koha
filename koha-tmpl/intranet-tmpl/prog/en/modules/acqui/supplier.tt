@@ -532,6 +532,7 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/vue/dist/islands.js", "init" => "1") | $raw %]
     <script>
         function add_contact() {
             var new_contact = $('#contact-template').clone();
