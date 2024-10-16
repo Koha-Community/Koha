@@ -145,7 +145,7 @@
                         "patron",
                         "pickup_library"
                     ],
-                    "order": [[ 1, "asc" ]],
+                    "order": [[ 7, "asc" ]],
                     "columns": [{
                         "data": "booking_id",
                         "title": "Booking ID",
@@ -196,10 +196,10 @@
                         }
                     },
                     {
-                        "data": "",
+                        "data": "item.location",
                         "title": "Location",
                         "searchable": false,
-                        "orderable": true,
+                        "orderable": false,
                         "render": function(data,type,row,meta) {
                             if ( row.item ) {
                                 if ( row.item.checked_out_date ) {
