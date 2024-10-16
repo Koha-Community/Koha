@@ -666,7 +666,7 @@
                 'embed': [ 'smtp_server', 'library_hours' ],
                 'emptyTable': '<div class="alert alert-info">'+_("There are no libraries defined.")+' <a href="/cgi-bin/koha/admin/branches.pl?op=add_form">'+_("Start defining libraries")+'</a>.</div>',
                 "columnDefs": [ {
-                    "targets": [0,1,3,4,7,10,11,12,13,14,15,16,17],
+                    "targets": [1,3,4,5,6],
                     "render": function (data, type, row, meta) {
                         if ( type == 'display' ) {
                             if ( data != null ) {
@@ -694,7 +694,7 @@
                         "orderable": true
                     },
                     {
-                        "data": function( row, type, val, meta ) {
+                        "render": function( data, type, row, meta ) {
                             const library_info = [];
                             if ( row.address1 != null ) library_info.push(row.address1.escapeHtml());
                             if ( row.address2 != null ) library_info.push(row.address2.escapeHtml());
@@ -754,7 +754,7 @@
                                 return '<a href="/cgi-bin/koha/admin/smtp_servers.pl?op=edit_form&smtp_server_id='+encodeURIComponent(data.smtp_server_id)+'">'+data.name.escapeHtml()+'</a>';
                             }
                             else {
-                                return _("Default");
+                                return _("Default").escapeHtml();
                             }
                         },
                         "searchable": false,
@@ -780,7 +780,7 @@
                                 for (let i = calendarFirstDayOfWeek; counter < 7; i++) {
                                     const day = i % 7; // Wrap around the day using modulo operator
                                     result += '<tr id="hours_'+day+'">';
-                                    result += '<td>'+daysOfWeek[day]+'</td>';
+                                    result += '<td>'+daysOfWeek[day].escapeHtml()+'</td>';
                                     result += '<td><span>';
                                     result += row.library_hours[day].open_time != null ? $kohatime(row.library_hours[day].open_time): '';
                                     result += '</span></td>';
@@ -792,7 +792,7 @@
                                 }
                                 result += '</tbody></table>';
                             } else {
-                                result = _("Library hours not set");
+                                result = _("Library hours not set").escapeHtml();
                             }
                             return result;
                         },
@@ -814,62 +814,6 @@
                         "searchable": false,
                         "orderable": false
                     },
-                    {
-                        "data": "address1",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "address2",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "address3",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "city",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "state",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "postal_code",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "country",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": function( row, type, val, meta ) {
-                            return ''; // provisional placeholder for opac_info
-                        },
-                        "searchable": false,
-                        "visible": false,
-                        "orderable": false
-                    },
-                    {
-                        "data": "notes",
-                        "searchable": true,
-                        "visible": false,
-                        "orderable": false
-                    }
                 ]
             }, table_settings);
 
