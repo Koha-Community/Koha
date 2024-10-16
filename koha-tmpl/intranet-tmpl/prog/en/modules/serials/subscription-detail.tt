@@ -486,13 +486,14 @@
 
             [% END %]
 
+            let table_dt = table.DataTable();
             $("#hide_received_orders").click(function(e){
                 e.preventDefault();
-                table.fnFilter( '^$', 4, true ); // Not empty "Receive date" columns
+                table_dt.columns(4).search('^$', {regex: true}).draw(); // Not empty "Receive date" columns
             });
             $("#show_all_orders").click(function(e){
                 e.preventDefault();
-                table.fnFilter( '', 4 ); // Not filter, display all columns
+                table_dt.columns(4).search('').draw(); // Not filter, display all columns
             });
             $("#show_all_orders").click();
 

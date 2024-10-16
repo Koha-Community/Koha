@@ -251,16 +251,17 @@
                 { "orderable": false, "targets": [1]}
             ],
         }, columns_settings);
+        let table_dt = table.DataTable();
 
         $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
             var id = e.target.id;
+            let pattern = "";
             if ( id == "checkout-tab" ) {
-                table.fnFilter("standard_checkout", 0);
+                pattern = "standard_checkout";
             } else if ( id == "onsite_checkout-tab" ) {
-                table.fnFilter("onsite_checkout", 0);
-            } else { // all
-                table.fnFilter('', 0);
+                pattern = "onsite_checkout";
             }
+            table_dt.columns(0).search(pattern).draw();
         });
     });
 </script>

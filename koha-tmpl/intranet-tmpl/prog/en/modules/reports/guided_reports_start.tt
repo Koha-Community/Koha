@@ -2026,6 +2026,7 @@
                     },
 
                 }, table_settings);
+                let table_dt = rtable.DataTable();
 
                 $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                     tabsInit( $(e.target).parent(), rtable );
@@ -2038,13 +2039,11 @@
                 $("#subgroup_filter").change(function() {
                     var selected = $(this).find('option:selected');
                     var sg_id = $(selected).val();
+                    let col = table_dt.columns(5);
                     if (sg_id.length > 0) {
-                        const input = '^' + $.fn.dataTable.util.escapeRegex(sg_id) + '$';
-                        rtable.fnFilter(input, 5, true, false, true, false);
-                        rtable.fnSetColumnVis(5, false);
+                        col.search(sg_id, {exact:true}).visible(false).draw();
                     } else {
-                        rtable.fnFilter('', 5);
-                        rtable.fnSetColumnVis(5, true);
+                        col.search("").visible(true).draw();
                     }
                 });
 
@@ -2335,10 +2334,11 @@
                     $(this).remove();
                 }
             });
-            rtable.fnFilter('', 4);
-            rtable.fnFilter('', 5);
-            rtable.fnSetColumnVis(4, true);
-            rtable.fnSetColumnVis(5, true);
+            let table_dt = rtable.DataTable();
+            let col4 = table_dt.columns(4);
+            col4.search("").visible(true);
+            let col5 = table_dt.columns(4);
+            col5.search("").visible(true);
 
             var g_id = tab.find("a").data("tabname");
             if (g_id === 'reports') {
@@ -2346,9 +2346,7 @@
             }
 
             if (g_id && g_id.length > 0) {
-                const input = '^' + $.fn.dataTable.util.escapeRegex(g_id) + '$';
-                rtable.fnFilter(input, 4, true, false, true, false);
-                rtable.fnSetColumnVis(4, false);
+                col4.search(g_id, {exact:true}).visible(false);
                 for(var i in group_subgroups[g_id]) {
                     $("#subgroup_filter").append(
                         '<option value="' + group_subgroups[g_id][i][0] + '">'
@@ -2359,6 +2357,7 @@
             } else {
                 $("#subgroup_filter_block").hide();
             }
+            table_dt.draw();
         }
 
         function addColumn() {

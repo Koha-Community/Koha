@@ -418,7 +418,7 @@
             e.preventDefault();
             fnClickAddRow(sale_table, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
             if($('#invoices_filter').find('input[type=search]').val() !== ''){
-                items_table.fnFilter( '' );
+                items_table.DataTable().search('').draw();
             }
         });
 

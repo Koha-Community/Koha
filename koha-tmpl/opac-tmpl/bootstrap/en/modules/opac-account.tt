@@ -127,14 +127,14 @@ $( document ).ready(function() {
     $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
     $('#filter_paid').click(function(e) {
         e.preventDefault();
+        let filteredValue = '';
         if ($(this).hasClass('filtered')) {
-            var filteredValue = '';
             $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter);
         } else { //Not filtered. Let's do it!
-            var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
+            filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
             $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtInactivefilter);
         }
-        fines_table.fnFilter(filteredValue, -2, true, false);
+        fines_table.DataTable().columns(-2).search(filteredValue, {regex: true}).draw();
         $(this).toggleClass('filtered');
     });
 

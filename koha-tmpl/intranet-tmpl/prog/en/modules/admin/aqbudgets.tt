@@ -732,6 +732,7 @@
                         "paginate": false,
                         "autoWidth": false
                     });
+                    let table_dt = oTable.DataTable();
 
                     $(oTable).treetable({
                         expandable: true
@@ -749,11 +750,11 @@
                     [% UNLESS budget_period_id %]
                       $("#hide_inactive").click(function(e){
                         e.preventDefault();
-                        oTable.fnFilter( 1, 0 ); // Show only active=1
+                        table_dt.columns(0).search(1).draw(); // Show only active=1
                       });
                       $("#show_inactive").click(function(e){
                         e.preventDefault();
-                        oTable.fnFilter( '', 0 );
+                        table_dt.columns(0).search("").draw(); // Show only active=1
                       });
                       $("#hide_inactive").click();
                     [% END %]

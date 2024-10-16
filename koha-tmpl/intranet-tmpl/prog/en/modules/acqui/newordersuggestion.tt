@@ -132,18 +132,19 @@
     $(document).ready(function() {
         var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "columnDefs": [
-                { "targets": [ 0 ],  "visible": false, "searchable":  true }, // must be searchable for fnFilter
+                { "targets": [ 0 ],  "visible": false, "searchable":  true }, // must be searchable for filtering
                 { "targets": [ -1 ], "orderable": false, "searchable":  false },
             ],
             "pagingType": "full"
         }));
+        let table_dt = suggestionst.DataTable();
         $("#show_only_mine").on('click', function(e){
             e.preventDefault();
-            suggestionst.fnFilter('^[% logged_in_user.borrowernumber | html %]$', 0, true);
+            table_dt.columns(0).search('^[% logged_in_user.borrowernumber | html %]$', true).draw();
         });
         $("#show_all").on('click', function(e){
             e.preventDefault();
-            suggestionst.fnFilter('', 0 );
+            table_dt.columns(0).search("").draw();
         });
      });
     </script>

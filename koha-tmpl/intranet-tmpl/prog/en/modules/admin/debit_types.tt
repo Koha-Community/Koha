@@ -284,11 +284,11 @@
                 if ($(this).hasClass('filtered')) {
                     var filteredValue = '';
                     $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
-                } else { //Not filtered. Let's do it!
+                } else { // Not filtered. Let's do it!
                     var filteredValue = '0';
                     $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
                 }
-                table_debit_types.fnFilter(filteredValue, 1, false, false);
+                table_debit_types.DataTable().columns(1).search(filteredValue, false, false).draw();
                 $(this).toggleClass('filtered');
             });
 

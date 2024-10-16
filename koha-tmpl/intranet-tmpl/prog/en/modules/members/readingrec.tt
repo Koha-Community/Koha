@@ -193,15 +193,16 @@
                 "order": [[column_sort, 'desc']]
             }, table_settings);
 
+            let table_dt = table.DataTable();
             $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {
                 active_tab = $(this).attr("href");
+                let pattern = "";
                 if( active_tab == "#tab_checkout_panel" ){
-                    table.fnFilter("standard_checkout", 0);
+                    pattern = "standard_checkout";
                 } else if( active_tab == "#tab_onsite_checkout_panel" ){
-                    table.fnFilter("onsite_checkout", 0);
-                } else {
-                    table.fnFilter('', 0);
+                    pattern = "onsite_checkout";
                 }
+                table_dt.columns(0).search(pattern).draw();
             });
         });
     </script>

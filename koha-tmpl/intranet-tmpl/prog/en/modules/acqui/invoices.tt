@@ -455,9 +455,9 @@
             $(".show_only_subscription").click(function(){
                 var table_id = $(this).attr("data-tableid");
                 if ( $(this).prop("checked") ) {
-                    $('#'+table_id).dataTable().fnFilter( "1", 0, true );
+                    $('#'+table_id).dataTable().columns(0).search(1, true).draw();
                 } else {
-                    $('#'+table_id).dataTable().fnFilter( '', 0 );
+                    $('#'+table_id).dataTable().columns(0).search("").draw();
                 }
             });
 
