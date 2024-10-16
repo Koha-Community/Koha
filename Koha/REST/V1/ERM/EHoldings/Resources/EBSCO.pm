@@ -73,12 +73,7 @@ sub list {
 
         my $base_total = $result->{totalResults};
 
-        my ( $per_page, $page ) = $ebsco->build_query_pagination(
-            {
-                per_page => $c->stash('koha.pagination.per_page'),
-                page     => $c->stash('koha.pagination.page'),
-            }
-        );
+        my ( $per_page, $page ) = $ebsco->build_query_pagination( $c->req->params->to_hash );
 
         my $additional_params = $ebsco->build_additional_params( $c->req->params->to_hash );
         my $searchfield = 'titlename';
