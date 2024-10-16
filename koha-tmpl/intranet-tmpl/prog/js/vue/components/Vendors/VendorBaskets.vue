@@ -117,11 +117,12 @@ export default {
                     searchable: true,
                     orderable: true,
                     render(data, type, row, meta) {
+                        const name = row.name ? row.name : __("Unnamed basket");
                         return (
                             '<a href="/cgi-bin/koha/acqui/basket.pl?basketno=' +
                             row.basket_id +
                             '" class="show">' +
-                            escape_str(`${row.name} (#${row.basket_id})`) +
+                            escape_str(`${name} (#${row.basket_id})`) +
                             "</a>"
                         );
                     },
@@ -139,7 +140,7 @@ export default {
                         ).length;
                         if (cancelledOrders) {
                             count +=
-                                " (" + cancelledOrders + _(" cancelled") + ")";
+                                " (" + cancelledOrders + __(" cancelled") + ")";
                         }
                         return count;
                     },
@@ -176,7 +177,7 @@ export default {
                             count +=
                                 " (" +
                                 recordCount.cancelledBibs.length +
-                                _(" cancelled") +
+                                __(" cancelled") +
                                 ")";
                         }
                         return count;
