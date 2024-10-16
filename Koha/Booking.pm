@@ -160,12 +160,13 @@ sub store {
             {
                 my $patron         = $self->patron;
                 my $pickup_library = $self->pickup_library;
+                my $branch         = C4::Context->userenv->{'branch'};
 
                 my $letter = C4::Letters::GetPreparedLetter(
                     module                 => 'bookings',
                     letter_code            => 'BOOKING_MODIFICATION',
                     message_transport_type => 'email',
-                    branchcode             => $pickup_library->branchcode,
+                    branchcode             => $branch,
                     lang                   => $patron->lang,
                     objects                => {
                         old_booking => $old_booking,
@@ -286,6 +287,7 @@ sub to_api_mapping {
 sub delete {
     my ($self) = @_;
 
+    my $branch         = C4::Context->userenv->{'branch'};
     my $patron         = $self->patron;
     my $pickup_library = $self->pickup_library;
 
@@ -293,7 +295,7 @@ sub delete {
         module                 => 'bookings',
         letter_code            => 'BOOKING_CANCELLATION',
         message_transport_type => 'email',
-        branchcode             => $pickup_library->branchcode,
+        branchcode             => $branch,
         lang                   => $patron->lang,
         objects                => { booking => $self }
     );

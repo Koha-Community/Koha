@@ -126,7 +126,8 @@ subtest 'store() tests' => sub {
     plan tests => 14;
     $schema->storage->txn_begin;
 
-    my $patron  = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
     my $biblio  = $builder->build_sample_biblio();
     my $item_1  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     my $start_0 = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
@@ -412,7 +413,8 @@ subtest 'delete() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron                 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $patron } );
     my $biblio                 = $builder->build_sample_biblio;
     my $item_1                 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
     my $start_0                = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
