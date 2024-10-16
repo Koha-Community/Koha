@@ -594,12 +594,11 @@
                 </div> <!-- /.panel-heading -->
                 <div id="[% letter.message_transport_type | html %]_[% lang | html %]" class="panel-collapse collapse" role="tabpanel" aria-labelledby="[% letter.message_transport_type | html %]_[% lang | html %]Heading">
                     <div class="panel-body">
-                        [% IF letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
-                            <fieldset class="rows mtt" disabled="disabled">
+                        [% SET sms_readonly = letter.message_transport_type == "sms" and not Koha.Preference("SMSSendDriver") %]
+                        <fieldset class="rows mtt">
+                            [% IF sms_readonly %]
                                 <div class="dialog message">You should enable the SMSSendDriver preference to use the SMS templates.</div>
-                        [% ELSE %]
-                            <fieldset class="rows mtt">
-                        [% END %]
+                            [% END %]
                             <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type | html %]" />
                             <input type="hidden" name="lang" value="[% lang | html %]" />
                             <ol>
@@ -618,39 +617,66 @@
                                 <li>
                                     <label for="is_html_[% letter.message_transport_type | html %]_[% lang | html %]">HTML message:</label>
                                     [% IF letter.is_html %]
-                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
+                                        [% IF sms_readonly %]
+                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" disabled="disabled" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" checked="checked" />
+                                        [% END %]
                                     [% ELSE %]
-                                        <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
+                                        [% IF sms_readonly %]
+                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" disabled="disabled" />
+                                        [% ELSE %]
+                                            <input type="checkbox" name="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" id="is_html_[% letter.message_transport_type | html %]_[% lang | html %]" value="1" />
+                                        [% END %]
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="title_[% letter.message_transport_type | html %]_[% lang | html %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" />
+                                    <label for="title_[% letter.message_transport_type | html %]_[% lang | html %]">Message subject:</label>
+                                    [% IF sms_readonly %]
+                                        <input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" readonly />
+                                    [% ELSE %]
+                                        <input type="text" id="title_[% letter.message_transport_type | html %]_[% lang | html %]" name="title" size="60" value="[% letter.title | html %]" />
+                                    [% END %]
                                 </li>
                                 <li>
                                     <label for="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]">Message body:</label>
                                     [% IF letter.message_transport_type == 'sms' %]
-                                        <span class="sms_counter" id="sms_counter_[% lang | html %]">
-                                            [% IF letter.content && letter.content.length > 0 %]
-                                                [% tx("{content_length} / 160 characters", {content_length = letter.content.length} ) %]
-                                            [% ELSE %]
-                                                [% tx("{content_length} / 160 characters", {content_length = 0} ) %]
-                                            [% END %]
-                                        </span>
+                                        [% IF !sms_readonly %]
+                                            <span class="sms_counter" id="sms_counter_[% lang | html %]">
+                                                [% IF letter.content && letter.content.length > 0 %]
+                                                    [% tx("{content_length} / 160 characters", {content_length = letter.content.length} ) %]
+                                                [% ELSE %]
+                                                    [% tx("{content_length} / 160 characters", {content_length = 0} ) %]
+                                                [% END %]
+                                            </span>
+                                        [% END %]
                                     [% END %]
                                     <table>
                                         <tr>
                                             <td>
-                                                <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
+                                                [% IF sms_readonly %]
+                                                    <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9" disabled="disabled" >
+                                                [% ELSE%]
+                                                    <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
+                                                [% END %]
                                                     [% FOREACH SQLfieldname IN SQLfieldnames %]
                                                         <option value="[% SQLfieldname.value | html %]">[% SQLfieldname.text | html %]</option>
                                                     [% END %]
                                                 </select>
                                             </td>
                                             <td class="actions">
-                                                <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long"></i></button>
+                                                [% IF sms_readonly %]
+                                                    <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long" disabled="disabled"></i></button>
+                                                [% ELSE %]
+                                                    <button type="button" data-containerid="[% letter.message_transport_type | html %]_[% lang | html %]" class="btn btn-default btn-sm insert">Insert <i class="fa-solid fa-right-long"></i></button>
+                                                [% END %]
                                             </td>
                                             <td>
+                                            [% IF sms_readonly %]
+                                                <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15" readonly>[% letter.content | html %]</textarea>
+                                            [% ELSE %]
                                                 <textarea name="content" data-lang="[% lang | html %]" class="content_[% letter.message_transport_type | html %]" id="content_[% letter.message_transport_type | html %]_[% lang | html %]" cols="80" rows="15">[% letter.content | html %]</textarea>
+                                            [% END %]
                                             </td>
                                         </tr>
                                     </table>
