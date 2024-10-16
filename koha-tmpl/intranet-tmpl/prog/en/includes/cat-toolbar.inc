@@ -60,7 +60,7 @@
             [% END %]
 
             [% IF CAN_user_editcatalogue_edit_items or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
-                <li><a class="dropdown-item" id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]">Edit items</a></li>
+                <li><a class="dropdown-item" id="manageitems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]">Manage items</a></li>
             [% END %]
 
             [% IF ( CAN_user_tools_items_batchmod ) %]
