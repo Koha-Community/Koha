@@ -36,7 +36,7 @@ Koha::Bookings - Koha Booking object set class
 
     $bookings->filter_by_active;
 
-Will return the bookings that have not ended and without "CANCELLED" status.
+Will return the bookings that have not ended, were cancelled or are completed.
 
 =cut
 
@@ -44,8 +44,8 @@ sub filter_by_active {
     my ($self) = @_;
     return $self->search(
         {
-            end_date => { '>=' => \'NOW()' },
-            status   => { '!=' => 'cancelled' }
+            end_date => { '>='  => \'NOW()' },
+            status   => { q{!=} => [ -and => qw(cancelled completed) ] }
         }
     );
 }

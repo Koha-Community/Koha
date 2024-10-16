@@ -1,36 +1,80 @@
-$('#cancelBookingModal').on('show.bs.modal', function(e) {
-    var button = $(e.relatedTarget);
-    var booking = button.data('booking');
-    $('#cancel_booking_id').val(booking);
-});
+(() => {
+    document
+        .getElementById("cancelBookingModal")
+        ?.addEventListener("show.bs.modal", handleShowBsModal);
+    document
+        .getElementById("cancelBookingForm")
+        ?.addEventListener("submit", handleSubmit);
 
-$("#cancelBookingForm").on('submit', function(e) {
-    e.preventDefault();
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    var booking_id = $('#cancel_booking_id').val();
-    var url = '/api/v1/bookings/'+booking_id;
-
-    var cancelling = $.ajax({
-        'method': "PATCH",
-        'url': url,
-        'data': JSON.stringify({"status": "cancelled"}),
-        'contentType': "application/json"
-    });
-
-
-    cancelling.done(function(data) {
-        cancel_success = 1;
-        if (bookings_table) {
-            bookings_table.api().ajax.reload();
+        const bookingIdInput = document.getElementById("cancel_booking_id");
+        if (!bookingIdInput) {
+            return;
         }
-        if (typeof timeline !== 'undefined') {
-            timeline.itemsData.remove(Number(booking_id));
-        }
-        $('.bookings_count').html(parseInt($('.bookings_count').html(), 10)-1);
-        $('#cancelBookingModal').modal('hide');
-    });
 
-    cancelling.fail(function(data) {
-        $('#cancel_booking_result').replaceWith('<div id="booking_result" class="alert alert-danger">'+__("Failure")+'</div>');
-    });
-});
+        const bookingId = bookingIdInput.value;
+        if (!bookingId) {
+            return;
+        }
+
+        let [error, response] = await catchError(
+            fetch(`/api/v1/bookings/${bookingId}`, {
+                method: "PATCH",
+                body: JSON.stringify({ status: "cancelled" }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+        );
+        if (error || !response.ok) {
+            const alertContainer = document.getElementById(
+                "cancel_booking_result"
+            );
+            alertContainer.outerHTML = `
+                <div id="booking_result" class="alert alert-danger">
+                    ${__("Failure")}
+                </div>
+            `;
+
+            return;
+        }
+
+        cancel_success = true;
+        bookings_table?.api().ajax.reload();
+        timeline?.itemsData.remove(Number(booking_id));
+
+        $("#cancelBookingModal").modal("hide");
+
+        const bookingsCount = document.querySelector(".bookings_count");
+        if (!bookingsCount) {
+            return;
+        }
+
+        bookingsCount.innerHTML = parseInt(bookingsCount.innerHTML, 10) - 1;
+    }
+
+    function handleShowBsModal(e) {
+        const button = e.relatedTarget;
+        if (!button) {
+            return;
+        }
+
+        const booking = button.dataset.booking;
+        if (!booking) {
+            return;
+        }
+
+        const bookingIdInput = document.getElementById("cancel_booking_id");
+        if (!bookingIdInput) {
+            return;
+        }
+
+        bookingIdInput.value = booking;
+    }
+
+    function catchError(promise) {
+        return promise.then(data => [undefined, data]).catch(error => [error]);
+    }
+})();

@@ -301,7 +301,11 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
         // Fetch list of existing bookings
         let bookingsFetch = $.ajax({
-            url: "/api/v1/bookings?biblio_id=" + biblionumber + "&_per_page=-1",
+            url:
+                "/api/v1/bookings?biblio_id=" +
+                biblionumber +
+                "&_per_page=-1" +
+                '&q={"status":{"-in":["new","pending","active"]}}',
             dataType: "json",
             type: "GET",
         });

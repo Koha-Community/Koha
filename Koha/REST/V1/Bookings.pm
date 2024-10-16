@@ -150,20 +150,19 @@ sub delete {
 
 =head3 edit
 
-Controller function that editing an existing booking
+Controller function that handles editing an existing booking
 
 =cut
 
 sub edit {
-    my $c    = shift->openapi->valid_input or return;
-    my $body = $c->req->json;
+    my $c = shift->openapi->valid_input or return;
 
-    my $booking = Koha::Bookings->find( $c->param('booking_id') );
+    my $booking = $c->objects->find_rs( Koha::Bookings->new, $c->param('booking_id') );
     return $c->render_resource_not_found("Booking")
         unless $booking;
 
     return try {
-        $booking->edit($body);
+        $booking->edit( $c->req->json );
         return $c->render(
             status  => 200,
             openapi => $c->objects->to_api($booking),

@@ -616,16 +616,16 @@ subtest 'set_status() tests' => sub {
     )->store;
 
     my $booking_with_old_status = Koha::Bookings->find( $booking->booking_id );
-    $booking_with_old_status->set_status('completed');
+    $booking_with_old_status->_set_status('completed');
     is( $booking_with_old_status->unblessed->{status}, 'completed', 'Booking status is now "completed"' );
 
-    $booking_with_old_status->set_status('cancelled');
+    $booking_with_old_status->_set_status('cancelled');
     is( $booking_with_old_status->unblessed->{status}, 'cancelled', 'Booking status is now "cancelled"' );
 
     subtest 'unauthorized status' => sub {
         plan tests => 2;
 
-        eval { $booking_with_old_status->set_status('blah'); };
+        eval { $booking_with_old_status->_set_status('blah'); };
 
         if ($@) {
             like(

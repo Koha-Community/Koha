@@ -312,22 +312,26 @@ sub delete {
 
 =head3 edit
 
-This method adds possibility to edit a booking
+This method allows patching a booking
 
 =cut
 
 sub edit {
     my ( $self, $params ) = @_;
 
-    if ( $params->{status} ) {
-        if ( $params->{status} eq 'cancelled' ) {
-            $self->cancel( { send_letter => 1 } );
-        }
-        $self->_set_status( $params->{status} );
+    my $new_status = $params->{'status'};
+    unless ($new_status) {
+        return $self->store;
     }
-    $self->store();
 
-    return $self;
+    $self->_set_status($new_status);
+
+    my $status = $self->status;
+    if ( $status eq 'cancelled' ) {
+        $self->cancel( { send_letter => 1 } );
+    }
+
+    return $self->store;
 }
 
 =head3 cancel
@@ -344,7 +348,7 @@ sub cancel {
     my $patron         = $self->patron;
     my $pickup_library = $self->pickup_library;
 
-    if ( $params->{send_letter} ) {
+    if ( $params->{'send_letter'} ) {
         my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'bookings',
             letter_code            => 'BOOKING_CANCELLATION',
@@ -367,7 +371,9 @@ sub cancel {
 }
 
 
-=head3 set_status
+=head2 Internal methods
+
+=head3 _set_status
 
 This method changes the status of a booking
 
@@ -376,15 +382,14 @@ This method changes the status of a booking
 sub _set_status {
     my ( $self, $new_status ) = @_;
 
-    my @valid_statuses = qw(pending completed cancelled);
-    unless ( grep { $_ eq $new_status } @valid_statuses ) {
+    my @valid_statuses = qw(new completed cancelled);
+    my $is_valid       = any { $new_status eq $_ } @valid_statuses;
+    unless ($is_valid) {
         die "Invalid status: $new_status";
     }
 
     $self->status($new_status);
 }
-
-=head2 Internal methods
 
 =head3 _type
 
