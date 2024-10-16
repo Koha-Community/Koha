@@ -1176,26 +1176,17 @@ sub _standard_request2biblio {
         ($record) = MarcToUTF8Record( $record, $marcflavour );
     }
 
-    if ($isbn) {
-        my $marc_isbn =
-            $marcflavour eq 'MARC21'
-            ? MARC::Field->new( '020', '', '', a => $isbn )
-            : MARC::Field->new( '010', '', '', a => $isbn );
-        $record->append_fields($marc_isbn);
-    }
-    if ($author) {
-        my $marc_author =
-            $marcflavour eq 'MARC21'
-            ? MARC::Field->new( '100', '1', '', a => $author )
-            : MARC::Field->new( '700', '1', '', a => $author );
-        $record->append_fields($marc_author);
-    }
-    if ($title) {
-        my $marc_title =
-            $marcflavour eq 'MARC21'
-            ? MARC::Field->new( '245', '0', '0', a => $title )
-            : MARC::Field->new( '200', '0', '0', a => $title );
-        $record->append_fields($marc_title);
+    my $marc_isbn;
+    my $marc_author;
+    my $marc_title;
+
+    if( $marcflavour eq 'MARC21' ) {
+        $record->append_fields(MARC::Field->new( '020', '', '', a => $isbn )) if $isbn;
+        $record->append_fields(MARC::Field->new( '100', '1', '', a => $author )) if $author;
+        $record->append_fields(MARC::Field->new( '245', '0', '0', a => $title )) if $title;
+    }elsif( $marcflavour eq 'UNIMARC' ) {
+        $record->append_fields(MARC::Field->new( '010', '', '', a => $isbn )) if $isbn;
+        $record->append_fields(MARC::Field->new( '200', '', '', $title ? ( 'a' => $title ) : undef, $author ? ( 'f' => $author ) : undef)) if $author || $title;
     }
 
     # Suppress the record
