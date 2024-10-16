@@ -326,64 +326,57 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
+        function add_select(column){
+            // Create select element
+            let select = document.createElement('select');
+            select.add(new Option(''));
+            column.footer().replaceChildren(select);
+
+            // Apply listener for user change in value
+            select.addEventListener('change', function () {
+                column
+                    .search(select.value, {exact: false})
+                    .draw();
+            });
+
+            let regex = /(<([^>]+)>)/ig; // Remove html tags
+            // Add list of options
+            column
+                .data()
+                .map(d => d.replace(regex, '').trim().split(/\n/gi).flat())
+                .unique()
+                .sort()
+                .each(function (d, j) {
+                    select.add(new Option(d));
+                });
+        }
+
         $(document).ready(function() {
           var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
           var holdst = KohaTable("holdst", {
-            "pagingType": "full_numbers"
+            "pagingType": "full_numbers",
+            initComplete: function () {
+                // homebranch
+                add_select(
+                    this.api()
+                    .column(5));
+
+                // itemtype
+                add_select(
+                    this.api()
+                    .column(10));
+
+                // location
+                add_select(
+                    this.api()
+                    .column(11));
+
+                // pickup-location
+                add_select(
+                    this.api()
+                    .column(15));
+                },
           }, table_settings);
-          holdst.fnAddFilters("filter");
-          [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
-          function separateData ( ColumnData ){
-            var cD = ColumnData;
-            var new_array = new Array();
-            for ( j=0 ; j<cD.length ; j++ ) {
-                var split_array = cD[j].split(/\n/gi);
-                for ( k=0 ; k<split_array.length ; k++ ){
-                    var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
-                    if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
-                        new_array.push(str);
-                    }
-                }
-            }
-            new_array.sort();
-            return new_array;
-          }
-          [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
-          function createSelect( data ) {
-              data = separateData(data);
-              var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
-              var regex = /(<([^>]+)>)/ig; // Remove html tags
-              for ( i=0 ; i<len ; i++ ) {
-                  var cell_val = data[i].replace(regex, '');
-                  if ( cell_val.length < 1 ) continue;
-                  r += '<option value="'+cell_val+'">'+cell_val+'</option>';
-              }
-              return r+'</select>';
-          }
-          $("#homebranchfilter").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
-              $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 5 );
-              });
-          });
-          $("#itemtype-filter").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
-              $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 10 );
-              });
-          });
-          $("#locationfilter").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(11) ) );
-              $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 11 );
-              });
-          });
-          $("#pickup-location").each( function () {
-              $(this).html( createSelect( holdst.fnGetColumnData(15) ) );
-              $('select', this).change( function () {
-                  holdst.fnFilter( $(this).val(), 15 );
-              });
-          });
         });
     </script>
 [% END %]
