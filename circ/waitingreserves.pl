@@ -145,23 +145,24 @@ if ($item && $tab eq 'holdsover' && !@cancel_result) {
 exit;
 
 sub cancel {
-    my ($item, $borrowernumber, $fbr, $tbr, $skip_transfers ) = @_;
+    my ( $itemnumber, $borrowernumber, $fbr, $tbr, $skip_transfers ) = @_;
 
     my $transfer = $fbr ne $tbr; # XXX && !$nextreservinfo;
+    my $item     = Koha::Items->find( $itemnumber );
 
     return if $transfer && $skip_transfers;
 
-    my ( $messages, $nextreservinfo ) = ModReserveCancelAll( $item, $borrowernumber );
+    my ( $messages, $nextreservinfo ) = ModReserveCancelAll( $itemnumber, $borrowernumber );
 
 # 	if the document is not in his homebranch location and there is not reservation after, we transfer it
-    if ($transfer && !$nextreservinfo) {
-        ModItemTransfer( $item, $fbr, $tbr, 'CancelReserve' );
+    if ( $transfer && !$nextreservinfo && !$item->itemlost ) {
+        ModItemTransfer( $itemnumber, $fbr, $tbr, 'CancelReserve' );
     }
     # if we have a result
     if ($nextreservinfo) {
         my %res;
         my $patron = Koha::Patrons->find( $nextreservinfo );
-        my $title = Koha::Items->find( $item )->biblio->title;
+        my $title  = $item->biblio->title;
         if ( $messages->{'transfert'} ) {
             $res{messagetransfert} = $messages->{'transfert'};
             $res{branchcode}       = $messages->{'transfert'};
@@ -171,7 +172,7 @@ sub cancel {
         $res{nextreservnumber}    = $nextreservinfo;
         $res{nextreservsurname}   = $patron->surname;
         $res{nextreservfirstname} = $patron->firstname;
-        $res{nextreservitem}      = $item;
+        $res{nextreservitem}      = $itemnumber;
         $res{nextreservtitle}     = $title;
         $res{waiting}             = $messages->{'waiting'} ? 1 : 0;
 
