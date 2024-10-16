@@ -10,7 +10,6 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("lib/datatables/rowReorder.dataTables.min.css") | $raw %]
 <style>
 a.add, a.delete {
     cursor: pointer;
@@ -601,7 +600,6 @@ a.add, a.delete {
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/datatables/dataTables.rowReorder.min.js") | $raw %]
     [% Asset.js("js/elasticsearch-mappings.js") | $raw %]
 [% END %]
 
