@@ -2015,6 +2015,30 @@ modules:
                 -
                     columnname: outstanding
 
+    bookings:
+        bookings-to-collect:
+            default_sort_order: 7
+            columns:
+                -
+                    columnname: booking_id
+                    is_hidden: 1
+                    cannot_be_toggled: 1
+                    cannot_be_modified: 1
+                -
+                    columnname: pickup_library
+                -
+                    columnname: biblio_title
+                -
+                    columnname: item_barcode
+                -
+                    columnname: item_callnumber
+                -
+                    columnname: item_location
+                -
+                    columnname: patron
+                -
+                    columnname: booking_dates
+
   opac:
     biblio-detail:
       holdingst:
