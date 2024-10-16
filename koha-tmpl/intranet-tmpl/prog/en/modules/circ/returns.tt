@@ -853,7 +853,22 @@
                                                         [% UNLESS ( transfertodo) %]
                                                             [% INCLUDE display_bormessagepref %]
                                                             [% IF patron.primary_contact_method %]
-                                                                <li id="main_contact_method">Main contact method: <span>[% patron.primary_contact_method | html %]</span></li>
+                                                                <li id="main_contact_method">Main contact method:
+                                                                    [% SWITCH patron.primary_contact_method %]
+                                                                        [% CASE 'phone' %]
+                                                                            <span>Primary phone</span>
+                                                                        [% CASE 'phonepro' %]
+                                                                            <span>Secondary phone</span>
+                                                                        [% CASE 'mobile' %]
+                                                                            <span>Other phone</span>
+                                                                        [% CASE 'email' %]
+                                                                            <span>Primary email</span>
+                                                                        [% CASE 'emailpro' %]
+                                                                            <span>Secondary email</span>
+                                                                        [% CASE 'fax' %]
+                                                                            <span>Fax</span>
+                                                                    [% END %]
+                                                                </li>
                                                             [% END %]
                                                         [% END %]
 
