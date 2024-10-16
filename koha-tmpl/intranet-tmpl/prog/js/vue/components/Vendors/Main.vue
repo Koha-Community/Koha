@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-md-2 order-sm-2 order-md-1">
-                    <LeftMenu :title="$__('Vendor management')"></LeftMenu>
+                    <LeftMenu :title="$__('Acquisitions')"></LeftMenu>
                 </div>
             </div>
         </div>
@@ -53,6 +53,7 @@ export default {
             loaded,
             userPermissions,
             AVStore,
+            config,
         };
     },
     beforeCreate() {

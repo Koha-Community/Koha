@@ -31,12 +31,14 @@ export const routes = [
                         path: "",
                         name: "VendorList",
                         component: markRaw(VendorList),
+                        alternateLeftMenu: "AcquisitionsMenu",
                     },
                     {
                         path: ":vendor_id",
                         name: "VendorShow",
                         component: markRaw(VendorShow),
                         title: $__("Show vendor"),
+                        alternateLeftMenu: "VendorMenu",
                     },
                     {
                         path: "add",
@@ -55,6 +57,7 @@ export const routes = [
                         name: "VendorShowBaskets",
                         component: markRaw(VendorShow),
                         title: $__("Baskets"),
+                        alternateLeftMenu: "VendorMenu",
                     },
                 ],
             },
