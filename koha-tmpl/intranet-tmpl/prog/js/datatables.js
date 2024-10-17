@@ -1014,7 +1014,19 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         // but only the main one has the table settings (and so the state saved)
         data.external_filters = Object.keys(external_filter_nodes).reduce(
             (r, k) => {
-                r[k] = $(external_filter_nodes[k]).val();
+                let node = $(external_filter_nodes[k]);
+                let tag_name = node.prop("tagName");
+                if (tag_name == "INPUT" && node.prop("type") == "checkbox") {
+                    r[k] = $(external_filter_nodes[k]).prop("checked");
+                } else if (tag_name == "INPUT" || tag_name == "SELECT") {
+                    r[k] = $(external_filter_nodes[k]).val();
+                } else {
+                    console.log(
+                        "Tag '%s' not supported yet for DT state".format(
+                            tag_name
+                        )
+                    );
+                }
                 return r;
             },
             {}
@@ -1026,7 +1038,22 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         if (data.external_filters) {
             Object.keys(external_filter_nodes).forEach((k, i) => {
                 if (data.external_filters.hasOwnProperty(k)) {
-                    $(external_filter_nodes[k]).val(data.external_filters[k]);
+                    let node = $(external_filter_nodes[k]);
+                    let tag_name = node.prop("tagName");
+                    if (
+                        tag_name == "INPUT" &&
+                        node.prop("type") == "checkbox"
+                    ) {
+                        node.prop("checked", data.external_filters[k]);
+                    } else if (tag_name == "INPUT" || tag_name == "SELECT") {
+                        node.val(data.external_filters[k]);
+                    } else {
+                        console.log(
+                            "Tag '%s' not supported yet for DT state".format(
+                                tag_name
+                            )
+                        );
+                    }
                 }
             });
         }
