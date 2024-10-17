@@ -961,7 +961,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
     });
 }
 
-function _dt_save_restore_state(table_settings){
+function _dt_save_restore_state(table_settings, external_filter_nodes={}){
 
     let table_key = 'DataTables_%s_%s_%s'.format(
         table_settings.module,
@@ -984,7 +984,6 @@ function _dt_save_restore_state(table_settings){
         return { columns, time: new Date() };
     }
     let stateLoadCallback = function(settings) {
-
         // Load state from URL
         const url = new URL(window.location.href);
         let state_from_url = url.searchParams.get( table_key + '_state');
@@ -1008,7 +1007,38 @@ function _dt_save_restore_state(table_settings){
         return state;
     }
 
-    return {stateSave: true, stateSaveCallback, stateLoadCallback};
+    let stateSaveParams = function (settings, data) {
+        // FIXME Selector in on the whole DOM, we don't know where the filters are
+        // If others exist on the same page this will lead to unexpected behaviours
+        // Should be safe so far as: patron search use the same code for the different searches
+        // but only the main one has the table settings (and so the state saved)
+        data.external_filters = Object.keys(external_filter_nodes).reduce(
+            (r, k) => {
+                r[k] = $(external_filter_nodes[k]).val();
+                return r;
+            },
+            {}
+        );
+    };
+    let stateLoadParams = function (settings, data) {
+        if (!settings.loaded_from_state) return;
+
+        if (data.external_filters) {
+            Object.keys(external_filter_nodes).forEach((k, i) => {
+                if (data.external_filters.hasOwnProperty(k)) {
+                    $(external_filter_nodes[k]).val(data.external_filters[k]);
+                }
+            });
+        }
+    };
+
+    return {
+        stateSave: true,
+        stateSaveCallback,
+        stateLoadCallback,
+        stateSaveParams,
+        stateLoadParams,
+    };
 }
 
 (function($) {
@@ -1028,7 +1058,7 @@ function _dt_save_restore_state(table_settings){
     * @param  {Object}  default_filters              Add a set of default search filters to apply at table initialisation
     * @return {Object}                               The dataTables instance
     */
-    $.fn.kohaTable = function(options, table_settings, add_filters, default_filters, filters_options) {
+    $.fn.kohaTable = function(options, table_settings, add_filters, default_filters, filters_options, external_filter_nodes) {
         var settings = null;
 
         if(options) {
@@ -1066,7 +1096,7 @@ function _dt_save_restore_state(table_settings){
         }
 
         if ( table_settings ) {
-            let state_settings = _dt_save_restore_state(table_settings);
+            let state_settings = _dt_save_restore_state(table_settings, external_filter_nodes);
             settings = {...settings, ...state_settings};
 
             if ( table_settings.hasOwnProperty('default_display_length') && table_settings['default_display_length'] != null ) {
