@@ -782,7 +782,7 @@
                                                         <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No" accesskey="n"><i class="fa fa-times"></i> No (N)</button>
                                                     [% ELSE %]
                                                         <button type="button" data-dismiss="modal" class="btn btn-default" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
-                                                        <button type="button" data-dismiss="modal" class="btn btn-default openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
