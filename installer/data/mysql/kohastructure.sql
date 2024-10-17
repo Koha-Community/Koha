@@ -1220,6 +1220,7 @@ CREATE TABLE `bookings` (
   `creation_date` timestamp DEFAULT current_timestamp() COMMENT 'the timestamp for when a booking was created',
   `modification_date` timestamp DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'the timestamp for when a booking has been updated',
   `status` enum('new', 'cancelled', 'completed') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking',
+  `cancellation_reason` varchar(80) DEFAULT NULL COMMENT 'optional authorised value BOOKING_CANCELLATION',
   PRIMARY KEY (`booking_id`),
   KEY `patron_id` (`patron_id`),
   KEY `biblio_id` (`biblio_id`),
