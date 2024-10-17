@@ -112,8 +112,10 @@ $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 delete $$suggestion_ref{$_}
     foreach
     qw( suggestedbyme op displayby tabcode notify filter_archived koha_login_context auth_forwarded_hash password userid );
-foreach (keys %$suggestion_ref){
-    delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
+
+foreach my $key ( keys %$suggestion_ref ) {
+    delete $suggestion_ref->{$key} if ( !$suggestion_ref->{$key} && ( $op eq 'else' ) );
+    delete $suggestion_ref->{$key} if $key =~ m{^DataTables_acqui_suggestions_suggestions};
 }
 delete $suggestion_only->{branchcode} if $suggestion_only->{branchcode} eq '__ANY__';
 delete $suggestion_only->{budgetid}   if $suggestion_only->{budgetid}   eq '__ANY__';
