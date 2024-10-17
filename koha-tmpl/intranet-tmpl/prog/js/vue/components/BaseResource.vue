@@ -131,6 +131,12 @@ export default {
         getResourceTableUrl: function () {
             return this.resource_table_url;
         },
+        getResourceTableColumns: function () {
+            //This is where I left off
+            let table_attrs = this.resource_attrs.filter(
+                attr => attr.show_in_table
+            );
+        },
     },
     name: "BaseResource",
     props: {

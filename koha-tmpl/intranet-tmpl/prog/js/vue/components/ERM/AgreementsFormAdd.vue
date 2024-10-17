@@ -9,136 +9,11 @@
             <form @submit="onSubmit($event)">
                 <fieldset class="rows">
                     <ol>
-                        <li>
-                            <label for="agreement_name" class="required"
-                                >{{ $__("Agreement name") }}:</label
-                            >
-                            <input
-                                id="agreement_name"
-                                v-model="agreement.name"
-                                :placeholder="$__('Agreement name')"
-                                required
-                            />
-                            <span class="required">{{ $__("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="agreement_vendor_id"
-                                >{{ $__("Vendor") }}:</label
-                            >
-                            <FormSelectVendors
-                                id="agreement_vendor_id"
-                                v-model="agreement.vendor_id"
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_description"
-                                >{{ $__("Description") }}:
-                            </label>
-                            <textarea
-                                id="agreement_description"
-                                v-model="agreement.description"
-                                :placeholder="$__('Description')"
-                                rows="10"
-                                cols="50"
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_status" class="required"
-                                >{{ $__("Status") }}:</label
-                            >
-                            <v-select
-                                id="agreement_status"
-                                v-model="agreement.status"
-                                label="description"
-                                :reduce="av => av.value"
-                                :options="
-                                    authorisedValues['av_agreement_statuses']
-                                "
-                                @option:selected="onStatusChanged"
-                                :required="!agreement.status"
-                            >
-                                <template #search="{ attributes, events }">
-                                    <input
-                                        :required="!agreement.status"
-                                        class="vs__search"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                    />
-                                </template>
-                            </v-select>
-                            <span class="required">{{ $__("Required") }}</span>
-                        </li>
-                        <li>
-                            <label for="agreement_closure_reason"
-                                >{{ $__("Closure reason") }}:</label
-                            >
-                            <v-select
-                                id="agreement_closure_reason"
-                                v-model="agreement.closure_reason"
-                                label="description"
-                                :reduce="av => av.value"
-                                :options="
-                                    authorisedValues[
-                                        'av_agreement_closure_reasons'
-                                    ]
-                                "
-                                :disabled="
-                                    agreement.status == 'closed' ? false : true
-                                "
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_is_perpetual"
-                                >{{ $__("Is perpetual") }}:</label
-                            >
-                            <label
-                                class="radio"
-                                for="agreement_is_perpetual_yes"
-                                >{{ $__("Yes") }}:
-                                <input
-                                    type="radio"
-                                    name="is_perpetual"
-                                    id="agreement_is_perpetual_yes"
-                                    :value="true"
-                                    v-model="agreement.is_perpetual"
-                                />
-                            </label>
-                            <label class="radio" for="agreement_is_perpetual_no"
-                                >{{ $__("No") }}:
-                                <input
-                                    type="radio"
-                                    name="is_perpetual"
-                                    id="agreement_is_perpetual_no"
-                                    :value="false"
-                                    v-model="agreement.is_perpetual"
-                                />
-                            </label>
-                        </li>
-                        <li>
-                            <label for="agreement_renewal_priority"
-                                >{{ $__("Renewal priority") }}:</label
-                            >
-                            <v-select
-                                id="agreement_renewal_priority"
-                                v-model="agreement.renewal_priority"
-                                label="description"
-                                :reduce="av => av.value"
-                                :options="
-                                    authorisedValues[
-                                        'av_agreement_renewal_priorities'
-                                    ]
-                                "
-                            />
-                        </li>
-                        <li>
-                            <label for="agreement_license_info"
-                                >{{ $__("License info") }}:
-                            </label>
-                            <textarea
-                                id="agreement_license_info"
-                                v-model="agreement.license_info"
-                                placeholder="License info"
-                            />
+                        <li
+                            v-for="(attr, index) in resource_attrs"
+                            v-bind:key="index"
+                        >
+                            <FormElement :resource="agreement" :attr="attr" />
                         </li>
                     </ol>
                 </fieldset>
@@ -147,6 +22,7 @@
                     :additional_field_values="agreement.extended_attributes"
                     @additional-fields-changed="additionalFieldsChanged"
                 />
+                <!-- These relationships need DRY -->
                 <AgreementPeriods :periods="agreement.periods" />
                 <UserRoles
                     :user_type="$__('Agreement user %s')"
@@ -170,6 +46,7 @@
                     "
                 />
                 <Documents :documents="agreement.documents" />
+                <!-- These relationships need DRY -->
                 <fieldset class="action">
                     <ButtonSubmit />
                     <router-link
@@ -185,31 +62,29 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import AgreementPeriods from "./AgreementPeriods.vue";
 import UserRoles from "./UserRoles.vue";
+import FormElement from "../FormElement.vue";
 import AgreementLicenses from "./AgreementLicenses.vue";
 import AgreementRelationships from "./AgreementRelationships.vue";
 import Documents from "./Documents.vue";
 import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
-import FormSelectVendors from "../FormSelectVendors.vue";
 import { setMessage, setError, setWarning } from "../../messages";
 import { APIClient } from "../../fetch/api-client.js";
-import { storeToRefs } from "pinia";
+import AgreementResource from "./AgreementResource.vue";
 
 export default {
+    extends: AgreementResource,
     setup() {
-        const ERMStore = inject("ERMStore");
-        const { authorisedValues } = storeToRefs(ERMStore);
 
         return {
-            authorisedValues,
-            max_allowed_packet,
+            ...AgreementResource.setup(),
         };
     },
     data() {
         return {
+            ...AgreementResource.data(),
             agreement: {
                 agreement_id: null,
                 name: "",
@@ -238,6 +113,20 @@ export default {
                 vm.initialized = true;
             }
         });
+    },
+    watch: {
+        "agreement.status": function (newVal, oldVal) {
+            var index = this.resource_attrs.findIndex(function (attr) {
+                return attr.name === "closure_reason";
+            });
+
+            if (newVal != "closed") {
+                this.agreement.closure_reason = "";
+                this.resource_attrs[index].disabled = true;
+            } else {
+                this.resource_attrs[index].disabled = false;
+            }
+        },
     },
     methods: {
         async getAgreement(agreement_id) {
@@ -384,11 +273,6 @@ export default {
                 );
             }
         },
-        onStatusChanged(e) {
-            if (e.value != "closed") {
-                this.agreement.closure_reason = "";
-            }
-        },
         additionalFieldsChanged(additionalFieldValues) {
             this.agreement.extended_attributes = additionalFieldValues;
         },
@@ -400,7 +284,7 @@ export default {
         AgreementRelationships,
         Documents,
         ButtonSubmit,
-        FormSelectVendors,
+        FormElement,
         AdditionalFieldsEntry,
     },
     name: "AgreementsFormAdd",

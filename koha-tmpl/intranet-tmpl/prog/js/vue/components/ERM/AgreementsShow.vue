@@ -18,65 +18,11 @@
         <div>
             <fieldset class="rows">
                 <ol>
-                    <li>
-                        <label>{{ $__("Agreement name") }}:</label>
-                        <span>
-                            {{ agreement.name }}
-                        </span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Vendor") }}:</label>
-                        <span v-if="agreement.vendor_id">
-                            <a
-                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${agreement.vendor_id}`"
-                            >
-                                {{ agreement.vendor.name }}
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Description") }}:</label>
-                        <span>
-                            {{ agreement.description }}
-                        </span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Status") }}:</label>
-                        <span>{{
-                            get_lib_from_av(
-                                "av_agreement_statuses",
-                                agreement.status
-                            )
-                        }}</span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Closure reason") }}:</label>
-                        <span>{{
-                            get_lib_from_av(
-                                "av_agreement_closure_reasons",
-                                agreement.closure_reason
-                            )
-                        }}</span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Is perpetual") }}:</label>
-                        <span v-if="agreement.is_perpetual">{{
-                            $__("Yes")
-                        }}</span>
-                        <span v-else>{{ $__("No") }}</span>
-                    </li>
-                    <li>
-                        <label>{{ $__("Renewal priority") }}:</label>
-                        <span>{{
-                            get_lib_from_av(
-                                "av_agreement_renewal_priorities",
-                                agreement.renewal_priority
-                            )
-                        }}</span>
-                    </li>
-                    <li>
-                        <label>{{ $__("License info") }}:</label>
-                        <span>{{ agreement.license_info }}</span>
+                    <li
+                        v-for="(attr, index) in resource_attrs"
+                        v-bind:key="index"
+                    >
+                        <ShowElement :resource="agreement" :attr="attr" />
                     </li>
 
                     <li v-if="agreement.periods.length">
@@ -340,6 +286,7 @@ import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
 import AgreementResource from "./AgreementResource.vue";
+import ShowElement from "../ShowElement.vue";
 
 export default {
     extends: AgreementResource,
@@ -399,7 +346,12 @@ export default {
             );
         },
     },
-    components: { Toolbar, ToolbarButton, AdditionalFieldsDisplay },
+    components: {
+        Toolbar,
+        ToolbarButton,
+        AdditionalFieldsDisplay,
+        ShowElement,
+    },
     name: "AgreementsShow",
 };
 </script>
