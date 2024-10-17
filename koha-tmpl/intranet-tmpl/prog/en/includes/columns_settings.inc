@@ -14,10 +14,12 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
 
         let columns_settings = table_settings["columns"];
 
-        let table_key = 'DataTables_%s_%s_%s'.format(
+        let table_key = 'DataTables_%s_%s_%s_%s'.format(
             table_settings.module,
             table_settings.page,
-            table_settings.table);
+            table_settings.table,
+            id_selector,
+        );
 
         let default_save_state        = table_settings.default_save_state;
         let default_save_state_search = table_settings.default_save_state_search;
@@ -221,10 +223,12 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
                 titleAttr: __("Copy shareable link"),
                 text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy shareable link") + '</span>',
                 action: function (e, dt, node, config) {
-                    let table_key = 'DataTables_%s_%s_%s'.format(
+                    let table_key = 'DataTables_%s_%s_%s_%s'.format(
                         table_settings.module,
                         table_settings.page,
-                        table_settings.table);
+                        table_settings.table,
+                        dt.settings()[0].nTable.id,
+                    );
 
                     let state = JSON.stringify(dt.state());
                     delete state.time;
