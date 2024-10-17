@@ -233,7 +233,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
                     let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
                     if( navigator.clipboard && navigator.clipboard.writeText){
                         navigator.clipboard.writeText( url );
-                        // TODO Add tooltip "State copied to the clipboard"
+                        $(node).tooltip({trigger: 'manual', title: _("Copied!")}).tooltip('show');
                     }
                 },
             }
