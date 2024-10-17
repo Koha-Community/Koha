@@ -14,7 +14,6 @@ export default {
     props: {
         action: {
             type: String,
-            required: true,
         },
         to: {
             type: [String, Object],
