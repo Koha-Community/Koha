@@ -230,7 +230,7 @@ export default {
             return new Date().toISOString().substring(0, 10);
         },
         table_url: function () {
-            let url = "/api/v1/erm/agreements";
+            let url = this.getResourceTableUrl();
             if (this.filters.by_expired)
                 url +=
                     "?max_expiration_date=" + this.filters.max_expiration_date;

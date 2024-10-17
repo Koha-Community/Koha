@@ -102,7 +102,9 @@ export default {
                                 if (
                                     this.$options.name === this.list_component
                                 ) {
-                                    this.$refs.table.redraw(this.table_url());
+                                    this.$refs.table.redraw(
+                                        this.getResourceTableUrl()
+                                    );
                                 } else if (
                                     this.$options.name === this.show_component
                                 ) {
@@ -114,6 +116,14 @@ export default {
                     );
                 }
             );
+        },
+        /**
+         * Return the URL for the resource table.
+         *
+         * @return {string}
+         */
+        getResourceTableUrl: function () {
+            return this.resource_table_url;
         },
     },
     name: "BaseResource",

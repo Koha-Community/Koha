@@ -15,6 +15,7 @@ export default {
                 add_component: "AgreementsFormAdd",
                 edit_component: "AgreementsFormAddEdit",
                 api_client: APIClient.erm.agreements,
+                resource_table_url: APIClient.erm._baseURL + "agreements",
                 i18n: {
                     display_name: __("Agreement"),
                 },
