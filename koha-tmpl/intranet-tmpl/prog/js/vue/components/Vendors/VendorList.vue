@@ -172,7 +172,7 @@ export default {
             return [
                 {
                     title: __("Name"),
-                    data: "me.name:me.id",
+                    data: "me.name:aliases.alias:me.id",
                     searchable: true,
                     orderable: true,
                     render(data, type, row, meta) {

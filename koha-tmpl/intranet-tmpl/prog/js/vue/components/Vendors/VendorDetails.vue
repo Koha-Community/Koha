@@ -60,11 +60,14 @@
                     {{ vendor.accountnumber }}
                 </span>
             </li>
-            <li v-if="vendor.aliases.count">
+            <li v-if="vendor.aliases.length">
                 <label>{{ $__("Aliases") }}:</label>
-                <ul>
-                    <li v-for="alias in vendor.aliases" :key="alias">
-                        {{ alias }}
+                <ul style="margin-left: 8rem">
+                    <li
+                        v-for="(alias, i) in vendor.aliases"
+                        :key="alias.alias_id"
+                    >
+                        {{ $__("Alias") + " " + (i + 1) }}: {{ alias.alias }}
                     </li>
                 </ul>
             </li>
