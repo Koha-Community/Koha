@@ -3,18 +3,13 @@
     <div v-else id="licenses_show">
         <Toolbar>
             <ToolbarButton
-                :to="{
-                    name: 'LicensesFormAddEdit',
-                    params: { license_id: license.license_id },
-                }"
-                icon="pencil"
-                :title="$__('Edit')"
+                action="edit"
+                @go-to-edit-resource="goToResourceEdit"
             />
-            <a
-                @click="delete_license(license.license_id, license.name)"
-                class="btn btn-default"
-                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
-            >
+            <ToolbarButton
+                action="delete"
+                @delete-resource="doResourceDelete"
+            />
         </Toolbar>
 
         <h2>
@@ -160,23 +155,22 @@ import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
+import LicenseResource from "./LicenseResource.vue";
 
 export default {
+    extends: LicenseResource,
     setup() {
         const format_date = $date;
         const patron_to_html = $patron_to_html;
-
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
 
         return {
+            ...LicenseResource.setup(),
             format_date,
             patron_to_html,
             get_lib_from_av,
-            setConfirmationDialog,
-            setMessage,
         };
     },
     data() {
@@ -212,33 +206,6 @@ export default {
                     this.initialized = true;
                 },
                 error => {}
-            );
-        },
-        delete_license: function (license_id, license_name) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this license?"
-                    ),
-                    message: license_name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.licenses.delete(license_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("License %s deleted").format(
-                                    license_name
-                                ),
-                                true
-                            );
-                            this.$router.push({ name: "LicensesList" });
-                        },
-                        error => {}
-                    );
-                }
             );
         },
     },
