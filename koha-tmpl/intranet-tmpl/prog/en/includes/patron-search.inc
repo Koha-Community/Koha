@@ -260,7 +260,7 @@
         }, {});
 
 
-        const av_bsort1= [% To.json(av_bsort1) | $raw %].map( e => {
+        var av_bsort1= [% To.json(av_bsort1) | $raw %].map( e => {
             e['_id'] = e.authorised_value;
             e['_str'] = e.lib;
             return e;
@@ -269,7 +269,7 @@
             map[e._id] = e;
             return map;
         }, {});
-        const av_bsort2= [% To.json(av_bsort2) | $raw %].map( e => {
+        var av_bsort2= [% To.json(av_bsort2) | $raw %].map( e => {
             e['_id'] = e.authorised_value;
             e['_str'] = e.lib;
             return e;
