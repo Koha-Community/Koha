@@ -4,6 +4,7 @@ import { createPinia } from "pinia";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+    faList,
     faPlus,
     faMinus,
     faPencil,
@@ -13,7 +14,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import vSelect from "vue-select";
 
-library.add(faPlus, faMinus, faPencil, faTrash, faSpinner);
+library.add(faList, faPlus, faMinus, faPencil, faTrash, faSpinner);
 
 import App from "../components/ERM/Main.vue";
 
