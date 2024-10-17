@@ -736,7 +736,7 @@
                                         <a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a>
                                     </p>
 
-                                    <table id="table_[% loop.count | html %]" class="sorted" data-table-number=[% loop.count | html %]>
+                                    <table id="table_[% suggestion.suggestiontype | html %]" class="sorted" data-tab-name="[% suggestion.suggestiontype | html %]">
                                         <thead>
                                             <tr>
                                                 <th class="NoSort noExport">&nbsp;</th>
@@ -888,7 +888,7 @@
                                                 </tr>
                                             [% END # /FOREACH s %]
                                         </tbody>
-                                    </table> <!-- /#table_[% loop.count | html %] -->
+                                    </table> <!-- /#table_[% suggestion.suggestiontype | html %] -->
 
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -899,9 +899,9 @@
                                         [% IF CAN_user_suggestions_suggestions_manage %]
                                         <div class="col-sm-4">
                                             <fieldset class="brief">
-                                                <div id="select-reason[% loop.index | html %]">
-                                                    <label for="STATUSreason[% loop.index | html %]">Mark selected as: </label>
-                                                    <select name="STATUS" id="STATUSreason[% loop.index | html %]">
+                                                <div id="select-reason-[% suggestion.suggestiontype | html %]">
+                                                    <label for="STATUSreason-[% suggestion.suggestiontype | html %]">Mark selected as: </label>
+                                                    <select name="STATUS" id="STATUSreason-[% suggestion.suggestiontype | html %]">
                                                         <option value=""> -- Choose a status --</option>
 
                                                         [% IF (statusselected_ASKED ) %]
@@ -939,8 +939,8 @@
                                                         [% END %]
                                                     </select>
 
-                                                    <label for="choosereason[% loop.index | html %]">with this reason:</label>
-                                                    <select name="reason" id="choosereason[% loop.index | html %]">
+                                                    <label for="choosereason-[% suggestion.suggestiontype | html %]">with this reason:</label>
+                                                    <select name="reason" id="choosereason-[% suggestion.suggestiontype | html %]">
                                                         <option value=""> -- Choose a reason -- </option>
                                                         [% FOREACH reasonsloo IN suggestion.reasonsloop %]
                                                             <option value="[% reasonsloo.lib | html %]">[% reasonsloo.lib | html %]</option>
@@ -979,11 +979,11 @@
                                         <div class="col-sm-2">
                                             <fieldset class="brief">
                                                 <span class="label">Update manager</span>
-                                                <a href="#patron_search_modal_manager_[% loop.count | uri %]" id="set_manager_[% loop.count | uri %]" data-tab="[% loop.count | uri %]" class="set_manager" data-bs-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
-                                                <span id="managedby_name[% loop.count | html %]"></span>
+                                                <a href="#patron_search_modal_manager_[% suggestion.suggestiontype | uri %]" id="set_manager_[% suggestion.suggestiontype | uri %]" data-tab="[% suggestion.suggestiontype | uri %]" class="set_manager" data-bs-toggle="modal"><i class="fa fa-search"></i> Select manager</a>
+                                                <span id="managedby_name-[% suggestion.suggestiontype | html %]"></span>
                                             </fieldset>
                                             <fieldset class="action">
-                                                <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
+                                                <input type="hidden" name="suggestion_managedby" id="managedby-[% suggestion.suggestiontype | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                                                 <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                                                 <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                                                 <button type="submit" data-op="cud-update_manager" class="btn btn-primary">Submit</button>
@@ -1116,8 +1116,8 @@
                                     <fieldset class="collapse suggestion_information">
                                         <ol>
                                             <li>
-                                                <label for="STATUS[% loop.index | html %]"> Status:</label>
-                                                <select name="STATUS" id="STATUS[% loop.index | html %]">
+                                                <label for="STATUS-[% suggestion.suggestiontype | html %]"> Status:</label>
+                                                <select name="STATUS" id="STATUS-[% suggestion.suggestiontype | html %]">
                                                     <option value="">Any</option>
                                                     [% IF (statusselected_ASKED ) %]
                                                         <option value="ASKED" selected="selected">Pending</option>
@@ -1300,9 +1300,9 @@
 
     <script>
         function select_manager(borrowernumber, borrower) {
-            let tab = $('#suggestiontabs .active table').data('table-number');
-            var managedby_name = $("#managedby_name"+tab);
-            var managedby = $("#managedby"+tab);
+            let tab = $('#suggestiontabs .active table').data('tab-name');
+            var managedby_name = $("#managedby_name-"+tab);
+            var managedby = $("#managedby-"+tab);
             managedby_name.empty();
             managedby.val('');
             var borrowername = borrower.firstname + ' ' + borrower.surname;
@@ -1392,7 +1392,7 @@
 
                 [% FOREACH suggestion IN suggestions %]
                     [% IF suggestion.suggestions.size %]
-                        KohaTable("table_[% loop.count| html %]", {
+                        KohaTable("table_[% suggestion.suggestiontype | html %]", {
                             "sorting": [[ 4, "asc" ]],
                             "autoWidth": false,
                             "stateSave": true,
@@ -1542,8 +1542,8 @@
     [% ELSIF op == 'else' %]
         [% FOREACH suggestion IN suggestions %]
             [% SET filter = "suggestions_managers" %]
-            [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager_' _ loop.count, table_id => 'patron_search_modal_manager_table_' _ loop.count %]
-            [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ loop.count, callback => 'select_manager' %]
+            [% PROCESS patron_search_modal columns => columns, modal_title => t("Select manager"), patron_search_modal_id => 'patron_search_modal_manager_' _ suggestion.suggestiontype, table_id => 'patron_search_modal_manager_table_' _ suggestion.suggestiontype %]
+            [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_manager_table_' _ suggestion.suggestiontype, callback => 'select_manager' %]
         [% END %]
     [% END %]
 
