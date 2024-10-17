@@ -2,28 +2,27 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="usage_data_providers_list">
         <template class="toolbar_options">
-            <Toolbar />
-            <div
-                v-if="usage_data_provider_count > 0"
-                id="toolbar"
-                class="btn-toolbar"
-            >
-                <router-link
+            <Toolbar>
+                <ToolbarButton
+                    action="add"
+                    @go-to-add-resource="goToResourceAdd"
+                    :title="$__('New data provider')"
+                />
+                <ToolbarButton
+                    v-if="usage_data_provider_count > 0"
                     :to="{ name: 'UsageStatisticsDataProvidersSummary' }"
-                    class="btn btn-default"
-                >
-                    <i class="fa fa-list"></i>
-                    {{ $__("Data providers summary") }}</router-link
-                >
-            </div>
+                    icon="list"
+                    :title="$__('Data providers summary')"
+                />
+            </Toolbar>
         </template>
         <div v-if="usage_data_provider_count > 0" class="page-section">
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @show="show_usage_data_provider"
-                @edit="edit_usage_data_provider"
-                @delete="delete_usage_data_provider"
+                @show="goToResourceShow"
+                @edit="goToResourceEdit"
+                @delete="doResourceDelete"
                 @run_now="run_harvester_now"
                 @test_connection="test_harvester_connection"
             ></KohaTable>
@@ -35,27 +34,25 @@
 </template>
 
 <script>
-import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue";
+import Toolbar from "../Toolbar.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
+import UsageStatisticsDataProviderResource from "./UsageStatisticsDataProviderResource.vue";
 
 export default {
+    extends: UsageStatisticsDataProviderResource,
     setup() {
         const ERMStore = inject("ERMStore"); // Left in for future permissions fixes
         const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
-        const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore");
-
         const table = ref();
 
         return {
+            ...UsageStatisticsDataProviderResource.setup(),
             get_lib_from_av,
             map_av_dt_filter,
-            setConfirmationDialog,
-            setMessage,
-            setWarning,
             table,
         };
     },
@@ -67,7 +64,7 @@ export default {
             tableOptions: {
                 columns: this.getTableColumns(),
                 options: {},
-                url: () => this.table_url(),
+                url: () => this.getResourceTableUrl(),
                 table_settings: this.usage_data_provider_table_settings,
                 add_filters: true,
                 actions: {
@@ -101,59 +98,6 @@ export default {
                     this.initialized = true;
                 },
                 error => {}
-            );
-        },
-        table_url() {
-            let url = "/api/v1/erm/usage_data_providers";
-            return url;
-        },
-        show_usage_data_provider(usage_data_provider, dt, event) {
-            event.preventDefault();
-
-            this.$router.push({
-                name: "UsageStatisticsDataProvidersShow",
-                params: {
-                    usage_data_provider_id:
-                        usage_data_provider.erm_usage_data_provider_id,
-                },
-            });
-        },
-        edit_usage_data_provider(usage_data_provider, dt, event) {
-            this.$router.push({
-                name: "UsageStatisticsDataProvidersFormAddEdit",
-                params: {
-                    usage_data_provider_id:
-                        usage_data_provider.erm_usage_data_provider_id,
-                },
-            });
-        },
-        delete_usage_data_provider(usage_data_provider, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this data provider?"
-                    ),
-                    message: usage_data_provider.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.usage_data_providers
-                        .delete(usage_data_provider.erm_usage_data_provider_id)
-                        .then(
-                            success => {
-                                this.setMessage(
-                                    this.$__("Data provider %s deleted").format(
-                                        usage_data_provider.name
-                                    ),
-                                    true
-                                );
-                                dt.draw();
-                            },
-                            error => {}
-                        );
-                }
             );
         },
         run_harvester_now(usage_data_provider, dt, event) {
@@ -309,9 +253,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return (
-                            '<a href="/cgi-bin/koha/erm/eusage/usage_data_providers/' +
-                            row.erm_usage_data_provider_id +
-                            '" class="show">' +
+                            '<a role="button" class="show">' +
                             escape_str(
                                 `${row.name} (#${row.erm_usage_data_provider_id})`
                             ) +
@@ -352,8 +294,8 @@ export default {
             this.getUsageDataProviderCount();
         }
     },
-    components: { Toolbar, KohaTable },
-    name: "DataProvidersList",
+    components: { Toolbar, ToolbarButton, KohaTable },
+    name: "UsageStatisticsDataProvidersList",
 };
 </script>
 

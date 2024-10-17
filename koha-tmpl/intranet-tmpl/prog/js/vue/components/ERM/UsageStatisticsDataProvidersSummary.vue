@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import Toolbar from "./UsageStatisticsDataProvidersToolbar.vue";
 import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
@@ -156,7 +155,7 @@ export default {
             this.getUsageDataProviders();
         }
     },
-    components: { Toolbar, KohaTable },
+    components: { KohaTable },
     name: "UsageStatisticsDataProvidersSummary",
 };
 </script>
