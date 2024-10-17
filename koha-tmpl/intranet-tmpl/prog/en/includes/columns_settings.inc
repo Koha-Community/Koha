@@ -218,8 +218,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
                 autoClose: true,
                 fade: 100,
                 className: "copyConditions_controls",
-                titleAttr: __("Copy conditions"),
-                text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy conditions") + '</span>',
+                titleAttr: __("Copy shareable link"),
+                text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy shareable link") + '</span>',
                 action: function (e, dt, node, config) {
                     let table_key = 'DataTables_%s_%s_%s'.format(
                         table_settings.module,
