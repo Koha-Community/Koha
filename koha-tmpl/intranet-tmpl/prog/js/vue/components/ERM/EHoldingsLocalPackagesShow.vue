@@ -3,20 +3,13 @@
     <div v-else-if="erm_package" id="packages_show">
         <Toolbar>
             <ToolbarButton
-                :to="{
-                    name: 'EHoldingsLocalPackagesFormAddEdit',
-                    params: { package_id: erm_package.package_id },
-                }"
-                icon="pencil"
-                :title="$__('Edit')"
+                action="edit"
+                @go-to-edit-resource="goToResourceEdit"
             />
-            <a
-                @click="
-                    delete_package(erm_package.package_id, erm_package.name)
-                "
-                class="btn btn-default"
-                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
-            >
+            <ToolbarButton
+                action="delete"
+                @delete-resource="doResourceDelete"
+            />
         </Toolbar>
 
         <h2>
@@ -126,21 +119,20 @@ import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
 import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
+import EHoldingsLocalPackageResource from "./EHoldingsLocalPackageResource.vue";
 
 export default {
+    extends: EHoldingsLocalPackageResource,
     setup() {
         const format_date = $date;
-
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
 
         return {
+            ...EHoldingsLocalPackageResource.setup(),
             format_date,
             get_lib_from_av,
-            setConfirmationDialog,
-            setMessage,
         };
     },
     data() {
@@ -178,35 +170,6 @@ export default {
                     this.initialized = true;
                 },
                 error => {}
-            );
-        },
-        delete_package: function (package_id, package_name) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this package?"
-                    ),
-                    message: package_name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.localPackages.delete(package_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Local package %s deleted").format(
-                                    package_name
-                                ),
-                                true
-                            );
-                            this.$router.push({
-                                name: "EHoldingsLocalPackagesList",
-                            });
-                        },
-                        error => {}
-                    );
-                }
             );
         },
     },

@@ -4,8 +4,8 @@
         <div v-else id="packages_list">
             <Toolbar>
                 <ToolbarButton
-                    :to="{ name: 'EHoldingsLocalPackagesFormAdd' }"
-                    icon="plus"
+                    action="add"
+                    @go-to-add-resource="goToResourceAdd"
                     :title="$__('New package')"
                 />
             </Toolbar>
@@ -19,9 +19,9 @@
                     v-bind="tableOptions"
                     :searchable_additional_fields="searchable_additional_fields"
                     :searchable_av_options="searchable_av_options"
-                    @show="doShow"
-                    @edit="doEdit"
-                    @delete="doDelete"
+                    @show="goToResourceShow"
+                    @edit="goToResourceEdit"
+                    @delete="doResourceDelete"
                 ></KohaTable>
             </div>
             <div v-else class="alert alert-info">
@@ -38,16 +38,16 @@ import { inject, ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
+import EHoldingsLocalPackageResource from "./EHoldingsLocalPackageResource.vue";
 
 export default {
+    extends: EHoldingsLocalPackageResource,
     setup() {
         const vendorStore = inject("vendorStore");
         const { vendors } = storeToRefs(vendorStore);
 
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av, map_av_dt_filter } = ERMStore;
-
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const table = ref();
         const filters = reactive({
@@ -56,13 +56,12 @@ export default {
         });
 
         return {
+            ...EHoldingsLocalPackageResource.setup(),
             vendors,
             get_lib_from_av,
             map_av_dt_filter,
             table,
             filters,
-            setConfirmationDialog,
-            setMessage,
             escape_str,
             eholdings_packages_table_settings,
         };
@@ -80,7 +79,7 @@ export default {
             searchable_av_options: [],
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: "/api/v1/erm/eholdings/local/packages",
+                url: this.getResourceTableUrl(),
                 options: {
                     embed: "resources+count,vendor.name,extended_attributes,+strings",
                     searchCols: [
@@ -169,46 +168,6 @@ export default {
                     });
                 });
         },
-        doShow: function ({ package_id }, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "EHoldingsLocalPackagesShow",
-                params: { package_id },
-            });
-        },
-        doEdit: function ({ package_id }, dt, event) {
-            this.$router.push({
-                name: "EHoldingsLocalPackagesFormAddEdit",
-                params: { package_id },
-            });
-        },
-        doDelete: function (erm_package, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this package?"
-                    ),
-                    message: erm_package.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.localPackages.delete(erm_package.package_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Local package %s deleted").format(
-                                    erm_package.name
-                                ),
-                                true
-                            );
-                            dt.draw();
-                        },
-                        error => {}
-                    );
-                }
-            );
-        },
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av;
             let escape_str = this.escape_str;
@@ -220,9 +179,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return (
-                            '<a href="/cgi-bin/koha/erm/eholdings/local/packages/' +
-                            row.package_id +
-                            '" class="show">' +
+                            '<a role="button" class="show">' +
                             escape_str(`${row.name} (#${row.package_id})`) +
                             "</a>"
                         );
