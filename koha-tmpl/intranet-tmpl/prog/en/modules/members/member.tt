@@ -248,7 +248,7 @@
                 e.preventDefault();
                 var patron_search_selections = JSON.parse( localStorage.getItem("patron_search_selections") ) || [];
                 if( patron_search_selections.length > 0 ){
-                    $("#borrowernumberlist").html( patron_search_selections.join('\n') );
+                    $("#borrowernumberlist").val( patron_search_selections.join('\n') );
                     $("#patron_batchmod_form").submit();
                 }
             });
