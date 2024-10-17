@@ -298,18 +298,6 @@ sub to_api_mapping {
     return {};
 }
 
-=head3 delete
-
-  my $deleted = $booking->delete();
-
-=cut
-
-sub delete {
-    my ($self) = @_;
-    my $deleted = $self->SUPER::delete($self);
-    return $deleted;
-}
-
 =head3 edit
 
 This method allows patching a booking
