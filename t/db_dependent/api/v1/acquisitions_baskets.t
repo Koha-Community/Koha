@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -70,3 +70,40 @@ subtest 'list_managers() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'list() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    $schema->resultset('Aqbasket')->search->delete;
+
+    my $superlibrarian =
+        $builder->build_object( { class => 'Koha::Patrons', value => { flags => 1 } } );
+    my $password = 'thePassword123';
+    $superlibrarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $superlibrarian->userid;
+    $superlibrarian->discard_changes;
+
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is(
+        []
+    );
+
+    my $vendor = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Booksellers',
+        }
+    );
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => { closedate => undef, authorisedby => undef, booksellerid => $vendor->id, branch => undef }
+        }
+    );
+
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is( [$basket->to_api ]);
+
+    $schema->storage->txn_rollback;
+
+}
