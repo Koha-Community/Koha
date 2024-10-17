@@ -1079,8 +1079,8 @@
                                 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
 
                                 <div id="limits">
-                                    <h4 class="local_collapse"><a href="#" data-bs-target="biblio_information">Bibliographic information</a></h4>
-                                    <fieldset class="brief biblio_information">
+                                    <h4 class="local_collapse"><a href="#" data-bs-target=".biblio_information" data-bs-toggle="collapse">Bibliographic information</a></h4>
+                                    <fieldset class="collapse biblio_information">
                                         <ol>
                                             <li>
                                                 <label for="title"> Title:</label>
@@ -1112,8 +1112,8 @@
                                         <input type="submit" value="Go" />
                                     </fieldset>
 
-                                    <h4 class="local_collapse"><a href="#" data-bs-target="suggestion_information">Suggestion information</a></h4>
-                                    <fieldset class="brief suggestion_information">
+                                    <h4 class="local_collapse"><a href="#" data-bs-target=".suggestion_information" data-bs-toggle="collapse">Suggestion information</a></h4>
+                                    <fieldset class="collapse suggestion_information">
                                         <ol>
                                             <li>
                                                 <label for="STATUS[% loop.index | html %]"> Status:</label>
@@ -1229,9 +1229,9 @@
                                     </fieldset>
 
                                     <h4 class="local_collapse">
-                                        <a href="#" data-bs-target="acquisition_information">Acquisition information</a>
+                                        <a href="#" data-bs-target=".acquisition_information" data-bs-toggle="collapse">Acquisition information</a>
                                     </h4>
-                                    <fieldset class="brief acquisition_information">
+                                    <fieldset class="collapse acquisition_information">
                                         <ol>
                                             <li>
                                                 [% PROCESS funds_dropdown %]
