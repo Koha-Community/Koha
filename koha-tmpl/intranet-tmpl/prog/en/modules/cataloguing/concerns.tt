@@ -38,9 +38,11 @@
 
                     <div class="page-section">
                         <fieldset class="action filters" style="cursor:pointer;">
-                            <a id="resolved_filter" class="filtered"><i class="fa fa-bars"></i> Include resolved</a>
+                            <a id="resolved_filter"><i class="fa fa-bars"></i> Include resolved</a>
+                            <input type="checkbox" id="hide_resolved_concerns" style="display:none;" />
                             [% FOR st IN status %]
                             | <a id="[% st.authorised_value | html %]_filter"><i class="fa fa-filter"></i> Filter [% st.lib | html %]</a>
+                            <input type="checkbox" id="hide_[% st.authorised_value | html %]" style="display:none;" />
                             [% END %]
                         </fieldset>
 
@@ -81,16 +83,18 @@
 
             var table_settings = [% TablesSettings.GetTableSettings('cataloguing', 'concerns', 'table_concerns', 'json') | $raw %];
 
-            var filter_resolved = true;
             let additional_filters = {
                 resolved_date: function(){
-                    if ( filter_resolved ) {
+                    if ( $("#hide_resolved_concerns").is(":checked") ) {
                         return { "=": null };
                     } else {
                         return;
                     }
                 },
                 source: 'catalog'
+            };
+            let external_filter_nodes = {
+                hide_resolved_concerns: "#hide_resolved_concerns",
             };
 
             var tickets_url = '/api/v1/tickets';
@@ -204,25 +208,27 @@
                         $(row).addClass(data.status.toLowerCase());
                     }
                 },
-            }, table_settings, 1, additional_filters);
+            }, table_settings, 1, additional_filters, undefined, external_filter_nodes);
 
             var txtActivefilter = _("Include resolved");
             var txtInactivefilter = _("Filter resolved");
-            $('#resolved_filter').on("click", function() {
-                if ($(this).hasClass('filtered')){
-                    filter_resolved = false;
-                    $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
+            function adjust_filter_label(){
+                if ($("#hide_resolved_concerns").is(":checked")){
+                    $("#resolved_filter").html('<i class="fa fa-filter"></i> '+txtActivefilter);
                 } else {
-                    filter_resolved = true;
-                    $(this).html('<i class="fa fa-bars"></i> '+txtInactivefilter);
+                    $("#resolved_filter").html('<i class="fa fa-bars"></i> '+txtInactivefilter);
                 }
+            }
+            $('#resolved_filter').on("click", function() {
+                $("#hide_resolved_concerns").prop("checked", !$("#hide_resolved_concerns").is(":checked"));
+                adjust_filter_label()
                 tickets.DataTable().draw();
-                $(this).toggleClass('filtered');
             });
+            adjust_filter_label();
 
             [% FOR st IN status %]
             $('#[% st.authorised_value | html %]_filter').on("click", function() {
-                if ($(this).hasClass('filtered')){
+                if ($("#hide_[% st.authorised_value | html %]").is(":checked")){
                     additional_filters.status.find((o, i) => {
                         if (o["!="] === '[% st.authorised_value | html %]') {
                             additional_filters.status.splice(i, 1);
@@ -240,8 +246,8 @@
                     additional_filters.status.push({ '!=': "[% st.authorised_value | html %]" });
                     $(this).html('<i class="fa fa-bars"></i> '+_("Include ")+"[% st.lib | html %]");
                 }
+                $("#hide_[% st.authorised_value | html %]").prop("checked", !$("#hide_[% st.authorised_value | html %]").is(":checked"));
                 tickets.DataTable().draw();
-                $(this).toggleClass('filtered');
             });
             [% END %]
         });

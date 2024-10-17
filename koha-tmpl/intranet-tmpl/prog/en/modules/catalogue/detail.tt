@@ -781,6 +781,7 @@
                                     <fieldset class="action" style="cursor:pointer;">
                                         <a id="hideResolved"><i class="fa fa-minus-square"></i> Hide resolved</a>
                                         | <a id="showAll"><i class="fa fa-bars"></i> Show all</a>
+                                        <input type="checkbox" id="hide_resolved_concerns" name="hide_resolved_concerns" style="display:none;" />
                                     </fieldset>
 
                                     <table id="table_concerns" width="100%">
@@ -1228,10 +1229,9 @@
                 $("#bibliodetails a:first").tab("show");
                 var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'concerns', 'table_concerns', 'json' ) | $raw %];
 
-                var filtered = false;
                 let additional_filters = {
                     resolved_date: function(){
-                        if ( filtered ) {
+                        if ( $("#hide_resolved_concerns").is(":checked") ) {
                             return { "=": null };
                         } else {
                             return;
@@ -1239,6 +1239,9 @@
                     },
                     source: 'catalog',
                     biblio_id: [% biblionumber | uri %]
+                };
+                let external_filter_nodes = {
+                    hide_resolved_concerns: "#hide_resolved_concerns",
                 };
 
                 var tickets_url = '/api/v1/tickets';
@@ -1350,15 +1353,15 @@
                             "orderable": false
                         },
                     ]
-                }, table_settings, 0, additional_filters);
+                }, table_settings, 0, additional_filters, undefined, external_filter_nodes);
 
                 $('#hideResolved').on("click", function() {
-                    filtered = true;
+                    $("#hide_resolved_concerns").prop("checked", true);
                     tickets.DataTable().draw();
                 });
 
                 $('#showAll').on("click", function() {
-                    filtered = false;
+                    $("#hide_resolved_concerns").prop("checked", false);
                     tickets.DataTable().draw();
                 });
             });
