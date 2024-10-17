@@ -406,6 +406,14 @@
                     return filters;
                 }
             };
+            let external_filter_nodes = {
+                search_patron_filter: '.search_patron_filter',
+                firstletter_filter: '.firstletter_filter',
+                searchtype_filter: '.searchtype_filter',
+                searchfieldstype_filter: '.searchfieldstype_filter',
+                categorycode_filter: '.categorycode_filter',
+                branchcode_filter: '.branchcode_filter'
+            };
 
             [% UNLESS default_sort_column %]
                 [% default_sort_column = "name" %]
@@ -717,7 +725,7 @@
                     },
                 [% END %]
                 fixedHeader: false,
-            }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters);
+            }, typeof table_settings !== 'undefined' ? table_settings : null, 1, additional_filters, undefined, external_filter_nodes);
 
             patron_search_form.on('submit', filter);
             patron_search_form.on('submit', update_search_type);
