@@ -262,6 +262,10 @@
                     </fieldset>
                 </div>
             </div>
+            <span class="btn btn-default" @click.prevent="deleteContact(i)"
+                ><font-awesome-icon icon="trash" />
+                {{ $__("Delete contact") }}</span
+            >
         </fieldset>
         <span class="btn btn-default" @click="addContact"
             ><font-awesome-icon icon="plus" />
@@ -292,6 +296,9 @@ export default {
                 serialsprimary: false,
                 claimissues: false,
             });
+        },
+        deleteContact(i) {
+            this.vendor.contacts.splice(i, 1);
         },
     },
 };
