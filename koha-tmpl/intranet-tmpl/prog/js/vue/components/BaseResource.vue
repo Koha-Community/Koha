@@ -4,9 +4,15 @@ import { inject } from "vue";
 export default {
     setup(props) {
         //global setup for all resource (list and show for now, but maybe others?) components here
-        const { setConfirmationDialog, setMessage, setError } =
+        const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
-        return { ...props, setConfirmationDialog, setMessage, setError };
+        return {
+            ...props,
+            setConfirmationDialog,
+            setMessage,
+            setError,
+            setWarning,
+        };
     },
     methods: {
         /**
