@@ -3,18 +3,13 @@
     <div v-else-if="title" id="eholdings_title_show">
         <Toolbar>
             <ToolbarButton
-                :to="{
-                    name: 'EHoldingsLocalTitlesFormAddEdit',
-                    params: { title_id: title.title_id },
-                }"
-                icon="pencil"
-                :title="$__('Edit')"
+                action="edit"
+                @go-to-edit-resource="goToResourceEdit"
             />
-            <a
-                @click="delete_title(title.title_id, title.publication_title)"
-                class="btn btn-default"
-                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
-            >
+            <ToolbarButton
+                action="delete"
+                @delete-resource="doResourceDelete"
+            />
         </Toolbar>
 
         <h2>
@@ -268,17 +263,17 @@ import EHoldingsTitlePackagesList from "./EHoldingsLocalTitlePackagesList.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
+import EHoldingsLocalTitleResource from "./EHoldingsLocalTitleResource.vue";
 
 export default {
+    extends: EHoldingsLocalTitleResource,
     setup() {
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av } = ERMStore;
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         return {
+            ...EHoldingsLocalTitleResource.setup(),
             get_lib_from_av,
-            setConfirmationDialog,
-            setMessage,
         };
     },
     data() {
@@ -332,35 +327,6 @@ export default {
                     this.initialized = true;
                 },
                 error => {}
-            );
-        },
-        delete_title: function (title_id, title_publication_title) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this title?"
-                    ),
-                    message: title_publication_title,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.localTitles.delete(title_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Local title %s deleted").format(
-                                    title_publication_title
-                                ),
-                                true
-                            );
-                            this.$router.push({
-                                name: "EHoldingsLocalTitlesList",
-                            });
-                        },
-                        error => {}
-                    );
-                }
             );
         },
     },

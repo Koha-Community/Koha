@@ -4,8 +4,8 @@
         <div v-else id="titles_list">
             <Toolbar>
                 <ToolbarButton
-                    :to="{ name: 'EHoldingsLocalTitlesFormAdd' }"
-                    icon="plus"
+                    action="add"
+                    @go-to-add-resource="goToResourceAdd"
                     :title="$__('New title')"
                 />
                 <ToolbarButton
@@ -27,9 +27,9 @@
                 <KohaTable
                     ref="table"
                     v-bind="tableOptions"
-                    @show="doShow"
-                    @edit="doEdit"
-                    @delete="doDelete"
+                    @show="goToResourceShow"
+                    @edit="goToResourceEdit"
+                    @delete="doResourceDelete"
                 ></KohaTable>
             </div>
             <div v-else class="alert alert-info">
@@ -46,13 +46,14 @@ import { inject, ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import KohaTable from "../KohaTable.vue";
+import EHoldingsLocalTitleResource from "./EHoldingsLocalTitleResource.vue";
 
 export default {
+    extends: EHoldingsLocalTitleResource,
     setup() {
         const ERMStore = inject("ERMStore");
         const { get_lib_from_av, map_av_dt_filter } = ERMStore;
 
-        const { setConfirmationDialog, setMessage } = inject("mainStore");
 
         const table = ref();
         const filters = reactive({
@@ -61,13 +62,12 @@ export default {
         });
 
         return {
+            ...EHoldingsLocalTitleResource.setup(),
             get_lib_from_av,
             map_av_dt_filter,
             escape_str,
             table,
             filters,
-            setConfirmationDialog,
-            setMessage,
             eholdings_titles_table_settings,
         };
     },
@@ -83,7 +83,7 @@ export default {
             initialized: false,
             tableOptions: {
                 columns: this.getTableColumns(),
-                url: "/api/v1/erm/eholdings/local/titles",
+                url: this.getResourceTableUrl(),
                 options: {
                     embed: "resources.package",
                     searchCols: [
@@ -122,46 +122,6 @@ export default {
                 error => {}
             );
         },
-        doShow: function ({ title_id }, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "EHoldingsLocalTitlesShow",
-                params: { title_id },
-            });
-        },
-        doEdit: function ({ title_id }, dt, event) {
-            this.$router.push({
-                name: "EHoldingsLocalTitlesFormAddEdit",
-                params: { title_id },
-            });
-        },
-        doDelete: function (title, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this title?"
-                    ),
-                    message: title.publication_title,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.erm;
-                    client.localTitles.delete(title.title_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Local title %s deleted").format(
-                                    title.publication_title
-                                ),
-                                true
-                            );
-                            dt.draw();
-                        },
-                        error => {}
-                    );
-                }
-            );
-        },
         getTableColumns: function () {
             let get_lib_from_av = this.get_lib_from_av;
             let escape_str = this.escape_str;
@@ -174,9 +134,7 @@ export default {
                     orderable: true,
                     render: function (data, type, row, meta) {
                         return (
-                            '<a href="/cgi-bin/koha/erm/eholdings/local/titles/' +
-                            row.title_id +
-                            '" class="show">' +
+                            '<a role="button" class="show">' +
                             escape_str(
                                 `${row.publication_title} (#${row.title_id})`
                             ) +
