@@ -68,7 +68,7 @@ export default {
             await client.counter_files
                 .count({
                     usage_data_provider_id:
-                        this.$route.params.usage_data_provider_id,
+                        this.$route.params.erm_usage_data_provider_id,
                 })
                 .then(
                     count => {
@@ -79,7 +79,7 @@ export default {
                 );
         },
         table_url() {
-            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.usage_data_provider_id}`;
+            let url = `/api/v1/erm/counter_logs?usage_data_provider_id=${this.$route.params.erm_usage_data_provider_id}`;
             return url;
         },
         download_counter_file(counter_log, dt, event) {

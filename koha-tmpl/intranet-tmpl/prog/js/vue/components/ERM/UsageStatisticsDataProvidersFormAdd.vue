@@ -435,12 +435,12 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (to.params.usage_data_provider_id) {
-                vm.getDataProvider(to.params.usage_data_provider_id);
+            if (to.params.erm_usage_data_provider_id) {
+                vm.getDataProvider(to.params.erm_usage_data_provider_id);
             } else {
                 vm.initialized = true;
             }
-            if (from.params.usage_data_provider_id) {
+            if (from.params.erm_usage_data_provider_id) {
                 vm.previous_route = "data_provider_show";
             } else {
                 vm.previous_route = "data_provider_list";
@@ -594,7 +594,7 @@ export default {
                             this.$router.push({
                                 name: "UsageStatisticsDataProvidersShow",
                                 params: {
-                                    usage_data_provider_id:
+                                    erm_usage_data_provider_id:
                                         erm_usage_data_provider_id,
                                 },
                             });
@@ -610,7 +610,7 @@ export default {
                         this.$router.push({
                             name: "UsageStatisticsDataProvidersShow",
                             params: {
-                                usage_data_provider_id:
+                                erm_usage_data_provider_id:
                                     erm_usage_data_provider_id,
                             },
                         });

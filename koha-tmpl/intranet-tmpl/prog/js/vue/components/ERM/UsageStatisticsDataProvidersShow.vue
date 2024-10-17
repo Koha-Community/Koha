@@ -182,7 +182,7 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            vm.getUsageDataProvider(to.params.usage_data_provider_id);
+            vm.getUsageDataProvider(to.params.erm_usage_data_provider_id);
         });
     },
     methods: {

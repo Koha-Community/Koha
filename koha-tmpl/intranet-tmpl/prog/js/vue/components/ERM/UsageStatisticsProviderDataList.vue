@@ -48,7 +48,7 @@ export default {
             await client[`usage_${this.data_type}s`]
                 .count({
                     usage_data_provider_id:
-                        this.$route.params.usage_data_provider_id,
+                        this.$route.params.erm_usage_data_provider_id,
                 })
                 .then(
                     count => {
@@ -61,7 +61,7 @@ export default {
         table_url() {
             let url = "/api/v1/erm/usage_%ss?usage_data_provider_id=%s".format(
                 this.data_type,
-                this.$route.params.usage_data_provider_id
+                this.$route.params.erm_usage_data_provider_id
             );
             return url;
         },

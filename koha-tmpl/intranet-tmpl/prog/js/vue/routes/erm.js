@@ -306,7 +306,7 @@ export const routes = [
                                 ),
                             },
                             {
-                                path: ":usage_data_provider_id",
+                                path: ":erm_usage_data_provider_id",
                                 name: "UsageStatisticsDataProvidersShow",
                                 component: markRaw(
                                     UsageStatisticsDataProvidersShow
@@ -322,7 +322,7 @@ export const routes = [
                                 title: $__("Add data provider"),
                             },
                             {
-                                path: "edit/:usage_data_provider_id",
+                                path: "edit/:erm_usage_data_provider_id",
                                 name: "UsageStatisticsDataProvidersFormAddEdit",
                                 component: markRaw(
                                     UsageStatisticsDataProvidersFormAdd

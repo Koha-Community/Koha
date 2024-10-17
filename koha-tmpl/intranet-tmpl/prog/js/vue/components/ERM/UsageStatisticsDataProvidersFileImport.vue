@@ -71,7 +71,7 @@ export default {
         loadFile(filename, content) {
             this.file.filename = filename;
             this.file.file_content = btoa(content);
-            this.getDataProvider(this.$route.params.usage_data_provider_id);
+            this.getDataProvider(this.$route.params.erm_usage_data_provider_id);
         },
         addDocument(e) {
             e.preventDefault();
@@ -126,7 +126,7 @@ export default {
         },
     },
     mounted() {
-        this.getDataProvider(this.$route.params.usage_data_provider_id);
+        this.getDataProvider(this.$route.params.erm_usage_data_provider_id);
     },
     components: {
         ButtonSubmit,
