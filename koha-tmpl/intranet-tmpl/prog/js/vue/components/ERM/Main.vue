@@ -91,6 +91,7 @@ export default {
             .then(config => {
                 this.config = config;
                 if (this.config.settings.ERMModule != 1) {
+                    this.loaded();
                     return this.setError(
                         this.$__(
                             "The e-resource management module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule'>ERMModule</a> to use it"

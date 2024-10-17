@@ -112,7 +112,6 @@ export const useMainStore = defineStore("main", {
             });
         },
         async loadAuthorisedValues(authorisedValues) {
-            console.log(authorisedValues);
             const AVsToFetch = Object.keys(authorisedValues).reduce(
                 (acc, avKey) => {
                     if (Array.isArray(authorisedValues[avKey])) return acc;

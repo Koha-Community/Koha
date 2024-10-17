@@ -51,7 +51,9 @@
                                 v-model="agreement.status"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_agreement_statuses"
+                                :options="
+                                    authorisedValues['av_agreement_statuses']
+                                "
                                 @option:selected="onStatusChanged"
                                 :required="!agreement.status"
                             >
@@ -75,7 +77,11 @@
                                 v-model="agreement.closure_reason"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_agreement_closure_reasons"
+                                :options="
+                                    authorisedValues[
+                                        'av_agreement_closure_reasons'
+                                    ]
+                                "
                                 :disabled="
                                     agreement.status == 'closed' ? false : true
                                 "
@@ -117,7 +123,11 @@
                                 v-model="agreement.renewal_priority"
                                 label="description"
                                 :reduce="av => av.value"
-                                :options="av_agreement_renewal_priorities"
+                                :options="
+                                    authorisedValues[
+                                        'av_agreement_renewal_priorities'
+                                    ]
+                                "
                             />
                         </li>
                         <li>
@@ -141,21 +151,23 @@
                 <UserRoles
                     :user_type="$__('Agreement user %s')"
                     :user_roles="agreement.user_roles"
-                    :av_user_roles="av_user_roles"
+                    :av_user_roles="authorisedValues['av_user_roles']"
                 />
                 <AgreementLicenses
                     :agreement_licenses="agreement.agreement_licenses"
                     :av_agreement_license_statuses="
-                        av_agreement_license_statuses
+                        authorisedValues['av_agreement_license_statuses']
                     "
                     :av_agreement_license_location="
-                        av_agreement_license_location
+                        authorisedValues['av_agreement_license_location']
                     "
                 />
                 <AgreementRelationships
                     :agreement_id="agreement.agreement_id"
                     :relationships="agreement.agreement_relationships"
-                    :av_agreement_relationships="av_agreement_relationships"
+                    :av_agreement_relationships="
+                        authorisedValues['av_agreement_relationships']
+                    "
                 />
                 <Documents :documents="agreement.documents" />
                 <fieldset class="action">
@@ -188,25 +200,11 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const AVStore = inject("AVStore");
-        const {
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
-        } = storeToRefs(AVStore);
+        const mainStore = inject("mainStore");
+        const { authorisedValues } = storeToRefs(mainStore);
 
         return {
-            av_agreement_statuses,
-            av_agreement_closure_reasons,
-            av_agreement_renewal_priorities,
-            av_user_roles,
-            av_agreement_license_statuses,
-            av_agreement_license_location,
-            av_agreement_relationships,
+            authorisedValues,
             max_allowed_packet,
         };
     },
