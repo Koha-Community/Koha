@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 6;
+use Test::More tests => 2;
 
 use Test::Exception;
 
@@ -123,7 +123,7 @@ subtest 'Relation accessor tests' => sub {
 };
 
 subtest 'store() tests' => sub {
-    plan tests => 15;
+    plan tests => 16;
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
@@ -323,88 +323,6 @@ subtest 'store() tests' => sub {
         # ✓ Any (1)         |--|
     };
 
-    subtest 'modification notice trigger' => sub {
-        plan tests => 3;
-
-        my $original_notices_count = Koha::Notice::Messages->search(
-            {
-                letter_code    => 'BOOKING_MODIFICATION',
-                borrowernumber => $patron->borrowernumber,
-            }
-        )->count;
-
-        $start_1 = dt_from_string->add( months => 1 )->truncate( to => 'day' );
-        $end_1   = $start_1->clone()->add( days => 1 );
-
-        # Use datetime formatting so that we don't get DateTime objects
-        $booking = Koha::Booking->new(
-            {
-                patron_id         => $patron->borrowernumber,
-                biblio_id         => $biblio->biblionumber,
-                pickup_library_id => $item_2->homebranch,
-                start_date        => $start_1->datetime(q{ }),
-                end_date          => $end_1->datetime(q{ }),
-            }
-        )->store;
-
-        my $post_notices_count = Koha::Notice::Messages->search(
-            {
-                letter_code    => 'BOOKING_MODIFICATION',
-                borrowernumber => $patron->borrowernumber,
-            }
-        )->count;
-        is(
-            $post_notices_count,
-            $original_notices_count,
-            'Koha::Booking->store should not have enqueued a BOOKING_MODIFICATION email for a new booking'
-        );
-
-        my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
-
-        $booking->update(
-            {
-                item_id => $item_4->itemnumber,
-            }
-        );
-
-        $post_notices_count = Koha::Notice::Messages->search(
-            {
-                letter_code    => 'BOOKING_MODIFICATION',
-                borrowernumber => $patron->borrowernumber,
-            }
-        )->count;
-        is(
-            $post_notices_count,
-            $original_notices_count,
-            'Koha::Booking->store should not have enqueued a BOOKING_MODIFICATION email for a booking with modified item_id'
-        );
-
-        $booking->update(
-            {
-                start_date => $start_1->clone()->add( days => 1 )->datetime(q{ }),
-            }
-        );
-
-        # start_date, end_date and pickup_library_id should behave identical
-        $post_notices_count = Koha::Notice::Messages->search(
-            {
-                letter_code    => 'BOOKING_MODIFICATION',
-                borrowernumber => $patron->borrowernumber,
-            }
-        )->count;
-        is(
-            $post_notices_count,
-            $original_notices_count + 1,
-            'Koha::Booking->store should have enqueued a BOOKING_MODIFICATION email for a booking with modified start_date'
-        );
-
-        $booking->update(
-            {
-                end_date => $end_1->clone()->add( days => 1 )->datetime(q{ }),
-            }
-        );
-    };
-
     subtest 'confirmation notice trigger' => sub {
         plan tests => 2;
 
@@ -456,188 +374,141 @@ subtest 'store() tests' => sub {
         );
     };
 
-    $schema->storage->txn_rollback;
-};
+    subtest 'modification/cancellation notice triggers' => sub {
+        plan tests => 5;
 
-subtest 'delete() tests' => sub {
-    plan tests => 2;
+        my $original_modification_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_MODIFICATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        my $original_cancellation_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CANCELLATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
 
-    $schema->storage->txn_begin;
+        $start_1 = dt_from_string->add( months => 1 )->truncate( to => 'day' );
+        $end_1   = $start_1->clone()->add( days => 1 );
 
-    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-    t::lib::Mocks::mock_userenv( { patron => $patron } );
-    my $biblio                 = $builder->build_sample_biblio;
-    my $item_1                 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $start_0                = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
-    my $end_0                  = $start_0->clone->add( days => 6 );
-    my $original_notices_count = Koha::Notice::Messages->search(
-        {
-            letter_code    => 'BOOKING_CANCELLATION',
-            borrowernumber => $patron->borrowernumber,
-        }
-    )->count;
+        # Use datetime formatting so that we don't get DateTime objects
+        $booking = Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $biblio->biblionumber,
+                pickup_library_id => $item_2->homebranch,
+                start_date        => $start_1->datetime(q{ }),
+                end_date          => $end_1->datetime(q{ }),
+            }
+        )->store;
 
-    $item_1->bookable(1)->store;
+        my $post_modification_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_MODIFICATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_modification_notices_count,
+            $original_modification_notices_count,
+            'Koha::Booking->store should not have enqueued a BOOKING_MODIFICATION email for a new booking'
+        );
 
-    my $booking = Koha::Booking->new(
-        {
-            patron_id         => $patron->borrowernumber,
-            biblio_id         => $biblio->biblionumber,
-            item_id           => $item_1->itemnumber,
-            pickup_library_id => $item_1->homebranch,
-            start_date        => $start_0,
-            end_date          => $end_0
-        }
-    )->store;
+        my $item_4 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, bookable => 1 } );
 
-    my $deleted = $booking->delete;
-    is(
-        ref($deleted), 'Koha::Booking',
-        'Koha::Booking->delete should return the Koha::Booking object if the booking has been correctly deleted'
-    );
-    is(
-        Koha::Bookings->search( { booking_id => $booking->booking_id } )->count, 0,
-        'Koha::Booking->delete should have deleted the booking'
-    );
+        $booking->update(
+            {
+                item_id => $item_4->itemnumber,
+            }
+        );
 
-    $schema->storage->txn_rollback;
-};
+        $post_modification_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_MODIFICATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_modification_notices_count,
+            $original_modification_notices_count,
+            'Koha::Booking->store should not have enqueued a BOOKING_MODIFICATION email for a booking with modified item_id'
+        );
 
-subtest 'edit() tests' => sub {
-    plan tests => 1;
+        $booking->update(
+            {
+                start_date => $start_1->clone()->add( days => 1 )->datetime(q{ }),
+            }
+        );
 
-    $schema->storage->txn_begin;
+        # start_date, end_date and pickup_library_id should behave identical
+        $post_modification_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_MODIFICATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_modification_notices_count,
+            $original_modification_notices_count + 1,
+            'Koha::Booking->store should have enqueued a BOOKING_MODIFICATION email for a booking with modified start_date'
+        );
 
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $biblio  = $builder->build_sample_biblio;
-    my $item_1  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $start_0 = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
-    my $end_0   = $start_0->clone->add( days => 6 );
+        $booking->update(
+            {
+                end_date => $end_1->clone()->add( days => 1 )->datetime(q{ }),
+            }
+        );
 
-    $item_1->bookable(1)->store;
+        $booking->update(
+            {
+                status => 'completed',
+            }
+        );
 
-    my $booking = Koha::Booking->new(
-        {
-            patron_id         => $patron->borrowernumber,
-            biblio_id         => $biblio->biblionumber,
-            item_id           => $item_1->itemnumber,
-            pickup_library_id => $item_1->homebranch,
-            start_date        => $start_0,
-            end_date          => $end_0,
-        }
-    )->store;
-
-    my $booking_to_edit = Koha::Bookings->find( $booking->booking_id );
-    $booking_to_edit->edit( { status => 'completed' } );
-
-    is(
-        $booking_to_edit->unblessed->{status}, 'completed',
-        'Koha::Booking->edit should edit booking with passed params'
-    );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'cancel() tests' => sub {
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    my $patron                 = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $biblio                 = $builder->build_sample_biblio;
-    my $item_1                 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $start_0                = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
-    my $end_0                  = $start_0->clone->add( days => 6 );
-    my $original_notices_count = Koha::Notice::Messages->search(
-        {
-            letter_code    => 'BOOKING_CANCELLATION',
-            borrowernumber => $patron->borrowernumber,
-        }
-    )->count;
-
-    $item_1->bookable(1)->store;
-
-    my $booking = Koha::Booking->new(
-        {
-            patron_id         => $patron->borrowernumber,
-            biblio_id         => $biblio->biblionumber,
-            item_id           => $item_1->itemnumber,
-            pickup_library_id => $item_1->homebranch,
-            start_date        => $start_0,
-            end_date          => $end_0,
-        }
-    )->store;
-
-    my $booking_to_cancel = Koha::Bookings->find( $booking->booking_id );
-    $booking_to_cancel->cancel( { send_letter => 1 } );
-
-    subtest 'notice trigger' => sub {
-        plan tests => 1;
-
-        my $post_notices_count = Koha::Notice::Messages->search(
+        my $post_cancellation_notices_count = Koha::Notice::Messages->search(
             {
                 letter_code    => 'BOOKING_CANCELLATION',
                 borrowernumber => $patron->borrowernumber,
             }
         )->count;
         is(
-            $post_notices_count,
-            $original_notices_count + 1,
-            'Koha::Booking->cancel should have enqueued a BOOKING_CANCELLATION email'
+            $post_cancellation_notices_count,
+            $original_cancellation_notices_count,
+            'Koha::Booking->store should NOT have enqueued a BOOKING_CANCELLATION email for a booking status change that is not a "cancellation"'
+        );
+
+        $booking->update(
+            {
+                status => 'cancelled',
+            }
+        );
+
+        $post_cancellation_notices_count = Koha::Notice::Messages->search(
+            {
+                letter_code    => 'BOOKING_CANCELLATION',
+                borrowernumber => $patron->borrowernumber,
+            }
+        )->count;
+        is(
+            $post_cancellation_notices_count,
+            $original_cancellation_notices_count + 1,
+            'Koha::Booking->store should have enqueued a BOOKING_CANCELLATION email for a booking status change that is a "cancellation"'
         );
     };
 
-    $schema->storage->txn_rollback;
-};
-
-subtest 'set_status() tests' => sub {
-    plan tests => 3;
-
-    $schema->storage->txn_begin;
-
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $biblio  = $builder->build_sample_biblio;
-    my $item_1  = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
-    my $start_0 = dt_from_string->subtract( days => 2 )->truncate( to => 'day' );
-    my $end_0   = $start_0->clone->add( days => 6 );
-
-    $item_1->bookable(1)->store;
-
-    my $booking = Koha::Booking->new(
-        {
-            patron_id         => $patron->borrowernumber,
-            biblio_id         => $biblio->biblionumber,
-            item_id           => $item_1->itemnumber,
-            pickup_library_id => $item_1->homebranch,
-            start_date        => $start_0,
-            end_date          => $end_0,
-            status            => 'new',
-        }
-    )->store;
-
-    my $booking_with_old_status = Koha::Bookings->find( $booking->booking_id );
-    $booking_with_old_status->_set_status('completed');
-    is( $booking_with_old_status->unblessed->{status}, 'completed', 'Booking status is now "completed"' );
-
-    $booking_with_old_status->_set_status('cancelled');
-    is( $booking_with_old_status->unblessed->{status}, 'cancelled', 'Booking status is now "cancelled"' );
-
-    subtest 'unauthorized status' => sub {
+    subtest 'status change exception' => sub {
         plan tests => 2;
 
-        eval { $booking_with_old_status->_set_status('blah'); };
-
-        if ($@) {
-            like(
-                $@, qr/Invalid status: blah/,
-                'An error is raised for unauthorized status'
-            );
-        } else {
-            fail('Expected an error but none was raised');
-        }
+        $booking->discard_changes;
+        my $status = $booking->status;
+        throws_ok { $booking->update( { status => 'blah' } ) } 'Koha::Exceptions::Object::BadValue',
+            'Throws exception when passed booking status would fail enum constraint';
 
         # Status unchanged
-        is( $booking_with_old_status->unblessed->{status}, 'cancelled', 'Booking status is still "cancelled"' );
+        $booking->discard_changes;
+        is( $booking->status, $status, 'Booking status is unchanged' );
     };
 
     $schema->storage->txn_rollback;

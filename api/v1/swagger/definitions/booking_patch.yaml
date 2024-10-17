@@ -1,0 +1,45 @@
+---
+additionalProperties: false
+properties:
+  biblio_id:
+    description: Internal identifier for the parent bibliographic record
+    type: integer
+  booking_id:
+    description: Internal booking identifier
+    readOnly: true
+    type: integer
+  creation_date:
+    description: Creation date and time of this booking
+    readOnly: true
+    format: date-time
+    type: string
+  end_date:
+    description: Start date and time of this booking
+    format: date-time
+    type: string
+  item_id:
+    description: Internal item identifier
+    type:
+      - integer
+      - 'null'
+  modification_date:
+    description: Modification date and time of this booking
+    readOnly: true
+    format: date-time
+    type: string
+  patron_id:
+    description: Internal patron identifier
+    type: integer
+  pickup_library_id:
+    description: Internal pickup_library identifier
+    type: string
+  start_date:
+    description: Start date and time of this booking
+    format: date-time
+    type: string
+  status:
+    description: Status of the booking
+    type:
+      - string
+      - "null"
+type: object

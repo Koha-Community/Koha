@@ -208,17 +208,19 @@
     operationId: updateBooking
     parameters:
       - $ref: "../swagger.yaml#/parameters/booking_id_pp"
-      - description: A booking object
+      - description: A complete booking object to replace the current one
         in: body
         name: body
         required: true
         schema:
           $ref: ../swagger.yaml#/definitions/booking
+    consumes:
+      - application/json
     produces:
       - application/json
     responses:
       200:
-        description: A booking
+        description: Updated booking
         schema:
           $ref: ../swagger.yaml#/definitions/booking
       400:
@@ -253,24 +255,15 @@
         circulate: manage_bookings
     x-mojo-to: Bookings#update
   patch:
-    x-mojo-to: Bookings#edit
     operationId: editBooking
-    tags:
-      - bookings
-    summary: Edit booking
     parameters:
       - $ref: "../swagger.yaml#/parameters/booking_id_pp"
-      - name: body
+      - description: A partial booking object containing fields to modify
         in: body
-        description: A JSON object containing fields to modify
+        name: body
         required: true
         schema:
-          type: object
-          properties:
-            status:
-              description: Set booking status
-              type: string
-          additionalProperties: false
+          $ref: ../swagger.yaml#/definitions/booking_patch
     consumes:
       - application/json
     produces:
@@ -304,6 +297,10 @@
         description: Under maintenance
         schema:
           $ref: ../swagger.yaml#/definitions/error
+    summary: Update booking
+    tags:
+      - bookings
     x-koha-authorization:
       permissions:
         circulate: manage_bookings
+    x-mojo-to: Bookings#update

@@ -477,9 +477,8 @@ subtest 'patch() tests' => sub {
     my $booking_id = $builder->build_object( { class => 'Koha::Bookings' } )->id;
 
     # Unauthorized attempt to partial update via PATCH
-    $t->patch_ok(
-        "//$unauth_userid:$password@/api/v1/bookings/$booking_id" => json => { status => 'cancelled' }
-    )->status_is(403);
+    $t->patch_ok( "//$unauth_userid:$password@/api/v1/bookings/$booking_id" => json => { status => 'cancelled' } )
+        ->status_is(403);
 
     my $biblio         = $builder->build_sample_biblio;
     my $item           = $builder->build_sample_item( { bookable => 1, biblionumber => $biblio->id } );

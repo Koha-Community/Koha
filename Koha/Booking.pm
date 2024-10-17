@@ -143,7 +143,6 @@ sub store {
                     booking_id => $self->in_storage ? $self->booking_id : undef
                 }
                 );
-
             # FIXME: We should be able to combine the above two functions into one
 
             # Assign item at booking time
@@ -151,57 +150,26 @@ sub store {
                 $self->_assign_item_for_booking;
             }
 
-            my $is_modification = $self->in_storage;
-            my $old_booking     = $self->get_from_storage;
+            if ( !$self->in_storage ) {
+                $self->SUPER::store;
+                $self->discard_changes;
+                $self->_send_notice( { notice => 'BOOKING_CONFIRMATION' } );
+            } else {
+                my %updated_columns = $self->_result->get_dirty_columns;
+                return $self->SUPER::store unless %updated_columns;
 
-            if ( $self = $self->SUPER::store ) {
-                my $patron         = $self->patron;
-                my $pickup_library = $self->pickup_library;
-                my $branch         = C4::Context->userenv->{'branch'};
+                my $old_booking = $self->get_from_storage;
+                $self->SUPER::store;
 
-                if ( $is_modification
-                    and any { $old_booking->$_ ne $self->$_ } qw(pickup_library_id start_date end_date) )
+                if ( exists( $updated_columns{status} ) && $updated_columns{status} eq 'cancelled' ) {
+                    $self->_send_notice(
+                        { notice => 'BOOKING_CANCELLATION', objects => { old_booking => $old_booking } } );
+                } elsif ( exists( $updated_columns{pickup_library_id} )
+                    or exists( $updated_columns{start_date} )
+                    or exists( $updated_columns{end_date} ) )
                 {
-                    my $letter = C4::Letters::GetPreparedLetter(
-                        module                 => 'bookings',
-                        letter_code            => 'BOOKING_MODIFICATION',
-                        message_transport_type => 'email',
-                        branchcode             => $branch,
-                        lang                   => $patron->lang,
-                        objects                => {
-                            old_booking => $old_booking,
-                            booking     => $self
-                        },
-                    );
-
-                    if ($letter) {
-                        C4::Letters::EnqueueLetter(
-                            {
-                                letter                 => $letter,
-                                borrowernumber         => $patron->borrowernumber,
-                                message_transport_type => 'email',
-                            }
-                        );
-                    }
-                } elsif ( !$is_modification ) {
-                    my $letter = C4::Letters::GetPreparedLetter(
-                        module                 => 'bookings',
-                        letter_code            => 'BOOKING_CONFIRMATION',
-                        message_transport_type => 'email',
-                        branchcode             => $branch,
-                        lang                   => $patron->lang,
-                        objects                => { booking => $self },
-                    );
-
-                    if ($letter) {
-                        C4::Letters::EnqueueLetter(
-                            {
-                                letter                 => $letter,
-                                borrowernumber         => $patron->borrowernumber,
-                                message_transport_type => 'email',
-                            }
-                        );
-                    }
+                    $self->_send_notice(
+                        { notice => 'BOOKING_MODIFICATION', objects => { old_booking => $old_booking } } );
                 }
             }
         }
@@ -298,85 +266,44 @@ sub to_api_mapping {
     return {};
 }
 
-=head3 edit
-
-This method allows patching a booking
-
-=cut
-
-sub edit {
-    my ( $self, $params ) = @_;
-
-    my $new_status = $params->{'status'};
-    unless ($new_status) {
-        return $self->store;
-    }
-
-    $self->_set_status($new_status);
-
-    my $status = $self->status;
-    if ( $status eq 'cancelled' ) {
-        $self->cancel( { send_letter => 1 } );
-    }
-
-    return $self->store;
-}
-
-=head3 cancel
-
-This method adds possibility of cancelling a booking (kept in table but flagged with 'cancelled' status)
-Also adds param to send a letter to the borrower affected by the cancellation
-
-=cut
-
-sub cancel {
-    my ( $self, $params ) = @_;
-
-    my $branch         = C4::Context->userenv->{'branch'};
-    my $patron         = $self->patron;
-    my $pickup_library = $self->pickup_library;
-
-    if ( $params->{'send_letter'} ) {
-        my $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'bookings',
-            letter_code            => 'BOOKING_CANCELLATION',
-            message_transport_type => 'email',
-            branchcode             => $branch,
-            lang                   => $patron->lang,
-            objects                => { booking => $self }
-        );
-
-        if ($letter) {
-            C4::Letters::EnqueueLetter(
-                {
-                    letter                 => $letter,
-                    borrowernumber         => $patron->borrowernumber,
-                    message_transport_type => 'email',
-                }
-            );
-        }
-    }
-}
-
-
 =head2 Internal methods
 
-=head3 _set_status
+=head3 _send_notice
 
-This method changes the status of a booking
+    $self->_send_notice();
+
+Sends appropriate notice to patron.
 
 =cut
 
-sub _set_status {
-    my ( $self, $new_status ) = @_;
+sub _send_notice {
+    my ( $self, $params ) = @_;
 
-    my @valid_statuses = qw(new completed cancelled);
-    my $is_valid       = any { $new_status eq $_ } @valid_statuses;
-    unless ($is_valid) {
-        die "Invalid status: $new_status";
+    my $notice  = $params->{notice};
+    my $objects = $params->{objects} // {};
+    $objects->{booking} = $self;
+
+    my $branch = C4::Context->userenv->{'branch'};
+    my $patron = $self->patron;
+
+    my $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'bookings',
+        letter_code            => $notice,
+        message_transport_type => 'email',
+        branchcode             => $branch,
+        lang                   => $patron->lang,
+        objects                => $objects
+    );
+
+    if ($letter) {
+        C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $patron->borrowernumber,
+                message_transport_type => 'email',
+            }
+        );
     }
-
-    $self->status($new_status);
 }
 
 =head3 _type

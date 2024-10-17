@@ -202,6 +202,16 @@ sub store {
                     property => $property =~ /(\w+\.\w+)$/ ? $1 : $property, # results in table.column without quotes or backtics
                 );
             }
+            elsif ( $_->{msg} =~ /Data truncated for column \W?(?<property>\w+)/ ) {    # The optional \W in the regex might be a quote or backtick
+                my $property = $+{property};
+                my $type     = $columns_info->{$property}->{data_type};
+                Koha::Exceptions::Object::BadValue->throw(
+                    type     => 'enum',
+                    property => $property =~ /(\w+\.\w+)$/
+                    ? $1
+                    : $property,    # results in table.column without quotes or backtics
+                ) if $type eq 'enum';
+            }
         }
         # Catch-all for foreign key breakages. It will help find other use cases
         $_->rethrow();
