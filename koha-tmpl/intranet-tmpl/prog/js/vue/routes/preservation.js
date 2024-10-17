@@ -89,7 +89,7 @@ export const routes = [
                     },
                     {
                         path: "edit/:train_id",
-                        name: "TrainsFormEdit",
+                        name: "TrainsFormAddEdit",
                         component: markRaw(TrainsFormAdd),
                         title: $__("Edit train"),
                     },

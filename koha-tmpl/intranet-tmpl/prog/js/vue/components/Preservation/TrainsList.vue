@@ -3,8 +3,8 @@
     <div v-else id="trains_list">
         <Toolbar>
             <ToolbarButton
-                :to="{ name: 'TrainsFormAdd' }"
-                icon="plus"
+                action="add"
+                @go-to-add-resource="goToResourceAdd"
                 :title="$__('New train')"
             />
         </Toolbar>
@@ -45,9 +45,9 @@
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
-                @show="doShow"
-                @edit="doEdit"
-                @delete="doDelete"
+                @show="goToResourceShow"
+                @edit="goToResourceEdit"
+                @delete="doResourceDelete"
                 @addItems="doAddItems"
             ></KohaTable>
         </div>
@@ -66,21 +66,21 @@ import { inject, ref, reactive } from "vue";
 import { APIClient } from "../../fetch/api-client";
 import { build_url } from "../../composables/datatables";
 import KohaTable from "../KohaTable.vue";
+import TrainResource from "./TrainResource.vue";
 
 export default {
+    extends: TrainResource,
     setup() {
         const PreservationStore = inject("PreservationStore");
         const { get_lib_from_av, map_av_dt_filter } = PreservationStore;
-        const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore");
+
         const table = ref();
         const filters = reactive({ status: "" });
         return {
+            ...TrainResource.setup(),
             get_lib_from_av,
             map_av_dt_filter,
-            setConfirmationDialog,
-            setMessage,
-            setWarning,
+            escape_str,
             table,
             filters,
         };
@@ -136,44 +136,6 @@ export default {
                 error => {}
             );
         },
-        doShow: function (train, dt, event) {
-            event.preventDefault();
-            this.$router.push({
-                name: "TrainsShow",
-                params: { train_id: train.train_id },
-            });
-        },
-        doEdit: function (train, dt, event) {
-            this.$router.push({
-                name: "TrainsFormEdit",
-                params: { train_id: train.train_id },
-            });
-        },
-        doDelete: function (train, dt, event) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this train?"
-                    ),
-                    message: train.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.preservation;
-                    client.trains.delete(train.train_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Train %s deleted").format(train.name),
-                                true
-                            );
-                            dt.draw();
-                        },
-                        error => {}
-                    );
-                }
-            );
-        },
         doAddItems: function (train, dt, event) {
             if (train.closed_on != null) {
                 this.setWarning(this.$__("Cannot add items to a closed train"));
@@ -185,7 +147,7 @@ export default {
             }
         },
         table_url() {
-            let url = "/api/v1/preservation/trains";
+            let url = this.getResourceTableUrl();
             let q;
             if (this.filters.status == "closed") {
                 q = {
@@ -231,7 +193,10 @@ export default {
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return `<a href="/cgi-bin/koha/preservation/trains/${row.train_id}" class="show">${row.name} (#${row.train_id})</a>`;
+                        return (
+                            '<a role="button" class="show">' +
+                            escape_str(`${row.name} (#${row.train_id})`)
+                        );
                     },
                 },
                 {
@@ -274,7 +239,7 @@ export default {
         },
     },
     components: { flatPickr, Toolbar, ToolbarButton, KohaTable },
-    name: "trainsList",
+    name: "TrainsList",
     emits: ["select-train", "close"],
 };
 </script>

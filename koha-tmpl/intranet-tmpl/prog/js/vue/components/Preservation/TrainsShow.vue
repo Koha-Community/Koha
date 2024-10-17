@@ -91,16 +91,13 @@
                 <font-awesome-icon icon="plus" /> {{ $__("Add items") }}
             </span>
             <ToolbarButton
-                :to="{
-                    name: 'TrainsFormEdit',
-                    params: { train_id: train.train_id },
-                }"
-                icon="pencil"
-                :title="$__('Edit')"
+                action="edit"
+                @go-to-edit-resource="goToResourceEdit"
             />
-            <a @click="deleteTrain(train)" class="btn btn-default"
-                ><font-awesome-icon icon="trash" /> {{ $__("Delete") }}</a
-            >
+            <ToolbarButton
+                action="delete"
+                @delete-resource="doResourceDelete"
+            />
             <a
                 v-if="!train.closed_on"
                 class="btn btn-default"
@@ -286,27 +283,24 @@ import { APIClient } from "../../fetch/api-client";
 import { useDataTable } from "../../composables/datatables";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
+import TrainResource from "./TrainResource.vue";
 
 export default {
+    extends: TrainResource,
     setup() {
         const format_date = $date;
 
         const PreservationStore = inject("PreservationStore");
         const { get_lib_from_av } = PreservationStore;
 
-        const { setConfirmationDialog, setMessage, setWarning } =
-            inject("mainStore");
-
         const table_id = "item_list";
         useDataTable(table_id);
 
         return {
+            ...TrainResource.setup(),
             format_date,
             get_lib_from_av,
             table_id,
-            setConfirmationDialog,
-            setMessage,
-            setWarning,
         };
     },
     data() {
@@ -415,31 +409,6 @@ export default {
             client.trains.getAll(q).then(
                 trains => (this.train_list = trains),
                 error => {}
-            );
-        },
-        deleteTrain: function (train) {
-            this.setConfirmationDialog(
-                {
-                    title: this.$__(
-                        "Are you sure you want to remove this train?"
-                    ),
-                    message: train.name,
-                    accept_label: this.$__("Yes, delete"),
-                    cancel_label: this.$__("No, do not delete"),
-                },
-                () => {
-                    const client = APIClient.preservation;
-                    client.trains.delete(train.train_id).then(
-                        success => {
-                            this.setMessage(
-                                this.$__("Train %s deleted").format(train.name),
-                                true
-                            );
-                            this.$router.push({ name: "TrainsList" });
-                        },
-                        error => {}
-                    );
-                }
             );
         },
         async updateTrainDate(attribute) {
