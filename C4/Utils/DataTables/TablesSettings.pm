@@ -89,7 +89,7 @@ sub get_columns {
 
 Returns the settings for a given table.
 
-The settings are default_display_length and default_sort_order.
+The settings are default_display_length, default_sort_order, default_save_state and default_save_state_search.
 
 =cut
 

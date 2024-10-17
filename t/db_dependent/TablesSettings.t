@@ -23,10 +23,11 @@ $module->mock(
                 admin => {
                     currency => {
                         'currencies-table' => {
-                            default_display_length => 20,
-                            default_sort_order => 1,
-                            default_save_state => 1,
-                            columns => [
+                            default_display_length    => 20,
+                            default_sort_order        => 1,
+                            default_save_state        => 1,
+                            default_save_state_search => 0,
+                            columns                   => [
                                 {
                                     columnname         => 'currency',
                                     cannot_be_toggled  => '1',
@@ -37,24 +38,16 @@ $module->mock(
                                     cannot_be_toggled  => '1',
                                     cannot_be_modified => '1'
                                 },
-                                {
-                                    columnname => 'symbol'
-                                },
+                                { columnname => 'symbol' },
                                 {
                                     is_hidden  => '1',
                                     columnname => 'iso_code'
                                 },
-                                {
-                                    columnname => 'last_updated'
-                                },
-                                {
-                                    columnname => 'active'
-                                },
-                                {
-                                    columnname => 'actions'
-                                }
+                                { columnname => 'last_updated' },
+                                { columnname => 'active' },
+                                { columnname => 'actions' }
                             ]
-                        }
+                            }
                     }
                 },
             }
@@ -127,6 +120,7 @@ my $modules_expected = {
                 default_display_length => 20,
                 default_sort_order => 1,
                 default_save_state => 1,
+                default_save_state_search => 0,
                 columns => [
                     {
                         columnname         => 'currency',
@@ -183,6 +177,10 @@ for my $m ( keys %$modules ) {
         for my $t ( keys %{ $modules->{$m}{$p} } ) {
             my $columns =
               C4::Utils::DataTables::TablesSettings::get_columns( $m, $p, $t );
+            # We do not store default_save_state and default_save_state_search in the yml file
+            # Removing them before comparison
+            delete $_->{default_save_state} for @$columns;
+            delete $_->{default_save_state_search} for @$columns;
             is_deeply(
                 $columns,
                 $modules->{$m}{$p}{$t}{columns},
@@ -192,14 +190,16 @@ for my $m ( keys %$modules ) {
               C4::Utils::DataTables::TablesSettings::get_table_settings( $m, $p, $t );
             is_deeply(
                 {
-                    default_display_length => $table_settings->{default_display_length},
-                    default_sort_order     => $table_settings->{default_sort_order}
-                    default_save_state     => $table_settings->{default_save_state}
+                    default_display_length    => $table_settings->{default_display_length},
+                    default_sort_order        => $table_settings->{default_sort_order},
+                    default_save_state        => $table_settings->{default_save_state},
+                    default_save_state_search => $table_settings->{default_save_state_search},
                 },
                 {
-                    default_display_length => $modules->{$m}{$p}{$t}{default_display_length},
-                    default_sort_order     => $modules->{$m}{$p}{$t}{default_sort_order},
-                    default_save_state     => $modules->{$m}{$p}{$t}{default_save_state},
+                    default_display_length    => $modules->{$m}{$p}{$t}{default_display_length},
+                    default_sort_order        => $modules->{$m}{$p}{$t}{default_sort_order},
+                    default_save_state        => $modules->{$m}{$p}{$t}{default_save_state},
+                    default_save_state_search => $modules->{$m}{$p}{$t}{default_save_state_search},
                 }
             );
         }
