@@ -672,6 +672,23 @@ function _dt_buttons(params){
         exportColumns = settings["exportColumns"];
     }
 
+    const export_format_spreadsheet = {
+        body: function ( data, row, column, node ) {
+            var newnode = $(node);
+
+            if ( newnode.find(".noExport").length > 0 ) {
+                newnode = newnode.clone();
+                newnode.find(".noExport").remove();
+            }
+            let trimmed_str = newnode.text().replace( /\n/g, ' ' ).trim();
+            const unsafeCharacters = /^[=+\-@\t\r]/;
+            if ( unsafeCharacters.test(trimmed_str) ){
+                trimmed_str = "'" + trimmed_str;
+            }
+            return trimmed_str;
+        }
+    }
+
     var export_format = {
         body: function ( data, row, column, node ) {
             var newnode = $(node);
@@ -691,7 +708,7 @@ function _dt_buttons(params){
             text: __("Excel"),
             exportOptions: {
                 columns: exportColumns,
-                format:  export_format
+                format:  export_format_spreadsheet
             },
         },
         {
@@ -699,7 +716,7 @@ function _dt_buttons(params){
             text: __("CSV"),
             exportOptions: {
                 columns: exportColumns,
-                format:  export_format
+                format:  export_format_spreadsheet
             },
         },
         {
