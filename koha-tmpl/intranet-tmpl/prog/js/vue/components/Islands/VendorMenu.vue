@@ -75,6 +75,17 @@
                     >{{ $__("Uncertain prices") }}</a
                 >
             </li>
+            <li v-if="ermModule && (erm || isUserPermitted('CAN_user_erm'))">
+                <a
+                    :href="`/cgi-bin/koha/erm/agreements?vendor_id=${vendorId}`"
+                    >{{ $__("ERM agreements") }}</a
+                >
+            </li>
+            <li v-if="ermModule && (erm || isUserPermitted('CAN_user_erm'))">
+                <a :href="`/cgi-bin/koha/erm/licenses?vendor_id=${vendorId}`">{{
+                    $__("ERM licenses")
+                }}</a>
+            </li>
         </ul>
     </div>
 </template>
@@ -103,14 +114,23 @@ export default {
         issuemanage: {
             type: String,
         },
+        ermmodule: {
+            type: String,
+        },
+        erm: {
+            type: String,
+        },
     },
     setup(props) {
         const vendorStore = inject("vendorStore");
-        const { isUserPermitted } = vendorStore;
+        const { isUserPermitted, config } = vendorStore;
         const navigationStore = inject("navigationStore");
         const { params } = storeToRefs(navigationStore);
 
         const vendorId = ref(props.vendorid || params.value.id);
+        const ermModule = props.ermmodule
+            ? props.ermmodule
+            : config.settings.ermModule;
         const templateRefs = ref([]);
 
         onMounted(() => {
@@ -123,6 +143,8 @@ export default {
         return {
             isUserPermitted,
             params,
+            config,
+            ermModule,
             vendorId,
             templateRefs,
         };

@@ -288,9 +288,18 @@ export default {
                 },
             ],
         });
+        const tableURL = () => {
+            let url = baseResource.getResourceTableUrl();
+
+            const vendorId = baseResource.route.query.vendor_id;
+            if (vendorId) {
+                url += "?vendor_id=" + vendorId;
+            }
+            return url;
+        };
 
         const tableOptions = {
-            url: baseResource.getResourceTableUrl(),
+            url: tableURL(),
             options: { embed: "vendor,extended_attributes,+strings" },
             table_settings: license_table_settings,
             add_filters: true,

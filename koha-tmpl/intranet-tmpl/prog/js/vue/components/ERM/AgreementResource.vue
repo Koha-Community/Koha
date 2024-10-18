@@ -831,6 +831,12 @@ export default {
             let url = baseResource.getResourceTableUrl();
             if (filters?.by_expired)
                 url += "?max_expiration_date=" + filters.max_expiration_date;
+            const vendorId = baseResource.route.query.vendor_id;
+            if (vendorId) {
+                url = filters?.by_expired
+                    ? url + "&vendor_id=" + vendorId
+                    : url + "?vendor_id=" + vendorId;
+            }
             return url;
         };
         const filterTable = async (filters, table, embedded = false) => {

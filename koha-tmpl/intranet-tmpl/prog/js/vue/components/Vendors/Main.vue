@@ -55,6 +55,7 @@ export default {
                     client.config.get("vendors").then(result => {
                         userPermissions.value = result.permissions;
                         config.value.settings.edifact = result.edifact;
+                        config.value.settings.ermModule = result.erm_module;
                         config.value.settings.marcOrderAutomation =
                             result.marcOrderAutomation;
                         vendorStore.currencies = result.currencies;

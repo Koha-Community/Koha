@@ -216,6 +216,7 @@ sub config {
             gst_values  => \@gst_values,
             edifact     => C4::Context->preference('EDIFACT'),
             marc_orders => C4::Context->preference('MarcOrderingAutomation'),
+            erm_module  => C4::Context->preference('ERMModule'),
         },
     );
 }
