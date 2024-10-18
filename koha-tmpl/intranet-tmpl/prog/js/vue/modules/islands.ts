@@ -19,52 +19,28 @@ type WebComponentDynamicImport = {
 /**
  * A registry for Vue components.
  * @type {Map<string, WebComponentDynamicImport>}
+ * @property {string} key - The name of the component.
+ * @property {WebComponentDynamicImport} value - The configuration for the component. Includes the import function and optional configuration.
+ * @example
+ * //
+ * [
+ *     "hello-islands",
+ *     {
+ *         importFn: async () => {
+ *             const module = await import(
+ *                 /* webpackChunkName: "hello-islands" */
+/**                "../components/Islands/HelloIslands.vue"
+ *             );
+ *             return module.default;
+ *         },
+ *         config: {
+ *             stores: ["mainStore", "navigationStore"],
+ *         },
+ *     },
+ * ],
  */
 export const componentRegistry: Map<string, WebComponentDynamicImport> =
-    new Map([
-        [
-            "hello-islands",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "hello-islands" */
-                        "../components/Islands/HelloIslands.vue"
-                    );
-                    return module.default;
-                },
-                config: {
-                    stores: ["mainStore", "navigationStore"],
-                },
-            },
-        ],
-        [
-            "hello-world",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "hello-world" */
-                        "../components/Islands/HelloWorld.vue"
-                    );
-                    return module.default;
-                },
-            },
-        ],
-        [
-            "dialog-island",
-            {
-                importFn: async () => {
-                    const module = await import(
-                        /* webpackChunkName: "vue-dialog" */
-                        "../components/Islands/DialogIsland.vue"
-                    );
-                    return module.default;
-                },
-                config: {
-                    stores: ["mainStore"],
-                },
-            },
-        ],
-    ]);
+    new Map([]);
 
 /**
  * Hydrates custom elements by scanning the document and loading only necessary components.
