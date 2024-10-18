@@ -70,6 +70,12 @@ describe("Vendor CRUD operations", () => {
                 force: true,
             }
         );
+        cy.get("#payment_method .vs__search").type(
+            vendor.payment_method + "{enter}",
+            {
+                force: true,
+            }
+        );
         cy.get("#gst_true").check();
         cy.get("#tax_rate .vs__search").type(
             `${(vendor.tax_rate * 100).toFixed(2)}` + "{enter}",
