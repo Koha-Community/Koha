@@ -458,7 +458,7 @@ export default {
                         { value: true, description: $__("Active") },
                         { value: false, description: $__("Inactive") },
                     ],
-                    value: true,
+                    defaultValue: true,
                 },
                 {
                     name: "list_currency",
@@ -490,7 +490,7 @@ export default {
                         { value: true, description: $__("Yes") },
                         { value: false, description: $__("No") },
                     ],
-                    value: true,
+                    defaultValue: true,
                     hideIn: ["List"],
                 },
                 {
@@ -502,7 +502,16 @@ export default {
                         { value: true, description: $__("Include tax") },
                         { value: false, description: $__("Don't include tax") },
                     ],
-                    value: true,
+                    defaultValue: true,
+                    hideIn: ["List"],
+                },
+                {
+                    name: "payment_method",
+                    group: $__("Ordering information"),
+                    type: "select",
+                    label: $__("Payment method"),
+                    avCat: "av_vendor_payment_methods",
+                    allowMultipleChoices: true,
                     hideIn: ["List"],
                 },
                 {
@@ -514,7 +523,7 @@ export default {
                         { value: true, description: $__("Include tax") },
                         { value: false, description: $__("Don't include tax") },
                     ],
-                    value: true,
+                    defaultValue: true,
                     hideIn: ["List"],
                 },
                 {
@@ -731,6 +740,12 @@ export default {
             baseResource.setWarning(errors.join("<br>"));
             if (errors.length) return false;
 
+            if (vendor.payment_method && vendor.payment_method.length) {
+                vendor.payment_method = vendor.payment_method.join("|");
+            } else {
+                vendor.payment_method = null;
+            }
+
             if (vendorId) {
                 return baseResource.apiClient.update(vendor, vendorId).then(
                     vendor => {
@@ -769,6 +784,9 @@ export default {
                     componentData.resource.value.discount =
                         componentData.resource.value.discount.toFixed(1);
                 }
+                componentData.resource.payment_method = resource.payment_method
+                    ? resource.payment_method.split("|")
+                    : [];
             }
             if (caller === "show") {
                 let physicalAddress = "";
@@ -778,6 +796,23 @@ export default {
                     }
                 });
                 resource.physical = physicalAddress;
+
+                if (resource.payment_method) {
+                    const avs =
+                        componentData.instancedResource.authorisedValues
+                            .av_vendor_payment_methods;
+                    const paymentMethods = resource.payment_method.split("|");
+                    let displayString = "";
+                    paymentMethods.forEach((method, i) => {
+                        const isLastMethod = i + 1 === paymentMethods.length;
+                        const avMatch = avs.find(av => av.value === method);
+                        if (avMatch) {
+                            displayString += avMatch.description;
+                            if (!isLastMethod) displayString += ", ";
+                        }
+                    });
+                    resource.payment_method = displayString;
+                }
             }
         };
 
