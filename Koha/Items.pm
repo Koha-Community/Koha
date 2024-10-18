@@ -197,17 +197,29 @@ Returns a new resultset, containing only those items that are allowed to be book
 sub filter_by_bookable {
     my ($self) = @_;
 
-    my @bookable_itemtypes = Koha::ItemTypes->search( { bookable => 1 } )->get_column('itemtype');
-
-    my ( $where, $attr );
-    if ( C4::Context->preference("item-level_itypes") ) {
-        $where = [ { bookable => 1 }, { bookable => undef, itype => { -in => \@bookable_itemtypes } } ];
-    } else {
-        $where = [ { bookable => 1 }, { bookable => undef, 'biblioitem.itemtype' => { -in => \@bookable_itemtypes } } ];
-        $attr  = { join => 'biblioitem' };
+    if ( !C4::Context->preference('item-level_itypes') ) {
+        return $self->search(
+            [
+                { bookable => 1 },
+                {
+                    bookable              => undef,
+                    'biblioitem.itemtype' =>
+                        { -in => [ Koha::ItemTypes->search( { bookable => 1 } )->get_column('itemtype') ] }
+                },
+            ],
+            { join => 'biblioitem' }
+        );
     }
 
-    return $self->search( $where, $attr );
+    return $self->search(
+        [
+            { bookable => 1 },
+            {
+                bookable => undef,
+                itype    => { -in => [ Koha::ItemTypes->search( { bookable => 1 } )->get_column('itemtype') ] }
+            },
+        ]
+    );
 }
 
 =head3 move_to_biblio

@@ -77,7 +77,7 @@ elsif ( $op eq "cud-set_public_note" ) { # i.e., itemnotes parameter passed from
     $item->exclude_from_local_holds_priority($exclude_from_local_holds_priority);
     $messages = "updated_exclude_from_local_holds_priority=$exclude_from_local_holds_priority&";
 } elsif ( $op eq "cud-set_bookable" && $bookable ne $item_data_hashref->{'bookable'} ) {
-    undef($bookable) if $bookable eq "";
+    undef $bookable if $bookable eq q{};
     $item->bookable($bookable);
 } elsif ( $op eq "cud-set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
     $item->damaged($damaged);
