@@ -343,7 +343,7 @@ __PACKAGE__->add_columns(
     '+notforloan'                   => { is_boolean => 1 },
     '+rentalcharge_daily_calendar'  => { is_boolean => 1 },
     '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
-    '+bookable' => { integer => 1 },
+    '+bookable'                     => { is_boolean => 1, is_nullable => 1 },
 );
 
 # Use the ItemtypeLocalization view to create the join on localization
