@@ -16,6 +16,18 @@ export class ItemAPIClient {
                 }),
         };
     }
+
+    get item_types() {
+        return {
+            getAll: (query, params, headers) =>
+                this.getAll({
+                    endpoint: "item_types",
+                    query,
+                    params,
+                    headers,
+                }),
+        };
+    }
 }
 
 export default ItemAPIClient;

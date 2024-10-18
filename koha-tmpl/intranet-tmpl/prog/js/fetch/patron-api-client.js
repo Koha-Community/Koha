@@ -13,6 +13,18 @@ export class PatronAPIClient {
                 }),
         };
     }
+
+    get patron_categories() {
+        return {
+            getAll: (query, params, headers) =>
+                this.getAll({
+                    endpoint: "patron_categories",
+                    query,
+                    params,
+                    headers,
+                }),
+        };
+    }
 }
 
 export default PatronAPIClient;

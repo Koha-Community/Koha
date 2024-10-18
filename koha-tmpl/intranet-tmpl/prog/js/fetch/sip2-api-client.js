@@ -41,6 +41,43 @@ export class SIP2APIClient {
                 }),
         };
     }
+
+    get accounts() {
+        return {
+            get: id =>
+                this.get({
+                    endpoint: "accounts/" + id,
+                }),
+            getAll: params =>
+                this.getAll({
+                    endpoint: "accounts",
+                }),
+            delete: id =>
+                this.delete({
+                    endpoint: "accounts/" + id,
+                }),
+            create: account =>
+                this.post({
+                    endpoint: "accounts",
+                    body: account,
+                }),
+            update: (account, id) =>
+                this.put({
+                    endpoint: "accounts/" + id,
+                    body: account,
+                }),
+            count: (query = {}) =>
+                this.count({
+                    endpoint:
+                        "accounts?" +
+                        new URLSearchParams({
+                            _page: 1,
+                            _per_page: 1,
+                            ...(query && { q: JSON.stringify(query) }),
+                        }),
+                }),
+        };
+    }
 }
 
 export default SIP2APIClient;

@@ -100,12 +100,6 @@ export default {
                     },
                 },
                 {
-                    title: __("Name"),
-                    data: "name",
-                    searchable: true,
-                    orderable: true,
-                },
-                {
                     title: __("Implementation"),
                     data: "implementation",
                     searchable: true,
