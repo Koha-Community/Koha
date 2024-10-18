@@ -1799,14 +1799,14 @@ Overloaded to_api method to ensure item-level itypes is adhered to.
 =cut
 
 sub to_api {
-    my ($self, $params) = @_;
+    my ( $self, $params ) = @_;
 
     my $response = $self->SUPER::to_api($params);
+
     my $overrides = {};
-
-    $overrides->{effective_item_type_id} = $self->effective_itemtype;
-
+    $overrides->{effective_item_type_id}        = $self->effective_itemtype;
     $overrides->{effective_not_for_loan_status} = $self->effective_not_for_loan_status;
+    $overrides->{effective_bookable}            = $self->effective_bookable;
 
     return { %$response, %$overrides };
 }
