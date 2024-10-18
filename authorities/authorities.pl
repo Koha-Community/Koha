@@ -540,7 +540,6 @@ my $error = $input->param('error');
 my $authid = $input->param('authid') =~ s/\D//gr
     ; # if authid exists, it's a modif, not a new authority. We remove from authid all non-digit characters just in case the CGI parameter contains weird characters like spaces
 my $op = $input->param('op');
-my $nonav = $input->param('nonav');
 my $myindex = $input->param('index');
 my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
@@ -570,7 +569,7 @@ my ($template, $loggedinuser, $cookie)
                             type => "intranet",
                             flagsrequired => {editauthorities => 1},
                             });
-$template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,breedingid=>$breedingid, count=>$count);
+$template->param( index => $myindex, authtypecode => $authtypecode, breedingid => $breedingid, count => $count );
 
 $tagslib = GetTagsLabels(1,$authtypecode);
 $mandatory_z3950 = GetMandatoryFieldZ3950($authtypecode);
@@ -632,15 +631,6 @@ if ($op eq "cud-add") {
                         duplicateauthvalue  => $duplicateauthvalue->{'authorized'}->[0]->{'heading'},
                         );
     }
-} elsif ($op eq "cud-delete") {
-#------------------------------------------------------------------------------------------------------------------------------
-        DelAuthority({ authid => $authid });
-        if ($nonav){
-            print $input->redirect("auth_finder.pl");
-        }else{
-            print $input->redirect("authorities-home.pl?authid=0");
-        }
-                exit;
 } else {
     if ( $op eq "duplicate" ) {
         $authid = "";
