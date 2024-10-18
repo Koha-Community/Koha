@@ -25,10 +25,9 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-
 use C4::Koha qw( getImageSets GetAuthorisedValues );
 use C4::Context;
-use C4::Auth qw( get_template_and_user );
+use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use Koha::ItemTypes;
 use Koha::ItemType;
@@ -41,10 +40,11 @@ my $op            = $input->param('op') // 'list';
 my @messages;
 $searchfield =~ s/\,//g if $searchfield;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => "admin/itemtypes.tt",
-        query           => $input,
-        type            => "intranet",
-        flagsrequired   => { parameters => 'manage_itemtypes' },
+    {
+        template_name => "admin/itemtypes.tt",
+        query         => $input,
+        type          => "intranet",
+        flagsrequired => { parameters => 'manage_itemtypes' },
     }
 );
 
@@ -56,49 +56,49 @@ undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
 
-    my $parent_type = $itemtype ? $itemtype->parent_type : undef;
-    my $parent_types = Koha::ItemTypes->search({parent_type=>undef,itemtype => {'!='=>$itemtype_code}});
-    my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
+    my $parent_type    = $itemtype ? $itemtype->parent_type : undef;
+    my $parent_types   = Koha::ItemTypes->search( { parent_type => undef, itemtype => { '!=' => $itemtype_code } } );
+    my $imagesets      = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT");
     my $translated_languages = C4::Languages::getTranslatedLanguages( "both", C4::Context->preference('template') );
     $template->param(
-        itemtype  => $itemtype,
-        parent_type => $parent_type,
-        parent_types => $parent_types,
-        is_a_parent => $itemtype ? Koha::ItemTypes->search({parent_type=>$itemtype_code})->count : 0,
-        imagesets => $imagesets,
-        searchcategory => $searchcategory,
+        itemtype          => $itemtype,
+        parent_type       => $parent_type,
+        parent_types      => $parent_types,
+        is_a_parent       => $itemtype ? Koha::ItemTypes->search( { parent_type => $itemtype_code } )->count : 0,
+        imagesets         => $imagesets,
+        searchcategory    => $searchcategory,
         can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
     );
 } elsif ( $op eq 'cud-add_validate' ) {
-    my $is_a_modif   = $input->param('is_a_modif');
-    my $itemtype     = Koha::ItemTypes->find($itemtype_code);
-    my $parent_type  = $input->param('parent_type') || undef;
-    my $description  = $input->param('description');
-    my $rentalcharge = $input->param('rentalcharge');
-    my $rentalcharge_daily = $input->param('rentalcharge_daily');
+    my $is_a_modif          = $input->param('is_a_modif');
+    my $itemtype            = Koha::ItemTypes->find($itemtype_code);
+    my $parent_type         = $input->param('parent_type') || undef;
+    my $description         = $input->param('description');
+    my $rentalcharge        = $input->param('rentalcharge');
+    my $rentalcharge_daily  = $input->param('rentalcharge_daily');
     my $rentalcharge_hourly = $input->param('rentalcharge_hourly');
-    my $defaultreplacecost = $input->param('defaultreplacecost');
-    my $processfee = $input->param('processfee');
-    my $image = $input->param('image') || q||;
-    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
+    my $defaultreplacecost  = $input->param('defaultreplacecost');
+    my $processfee          = $input->param('processfee');
+    my $image               = $input->param('image') || q||;
+    my @branches            = grep { $_ ne q{} } $input->multi_param('branches');
 
     my $notforloan = $input->param('notforloan') ? 1 : 0;
     my $imageurl =
-      $image eq 'removeImage' ? ''
-      : (
+        $image eq 'removeImage' ? ''
+        : (
           $image eq 'remoteImage' ? $input->param('remoteImage')
         : $image
-      );
-    my $summary        = $input->param('summary');
-    my $checkinmsg     = $input->param('checkinmsg');
-    my $checkinmsgtype = $input->param('checkinmsgtype');
-    my $hideinopac     = $input->param('hideinopac') // 0;
-    my $searchcategory = $input->param('searchcategory');
-    my $rentalcharge_daily_calendar  = $input->param('rentalcharge_daily_calendar') // 0;
+        );
+    my $summary                      = $input->param('summary');
+    my $checkinmsg                   = $input->param('checkinmsg');
+    my $checkinmsgtype               = $input->param('checkinmsgtype');
+    my $hideinopac                   = $input->param('hideinopac') // 0;
+    my $searchcategory               = $input->param('searchcategory');
+    my $rentalcharge_daily_calendar  = $input->param('rentalcharge_daily_calendar')  // 0;
     my $rentalcharge_hourly_calendar = $input->param('rentalcharge_hourly_calendar') // 0;
-    my $automatic_checkin = $input->param('automatic_checkin') // 0;
-    my $bookable = $input->param('bookable')// 0;
+    my $automatic_checkin            = $input->param('automatic_checkin')            // 0;
+    my $bookable                     = $input->param('bookable')                     // 0;
 
     if ( $itemtype and $is_a_modif ) {    # it's a modification
         $itemtype->description($description);
@@ -122,8 +122,8 @@ if ( $op eq 'add_form' ) {
         $itemtype->bookable($bookable);
 
         eval {
-          $itemtype->store;
-          $itemtype->replace_library_limits( \@branches );
+            $itemtype->store;
+            $itemtype->replace_library_limits( \@branches );
         };
 
         if ($@) {
@@ -134,31 +134,31 @@ if ( $op eq 'add_form' ) {
     } elsif ( not $itemtype and not $is_a_modif ) {
         my $itemtype = Koha::ItemType->new(
             {
-                itemtype            => $itemtype_code,
-                description         => $description,
-                parent_type         => $parent_type,
-                rentalcharge        => $rentalcharge,
-                rentalcharge_daily  => $rentalcharge_daily,
-                rentalcharge_hourly => $rentalcharge_hourly,
-                defaultreplacecost  => $defaultreplacecost,
-                processfee          => $processfee,
-                notforloan          => $notforloan,
-                imageurl            => $imageurl,
-                summary             => $summary,
-                checkinmsg          => $checkinmsg,
-                checkinmsgtype      => $checkinmsgtype,
-                sip_media_type      => $sip_media_type,
-                hideinopac          => $hideinopac,
-                searchcategory      => $searchcategory,
+                itemtype                     => $itemtype_code,
+                description                  => $description,
+                parent_type                  => $parent_type,
+                rentalcharge                 => $rentalcharge,
+                rentalcharge_daily           => $rentalcharge_daily,
+                rentalcharge_hourly          => $rentalcharge_hourly,
+                defaultreplacecost           => $defaultreplacecost,
+                processfee                   => $processfee,
+                notforloan                   => $notforloan,
+                imageurl                     => $imageurl,
+                summary                      => $summary,
+                checkinmsg                   => $checkinmsg,
+                checkinmsgtype               => $checkinmsgtype,
+                sip_media_type               => $sip_media_type,
+                hideinopac                   => $hideinopac,
+                searchcategory               => $searchcategory,
                 rentalcharge_daily_calendar  => $rentalcharge_daily_calendar,
                 rentalcharge_hourly_calendar => $rentalcharge_hourly_calendar,
-                automatic_checkin   => $automatic_checkin,
-                bookable   => $bookable,
+                automatic_checkin            => $automatic_checkin,
+                bookable                     => $bookable,
             }
         );
         eval {
-          $itemtype->store;
-          $itemtype->replace_library_limits( \@branches );
+            $itemtype->store;
+            $itemtype->replace_library_limits( \@branches );
         };
 
         if ($@) {
@@ -168,19 +168,20 @@ if ( $op eq 'add_form' ) {
         }
     } else {
         push @messages,
-          { type => 'alert',
+            {
+            type => 'alert',
             code => 'already_exists',
-          };
+            };
     }
 
     $searchfield = '';
     $op          = 'list';
 
- } elsif ( $op eq 'delete_confirm' ) {
-    my $itemtype = Koha::ItemTypes->find($itemtype_code);
+} elsif ( $op eq 'delete_confirm' ) {
+    my $itemtype       = Koha::ItemTypes->find($itemtype_code);
     my $can_be_deleted = $itemtype->can_be_deleted();
-    if ($can_be_deleted == 0) {
-        push @messages, { type => 'alert', code => 'cannot_be_deleted'};
+    if ( $can_be_deleted == 0 ) {
+        push @messages, { type => 'alert', code => 'cannot_be_deleted' };
         $op = 'list';
     } else {
         $template->param( itemtype => $itemtype, );
@@ -189,7 +190,7 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'cud-delete_confirmed' ) {
 
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
-    my $deleted = eval { $itemtype->delete };
+    my $deleted  = eval { $itemtype->delete };
     if ( $@ or not $deleted ) {
         push @messages, { type => 'alert', code => 'error_on_delete' };
     } else {
