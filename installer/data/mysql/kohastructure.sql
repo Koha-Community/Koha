@@ -504,6 +504,7 @@ CREATE TABLE `aqbooksellers` (
   `fax` varchar(50) DEFAULT NULL COMMENT 'vendor fax number',
   `deliverytime` int(11) DEFAULT NULL COMMENT 'vendor delivery time',
   `external_id` varchar(255) DEFAULT NULL COMMENT 'external id of the vendor',
+  `payment_method` varchar(255) DEFAULT NULL COMMENT 'the payment method for the vendor',
   PRIMARY KEY (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
