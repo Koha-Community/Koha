@@ -1020,6 +1020,12 @@ modification template to apply as the MARC records are imported (these
 templates are created in the "MARC modification templates" tool in Koha).
 If not specified, no MARC modification templates are used (default).
 
+=item B<-si, --skip_indexing>
+
+If set, do not index the imported records with Zebra or Elasticsearch.
+Use this when you plan to do a complete reindex of your data after running
+bulkmarciport. This can increase performance and avoid unnecessary load.
+
 =back
 
 =cut
