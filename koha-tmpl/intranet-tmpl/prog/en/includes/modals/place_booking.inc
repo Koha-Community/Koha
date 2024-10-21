@@ -33,11 +33,7 @@
                             </li>
                             <li>
                                 <label for="booking_itemtype">Itemtype: </label>
-                                [% SET itemtypes = ItemTypes.Get() %]
-                                <select id="booking_itemtype" name="booking_itemtype" disabled="true">
-                                    [% FOREACH itemtype IN itemtypes %]
-                                        <option value="[% itemtype.itemtype | html %]">[% itemtype.description | html%]</option>
-                                    [% END %]
+                                <select id="booking_itemtype" name="booking_itemtype" disabled="disabled">
                                 </select>
                             <li>
                             <label for="booking_item_id">Item: </label>

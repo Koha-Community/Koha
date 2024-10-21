@@ -129,45 +129,54 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
         placeholder: __("Search for a patron"),
     });
 
-    // Lead and Trail days syncing
+    // Circulation rules update
     let leadDays = 0;
     let trailDays = 0;
     let boldDates = [];
     let issueLength;
     let renewalLength;
     let renewalsAllowed;
+
+    // Note: For now, we apply the pickup library rules for issuelength, renewalsallowed and renewalperiod.
+    // This effectively makes these circulation rules hard coded to CircControl: ItemHomeLibrary + HomeOrHolding: holdingbranch
+    // Whilst it would be beneficial to make this follow those rules more closely, this would require some significant thinking
+    // around how to best display this in the calender component for the 'Any item' case.
     function getCirculationRules() {
         let rules_url = "/api/v1/circulation_rules";
-        $.ajax({
-            url: rules_url,
-            type: "GET",
-            dataType: "json",
-            data: {
-                patron_category_id: booking_patron.category_id,
-                item_type_id: booking_itemtype_id,
-                library_id: pickup_library_id,
-                rules: "bookings_lead_period,bookings_trail_period,issuelength,renewalsallowed,renewalperiod",
-            },
-            success: function (response) {
-                let rules = response[0];
-                issueLength = rules.issuelength;
-                renewalsAllowed = rules.renewalsallowed;
-                renewalLength = rules.renewalperiod;
-                leadDays = rules.bookings_lead_period;
-                trailDays = rules.bookings_trail_period;
+        if (booking_patron && pickup_library_id && booking_itemtype_id) {
+            $.ajax({
+                url: rules_url,
+                type: "GET",
+                dataType: "json",
+                data: {
+                    patron_category_id: booking_patron.category_id,
+                    item_type_id: booking_itemtype_id,
+                    library_id: pickup_library_id,
+                    rules: "bookings_lead_period,bookings_trail_period,issuelength,renewalsallowed,renewalperiod",
+                },
+                success: function (response) {
+                    let rules = response[0];
+                    issueLength = rules.issuelength;
+                    renewalsAllowed = rules.renewalsallowed;
+                    renewalLength = rules.renewalperiod;
+                    leadDays = rules.bookings_lead_period;
+                    trailDays = rules.bookings_trail_period;
 
-                // redraw pariodPicker taking selected item into account
-                periodPicker.redraw();
+                    // redraw pariodPicker taking selected item into account
+                    periodPicker.redraw();
 
-                // Enable flatpickr now we have data we need
-                if (dataFetched) {
-                    $("#period_fields :input").prop("disabled", false);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Circulation rules fetch failed: ", error);
-            },
-        });
+                    // Enable flatpickr now we have data we need
+                    if (dataFetched) {
+                        $("#period_fields :input").prop("disabled", false);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Circulation rules fetch failed: ", error);
+                },
+            });
+        } else {
+            $("#period_fields :input").prop("disabled", true);
+        }
     }
 
     // Pickup location select2
@@ -304,6 +313,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 "&_per_page=-1",
             dataType: "json",
             type: "GET",
+            headers: {
+                "x-koha-embed": "item_type",
+            },
         });
 
         // Fetch list of existing bookings
@@ -350,12 +362,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                 // Total bookable items
                 let bookable = 0;
-
-                let itemtypes = new Set();
                 for (item of bookable_items) {
                     bookable++;
 
-                    // Populate item select (NOTE: Do we still need this check for pre-existing select option here?)
+                    // Populate item select
                     if (
                         !$("#booking_item_id").find(
                             "option[value='" + item.item_id + "']"
@@ -378,18 +388,25 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                         $("#booking_item_id").append(newOption);
                     }
 
-                    // Build list of itemtypes
-                    itemtypes.add(item.effective_item_type_id);
-                }
-
-                // Filter itemtypes
-                $("#booking_itemtype option").each(function () {
-                    const optionValue = $(this).val();
-                    if (!itemtypes.has(optionValue)) {
-                        $(this).remove();
+                    // Populate item types select
+                    if (
+                        !$("#booking_itemtype").find(
+                            "option[value='" +
+                                item.item_type.item_type_id +
+                                "']"
+                        ).length
+                    ) {
+                        // Create a DOM Option and de-select by default
+                        let newTypeOption = new Option(
+                            escape_str(item.item_type.description),
+                            item.item_type.item_type_id,
+                            false,
+                            false
+                        );
+                        $("#booking_itemtype").append(newTypeOption);
                     }
-                });
-                $("#booking_itemtype").trigger("change");
+                }
+                $("#booking_itemtype").val(null).trigger("change");
 
                 // Set disable function for periodPicker
                 let disableExists = periodPicker.config.disable.filter(
@@ -572,28 +589,33 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 }
 
                 // Setup listener for itemtype select2
-                $("#booking_itemtype").on("select2:select", function (e) {
-                    booking_itemtype_id = e.params.data.id
-                        ? e.params.data.id
-                        : null;
+                $("#booking_itemtype").on("change", function (e) {
+                    let selectedValue = $(this).val(); // Get selected value (null if cleared)
+                    booking_itemtype_id = selectedValue ? selectedValue : null;
 
-                    // Disable items not of this itemtype
-                    $("#booking_item_id > option").each(function () {
-                        let option = $(this);
-                        if (option.val() != 0) {
-                            let item_itemtype = option.data("itemtype");
-                            if (item_itemtype == booking_itemtype_id) {
-                                if (
-                                    option.data("available") &&
-                                    option.data("pickup")
-                                ) {
-                                    option.prop("disabled", false);
+                    // Handle item selectionue
+                    if (!booking_itemtype_id) {
+                        // Enable all items for selection
+                        $("#booking_item_id > option").prop("disabled", false);
+                    } else {
+                        // Disable items not of this itemtype
+                        $("#booking_item_id > option").each(function () {
+                            let option = $(this);
+                            if (option.val() != 0) {
+                                let item_itemtype = option.data("itemtype");
+                                if (item_itemtype == booking_itemtype_id) {
+                                    if (
+                                        option.data("available") &&
+                                        option.data("pickup")
+                                    ) {
+                                        option.prop("disabled", false);
+                                    }
+                                } else {
+                                    option.prop("disabled", true);
                                 }
-                            } else {
-                                option.prop("disabled", true);
                             }
-                        }
-                    });
+                        });
+                    }
                     $("#booking_item_id").trigger("change.select2");
 
                     // Update circulation rules
@@ -671,6 +693,11 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
 
                     // Disable patron selection change
                     $("#booking_patron_id").prop("disabled", true);
+
+                    pickup_library_id = $("#pickup_library_id").val();
+
+                    // Populate circulation rules
+                    getCirculationRules();
                 });
 
                 // Set onChange for flatpickr
@@ -1230,7 +1257,7 @@ $("#placeBookingModal").on("hidden.bs.modal", function (e) {
     $("#booking_item_id").prop("disabled", true);
 
     // Reset itemtype select
-    $("#booking_itemtype").val(0).trigger("change");
+    $("#booking_itemtype").val(null).trigger("change");
     $("#booking_itemtype").prop("disabled", true);
     booking_itemtype_id = undefined;
 
