@@ -736,6 +736,10 @@ body {
     padding: 0;
     text-align: left;
 
+    &:has( nav.fixed-bottom ) {
+        padding-bottom: 6rem;
+    }
+
     &.nobackdrop {
         .modal-backdrop {
             opacity: 0;
@@ -4830,7 +4834,7 @@ div .suggestion_note {
     position: fixed;
     bottom: 40px;
     right: 40px;
-    z-index: 1000;
+    z-index: $zindex-tooltip;
 }
 
 @media only screen and ( max-width: 1200px ) {
