@@ -170,8 +170,13 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
         # i.e., whether to apply waiting status
         ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
 
+        my $hold = Koha::Holds->find($reserve_id);
         if ($diffBranchSend) {
-            ModItemTransfer( $itemnumber, $userenv_branch, $diffBranchSend, 'Reserve' );
+            my $tobranch = Koha::Libraries->find( $hold->branchcode );
+
+            # Add transfer, enqueue if one is already in the queue, and immediately set to in transit
+            my $transfer = $item->request_transfer( { to => $tobranch, reason => 'Reserve', enqueue => 1 } );
+            $transfer->transit;
         }
     }
     # check if we have other reserves for this document, if we have a result send the message of transfer
@@ -612,7 +617,10 @@ if ( $messages->{'ResFound'} ) {
         ModReserveAffect( $itemnumber, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id}, $desk_id );
 
         if ($diffBranchSend) {
-            ModItemTransfer( $itemnumber, $item->holdingbranch, $reserve->{branchcode}, 'Reserve' );
+            my $tobranch = Koha::Libraries->find( $reserve->{branchcode} );
+            # Add transfer, enqueue if one is already in the queue, and immediately set to in transit
+            my $transfer = $item->request_transfer( { to => $tobranch, reason => 'Reserve', enqueue => 1 } );
+            $transfer->transit;
         }
 
         $template->param(
