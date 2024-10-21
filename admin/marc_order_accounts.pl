@@ -55,18 +55,8 @@ $op ||= 'display';
 
 if ( $op eq 'acct_form' ) {
     $template->param( acct_form => 1 );
-    my @vendors = Koha::Acquisition::Booksellers->search(
-        undef,
-        {
-            columns  => [ 'name', 'id' ],
-            order_by => { -asc => 'name' }
-        }
-    )->as_list;
     my $budgets = GetBudgets();
-    $template->param(
-        vendors => \@vendors,
-        budgets => $budgets
-    );
+    $template->param( budgets => $budgets );
     my @matchers = C4::Matcher::GetMatcherList();
     $template->param( available_matchers => \@matchers );
 
@@ -127,7 +117,8 @@ sub show_account {
     if ($acct_id) {
         my $acct = Koha::MarcOrderAccounts->find($acct_id);
         if ($acct) {
-            $template->param( account => $acct );
+            my $vendor = Koha::Acquisition::Booksellers->find( $acct->vendor_id );
+            $template->param( vendor => $vendor, account => $acct );
         }
     }
     return;

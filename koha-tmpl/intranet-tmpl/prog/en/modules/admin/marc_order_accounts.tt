@@ -34,8 +34,9 @@ MARC Order Accounts
 
 <div class="main container-fluid">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
+        <div class="col-md-10 order-md-2 order-sm-1">
             <main>
+                [% INCLUDE 'messages.inc' %]
                 [% IF display %]
                     <div id="toolbar" class="btn-toolbar">
                     <a class="btn btn-default" id="newmarcorderacct" href="/cgi-bin/koha/admin/marc_order_accounts.pl?op=acct_form">
@@ -95,19 +96,15 @@ MARC Order Accounts
                             <ol>
                                 <li>
                                     <label for="vendor_id">Vendor: </label>
-                                    <select name="vendor_id" id="vendor_id">
-                                        [% FOREACH vendor IN vendors %]
-                                            [% IF account.vendor_id == vendor.id %]
-                                                <option value="[% vendor.id | html %]" selected="selected">[% vendor.name | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% vendor.id | html %]">[% vendor.name | html %]</option>
-                                            [% END %]
+                                    <select class="select2" name="vendor_id" id="vendor_id">
+                                        [% IF (vendor) %]
+                                            <option value="[% account.vendor_id | html %]" selected="selected">Current vendor ([% vendor.name | html %])</option>
                                         [% END %]
                                     </select>
                                 </li>
                                 <li>
                                     <label for="budget_id">Budget: </label>
-                                    <select name="budget_id" id="budget_id">
+                                    <select class="select2" name="budget_id" id="budget_id">
                                         [% FOREACH budget IN budgets %]
                                             [% IF account.budget_id == budget.budget_id %]
                                                 <option value="[% budget.budget_id | html %]" selected="selected">[% budget.budget_name | html %]</option>
@@ -144,7 +141,7 @@ MARC Order Accounts
                             <ol>
                                 <li>
                                         <label for='record_type'>Record type:</label>
-                                        <select name='record_type' id='record_type'>
+                                        <select class="select2" name='record_type' id='record_type'>
                                             [% IF ( account.record_type == 'biblio' ) %]
                                                 <option value="biblio" selected="selected">
                                             [% ELSE %]
@@ -161,7 +158,7 @@ MARC Order Accounts
                                     </li>
                                     <li>
                                         <label for="encoding">Character encoding: </label>
-                                        <select name="encoding" id="encoding">
+                                        <select class="select2" name="encoding" id="encoding">
                                             [% IF ( account.encoding == 'UTF-8' ) %]
                                                 <option value="UTF-8" selected="selected">
                                             [% ELSE %]
@@ -207,7 +204,7 @@ MARC Order Accounts
                             <ol>
                                 <li>
                                     <label for="matcher">Record matching rule:</label>
-                                    <select name="matcher" id="matcher">
+                                    <select class="select2" name="matcher" id="matcher">
                                         [% FOREACH available_matcher IN available_matchers %]
                                             [% IF available_matcher.matcher_id == account.matcher_id %]
                                                 <option value="[% available_matcher.matcher_id | html %]" selected="selected">[% available_matcher.code | html %] ([% available_matcher.description | html %])</option>
@@ -219,7 +216,7 @@ MARC Order Accounts
                                 </li>
                                 <li>
                                     <label for="overlay_action">Action if matching record found: </label>
-                                    <select name="overlay_action" id="overlay_action">
+                                    <select class="select2" name="overlay_action" id="overlay_action">
                                         [% IF ( account.overlay_action == 'replace' ) %]
                                             <option value="replace"  selected="selected">
                                         [% ELSE %]
@@ -242,7 +239,7 @@ MARC Order Accounts
                                 </li>
                                 <li>
                                     <label for="nomatch_action">Action if no match is found: </label>
-                                    <select name="nomatch_action" id="nomatch_action">
+                                    <select class="select2" name="nomatch_action" id="nomatch_action">
                                         [% IF ( account.nomatch_action == 'create_new' ) %]
                                             <option value="create_new" selected="selected">
                                         [% ELSE %]
@@ -282,7 +279,7 @@ MARC Order Accounts
                             <ol>
                                 <li>
                                     <label for="item_action">How to process items: </label>
-                                    <select name="item_action" id="item_action">
+                                    <select class="select2" name="item_action" id="item_action">
                                     [% IF ( account.item_action == 'always_add' ) %]
                                         <option value="always_add" selected="selected">
                                     [% ELSE %]
@@ -361,5 +358,53 @@ MARC Order Accounts
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'select2.inc' %]
+<script>
+
+$(document).ready(function() {
+
+    function display_vendor(vendor) {
+        var $text;
+        $text = $('<span>'+vendor.text+'</span>');
+
+        return $text;
+    };
+
+    $("#vendor_id").kohaSelect({
+        width: '10%',
+        allowClear: false,
+        ajax: {
+            url: '/api/v1/acquisitions/vendors',
+            delay: 300, // wait 300 milliseconds before triggering the request
+            cache: true,
+            dataType: 'json',
+            data: function (params) {
+                var search_term = (params.term === undefined) ? '' : params.term;
+                var query = {
+                    "q": JSON.stringify({"name":{"-like":'%'+search_term+'%'}}),
+                    "_order_by": "name",
+                    "_page": params.page
+                };
+
+                return query;
+            },
+            processResults: function (data) {
+                var results = [];
+                data.results.forEach( function ( vendor ) {
+                    results.push(
+                        {
+                            "id": vendor.id,
+                            "text": vendor.name.escapeHtml()
+                        }
+                    );
+                });
+                return { "results": results, "pagination": { "more": data.pagination.more } };
+            }
+        },
+        templateResult: display_vendor,
+        templateSelection: display_vendor
+    });
+});
+</script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
