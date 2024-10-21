@@ -47,6 +47,10 @@ Print report to standard out.
 
 Without this parameter no changes will be made
 
+=item B<-d|--delete>
+
+Delete the file once it has been processed
+
 =back
 
 =cut
@@ -64,11 +68,12 @@ use C4::Log qw( cronlogaction );
 
 my $command_line_options = join( " ", @ARGV );
 
-my ( $help, $verbose, $confirm );
+my ( $help, $verbose, $confirm, $delete );
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
     'c|confirm' => \$confirm,
+    'd|delete'  => \$delete,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
@@ -116,11 +121,19 @@ foreach my $acct (@accounts) {
         }
         if ($confirm) {
             say sprintf "Creating order lines from file %s", $filename if $verbose;
+
             my $result = Koha::MarcOrder->create_order_lines_from_file($args);
             if ( $result->{success} ) {
                 $files_processed++;
                 say sprintf "Successfully processed file: %s", $filename if $verbose;
-                unlink $full_path;
+                if ($delete) {
+                    say sprintf "Deleting processed file: %s", $filename if $verbose;
+                    unlink $full_path;
+                } else {
+                    mkdir "$working_dir/archive" unless -d "$working_dir/archive";
+                    say sprintf "Moving file to archive: %s", $filename if $verbose;
+                    move( $full_path, "$working_dir/archive/$filename" );
+                }
             } else {
                 say sprintf "Error processing file: %s", $filename        if $verbose;
                 say sprintf "Error message: %s",         $result->{error} if $verbose;
