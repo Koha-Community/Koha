@@ -515,6 +515,7 @@ my $fa_branch             = $input->param('branch');
 my $fa_stickyduedate      = $input->param('stickyduedate');
 my $fa_duedatespec        = $input->param('duedatespec');
 
+$op            = $input->param('op') // q{};
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'cud-addbiblio' );
 
@@ -539,7 +540,6 @@ $tagslib           = &GetMarcStructure( 1, $frameworkcode );
 $usedTagsLib       = &GetUsedMarcStructure($frameworkcode);
 $mandatory_z3950   = GetMandatoryFieldZ3950($frameworkcode);
 $is_a_modif        = 0;
-$op                = $input->param('op') // q{};
 $changed_framework = 0;
 
 if ( $op eq 'cud-change-framework' ) {
