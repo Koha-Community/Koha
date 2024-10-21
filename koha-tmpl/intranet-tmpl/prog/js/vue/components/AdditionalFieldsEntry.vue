@@ -6,7 +6,10 @@
     >
         <legend>{{ $__("Additional fields") }}</legend>
         <ol>
-            <template v-for="available_field in available_fields">
+            <template
+                v-for="available_field in available_fields"
+                v-bind:key="available_field.extended_attribute_type_id"
+            >
                 <template
                     v-if="
                         available_field.authorised_value_category_name &&
@@ -84,6 +87,7 @@
                         v-for="current in current_additional_fields_values[
                             available_field.extended_attribute_type_id
                         ]"
+                        v-bind:key="current.id"
                     >
                         <label
                             :for="
@@ -121,7 +125,6 @@
 </template>
 
 <script>
-import { inject } from "vue"
 import { APIClient } from "../fetch/api-client.js"
 
 export default {

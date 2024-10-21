@@ -6,7 +6,10 @@
     >
         <legend>{{ $__("Additional fields") }}</legend>
         <ol>
-            <li v-for="additional_field_value in additional_field_values">
+            <li
+                v-for="additional_field_value in additional_field_values"
+                v-bind:key="additional_field_value.id"
+            >
                 <label
                     :for="`additional_field_` + additional_field_value.field_id"
                 >
@@ -19,9 +22,6 @@
 </template>
 
 <script>
-import { inject } from "vue"
-import { APIClient } from "../fetch/api-client.js"
-
 export default {
     data() {
         return {
