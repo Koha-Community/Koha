@@ -1040,13 +1040,21 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
                 if (data.external_filters.hasOwnProperty(k)) {
                     let node = $(external_filter_nodes[k]);
                     let tag_name = node.prop("tagName");
+                    let value = data.external_filters[k];
                     if (
                         tag_name == "INPUT" &&
                         node.prop("type") == "checkbox"
                     ) {
-                        node.prop("checked", data.external_filters[k]);
+                        node.prop("checked", value);
+                    } else if (
+                        tag_name == "INPUT" &&
+                        node.hasClass("flatpickr")
+                    ) {
+                        const fp =
+                            document.querySelector(external_filter_nodes[k])._flatpickr;
+                        fp.setDate(value);
                     } else if (tag_name == "INPUT" || tag_name == "SELECT") {
-                        node.val(data.external_filters[k]);
+                        node.val(value);
                     } else {
                         console.log(
                             "Tag '%s' not supported yet for DT state".format(
