@@ -116,7 +116,7 @@ export default {
                 options: {
                     ordering: false,
                     dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    aLengthMenu: [
+                    lengthMenu: [
                         [10, 20, 50, 100],
                         [10, 20, 50, 100],
                     ],
