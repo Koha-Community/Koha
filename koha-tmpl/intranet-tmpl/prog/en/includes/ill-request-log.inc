@@ -8,7 +8,7 @@
             [% PROCESS 'action-logs.inc' %]
             [% PROCESS translate_log_interface log_interface = log.interface %]
         [% END %]
-        - <strong>[% action_label | html %]</strong>
+        - <strong>[% action_label | html %]: </strong>
         [% content | $raw %]
     </p>
 [% END %]
