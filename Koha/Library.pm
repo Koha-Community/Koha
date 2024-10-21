@@ -361,7 +361,7 @@ sub to_api_mapping {
         branchphone      => 'phone',
         branchfax        => 'fax',
         branchemail      => 'email',
-        branchillemail   => 'illemail',
+        branchillemail   => 'ill_email',
         branchreplyto    => 'reply_to_email',
         branchreturnpath => 'return_path_email',
         branchurl        => 'url',
