@@ -194,6 +194,18 @@ $(document).ready(function() {
         }
     };
 
+    let external_filter_nodes = {
+        illfilter_keyword: '#illfilter_keyword',
+        illfilter_backend: '#illfilter_backend',
+        illfilter_status: '#illfilter_status',
+        illfilter_dateplaced_start: '#illfilter_dateplaced_start',
+        illfilter_dateplaced_end: '#illfilter_dateplaced_end',
+        illfilter_datemodified_start: '#illfilter_datemodified_start',
+        illfilter_datemodified_end: '#illfilter_datemodified_end',
+        illfilter_branchname: '#illfilter_branchname',
+        illfilter_patron: '#illfilter_patron',
+    };
+
     let table_id = "#ill-requests";
 
     if (borrower_prefilter) {
@@ -426,7 +438,7 @@ $(document).ready(function() {
                 }
             }
         ]
-    }, table_settings, null, additional_filters);
+    }, table_settings, null, additional_filters, undefined, external_filter_nodes);
 
     $("#illfilter_form").on('submit', filter);
 
