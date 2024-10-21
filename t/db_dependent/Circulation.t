@@ -2600,8 +2600,8 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31', 'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments' );
 };
 
-subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
-    plan tests => 13;
+subtest 'Statistic patrons "X"' => sub {
+    plan tests => 15;
 
     my $library           = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category_x = $builder->build_object(
@@ -2660,6 +2660,13 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
         'Single entry recorded in the stats table'
     );
 
+    AddReturn( $item_3->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
+    $item_3->discard_changes;
+    is(
+        Koha::Statistics->search( { itemnumber => $item_3->itemnumber } )->count, 1,
+        'Stats skipped in AddReturn when there was no checkout and skip_localuse was passed'
+    );
+
     my $item_4 = $builder->build_sample_item( { library => $library->branchcode } );
     AddIssue( $patron_2, $item_4->barcode );
     $item_4->discard_changes;
@@ -2671,6 +2678,13 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     $item_4->discard_changes;
     is(
         Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 2,
+        'Issue and localuse should be recorded in statistics table for item 4.'
+    );
+
+    AddReturn( $item_4->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
+    $item_4->discard_changes;
+    is(
+        Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 3,
         'Issue, return, and localuse should be recorded in statistics table for item 4.'
     );
 
