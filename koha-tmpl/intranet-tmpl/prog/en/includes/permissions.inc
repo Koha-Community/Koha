@@ -827,6 +827,11 @@
             Manage EDIFACT transmissions
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'marc_order_manage' -%]
+        <span class="sub_permission marc_order_manage_subpermission">
+            Manage MARC ordering
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'reopen_closed_invoices' -%]
         <span class="sub_permission reopen_closed_invoices_subpermission">
             Reopen closed invoices

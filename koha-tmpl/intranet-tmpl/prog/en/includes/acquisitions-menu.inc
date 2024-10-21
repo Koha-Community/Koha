@@ -24,7 +24,7 @@
                 [% END %]
             </ul>
         [% END %]
-        [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_currencies_manage || ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage ) || CAN_user_parameters_manage_additional_fields ) %]
+        [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_acquisition_currencies_manage || ( Koha.Preference('EDIFACT') && CAN_user_acquisition_edi_manage ) || CAN_user_parameters_manage_additional_fields ) || ( Koha.Preference('MarcOrderingAutomation') && CAN_user_acquisition_marc_order_manage ) %]
             <h5>Administration</h5>
             <ul>
                 [% IF ( CAN_user_acquisition_period_manage ) %]
@@ -40,7 +40,7 @@
                     <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
                     <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
                 [% END %]
-                [% IF Koha.Preference('MarcOrderingAutomation') %]
+                [% IF Koha.Preference('MarcOrderingAutomation') && CAN_user_acquisition_marc_order_manage %]
                     <li><a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC order accounts</a></li>
                 [% END %]
                 [% IF CAN_user_acquisition_edit_invoices && CAN_user_parameters_manage_additional_fields %]

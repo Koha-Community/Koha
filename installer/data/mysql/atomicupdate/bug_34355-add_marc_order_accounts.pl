@@ -43,5 +43,13 @@ return {
             }
         );
 
+        $dbh->do(
+            q{
+                INSERT IGNORE INTO permissions (module_bit, code, description) values (11, 'marc_order_manage', 'Manage MARC ordering');
+                }
+        );
+
+
+
     },
 };

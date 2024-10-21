@@ -44,6 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "admin/marc_order_accounts.tt",
         query         => $input,
         type          => "intranet",
+        flagsrequired => { acquisition => 'marc_order_manage' },
     }
 );
 

@@ -115,6 +115,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_acquisition_group_manage'                         => 1,
         'CAN_user_acquisition_issue_manage'                         => 1,
         'CAN_user_acquisition_merge_invoices'                       => 1,
+        'CAN_user_acquisition_marc_order_manage'                    => 1,
         'CAN_user_acquisition_order_manage_all'                     => 1,
         'CAN_user_acquisition_order_manage'                         => 1,
         'CAN_user_acquisition_order_receive'                        => 1,

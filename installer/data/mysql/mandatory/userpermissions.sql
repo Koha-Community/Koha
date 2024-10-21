@@ -86,6 +86,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_add_del', 'Add and delete funds (but can''t modify funds)'),
    (11, 'budget_manage_all', 'Manage all funds'),
    (11, 'edi_manage', 'Manage EDIFACT transmissions'),
+   (11, 'marc_order_manage', 'Manage MARC ordering'),
    (11, 'reopen_closed_invoices', 'Reopen closed invoices'),
    (11, 'edit_invoices', 'Edit invoices'),
    (11, 'delete_invoices', 'Delete invoices'),
