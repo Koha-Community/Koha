@@ -280,6 +280,7 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
+    clear_filters();
     $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
@@ -288,10 +289,7 @@ subtest 'Search patrons' => sub {
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
 
-    # Reset the filters
-    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
-    $s->submit_form;
-    sleep $DT_delay && $s->wait_for_ajax;
+    clear_filters();
 
     # And make sure all the patrons are present
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
@@ -313,8 +311,7 @@ subtest 'Search patrons' => sub {
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons), 'Searching on a non-searchable attribute returns no results' );
 
-    # clear form
-    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
+    clear_filters();
 
     # Search on searchable attribute, we expect 2 patrons
     $s->fill_form( { 'search_patron_filter' => 'test_attr_2' } );
@@ -323,8 +320,7 @@ subtest 'Search patrons' => sub {
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
-    # clear form
-    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
+    clear_filters();
 
     $s->fill_form( { 'search_patron_filter' => 'test_attr_3' } ); # Terms must be split
     $s->submit_form;
@@ -332,8 +328,7 @@ subtest 'Search patrons' => sub {
 
     is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
-    # clear form
-    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
+    clear_filters();
 
     # Search on searchable attribute as specific field, we expect 2 patrons
     $s->fill_form( { 'search_patron_filter' => 'test_attr_4' } );
@@ -361,12 +356,14 @@ subtest 'Search patrons' => sub {
 
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
+        clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
         my $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "", "Patrons selected is not displayed" );
 
+        $driver->capture_screenshot('selenium_xxx.png');
         my @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[2]->click;
@@ -387,6 +384,7 @@ subtest 'Search patrons' => sub {
 
         # Perform another search
         $driver->get( $base_url . "/members/members-home.pl" );
+        clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
@@ -414,6 +412,7 @@ subtest 'Search patrons' => sub {
         # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
 
         $driver->get( $base_url . "/members/members-home.pl" );
+        clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
@@ -740,4 +739,10 @@ sub is_patron_shown {
 
     my @checkboxes = $driver->find_elements('//input[@type="checkbox"][@name="borrowernumber"]');
     return scalar( grep { $_->get_value == $patron->borrowernumber } @checkboxes );
+}
+
+sub clear_filters {
+    $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
+    $s->submit_form;
+    sleep $DT_delay && $s->wait_for_ajax;
 }
