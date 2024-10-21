@@ -2473,7 +2473,7 @@ sub AddReturn {
         ccode          => $item->ccode,
         categorycode   => $categorycode,
         interface      => C4::Context->interface,
-    }) unless ( $skip_localuse && $stat_type eq 'localuse' );
+    }) unless ( $skip_localuse && !$issue );
 
     # Send a check-in slip. # NOTE: borrower may be undef. Do not try to send messages then.
     if ( $patron ) {
