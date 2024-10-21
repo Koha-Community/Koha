@@ -251,87 +251,16 @@ sub _create_basket_for_file {
 
     $file->_stage_file($params)
 
-    Stages a file directly using parameters from a marc ordering account and without using the background job
-    This function is a mirror of Koha::BackgroundJob::StageMARCForImport->process but with the background job functionality removed
+    Stages a file directly using parameters from a marc ordering account
 
 =cut
 
 sub _stage_file {
     my ($args) = @_;
 
-    my $record_type                = $args->{record_type};
-    my $encoding                   = $args->{encoding};
-    my $format                     = $args->{format};
-    my $filepath                   = $args->{filepath};
-    my $filename                   = $args->{filename};
-    my $marc_modification_template = $args->{marc_modification_template};
-    my $comments                   = $args->{comments};
-    my $parse_items                = $args->{parse_items};
-    my $matcher_id                 = $args->{matcher_id};
-    my $overlay_action             = $args->{overlay_action};
-    my $nomatch_action             = $args->{nomatch_action};
-    my $item_action                = $args->{item_action};
+    my $result = Koha::ImportBatch->new_from_file($args);
 
-    my ( $batch_id, $num_valid, $num_items, @import_errors );
-    my $num_with_matches = 0;
-    my $checked_matches  = 0;
-    my $matcher_failed   = 0;
-    my $matcher_code     = "";
-
-    my $schema = Koha::Database->new->schema;
-    try {
-        $schema->storage->txn_begin;
-
-        my ( $errors, $marcrecords );
-        if ( $format eq 'MARCXML' ) {
-            ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $filepath, $encoding );
-        } elsif ( $format eq 'ISO2709' ) {
-            ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File(
-                $filepath, $record_type,
-                $encoding
-            );
-        } else {    # plugin based
-            $errors      = [];
-            $marcrecords = C4::ImportBatch::RecordsFromMarcPlugin(
-                $filepath, $format,
-                $encoding
-            );
-        }
-
-        ( $batch_id, $num_valid, $num_items, @import_errors ) = BatchStageMarcRecords(
-            $record_type,                $encoding,
-            $marcrecords,                $filename,
-            $marc_modification_template, $comments,
-            '',                          $parse_items,
-            0
-        );
-
-        if ($matcher_id) {
-            my $matcher = C4::Matcher->fetch($matcher_id);
-            if ( defined $matcher ) {
-                $checked_matches  = 1;
-                $matcher_code     = $matcher->code();
-                $num_with_matches = BatchFindDuplicates( $batch_id, $matcher, 10 );
-                SetImportBatchMatcher( $batch_id, $matcher_id );
-                SetImportBatchOverlayAction( $batch_id, $overlay_action );
-                SetImportBatchNoMatchAction( $batch_id, $nomatch_action );
-                SetImportBatchItemAction( $batch_id, $item_action );
-                $schema->storage->txn_commit;
-            } else {
-                $matcher_failed = 1;
-                $schema->storage->txn_rollback;
-            }
-        } else {
-            $schema->storage->txn_commit;
-        }
-
-        return $batch_id;
-    } catch {
-        warn $_;
-        $schema->storage->txn_rollback;
-        die "Something terrible has happened!"
-            if ( $_ =~ /Rollback failed/ );    # TODO Check test: Rollback failed
-    };
+    return $result->{report}->{import_batch_id};
 }
 
 =head3 _get_syspref_mappings
