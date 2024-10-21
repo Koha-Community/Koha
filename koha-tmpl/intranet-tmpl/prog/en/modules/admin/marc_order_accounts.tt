@@ -128,6 +128,7 @@ MARC Order Accounts
                                     <label for="match_field">Match field: </label>
                                     <input type="text" name="match_field" id="match_field" size="20" value="[% account.match_field | html %]" />
                                     <div class="hint">(Optional): If you have files from multiple vendors in the same file directory, the match field is the field in the marc record that will be checked to see if the file should be processed by this account.</div>
+                                    <div class="hint">The format for this field is the same as MARCFieldsToOrder - the field and the subfield separated by a dollar sign e.g. 245$a</div>
                                 </li>
                                 <li>
                                     <label for="match_value">Match value: </label>
@@ -143,17 +144,15 @@ MARC Order Accounts
                                         <label for='record_type'>Record type:</label>
                                         <select class="select2" name='record_type' id='record_type'>
                                             [% IF ( account.record_type == 'biblio' ) %]
-                                                <option value="biblio" selected="selected">
+                                                <option value="biblio" selected="selected">Bibliographic</option>
                                             [% ELSE %]
-                                                <option value="biblio">
+                                                <option value="biblio">Bibliographic</option>
                                             [% END %]
-                                                Bibliographic</option>
                                             [% IF ( account.record_type == 'auth' ) %]
-                                                <option value="auth" selected="selected">
+                                                <option value="auth" selected="selected">Authority</option>
                                             [% ELSE %]
-                                                <option value="auth">
+                                                <option value="auth">Authority</option>
                                             [% END %]
-                                                Authority</option>
                                         </select>
                                     </li>
                                     <li>
@@ -216,43 +215,11 @@ MARC Order Accounts
                                 </li>
                                 <li>
                                     <label for="overlay_action">Action if matching record found: </label>
-                                    <select class="select2" name="overlay_action" id="overlay_action">
-                                        [% IF ( account.overlay_action == 'replace' ) %]
-                                            <option value="replace"  selected="selected">
-                                        [% ELSE %]
-                                            <option value="replace">
-                                        [% END %]
-                                            Replace existing record with incoming record</option>
-                                        [% IF ( account.overlay_action == 'create_new' ) %]
-                                            <option value="create_new" selected="selected">
-                                        [% ELSE %]
-                                            <option value="create_new">
-                                        [% END %]
-                                            Add incoming record</option>
-                                        [% IF ( account.overlay_action == 'ignore' ) %]
-                                            <option value="ignore" selected="selected">
-                                        [% ELSE %]
-                                            <option value="ignore">
-                                        [% END %]
-                                            Ignore incoming record (its items may still be processed)</option>
-                                    </select>
+                                    [% INCLUDE 'tools-overlay-action.inc' class_name='select2' %]
                                 </li>
                                 <li>
                                     <label for="nomatch_action">Action if no match is found: </label>
-                                    <select class="select2" name="nomatch_action" id="nomatch_action">
-                                        [% IF ( account.nomatch_action == 'create_new' ) %]
-                                            <option value="create_new" selected="selected">
-                                        [% ELSE %]
-                                            <option value="create_new">
-                                        [% END %]
-                                            Add incoming record</option>
-                                        [% IF ( account.nomatch_action == 'ignore' ) %]
-                                            <option value="ignore" selected="selected">
-                                        [% ELSE %]
-                                            <option value="ignore">
-                                        [% END %]
-                                            Ignore incoming record</option>
-                                    </select>
+                                    [% INCLUDE 'tools-nomatch-action.inc' class_name='select2' %]
                                 </li>
                             </ol>
                         </fieldset>
@@ -279,38 +246,7 @@ MARC Order Accounts
                             <ol>
                                 <li>
                                     <label for="item_action">How to process items: </label>
-                                    <select class="select2" name="item_action" id="item_action">
-                                    [% IF ( account.item_action == 'always_add' ) %]
-                                        <option value="always_add" selected="selected">
-                                    [% ELSE %]
-                                        <option value="always_add">
-                                    [% END %]
-                                        Always add items</option>
-                                    [% IF ( account.item_action == 'add_only_for_matches' ) %]
-                                        <option value="add_only_for_matches" selected="selected">
-                                    [% ELSE %]
-                                        <option value="add_only_for_matches">
-                                    [% END %]
-                                        Add items only if matching bib was found</option>
-                                    [% IF ( account.item_action == 'add_only_for_new' ) %]
-                                        <option value="add_only_for_new" selected="selected">
-                                    [% ELSE %]
-                                        <option value="add_only_for_new">
-                                    [% END %]
-                                        Add items only if no matching bib was found</option>
-                                    [% IF ( account.item_action == 'replace' ) %]
-                                        <option value="replace" selected="selected">
-                                    [% ELSE %]
-                                        <option value="replace">
-                                    [% END %]
-                                        Replace items if matching bib was found (only for existing items)</option>
-                                    [% IF ( account.item_action == 'ignore' ) %]
-                                        <option value="ignore" selected="selected">
-                                    [% ELSE %]
-                                        <option value="ignore">
-                                    [% END %]
-                                        Ignore items</option>
-                                    </select>
+                                    [% INCLUDE 'tools-item-action.inc' class_name='select2' %]
                                 </li>
                             </ol>
                         </fieldset>

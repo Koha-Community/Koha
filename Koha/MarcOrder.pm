@@ -241,7 +241,7 @@ sub _create_basket_for_file {
 
     my $basketno = NewBasket(
         $vendor_id, 0, $basketname, q{},
-        q{} . q{}
+        q{}, q{}, q{}, q{}, 0, 'ordering'
     );
 
     return $basketno;
@@ -608,6 +608,7 @@ sub add_items_from_import_record {
     });
 
     Used by the cronjob to detect whether a file matches the account and should be processed
+    This method only checks the first record in the file.
 
 =cut
 
@@ -1229,20 +1230,23 @@ sub _create_item_fields_from_syspref {
     my $marc_fields_to_order      = $args->{marc_fields_to_order};
     my $budget_id                 = $args->{budget_id};
 
-    my @homebranches      = ();
-    my @holdingbranches   = ();
-    my @itypes            = ();
-    my @nonpublic_notes   = ();
-    my @public_notes      = ();
-    my @locs              = ();
-    my @ccodes            = ();
-    my @notforloans       = ();
-    my @uris              = ();
-    my @copynos           = ();
-    my @budget_codes      = ();
-    my @itemprices        = ();
-    my @replacementprices = ();
-    my @itemcallnumbers   = ();
+    my @homebranches              = ();
+    my @holdingbranches           = ();
+    my @itypes                    = ();
+    my @nonpublic_notes           = ();
+    my @public_notes              = ();
+    my @locs                      = ();
+    my @ccodes                    = ();
+    my @notforloans               = ();
+    my @uris                      = ();
+    my @copynos                   = ();
+    my @budget_codes              = ();
+    my @itemprices                = ();
+    my @replacementprices         = ();
+    my @itemcallnumbers           = ();
+    my @coded_location_qualifiers = ();
+    my @barcodes                  = ();
+    my @enumchrons                = ();
 
     foreach my $infoset (@$marc_item_fields_to_order) {
         my $quantity = $infoset->{quantity} || 1;
@@ -1264,48 +1268,55 @@ sub _create_item_fields_from_syspref {
                 $item_budget_id = $budget_id;
             }
 
-            push @homebranches,      $infoset->{homebranch};
-            push @holdingbranches,   $infoset->{holdingbranch};
-            push @itypes,            $infoset->{itype};
-            push @nonpublic_notes,   $infoset->{nonpublic_note};
-            push @public_notes,      $infoset->{public_note};
-            push @locs,              $infoset->{loc};
-            push @ccodes,            $infoset->{ccode};
-            push @notforloans,       $infoset->{notforloan};
-            push @uris,              $infoset->{uri};
-            push @copynos,           $infoset->{copyno};
-            push @budget_codes,      $item_budget_id;
-            push @itemprices,        $infoset->{price};
-            push @replacementprices, $infoset->{replacementprice};
-            push @itemcallnumbers,   $infoset->{itemcallnumber};
+            push @homebranches,              $infoset->{homebranch};
+            push @holdingbranches,           $infoset->{holdingbranch};
+            push @itypes,                    $infoset->{itype};
+            push @nonpublic_notes,           $infoset->{nonpublic_note};
+            push @public_notes,              $infoset->{public_note};
+            push @locs,                      $infoset->{loc};
+            push @ccodes,                    $infoset->{ccode};
+            push @notforloans,               $infoset->{notforloan};
+            push @uris,                      $infoset->{uri};
+            push @copynos,                   $infoset->{copyno};
+            push @budget_codes,              $item_budget_id;
+            push @itemprices,                $infoset->{price};
+            push @replacementprices,         $infoset->{replacementprice};
+            push @itemcallnumbers,           $infoset->{itemcallnumber};
+            push @coded_location_qualifiers, $infoset->{coded_location_qualifier};
+            push @barcodes,                  $infoset->{barcode};
+            push @enumchrons,                $infoset->{enumchron};
         }
     }
 
     my $item_fields = {
-        quantity          => scalar(@homebranches),
-        homebranches      => \@homebranches,
-        holdingbranches   => \@holdingbranches,
-        itypes            => \@itypes,
-        nonpublic_notes   => \@nonpublic_notes,
-        public_notes      => \@public_notes,
-        locs              => \@locs,
-        ccodes            => \@ccodes,
-        notforloans       => \@notforloans,
-        uris              => \@uris,
-        copynos           => \@copynos,
-        budget_codes      => \@budget_codes,
-        itemprices        => \@itemprices,
-        replacementprices => \@replacementprices,
-        itemcallnumbers   => \@itemcallnumbers,
-        c_quantity        => $marc_fields_to_order->{quantity},
-        c_budget_code     => $marc_fields_to_order->{budget_code},
-        c_price           => $marc_fields_to_order->{price},
-        c_discount        => $marc_fields_to_order->{discount},
-        c_sort1           => $marc_fields_to_order->{sort1},
-        c_sort2           => $marc_fields_to_order->{sort2},
+        quantity                  => scalar(@homebranches),
+        homebranches              => \@homebranches,
+        holdingbranches           => \@holdingbranches,
+        itypes                    => \@itypes,
+        nonpublic_notes           => \@nonpublic_notes,
+        public_notes              => \@public_notes,
+        locs                      => \@locs,
+        ccodes                    => \@ccodes,
+        notforloans               => \@notforloans,
+        uris                      => \@uris,
+        copynos                   => \@copynos,
+        budget_codes              => \@budget_codes,
+        itemprices                => \@itemprices,
+        replacementprices         => \@replacementprices,
+        itemcallnumbers           => \@itemcallnumbers,
+        coded_location_qualifiers => \@coded_location_qualifiers,
+        barcodes                  => \@barcodes,
+        enumchrons                => \@enumchrons,
+        c_quantity                => $marc_fields_to_order->{quantity},
+        c_budget_code             => $marc_fields_to_order->{budget_code},
+        c_price                   => $marc_fields_to_order->{price},
+        c_discount                => $marc_fields_to_order->{discount},
+        c_sort1                   => $marc_fields_to_order->{sort1},
+        c_sort2                   => $marc_fields_to_order->{sort2},
     };
 
     return $item_fields;
 }
+
 
 1;
