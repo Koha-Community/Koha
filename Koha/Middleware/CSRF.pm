@@ -44,9 +44,18 @@ sub call {
     my $request_method = $req->method  // q{};
     my $uri            = $req->uri     // q{};
     my $referer        = $req->referer // q{No referer};
+    my $request_path   = $req->path // q{};
+
+    my %path_exceptions = (
+        '/ilsdi.pl' => 1,
+    );
 
     #NOTE: Ignore ErrorDocument requests for CSRF
     if ( $env->{'psgix.errordocument.SCRIPT_NAME'} ) {
+        return $self->app->($env);
+    }
+    elsif ( $path_exceptions{$request_path} ){
+        #NOTE: Ignore path exceptions for CSRF
         return $self->app->($env);
     }
 
