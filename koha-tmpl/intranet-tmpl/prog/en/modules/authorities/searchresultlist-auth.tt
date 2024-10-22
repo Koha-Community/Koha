@@ -22,42 +22,56 @@
 </style>
 </head>
 
-<body id="auth_searchresultlist_auth" class="auth">
-    <div class="container-fluid">
-
-    	<h1>Authority search results</h1>
-    	[% INCLUDE 'auth-finder-search.inc' %]
-        [% IF ( total ) %]<div class="resultnumber">
-            [% IF ( displayprev ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                        &lt;&lt;
-                    </a>
+[% BLOCK result_page_numbers %]
+    <div class="resultnumber clearfix">
+        <nav>
+            <ul class="pagination">
+                [% IF ( displayprev ) %]
+                    <li class="page-item">
+                        <a class="page-link" href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranetamp;&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
+                            <i class="fa fa-fw fa-angle-left"></i> Previous
+                        </a>
+                    </li>
                 [% END %]
                 [% FOREACH number IN numbers %]
                     [% IF ( number.highlight ) %]
-                        [% number.number | html %]
+                        <li class="page-item active">
+                            <a class="page-link" href="#">[% number.number | html %]</a>
                     [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                            [% number.number | html %]</a>
+                        <li class="page-item">
+                            <a class="page-link" href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
+                                [% number.number | html %]</a>
+                        </li>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                        &gt;&gt;</a>
+                    <li class="page-item">
+                        <a class="page-link" href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
+                            Next <i class="fa fa-fw fa-angle-right"></i>
+                        </a>
+                    </li>
                 [% END %]
-            <div>
-                
-                    <p><strong>Results [% from | html %] to [% to | html %] of [% total | html %]</strong></p>
-                [% ELSE %]
-                    
-                
-            </div>
+            </ul>
+        </nav>
+    </div>
+[% END %]
+
+<body id="auth_searchresultlist_auth" class="auth">
+    <div class="container-fluid">
+
+        <h1>Authority search results</h1>
+        [% INCLUDE 'auth-finder-search.inc' %]
+        [% IF ( result ) %]
+            <p><strong>Results [% from | html %] to [% to | html %] of [% total | html %]</strong></p>
+            [% PROCESS 'result_page_numbers' %]
+        [% ELSE %]
             <div class="alert alert-info">
                 <p>No results found</p>
             </div>
-            [% END %]
-        </div>
-        [% IF ( result ) %]<div id="resultlist">
+        [% END %]
+
+        [% IF ( result ) %]
+            <div id="resultlist" class="page-section">
             <table>
                 <tr>
                     <th>Summary</th>
@@ -106,27 +120,10 @@
                     </tr>
                 [% END %]
             </table>
-    
         </div>
-        <div class="resultnumber">
-            [% IF ( displayprev ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranetamp;&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                        &lt;&lt;
-                    </a>
-                [% END %]
-                [% FOREACH number IN numbers %]
-                    [% IF ( number.highlight ) %]
-                        [% number.number | html %]
-                    [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                            [% number.number | html %]</a>
-                    [% END %]
-                [% END %]
-                [% IF ( displaynext ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source | uri %]">
-                        &gt;&gt;</a>
-                [% END %]
-        </div>[% END %]
+        [% PROCESS 'result_page_numbers' %]
+        [% END %]
+
     </div>
 
 [% INCLUDE 'authority-detail-modal.inc' %]
