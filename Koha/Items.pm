@@ -61,16 +61,13 @@ placing a hold on one of those items.
 sub filter_by_for_hold {
     my ($self) = @_;
 
-    my $default_rule = Koha::CirculationRules->get_effective_rule_value(
+    my $default_rule = Koha::CirculationRules->get_effective_rule(
         {
             rule_name    => 'holdallowed',
-            itemtype     => undef,
-            branchcode   => undef,
-            categorycode => undef,
         }
     );
     my @hold_not_allowed_itypes;
-    if ($default_rule eq 'not_allowed') {
+    if ( defined $default_rule && $default_rule->rule_value eq 'not_allowed' ) {
         @hold_not_allowed_itypes = Koha::ItemTypes->search->get_column('itemtype');
         my @hold_allowed_itypes = Koha::CirculationRules->search(
             {
