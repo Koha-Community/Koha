@@ -33,7 +33,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'filter_by_active' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -50,7 +50,9 @@ subtest 'filter_by_active' => sub {
             value => {
                 biblio_id  => $biblio->biblionumber,
                 start_date => $start_ago,
-                end_date   => $end_hour
+                end_date   => $end_hour,
+                status     => 'new'
+
             }
         }
     );
@@ -62,7 +64,9 @@ subtest 'filter_by_active' => sub {
             value => {
                 biblio_id  => $biblio->biblionumber,
                 start_date => $start_ago,
-                end_date   => $end_ago
+                end_date   => $end_ago,
+                status     => 'new'
+
             }
         }
     );
@@ -74,7 +78,9 @@ subtest 'filter_by_active' => sub {
             value => {
                 biblio_id  => $biblio->biblionumber,
                 start_date => $start_hour,
-                end_date   => $end_hour
+                end_date   => $end_hour,
+                status     => 'new'
+
             }
         }
     );
@@ -86,7 +92,8 @@ subtest 'filter_by_active' => sub {
             value => {
                 biblio_id  => $biblio->biblionumber,
                 start_date => $start_day,
-                end_date   => $end_day
+                end_date   => $end_day,
+                status     => 'new'
             }
         }
     );
@@ -98,7 +105,8 @@ subtest 'filter_by_active' => sub {
             value => {
                 biblio_id  => $biblio->biblionumber,
                 start_date => $start_day,
-                end_date   => $end_ago
+                end_date   => $end_ago,
+                status     => 'new'
             }
         }
     );
@@ -106,6 +114,32 @@ subtest 'filter_by_active' => sub {
         $biblio->bookings->filter_by_active->count, 3,
         'EDGE CASE: Booking starting in future, already ended is not counted - should be impossible, but good check'
     );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                start_date => $start_day,
+                end_date   => $end_day,
+                status     => 'cancelled'
+            }
+        }
+    );
+    is( $biblio->bookings->filter_by_active->count, 3, 'Cancelled bookings are not counted' );
+
+    $builder->build_object(
+        {
+            class => 'Koha::Bookings',
+            value => {
+                biblio_id  => $biblio->biblionumber,
+                start_date => $start_day,
+                end_date   => $end_day,
+                status     => 'completed'
+            }
+        }
+    );
+    is( $biblio->bookings->filter_by_active->count, 3, 'Completed bookings are not counted' );
 
     $schema->storage->txn_rollback;
 };
