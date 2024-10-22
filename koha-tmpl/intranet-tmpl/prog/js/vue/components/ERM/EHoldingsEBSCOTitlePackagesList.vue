@@ -89,13 +89,14 @@ export default {
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
             )
-            $("#" + table_id).dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
+            $("#" + table_id).dataTable({
+                ...dataTablesDefaults,
+                ...{
                     data: resources,
                     embed: ["package.name"],
                     ordering: false,
                     dom: '<"top pager"<"table_entries"ilp>>tr<"bottom pager"ip>',
-                    aLengthMenu: [
+                    lengthMenu: [
                         [10, 20, 50, 100],
                         [10, 20, 50, 100],
                     ],
@@ -177,8 +178,8 @@ export default {
                             )
                         })
                     },
-                })
-            )
+                },
+            })
         },
     },
     mounted() {
