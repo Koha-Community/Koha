@@ -76,7 +76,7 @@ return {
             q{
             INSERT IGNORE INTO letter
             (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
-            VALUES ('catalogue','OAI_HARVEST_REPORT','','OAI Harvest Report',0,'OAI Harvest report for [% servername %]','OAI Harvest report for [% servername %]:\n\nEndpoint: [% endpoint %]\nSet: [% set %]\nData format: [% dataformat %]\nRecord type: [% recordtype %]\n\n[% added %] records added\n[% updated %] records updated\n[% deleted %] records deleted\n[% skipped %] records skipped\n[% in_error %] records in error\n[% total %] total','email','default');
+            VALUES ('catalogue','OAI_HARVEST_REPORT','','OAI harvest report',0,'OAI harvest report for [% servername %]','OAI harvest report for [% servername %]:\n\nEndpoint: [% endpoint %]\nSet: [% set %]\nData format: [% dataformat %]\nRecord type: [% recordtype %]\n\n[% added %] records added\n[% updated %] records updated\n[% deleted %] records deleted\n[% skipped %] records skipped\n[% in_error %] records in error\n[% total %] total','email','default');
         }
         );
         say $out "Added OAI_HARVEST_REPORT letter";
