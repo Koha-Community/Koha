@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 92;
+use Test::More tests => 94;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -64,6 +64,7 @@ $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'CHECKED', 'my content')|);
+$dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'ORDERED', 'my content')|);
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'NEW_SUGGESTION', 'Content for new suggestion')|);
 
 # Add CPL if missing.
@@ -242,7 +243,11 @@ is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEm
 
 #Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is enabled and the borrower has a smsalertnumber and no email
 t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
-ModSuggestion($mod_suggestion3);
+my $mod_suggestion3a = {
+    STATUS       => 'ORDERED',
+    suggestionid => $my_suggestionid,
+};
+ModSuggestion($mod_suggestion3a);
 $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber
 });
@@ -263,6 +268,20 @@ $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber2
 });
 is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is email if the borrower has an email');
+
+# changing STATUS from ORDERED to CHECKED should generate a message
+my $mod_suggestion5 = {
+    STATUS       => 'CHECKED',
+    suggestionid => $my_suggestionid,
+};
+$status   = ModSuggestion($mod_suggestion5);
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+is( @$messages, 3, 'ModSuggestions does send a message if the status has been changed' );
+
+# modifying suggestion without changing STATUS should not generate a message
+$status   = ModSuggestion($mod_suggestion5);
+$messages = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber } );
+is( @$messages, 3, 'ModSuggestions does send a message if the status has been changed' );
 
 {
     # Hiding the expected warning displayed by DBI
