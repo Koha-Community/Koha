@@ -59,6 +59,22 @@ $.fn.selectTabByID = function (tabID) {
     $("a[href='" + tabID + "']", $(this)).tab("show");
 };
 
+function togglePanel(node) {
+    var panel = node.nextAll();
+    if (panel.is(":visible")) {
+        node.addClass("collapsed")
+            .removeClass("expanded")
+            .attr("title", __("Click to expand this section"));
+        panel.hide();
+    } else {
+        node.addClass("expanded")
+            .removeClass("collapsed")
+            .attr("title", __("Click to collapse this section"));
+        panel.show();
+        panel.find("input, select, textarea").eq(0).focus();
+    }
+}
+
 $(document).ready(function () {
     //check if sticky element is stuck, if so add floating class
     if ($(".sticky").length) {
@@ -438,6 +454,11 @@ $(document).ready(function () {
         $(".output.next").prepend(__("Next"));
         $(".output.last").prepend(__("Last"));
     }
+
+    $(".collapsed,.expanded").on("click", function (e) {
+        e.preventDefault();
+        togglePanel($(this));
+    });
 });
 
 function removeLastBorrower() {

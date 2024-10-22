@@ -27,34 +27,6 @@
     [% END %]</title
 >
 [% INCLUDE 'doc-head-close.inc' %]
-[% FILTER collapse %]
-    <style>
-        fieldset legend {
-            border: 1px solid #fff;
-            margin-left: -0.5em;
-            margin-top: -0.5em;
-            padding: 0.7em;
-        }
-        fieldset legend:hover {
-            border: 1px solid #6faf44;
-            cursor: pointer;
-        }
-
-        fieldset legend i {
-            color: #4c7aa8;
-            font-size: 80%;
-            padding-right: 0.2rem;
-        }
-
-        fieldset legend.collapsed {
-            margin-bottom: -0.5em;
-        }
-
-        legend.collapsed i.fa.fa-caret-down::before {
-            content: "\f0da";
-        }
-    </style>
-[% END %]
 </head>
 
 <body id="pat_memberentrygen" class="pat">
@@ -1771,18 +1743,6 @@
             [% END %]
         }
 
-        function togglePanel( node ){
-            var panel = node.nextAll();
-            if(panel.is(":visible")){
-                node.addClass("collapsed").removeClass("expanded").attr("title", _("Click to expand this section") );
-                panel.hide();
-            } else {
-                node.addClass("expanded").removeClass("collapsed").attr("title", _("Click to collapse this section") );
-                panel.show();
-                panel.find("input, select, textarea").eq(0).focus();
-            }
-        }
-
         $(document).ready(function() {
             showHideFields();
             $("#toggle_hidden_fields").change(function(){
@@ -1790,7 +1750,6 @@
             });
 
             $(".collapsed,.expanded").on("click",function(){
-                togglePanel( $(this) );
                 $("#messaging_prefs_loading").hide();
                 $("#guarantor_template").hide();
             });

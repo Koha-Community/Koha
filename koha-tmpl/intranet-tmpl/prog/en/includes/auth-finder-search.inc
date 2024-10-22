@@ -12,10 +12,10 @@
     <input type="hidden" name="op" value="do_search" />
     <input type="hidden" name="type" value="intranet" />
     <input type="hidden" name="index" value="[% index | html %]" />
-    <fieldset class="rows"
-        ><legend>Search options</legend>
-        <ol
-            ><li>
+    <fieldset class="rows">
+        <legend class="collapsed"><i class="fa fa-caret-down" title="Collapse this section"></i> Search options</legend>
+        <ol style="display:none">
+            <li>
                 <span class="label">Authority type: </span>
                 [% authtypecode | html %]
                 <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />

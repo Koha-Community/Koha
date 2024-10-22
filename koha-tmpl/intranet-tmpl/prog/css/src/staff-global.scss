@@ -1198,6 +1198,35 @@ fieldset {
     }
 }
 
+legend {
+    &.collapsed,
+    &.expanded {
+        border: 1px solid #FFF;
+        margin-left: -.7em;
+        margin-top: -.7em;
+        padding: .7em;
+
+        &:hover {
+            border: 1px solid #6FAF44;
+            cursor: pointer;
+        }
+
+        i {
+            color: #4C7AA8;
+            font-size: 80%;
+            padding-right: .2rem;
+        }
+    }
+
+    &.collapsed {
+        margin-bottom: -.5em;
+
+        i.fa.fa-caret-down::before {
+            content: "\f0da";
+        }
+    }
+}
+
 details {
     > summary {
         cursor: pointer;
