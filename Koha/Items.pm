@@ -51,7 +51,10 @@ Koha::Items - Koha Item object set class
 
     my $filtered_items = $items->filter_by_for_hold;
 
-Return the items of the set that are *potentially* holdable.
+Return the items of the set that are *potentially* holdable. This routine
+checks only rules defined in the 'Standard rules for all libraries' and
+should only be used in the context where we don't have a patron to check
+policies for specifically.
 
 Caller has the responsibility to call C4::Reserves::CanItemBeReserved before
 placing a hold on one of those items.
@@ -68,6 +71,7 @@ sub filter_by_for_hold {
     );
     my @hold_not_allowed_itypes;
     if ( defined $default_rule && $default_rule->rule_value eq 'not_allowed' ) {
+        # If the default rule is not allowed we get all itemtypes as not allowed
         @hold_not_allowed_itypes = Koha::ItemTypes->search->get_column('itemtype');
         my @hold_allowed_itypes = Koha::CirculationRules->search(
             {
@@ -77,8 +81,10 @@ sub filter_by_for_hold {
                 categorycode => undef,
             }
         )->get_column('itemtype');
+        # We then only allow those explicitly defined in hold policies at the all libraries level
         @hold_not_allowed_itypes = array_minus( @hold_not_allowed_itypes, @hold_allowed_itypes );
     } else {
+        # If there is no default 'not_allowed' rule, then only those explicitly forbidden at the all libraries level are forbidden
         @hold_not_allowed_itypes = Koha::CirculationRules->search(
             {
                 rule_name    => 'holdallowed',
@@ -89,6 +95,7 @@ sub filter_by_for_hold {
         )->get_column('itemtype');
     }
 
+    # We also forbid holds on any marked not for loan at the item level
     push @hold_not_allowed_itypes, Koha::ItemTypes->search({ notforloan => 1 })->get_column('itemtype');
     @hold_not_allowed_itypes = uniq @hold_not_allowed_itypes;
 
