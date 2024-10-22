@@ -67,7 +67,7 @@ return {
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES
-            ('OAI-PMH:HarvestEmailReport','','','If set, a report email will be sent to this address after an OAI harvest','Free');
+            ('OAI-PMH:HarvestEmailReport','','','After an OAI-PMH harvest, send a report email to the email address','Free');
         }
         );
         say $out "Added OAI-PMH:HarvestEmailReport system preference";
