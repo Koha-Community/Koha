@@ -218,7 +218,7 @@ sub GetRecords {
 
         my $biblioitem = $biblio->biblioitem->unblessed;
 
-        my $record = $biblio->metadata->record({ embed_items => 1 });
+        my $record = $biblio->metadata->record({ embed_items => 1, opac => 1, });
         if ($record) {
             $biblioitem->{marcxml} = $record->as_xml_record( C4::Context->preference('marcflavour') );
         }
@@ -236,7 +236,7 @@ sub GetRecords {
         foreach my $checkout (@$checkouts) {
             delete $checkout->{'borrowernumber'};
         }
-        my @items            = $biblio->items->as_list;
+        my @items            = $biblio->items->filter_by_visible_in_opac->as_list;
 
         $biblioitem->{items}->{item} = [];
 
