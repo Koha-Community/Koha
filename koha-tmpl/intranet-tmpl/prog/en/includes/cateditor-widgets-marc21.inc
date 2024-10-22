@@ -152,9 +152,10 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
                 $( this.node )
                     .find('.control-number-widget-assign').click( function() {
                         var sequence = $( widget.node ).find('.control-number-widget-sequence').val();
-                        const token = $("input[name='csrf_token']").first().val();
+                        const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                         $.post(
-                            '/cgi-bin/koha/svc/cataloguing/control_num_sequences/' + sequence + '?csrf_token=' + token
+                            '/cgi-bin/koha/svc/cataloguing/control_num_sequences/' + sequence,
+                            { csrf_token: csrf_token }
                         ).done( function( result ) {
                             if ( result.next_value ) widget.setControlNumber( result.next_value );
                         } );
