@@ -5,7 +5,7 @@
     <div class="btn-group"><a href="#" id="clear" class="btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Clear field</a></div>
     <div class="btn-group"><a href="#" id="createnew" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Create new authority</a></div>
 </div>
-<form name="f" method="get" action="auth_finder.pl">
+<form name="f" method="get" action="auth_finder.pl" class="clearfix">
             <input type="hidden" name="source" value="[% source | html %]" />
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
