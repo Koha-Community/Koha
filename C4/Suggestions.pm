@@ -251,12 +251,18 @@ sub ModSuggestion {
     return unless ( $suggestion and defined( $suggestion->{suggestionid} ) );
 
     my $suggestion_object = Koha::Suggestions->find( $suggestion->{suggestionid} );
+    my $previous_suggestion_status;
+    $previous_suggestion_status = $suggestion_object->STATUS if $suggestion_object;
     eval {    # FIXME Must raise an exception instead
         $suggestion_object->set($suggestion)->store;
     };
     return 0 if $@;
 
-    if ( $suggestion->{STATUS} && $suggestion_object->suggestedby ) {
+    # now send a notification but only if STATUS has been changed
+    if (   $suggestion->{STATUS}
+        && $suggestion->{STATUS} ne $previous_suggestion_status
+        && $suggestion_object->suggestedby )
+    {
 
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
