@@ -44,8 +44,8 @@ sub filter_by_active {
     my ($self) = @_;
     return $self->search(
         {
-            end_date => { '>='  => \'NOW()' },
-            status   => { q{!=} => [ -and => qw(cancelled completed) ] }
+            end_date => { '>='      => \'NOW()' },
+            status   => { '-not_in' => [ 'cancelled', 'completed' ] }
         }
     );
 }

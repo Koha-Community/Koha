@@ -707,24 +707,31 @@ sub check_booking {
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
     my $existing_bookings = $self->bookings(
-        [
-            start_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            end_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            {
-                start_date => { '<' => $dtf->format_datetime($start_date) },
-                end_date   => { '>' => $dtf->format_datetime($end_date) }
-            }
-        ]
+        {
+            '-and' => [
+                {
+                    '-or' => [
+                        start_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
+                        end_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
+                        {
+                            start_date => { '<' => $dtf->format_datetime($start_date) },
+                            end_date   => { '>' => $dtf->format_datetime($end_date) }
+                        }
+                    ]
+                },
+                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
+            ]
+        }
     );
 
     my $bookings_count =

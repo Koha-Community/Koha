@@ -3056,7 +3056,7 @@ subtest 'find_booking' => sub {
 };
 
 subtest 'check_booking tests' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -3143,6 +3143,20 @@ subtest 'check_booking tests' => sub {
         $can_book,
         1,
         "Koha::Item->check_booking returns true if we pass the booking_id that would conflict"
+    );
+
+    # Cancelled booking
+    $booking2->update( { status => 'cancelled' } );
+    $can_book = $item->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking returns true if the conflicting booking is cancelled"
     );
 
     $booking2->delete();

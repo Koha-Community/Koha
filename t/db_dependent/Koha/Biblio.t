@@ -1851,7 +1851,7 @@ sub host_record {
 }
 
 subtest 'check_booking tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -1950,6 +1950,20 @@ subtest 'check_booking tests' => sub {
         $can_book,
         1,
         "Koha::Biblio->check_booking returns true if we pass the booking_id of one of the bookings that we would conflict with"
+    );
+
+    # Cancelled booking
+    $current_bookings[0]->update( { status => 'cancelled' } );
+    $can_book = $biblio->check_booking(
+        {
+            start_date => dt_from_string(),
+            end_date   => dt_from_string()->add( days => 7 ),
+        }
+    );
+    is(
+        $can_book,
+        1,
+        "Koha::Item->check_booking takes account of cancelled status in bookings check"
     );
 
     $schema->storage->txn_rollback;
