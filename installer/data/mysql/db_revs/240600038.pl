@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "36766",
@@ -17,6 +18,6 @@ return {
         }
         );
 
-        say $out "Added new sample notices 'SFTP_FAILURE' and 'SFTP_SUCCESS'";
+        say_success( $out, "Added new sample notices 'SFTP_FAILURE' and 'SFTP_SUCCESS'" );
     },
 };
