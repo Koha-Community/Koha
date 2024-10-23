@@ -768,6 +768,7 @@
     [% Asset.js("js/holds.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/cancel_booking_modal.js") | $raw %]
+    [% Asset.js("js/combobox.js") | $raw %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
@@ -825,6 +826,15 @@
 
             $("#view_guarantees_finesandcharges").on("click", function () {
                 $("#guarantees_finesandcharges-tab").click();
+            });
+
+            $("#cancellation-reason").comboBox({
+                displayProperty: 'name',
+                placeholder: _("Select or type a reason"),
+            });
+
+            document.getElementById("cancelBookingModal")?.addEventListener('hide.bs.modal', () => {
+                $("#cancellation-reason").comboBox('reset');
             });
         });
     </script>
