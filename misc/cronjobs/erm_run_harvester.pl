@@ -22,8 +22,11 @@ use Getopt::Long qw( GetOptions );
 use Koha::DateUtils qw( dt_from_string );
 use POSIX;
 
+use C4::Log qw( cronlogaction );
 use Koha::Script;
 use Koha::ERM::EUsage::UsageDataProviders;
+
+my $command_line_options = join(" ",@ARGV);
 
 # Command line option values
 my $get_help   = 0;
@@ -54,6 +57,7 @@ unless ($begin_date) {
     die "ERROR: Please specify a begin-date";
 }
 
+cronlogaction({ info => $command_line_options });
 debug_msg("Dry run: Harvests will not be enqueued") if $dry_run;
 while ( my $udprovider = $udproviders->next ) {
     debug_msg(
@@ -93,6 +97,8 @@ while ( my $udprovider = $udproviders->next ) {
     }
 
 }
+
+cronlogaction({ action => 'End', info => "COMPLETED" });
 
 sub debug_msg {
     my ($msg) = @_;
