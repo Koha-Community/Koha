@@ -34,9 +34,9 @@ subtest 'transfer_ownership() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-    my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_3 = $builder->build_object( { class => 'Koha::Patrons' } );
 
     my $public_list = $builder->build_object(
         {
@@ -52,9 +52,8 @@ subtest 'transfer_ownership() tests' => sub {
         }
     );
 
-    throws_ok
-        { $public_list->transfer_ownership }
-        'Koha::Exceptions::MissingParameter',
+    throws_ok { $public_list->transfer_ownership }
+    'Koha::Exceptions::MissingParameter',
         'Exception thrown if missing parameter';
 
     like( "$@", qr/Mandatory parameter 'patron' missing/, 'Exception string as expected' );
@@ -63,7 +62,7 @@ subtest 'transfer_ownership() tests' => sub {
     $builder->build_object(
         {
             class => 'Koha::Virtualshelfshares',
-            value => { shelfnumber => $public_list->id,  invitekey => undef, borrowernumber => $patron_2->id }
+            value => { shelfnumber => $public_list->id, invitekey => undef, borrowernumber => $patron_2->id }
         }
     );
     $builder->build_object(
@@ -84,7 +83,7 @@ subtest 'transfer_ownership() tests' => sub {
 
     is( $public_list->owner, $patron_2->id, 'Owner changed correctly' );
     my $public_list_shares = $public_list->get_shares;
-    is( $public_list_shares->count, 1, 'Count is correct' );
+    is( $public_list_shares->count,                1,             'Count is correct' );
     is( $public_list_shares->next->borrowernumber, $patron_2->id, "Public lists don't get the share removed" );
 
     $private_list->transfer_ownership( $patron_2->id );
@@ -93,7 +92,10 @@ subtest 'transfer_ownership() tests' => sub {
     is( $private_list->owner, $patron_2->id );
     my $private_list_shares = $private_list->get_shares;
     is( $private_list_shares->count, 1, 'Count is correct' );
-    is( $private_list_shares->next->borrowernumber, $patron_3->id, "Private lists get the share for the new owner removed" );
+    is(
+        $private_list_shares->next->borrowernumber, $patron_3->id,
+        "Private lists get the share for the new owner removed"
+    );
 
     my %params;
     my $mocked_letters = Test::MockModule->new('C4::Letters');
@@ -114,10 +116,16 @@ subtest 'transfer_ownership() tests' => sub {
     $public_list->transfer_ownership( $patron_1->id );
     $public_list->discard_changes;
 
-    is( $params{module}, "lists", "Enqueued letter with module lists correctly" );
+    is( $params{module},      "lists",              "Enqueued letter with module lists correctly" );
     is( $params{letter_code}, "TRANSFER_OWNERSHIP", "Enqueued letter with code TRANSFER_OWNERSHIP correctly" );
-    is( $params{objects}->{old_owner}->borrowernumber, $patron_2->borrowernumber, "old_owner passed to enqueue letter correctly" );
-    is( $params{objects}->{new_owner}->borrowernumber, $patron_1->borrowernumber, "new_owner passed to enqueue letter correctly" );
+    is(
+        $params{objects}->{old_owner}->borrowernumber, $patron_2->borrowernumber,
+        "old_owner passed to enqueue letter correctly"
+    );
+    is(
+        $params{objects}->{owner}->borrowernumber, $patron_1->borrowernumber,
+        "owner passed to enqueue letter correctly"
+    );
     is( $params{objects}->{shelf}->shelfnumber, $public_list->shelfnumber, "shelf passed to enqueue letter correctly" );
 
     $schema->storage->txn_rollback;

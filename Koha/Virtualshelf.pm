@@ -361,9 +361,10 @@ sub transfer_ownership {
         unless $patron_id;
 
     ## before we change the owner, collect some details
-    my $old_owner = Koha::Patrons->find( $self->owner );
-    my $new_owner = Koha::Patrons->find($patron_id);
-    my $library   = $new_owner->library->unblessed;
+    my $old_owner  = Koha::Patrons->find( $self->owner );
+    my $new_owner  = Koha::Patrons->find($patron_id);
+    my $userenv    = C4::Context->userenv;
+    my $branchcode = $userenv->{branch};
 
     ## first we change the owner
     $self->remove_share($patron_id) if $self->is_private;
@@ -373,16 +374,14 @@ sub transfer_ownership {
     my $letter = C4::Letters::GetPreparedLetter(
         module      => 'lists',
         letter_code => 'TRANSFER_OWNERSHIP',
-        branchcode  => $library->{branchcode},
+        branchcode  => $branchcode,
         lang        => $new_owner->lang || 'default',
         objects     => {
             old_owner => $old_owner,
-            new_owner => $new_owner,
+            owner     => $new_owner,
             shelf     => $self,
         },
-        tables => {
-            'branches' => $library->{branchcode},
-        },
+        want_librarian         => 1,
         message_transport_type => 'email',
     );
 

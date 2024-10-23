@@ -1338,10 +1338,11 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear [%- INCLUDE 'patron-title.inc' patron => new_owner -%],<br>"
+            - "Dear [%- INCLUDE 'patron-title.inc' patron => owner -%],<br>"
             - "<br>"
-            - "A public list, titled <em>[% shelf.shelfname | html %]</em>, has been transferred to you[% IF ( old_owner ) %] by [%- INCLUDE 'patron-title.inc' patron => old_owner%][% IF ( old_owner.email ) %] <em>([% old_owner.email | html %])</em>[% END %][% END %].<br>"
+            - "A public list, titled <em>[% shelf.shelfname | html %]</em>, has been transferred to you[% IF ( librarian ) %] by [%- INCLUDE 'patron-title.inc' patron => librarian %][% END %].<br>"
             - "<br>"
+            - "[% IF old_owner %]The list was previously owned by [%- INCLUDE 'patron-title.inc' patron => old_owner -%].<br><br>[% END %]"
             - "Thank you<br>"
             - "<br>"
 
