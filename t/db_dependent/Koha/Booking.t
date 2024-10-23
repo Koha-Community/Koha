@@ -314,13 +314,56 @@ subtest 'store() tests' => sub {
     ok( $booking->item_id,    'An item was assigned to the booking' );
 
     subtest '_assign_item_for_booking() tests' => sub {
-        plan tests => 1;
-        is( $booking->item_id, $item_1->itemnumber, "Item 1 was assigned to the booking" );
+        plan tests => 5;
 
         # Bookings
         # ✓ Item 1    |----|
         # ✓ Item 2     |--|
-        # ✓ Any (1)         |--|
+        # ✓ Any (X)         |--|
+        my $valid_items   = [ $item_1->itemnumber, $item_2->itemnumber ];
+        my $assigned_item = $booking->item_id;
+        is(
+            ( scalar grep { $_ == $assigned_item } @$valid_items ), 1,
+            'The item assigned was one of the valid, bookable items'
+        );
+
+        my $second_booking = Koha::Booking->new(
+            {
+                patron_id         => $patron->borrowernumber,
+                biblio_id         => $biblio->biblionumber,
+                pickup_library_id => $item_2->homebranch,
+                start_date        => $start_1,
+                end_date          => $end_1
+            }
+        )->store();
+        isnt( $second_booking->item_id, $assigned_item, "The subsequent booking picks the only other available item" );
+
+        # Cancel both bookings so we can check that cancelled bookings are allowed in the auto-assign
+        $booking->status('cancelled')->store();
+        $second_booking->status('cancelled')->store();
+        is($booking->status, 'cancelled', "Booking is cancelled");
+        is($second_booking->status, 'cancelled', "Second booking is cancelled");
+
+        # Test randomness of selection
+        my %seen_items;
+        foreach my $i ( 1 .. 10 ) {
+            my $new_booking = Koha::Booking->new(
+                {
+                    patron_id         => $patron->borrowernumber,
+                    biblio_id         => $biblio->biblionumber,
+                    pickup_library_id => $item_1->homebranch,
+                    start_date        => $start_1,
+                    end_date          => $end_1
+                }
+            );
+            $new_booking->store();
+            $seen_items{ $new_booking->item_id }++;
+            $new_booking->delete();
+        }
+        ok(
+            scalar( keys %seen_items ) > 1,
+            'Multiple different items were selected randomly across bookings, and a cancelled booking is allowed in the selection'
+        );
     };
 
     subtest 'confirmation notice trigger' => sub {
