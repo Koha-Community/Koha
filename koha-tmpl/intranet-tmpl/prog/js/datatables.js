@@ -880,7 +880,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                     // Compare with lc, or selfreg won't match ^SELFREG$ for instance, see bug 32517
                     // This is only for category, we might want to apply it only in this case.
                     existing_search = existing_search.toLowerCase()
-                    if ( existing_search === this._id || (existing_search && this._id.match(existing_search)) ) {
+                    if ( existing_search === this._id || (existing_search && this._id.toLowerCase().match(existing_search)) ) {
                         o.prop("selected", "selected");
                     }
                     o.appendTo(select);
