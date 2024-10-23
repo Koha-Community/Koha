@@ -357,7 +357,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     <style>fieldset.action { margin-bottom: 20px }</style>
     <script>
         dt_overwrite_html_sorting_localeCompare();

@@ -1638,7 +1638,6 @@
         <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
     [% END %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
@@ -1648,7 +1647,6 @@
     [% INCLUDE 'js-patron-format.inc' %]
     [% INCLUDE 'js-biblio-format.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
-    [% Asset.js("js/table_filters.js") | $raw %]
     [% Asset.js("js/modals/place_booking.js") | $raw %]
     <script>
         var browser;

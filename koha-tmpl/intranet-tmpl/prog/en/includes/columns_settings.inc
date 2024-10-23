@@ -261,13 +261,6 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     }
 
     var table = $(selector);
-    if ( add_filters ) {
-        // Duplicate the table header row for columnFilter
-        thead_row = table.find('thead tr');
-        clone = thead_row.clone().addClass('filters_row');
-        clone.find("th.NoSort").html('');
-        thead_row.before(clone);
-    }
 
     var new_parameters = {}
     $.extend(true, new_parameters, dataTablesDefaults, dt_parameters);
@@ -299,7 +292,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     }
 
     table.dataTable(new_parameters);
-    table.DataTable().on("column-visibility.dt", function(){
+    var table_dt = table.DataTable();
+    table_dt.on("column-visibility.dt", function(){
         if( typeof columnsInit == 'function' ){
             // This function can be created separately and used to trigger
             // an event after the DataTable has loaded AND column visibility
@@ -309,13 +303,14 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     }).columns( hidden_ids ).visible( false );
 
     if ( add_filters ) {
-        // show a link to activate filtering
-        link = $('<a>')
-            .attr('href', '#')
-            .attr('id', id_selector + '_activate_filters');
-        $("." + id_selector  + "_table_controls").prepend(link);
-        deactivate_filters(id_selector);
+        _dt_add_filters(table, table_dt);
     }
+
+    table_dt.on("column-visibility.dt", function(){
+        if ( add_filters ) {
+            _dt_add_filters(table, table_dt);
+        }
+    });
 
     return table;
 }

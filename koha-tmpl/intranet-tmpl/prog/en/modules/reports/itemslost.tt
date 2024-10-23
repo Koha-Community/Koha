@@ -205,9 +205,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("js/table_filters.js") | $raw %]
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
