@@ -194,7 +194,7 @@ if ( $holds->count ) {
 # patrons count per biblio
 my $patrons_count = {
     map { $_->{biblionumber} => $_->{patrons_count} } @{ Koha::Holds->search(
-            { 'suspend' => 0 },
+            { 'suspend' => 0, 'found' => undef },
             {
                 select   => [ 'biblionumber', { count => { distinct => 'borrowernumber' } } ],
                 as       => [qw( biblionumber patrons_count )],
