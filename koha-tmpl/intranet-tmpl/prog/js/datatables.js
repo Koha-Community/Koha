@@ -860,7 +860,8 @@ function _dt_add_delay_filters(table_dt, table_node) {
         table_dt.column(i).search(val, true, false).draw();
     }, delay_ms);
 
-    $(table_node).find('thead tr:eq(1) th').each( function (i) {
+    $(table_node).find('thead tr:eq(1) th').each( function (visible_i) {
+        var i = table_dt.column.index('fromVisible', visible_i);
         $(this).find("input")
             .unbind()
             .bind("keyup change", function(){
