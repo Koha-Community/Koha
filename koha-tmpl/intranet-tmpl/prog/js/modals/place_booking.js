@@ -156,6 +156,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 },
                 success: function (response) {
                     let rules = response[0];
+                    let changed =
+                        issueLength !== rules.issuelength ||
+                        renewalsAllowed !== rules.renewalsallowed ||
+                        renewalLength !== rules.renewalperiod;
                     issueLength = rules.issuelength;
                     renewalsAllowed = rules.renewalsallowed;
                     renewalLength = rules.renewalperiod;
@@ -163,6 +167,9 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     trailDays = rules.bookings_trail_period;
 
                     // redraw pariodPicker taking selected item into account
+                    if (changed) {
+                        periodPicker.clear();
+                    }
                     periodPicker.redraw();
 
                     // Enable flatpickr now we have data we need
@@ -175,6 +182,7 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                 },
             });
         } else {
+            periodPicker.clear();
             $("#period_fields :input").prop("disabled", true);
         }
     }
