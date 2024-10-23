@@ -197,24 +197,31 @@ sub _assign_item_for_booking {
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
     my $existing_bookings = $biblio->bookings(
-        [
-            start_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            end_date => {
-                '-between' => [
-                    $dtf->format_datetime($start_date),
-                    $dtf->format_datetime($end_date)
-                ]
-            },
-            {
-                start_date => { '<' => $dtf->format_datetime($start_date) },
-                end_date   => { '>' => $dtf->format_datetime($end_date) }
-            }
-        ]
+        {
+            '-and' => [
+                {
+                    '-or' => [
+                        start_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
+                        end_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
+                        {
+                            start_date => { '<' => $dtf->format_datetime($start_date) },
+                            end_date   => { '>' => $dtf->format_datetime($end_date) }
+                        }
+                    ]
+                },
+                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
+            ]
+        }
     );
 
     my $checkouts =
@@ -227,7 +234,7 @@ sub _assign_item_for_booking {
                 { '-not_in' => $checkouts->_resultset->get_column('itemnumber')->as_query }
             ]
         },
-        { rows => 1 }
+        { order_by => \'RAND()', rows => 1 }
     );
 
     my $itemnumber = $bookable_items->single->itemnumber;
