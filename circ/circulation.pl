@@ -351,193 +351,194 @@ if (@$barcodes && $op eq 'cud-checkout') {
             }
         };
 
-    my $blocker = $invalidduedate ? 1 : 0;
+        my $blocker = $invalidduedate ? 1 : 0;
 
-    $template_params->{alert} = $alerts;
-    $template_params->{messages} = $messages;
+        $template_params->{alert} = $alerts;
+        $template_params->{messages} = $messages;
 
-    my $item = Koha::Items->find({ barcode => $barcode });
+        my $item = Koha::Items->find({ barcode => $barcode });
 
-    my $biblio;
-    if ( $item ) {
-        $biblio = $item->biblio;
-    }
-
-    if ( $issuingimpossible->{'STATS'} ) {
-        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
-            AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
-
-        $template->param(
-            STATS     => 1,
-            CHECKEDIN => $stats_return,
-            MESSAGES  => $stats_messages,
-            ITEM      => $stats_iteminformation,
-            BORROWER  => $stats_borrower,
-        );
-
-        #increment items.localuse
-        my $localuse_count = $item->localuse;
-        $localuse_count++;
-        $item->localuse($localuse_count)->store;
-    }
-
-    # Fix for bug 7494: optional checkout-time fallback search for a book
-
-    if ( $issuingimpossible->{'UNKNOWN_BARCODE'}
-        && C4::Context->preference("itemBarcodeFallbackSearch")
-        && not $batch
-    )
-    {
-     $template_params->{FALLBACK} = 1;
-
-        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my $query = "kw=" . $barcode;
-        my ( $searcherror, $results, $total_hits ) = $searcher->simple_search_compat($query, 0, 10);
-
-        # if multiple hits, offer options to librarian
-        if ( $total_hits > 0 ) {
-            my @barcodes;
-            foreach my $hit ( @{$results} ) {
-                my $chosen = # Maybe easier to retrieve the itemnumber from $hit?
-                  TransformMarcToKoha({ record => C4::Search::new_record_from_zebra('biblioserver',$hit) });
-
-                # offer all barcodes individually
-                if ( $chosen->{barcode} ) {
-                    push @barcodes, sort split(/\s*\|\s*/, $chosen->{barcode});
-                }
-            }
-            my $items = Koha::Items->search({ barcode => {-in => \@barcodes}});
-            $template_params->{options} = $items;
+        my $biblio;
+        if ( $item ) {
+            $biblio = $item->biblio;
         }
-    }
 
-    # Only some errors will block when performing forced onsite checkout,
-    # for other cases all errors will block
-    my @blocking_error_codes =
-        ( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") )
-        ? qw( UNKNOWN_BARCODE NO_OPEN_DAYS )
-        : ( keys %$issuingimpossible );
+        if ( $issuingimpossible->{'STATS'} ) {
+            my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
+                AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
 
-    if ( $issuingimpossible->{BOOKED_TO_ANOTHER} ) {
-        $template_params->{BOOKED_TO_ANOTHER} = $issuingimpossible->{BOOKED_TO_ANOTHER};
-        $template_params->{IMPOSSIBLE}        = 1;
-        $blocker                              = 1;
-    }
+            $template->param(
+                STATS     => 1,
+                CHECKEDIN => $stats_return,
+                MESSAGES  => $stats_messages,
+                ITEM      => $stats_iteminformation,
+                BORROWER  => $stats_borrower,
+            );
 
-    foreach my $code ( @blocking_error_codes ) {
-        if ($issuingimpossible->{$code}) {
-            $template_params->{$code} = $issuingimpossible->{$code};
-
-            $template_params->{IMPOSSIBLE} = 1;
-            $blocker = 1;
+            #increment items.localuse
+            my $localuse_count = $item->localuse;
+            $localuse_count++;
+            $item->localuse($localuse_count)->store;
         }
-    }
 
-    delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
+        # Fix for bug 7494: optional checkout-time fallback search for a book
 
-    if ( $item && C4::Context->preference('ClaimReturnedLostValue') ) {
-        my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
+        if ( $issuingimpossible->{'UNKNOWN_BARCODE'}
+            && C4::Context->preference("itemBarcodeFallbackSearch")
+            && not $batch
+        )
+        {
+        $template_params->{FALLBACK} = 1;
 
-        my $claims = Koha::Checkouts::ReturnClaims->search(
-            {
-                itemnumber => $item->id,
-            }
-        );
-        if ( $claims->count ) {
-            if ($autoClaimReturnCheckout) {
-                my $claim = $claims->next;
+            my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+            my $query = "kw=" . $barcode;
+            my ( $searcherror, $results, $total_hits ) = $searcher->simple_search_compat($query, 0, 10);
 
-                my $patron_id  = $logged_in_user->borrowernumber;
-                my $resolution = $autoClaimReturnCheckout;
+            # if multiple hits, offer options to librarian
+            if ( $total_hits > 0 ) {
+                my @barcodes;
+                foreach my $hit ( @{$results} ) {
+                    my $chosen = # Maybe easier to retrieve the itemnumber from $hit?
+                    TransformMarcToKoha({ record => C4::Search::new_record_from_zebra('biblioserver',$hit) });
 
-                $claim->resolve(
-                    {
-                        resolution  => $resolution,
-                        resolved_by => $patron_id,
+                    # offer all barcodes individually
+                    if ( $chosen->{barcode} ) {
+                        push @barcodes, sort split(/\s*\|\s*/, $chosen->{barcode});
                     }
-                );
-                $template_params->{CLAIM_RESOLUTION} = $claim;
-            }
-        }
-    }
-
-    if( $item and ( !$blocker or $force_allow_issue ) ){
-        my $confirm_required = 0;
-        unless($issueconfirmed){
-            #  Get the item title for more information
-            my $materials = $item->materials;
-            my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
-            $materials = $descriptions->{lib} // $materials;
-            $template_params->{ADDITIONAL_MATERIALS} = $materials;
-            $template_params->{itemhomebranch} = $item->homebranch;
-
-            # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
-            foreach my $needsconfirmation_key ( keys %$needsconfirmation ) {
-                $template_params->{$needsconfirmation_key} = $needsconfirmation->{$needsconfirmation_key};
-                $template_params->{getTitleMessageIteminfo} = $biblio->title;
-                $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
-                $template_params->{NEEDSCONFIRMATION} = 1;
-                $confirm_required = 1;
-                if ( $needsconfirmation_key eq 'BOOKED_TO_ANOTHER' ) {
-                    my $reduceddue =
-                        dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )->subtract( days => 1 );
-                    $template_params->{reduceddue} = $reduceddue;
                 }
+                my $items = Koha::Items->search({ barcode => {-in => \@barcodes}});
+                $template_params->{options} = $items;
             }
         }
-        unless ($confirm_required) {
-            my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
-            if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
-                my $recall = Koha::Recalls->find(
-                    {
-                        biblio_id => $item->biblionumber,
-                        item_id   => [ undef,       $item->itemnumber ],
-                        status    => [ 'requested', 'waiting' ],
-                        completed => 0,
-                        patron_id => $patron->borrowernumber,
-                    }
-                );
-                $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
-            }
 
-            # If booked (alerts or confirmation) update datedue to end of booking
-            if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
-                $datedue = $booked->end_date;
+        # Only some errors will block when performing forced onsite checkout,
+        # for other cases all errors will block
+        my @blocking_error_codes =
+            ( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") )
+            ? qw( UNKNOWN_BARCODE NO_OPEN_DAYS )
+            : ( keys %$issuingimpossible );
+
+        if ( $issuingimpossible->{BOOKED_TO_ANOTHER} ) {
+            $template_params->{BOOKED_TO_ANOTHER} = $issuingimpossible->{BOOKED_TO_ANOTHER};
+            $template_params->{IMPOSSIBLE}        = 1;
+            $blocker                              = 1;
+        }
+
+        foreach my $code ( @blocking_error_codes ) {
+            if ($issuingimpossible->{$code}) {
+                $template_params->{$code} = $issuingimpossible->{$code};
+
+                $template_params->{IMPOSSIBLE} = 1;
+                $blocker = 1;
             }
-            my $issue = AddIssue(
-                $patron, $barcode, $datedue,
-                $cancelreserve,
-                undef, undef,
+        }
+
+        delete $needsconfirmation->{'DEBT'} if ($debt_confirmed);
+
+        if ( $item && C4::Context->preference('ClaimReturnedLostValue') ) {
+            my $autoClaimReturnCheckout = C4::Context->preference('AutoClaimReturnStatusOnCheckout');
+
+            my $claims = Koha::Checkouts::ReturnClaims->search(
                 {
-                    onsite_checkout        => $onsite_checkout,        auto_renew    => $session->param('auto_renew'),
-                    switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall,
-                    recall_id              => $recall_id,
+                    itemnumber => $item->id,
+                    resolution => undef,
                 }
             );
-            $template_params->{issue} = $issue;
-            $session->clear('auto_renew');
-            $inprocess = 1;
+            if ( $claims->count ) {
+                if ($autoClaimReturnCheckout) {
+                    my $claim = $claims->next;
+
+                    my $patron_id  = $logged_in_user->borrowernumber;
+                    my $resolution = $autoClaimReturnCheckout;
+
+                    $claim->resolve(
+                        {
+                            resolution  => $resolution,
+                            resolved_by => $patron_id,
+                        }
+                    );
+                    $template_params->{CLAIM_RESOLUTION} = $claim;
+                }
+            }
         }
-    }
 
-    if ($needsconfirmation->{RESERVE_WAITING} or $needsconfirmation->{RESERVED} or $needsconfirmation->{TRANSFERRED} or $needsconfirmation->{PROCESSING}){
-        $template->param(
-            reserveborrowernumber => $needsconfirmation->{'resborrowernumber'},
-            reserve_id => $needsconfirmation->{reserve_id},
-        );
-    }
+        if( $item and ( !$blocker or $force_allow_issue ) ){
+            my $confirm_required = 0;
+            unless($issueconfirmed){
+                #  Get the item title for more information
+                my $materials = $item->materials;
+                my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
+                $materials = $descriptions->{lib} // $materials;
+                $template_params->{ADDITIONAL_MATERIALS} = $materials;
+                $template_params->{itemhomebranch} = $item->homebranch;
+
+                # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
+                foreach my $needsconfirmation_key ( keys %$needsconfirmation ) {
+                    $template_params->{$needsconfirmation_key} = $needsconfirmation->{$needsconfirmation_key};
+                    $template_params->{getTitleMessageIteminfo} = $biblio->title;
+                    $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
+                    $template_params->{NEEDSCONFIRMATION} = 1;
+                    $confirm_required = 1;
+                    if ( $needsconfirmation_key eq 'BOOKED_TO_ANOTHER' ) {
+                        my $reduceddue =
+                            dt_from_string( $$needsconfirmation{$needsconfirmation_key}->start_date )->subtract( days => 1 );
+                        $template_params->{reduceddue} = $reduceddue;
+                    }
+                }
+            }
+            unless ($confirm_required) {
+                my $switch_onsite_checkout = exists $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED};
+                if ( C4::Context->preference('UseRecalls') && !$recall_id ) {
+                    my $recall = Koha::Recalls->find(
+                        {
+                            biblio_id => $item->biblionumber,
+                            item_id   => [ undef,       $item->itemnumber ],
+                            status    => [ 'requested', 'waiting' ],
+                            completed => 0,
+                            patron_id => $patron->borrowernumber,
+                        }
+                    );
+                    $recall_id = ( $recall and $recall->id ) ? $recall->id : undef;
+                }
+
+                # If booked (alerts or confirmation) update datedue to end of booking
+                if ( my $booked = $needsconfirmation->{BOOKED_EARLY} // $alerts->{BOOKED} ) {
+                    $datedue = $booked->end_date;
+                }
+                my $issue = AddIssue(
+                    $patron, $barcode, $datedue,
+                    $cancelreserve,
+                    undef, undef,
+                    {
+                        onsite_checkout        => $onsite_checkout,        auto_renew    => $session->param('auto_renew'),
+                        switch_onsite_checkout => $switch_onsite_checkout, cancel_recall => $cancel_recall,
+                        recall_id              => $recall_id,
+                    }
+                );
+                $template_params->{issue} = $issue;
+                $session->clear('auto_renew');
+                $inprocess = 1;
+            }
+        }
+
+        if ($needsconfirmation->{RESERVE_WAITING} or $needsconfirmation->{RESERVED} or $needsconfirmation->{TRANSFERRED} or $needsconfirmation->{PROCESSING}){
+            $template->param(
+                reserveborrowernumber => $needsconfirmation->{'resborrowernumber'},
+                reserve_id => $needsconfirmation->{reserve_id},
+            );
+        }
 
 
-    # FIXME If the issue is confirmed, we launch another time checkouts->count, now display the issue count after issue
-    $patron = Koha::Patrons->find( $borrowernumber );
-    $template_params->{issuecount} = $patron->checkouts->count;
+        # FIXME If the issue is confirmed, we launch another time checkouts->count, now display the issue count after issue
+        $patron = Koha::Patrons->find( $borrowernumber );
+        $template_params->{issuecount} = $patron->checkouts->count;
 
-    if ( $item ) {
-        $template_params->{item} = $item;
-        $template_params->{biblio} = $biblio;
-        $template_params->{itembiblionumber} = $biblio->biblionumber;
-    }
-    push @$checkout_infos, $template_params;
+        if ( $item ) {
+            $template_params->{item} = $item;
+            $template_params->{biblio} = $biblio;
+            $template_params->{itembiblionumber} = $biblio->biblionumber;
+        }
+        push @$checkout_infos, $template_params;
   }
   unless ( $batch ) {
     $template->param( %{$checkout_infos->[0]} );
