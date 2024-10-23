@@ -836,7 +836,9 @@
                     });
                 [% END %]
 
-                update_columns_visibility(settings);
+                if ( api.data().length ) {
+                    update_columns_visibility(settings);
+                }
 
                 if ( drawcallback ) { drawcallback(this); }
             },
