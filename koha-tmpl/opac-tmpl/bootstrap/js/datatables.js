@@ -180,9 +180,6 @@ $.fn.dataTable.ext.buttons.clearFilter = {
                                 if(query_parameters.length) {
                                     query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:query_parameters);
                                     dataSet.q = query_parameters;
-                                    delete options.query_parameters;
-                                } else {
-                                    delete options.query_parameters;
                                 }
 
                                 dataSet._match = options.criteria;
