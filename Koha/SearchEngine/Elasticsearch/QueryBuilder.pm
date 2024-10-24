@@ -855,6 +855,13 @@ sub _modify_string_by_type {
             $str = "[$from TO $until]";
         }
     }
+    elsif($type eq 'st-date-normalized'){
+        if ($str =~ /^(.*) - (.*)$/) {
+         my $from = $1 || '*';
+            my $until = $2 || '*';
+            $str = "[$from TO $until]";
+        }
+    }
     return $str;
 }
 
@@ -1098,7 +1105,6 @@ sub _fix_limit_special_cases {
     my ( $self, $limits ) = @_;
 
     my @new_lim;
-    my $ranges;
     foreach my $l (@$limits) {
         # This is set up by opac-search.pl
         if ( $l =~ /^yr,st-numeric,ge[=:]/ ) {
@@ -1166,15 +1172,11 @@ sub _fix_limit_special_cases {
                 push @new_lim, $term;
             }
         }
-        elsif ($l =~ /^acqdate,(ge|le),st-date-normalized=/ ) {
-            my ($fromdate) = ( $l =~ /^acqdate,ge,st-date-normalized=(.*)$/ );
-            my ($todate) = ( $l =~ /^acqdate,le,st-date-normalized=(.*)$/ );
-            $fromdate ||= '*';
-            $todate ||= '*';
-            $ranges->{'date-of-acquisition.raw'} = {
-                from => $fromdate,
-                to => $todate
-            }
+        elsif ($l =~ /^acqdate,st-date-normalized=/ ) {
+            my ($date) = ( $l =~ /^acqdate,st-date-normalized=(.*)$/ );
+            next unless defined($date);
+            $date = $self->_modify_string_by_type(type => 'st-date-normalized', operand => $date);
+            push @new_lim, "date-of-acquisition.raw:$date";
         }
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
@@ -1184,12 +1186,6 @@ sub _fix_limit_special_cases {
             }
             else {
                 push @new_lim, $l;
-            }
-        }
-
-        if ( $ranges ) {
-            foreach my $index ( keys %$ranges ) {
-                push @new_lim, "$index:[$ranges->{$index}{from} TO $ranges->{$index}{to}]"
             }
         }
     }

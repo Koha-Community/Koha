@@ -69,8 +69,7 @@ if ( $op eq "do_search" ) {
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 
     if (!@limits) {
-        push(@limits, "acqdate,ge,st-date-normalized=$datefrom") if ($datefrom);
-        push(@limits, "acqdate,le,st-date-normalized=$dateto") if ($dateto);
+       push(@limits, "acqdate,st-date-normalized=$datefrom - $dateto");
     }
 
     my ( $build_error, $query, $simple_query, $query_cgi,
