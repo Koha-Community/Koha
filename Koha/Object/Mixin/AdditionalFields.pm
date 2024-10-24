@@ -249,7 +249,7 @@ the mapping type and the mapping category where appropriate.
 Currently handles additional fields values mappings.
 
 Accepts a param hashref where the 'public' key denotes whether we want the public
-or staff client strings.
+or staff interface strings.
 
 =cut
 
