@@ -1330,6 +1330,46 @@ tables:
             - "[% branch.branchemail %]"
 
         - module: lists
+          code: SHARE_ACCEPT
+          branchcode: ""
+          name: "Notification about an accepted share"
+          is_html: 0
+          title: "Share on list <<listname>> accepted"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear patron,"
+            - ""
+            - "We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog."
+            - ""
+            - "Thank you."
+            - ""
+            - "Your library."
+
+        - module: lists
+          code: SHARE_INVITE
+          branchcode: ""
+          name: "Invitation for sharing a list"
+          is_html: 0
+          title: "Share list <<listname>>"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear patron,"
+            - ""
+            - "One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog."
+            - ""
+            - "To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar."
+            - ""
+            - "<<shareurl>>"
+            - ""
+            - "In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks."
+            - ""
+            - "Thank you."
+            - ""
+            - "Your library."
+
+        - module: lists
           code: TRANSFER_OWNERSHIP
           branchcode: ""
           name: "Transfer ownership"
@@ -1470,46 +1510,6 @@ tables:
             - "</p>"
             - "<p>This link will be valid for 5 days from this email's reception, then you must reapply if you do not change your password.</p>"
             - "<p>Thank you.</p>"
-
-        - module: members
-          code: SHARE_ACCEPT
-          branchcode: ""
-          name: "Notification about an accepted share"
-          is_html: 0
-          title: "Share on list <<listname>> accepted"
-          message_transport_type: email
-          lang: default
-          content:
-            - "Dear patron,"
-            - ""
-            - "We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog."
-            - ""
-            - "Thank you."
-            - ""
-            - "Your library."
-
-        - module: members
-          code: SHARE_INVITE
-          branchcode: ""
-          name: "Invitation for sharing a list"
-          is_html: 0
-          title: "Share list <<listname>>"
-          message_transport_type: email
-          lang: default
-          content:
-            - "Dear patron,"
-            - ""
-            - "One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog."
-            - ""
-            - "To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar."
-            - ""
-            - "<<shareurl>>"
-            - ""
-            - "In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks."
-            - ""
-            - "Thank you."
-            - ""
-            - "Your library."
 
         - module: members
           code: WELCOME

@@ -191,7 +191,7 @@ sub notify_owner {
 
     #prepare letter
     my $letter = C4::Letters::GetPreparedLetter(
-        module      => 'members',
+        module      => 'lists',
         letter_code => 'SHARE_ACCEPT',
         branchcode  => C4::Context->userenv->{"branch"},
         lang        => $patron->lang,
@@ -257,7 +257,7 @@ sub send_invitekey {
 
         #prepare letter
         my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'members',
+            module      => 'lists',
             letter_code => 'SHARE_INVITE',
             branchcode  => C4::Context->userenv->{"branch"},
             lang        => 'default', # Not sure how we could use something more useful else here
