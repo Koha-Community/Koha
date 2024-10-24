@@ -1311,7 +1311,7 @@
                 [% END %]
             [% END %]
         [% END %]
-        [% IF ( reserveloop ) %]
+        [% IF ( total_holds ) %]
             <form id="existing_holds" name="T[% time | html %]" action="modrequest.pl" method="post" style="display:block">
                 [% INCLUDE 'csrf-token.inc' %]
                 [% IF ( multi_hold ) %]
@@ -1330,11 +1330,7 @@
                 <h2>Existing holds</h2>
                 <div id="toolbar" class="btn-toolbar sticky">
                     <div class="btn-group">
-                        <input type="hidden" name="op" value="cud-modifyall" />
-                        <input type="submit" class="btn btn-primary" name="submit" value="Update hold(s)" />
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn cancel_selected_holds" data-bulk="true"> Cancel selected (<span class="selected_holds_count"></span>)</button>
+                        <button class="btn cancel_selected_holds" data-bulk="true"></button>
                     </div>
                     <div id="cancellation-reason-div" style="display:none">
                         [% SET hold_cancellation = AuthorisedValues.GetAuthValueDropbox('HOLD_CANCELLATION') %]
@@ -1360,137 +1356,75 @@
                 </div>
                 <div class="page-section">
                     [% FOREACH biblioloo IN biblioloop %]
-                        [% IF ( biblioloo.reserveloop ) %]
+                        [% IF ( biblioloo.total_holds ) %]
                             <div class="hold_title" id="hold_title_[% biblioloo.biblionumber | html %]">
                                 [% IF ( multi_hold ) %]
                                     <h3>
                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]"> [% biblioloo.title | html %] </a>
-                                        <span class="badge bg-info-subtle"><span>[% biblioloo.reserveloop.size | html %] [% tn('Hold', 'Holds', biblioloo.reserveloop.size) | $raw %]</span></span>
+                                        <span class="badge bg-info-subtle"><span>[% biblioloo.total_holds | html %] [% tn('Hold', 'Holds', biblioloo.total_holds) | $raw %]</span></span>
                                     </h3>
                                 [% END %]
 
                                 [% IF Koha.Preference('HoldsSplitQueue') == 'branch' %]
-
-                                    [% SET branchcodes = [] %]
-
-                                    [% FOREACH h IN biblioloo.reserveloop %]
-                                        [% branchcodes.push( h.branchcode ) %]
-                                    [% END %]
-                                    [% branchcodes = branchcodes.unique %]
-                                    [% IF ( branchcodes.empty ) %]
-                                        <div class="alert alert-info"> There are no holds on this title. </div>
+                                    [% IF biblioloo.hold_branches.empty %]
+                                        <div class="holds_by_library">
+                                            <h4>Any library</h4>
+                                            [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data="any" %]
+                                        </div>
                                     [% ELSE %]
-
-                                        [% FOREACH b IN branchcodes.sort %]
-                                            [% SET holds_by_branch = [] %]
-                                            [% FOREACH h IN biblioloo.reserveloop %]
-                                                [% IF h.branchcode == b %]
-                                                    [% holds_by_branch.push( h ) %]
-                                                [% END %]
-                                            [% END %]
+                                        [% FOREACH b IN biblioloo.hold_branches %]
                                             <div class="holds_by_library">
                                                 <h4>[% Branches.GetName( b ) | html %]</h4>
 
-                                                [% INCLUDE holds_table.inc holds=holds_by_branch %]
+                                                [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data=b %]
                                             </div>
-                                        [% END # /FOREACh b %]
-                                    [% END # /IF ( branchcodes.empty ) %]
+                                        [% END %]
+                                    [% END # /IF hold_branches.empty %]
                                 [% ELSIF Koha.Preference('HoldsSplitQueue') == 'itemtype' %]
 
-                                    [% SET itemtypes = [] %]
-
-                                    [% FOREACH h IN biblioloo.reserveloop %]
-                                        [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                        [% itemtypes.push( hold_itemtype ) %]
-                                    [% END %]
-                                    [% itemtypes = itemtypes.unique %]
-                                    [% IF ( itemtypes.empty ) %]
-                                        <div class="alert alert-info"> There are no holds on this title. </div>
+                                    [% IF biblioloo.hold_itemtypes.empty %]
+                                        <div class="holds_by_itemtype">
+                                            <h4>Any item type</h4>
+                                            [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data="any" %]
+                                        </div>
                                     [% ELSE %]
-
-                                        [% FOREACH i IN itemtypes.sort %]
-                                            [% SET holds_by_itemtype = [] %]
-                                            [% FOREACH h IN biblioloo.reserveloop %]
-                                                [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                [% IF hold_itemtype == i %]
-                                                    [% holds_by_itemtype.push( h ) %]
-                                                [% END %]
-                                            [% END %]
-
+                                        [% FOREACH i IN biblioloo.hold_itemtypes %]
                                             <div class="holds_by_itemtype">
-                                                [% IF i %]
+                                                [% IF i && i != 'any' %]
                                                     <h4>[% ItemTypes.GetDescription( i ) | html %]</h4>
                                                 [% ELSE %]
                                                     <h4>Any item type</h4>
                                                 [% END %]
-                                                [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
+                                                [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data=i %]
                                             </div>
-                                        [% END # /FOREACH i %]
-                                    [% END # /IF ( itemtypes.empty ) %]
+                                        [% END %]
+                                    [% END # /IF hold_split.empty %]
                                 [% ELSIF Koha.Preference('HoldsSplitQueue') == 'branch_itemtype' %]
-                                    [% SET branchcodes = [] %]
 
-                                    [% FOREACH h IN biblioloo.reserveloop %]
-                                        [% branchcodes.push( h.branchcode ) %]
-                                    [% END %]
-                                    [% branchcodes = branchcodes.unique %]
-                                    [% IF ( branchcodes.empty ) %]
-                                        <div class="alert alert-info"> There are no holds on this title. </div>
-                                    [% ELSE %]
-
-                                        [% FOREACH b IN branchcodes.sort %]
-                                            <div class="holds_by_library">
-                                                <h4 class="library_holds">[% Branches.GetName( b ) | html %]</h4>
-                                                [% SET holds_by_branch = [] %]
-                                                [% FOREACH h IN biblioloo.reserveloop %]
-                                                    [% IF h.branchcode == b %]
-                                                        [% holds_by_branch.push( h ) %]
+                                    [% FOREACH b IN biblioloo.hold_branches %]
+                                        <div class="holds_by_library">
+                                            <h4>[% Branches.GetName( b ) | html %]</h4>
+                                            [% FOREACH i IN biblioloo.hold_itemtypes %]
+                                                <div class="holds_by_itemtype">
+                                                    [% IF i && i != 'any' %]
+                                                        <h4>[% ItemTypes.GetDescription( i ) | html %]</h4>
+                                                    [% ELSE %]
+                                                        <h4>Any item type</h4>
                                                     [% END %]
-                                                [% END %]
-
-                                                [% SET itemtypes = [] %]
-                                                [% FOREACH h IN holds_by_branch %]
-                                                    [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                    [% itemtypes.push( hold_itemtype ) %]
-                                                [% END %]
-                                                [% itemtypes = itemtypes.unique %]
-
-                                                [% FOREACH i IN itemtypes.sort %]
-                                                    <div class="holds_by_itemtype">
-                                                        <h5 class="itemtype_holds">
-                                                            [% IF i %]
-                                                                [% ItemTypes.GetDescription( i ) | html %]
-                                                            [% ELSE %]
-                                                                <span>Any item type</span>
-                                                            [% END %]
-                                                        </h5>
-
-                                                        [% SET holds_by_itemtype = [] %]
-                                                        [% FOREACH h IN holds_by_branch %]
-                                                            [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                                            [% IF hold_itemtype == i %]
-                                                                [% holds_by_itemtype.push( h ) %]
-                                                            [% END %]
-                                                        [% END %]
-                                                        [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
-                                                    </div>
-                                                    <!-- /.holds_by_itemtype -->
-                                                [% END %]
-                                            </div>
-                                            <!-- /.holds_by_library -->
-                                        [% END # /FOREACH b %]
-                                    [% END # /IF ( branchcodes.empty ) %]
-                                [% ELSE %]
-
-                                    [% IF ( biblioloo.reserveloop.size ) %]
-                                        [% INCLUDE holds_table.inc holds=biblioloo.reserveloop %]
-                                    [% ELSE %]
-                                        <div class="alert alert-info"> There are no holds on this title. </div>
+                                                    [% SET split_data = b _ "_" _ i %]
+                                                    [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data=split_data %]
+                                                </div>
+                                            [% END %]
+                                        </div>
                                     [% END %]
+                                [% ELSE %]
+                                    [% INCLUDE holds_table.inc biblio_id=biblioloo.biblionumber total_holds=biblioloo.total_holds split_data="any" %]
                                 [% END # /IF HoldsSplitQueue %]
                             </div>
                             <!-- /hold_title -->
-                        [% END # /IF biblioloo.reserveloop %]
+                        [% ELSE %]
+                            <div class="note"> There are no holds on this title. </div>
+                        [% END # /IF ( biblioloo.total_holds ) %]
                     [% END # FOREACH biblioloo %]
                 </div>
             </form>
@@ -1605,6 +1539,9 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
+    <script>
+        hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
+    </script>
     [% Asset.js("js/holds.js") | $raw %]
     [% Asset.js("js/hold-group.js") | $raw %]
 
@@ -1613,17 +1550,16 @@
         [% SET url_biblio_params = url_biblio_params _ "&amp;multi_hold=1" %]
     [% END %]
     <script>
-        $(document).ready(function () {
-            hold_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds', 'patron_holds_table', 'json' ) | $raw %];
-            $("#patron_holds_table").kohaTable(
-                {
-                    paging: false,
-                    bKohaColumnsUseNames: true,
-                },
-                hold_table_settings
-            );
-        });
         var biblionumbers = [[% biblionumbers.join(', ') | $raw %]];
+        var hold_branches = {[% FOREACH biblio_info IN biblioloop %] [% biblio_info.biblionumber | html %]: ["[% biblio_info.hold_branches.join('", "') | $raw %]"], [% END %]};
+        var hold_itemtypes = {[% FOREACH biblio_info IN biblioloop %] [% biblio_info.biblionumber | html %]: ["[% biblio_info.hold_itemtypes.join('", "') | $raw %]"], [% END %]};
+        var HoldsSplitQueue = "[% Koha.Preference('HoldsSplitQueue') | html %]";
+        var HoldsSplitQueueNumbering = "[% Koha.Preference('HoldsSplitQueueNumbering') | html %]";
+        var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
+        var AutoResumeSuspendedHolds = [% ( Koha.Preference('AutoResumeSuspendedHolds') ) ? 1 : 0 | html %];
+        var AllowHoldDateInFuture = [% ( Koha.Preference('AllowHoldDateInFuture') ) ? 1 : 0 | html %];
+        var HidePatronName = [% ( Koha.Preference('HidePatronName') ) ? 1 : 0 | html %];
+        var CAN_user_reserveforothers_modify_holds_priority = [%CAN_user_reserveforothers_modify_holds_priority ? 1 : 0 | html %];
         var borrowernumber = "[% patron.borrowernumber | $raw %]";
         var patron_homebranch = "[% To.json( Branches.GetName( patron.branchcode ) ) | $raw %]";
         var override_items = {[% FOREACH biblio_info IN biblioloop %][% FOREACH itemloo IN biblio_info.itemloop %][% IF ( itemloo.override ) %]
@@ -1651,6 +1587,31 @@
         $.fn.select2.defaults.set("dropdownAutoWidth", true );
 
         $(document).ready(function() {
+            biblionumbers.forEach(function(biblionumber) {
+                let branches = hold_branches[biblionumber];
+                let itemtypes = hold_itemtypes[biblionumber];
+                switch (HoldsSplitQueue) {
+                    case 'branch':
+                        branches.forEach(function(branch) {
+                            load_patron_holds_table(biblionumber, {name: HoldsSplitQueue, value: branch});
+                        });
+                        break;
+                    case 'itemtype':
+                        itemtypes.forEach(function(itemtype) {
+                            load_patron_holds_table(biblionumber, {name: HoldsSplitQueue, value: itemtype});
+                        });
+                        break;
+                    case 'branch_itemtype':
+                        branches.forEach(function(branch) {
+                            itemtypes.forEach(function(itemtype) {
+                                load_patron_holds_table(biblionumber, {name: HoldsSplitQueue, value: branch + '_' + itemtype});
+                            });
+                        });
+                        break;
+                    default:
+                        load_patron_holds_table(biblionumber, {name: 'any', value: 'any'});
+                }
+            });
             $('#cancellation-reason-div').hide();
             $('.rank-request').on('change', function() {
                 if ( $(".rank-request option:selected[value='del']").length ) {
@@ -2011,66 +1972,10 @@
                 });
             [% END %]
 
-            $(".hold-arrow").click(function(e) {
-                e.preventDefault();
-                let arrowForm = $("#hold-actions-form").attr({
-                    action: 'request.pl',
-                    method: 'post'
-                });
-                let arrow_op = $("<input />").attr({
-                    name: 'op',
-                    type: 'hidden',
-                    value: $(this).data('op')
-                });
-                let arrow_where = $("<input />").attr({
-                    name: 'where',
-                    type: 'hidden',
-                    value: $(this).data('where')
-                });
-                let arrow_fp = $("<input />").attr({
-                    name: 'first_priority',
-                    type: 'hidden',
-                    value: $(this).data('first_priority')
-                });
-                let arrow_lp = $("<input />").attr({
-                    name: 'last_priority',
-                    type: 'hidden',
-                    value: $(this).data('last_priority')
-                });
-                let arrow_pp = $("<input />").attr({
-                    name: 'prev_priority',
-                    type: 'hidden',
-                    value: $(this).data('prev_priority')
-                });
-                let arrow_np = $("<input />").attr({
-                    name: 'next_priority',
-                    type: 'hidden',
-                    value: $(this).data('next_priority')
-                });
-                let arrow_bn = $("<input />").attr({
-                    name: 'borrowernumber',
-                    type: 'hidden',
-                    value: $(this).data('borrowernumber')
-                });
-                let arrow_bb = $("<input />").attr({
-                    name: 'biblionumber',
-                    type: 'hidden',
-                    value: $(this).data('biblionumber')
-                });
-                let arrow_ri = $("<input />").attr({
-                    name: 'reserve_id',
-                    type: 'hidden',
-                    value: $(this).data('reserve_id')
-                });
-                let arrow_date = $("<input />").attr({
-                    name: 'date',
-                    type: 'hidden',
-                    value: $(this).data('date')
-                });
-                arrowForm.append(arrow_op,arrow_where,arrow_fp,arrow_lp,arrow_pp,arrow_np,arrow_bn,arrow_bb,arrow_ri,arrow_date);
-                $("#hold-actions-form").submit();
-                return true;
-            })
+            if(!localStorage.selectedHolds  || document.referrer.replace(/\?.*/, '') !== document.location.origin+document.location.pathname) {
+                localStorage.selectedHolds = [];
+            }
+
         });
     </script>
     <script>
@@ -2086,13 +1991,6 @@
             });
         </script>
     [% END %]
-    <script>
-        $(".printholdslip").click(function () {
-            var reserve_id = $(this).attr("data-reserve_id");
-            window.open("/cgi-bin/koha/circ/hold-transfer-slip.pl?reserve_id=" + reserve_id);
-            return false;
-        });
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

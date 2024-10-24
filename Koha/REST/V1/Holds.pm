@@ -281,21 +281,27 @@ sub edit {
         }
 
         $pickup_library_id //= $hold->branchcode;
-        my $priority        = $body->{priority}        // $hold->priority;
-        my $hold_date       = $body->{hold_date}       // $hold->reservedate;
-        my $expiration_date = $body->{expiration_date} // $hold->expirationdate;
+        my $priority        = $body->{priority} // $hold->priority;
+        my $hold_date       = exists $body->{hold_date}       ? $body->{hold_date}       : $hold->reservedate;
+        my $expiration_date = exists $body->{expiration_date} ? $body->{expiration_date} : $hold->expirationdate;
+        my $item_id         = exists $body->{item_id}         ? $body->{item_id}         : $hold->itemnumber;
+        my $item_level =
+            exists $body->{item_level}
+            ? ( $body->{item_level} ? 1 : 0 )
+            : $hold->item_level_hold;
 
         # suspended_until can also be set to undef
         my $suspended_until = $body->{suspended_until} || $hold->suspend_until;
 
         my $params = {
-            reserve_id     => $hold->id,
-            branchcode     => $pickup_library_id,
-            rank           => $priority,
-            suspend_until  => $suspended_until,
-            itemnumber     => $hold->itemnumber,
-            reservedate    => $hold_date,
-            expirationdate => $expiration_date,
+            reserve_id      => $hold->id,
+            branchcode      => $pickup_library_id,
+            rank            => $priority,
+            suspend_until   => $suspended_until,
+            itemnumber      => $item_id,
+            reservedate     => $hold_date,
+            expirationdate  => $expiration_date,
+            item_level_hold => $item_level
         };
 
         C4::Reserves::ModReserve($params);

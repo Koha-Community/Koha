@@ -108,6 +108,8 @@
             - pickup_library
             - item
             - patron
+            - item_group
+            - item_level_holds
         collectionFormat: csv
     produces:
       - application/json
@@ -430,12 +432,26 @@
               format: date-time
             hold_date:
               description: Hold date
-              type: string
+              type:
+                - string
+                - "null"
               format: date
             expiration_date:
               description: Hold's expiration date
-              type: string
+              type:
+                - string
+                - "null"
               format: date
+            item_id:
+              description: Internal item identifier
+              type:
+                - integer
+                - "null"
+            item_level:
+              description: Whether the hold is item-level or not
+              type:
+                - boolean
+                - "null"
           additionalProperties: false
     consumes:
       - application/json

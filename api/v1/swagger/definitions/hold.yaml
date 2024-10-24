@@ -114,6 +114,11 @@ properties:
   item_level:
     type: boolean
     description: If the hold is placed at item level
+  item_level_holds:
+    type:
+      - integer
+      - "null"
+    description: Count of item level holds for this bibliographic record
   cancellation_requested:
     type:
       - boolean
@@ -134,6 +139,11 @@ properties:
       - object
       - "null"
     description: The item
+  item_group:
+    type:
+      - object
+      - "null"
+    description: The item group
   pickup_library:
     type:
       - object
