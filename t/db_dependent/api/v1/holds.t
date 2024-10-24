@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -1494,6 +1494,58 @@ subtest 'delete() tests' => sub {
         ->status_is( 202, 'Cancellation request accepted' );
 
     is( $hold->cancellation_requests->count, 1 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'PUT /holds/{hold_id}/lowest_priority tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $library_1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'modify_holds_priority',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $biblio = $builder->build_sample_biblio;
+
+    # biblio-level hold
+    my $hold = Koha::Holds->find(
+        AddReserve(
+            {
+                branchcode     => $library_1->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+                itemnumber     => undef,
+            }
+        )
+    );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/0" . "/lowest_priority" )->status_is(404);
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/lowest_priority" )->status_is(200);
+
+    is( $hold->discard_changes->lowestPriority, 1, 'Priority set to lowest' );
 
     $schema->storage->txn_rollback;
 };

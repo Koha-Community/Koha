@@ -761,3 +761,54 @@
     x-koha-authorization:
       permissions:
         reserveforothers: place_holds
+"/holds/{hold_id}/lowest_priority":
+  put:
+    x-mojo-to: Holds#lowest_priority
+    operationId: toggleLowestPriority
+    tags:
+      - holds
+    summary: Toggle holds lowest priority
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/hold_id_pp"
+      - name: body
+        in: body
+        description: An integer representing the new priority to be set for the hold
+        required: false
+        schema:
+          type: integer
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: Toggle the holds lowest priority value
+        schema:
+          type: integer
+      "401":
+        description: Authentication required
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Hold not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "409":
+        description: Unable to perform action on hold
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        reserveforothers: modify_holds_priority
