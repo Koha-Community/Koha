@@ -53,6 +53,92 @@ const dates = {
     tomorrow_us: dayjs().add(1, "day").format("MM/DD/YYYY"),
 }
 
+cy.get_license = () => {
+    return {
+        license_id: 1,
+        name: "license 1",
+        description: "my first license",
+        type: "local",
+        status: "active",
+        started_on: dates["today_iso"],
+        ended_on: dates["tomorrow_iso"],
+        user_roles: [],
+        vendor_id: 1,
+        vendor: [cy.get_vendors_to_relate()[0]],
+        documents: [
+            {
+                license_id: 1,
+                file_description: "file description",
+                file_name: "file.json",
+                notes: "file notes",
+                physical_location: "file physical location",
+                uri: "file uri",
+                uploaded_on: "2022-10-27T11:57:02+00:00",
+            },
+        ],
+        extended_attributes: [
+            {
+                field_id: 1,
+                id: "1",
+                record_id: "1",
+                value: "REF",
+            },
+            {
+                field_id: 1,
+                id: "2",
+                record_id: "1",
+                value: "NFIC",
+            },
+            {
+                field_id: 2,
+                id: "3",
+                record_id: "1",
+                value: "some text",
+            },
+            {
+                field_id: 3,
+                id: "4",
+                record_id: "1",
+                value: "some repeatable text",
+            },
+            {
+                field_id: 4,
+                id: "5",
+                record_id: "1",
+                value: "AF",
+            },
+        ],
+        _strings: {
+            additional_field_values: [
+                {
+                    field_id: 1,
+                    field_label: "AV Repeatable",
+                    type: "av",
+                    value_str: "Reference, Non-fiction",
+                },
+                {
+                    field_id: 2,
+                    field_label: "Text non-repeatable",
+                    type: "text",
+                    value_str: "some text",
+                },
+                {
+                    field_id: 3,
+                    field_label: "Text repeatable",
+                    type: "text",
+                    value_str: "some repeatable text",
+                },
+                {
+                    field_id: 4,
+                    field_label: "AV Searchable",
+                    type: "av",
+                    value_str: "Afghanistan",
+                },
+            ],
+        },
+    };
+}
+
 cy.get_agreement = () => {
     let licenses = cy.get_licenses_to_relate();
     return {
