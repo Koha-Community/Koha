@@ -607,6 +607,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% IF print %]
         <script>
             $( document ).ready(function() {
