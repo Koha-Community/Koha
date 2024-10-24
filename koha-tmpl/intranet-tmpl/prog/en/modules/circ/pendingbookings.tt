@@ -159,7 +159,7 @@
                     },
                     {
                         "data": "biblio.title",
-                        "title": "Title",
+                        "title": _("Title"),
                         "searchable": true,
                         "orderable": true,
                         "render": function(data,type,row,meta) {
@@ -170,7 +170,7 @@
                     },
                     {
                         "data": "item.external_id",
-                        "title": "Item",
+                        "title": _("Item"),
                         "searchable": true,
                         "orderable": true,
                         "defaultContent": "Any item",
@@ -184,7 +184,7 @@
                     },
                     {
                         "data": "item.callnumber",
-                        "title": "Callnumber",
+                        "title": _("Callnumber"),
                         "searchable": true,
                         "orderable": true,
                         "render": function(data,type,row,meta) {
@@ -197,13 +197,13 @@
                     },
                     {
                         "data": "item.location",
-                        "title": "Location",
+                        "title": _("Location"),
                         "searchable": false,
                         "orderable": false,
                         "render": function(data,type,row,meta) {
                             if ( row.item ) {
                                 if ( row.item.checked_out_date ) {
-                                    return __("On loan, due: ") . $date(row.item.checked_out_date);
+                                    return _("On loan, due: ") . $date(row.item.checked_out_date);
                                 } else {
                                     return row.item._strings.location.str;
                                 }
@@ -214,7 +214,7 @@
                     },
                     {
                         "data": "patron.firstname:patron.surname",
-                        "title": "Patron",
+                        "title": _("Patron"),
                         "searchable": true,
                         "orderable": true,
                         "render": function(data, type, row, meta) {
@@ -237,7 +237,7 @@
                     },
                     {
                         "name": "actions",
-                        "title": "Actions",
+                        "title": _("Actions"),
                         "searchable": false,
                         "orderable": false,
                         "render": function(data,type,row,meta){
