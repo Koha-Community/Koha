@@ -1591,7 +1591,7 @@ sub _set_found_trigger {
                             interface   => C4::Context->interface,
                             library_id  => $branchcode,
                             item_id     => $self->itemnumber,
-                            issue_id    => $lost_charge->issue_id
+                            issue_id    => $lost_charge->checkout ? $lost_charge->checkout->issue_id : undef,
                         }
                     );
 
@@ -1747,7 +1747,7 @@ sub _set_found_trigger {
                             interface   => C4::Context->interface,
                             library_id  => $branchcode,
                             item_id     => $self->itemnumber,
-                            issue_id    => $processing_charge->issue_id
+                            issue_id    => $processing_charge->checkout ? $processing_charge->checkout->issue_id : undef,
                         }
                     );
 

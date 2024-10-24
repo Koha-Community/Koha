@@ -563,7 +563,7 @@ sub UpdateFine {
     # - accumulate fines for other items
     # so we can update $itemnum fine taking in account fine caps
     while (my $overdue = $overdues->next) {
-        if ( defined $overdue->issue_id && $overdue->issue_id == $issue_id && $overdue->status eq 'UNRETURNED' ) {
+        if ( defined $overdue->checkout && $overdue->checkout->issue_id == $issue_id && $overdue->status eq 'UNRETURNED' ) {
             if ($accountline) {
                 Koha::Logger->get->debug("Not a unique accountlines record for issue_id $issue_id"); # FIXME Do we really need to log that?
                 #FIXME Should we still count this one in total_amount ??
