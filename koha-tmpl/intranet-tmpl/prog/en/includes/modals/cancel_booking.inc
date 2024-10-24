@@ -8,7 +8,7 @@
                     <h1 class="modal-title" id="cancelBookingLabel">Cancel booking</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body overflow-visible">
                     <div id="cancel_booking_result"></div>
                     <input type="hidden" name="booking_id" id="cancel_booking_id">
                     <p>Are you sure you want to cancel this booking?</p>
@@ -17,7 +17,7 @@
                         <div class="combobox-container">
                             <label for="cancellation-reason" class="form-label">Cancellation Reason:</label>
                             <input type="text" id="cancellation-reason" name="cancellation_reason" class="form-control" />
-                            <ul id="cancellation-reason-list" class="dropdown-menu position-fixed" style="max-height: 200px; overflow-y: auto; max-width: fit-content;">
+                            <ul id="cancellation-reason-list" class="dropdown-menu">
                                 [% IF booking_cancellation.count %]
                                     [% FOR reason IN booking_cancellation %]
                                         <li>
