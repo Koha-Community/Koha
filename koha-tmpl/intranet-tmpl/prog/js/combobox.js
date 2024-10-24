@@ -17,7 +17,7 @@
      * <div class="combobox-container">
      *     <label for="generic-combobox" class="form-label">Choose an Option:</label>
      *     <input type="text" id="generic-combobox" class="form-control" placeholder="Select or type an option" />
-     *     <ul id="generic-list" class="dropdown-menu position-fixed" style="max-height: 200px; overflow-y: auto; max-width: fit-content;">
+     *     <ul id="generic-list" class="dropdown-menu position-fixed">
      *         <li>
      *             <button type="button" class="dropdown-item" data-id="1">Option 1</button>
      *         </li>
