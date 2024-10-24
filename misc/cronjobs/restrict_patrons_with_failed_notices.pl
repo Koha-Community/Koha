@@ -53,7 +53,7 @@ my @failed_notices = Koha::Notice::Messages->get_failed_notices( { days => 7 } )
 
 if ( C4::Context->preference('RestrictPatronsWithFailedNotices') ) {
     if (@failed_notices) {
-        say "There are borrowers with failed SMS or email notices" if $verbose;
+        say "There are patrons with failed SMS or email notices" if $verbose;
 
         foreach my $failed_notice (@failed_notices) {
 
