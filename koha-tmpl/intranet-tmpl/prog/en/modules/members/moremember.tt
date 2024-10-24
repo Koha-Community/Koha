@@ -817,11 +817,11 @@
                 "shown.bs.tab",
                 function (e) {
                     var oTable = $(
-                        "div.dataTables_wrapper > table",
+                        "div.dt-container > table",
                         $(e.target.hash)
-                    ).dataTable();
+                    ).DataTable();
                     if (oTable.length > 0) {
-                        oTable.fnAdjustColumnSizing();
+                        oTable.columns().adjust();
                     }
                 }
             );
