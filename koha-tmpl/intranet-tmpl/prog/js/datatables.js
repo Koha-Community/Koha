@@ -999,11 +999,12 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
 
         state = JSON.parse(state);
 
-        if (!default_save_state_search ) {
+        if (default_save_state_search ) {
+            settings.loaded_from_state = true;
+        } else {
             delete state.search;
             state.columns.forEach(c => delete c.search );
         }
-        settings.loaded_from_state = true;
         return state;
     }
 

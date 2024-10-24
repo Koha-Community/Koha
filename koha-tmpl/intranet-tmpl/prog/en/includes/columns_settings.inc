@@ -54,11 +54,12 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
 
             state = JSON.parse(state);
 
-            if (!default_save_state_search ) {
+            if (default_save_state_search ) {
+                settings.loaded_from_state = true;
+            } else {
                 delete state.search;
                 state.columns.forEach(c => delete c.search );
             }
-            settings.loaded_from_state = true;
             return state;
         }
 
