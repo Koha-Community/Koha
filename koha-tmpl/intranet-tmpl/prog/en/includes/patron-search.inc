@@ -31,6 +31,7 @@
 [%# - search_type: select 'contains' or 'starts with' %]
 [%- searchtype = searchtype || Koha.Preference('DefaultPatronSearchMethod') -%]
 [% BLOCK patron_search_filters %]
+    [% SET has_patron_search_filters_block = 1 %]
     <aside>
         <form method="get" class="patron_search_form">
             <fieldset class="brief">
@@ -406,14 +407,17 @@
                     return filters;
                 }
             };
-            let external_filter_nodes = {
-                search_patron_filter: '.search_patron_filter',
-                firstletter_filter: '.firstletter_filter',
-                searchtype_filter: '.searchtype_filter',
-                searchfieldstype_filter: '.searchfieldstype_filter',
-                categorycode_filter: '.categorycode_filter',
-                branchcode_filter: '.branchcode_filter'
-            };
+            let external_filter_nodes = {};
+            [% IF has_patron_search_filters_block %]
+                external_filter_nodes = {
+                    search_patron_filter: '.search_patron_filter',
+                    firstletter_filter: '.firstletter_filter',
+                    searchtype_filter: '.searchtype_filter',
+                    searchfieldstype_filter: '.searchfieldstype_filter',
+                    categorycode_filter: '.categorycode_filter',
+                    branchcode_filter: '.branchcode_filter'
+                };
+            [% END %]
 
             [% UNLESS default_sort_column %]
                 [% default_sort_column = "name" %]
