@@ -3701,7 +3701,7 @@ subtest 'AddReturn | is_overdue' => sub {
         $lines = Koha::Account::Lines->search(
             {
                 borrowernumber => $patron->borrowernumber,
-                issue_id       => $issue->id
+                old_issue_id   => $issue->id
             }
         );
         $accountline = $lines->next;
