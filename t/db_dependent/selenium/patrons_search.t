@@ -284,25 +284,25 @@ subtest 'Search patrons' => sub {
     sleep $DT_delay && $s->wait_for_ajax;
 
     clear_filters();
-    $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
+    $s->driver->find_element('//*[@id="'.$table_id.'_wrapper"]//input[@class="dt-input"]')->send_keys('test_patron');
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Searching in standard brings back correct results' );
 
     $s->driver->find_element('//table[@id="'.$table_id.'"]//th[@data-filter="libraries"]/select/option[@value="'.$first_patron->library->branchcode.'"]')->click;
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 25, $total_number_of_patrons), 'Filtering on library works in combination with main search' );
 
     clear_filters();
 
     # And make sure all the patrons are present
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries', $PatronsPerPage, $total_number_of_patrons), 'Resetting filters works as expected' );
 
     # Pattern terms must be split
     $s->fill_form( { 'search_patron_filter' => 'test patron' } );
     $s->submit_form;
 
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
@@ -312,7 +312,7 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons), 'Searching on a non-searchable attribute returns no results' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('No entries to show (filtered from %s total entries)', $total_number_of_patrons), 'Searching on a non-searchable attribute returns no results' );
 
     clear_filters();
 
@@ -321,7 +321,7 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
     clear_filters();
 
@@ -329,7 +329,7 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute returns correct results' );
 
     clear_filters();
 
@@ -339,19 +339,19 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
 
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute as a specific field returns correct results' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Searching on a searchable attribute as a specific field returns correct results' );
 
     # Refine search and search for test_patron in all the data using the DT global search
     # No change in result expected, still 2 patrons
-    $s->driver->find_element('//*[@id="'.$table_id.'_filter"]//input')->send_keys('test_patron');
+    $s->driver->find_element('//*[@id="'.$table_id.'_wrapper"]//input[@class="dt-input"]')->send_keys('test_patron');
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Refining with DataTables search works to further filter the original query' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 2, 2, $total_number_of_patrons), 'Refining with DataTables search works to further filter the original query' );
 
     # Adding the surname of the first patron in the "Name" column
     # We expect only 1 result
     $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($first_patron->surname);
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
 
     subtest 'remember_search' => sub {
 
@@ -376,7 +376,7 @@ subtest 'Search patrons' => sub {
         $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "Patrons selected: 2", "Two patrons are selected" );
 
-        $driver->find_element('//*[@id="memberresultst_next"]')->click;
+        $driver->find_element('//*[@id="memberresultst_wrapper"]//button[@class="dt-paging-button next"]')->click;
         sleep $DT_delay && $s->wait_for_ajax;
         @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
@@ -501,7 +501,7 @@ subtest 'Search patrons in modal' => sub {
 
         # => the table is correctly displayed
         is(
-            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->get_text,
+            $driver->find_element( '//div[@id="' . $table_id . '_wrapper"]//div[@class="dt-info"]' )->get_text,
             sprintf(
                 'Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26,
                 $total_number_of_patrons
@@ -594,7 +594,7 @@ subtest 'Search patrons in modal' => sub {
 
         # => the table is correctly displayed
         is(
-            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->is_displayed,
+            $driver->find_element( '//div[@id="' . $table_id . '_wrapper"]//div[@class="dt-info"]' )->is_displayed,
             1,
         );
 
@@ -656,7 +656,7 @@ subtest 'Search patrons in modal' => sub {
 
         # => the table is correctly displayed
         is(
-            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->is_displayed,
+            $driver->find_element( '//div[@id="' . $table_id . '_wrapper"]//div[@class="dt-info"]' )->is_displayed,
             1,
         );
 

@@ -258,7 +258,7 @@ sub show_all_entries {
     my ( $self, $xpath_selector ) = @_;
 
     $self->driver->find_element( $xpath_selector
-          . '//div[@class="dataTables_length"]/label/select/option[@value="-1"]'
+          . '//div[@class="dt-length"]/label/select/option[@value="-1"]'
     )->click;
     my ($all_displayed, $i);
     my $max_retries = $self->max_retries;
