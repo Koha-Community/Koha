@@ -91,7 +91,7 @@ if ( $shelf and $shelf->can_be_viewed($borrowernumber) ) {
             );
 
             my $letter = C4::Letters::GetPreparedLetter(
-                module      => 'catalogue',
+                module      => 'lists',
                 letter_code => 'LIST',
                 lang        => $patron->lang,
                 tables      => {

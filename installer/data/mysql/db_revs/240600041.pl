@@ -13,5 +13,8 @@ return {
 
         $dbh->do(q{ UPDATE IGNORE letter SET module = 'lists' WHERE code = 'SHARE_INVITE'; });
         say_success( $out, "Moved SHARE_INVITE notice to lists module" );
+
+        $dbh->do(q{ UPDATE IGNORE letter SET module = 'lists' WHERE code = 'LIST'; });
+        say_success( $out, "Moved LIST notice to lists module" );
     },
 };

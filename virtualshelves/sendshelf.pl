@@ -90,7 +90,7 @@ if ( $to_address && $op eq 'cud-send' ) {
         );
 
         my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'catalogue',
+            module      => 'lists',
             letter_code => 'LIST',
             lang        => $patron->lang,
             tables      => {
