@@ -952,7 +952,7 @@ $(function() {
                 }
                 confirmModal( message, title, yes_label, no_label, function( result ){
                     if( result ){
-                        if( selected_titles.size() == 1 ){
+                        if( biblionumber ){
                             $("#shelf_delete_biblionumber").val( biblionumber );
                             $("#shelf_delete_title").submit();
                         } else {
@@ -960,12 +960,6 @@ $(function() {
                         }
                     }
                 });
-            }
-        });
-        $("body").on("hidden.bs.modal", "#bootstrap-confirm-box-modal", function(){
-            /* If the user clicked a single "Remove from list" link, uncheck the checkbox */
-            if( single_bib ){
-                selected_titles.prop("checked", false );
             }
         });
     [% END %]
