@@ -172,13 +172,13 @@ $(document).ready(function() {
             // because the click event is caught after the request has been
             // sent
             tableDef.drawCallback = function() {
-                $('.paginate_button.next:not(.disabled)',
+                $('.dt-paging-button.next:not(.disabled)',
                     this.api().table().container()
                 ).on('hover', function() {
                     forward = true;
                     directionSet = true;
                 });
-                $('.paginate_button.previous:not(.disabled)',
+                $('.dt-paging-button.previous:not(.disabled)',
                     this.api().table().container()
                 ).on('hover', function() {
                     forward = false;
@@ -230,8 +230,8 @@ $(document).ready(function() {
             };
             // Hide pagination buttons if appropriate
             tableDef.drawCallback = function() {
-                var pagination = $(this).closest('.dataTables_wrapper')
-                    .find('.dataTables_paginate');
+                var pagination = $(this).closest('.dt-container')
+                    .find('.dt-paging');
                 pagination.toggle(this.api().page.info().pages > 1);
             }
             KohaTable(service.id, tableDef, table_settings);
