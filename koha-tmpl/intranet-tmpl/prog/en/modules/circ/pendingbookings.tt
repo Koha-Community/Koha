@@ -111,13 +111,17 @@
                        let fromdate = $("#from");
                        let isoFrom;
                        if ( fromdate.val() !== '' ) {
-                         isoFrom = fromdate.get(0)._flatpickr.selectedDates[0].toISOString().substring(0,10);
+                         let selectedDate = fromdate.get(0)._flatpickr.selectedDates[0];
+                         selectedDate.setHours(0, 0, 0, 0);
+                         isoFrom = selectedDate.toISOString();
                        }
 
                        let todate = $("#to");
                        let isoTo;
                        if ( todate.val() !== '' ) {
-                         isoTo = todate.get(0)._flatpickr.selectedDates[0].toISOString().substring(0,10);
+                         let selectedDate = todate.get(0)._flatpickr.selectedDates[0];
+                         selectedDate.setHours(23, 59, 59, 999);
+                         isoTo = selectedDate.toISOString();
                        }
 
                        if ( isoFrom || isoTo ) {
