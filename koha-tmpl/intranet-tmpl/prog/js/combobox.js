@@ -78,11 +78,18 @@
             })
             .filter(option => option !== null);
 
-        const combinedData = [...existingOptions, ...data];
-
         let selectedValue = null;
         let query = "";
         let focusedIndex = -1;
+
+        const combinedData = [...existingOptions, ...data];
+        if (!combinedData?.length) {
+            dropdownMenu.style.display = "none";
+            return {
+                getSelectedValue: () => selectedValue,
+                reset,
+            };
+        }
 
         // Setup input attributes
         input.setAttribute("placeholder", placeholder);
