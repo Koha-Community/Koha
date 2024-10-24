@@ -183,7 +183,13 @@ sub search_compat {
     my %result;
     $result{biblioserver}{hits} = $hits->{'total'};
     $result{biblioserver}{RECORDS} = \@records;
-    return (undef, \%result, $self->_convert_facets($results->{aggregations}));
+
+    my $facets = $self->_convert_facets( $results->{aggregations} );
+    if ( C4::Context->interface eq 'opac' ) {
+        my $rules = C4::Context->yaml_preference('OpacHiddenItems');
+        $facets = Koha::SearchEngine::Search->post_filter_opac_facets( { facets => $facets, rules => $rules } );
+    }
+    return (undef, \%result, $facets);
 }
 
 =head2 search_auth_compat

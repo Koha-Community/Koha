@@ -179,4 +179,54 @@ sub pagination_bar {
 
 }
 
+=head2 post_filter_opac_facets
+
+    if ( C4::Context->interface eq 'opac' ) {
+        my $rules = C4::Context->yaml_preference('OpacHiddenItems');
+        $facets = Koha::SearchEngine::Search->post_filter_facets({ facets => $facets, rules => $rules });
+    }
+
+=cut
+
+sub post_filter_opac_facets {
+    my ( $class, $args ) = @_;
+    my $facets = $args->{facets};
+    my $rules  = $args->{rules};
+    if ( $rules && $facets ) {
+
+        #Build a hashmap of the rules to provide efficient lookups
+        my $rule_map = {};
+        my @keys     = keys %$rules;
+        foreach my $key (@keys) {
+            $rule_map->{$key} = {};
+            foreach my $rule_value ( @{ $rules->{$key} } ) {
+                $rule_map->{$key}->{$rule_value} = 1;
+            }
+        }
+
+        #Iterate through the facets
+        foreach my $facet_type (@$facets) {
+            my $type_link_value  = $facet_type->{type_link_value};
+            my $rule_map_by_type = $rule_map->{$type_link_value};
+
+            #If the facet type has a rule map, process the facets
+            if ($rule_map_by_type) {
+
+                #Filter out any facet which has a value in the rule map
+                my @filtered_facets = ();
+                foreach my $facet ( @{ $facet_type->{facets} } ) {
+                    my $facet_link_value = $facet->{facet_link_value};
+                    if ($facet_link_value) {
+                        if ( !$rule_map_by_type->{$facet_link_value} ) {
+                            push( @filtered_facets, $facet );
+                        }
+                    }
+                }
+                $facet_type->{facets} = \@filtered_facets;
+            }
+        }
+    }
+    return $facets;
+}
+
 1;

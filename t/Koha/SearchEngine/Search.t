@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -85,3 +85,76 @@ subtest "pagination_bar tests" => sub {
     is( @$PAGE_NUMBERS, 20, "If past first ten pages we show 20 pages" );
 
 };
+
+subtest "post_filter_opac_facets" => sub {
+    plan tests => 4;
+
+    my $facets = _get_mock_facet_data();
+    my $rules  = { 'itype' => ['MP'] };
+
+    my $filtered_facets = Koha::SearchEngine::Search->post_filter_opac_facets( { facets => $facets, rules => $rules } );
+    is( scalar @$filtered_facets,                                 2,    'Facet type length the same' );
+    is( scalar @{ $filtered_facets->[0]->{facets} },              3,    'author facet length the same' );
+    is( scalar @{ $filtered_facets->[1]->{facets} },              1,    'itype facet has been filtered' );
+    is( $filtered_facets->[1]->{facets}->[0]->{facet_link_value}, 'BK', 'correct itype facet has been filtered' );
+};
+
+sub _get_mock_facet_data {
+    my $facets = [
+        {
+            'type_label_Authors' => 1,
+            'facets'             => [
+                {
+                    'facet_link_value'  => 'Farley, David',
+                    'type_link_value'   => 'author',
+                    'facet_title_value' => 'Farley, David',
+                    'facet_count'       => 1,
+                    'facet_label_value' => 'Farley, David'
+                },
+                {
+                    'facet_label_value' => 'Humble, Jez',
+                    'facet_count'       => 1,
+                    'facet_title_value' => 'Humble, Jez',
+                    'type_link_value'   => 'author',
+                    'facet_link_value'  => 'Humble, Jez'
+                },
+                {
+                    'facet_count'       => 1,
+                    'facet_title_value' => 'Martin, Robert C.',
+                    'facet_label_value' => 'Martin, Robert C.',
+                    'type_link_value'   => 'author',
+                    'facet_link_value'  => 'Martin, Robert C.'
+                }
+            ],
+            'av_cat'          => '',
+            'order'           => 1,
+            'label'           => 'Authors',
+            'type_id'         => 'author_id',
+            'type_link_value' => 'author'
+        },
+        {
+            'type_label_Item types' => 1,
+            'facets'                => [
+                {
+                    'type_link_value'   => 'itype',
+                    'facet_link_value'  => 'BK',
+                    'facet_count'       => 4,
+                    'facet_title_value' => 'BK',
+                    'facet_label_value' => 'Books'
+                },
+                {
+                    'facet_title_value' => 'MP',
+                    'facet_count'       => 1,
+                    'facet_label_value' => 'Maps',
+                    'type_link_value'   => 'itype',
+                    'facet_link_value'  => 'MP'
+                }
+            ],
+            'order'           => 2,
+            'av_cat'          => undef,
+            'type_id'         => 'itype_id',
+            'type_link_value' => 'itype',
+            'label'           => 'Item types'
+        }
+    ];
+}

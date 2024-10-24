@@ -60,9 +60,14 @@ This passes straight through to C4::Search::getRecords.
 =cut
 
 sub search_compat {
-    shift; # get rid of $self
+    shift;    # get rid of $self
 
-    return C4::Search::getRecords(@_);
+    my ( $error, $results_hashref, $facets ) = C4::Search::getRecords(@_);
+    if ( C4::Context->interface eq 'opac' ) {
+        my $rules = C4::Context->yaml_preference('OpacHiddenItems');
+        $facets = Koha::SearchEngine::Search->post_filter_opac_facets( { facets => $facets, rules => $rules } );
+    }
+    return ( $error, $results_hashref, $facets );
 }
 
 =head2 simple_search_compat
