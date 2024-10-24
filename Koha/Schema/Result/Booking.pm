@@ -109,6 +109,14 @@ the timestamp for when a booking has been updated
 
 current status of the booking
 
+=head2 cancellation_reason
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
+optional authorised value BOOKING_CANCELLATION
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -165,6 +173,8 @@ __PACKAGE__->add_columns(
     extra => { list => ["new", "cancelled", "completed"] },
     is_nullable => 0,
   },
+  "cancellation_reason",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -247,8 +257,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-09-18 08:58:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3ctwNEgFUMhV+uR/UGSWag
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-24 16:23:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kTR2kwiwY2PnjU1E0P+CMQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
