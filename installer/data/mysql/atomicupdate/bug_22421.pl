@@ -16,6 +16,9 @@ return {
             }
             );
             say $out "Added column 'accountlines.old_issue_id'";
+        }
+
+        unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_old_issues' ) ) {
 
             $dbh->do(
                 q{
@@ -28,48 +31,49 @@ return {
             }
             );
             say $out "Added constraint 'accountlines.old_issues'";
+        }
+
+        # Add constraint for issue_id
+        unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_issues' ) ) {
 
             $dbh->do(
                 q{
             UPDATE
-              accountlines a
-              LEFT JOIN old_issues o ON (a.issue_id = o.issue_id)
+                accountlines a
+                LEFT JOIN old_issues o ON (a.issue_id = o.issue_id)
             SET
-              a.old_issue_id = o.issue_id,
-              a.issue_id = NULL
+                a.old_issue_id = o.issue_id,
+                a.issue_id = NULL
             WHERE
-              o.issue_id IS NOT NULL
+                o.issue_id IS NOT NULL
             }
             );
             say $out "Updated 'accountlines.old_issue_id' from 'old_issues'";
 
-            # Add constraint for issue_id
-            unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_issues' ) ) {
-                $dbh->do(
-                    q{
-                UPDATE
-                  accountlines a
-                  LEFT JOIN issues i ON (a.issue_id = i.issue_id)
-                SET
-                  a.issue_id = NULL
-                WHERE
-                  i.issue_id IS NULL
-                }
-                );
-                say $out "Fix accountlines.issue_id where missing from issues";
-
-                $dbh->do(
-                    q{
-                ALTER TABLE accountlines
-                ADD CONSTRAINT `accountlines_ibfk_issues`
-                  FOREIGN KEY (`issue_id`)
-                  REFERENCES `issues` (`issue_id`)
-                  ON DELETE SET NULL
-                  ON UPDATE CASCADE
-                }
-                );
-                say $out "Added constraint 'accountlines.issues'";
+            $dbh->do(
+                q{
+            UPDATE
+                accountlines a
+                LEFT JOIN issues i ON (a.issue_id = i.issue_id)
+            SET
+                a.issue_id = NULL
+            WHERE
+                i.issue_id IS NULL
             }
+            );
+            say $out, "Fixed accountlines.issue_id where missing from issues";
+
+            $dbh->do(
+                q{
+            ALTER TABLE accountlines
+            ADD CONSTRAINT `accountlines_ibfk_issues`
+                FOREIGN KEY (`issue_id`)
+                REFERENCES `issues` (`issue_id`)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE
+            }
+            );
+            say $out "Added constraint 'accountlines.issues'";
         }
 
         say $out "Add old_issue_id to accountlines and setup appropriate constraints)\n";
