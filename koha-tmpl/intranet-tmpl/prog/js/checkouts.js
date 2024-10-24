@@ -433,13 +433,8 @@ function LoadIssuesTable() {
         "paging":  false,
         "processing":  true,
         "serverSide":  false,
-        "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
-        "fnServerData": function ( sSource, aoData, fnCallback ) {
-            aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
-
-            $.getJSON( sSource, aoData, function (json) {
-                fnCallback(json)
-            } );
+        ajax: {
+            url: '/cgi-bin/koha/svc/checkouts?borrowernumber=%s'.format(borrowernumber),
         },
         "rowGroup":{
             "dataSrc": "issued_today",
@@ -976,15 +971,8 @@ $(document).ready(function() {
                 "paging":  false,
                 "processing":  true,
                 "serverSide":  false,
-                "sAjaxSource": '/cgi-bin/koha/svc/checkouts',
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    $.each(relatives_borrowernumbers, function( index, value ) {
-                        aoData.push( { "name": "borrowernumber", "value": value } );
-                    });
-
-                    $.getJSON( sSource, aoData, function (json) {
-                        fnCallback(json)
-                    } );
+                ajax: {
+                    url: '/cgi-bin/koha/svc/checkouts?%s'.format(relatives_borrowernumbers.map(b => 'borrowernumber=%s'.format(b)).join('&')),
                 },
             }, table_settings_relatives_issues_table);
         }
@@ -1156,11 +1144,9 @@ $(document).ready(function() {
                 "paging":  false,
                 "processing":  true,
                 "serverSide":  false,
-                "sAjaxSource": '/cgi-bin/koha/svc/return_claims',
-                "fnServerData": function ( sSource, aoData, fnCallback ) {
-                    aoData.push( { "name": "borrowernumber", "value": borrowernumber } );
-
-                    $.getJSON( sSource, aoData, function (json) {
+                ajax: {
+                    url: '/cgi-bin/koha/svc/return_claims?borrowernumber=%s'.format(borrowernumber),
+                    complete: function(json){
                         let resolved = json.resolved;
                         let unresolved = json.unresolved;
 
@@ -1182,9 +1168,7 @@ $(document).ready(function() {
                                                                 .removeClass('text-bg-warning')
                                                                 .addClass('text-bg-info');
                         }
-
-                        fnCallback(json)
-                    } );
+                    }
                 },
                 "search": { "search": "is_unresolved" },
                 "footerCallback": function (row, data, start, end, display) {
