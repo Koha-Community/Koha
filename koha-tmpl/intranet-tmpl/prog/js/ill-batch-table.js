@@ -85,7 +85,6 @@
                 }
             ],
             processing: true,
-            deferRender: true,
             drawCallback: addEventListeners
         });
     }

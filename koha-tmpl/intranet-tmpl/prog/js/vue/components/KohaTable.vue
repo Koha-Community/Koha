@@ -63,7 +63,6 @@ export default {
             data: [],
             tableColumns: this.columns,
             allOptions: {
-                deferRender: true,
                 paging: true,
                 serverSide: true,
                 searching: true,

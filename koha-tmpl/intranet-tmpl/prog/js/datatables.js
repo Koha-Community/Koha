@@ -1024,7 +1024,6 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
             }
 
             settings = $.extend(true, {}, dataTablesDefaults, {
-                        'deferRender': true,
                         "paging": true,
                         'serverSide': true,
                         'searching': true,

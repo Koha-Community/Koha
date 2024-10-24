@@ -126,7 +126,6 @@ $.fn.dataTable.ext.buttons.clearFilter = {
             if(!options.criteria || ['contains', 'starts_with', 'ends_with', 'exact'].indexOf(options.criteria.toLowerCase()) === -1) options.criteria = 'contains';
             options.criteria = options.criteria.toLowerCase();
             settings = $.extend(true, {}, dataTablesDefaults, {
-                        'deferRender': true,
                         "paging": true,
                         'serverSide': true,
                         'searching': true,

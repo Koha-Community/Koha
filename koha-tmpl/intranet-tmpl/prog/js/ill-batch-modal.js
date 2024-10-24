@@ -946,7 +946,6 @@
     function buildTable(identifiers) {
         table = KohaTable('identifier-table', {
             processing: true,
-            deferRender: true,
             ordering: false,
             paging: false,
             searching: false,
