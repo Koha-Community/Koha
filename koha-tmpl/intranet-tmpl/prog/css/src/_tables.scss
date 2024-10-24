@@ -423,8 +423,8 @@ tbody {
     }
 }
 
-.dataTables_wrapper {
-    .dataTables_processing {
+.dt-container {
+    .dt-processing {
         background-color: #F4F8F9;
         border: 2px solid $background-color-primary;
         border-radius: 3px;
@@ -447,21 +447,21 @@ tbody {
         }
     }
 
-    .dataTables_info {
+    .dt-info {
         float: none;
         line-height: 1.9em;
         padding-right: 1em;
         padding-top: 0;
     }
 
-    .dataTables_length {
+    .dt-length {
         display: none;
         float: none;
         line-height: 1.5em;
         padding-right: 1em;
     }
 
-    .dataTables_filter {
+    .dt-input {
         float: none;
         padding-right: 1em;
         white-space: nowrap;
@@ -476,20 +476,20 @@ tbody {
         display: flex;
     }
 
-    .dataTables_paginate {
+    .dt-paging {
         float: none;
         line-height: 1.5em;
         padding: 0;
         padding-right: 1em;
 
         span {
-            .paginate_button,
+            .dt-paging-button,
             .ellipsis {
                 display: none;
             }
         }
 
-        .paginate_button {
+        .dt-paging-button {
             border-radius: 4px;
             color: $green-text-color !important;
             padding-bottom: 0;
@@ -863,9 +863,9 @@ div {
         display: inline;
     }
 
-    .dataTables_wrapper {
-        .dataTables_paginate {
-            .paginate_button {
+    .dt-container {
+        .dt-paging {
+            .dt-paging-button {
                 &.first,
                 &.last {
                     display: inline-block;
@@ -876,8 +876,8 @@ div {
 }
 
 @media only screen and ( min-width: 500px ) {
-    .dataTables_wrapper {
-        .dataTables_length {
+    .dt-container {
+        .dt-length {
             display: block;
         }
     }
@@ -888,9 +888,9 @@ div {
 }
 
 @media only screen and ( max-width: 767px ) {
-    .dataTables_wrapper {
-        .dataTables_info,
-        .dataTables_paginate {
+    .dt-container {
+        .dt-info,
+        .dt-paging {
             float: none;
             text-align: left;
         }
@@ -914,10 +914,10 @@ div {
 }
 
 @media only screen and (min-width: 1500px) {
-    .dataTables_wrapper {
-        .dataTables_paginate {
+    .dt-container {
+        .dt-paging {
             span {
-                .paginate_button,
+                .dt-paging-button,
                 .ellipsis {
                     display: inline-block;
                 }
