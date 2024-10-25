@@ -172,7 +172,7 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
 
         my $hold = Koha::Holds->find($reserve_id);
         if ($diffBranchSend) {
-            my $tobranch = Koha::Libraries->find( $hold->branchcode );
+            my $tobranch = $hold->pickup_library();
 
             # Add transfer, enqueue if one is already in the queue, and immediately set to in transit
             my $transfer = $item->request_transfer( { to => $tobranch, reason => 'Reserve', enqueue => 1 } );
