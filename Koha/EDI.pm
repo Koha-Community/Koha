@@ -45,6 +45,7 @@ use Koha::Plugins; # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
+use Koha::Util::FrameworkPlugin qw( biblio_008 );
 
 our $VERSION = 1.1;
 
@@ -685,6 +686,10 @@ sub quote_item {
     if ( !defined $bib ) {
         $bib = {};
         my $bib_record = _create_bib_from_quote( $item, $quote );
+
+        # Check for and add default 008 as this is a mandatory field
+        $bib_record = _handle_008_field($bib_record);
+
         ( $bib->{biblionumber}, $bib->{biblioitemnumber} ) =
           AddBiblio( $bib_record, q{} );
         $logger->trace("New biblio added $bib->{biblionumber}");
@@ -1216,6 +1221,17 @@ sub _create_item_from_quote {
     return $item_hash;
 }
 
+sub _handle_008_field {
+    my ( $bib_record ) = @_;
+
+    if ( !$bib_record->field('008') ) {
+        my $default008 = biblio_008();
+        $bib_record->insert_fields_ordered( MARC::Field->new('008', $default008));
+    }
+
+    return $bib_record
+}
+
 1;
 __END__
 
@@ -1373,6 +1389,14 @@ Koha::EDI
 
      Returns the Aqbudget object for the active budget given the passed budget_code
      or undefined if one does not exist
+
+=head2 _handle_008_field
+
+     bib_record = _handle_008_field($bib_record)
+
+     Checks whether an 008 field exists on the record and adds a default field it does not
+
+     Returns the bib_record
 
 =head1 AUTHOR
 
