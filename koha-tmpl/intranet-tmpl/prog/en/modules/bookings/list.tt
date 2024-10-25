@@ -269,23 +269,56 @@
                 orderable: false,
                 visible: false,
                 render: function (data, type, row, meta) {
-                    const is_expired = dayjs(row.end_date).isBefore(new Date());
-                    if (is_expired) {
-                        return `<span class="badge rounded-pill bg-secondary">
-                            ${_("Expired")}
-                        </span>`;
-                    }
+                    const isExpired = date => dayjs(date).isBefore(new Date());
+                    const isActive = (startDate, endDate) => {
+                        const now = dayjs();
+                        return (
+                            now.isAfter(dayjs(startDate)) &&
+                            now.isBefore(dayjs(endDate).add(1, "day"))
+                        );
+                    };
 
-                    const is_cancelled = row.status === "cancelled";
-                    if (is_cancelled) {
-                        return `<span class="badge rounded-pill bg-secondary">
-                            ${_("Cancelled")}
-                        </span>`;
-                    }
+                    const statusMap = {
+                        new: () => {
+                            if (isExpired(row.end_date)) {
+                                return __("Expired");
+                            }
 
-                    return `<span class="badge rounded-pill bg-success">
-                        ${_("New")}
-                    </span>`;
+                            if (isActive(row.start_date, row.end_date)) {
+                                return __("Active");
+                            }
+
+                            if (dayjs(row.start_date).isAfter(new Date())) {
+                                return __("Pending");
+                            }
+
+                            return __("New");
+                        },
+                        cancelled: () =>
+                            [__("Cancelled"), row.cancellation_reason]
+                                .filter(Boolean)
+                                .join(": "),
+                        completed: () => __("Completed"),
+                    };
+
+                    const statusText = statusMap[row.status]
+                        ? statusMap[row.status]()
+                        : __("Unknown");
+
+                    const classMap = [
+                        { status: __("Expired"), class: "bg-secondary" },
+                        { status: __("Cancelled"), class: "bg-secondary" },
+                        { status: __("Pending"), class: "bg-warning" },
+                        { status: __("Active"), class: "bg-primary" },
+                        { status: __("Completed"), class: "bg-info" },
+                        { status: __("New"), class: "bg-success" },
+                    ];
+
+                    const badgeClass =
+                        classMap.find(mapping => statusText.startsWith(mapping.status))
+                            ?.class || "bg-secondary";
+
+                    return `<span class="badge rounded-pill ${badgeClass}">${statusText}</span>`;
                 }
             },
             {

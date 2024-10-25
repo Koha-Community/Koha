@@ -45,24 +45,7 @@ $(document).ready(function () {
                             name: "status",
                             searchable: false,
                             orderable: false,
-                            render: function (data, type, row, meta) {
-                                let is_expired = dayjs(row.end_date).isBefore(
-                                    new Date()
-                                );
-                                if (is_expired) {
-                                    return (
-                                        '<span class="badge rounded-pill bg-secondary">' +
-                                        __("Expired") +
-                                        "</span>"
-                                    );
-                                }
-
-                                return (
-                                    '<span class="badge rounded-pill bg-success">' +
-                                    __("Active") +
-                                    "</span>"
-                                );
-                            },
+                            render: renderStatus,
                         },
                         {
                             data: "biblio.title",
@@ -138,6 +121,59 @@ $(document).ready(function () {
                 additional_filters
             );
         }
+    }
+
+    function renderStatus(data, type, row, meta) {
+        const isExpired = date => dayjs(date).isBefore(new Date());
+        const isActive = (startDate, endDate) => {
+            const now = dayjs();
+            return (
+                now.isAfter(dayjs(startDate)) &&
+                now.isBefore(dayjs(endDate).add(1, "day"))
+            );
+        };
+
+        const statusMap = {
+            new: () => {
+                if (isExpired(row.end_date)) {
+                    return __("Expired");
+                }
+
+                if (isActive(row.start_date, row.end_date)) {
+                    return __("Active");
+                }
+
+                if (dayjs(row.start_date).isAfter(new Date())) {
+                    return __("Pending");
+                }
+
+                return __("New");
+            },
+            cancelled: () =>
+                [__("Cancelled"), row.cancellation_reason]
+                    .filter(Boolean)
+                    .join(": "),
+            completed: () => __("Completed"),
+        };
+
+        const statusText = statusMap[row.status]
+            ? statusMap[row.status]()
+            : __("Unknown");
+
+        const classMap = [
+            { status: _("Expired"), class: "bg-secondary" },
+            { status: _("Cancelled"), class: "bg-secondary" },
+            { status: _("Pending"), class: "bg-warning" },
+            { status: _("Active"), class: "bg-primary" },
+            { status: _("Completed"), class: "bg-info" },
+            { status: _("New"), class: "bg-success" },
+        ];
+
+        const badgeClass =
+            classMap.find(mapping => statusText.startsWith(mapping.status))
+                ?.class || "bg-secondary";
+
+        return `<span class="badge rounded-pill ${badgeClass}">${statusText}</span>`;
     }
 
     var txtActivefilter = __("Show expired");
