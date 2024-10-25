@@ -227,6 +227,7 @@ sub checkpw_ldap {
                 map { exists( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
             }
         )->store;
+        $patron->discard_changes;
         die "Insert of new patron failed" unless $patron;
         $borrowernumber = $patron->borrowernumber;
         C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
