@@ -82,14 +82,9 @@ BEGIN {
         get_template_and_user haspermission create_basic_session
     );
 
-    $ldap      = C4::Context->config('useldapserver') || 0;
     $cas       = C4::Context->preference('casAuthentication');
     $caslogout = C4::Context->preference('casLogout');
 
-    if ($ldap) {
-        require C4::Auth_with_ldap;
-        import C4::Auth_with_ldap qw(checkpw_ldap);
-    }
     if ($cas) {
         require C4::Auth_with_cas;    # no import
         import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
@@ -1992,15 +1987,17 @@ sub checkpw {
     my $passwd_ok                  = 0;
     my $patron;
 
-
     # Note: checkpw_* routines returns:
     # 1 if auth is ok
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
-
+    $ldap = C4::Context->config('useldapserver') || 0;
     if ( $ldap && defined($password) ) {
         my ( $retval, $retcard, $retuserid );
-        ( $retval, $retcard, $retuserid, $patron ) = checkpw_ldap(@_);    # EXTERNAL AUTH
+        require C4::Auth_with_ldap;
+        import C4::Auth_with_ldap qw(checkpw_ldap);
+
+        ( $retval, $retcard, $retuserid, $patron ) = C4::Auth_with_ldap::checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
             @return    = ( $retval, $retcard, $retuserid, $patron );
             $passwd_ok = 1;
