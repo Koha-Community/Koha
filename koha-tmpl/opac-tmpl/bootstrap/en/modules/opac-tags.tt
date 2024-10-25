@@ -254,6 +254,7 @@
                     });
                 }
                 confirmModal( message, title, yes_label, no_label, function( result ){
+                    $("#bootstrap-confirm-box-modal").remove();
                     if( result ){
                         $("#deletetags").submit();
                     }
