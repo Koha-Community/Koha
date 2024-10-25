@@ -10,7 +10,7 @@ return {
 
         $dbh->do(
             q{
-            ALTER TABLE itemtypes ADD IF NOT EXISTS bookable INT(1) DEFAULT 0
+            ALTER TABLE itemtypes ADD IF NOT EXISTS bookable INT(1) DEFAULT 0 AFTER automatic_checkin
         }
         );
 
