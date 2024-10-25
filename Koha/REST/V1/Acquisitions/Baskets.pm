@@ -47,14 +47,13 @@ sub list_managers {
     return try {
 
         my $patrons_rs = Koha::Patrons->search->filter_by_have_permission('acquisition.order_manage');
-        my $patrons    = $c->objects->search( $patrons_rs );
+        my $patrons    = $c->objects->search($patrons_rs);
 
         return $c->render(
             status  => 200,
             openapi => $patrons
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }
@@ -70,15 +69,11 @@ sub list {
 
     return try {
 
-        my $baskets_rs = Koha::Acquisition::Baskets->new;
-        my $baskets    = $c->objects->search( $baskets_rs );
-
         return $c->render(
             status  => 200,
-            openapi => $baskets
+            openapi => $c->objects->search( Koha::Acquisition::Baskets->new ),
         );
-    }
-    catch {
+    } catch {
         $c->unhandled_exception($_);
     };
 }

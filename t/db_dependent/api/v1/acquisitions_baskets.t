@@ -86,9 +86,7 @@ subtest 'list() tests' => sub {
     my $userid = $superlibrarian->userid;
     $superlibrarian->discard_changes;
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is(
-        []
-    );
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is( [] );
 
     my $vendor = $builder->build_object(
         {
@@ -102,8 +100,7 @@ subtest 'list() tests' => sub {
         }
     );
 
-    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is( [$basket->to_api ]);
+    $t->get_ok("//$userid:$password@/api/v1/acquisitions/baskets")->status_is(200)->json_is( [ $basket->to_api ] );
 
     $schema->storage->txn_rollback;
-
-}
+};
