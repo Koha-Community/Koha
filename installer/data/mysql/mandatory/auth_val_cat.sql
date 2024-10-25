@@ -101,3 +101,8 @@ INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
 VALUES
     ('TICKET_STATUS', 1),
     ('TICKET_RESOLUTION', 1);
+
+-- For bookings
+INSERT IGNORE INTO authorised_value_categories (category_name, is_system)
+VALUES
+    ('BOOKING_CANCELLATION', 1);
