@@ -25,8 +25,10 @@ use t::lib::TestBuilder;
 use Test::Warn;
 
 use C4::Context;
+use C4::Auth;
 
 use Koha::Patrons;
+use Koha::DateUtils qw( dt_from_string );
 
 # Hide all the subrouteine redefined warnings when running this test..
 # We reload the ldap module lots in the test and each reload triggers the
@@ -155,7 +157,7 @@ subtest 'checkpw_ldap tests' => sub {
 
     subtest 'auth_by_bind = 1 tests' => sub {
 
-        plan tests => 14;
+        plan tests => 15;
 
         $auth_by_bind = 1;
 
@@ -272,6 +274,17 @@ subtest 'checkpw_ldap tests' => sub {
         $patron->delete;
         $replicate = 0;
         $welcome   = 0;
+
+        # replicate testing with checkpw
+        C4::Auth::checkpw( 'hola', password => 'hey' );
+        my $patron_replicated_from_auth = Koha::Patrons->search( { userid => 'hola' } )->next;
+        is(
+            $patron_replicated_from_auth->updated_on, dt_from_string()->ymd . ' ' . dt_from_string()->hms,
+            "updated_on correctly saved on newly created user"
+        );
+
+        $patron_replicated_from_auth->delete;
+
         $auth->unmock('ldap_entry_2_hash');
         # end replicate testing
 
@@ -464,6 +477,9 @@ sub mockedC4Config {
     my $class = shift;
     my $param = shift;
 
+    if ( $param eq 'useldapserver' ) {
+        return 1;
+    }
     if ( $param eq 'useshibboleth' ) {
         return 0;
     }
