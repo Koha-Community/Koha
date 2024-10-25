@@ -6,6 +6,12 @@
         .getElementById("cancelBookingForm")
         ?.addEventListener("submit", handleSubmit);
 
+    document
+        .getElementById("cancelBookingModal")
+        ?.addEventListener("hide.bs.modal", () => {
+            $("#cancellation-reason").comboBox("reset");
+        });
+
     async function handleSubmit(e) {
         e.preventDefault();
 

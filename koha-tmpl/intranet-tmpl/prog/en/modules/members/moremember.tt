@@ -832,10 +832,6 @@
                 displayProperty: 'name',
                 placeholder: _("Select or type a reason"),
             });
-
-            document.getElementById("cancelBookingModal")?.addEventListener('hide.bs.modal', () => {
-                $("#cancellation-reason").comboBox('reset');
-            });
         });
     </script>
     [% Asset.js("js/tables/bookings.js") | $raw %]
