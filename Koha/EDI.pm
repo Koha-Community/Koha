@@ -1222,14 +1222,14 @@ sub _create_item_from_quote {
 }
 
 sub _handle_008_field {
-    my ( $bib_record ) = @_;
+    my ($bib_record) = @_;
 
     if ( !$bib_record->field('008') ) {
         my $default008 = biblio_008();
-        $bib_record->insert_fields_ordered( MARC::Field->new('008', $default008));
+        $bib_record->insert_fields_ordered( MARC::Field->new( '008', $default008 ) );
     }
 
-    return $bib_record
+    return $bib_record;
 }
 
 1;
