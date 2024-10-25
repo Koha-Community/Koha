@@ -605,9 +605,9 @@ implementation.
 sub find_booking {
     my ( $self, $params ) = @_;
 
-    my $checkout_date = $params->{checkout_date};
-    my $due_date      = $params->{due_date};
-    my $biblio        = $self->biblio;
+    my $start_date = $params->{checkout_date};
+    my $end_date   = $params->{due_date};
+    my $biblio     = $self->biblio;
 
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
@@ -617,33 +617,41 @@ sub find_booking {
         }
     );
     my $preparation_period = $rule ? $rule->rule_value : 0;
-    $due_date = $due_date->clone->add( days => $preparation_period );
+    $end_date = $end_date->clone->add( days => $preparation_period );
 
     my $dtf      = Koha::Database->new->schema->storage->datetime_parser;
     my $bookings = $biblio->bookings(
-        [
-            # Proposed checkout starts during booked period
-            start_date => {
-                '-between' => [
-                    $dtf->format_datetime($checkout_date),
-                    $dtf->format_datetime($due_date)
-                ]
-            },
+        {
+            '-and' => [
+                {
+                    '-or' => [
 
-            # Proposed checkout is due during booked period
-            end_date => {
-                '-between' => [
-                    $dtf->format_datetime($checkout_date),
-                    $dtf->format_datetime($due_date)
-                ]
-            },
+                        # Proposed checkout starts during booked period
+                        start_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
 
-            # Proposed checkout would contain the booked period
-            {
-                start_date => { '<' => $dtf->format_datetime($checkout_date) },
-                end_date   => { '>' => $dtf->format_datetime($due_date) }
-            }
-        ],
+                        # Proposed checkout is due during booked period
+                        end_date => {
+                            '-between' => [
+                                $dtf->format_datetime($start_date),
+                                $dtf->format_datetime($end_date)
+                            ]
+                        },
+
+                        # Proposed checkout would contain the booked period
+                        {
+                            start_date => { '<' => $dtf->format_datetime($start_date) },
+                            end_date   => { '>' => $dtf->format_datetime($end_date) }
+                        }
+                    ]
+                },
+                { status => { '-not_in' => [ 'cancelled', 'completed' ] } }
+            ]
+        },
         { order_by => { '-asc' => 'start_date' } }
     );
 
@@ -668,6 +676,7 @@ sub find_booking {
 
         # Booking for another item
         elsif ( defined( $booking->item_id ) ) {
+
             # Due for another booking, remove from pool
             delete $loanable_items->{ $booking->item_id };
             next;

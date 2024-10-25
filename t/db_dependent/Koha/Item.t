@@ -2897,7 +2897,7 @@ subtest 'bookings' => sub {
 };
 
 subtest 'find_booking' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -3002,6 +3002,21 @@ subtest 'find_booking' => sub {
     is(
         $found_booking->booking_id, $booking2->booking_id,
         "Koha::Item->find_booking returns the current booking not a future one"
+    );
+
+    # Cancelled booking
+    $booking2->status('cancelled')->store();
+    $found_booking = $item->find_booking(
+        {
+            checkout_date => dt_from_string(),
+            due_date      => dt_from_string()->add( days => 7 ),
+        }
+    );
+
+    is(
+        $found_booking,
+        undef,
+        "Koha::Item->find_booking returns undefined when the current booking is cancelled and the future booking is out of range"
     );
 
     subtest "Preparation period handling" => sub {
