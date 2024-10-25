@@ -130,7 +130,7 @@ subtest '_handle_008_field' => sub {
 
     $schema->storage->txn_begin;
 
-        # Add our test quote file to the database for testing against
+    # Add our test quote file to the database for testing against
     my $account = $builder->build(
         {
             source => 'VendorEdiAccount',
@@ -190,16 +190,16 @@ subtest '_handle_008_field' => sub {
 
     # Tests for generated basket for passed quote file
     my $baskets = Koha::Acquisition::Baskets->search( { booksellerid => $account->{vendor_id} } );
-    my $basket = $baskets->next;
+    my $basket  = $baskets->next;
 
     my $orders = $basket->orders;
-    my $order = $orders->next;
+    my $order  = $orders->next;
 
-    my $biblio = $order->biblio;
-    my $record = $biblio->record;
+    my $biblio       = $order->biblio;
+    my $record       = $biblio->record;
     my $record_field = $record->field('008');
 
-    is(exists($record_field->{_data}), 1, 'Field has been added');
+    is( exists( $record_field->{_data} ), 1, 'Field has been added' );
 
     # Test without calling the 008 handler
     $account = $builder->build(
@@ -288,4 +288,4 @@ subtest '_handle_008_field' => sub {
     is( $record_field->{_data}, undef, 'Field has not been added' );
 
     $schema->storage->txn_rollback;
-}
+    }
