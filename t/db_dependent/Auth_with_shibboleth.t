@@ -20,7 +20,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Warn;
 use CGI qw(-utf8 );
@@ -32,6 +32,14 @@ use t::lib::TestBuilder;
 
 use C4::Auth_with_shibboleth qw( shib_ok login_shib_url get_login_shib checkpw_shib );
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
+
+BEGIN {
+    use_ok(
+        'C4::Auth',
+        qw( checkpw )
+    );
+}
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -155,7 +163,7 @@ subtest "get_login_shib tests" => sub {
 };
 
 subtest "checkpw_shib tests" => sub {
-    plan tests => 33;
+    plan tests => 35;
 
     # Test borrower data
     my $test_borrowers = [
@@ -267,6 +275,29 @@ subtest "checkpw_shib tests" => sub {
     ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
     is( $retval, "0", "user not authenticated" );
     $logger->info_is("No users with userid of martin found and autocreate is disabled", "Missing matchpoint warned to info");
+
+    # autocreate user from checkpw
+    change_config( { autocreate => 1, welcome => 1 } );
+    $shib_login      = 'test43210';
+    $ENV{'uid'}      = 'test43210';
+    $ENV{'sn'}       = "pika";
+    $ENV{'exp'}      = "2017-01-01";
+    $ENV{'cat'}      = $category->categorycode;
+    $ENV{'add'}      = 'Address';
+    $ENV{'city'}     = 'City';
+    $ENV{'emailpro'} = 'me@myemail.com';
+    $ENV{branchcode} = $library->branchcode;      # needed since T::D::C does no longer hides the FK constraint
+
+    checkpw($shib_login);
+    ok my $new_user_autocreated = $schema->resultset('Borrower')->search( { 'userid' => 'test43210' }, { rows => 1 } ),
+        "new user found";
+
+    my $rec_autocreated = $new_user_autocreated->next;
+    is_deeply(
+        [ map { $rec_autocreated->$_ } qw/updated_on/ ],
+        [ dt_from_string()->ymd . ' ' . dt_from_string()->hms ],
+        'updated_on correctly saved on newly created user'
+    );
 };
 
 subtest 'get_uri' => sub {
