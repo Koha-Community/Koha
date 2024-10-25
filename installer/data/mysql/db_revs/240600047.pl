@@ -1,8 +1,9 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "35659",
-    description => "OAI-PMH Harvester",
+    description => "OAI-PMH harvester",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -20,7 +21,7 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
-        say $out "Added new table 'oai_servers'";
+        say_success( $out, "Added new table 'oai_servers'" );
 
         $dbh->do(
             q{
@@ -55,14 +56,14 @@ return {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         }
         );
-        say $out "Added new tables 'import_oai_biblios' and import_oai_authorities";
+        say_success( $out, "Added new tables 'import_oai_biblios' and import_oai_authorities" );
 
         $dbh->do(
             q{
             UPDATE `permissions` SET description='Manage Z39.50 and SRU servers, OAI repositories configuration' WHERE code='manage_search_targets';
         }
         );
-        say $out "Updated manage_search_targets permission description";
+        say_success( $out, "Updated manage_search_targets permission description" );
 
         $dbh->do(
             q{
@@ -70,7 +71,7 @@ return {
             ('OAI-PMH:HarvestEmailReport','','','After an OAI-PMH harvest, send a report email to the email address','Free');
         }
         );
-        say $out "Added OAI-PMH:HarvestEmailReport system preference";
+        say_success( $out, "Added OAI-PMH:HarvestEmailReport system preference" );
 
         $dbh->do(
             q{
@@ -79,7 +80,7 @@ return {
             VALUES ('catalogue','OAI_HARVEST_REPORT','','OAI harvest report',0,'OAI harvest report for [% servername %]','OAI harvest report for [% servername %]:\n\nEndpoint: [% endpoint %]\nSet: [% set %]\nData format: [% dataformat %]\nRecord type: [% recordtype %]\n\n[% added %] records added\n[% updated %] records updated\n[% deleted %] records deleted\n[% skipped %] records skipped\n[% in_error %] records in error\n[% total %] total','email','default');
         }
         );
-        say $out "Added OAI_HARVEST_REPORT letter";
+        say_success( $out, "Added OAI_HARVEST_REPORT letter" );
 
     },
 };
