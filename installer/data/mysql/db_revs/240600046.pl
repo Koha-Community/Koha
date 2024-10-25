@@ -15,6 +15,6 @@ return {
                 ('BOOKING_CANCELLATION', 1)
             }
         );
-        say_success( $out, "Added BOOKING_CANCELLATION AV category" );
+        say_success( $out, "Added BOOKING_CANCELLATION authorised value category" );
     },
 };
