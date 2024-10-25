@@ -16,7 +16,7 @@
                         [% SET booking_cancellation = AuthorisedValues.GetAuthValueDropbox('BOOKING_CANCELLATION') %]
                         <div class="combobox-container">
                             <label for="cancellation-reason" class="form-label">Cancellation Reason:</label>
-                            <input type="text" id="cancellation-reason" name="cancellation_reason" class="form-control" />
+                            <input type="text" id="cancellation-reason" name="cancellation_reason" class="form-control" maxlength="80" />
                             <ul id="cancellation-reason-list" class="dropdown-menu">
                                 [% IF booking_cancellation.count %]
                                     [% FOR reason IN booking_cancellation %]
