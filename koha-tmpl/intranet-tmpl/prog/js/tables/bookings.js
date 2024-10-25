@@ -161,12 +161,12 @@ $(document).ready(function () {
             : __("Unknown");
 
         const classMap = [
-            { status: _("Expired"), class: "bg-secondary" },
-            { status: _("Cancelled"), class: "bg-secondary" },
-            { status: _("Pending"), class: "bg-warning" },
-            { status: _("Active"), class: "bg-primary" },
-            { status: _("Completed"), class: "bg-info" },
-            { status: _("New"), class: "bg-success" },
+            { status: __("Expired"), class: "bg-secondary" },
+            { status: __("Cancelled"), class: "bg-secondary" },
+            { status: __("Pending"), class: "bg-warning" },
+            { status: __("Active"), class: "bg-primary" },
+            { status: __("Completed"), class: "bg-info" },
+            { status: __("New"), class: "bg-success" },
         ];
 
         const badgeClass =
