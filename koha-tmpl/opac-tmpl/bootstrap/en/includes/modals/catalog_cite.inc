@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 [% FOREACH system IN cites.keys.sort %]
-                <h3>[% system %]</h3>
+                <h3>[% system | html %]</h3>
                 <p>[% cites.$system | html %]</p>
                 [% END %]
             </div>
