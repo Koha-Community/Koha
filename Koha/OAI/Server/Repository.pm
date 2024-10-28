@@ -188,8 +188,9 @@ sub get_biblio_marcxml {
     eval {
         $record = $biblio->metadata_record(
             {
-                embed_items => $with_items,
-                interface   => 'opac'
+                embed_items         => $with_items,
+                expand_coded_values => $expanded_avs,
+                interface           => 'opac'
             }
         );
     };
@@ -209,19 +210,7 @@ sub get_biblio_marcxml {
 
         #TODO: Also hide record if OpacSuppression is in use
     }
-    if ( $record && $expanded_avs ) {
-        my $frameworkcode = GetFrameworkCode($biblionumber) || '';
-        my $record_processor = Koha::RecordProcessor->new(
-            {
-                filters => [ 'ExpandCodedFields' ],
-                options => {
-                    interface     => 'opac',
-                    frameworkcode => $frameworkcode
-                }
-            }
-        );
-        $record_processor->process($record);
-    }
+
     return ( $record ? $record->as_xml_record( C4::Context->preference('marcflavour') ) : undef, $decoding_error );
 }
 
