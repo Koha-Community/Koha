@@ -260,7 +260,7 @@ subtest '_handle_008_field' => sub {
         '_check_for_existing_bib',
         sub {
             my $bib_record = shift;
-            return undef;
+            return;
         }
     );
     $edi_module->mock(
