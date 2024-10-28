@@ -124,7 +124,7 @@
     <div id="toolbar" class="btn-toolbar">
         <a id="newserver" class="btn btn-default" href="/cgi-bin/koha/admin/oai_servers.pl?op=add"><i class="fa fa-plus"></i> New OAI repository</a>
     </div>
-    <h1>OAI repositories administration</h1>
+    <h1>OAI repositories</h1>
     [% IF id %]
         <span>You searched for record [% id | html %]</span>
     [% ELSIF searchfield %]
@@ -134,7 +134,7 @@
     <div class="page-section">
     <table id="serverst">
 
-        <thead><tr><th>Id</th><th>Repository name</th><th>Endpoint</th><th>[% tp('OAI', 'Set') | html %]</th><th>Data format</th><th>Record type</th><th class="noExport">Actions</th>
+        <thead><tr><th>ID</th><th>Repository name</th><th>Endpoint</th><th>[% tp('OAI', 'Set') | html %]</th><th>Data format</th><th>Record type</th><th class="noExport">Actions</th>
         </tr></thead>
         <tbody>
         [% FOREACH loo IN loop %]
