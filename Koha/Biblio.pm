@@ -166,11 +166,11 @@ sub metadata_record {
 
         if ( $params->{embed_items} ) {
             push @filters, 'EmbedItems';
-            if ( $params->{interface} eq 'opac' ) {
+            if ( $params->{interface} && $params->{interface} eq 'opac' ) {
                 $options->{items} = $self->items->filter_by_visible_in_opac(
-                    { ( $params->{patron} ? ( patron => $params->{patron} ) : () ) } );
+                    { ( $params->{patron} ? ( patron => $params->{patron} ) : () ) } )->as_list;
             } else {
-                $options->{items} = $self->items;
+                $options->{items} = $self->items->as_list;
             }
         }
 
