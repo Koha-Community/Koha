@@ -22,7 +22,6 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Ratings;
-use Koha::RecordProcessor;
 use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
 use C4::Search qw( FindDuplicate );
 
@@ -162,32 +161,19 @@ sub get_public {
 
     return try {
 
-        my $metadata = $biblio->metadata;
-        my $record   = $metadata->record;
-
-        my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
+        my $schema = $biblio->metadata->schema // C4::Context->preference("marcflavour");
         my $patron = $c->stash('koha.user');
 
-        # Check if the biblio should be hidden for unprivileged access
-        # unless there's a logged in user, and there's an exception for it's
-        # category
+        # Check if the bibliographic record should be hidden for unprivileged access
+        # unless there's a logged in user, and there's an exception for it's category
+        my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
         unless ( $patron and $patron->category->override_hidden_items ) {
             if ( $biblio->hidden_in_opac( { rules => $opachiddenitems_rules } ) ) {
                 return $c->render_resource_not_found("Bibliographic record");
             }
         }
 
-        my $schema = $metadata->schema // C4::Context->preference("marcflavour");
-
-        my $record_processor = Koha::RecordProcessor->new({
-            filters => 'ViewPolicy',
-            options => {
-                interface => 'opac',
-                frameworkcode => $biblio->frameworkcode
-            }
-        });
-        # Apply framework's filtering to MARC::Record object
-        $record_processor->process($record);
+        my $record = $biblio->metadata_record( { interface => 'opac', patron => $patron } );
 
         $c->respond_to(
             marcxml => {
