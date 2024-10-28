@@ -192,24 +192,6 @@ sub GetImportRecordMarc {
     return $marc, $encoding;
 }
 
-sub EmbedItemsInImportBiblio {
-    my ( $record, $import_record_id ) = @_;
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
-    my $dbh = C4::Context->dbh;
-    my $import_items = $dbh->selectall_arrayref(q|
-        SELECT import_items.marcxml
-        FROM import_items
-        WHERE import_record_id = ?
-    |, { Slice => {} }, $import_record_id );
-    my @item_fields;
-    for my $import_item ( @$import_items ) {
-        my $item_marc = MARC::Record::new_from_xml($import_item->{marcxml}, 'UTF-8');
-        push @item_fields, $item_marc->field($itemtag);
-    }
-    $record->append_fields(@item_fields);
-    return $record;
-}
-
 =head2 AddImportBatch
 
   my $batch_id = AddImportBatch($params_hash);
