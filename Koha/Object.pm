@@ -226,8 +226,8 @@ Refetch the row from the DB
 
 sub discard_changes {
     my ($self) = @_;
-    my $object_class = Koha::Object::_get_object_class( $self->_result->result_class );
-    return $object_class->_new_from_dbic( $self->_result->discard_changes );
+    $self->_result->discard_changes;
+    return $self;
 }
 
 =head3 $object->update();

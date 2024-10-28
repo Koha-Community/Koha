@@ -37,7 +37,7 @@ use Koha::Patrons;
 use Koha::Library::Groups;
 
 use JSON;
-use Scalar::Util qw( isvstring );
+use Scalar::Util qw( isvstring refaddr );
 use Try::Tiny;
 
 use t::lib::TestBuilder;
@@ -152,31 +152,29 @@ subtest 'get_column' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'discard_changes' => sub {
+subtest 'discard_changes() tests' => sub {
+
     plan tests => 3;
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build( { source => 'Borrower' } );
-    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    my $date_expiry = dt_from_string->add( days => 30 );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { dateexpiry => $date_expiry }
+        }
+    );
     $patron->dateexpiry(dt_from_string);
-    $patron->discard_changes;
+    my $ret = $patron->discard_changes;
     is(
         dt_from_string( $patron->dateexpiry ),
-        dt_from_string->truncate( to => 'day' ),
+        $date_expiry->truncate( to => 'day' ),
         'discard_changes should refresh the object'
     );
-    my $cardnumber   = $patron->cardnumber;
-    my $categorycode = $patron->categorycode;
-    my $branchcode   = $patron->branchcode;
-    $patron->delete;
-
-    $patron =
-        Koha::Patron->new( { cardnumber => $cardnumber, categorycode => $categorycode, branchcode => $branchcode } )
-        ->store->discard_changes;
-
-    is( ref($patron), 'Koha::Patron', 'discard_changes should return a Koha::Object object' );
-    isnt( $patron->updated_on, undef, 'discard_changes should have fetched the row from the DB' );
+    is( ref($ret),     'Koha::Patron',   'discard_changes should return a Koha::Object object' );
+    is( refaddr($ret), refaddr($patron), 'Same object referenced' );
 
     $schema->storage->txn_rollback;
 };
