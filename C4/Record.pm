@@ -845,6 +845,7 @@ sub marc2bibtex {
     return $tex;
 }
 
+
 =head2 marc2cites - Convert from MARC21 and UNIMARC to citations
 
   my $cites = marc2cites($record);
@@ -857,81 +858,84 @@ C<$record> - a MARC::Record object
 =cut
 
 sub marc2cites {
-    my $record = shift;
+    my $record      = shift;
     my $marcflavour = C4::Context->preference("marcflavour");
-    my %cites = ();
-    my @authors = ();
-    my $re_clean = qr/(^[\.,:;\/\-\s]+|[\.,:;\/\-\s]+$)/;
+    my %cites       = ();
+    my @authors     = ();
+    my $re_clean    = qr/(^[\.,:;\/\-\s]+|[\.,:;\/\-\s]+$)/;
 
-    my @authorFields = ('100','110','111','700','710','711');
-    @authorFields = ('700','701','702','710','711','721') if ( $marcflavour eq "UNIMARC" );
+    my @authorFields = ( '100', '110', '111', '700', '710', '711' );
+    @authorFields = ( '700', '701', '702', '710', '711', '721' ) if ( $marcflavour eq "UNIMARC" );
 
-    foreach my $ftag ( @authorFields ) {
-        foreach my $field ($record->field($ftag)) {
+    foreach my $ftag (@authorFields) {
+        foreach my $field ( $record->field($ftag) ) {
             my $author = '';
             if ( $marcflavour eq "UNIMARC" ) {
                 $author = join ', ',
-                ( $field->subfield("a"), $field->subfield("b") );
+                    ( $field->subfield("a"), $field->subfield("b") );
             } else {
                 $author = $field->subfield("a");
             }
-            if($author =~ /([^,]+),?(.*)/) {
+            if ( $author =~ /([^,]+),?(.*)/ ) {
                 my %a;
-                ($a{'surname'} = $1) =~ s/$re_clean//g;
-                $a{'forenames'} = [map {my $t=$_;$t=~s/$re_clean//g;$t} split ' ', $2];
-                push(@authors, \%a);
+                ( $a{'surname'} = $1 ) =~ s/$re_clean//g;
+                $a{'forenames'} = [ map { my $t = $_; $t =~ s/$re_clean//g; $t } split ' ', $2 ];
+                push( @authors, \%a );
             }
         }
     }
 
     my %publication;
     if ( $marcflavour eq "UNIMARC" ) {
-            %publication = (
-                title     => $record->subfield("200", "a") || "",
-                place     => $record->subfield("210", "a") || "",
-                publisher => $record->subfield("210", "c") || "",
-                date      => $record->subfield("210", "d") || $record->subfield("210", "h") || ""
-            );
+        %publication = (
+            title     => $record->subfield( "200", "a" ) || "",
+            place     => $record->subfield( "210", "a" ) || "",
+            publisher => $record->subfield( "210", "c" ) || "",
+            date      => $record->subfield( "210", "d" ) || $record->subfield( "210", "h" ) || ""
+        );
     } else {
-            %publication = (
-                title     => $record->subfield("245", "a") || "",
-                place     => $record->subfield("264", "a") || $record->subfield("260", "a") || "",
-                publisher => $record->subfield("264", "b") || $record->subfield("260", "b") || "",
-                date      => $record->subfield("264", "c") || $record->subfield("260", "c") || $record->subfield("260", "g") || ""
-            );
+        %publication = (
+            title     => $record->subfield( "245", "a" ) || "",
+            place     => $record->subfield( "264", "a" ) || $record->subfield( "260", "a" ) || "",
+            publisher => $record->subfield( "264", "b" ) || $record->subfield( "260", "b" ) || "",
+            date      => $record->subfield( "264", "c" )
+                || $record->subfield( "260", "c" )
+                || $record->subfield( "260", "g" )
+                || ""
+        );
     }
 
     $publication{$_} =~ s/$re_clean//g for keys %publication;
     $publication{'date'} =~ s/[\D-]//g;
 
-    my $i = $#authors;
-    my $last = 0;
+    my $i       = $#authors;
+    my $last    = 0;
     my $seclast = 0;
     for my $author (@authors) {
         $cites{'Harvard'} .= $author->{'surname'} . ' ';
-        $cites{'Harvard'} .= substr($_, 0, 1) . '. ' for @{$author->{'forenames'}};
+        $cites{'Harvard'} .= substr( $_, 0, 1 ) . '. ' for @{ $author->{'forenames'} };
         $cites{'Harvard'} =~ s/\s+$//;
-        $cites{'Harvard'} .= $last ? '' : ($seclast ? ' and ' : ', ');
+        $cites{'Harvard'} .= $last ? '' : ( $seclast ? ' and ' : ', ' );
         $cites{'Chicago'} .= $author->{'surname'} . ' ';
-        $cites{'Chicago'} .= $_ . ' ' for @{$author->{'forenames'}};
+        $cites{'Chicago'} .= $_ . ' ' for @{ $author->{'forenames'} };
         $cites{'Chicago'} =~ s/\s+$//;
-        $cites{'Chicago'} .= $last ? '' : ($seclast ? ' and ' : ', ');
-        $cites{'MLA'} .= $author->{'surname'} . ' ';
-        $cites{'MLA'} .= $_ . ' ' for @{$author->{'forenames'}};
+        $cites{'Chicago'} .= $last ? '' : ( $seclast ? ' and ' : ', ' );
+        $cites{'MLA'}     .= $author->{'surname'} . ' ';
+        $cites{'MLA'}     .= $_ . ' ' for @{ $author->{'forenames'} };
         $cites{'MLA'} =~ s/\s+$//;
-        $cites{'MLA'} .= $last ? '' : ($seclast ? ' and ' : ', ');
+        $cites{'MLA'} .= $last ? '' : ( $seclast ? ' and ' : ', ' );
         $cites{'APA'} .= $author->{'surname'} . ' ';
-        $cites{'APA'} .= substr($_, 0, 1) . '. ' for @{$author->{'forenames'}};
+        $cites{'APA'} .= substr( $_, 0, 1 ) . '. ' for @{ $author->{'forenames'} };
         $cites{'APA'} =~ s/\s+$//;
-        $cites{'APA'} .= $last ? '' : ($seclast ? ' & ' : ', ');
+        $cites{'APA'} .= $last ? '' : ( $seclast ? ' & ' : ', ' );
         $seclast = $#authors > 1 && $i-- == 2;
-        $last = $i == 0;
+        $last    = $i == 0;
     }
     $cites{$_} =~ s/([^\.])$/$1./ for keys %cites;
 
     if ( $publication{date} ) {
         $cites{'Harvard'} .= ' (' . $publication{'date'} . '). ';
-        $cites{'Chicago'} .= ' ' . $publication{'date'}  . '. ';
+        $cites{'Chicago'} .= ' ' . $publication{'date'} . '. ';
         $cites{'MLA'}     .= ' ' . $publication{'title'} . '. ';
         $cites{'APA'}     .= ' (' . $publication{'date'} . '). ';
     }
@@ -941,13 +945,13 @@ sub marc2cites {
     $cites{'APA'}     .= $publication{'title'} . '. ';
     $cites{'Harvard'} .= $publication{'place'} . ': ';
     $cites{'Chicago'} .= $publication{'place'} . ': ';
-    $cites{'MLA'}     .= $publication{'publisher'}  . '. ';
+    $cites{'MLA'}     .= $publication{'publisher'} . '. ';
     $cites{'APA'}     .= $publication{'place'} . ': ';
     $cites{'Harvard'} .= $publication{'publisher'};
     $cites{'Chicago'} .= $publication{'publisher'};
     $cites{'MLA'}     .= $publication{'date'};
     $cites{'APA'}     .= $publication{'publisher'};
-    $cites{$_} =~ s/  +/ / for keys %cites;
+    $cites{$_} =~ s/  +/ /        for keys %cites;
     $cites{$_} =~ s/([^\.])$/$1./ for keys %cites;
 
     return \%cites;
