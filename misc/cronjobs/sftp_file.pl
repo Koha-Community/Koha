@@ -169,7 +169,9 @@ $sftp->setcwd($upload_dir)
 # If the --email parameter is defined then prepare sending an email confirming the success
 # or failure of the SFTP
 if ($email) {
-    if ( C4::Context->preference('KohaAdminEmailAddress') ) {
+    if ( C4::Context->preference('ReplytoDefault') ) {
+        $admin_address = C4::Context->preference('ReplytoDefault');
+    } elsif ( C4::Context->preference('KohaAdminEmailAddress') ) {
         $admin_address = C4::Context->preference('KohaAdminEmailAddress');
     }
 
