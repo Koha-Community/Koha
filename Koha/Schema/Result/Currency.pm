@@ -184,6 +184,9 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-10-01 10:59:15
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:C7BtR3ceUVovrYitKh55bA
 
+__PACKAGE__->add_columns(
+    "+p_cs_precedes" => { is_boolean => 1 },
+);
 
 sub koha_object_class {
     'Koha::Acquisition::Currency';
