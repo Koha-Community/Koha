@@ -67,17 +67,17 @@ div.dt-scroll-body tfoot tr {
 div.dt-scroll-body thead tr th, div.dt-scroll-body thead tr td,
 div.dt-scroll-body tfoot tr th,
 div.dt-scroll-body tfoot tr td {
-  height: 0 !important;
-  padding-top: 0px !important;
-  padding-bottom: 0px !important;
-  border-top-width: 0px !important;
-  border-bottom-width: 0px !important;
+  height: 0;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-top-width: 0px;
+  border-bottom-width: 0px;
 }
 div.dt-scroll-body thead tr th div.dt-scroll-sizing, div.dt-scroll-body thead tr td div.dt-scroll-sizing,
 div.dt-scroll-body tfoot tr th div.dt-scroll-sizing,
 div.dt-scroll-body tfoot tr td div.dt-scroll-sizing {
-  height: 0 !important;
-  overflow: hidden !important;
+  height: 0;
+  overflow: hidden;
 }
 
 table.dataTable thead > tr > th:active,
@@ -426,8 +426,8 @@ table.dataTable.hover > tbody > tr:hover > *, table.dataTable.display > tbody > 
   box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-hover), 0.035);
 }
 table.dataTable.hover > tbody > tr.selected:hover > *, table.dataTable.display > tbody > tr.selected:hover > * {
-  box-shadow: inset 0 0 0 9999px #0d6efd !important;
-  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-selected), 1) !important;
+  box-shadow: inset 0 0 0 9999px #0d6efd;
+  box-shadow: inset 0 0 0 9999px rgba(var(--dt-row-selected), 1);
 }
 table.dataTable.order-column > tbody tr > .sorting_1,
 table.dataTable.order-column > tbody tr > .sorting_2,
@@ -582,7 +582,7 @@ div.dt-container div.dt-layout-full > *:only-child {
   margin-right: auto;
 }
 div.dt-container div.dt-layout-table > div {
-  display: block !important;
+  display: block;
 }
 
 @media screen and (max-width: 767px) {
@@ -625,15 +625,15 @@ div.dt-container .dt-paging .dt-paging-button {
   padding: 0.5em 1em;
   margin-left: 2px;
   text-align: center;
-  text-decoration: none !important;
+  text-decoration: none;
   cursor: pointer;
-  color: inherit !important;
+  color: inherit;
   border: 1px solid transparent;
   border-radius: 2px;
   background: transparent;
 }
 div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging .dt-paging-button.current:hover {
-  color: inherit !important;
+  color: inherit;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: rgba(0, 0, 0, 0.05);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(230, 230, 230, 0.05)), color-stop(100%, rgba(0, 0, 0, 0.05))); /* Chrome,Safari4+ */
@@ -645,13 +645,13 @@ div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-pagi
 }
 div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
   cursor: default;
-  color: rgba(0, 0, 0, 0.5) !important;
+  color: rgba(0, 0, 0, 0.5);
   border: 1px solid transparent;
   background: transparent;
   box-shadow: none;
 }
 div.dt-container .dt-paging .dt-paging-button:hover {
-  color: white !important;
+  color: white;
   border: 1px solid #111;
   background-color: #111;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #585858), color-stop(100%, #111)); /* Chrome,Safari4+ */
@@ -696,8 +696,8 @@ div.dt-container .dataTables_scroll div.dt-scroll-body > table > thead > tr > td
 div.dt-container .dataTables_scroll div.dt-scroll-body > table > tbody > tr > td > div.dataTables_sizing {
   height: 0;
   overflow: hidden;
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
 }
 div.dt-container.dt-empty-footer tbody > tr:last-child > * {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
@@ -758,7 +758,7 @@ html.dark .dt-container .dt-paging .dt-paging-button.current, html.dark .dt-cont
   background: rgba(255, 255, 255, 0.15);
 }
 html.dark .dt-container .dt-paging .dt-paging-button.disabled, html.dark .dt-container .dt-paging .dt-paging-button.disabled:hover, html.dark .dt-container .dt-paging .dt-paging-button.disabled:active {
-  color: #666 !important;
+  color: #666;
 }
 html.dark .dt-container .dt-paging .dt-paging-button:hover {
   border: 1px solid rgb(53, 53, 53);
@@ -871,7 +871,7 @@ div.dtb-popover-close {
 }
 
 button.dtb-hide-drop {
-  display: none !important;
+  display: none;
 }
 
 div.dt-button-collection-title {
@@ -963,7 +963,7 @@ div.dt-button-collection span.dt-button-spacer.bar {
 
 @media print {
   table.dataTable tr > * {
-    box-shadow: none !important;
+    box-shadow: none;
   }
 }
 html.dark div.dt-button-info {
@@ -1191,7 +1191,7 @@ div.dt-button-collection.fixed > :last-child {
   overflow: auto;
 }
 div.dt-button-collection.two-column > :last-child, div.dt-button-collection.three-column > :last-child, div.dt-button-collection.four-column > :last-child {
-  display: block !important;
+  display: block;
   -webkit-column-gap: 8px;
   -moz-column-gap: 8px;
   -ms-column-gap: 8px;
@@ -1311,7 +1311,7 @@ div.dt-button-background {
 
 @media screen and (max-width: 640px) {
   div.dt-buttons {
-    float: none !important;
+    float: none;
     text-align: center;
   }
 }
@@ -1356,7 +1356,7 @@ html.dark div.dt-button-collection {
 
 table.fixedHeader-floating,
 table.fixedHeader-locked {
-  position: relative !important;
+  position: relative;
   background-color: var(--dt-html-background);
   background-color: var(--dt-html-background);
 }
@@ -1371,12 +1371,12 @@ table.fixedHeader-locked {
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th.child,
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty {
-  cursor: default !important;
+  cursor: default;
 }
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th.child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty:before {
-  display: none !important;
+  display: none;
 }
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
@@ -1451,7 +1451,7 @@ table.dataTable > tbody > tr.child {
   padding: 0.5em 1em;
 }
 table.dataTable > tbody > tr.child:hover {
-  background: transparent !important;
+  background: transparent;
 }
 table.dataTable > tbody > tr.child ul.dtr-details {
   display: inline-block;
@@ -1539,19 +1539,19 @@ div.dtr-modal div.dtr-modal-background {
 }
 html.dark table.dataTable > tbody > tr > td.dtr-control:before,
 html[data-bs-theme=dark] table.dataTable > tbody > tr > td.dtr-control:before {
-  border-left-color: rgba(255, 255, 255, 0.5) !important;
+  border-left-color: rgba(255, 255, 255, 0.5);
 }
 html.dark table.dataTable > tbody > tr > td.dtr-control.arrow-right::before,
 html[data-bs-theme=dark] table.dataTable > tbody > tr > td.dtr-control.arrow-right::before {
-  border-right-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: rgba(255, 255, 255, 0.5);
 }
 html.dark table.dataTable > tbody > tr.dtr-expanded > td.dtr-control:before,
 html.dark table.dataTable > tbody > tr.dtr-expanded > th.dtr-control:before,
 html[data-bs-theme=dark] table.dataTable > tbody > tr.dtr-expanded > td.dtr-control:before,
 html[data-bs-theme=dark] table.dataTable > tbody > tr.dtr-expanded > th.dtr-control:before {
-  border-top-color: rgba(255, 255, 255, 0.5) !important;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: transparent;
+  border-right-color: transparent;
 }
 html.dark table.dataTable > tbody > tr.child ul.dtr-details > li,
 html[data-bs-theme=dark] table.dataTable > tbody > tr.child ul.dtr-details > li {
@@ -1623,14 +1623,14 @@ div.dt-rowReorder-float-parent {
   table-layout: fixed;
   outline: 2px solid rgb(10, 89, 203);
   z-index: 2001;
-  position: absolute !important;
+  position: absolute;
   overflow: hidden;
   border-radius: 3px;
 }
 div.dt-rowReorder-float-parent table.dt-rowReorder-float {
   opacity: 0.9;
   background-color: white;
-  margin: 0 !important;
+  margin: 0;
 }
 
 div.dt-rowReorder-float-parent.drop-not-allowed {

@@ -62,7 +62,7 @@ function css(css_base) {
         .pipe(rename({
             suffix: '-rtl'
         })) // Append "-rtl" to the filename.
-        .pipe(dest(css_base, { sourcemaps: "/maps" } ));
+        .pipe(dest(css_base, { sourcemaps: "./maps" } ));
     }
 
     return stream;
