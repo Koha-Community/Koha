@@ -418,7 +418,7 @@
                 paginate: false
             }));
 
-            if( $("#subfieldtabs").length > 0 ){
+            if ($("#subfieldtabs").length > 0) {
                 [% IF ( tagsubfield && tagsubfield == "@") %]
                     $("#subfieldtabs a[href='#AT_panel']").tab("show");
                 [% ELSIF ( tagsubfield && tagsubfield != "@") %]
@@ -428,20 +428,20 @@
                 [% END %]
 
                 var subfields_list = $("#subfieldtabs > ul");
-                var sortable_subfields = new Sortable( subfields_list[0], {
-                    onEnd: function( e ){
+                var sortable_subfields = new Sortable(subfields_list[0], {
+                    onEnd: function (e) {
                         var old_index = e.oldIndex;
                         var new_index = e.newIndex;
                         if (old_index < new_index) new_index++;
-                        var subfield_code = e.item.id.replace( /^tab_subfield_/, '');
-                        var content = $( '#' + subfield_code + '_panel');
+                        var subfield_code = e.item.id.replace(/^tab_subfield_/, "");
+                        var content = $("#" + subfield_code + "_panel");
                         var panels = $("#subfieldtabs .tab-pane");
-                        if ( new_index < $(panels).size() ){
-                            $(content).insertBefore( panels[new_index]);
+                        if (new_index < $(panels).size()) {
+                            $(content).insertBefore(panels[new_index]);
                         } else {
-                            $(content).insertAfter( panels[new_index-1]);
+                            $(content).insertAfter(panels[new_index - 1]);
                         }
-                    }
+                    },
                 });
             }
 

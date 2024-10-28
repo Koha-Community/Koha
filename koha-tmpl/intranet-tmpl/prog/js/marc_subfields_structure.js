@@ -15,7 +15,7 @@ $(document).ready(function() {
             var new_index = e.newIndex;
             if (old_index < new_index) new_index++;
             var subfield_code = e.item.id.replace( /^tab_subfield_/, '');
-            var content = $( '#' + subfield_code + '_panel');
+            var content = $("#" + subfield_code + "_panel");
             var panels = $("#subfieldtabs .tab-pane");
             if ( new_index < $(panels).size() ){
                 $(content).insertBefore( panels[new_index]);
