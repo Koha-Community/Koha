@@ -363,7 +363,6 @@ subtest 'Search patrons' => sub {
         my $patron_selected_text = $driver->find_element('//div[@id="table_search_selections"]/span')->get_text;
         is( $patron_selected_text, "", "Patrons selected is not displayed" );
 
-        $driver->capture_screenshot('selenium_xxx.png');
         my @checkboxes = $driver->find_elements(
             '//input[@type="checkbox"][@name="borrowernumber"]');
         $checkboxes[2]->click;
@@ -581,7 +580,7 @@ subtest 'Search patrons in modal' => sub {
         $s->wait_for_element_visible('//div[@id="patron_search_modal_owner"]//div[@class="modal-header"]');
 
         # Search for our test patrons
-        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@id="search_patron_filter"]')
+        $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@class="search_patron_filter focus"]')
             ->send_keys('test_patron');
         $driver->find_element('//div[@id="patron_search_modal_owner"]//input[@type="submit"]')->click;
 
@@ -643,7 +642,7 @@ subtest 'Search patrons in modal' => sub {
         $s->wait_for_element_visible('//div[@id="patron_search_modal_users"]//div[@class="modal-header"]');
 
         # Search for our test patrons
-        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@id="search_patron_filter"]')
+        $driver->find_element('//div[@id="patron_search_modal_users"]//input[@class="search_patron_filter focus"]')
             ->send_keys('test_patron');
         $driver->find_element('//div[@id="patron_search_modal_users"]//input[@type="submit"]')->click;
 
