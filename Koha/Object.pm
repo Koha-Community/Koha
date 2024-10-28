@@ -218,6 +218,18 @@ sub store {
     }
 }
 
+=head3 discard_changes
+
+Refetch the row from the DB
+
+=cut
+
+sub discard_changes {
+    my ($self) = @_;
+    my $object_class = Koha::Object::_get_object_class( $self->_result->result_class );
+    return $object_class->_new_from_dbic( $self->_result->discard_changes );
+}
+
 =head3 $object->update();
 
 A shortcut for set + store in one call.
@@ -1020,7 +1032,7 @@ sub AUTOLOAD {
         return $accessor->( $self, @_ );
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes make_column_dirty );
+    my @known_methods = qw( is_changed id in_storage get_column make_column_dirty );
 
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
         error      => sprintf("The method %s->%s is not covered by tests!", ref($self), $method),

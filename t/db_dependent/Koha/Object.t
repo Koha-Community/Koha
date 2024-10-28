@@ -153,7 +153,7 @@ subtest 'get_column' => sub {
 };
 
 subtest 'discard_changes' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -166,6 +166,17 @@ subtest 'discard_changes' => sub {
         dt_from_string->truncate( to => 'day' ),
         'discard_changes should refresh the object'
     );
+    my $cardnumber   = $patron->cardnumber;
+    my $categorycode = $patron->categorycode;
+    my $branchcode   = $patron->branchcode;
+    $patron->delete;
+
+    $patron =
+        Koha::Patron->new( { cardnumber => $cardnumber, categorycode => $categorycode, branchcode => $branchcode } )
+        ->store->discard_changes;
+
+    is( ref($patron), 'Koha::Patron', 'discard_changes should return a Koha::Object object' );
+    isnt( $patron->updated_on, undef, 'discard_changes should have fetched the row from the DB' );
 
     $schema->storage->txn_rollback;
 };
