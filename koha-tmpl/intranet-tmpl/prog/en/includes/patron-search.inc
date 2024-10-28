@@ -430,7 +430,8 @@
                     "dataSrc": function ( json ) {
                         [% IF redirect_if_one_result %]
                             // redirect if there is only 1 result.
-                            if ( first_draw && json.recordsFiltered == 1 ) {
+                            // Do not redirect if state has been loaded
+                            if ( !loaded_from_state && first_draw && json.recordsFiltered == 1 ) {
                                 let url = '[% redirect_url | url %]'.indexOf("?") != -1
                                     ? '[% redirect_url | url %]&borrowernumber=' + json.data[0].patron_id
                                     : '[% redirect_url | url %]?borrowernumber=' + json.data[0].patron_id;
