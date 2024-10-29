@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Koha::Acquisition::Bookseller;
 
-use base qw( Koha::Objects );
+use base qw( Koha::Object::Mixin::AdditionalFields Koha::Objects );
 
 =head1 NAME
 

@@ -99,10 +99,11 @@ Controller function that handles adding a new Koha::Acquisition::Bookseller obje
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor     = $c->req->json;
-    my $contacts   = delete $vendor->{contacts};
-    my $interfaces = delete $vendor->{interfaces};
-    my $aliases    = delete $vendor->{aliases};
+    my $vendor              = $c->req->json;
+    my $contacts            = delete $vendor->{contacts};
+    my $interfaces          = delete $vendor->{interfaces};
+    my $aliases             = delete $vendor->{aliases};
+    my $extended_attributes = delete $vendor->{extended_attributes};
 
     my $vendor_to_store = Koha::Acquisition::Bookseller->new_from_api( $c->req->json );
 
@@ -112,6 +113,12 @@ sub add {
         $vendor_to_store->contacts( $contacts     || [] );
         $vendor_to_store->aliases( $aliases       || [] );
         $vendor_to_store->interfaces( $interfaces || [] );
+
+        if ( scalar(@$extended_attributes) > 0 ) {
+            my @extended_attributes =
+                map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
+            $vendor_to_store->extended_attributes( \@extended_attributes );
+        }
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $vendor_to_store->id );
         return $c->render(
@@ -143,6 +150,8 @@ sub update {
         my $contacts      = exists $vendor_update->{contacts}   ? delete $vendor_update->{contacts}   : undef;
         my $interfaces    = exists $vendor_update->{interfaces} ? delete $vendor_update->{interfaces} : undef;
         my $aliases       = exists $vendor_update->{aliases}    ? delete $vendor_update->{aliases}    : undef;
+        my $extended_attributes =
+            exists $vendor_update->{extended_attributes} ? delete $vendor_update->{extended_attributes} : undef;
 
         $vendor->set_from_api($vendor_update);
         $vendor->store();
@@ -150,6 +159,12 @@ sub update {
         $vendor->contacts( $contacts     || [] ) if defined $contacts;
         $vendor->aliases( $aliases       || [] ) if defined $aliases;
         $vendor->interfaces( $interfaces || [] ) if defined $interfaces;
+
+        if ( scalar(@$extended_attributes) > 0 ) {
+            my @extended_attributes =
+                map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
+            $vendor->extended_attributes( \@extended_attributes );
+        }
 
         return $c->render(
             status  => 200,

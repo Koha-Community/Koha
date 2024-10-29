@@ -25,7 +25,7 @@ use Koha::Subscriptions;
 
 use C4::Contract qw( GetContracts );
 
-use base qw( Koha::Object );
+use base qw( Koha::Object::Mixin::AdditionalFields Koha::Object );
 
 =head1 NAME
 
