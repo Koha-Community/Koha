@@ -49,5 +49,5 @@
             </div> <!-- /# .dropdown-menu -->
         </li> <!-- / .dropdown -->
         <li class="divider-vertical" aria-hidden="false"></li>
-    </ul> <!-- /.nav.pull-right -->
+    </ul> <!-- /.navbar-nav -->
 </div> <!-- /#header_langmenu -->

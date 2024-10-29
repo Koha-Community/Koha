@@ -139,7 +139,7 @@
                                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Manage
                                                     </button>
-                                                    <ul class="dropdown-menu pull-right">
+                                                    <ul class="dropdown-menu">
                                                         <li><a class="dropdown-item" href="?op=manage_stages&amp;rota_id=[% rota.rota_id | uri %]">Stages</a></li>
                                                         [% IF CAN_user_stockrotation_manage_rota_items && rota.stockrotationstages.count > 0 %]
                                                         <li><a class="dropdown-item" href="?op=manage_items&amp;rota_id=[% rota.rota_id | uri %]">Items</a></li>
