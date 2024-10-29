@@ -1,11 +1,20 @@
 /* keep tidy */
 $(document).ready(function () {
-    $("#table_concerns").on("click", ".detail-trigger", function () {
-        // Find the main trigger anchor within the same table row
-        var $mainTrigger = $(this).closest("tr").find(".main-trigger");
+    document.addEventListener("click", function (event) {
+        const detailTrigger = event.target.closest(".detail-trigger");
+        if (detailTrigger) {
+            event.preventDefault();
 
-        // Trigger the click event of the main trigger anchor
-        $mainTrigger.trigger("click");
+            // Find the main trigger button in the same row
+            const mainTrigger = detailTrigger
+                .closest("tr")
+                .querySelector(".main-trigger");
+
+            // Trigger a click on the main trigger if it exists
+            if (mainTrigger) {
+                mainTrigger.click();
+            }
+        }
     });
 
     $("#ticketDetailsModal").on("show.bs.modal", function (event) {
