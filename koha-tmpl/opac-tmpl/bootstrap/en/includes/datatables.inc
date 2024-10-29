@@ -1,5 +1,4 @@
 [% USE raw %]
 [% USE Asset %]
-[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/dataTables.responsive.min.js") | $raw %]
+[% Asset.js("lib/datatables/datatables.min.js") | $raw %]
 [% Asset.js("js/datatables.js") | $raw %]
