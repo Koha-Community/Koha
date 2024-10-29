@@ -50,7 +50,7 @@
                                 <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id | html %]" role="button" data-bs-toggle="dropdown" href="#">
                                     Actions
                                 </a>
-                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id | html %]">
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="listactions[% l.patron_list_id | html %]">
                                     <li><a class="dropdown-item" onclick="removeFromList('[% l.patron_list_id | html %]','[% list_id_lookup.${l.patron_list_id} | html %]')"><i class="fa fa-remove"></i> Remove patron from list</a></li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>

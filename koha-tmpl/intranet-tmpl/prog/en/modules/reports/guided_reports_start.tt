@@ -375,7 +375,7 @@
                                                                 class="fa fa-play"></i> Run</a><a
                                                                 class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-bs-toggle="dropdown"
                                                                 href="#"></a>
-                                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
+                                                                <ul class="dropdown-menu" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
                                                                     <li><a class="dropdown-item" href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&amp;op=show"><i class="fa fa-search" aria-hidden="true"></i> View</a></li>
                                                                     <li>
                                                                         <a href="/cgi-bin/koha/reports/guided_reports.pl?id=[% savedreport.id | uri %]&op=show" class="dropdown-item preview_sql" data-reportid="[% savedreport.id | html %]">
@@ -1184,7 +1184,7 @@
                                                     <td class="batch-op itemnumber" data-number="itemnumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="itemnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
-                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                            <ul class="dropdown-menu" role="menu">
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&itemnumber=[% cells.cell | $raw %]"><i class="fa-fw fa-solid fa-pencil" aria-hidden="true"></i> Edit item</a></li>
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cells.cell | $raw %]"><i class="fa fa-fw fa-eye" aria-hidden="true"></i> View item</a></li>
                                                             </ul>
@@ -1194,7 +1194,7 @@
                                                     <td class="batch-op biblionumber" data-number="biblionumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="biblionumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
-                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                            <ul class="dropdown-menu" role="menu">
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit record</a></li>
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> View record</a></li>
                                                             </ul>
@@ -1204,7 +1204,7 @@
                                                     <td class="batch-op borrowernumber" data-number="borrowernumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="borrowernumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
-                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                            <ul class="dropdown-menu" role="menu">
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-eye" aria-hidden="true"></i> View patron</a></li>
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% cells.cell | $raw %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit patron</a></li>
                                                                 <li><a class="dropdown-item" target="_blank" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% cells.cell | $raw %]"><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a></li>
@@ -1215,7 +1215,7 @@
                                                     <td class="batch-op cardnumber" data-number="cardnumber">
                                                         <span class="data-plain">[% cells.cell | $raw %]</span>
                                                         <div id="cardnumber_autolink" class="btn-group dropup autolink"><a class="btn btn-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="#">[% cells.cell | $raw %] </a>
-                                                            <ul class="dropdown-menu pull-right" role="menu">
+                                                            <ul class="dropdown-menu" role="menu">
                                                                 <li><a target="_blank" href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cells.cell | $raw %]"><i class="fa fa-barcode" aria-hidden="true"></i> Check out</a></li>
                                                             </ul>
                                                         </div>

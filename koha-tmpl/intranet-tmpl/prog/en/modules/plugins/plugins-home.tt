@@ -210,7 +210,7 @@
                                                     <a class="btn btn-default btn-xs dropdown-toggle" id="pluginactions[% plugin.class | html %]" role="button" data-bs-toggle="dropdown" href="#">
                                                        Actions
                                                     </a>
-                                                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
                                                         [% IF ( CAN_user_plugins_report ) %]
                                                             [% IF plugin.can('report') %]
                                                                 <li><a class="dropdown-item" href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li>
