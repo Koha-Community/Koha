@@ -23,6 +23,7 @@ use utf8;
 use Test::More tests => 38;
 use Test::Exception;
 use Test::MockModule;
+use Test::Warn;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
 use C4::Circulation qw( AddIssue AddReturn );
@@ -410,7 +411,7 @@ subtest 'remove_from_bundle tests' => sub {
 
 subtest 'hidden_in_opac() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -435,7 +436,12 @@ subtest 'hidden_in_opac() tests' => sub {
 
     ok( $item->hidden_in_opac({ rules => $rules }), 'Rule matching itype passed, should hide' );
 
-
+    $rules = { ccode => ['FOO'] };
+    $item  = $item->ccode(undef)->store->get_from_storage;
+    warning_is {
+        $item->hidden_in_opac( { rules => $rules } )
+    }
+    undef, 'No warning from hidden_in_opac';
 
     $schema->storage->txn_rollback;
 };
