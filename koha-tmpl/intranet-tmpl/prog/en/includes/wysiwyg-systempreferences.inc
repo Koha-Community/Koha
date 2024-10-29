@@ -22,6 +22,7 @@
         branding : false,
         relative_urls : false,
         content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
+        convert_urls : false,
         editor_selector : "mce",
         menubar : "file edit view insert format tools table",
         mode : "specific_textareas",
