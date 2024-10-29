@@ -42,7 +42,7 @@ $schema->storage->txn_begin;
 
 my $new_oai_biblio = Koha::OAIServer->new(
     {
-        endpoint   => C4::Context->preference('OPACBaseURL') . '/cgi-bin/koha/oai.pl',
+        endpoint   => ( $ENV{KOHA_OPAC_URL} || C4::Context->preference('OPACBaseURL') ) . '/cgi-bin/koha/oai.pl',
         oai_set    => '',
         servername => 'my_test_1',
         dataformat => 'oai_dc',
