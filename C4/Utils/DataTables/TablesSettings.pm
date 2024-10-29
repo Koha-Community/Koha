@@ -60,16 +60,10 @@ sub get_columns {
     $columns = [
         map {
             {
-                cannot_be_toggled         => exists $_->{cannot_be_toggled}  ? $_->{cannot_be_toggled}  : 0,
-                cannot_be_modified        => exists $_->{cannot_be_modified} ? $_->{cannot_be_modified} : 0,
-                is_hidden                 => exists $_->{is_hidden}          ? $_->{is_hidden}          : 0,
-                default_save_state        => exists $_->{default_save_state} ? $_->{default_save_state} : 1,
-                default_save_state_search => exists $_->{default_save_state_search}
-                    && exists $_->{default_save_state}
-                    && $_->{default_save_state}    # We need default_save_state
-                ? $_->{default_save_state_search}
-                : 0,
-                columnname => $_->{columnname},
+                cannot_be_toggled  => exists $_->{cannot_be_toggled}  ? $_->{cannot_be_toggled}  : 0,
+                cannot_be_modified => exists $_->{cannot_be_modified} ? $_->{cannot_be_modified} : 0,
+                is_hidden          => exists $_->{is_hidden}          ? $_->{is_hidden}          : 0,
+                columnname         => $_->{columnname},
             }
         } @$columns
     ];
