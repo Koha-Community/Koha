@@ -470,14 +470,13 @@ the I<OpacHiddenItems> system preference.
 sub hidden_in_opac {
     my ( $self, $params ) = @_;
 
+    return 0 unless C4::Context->preference('OpacHiddenItemsHidesRecord');
+
     my $rules = $params->{rules} // {};
 
     my @items = $self->items->as_list;
 
     return 0 unless @items; # Do not hide if there is no item
-
-    # Ok, there are items, don't even try the rules unless OpacHiddenItemsHidesRecord
-    return 0 unless C4::Context->preference('OpacHiddenItemsHidesRecord');
 
     return !(any { !$_->hidden_in_opac({ rules => $rules }) } @items);
 }
