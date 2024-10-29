@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -488,6 +488,43 @@ subtest 'Lastseen response patron status' => sub {
         output_pref( { str => $seen_patron->lastseen(), dateonly => 1 } ),
         output_pref( { dt  => dt_from_string(), dateonly => 1 } ), 'Last seen updated if tracking patrons'
     );
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'Invalid cardnumber test response patron status' => sub {
+
+    plan tests => 1;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks      = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $cardnum    = 'nonexistentcardnumber';
+    my $sip_patron = C4::SIP::ILS::Patron->new($cardnum);
+    $findpatron = $sip_patron;
+
+    my $siprequest =
+          PATRON_STATUS_REQ
+        . 'engYYYYMMDDZZZZHHMMSS'
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $cardnum . '|'
+        . FID_PATRON_PWD
+        . PATRON_PW . '|';
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    my $server = { ils => $mocks->{ils} };
+    undef $response;
+
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login' );
+    $msg->handle_patron_status($server);
+    isnt( $response, undef, 'At least we got a response.' );
+
     $schema->storage->txn_rollback;
 
 };
