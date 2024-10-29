@@ -127,13 +127,15 @@
                 "columns": [{
                         "data": "reported_date:reporter.firstname",
                         "render": function(data, type, row, meta) {
-                            let reported = '<span class="date clearfix">' + $datetime(row.reported_date) + '</span>';
-                            reported += '<span class="reporter clearfix">' + $patron_to_html(row.reporter, {
+                            let reported = '<div class="d-flex justify-content-between align-items-start">';
+                            reported += '<span class="reporter">' + $patron_to_html(row.reporter, {
                                 display_cardnumber: false,
                                 url: true
                             }) + '</span>';
+                            reported += '<span class="date text-muted">' + $datetime(row.reported_date) + '</span>';
+                            reported += '</div>';
                             return reported;
-                        },
+                       },
                         "searchable": true,
                         "orderable": true
                     },
@@ -141,11 +143,20 @@
                         "data": "title:body",
                         "render": function(data, type, row, meta) {
                             let resolved = ( row.resolved_date ) ? true : false;
-                            let result = '<a role="button" href="#" class="detail-trigger">' + row.title + '</a>';
+                            let result = '<div class="d-flex justify-content-between align-items-start">';
+
+                            // Title link on the left
+                            result += '<a id="title_' + row.ticket_id + '" role="button" href="#" class="detail-trigger">' + row.title + '</a>';
+
+                            // Updates count on the right, if it exists
                             if (row.updates_count) {
-                                result += '<span class="pull-right"><a role="button" href="#" class="detail-trigger"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
+                                result += '<span><a role="button" href="#" class="detail-trigger"><i class="fa fa-comment" aria-hidden="true"></i> ' + row.updates_count + '</a></span>';
                             }
+
+                            // Hidden detail content
+                            result += '</div>';
                             result += '<div id="detail_' + row.ticket_id + '" style="display:none">' + row.body + '</div>';
+
                             return result;
                         },
                         "searchable": true,
@@ -166,26 +177,34 @@
                         "render": function(data, type, row, meta) {
                             let result = '';
                             if (row.resolved_date) {
+                                result += "<div>";
                                 result += _("Resolved by") + ' <span>' + $patron_to_html(row.resolver, {
                                     display_cardnumber: false,
                                     url: true
                                 }) + '</span>';
+                                result += "</div>";
                                 if (row.status) {
+                                    result += '<div>';
                                     result += ' ' + _("as") + ' ';
                                     result += row._strings.status ? escape_str(row._strings.status.str) : "";
+                                    result += '</div>';
                                 }
-                                result += '<span class="clearfix">' + $datetime(row.resolved_date) + '</span>';
+                                result += '<div>' + $datetime(row.resolved_date) + '</div>';
                             } else {
+                                result += '<div>';
                                 if (row.status) {
                                     result += row._strings.status ? escape_str(row._strings.status.str) : "";
                                 } else {
                                     result += _("Open");
                                 }
+                                result += '</div>';
                                 if (row.assignee) {
-                                    result += '<span class="clearfix">' + _("Assigned to: ") + $patron_to_html(row.assignee, {
+                                    result += '<div>';
+                                    result += _("Assigned to: ") + ' <span>' + $patron_to_html(row.assignee, {
                                         display_cardnumber: false,
                                         url: true
                                     }) + '</span>';
+                                    result += '</div>';
                                 }
                             }
                             return result;

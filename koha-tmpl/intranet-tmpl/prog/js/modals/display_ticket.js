@@ -31,22 +31,31 @@ $(document).ready(function () {
             $("#resolveTicket").show();
         }
 
+        let title = $("#title_" + ticket_id).text();
         let detail = $("#detail_" + ticket_id).text();
 
         // Display ticket details
         let display = '<div class="list-group">';
-        display += '<div class="list-group-item">';
+        display +=
+            '<div class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start">';
+        display += '<div class="ms-2 me-auto">';
+        display += '<div class="fw-bold">' + title + "</div>";
+        display += '<div class="wrapfix">' + detail + "</div>";
+        display += "</div>";
         if (assignee) {
+            display += "<span>";
             display +=
-                '<span class="pull-right"><span class="label strong">' +
+                '<label class="label strong">' +
                 __("Assignee") +
-                "</span>: " +
+                "</label>: " +
+                "<span>" +
                 assignee +
                 "</span>";
+            display += "</span>";
         }
-        display += '<span class="wrapfix">' + detail + "</span>";
         display += "</div>";
-        display += '<div id="concern-updates" class="list-group-item">';
+        display +=
+            '<div id="concern-updates" class="list-group-item list-group-item-info">';
         display += "<span>" + __("Loading updates . . .") + "</span>";
         display += "</div>";
         display += "</div>";
@@ -68,49 +77,54 @@ $(document).ready(function () {
                 data.forEach(function (item, index) {
                     if (item.public) {
                         updates +=
-                            '<div class="list-group-item list-group-item-success">';
-                        updates +=
-                            '<span class="pull-right">' +
-                            __("Public") +
-                            "</span>";
+                            '<div class="list-group-item list-group-item-success d-flex flex-column">';
                     } else {
                         updates +=
-                            '<div class="list-group-item list-group-item-warning">';
-                        updates +=
-                            '<span class="pull-right">' +
-                            __("Private") +
-                            "</span>";
+                            '<div class="list-group-item list-group-item-warning d-flex flex-column">';
                     }
+                    updates += '<div class="d-flex">';
                     updates +=
-                        '<span class="wrapfix">' + item.message + "</span>";
-                    updates +=
-                        '<span class="clearfix">' +
-                        $patron_to_html(item.user, {
-                            display_cardnumber: false,
-                            url: true,
-                        }) +
-                        " (" +
-                        $datetime(item.date) +
-                        ")";
+                        '<div class="flex-grow-1 mb-0 wrapfix">' +
+                        item.message +
+                        "</div>";
+                    updates += '<div class="d-flex flex-column ms-3 text-end">';
+                    if (item.public) {
+                        updates +=
+                            '<span class="mb-1">' + __("Public") + "</span>";
+                    } else {
+                        updates +=
+                            '<span class="mb-1">' + __("Private") + "</span>";
+                    }
                     if (item.status) {
-                        updates += '<span class="clearfix pull-right">';
+                        updates += '<span class="mb-1">';
                         updates += item._strings.status
                             ? escape_str(item._strings.status.str)
                             : "";
                         updates += "</span>";
                     }
                     if (item.assignee) {
-                        updates += '<span class="clearfix pull-right">';
+                        updates += '<span class="mb-1">';
                         updates += $patron_to_html(item.assignee, {
                             display_cardnumber: false,
                             url: true,
                         });
                         updates += "</span>";
                     }
-                    updates += "</span>";
+                    updates += "</div>";
+                    updates += "</div>";
+                    updates +=
+                        '<div class="text-end text-muted small mt-2">' +
+                        $patron_to_html(item.user, {
+                            display_cardnumber: false,
+                            url: true,
+                        }) +
+                        " (" +
+                        $datetime(item.date) +
+                        ")" +
+                        "</div>";
                     updates += "</div>";
                 });
-                updates_display.html(updates);
+                updates_display.replaceWith(updates);
             })
             .error(function () {});
 
