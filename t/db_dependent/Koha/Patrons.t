@@ -83,8 +83,6 @@ is( Koha::Patrons->search->count, $nb_of_patrons + 2, 'The 2 patrons should have
 my $retrieved_patron_1 = Koha::Patrons->find( $new_patron_1->borrowernumber );
 is( $retrieved_patron_1->cardnumber, $new_patron_1->cardnumber, 'Find a patron by borrowernumber should return the correct patron' );
 
-
-
 subtest 'library' => sub {
     plan tests => 2;
     is( $retrieved_patron_1->library->branchcode, $library->{branchcode}, 'Koha::Patron->library should return the correct library' );
@@ -1319,12 +1317,8 @@ subtest
     # group2
     #   + library21
     $nb_of_patrons = Koha::Patrons->search->count;
-    my $group_1 =
-        Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )
-        ->store;
-    my $group_2 =
-        Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )
-        ->store;
+    my $group_1    = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
+    my $group_2    = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
     my $library_11 = $builder->build( { source => 'Branch' } );
     my $library_12 = $builder->build( { source => 'Branch' } );
     my $library_21 = $builder->build( { source => 'Branch' } );
@@ -1336,16 +1330,16 @@ subtest
     Koha::Library::Group->new( { branchcode => $library_21->branchcode, parent_id => $group_2->id } )->store;
 
     my $sth =
-        C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, ?, ?)|)
-        ;
-             # 2 patrons from library_11 (group1)
-             # patron_11_1 see patron's infos from outside its group
-             # Setting flags => undef to not be considered as superlibrarian
+        C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, ?, ?)|);
+
+    # 2 patrons from library_11 (group1)
+    # patron_11_1 see patron's infos from outside its group
+    # Setting flags => undef to not be considered as superlibrarian
     my $patron_11_1 = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_11->branchcode, flags => undef, } } );
     $patron_11_1 = Koha::Patrons->find( $patron_11_1->{borrowernumber} );
     $sth->execute( $patron_11_1->borrowernumber, 4, 'edit_borrowers' );
-    $sth->execute( $patron_11_1->borrowernumber, 4,'view_borrower_infos_from_any_libraries' );
+    $sth->execute( $patron_11_1->borrowernumber, 4, 'view_borrower_infos_from_any_libraries' );
 
     # patron_11_2 can only see patron's info from its group
     my $patron_11_2 = $builder->build(
@@ -1376,12 +1370,12 @@ subtest
         };
         my @branchcodes = $patron_11_1->libraries_where_can_see_things($params);
         is_deeply(
-            \@branchcodes, [ ],
+            \@branchcodes, [],
             q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
         );
         @branchcodes = $patron_11_1->libraries_where_can_see_things($params);
         is_deeply(
-            \@branchcodes, [ ],
+            \@branchcodes, [],
             q|confirming second/cached request is the same patron_11_1 has view_borrower_infos_from_any_libraries => No restriction|
         );
 
@@ -1415,7 +1409,8 @@ subtest
         );
         $group_1->ft_limit_item_editing(1)->store();
 
-        $patron_11_2  = Koha::Patrons->find( $patron_11_2->borrowernumber );
+        $patron_11_2 = Koha::Patrons->find( $patron_11_2->borrowernumber );
+
         #FIXME We refetch the patron because library lists are cached in an extra hash key
         # in libraries_where_can_see_things
 
@@ -1425,7 +1420,7 @@ subtest
         );
 
         $sth->execute( $patron_11_2->borrowernumber, 9, 'edit_any_item' );
-        $patron_11_2  = Koha::Patrons->find( $patron_11_2->borrowernumber );
+        $patron_11_2 = Koha::Patrons->find( $patron_11_2->borrowernumber );
 
         ok(
             $patron_11_2->can_edit_items_from( $library_21->branchcode ),

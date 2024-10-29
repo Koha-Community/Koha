@@ -1818,8 +1818,8 @@ sub can_see_patrons_from {
 
     return $self->can_see_things_from(
         {
-            branchcode => $branchcode,
-            permission => 'borrowers',
+            branchcode    => $branchcode,
+            permission    => 'borrowers',
             subpermission => 'view_borrower_infos_from_any_libraries',
             group_feature => 'ft_hide_patron_info',
         }
