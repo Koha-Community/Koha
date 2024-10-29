@@ -11,19 +11,21 @@
             </div>
             <div class="modal-body">
                 <div id="concern-details"></div>
-                <fieldset>
-                    <ol>
-                        <li class="form-group">
-                            <label for="message">Update: </label>
-                            <textarea id="update_message" class="form-control" name="message"></textarea>
-                        </li>
-                        <li class="rows">
-                            <label for="public">Notify reporter: </label>
-                            <input type="checkbox" name="public" id="public">
-                            <label for="assignee_id">Change assignee: </label>
-                            <select name="assignee_id" id="assignee_id"></select>
-                        </li>
-                    </ol>
+                <fieldset class="mt-4">
+                  <div class="mb-3">
+                    <label for="message" class="form-label">Update:</label>
+                    <textarea id="update_message" class="form-control" name="message"></textarea>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <label for="assignee_id" class="me-2 mb-0">Change assignee:</label>
+                      <select name="assignee_id" id="assignee_id"></select>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" name="public" id="public">
+                      <label for="public" class="form-check-label">Notify reporter</label>
+                    </div>
+                  </div>
                 </fieldset>
             </div> <!-- /.modal-body -->
             <div class="modal-footer">
