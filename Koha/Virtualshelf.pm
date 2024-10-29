@@ -424,8 +424,8 @@ This method returns the list of publicly readable database fields for both API a
 
 sub public_read_list {
     return [
-        'created_on',  'lastmodified', 'shelfname',
-        'shelfnumber', 'public',       'sortfield',
+        'created_on',              'lastmodified', 'shelfname',
+        'shelfnumber',             'public',       'sortfield',
         'allow_change_from_owner', 'allow_change_from_others'
     ];
 }

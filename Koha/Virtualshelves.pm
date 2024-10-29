@@ -257,7 +257,7 @@ Returns a resultset of lists marked as public.
 sub filter_by_public {
     my ($self) = @_;
 
-    return $self->search({ public => 1 });
+    return $self->search( { public => 1 } );
 }
 
 =head3 filter_by_readable
@@ -272,7 +272,7 @@ sub filter_by_readable {
     my ( $self, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw("Mandatory patron_id parameter missing")
-      unless $params->{patron_id};
+        unless $params->{patron_id};
 
     return $self->search( { '-or' => { public => 1, owner => $params->{patron_id} } } );
 }

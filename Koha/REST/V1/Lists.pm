@@ -36,8 +36,10 @@ sub list_public {
 
     my $user = $c->stash('koha.user');
 
-    my $only_mine   = delete $c->param('only_mine');
-    my $only_public = delete $c->param('only_public');
+    my $only_mine   = $c->param('only_mine');
+    my $only_public = $c->param('only_public');
+
+    $c->req->params->remove('only_mine')->remove('only_public');
 
     if ( !$user && $only_mine ) {
         return $c->render(
