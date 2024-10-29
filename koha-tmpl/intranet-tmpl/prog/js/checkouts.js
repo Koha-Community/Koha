@@ -32,6 +32,24 @@ function LoadIssuesTable() {
     $('#issues-table').show();
     $('#issues-table-actions').show();
     var msg_loading = __('Loading... you may continue scanning.');
+    if (!AllowCirculate) {
+        table_settings_issues_table.columns.find(
+            c => c.columnname == "renew"
+        ).is_hidden = 42;
+        table_settings_issues_table.columns.find(
+            c => c.columnname == "checkin"
+        ).is_hidden = 1;
+    }
+    if (!ClaimReturnedLostValue) {
+        table_settings_issues_table.columns.find(
+            c => c.columnname == "claims_returned"
+        ).is_hidden = 1;
+    }
+    if (!exports_enabled) {
+        table_settings_issues_table.columns.find(
+            c => c.columnname == "export"
+        ).is_hidden = 1;
+    }
     issuesTable = KohaTable("issues-table", {
         "language":  {
             "emptyTable":  msg_loading,
@@ -224,7 +242,6 @@ function LoadIssuesTable() {
             },
             {
                 "orderable":  false,
-                "visible":  AllowCirculate ? true : false,
                 "data": function ( oObj ) {
                     var content = "";
                     var msg = "";
@@ -363,7 +380,6 @@ function LoadIssuesTable() {
             },
             {
                 "orderable":  false,
-                "visible":  AllowCirculate ? true : false,
                 "data": function ( oObj ) {
                     if ( oObj.can_renew_error == "recalled" ) {
                         return "<a href='/cgi-bin/koha/recalls/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("Recalled") + "</a>";
@@ -377,7 +393,6 @@ function LoadIssuesTable() {
                 }
             },
             {
-                "visible":  ClaimReturnedLostValue ? true : false,
                 "orderable":  false,
                 "data": function ( oObj ) {
                     let content = "";
@@ -393,7 +408,6 @@ function LoadIssuesTable() {
                 }
             },
             {
-                "visible":  exports_enabled == 1 ? true : false,
                 "orderable":  false,
                 "data": function ( oObj ) {
                     var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
