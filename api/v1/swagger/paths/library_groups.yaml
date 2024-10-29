@@ -1,0 +1,96 @@
+---
+/library_groups:
+  get:
+    x-mojo-to: LibraryGroups#list
+    operationId: listLibraryGroups
+    tags:
+      - library_groups
+    summary: List library groups
+    parameters:
+      - name: parent_id
+        in: query
+        description: Identifier for the parent group
+        required: false
+        type: integer
+      - name: branchcode
+        in: query
+        description: Branchcode included in the group
+        required: false
+        type: string
+      - name: title
+        in: query
+        description: title of the library group
+        required: false
+        type: string
+      - name: description
+        in: query
+        description: description of the library group
+        required: false
+        type: string
+      - name: ft_hide_patron_info
+        in: query
+        description: search on ft_hide_patron_info
+        required: false
+        type: integer
+      - name: ft_limit_item_editing
+        in: query
+        description: search on ft_limit_item_editing
+        required: false
+        type: integer
+      - name: ft_search_groups_opac
+        in: query
+        description: search on ft_search_groups_opac
+        required: false
+        type: integer
+      - name: ft_search_groups_staff
+        in: query
+        description: search on ft_search_groups_staff
+        required: false
+        type: integer
+      - name: ft_local_hold_group
+        in: query
+        description: search on ft_local_hold_group
+        required: false
+        type: integer
+      - name: ft_local_float_group
+        in: query
+        description: search on ft_local_float_group
+        required: false
+        type: integer
+      - $ref: "../swagger.yaml#/parameters/match"
+      - $ref: "../swagger.yaml#/parameters/order_by"
+      - $ref: "../swagger.yaml#/parameters/page"
+      - $ref: "../swagger.yaml#/parameters/per_page"
+      - $ref: "../swagger.yaml#/parameters/q_param"
+      - $ref: "../swagger.yaml#/parameters/q_body"
+      - $ref: "../swagger.yaml#/parameters/request_id_header"
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: A list of library groups
+        schema:
+          type: array
+          items:
+            $ref: "../swagger.yaml#/definitions/library_group"
+      "400":
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `invalid_query`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: |
+          Internal server error. Possible `error_code` attribute values:
+
+          * `internal_server_error`
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        catalogue: "1"

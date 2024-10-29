@@ -172,6 +172,8 @@ definitions:
     $ref: ./definitions/job.yaml
   library:
     $ref: ./definitions/library.yaml
+  library_group:
+    $ref: ./definitions/library_group.yaml
   list:
     $ref: ./definitions/list.yaml
   merge_biblios:
@@ -577,6 +579,8 @@ paths:
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1desks"
   "/libraries/{library_id}/closed_dates":
     $ref: "./paths/libraries.yaml#/~1libraries~1{library_id}~1closed_dates"
+  /library_groups:
+    $ref: ./paths/library_groups.yaml#/~1library_groups
   "/messages":
     $ref: "./paths/messages.yaml#/~1messages"
   "/messages/{message_id}":

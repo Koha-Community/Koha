@@ -1,0 +1,65 @@
+---
+type: object
+properties:
+  id:
+    type: string
+    description: internally assigned library group identifier
+    maxLength: 10
+    minLength: 1
+  title:
+    type:
+      - string
+      - "null"
+    description: Title of the library group
+  branchcode:
+    type:
+      - string
+      - "null"
+    description: Branchcode in the library group
+  description:
+    type:
+      - string
+      - "null"
+    description: the description of the library
+  parent_id:
+    type:
+      - integer
+      - "null"
+    description: identifier for the parent group
+  ft_hide_patron_info:
+    type: boolean
+    description: ft_hide_patron_info
+  ft_limit_item_editing:
+    type: boolean
+    description: ft_limit_item_editing
+  ft_search_groups_opac:
+    type: boolean
+    description: ft_search_groups_opac
+  ft_search_groups_staff:
+    type: boolean
+    description: ft_search_groups_staff
+  ft_local_hold_group:
+    type: boolean
+    description: ft_local_hold_group
+  ft_local_float_group:
+    type: boolean
+    description: ft_local_float_group
+  created_on:
+    description: date of creation
+    type:
+      - string
+      - "null"
+  updated_on:
+    description: date of update
+    type:
+      - string
+      - "null"
+additionalProperties: false
+required:
+  - id
+  - title
+  - ft_limit_item_editing
+  - ft_search_groups_opac
+  - ft_search_groups_staff
+  - ft_local_hold_group
+  - ft_local_float_group
