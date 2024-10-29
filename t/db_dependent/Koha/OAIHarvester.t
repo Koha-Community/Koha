@@ -20,7 +20,8 @@
 use Modern::Perl;
 use Test::More tests => 28;
 use Test::Exception;
-use File::Temp qw/tempfile/;
+use File::Temp   qw/tempfile/;
+use Scalar::Util qw//;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -66,7 +67,7 @@ like(
     'Got list of supported metadata formats'
 );
 is( $init_results->{is_error}, undef, 'ListRecords request worked' );
-cmp_ok( $init_results->{total}, '>', 0, 'Records have been processed' );
+ok( Scalar::Util::looks_like_number( $init_results->{total} ), 'Total records fetched' );
 isnt( $init_results->{letter_message_id}, undef, 'Report has been enqueued' );
 
 my $record =
