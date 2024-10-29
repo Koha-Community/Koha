@@ -169,6 +169,8 @@ export default {
             additionalToolbarButtons,
             defaultToolbarButtons,
             stickyToolbar: ["Form"],
+            extendedAttributesResourceType: "vendor",
+            extendedAttributesFieldGroup: "Details",
             resourceAttrs: [
                 {
                     name: "id",
@@ -620,7 +622,7 @@ export default {
 
         const tableOptions = {
             options: {
-                embed: "aliases,baskets+count,subscriptions+count,invoices+count",
+                embed: "aliases,baskets+count,subscriptions+count,invoices+count,extended_attributes,+strings",
             },
             url: baseResource.getResourceTableUrl(),
             table_settings: baseResource.vendorTableSettings,
@@ -720,6 +722,7 @@ export default {
             delete vendor.subscriptions;
             delete vendor.contracts;
             delete vendor.invoices_count;
+            delete vendor._strings;
 
             if (vendor.discount && !verifyDiscountValue(vendor.discount))
                 errors.push($__("Invalid discount value"));

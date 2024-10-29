@@ -30,7 +30,7 @@
 </head>
 
 [% marcfield_tables = ['subscription', 'aqorders'] %]
-[% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices', 'erm_licenses', 'erm_agreements', 'erm_packages'] %]
+[% searchable_tables = ['subscription', 'aqbasket', 'aqinvoices', 'erm_licenses', 'erm_agreements', 'erm_packages', 'aqbooksellers:vendor'] %]
 [% show_marcfield = marcfield_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 [% show_searchable = searchable_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
 
@@ -130,6 +130,7 @@
                         [% IF CAN_user_acquisition_order_manage %]
                             [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
                             [% WRAPPER table_option value="aqorders" %]<span>Order lines</span>[% END %]
+                            [% WRAPPER table_option value="aqbooksellers:vendor" %]<span>Vendors</span>[% END %]
                         [% END %]
                     </ul>
                 [% END %]

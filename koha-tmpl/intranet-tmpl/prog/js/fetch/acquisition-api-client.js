@@ -21,7 +21,7 @@ export class AcquisitionAPIClient {
                     endpoint: "vendors/" + id,
                     headers: {
                         "x-koha-embed":
-                            "aliases,subscriptions+count,interfaces,contacts,contracts,baskets+count,invoices+count",
+                            "aliases,subscriptions+count,interfaces,contacts,contracts,baskets+count,invoices+count,extended_attributes,+strings",
                     },
                 }),
             getAll: (query, params) =>
