@@ -117,6 +117,7 @@ if ( $op eq 'list' ) {
             backends    => $req->available_backends
         );
     } else {
+        $params->{backend} = 'Standard' if $params->{backend} eq 'FreeForm';
         my $request = Koha::ILL::Request->new
             ->load_backend($params->{backend});
 
