@@ -686,7 +686,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 }
 
                 my $biblio = Koha::Biblios->find($record_id);
-                $record = $biblio->metadata->record( { embed_items => 1 } );
+                $record = $biblio->metadata_record( { embed_items => 1 } );
 
                 push @search_engine_record_ids, $record_id;
                 push @search_engine_records,    $record;
