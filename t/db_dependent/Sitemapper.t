@@ -68,7 +68,7 @@ subtest 'Sitemapper' => sub {
 
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>http://www.mylibrary.org/sitemap0001.xml</loc>
+    <loc>http://www.mylibrary.org/sitemap_0001.xml</loc>
     <lastmod>$now</lastmod>
   </sitemap>
 </sitemapindex>
@@ -76,8 +76,8 @@ EOS
     chop $expected_content;
     is( $file_content, $expected_content, 'Its content is valid' );
 
-    $file = "$dir/sitemap0001.xml";
-    ok( -e $file, 'File sitemap0001.xml created' );
+    $file = "$dir/sitemap_0001.xml";
+    ok( -e $file, 'File sitemap_0001.xml created' );
     $file_content     = read_file($file);
     $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
@@ -105,8 +105,8 @@ EOS
     );
     $sitemapper->run( "biblionumber>=$id1" );
 
-    $file = "$dir/sitemap0001.xml";
-    ok( -e $file, 'File sitemap0001.xml with short URLs created' );
+    $file = "$dir/sitemap_0001.xml";
+    ok( -e $file, 'File sitemap_0001.xml with short URLs created' );
     $file_content     = read_file($file);
     $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
@@ -147,11 +147,11 @@ EOS
 
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>http://www.mylibrary.org/sitemap0001.xml</loc>
+    <loc>http://www.mylibrary.org/sitemap_0001.xml</loc>
     <lastmod>$now</lastmod>
   </sitemap>
   <sitemap>
-    <loc>http://www.mylibrary.org/sitemap0002.xml</loc>
+    <loc>http://www.mylibrary.org/sitemap_0002.xml</loc>
     <lastmod>$now</lastmod>
   </sitemap>
 </sitemapindex>
@@ -159,8 +159,8 @@ EOS
     chop $expected_content;
     is( $file_content, $expected_content, 'Its content is valid' );
 
-    $file = "$dir/sitemap0001.xml";
-    ok( -e $file, 'File sitemap0001.xml created' );
+    $file = "$dir/sitemap_0001.xml";
+    ok( -e $file, 'File sitemap_0001.xml created' );
 
     open my $fh, '<', $file or croak;
     my $count = 0;
@@ -170,8 +170,8 @@ EOS
     close $fh;
     is( $count, 6, 'It contains 6 URLs' );
 
-    $file = "$dir/sitemap0002.xml";
-    ok( -e $file, 'File sitemap0002.xml created' );
+    $file = "$dir/sitemap_0002.xml";
+    ok( -e $file, 'File sitemap_0002.xml created' );
 
     open $fh, '<', $file or croak;
     $count = 0;
@@ -182,7 +182,7 @@ EOS
     is( $count, 4, 'It contains 4 URLs' );
 
     # Cleanup
-    for my $file (qw/sitemapindex.xml sitemap0001.xml sitemap0002.xml/) {
+    for my $file (qw/sitemapindex.xml sitemap_0001.xml sitemap_0002.xml/) {
         unlink "$dir/$file";
     }
 };
