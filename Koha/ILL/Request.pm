@@ -403,20 +403,23 @@ sub status {
 
     my $backend_plugin = $self->get_backend_plugin($backend_name);
 
-Returns the installed I<Koha::Plugin> corresponding to the given backend_id
+Returns the installed I<Koha::Plugin> corresponding to the given backend_id or undef if no plugin is found
 
 =cut
 
 sub get_backend_plugin {
     my ( $self, $backend_id ) = @_;
 
-    my @backend_plugins = Koha::Plugins->new()->GetPlugins(
+    my $koha_plugins    = Koha::Plugins->new();
+    my @backend_plugins = $koha_plugins
+        ? Koha::Plugins->new()->GetPlugins(
         {
             method   => 'ill_backend',
             metadata => { name => $backend_id },
             all      => 1,
         }
-    );
+        )
+        : ();
 
     return $backend_plugins[0];
 }

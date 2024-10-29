@@ -113,15 +113,17 @@ Returns a list of names for all the installed ILL backend plugins.
 =cut
 
 sub get_backend_plugin_names {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    return () unless C4::Context->config("enable_plugins");
-    my @backend_plugins = Koha::Plugins->new()->GetPlugins(
+    my $koha_plugins    = Koha::Plugins->new();
+    my @backend_plugins = $koha_plugins
+        ? $koha_plugins->GetPlugins(
         {
             method => 'ill_backend',
             all    => 1
         }
-    );
+        )
+        : ();
 
     return map { $_->{metadata}->{name} } @backend_plugins;
 }
