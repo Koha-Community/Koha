@@ -843,7 +843,7 @@ sub hidden_in_opac {
 
     foreach my $field ( keys %{$rules} ) {
 
-        if ( any { $self->$field eq $_ } @{ $rules->{$field} } ) {
+        if ( any { defined $self->$field && $self->$field eq $_ } @{ $rules->{$field} } ) {
             $hidden_in_opac = 1;
             last;
         }
