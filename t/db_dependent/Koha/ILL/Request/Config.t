@@ -23,7 +23,7 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::Exception;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -487,5 +487,20 @@ subtest 'Final tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'get_backend_plugin_names() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $config = Koha::ILL::Request::Config->new;
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    is(
+        $config->get_backend_plugin_names(), 0,
+        'get_backend_plugin_names returns empty list if plugins are disabled'
+    );
+
+    $schema->storage->txn_rollback;
+};
 
 1;

@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 
 use Koha::ILL::Requests;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
@@ -126,6 +127,22 @@ subtest 'get_type_disclaimer_date() tests' => sub {
     is(
         $request->get_type_disclaimer_date, "2023-11-27T14:27:01",
         'get_type_disclaimer_date() returns the value if is set'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_backend_plugin() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+    is(
+        $request->get_backend_plugin, undef,
+        'get_backend_plugin returns undef if plugins are disabled'
     );
 
     $schema->storage->txn_rollback;
