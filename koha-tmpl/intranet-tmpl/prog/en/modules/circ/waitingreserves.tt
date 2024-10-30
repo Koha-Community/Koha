@@ -264,14 +264,25 @@
                 }
             });
 
+            function get_selected_ids(dt){
+                let selected_ids = [];
+                dt.cells(null, 0).every(function(){
+                    let checkbox = $(this.node()).find('input[type="checkbox"]');
+                    if ( checkbox.is(':checked') ) {
+                        selected_ids.push(checkbox.data('id'));
+                    }
+                })
+                return selected_ids;
+            }
+
             $('.holds_table').each(function() {
-                var table = $(this);
-                var parent = table.parents('.tab-pane');
-                var this_dt = $(this).closest('.holds_table').dataTable();
-                parent.find('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format(this_dt.$(".select_hold:checked", {"page": "all"}).length));
+                var parent = $(this).parents('.tab-pane');
+                var this_dt = $(this).DataTable();
+                let selected_ids = get_selected_ids(this_dt);
+                parent.find('.cancel_selected_holds').html(MSG_CANCEL_SELECTED.format(selected_ids.length));
                 parent.find('.cancel_selected_holds').click(function(e) {
                   e.preventDefault();
-                  if($('.select_hold:checked', table).length) {
+                  if(get_selected_ids(this_dt).length) {
                       cancel_link = $(this);
                       $('#cancelModal').modal('show');
                   }
@@ -280,26 +291,28 @@
             });
 
             $('.holds_table').on('click', '.select_hold_all', function() {
-                var table = $(this);
-                var parent = table.parents('.tab-pane');
-                var this_dt = $(this).closest('.holds_table').dataTable();
-                var all_pages = this_dt.fnGetNodes();
+                var parent = $(this).parents('.tab-pane');
+                var this_dt = $(this).closest('.holds_table').DataTable();
 
-                var all_checked = this_dt.find('.select_hold_all').prop('checked');
-                this_dt.find('.select_hold' , all_pages).prop('checked', all_checked);
+                var all_checked = $(this).closest('.select_hold_all').prop('checked');
 
-                var count = this_dt.$(".select_hold:checked", {"page": "all"}).length;
-                parent.find('.cancel_selected_holds').data('ids', this_dt.$(".select_hold:checked", {"page": "all"}).toArray().map(el => $(el).data('id'))).html(MSG_CANCEL_SELECTED.format(count));
-                localStorage.selectedWaitingHolds = JSON.stringify(this_dt.$(".select_hold:checked", {"page": "all"}).toArray().map(el => $(el).data('id')));
+                this_dt.cells(null, 0).every(function(){
+                    $(this.node()).find('input[type="checkbox"]').prop('checked', all_checked)
+                });
+
+                let selected_ids = get_selected_ids(this_dt);
+                var count = selected_ids.length;
+                parent.find('.cancel_selected_holds').data('ids', selected_ids).html(MSG_CANCEL_SELECTED.format(count));
+                localStorage.selectedWaitingHolds = JSON.stringify(selected_ids);
             });
 
             $('.holds_table').on('click', '.select_hold', function() {
-                var table = $(this);
-                var parent = table.parents('.tab-pane');
-                var this_dt = $(this).closest('.holds_table').dataTable();
-                var count = this_dt.$(".select_hold:checked", {"page": "all"}).length;
-                parent.find('.cancel_selected_holds').data('ids', this_dt.$(".select_hold:checked", {"page": "all"}).toArray().map(el => $(el).data('id'))).html(MSG_CANCEL_SELECTED.format(count));
-                localStorage.selectedWaitingHolds = JSON.stringify(this_dt.$(".select_hold:checked", {"page": "all"}).toArray().map(el => $(el).data('id')));
+                var parent = $(this).parents('.tab-pane');
+                var this_dt = $(this).closest('.holds_table').DataTable();
+                let selected_ids = get_selected_ids(this_dt);
+                var count = selected_ids.length;
+                parent.find('.cancel_selected_holds').data('ids', selected_ids).html(MSG_CANCEL_SELECTED.format(count));
+                localStorage.selectedWaitingHolds = JSON.stringify(selected_ids);
             });
 
             var hash = document.location.hash;
