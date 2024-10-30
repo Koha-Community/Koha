@@ -13,10 +13,10 @@ return {
             try {
                 $dbh->do(
                     q{
- ALTER TABLE `currency` ADD COLUMN `p_cs_precedes` tinyint(1) DEFAULT 1
+ ALTER TABLE `currency` ADD COLUMN `p_cs_precedes` tinyint(1) DEFAULT 1 AFTER p_sep_by_space
                 }
                 );
-                say_success( $out, "Added column p_cs_precedes" );
+                say_success( $out, "Added column 'currency.p_cs_precedes'" );
             } catch {
                 say_failure(
                     $out,
@@ -24,7 +24,7 @@ return {
                 );
             };
         } else {
-            say_info( $out, "Column 'currency.p_cs_precedes' already exists!" );
+            say_info( $out, "Column 'currency.p_cs_precedes' already exists" );
         }
     },
 };
