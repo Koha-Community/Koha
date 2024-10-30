@@ -149,25 +149,27 @@
                                     </p>
                                 [% END %]
 
-                                <p>
-                                    [% SET option_name = pagename _ "|" _ tablename _ "_default_save_state" %]
-                                    <label for="[% option_name | html %]" title="Save the column visibility, length of the table and order in session">Save configuration state on page change:</label>
-                                    [%- IF table_settings.default_save_state -%]
-                                        <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" checked="checked" />
-                                    [%- ELSE -%]
-                                        <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" />
-                                    [%- END -%]
-                                </p>
+                                [% IF modulename != 'opac' %]
+                                    <p>
+                                        [% SET option_name = pagename _ "|" _ tablename _ "_default_save_state" %]
+                                        <label for="[% option_name | html %]" title="Save the column visibility, length of the table and order in session">Save configuration state on page change:</label>
+                                        [%- IF table_settings.default_save_state -%]
+                                            <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" checked="checked" />
+                                        [%- ELSE -%]
+                                            <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" />
+                                        [%- END -%]
+                                    </p>
 
-                                <p>
-                                    [% SET option_name = pagename _ "|" _ tablename _ "_default_save_state_search" %]
-                                    <label for="[% option_name | html %]" title="Save the search and filtering in session">Save search state on page change:</label>
-                                    [%- IF table_settings.default_save_state_search -%]
-                                        <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" checked="checked" />
-                                    [%- ELSE -%]
-                                        <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" />
-                                    [%- END -%]
-                                </p>
+                                    <p>
+                                        [% SET option_name = pagename _ "|" _ tablename _ "_default_save_state_search" %]
+                                        <label for="[% option_name | html %]" title="Save the search and filtering in session">Save search state on page change:</label>
+                                        [%- IF table_settings.default_save_state_search -%]
+                                            <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" checked="checked" />
+                                        [%- ELSE -%]
+                                            <input type="checkbox" id="[% option_name | html %]" name="[% option_name | html %]" value="1" />
+                                        [%- END -%]
+                                    </p>
+                                [% END %]
 
                             </div>
                         [% END %]
