@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -1636,6 +1636,28 @@ sub test_renew_desensitize {
     is( $respcode, 'N', "Desensitize flag was not set for itemtype in inhouse_item_types" );
 
 }
+
+subtest 'Test  convert_nonprinting_characters' => sub {
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 1;
+    my $msg =
+        qq{64YYYY          eng20241030    115433000000000000000000000000AOtDJZ8mxoq|AAF6LO825MxxosppnEpaUQ6a|AEnzsktrzn seoGzB|BLY|CQY|BHUSD|BV0|CC807485965|BDlbbGF5qo AawLbgu5W cD3r4q KVHWEkp KMAEKo en6QWEa5 Ho12sDL5hf|PB20241030|PCTQvaTv45|PIN|AFComment 1\nComment 2\nComment 3|BEZ2f_HGLMji|BFbbV3yXQ};
+    my $server = { account => { convert_nonprinting_characters => ' -- ' } };
+
+    my $output;
+    {
+        local *STDOUT;
+        open STDOUT, '>', \$output;
+        C4::SIP::Sip::write_msg( undef, $msg, $server )
+    }
+
+    like( $output, qr/Comment 1 -- Comment 2 -- Comment 3/, "Response contains converted restriction comment" );
+
+    $schema->storage->txn_rollback;
+};
 
 # Helper routines
 
