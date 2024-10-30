@@ -31,7 +31,11 @@
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% IF CAN_user_parameters %]
+                <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+            [% ELSE %]
+                <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+            [% END %]
         [% END %]
 
         [% IF acct_form || delete_confirm %]
