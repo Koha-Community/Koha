@@ -121,7 +121,7 @@ sub new_from_file {
         if ( $num_valid && $job ) {
             $job->set( { progress => $num_valid, size => $num_valid } );
         } else {    # We must assume that something went wrong here
-            $job->set( { progress => 0, status => 'failed' } );
+            $job->set( { progress => 0, status => 'failed' } ) if $job;
         }
 
         if ($profile_id) {
