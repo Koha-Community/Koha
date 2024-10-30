@@ -1374,7 +1374,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(200)
       ->json_is({ pickup_library_id => $library_2->branchcode });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
 
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $hold->id
@@ -1382,7 +1382,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(400)
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library unchanged' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'pickup library unchanged' );
 
     # item-level hold
     $hold = Koha::Holds->find(
@@ -1404,7 +1404,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(400)
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_1->branchcode, 'pickup library unchanged' );
+    is( $hold->discard_changes->branchcode, $library_1->branchcode, 'pickup library unchanged' );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
 
@@ -1417,7 +1417,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(200)
       ->json_is({ pickup_library_id => $library_2->branchcode });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library changed' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'pickup library changed' );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
 
@@ -1427,7 +1427,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(200)
       ->json_is({ pickup_library_id => $library_2->branchcode });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'pickup library adjusted correctly' );
 
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $hold->id
@@ -1435,7 +1435,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(400)
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'invalid pickup library not used' );
 
     $t->put_ok( "//$userid:$password@/api/v1/holds/"
           . $hold->id
@@ -1445,7 +1445,7 @@ subtest 'PUT /holds/{hold_id}/pickup_location tests' => sub {
       ->status_is(400)
       ->json_is({ error => '[The supplied pickup location is not valid]' });
 
-    is( $hold->discard_changes->branchcode->branchcode, $library_2->branchcode, 'invalid pickup library not used, even if x-koha-override is passed' );
+    is( $hold->discard_changes->branchcode, $library_2->branchcode, 'invalid pickup library not used, even if x-koha-override is passed' );
 
     my $waiting_hold       = $builder->build_object( { class => 'Koha::Holds', value => { found => 'W' } } );
     my $in_processing_hold = $builder->build_object( { class => 'Koha::Holds', value => { found => 'P' } } );
