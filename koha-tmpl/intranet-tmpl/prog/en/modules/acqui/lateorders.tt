@@ -335,7 +335,7 @@
     <script>
         var late_orderst;
         function check_uncheck() {
-            var all_nodes = $(late_orderst.fnGetNodes());
+            var all_nodes = late_orderst.DataTable().rows().nodes();
             if ( $(all_nodes).find("input:checkbox[name=ordernumber]:checked").length > 0) {
                 var booksellerid = $(all_nodes).find("input:checkbox[name=ordernumber]:checked:first").attr("data-booksellerid");
                 $(all_nodes).find("input:checkbox[name=ordernumber][data-booksellerid!="+booksellerid+"]").prop('disabled', true);
@@ -370,7 +370,7 @@
 
             // Generates a dynamic link for exporting the selection's data as CSV
             $("#exportbutton, #export-csv-menu a").click(function() {
-                var all_nodes = $(late_orderst.fnGetNodes());
+                var all_nodes = late_orderst.DataTable().rows().nodes();
                 var selected = $(all_nodes).find("input[name='ordernumber']:checked");
 
                 if (selected.length == 0) {

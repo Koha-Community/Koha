@@ -481,7 +481,7 @@
 
 
             $("#continuewithoutmarkingbutton").click(function(){
-                inventorydt.fnPageChange( 'next' );
+                inventorydt.DataTable().page('next').draw('page');
                 return false;
             });
 
@@ -491,7 +491,7 @@
                     param += "|" + $(this).attr('name');
                 });
                 $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param, op: 'cud-seen', csrf_token: $('meta[name="csrf-token"]').attr("content") });
-                inventorydt.fnPageChange( 'next' );
+                inventorydt.DataTable().page('next').draw('page');
                 return false;
             });
 
