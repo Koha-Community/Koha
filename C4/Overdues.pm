@@ -288,10 +288,12 @@ sub CalcFine {
         && $amount > $issuing_rule->{overduefinescap};
 
     # This must be moved to Koha::Item (see also similar code in C4::Accounts::chargelostitem
-    $item->{replacementprice} ||= $itemtype->defaultreplacecost
-      if $itemtype
-      && ( ! defined $item->{replacementprice} || $item->{replacementprice} == 0 )
-      && C4::Context->preference("useDefaultReplacementCost");
+    if (   $itemtype
+        && ( !defined $item->{replacementprice} || $item->{replacementprice} + .0 == 0 )
+        && C4::Context->preference("useDefaultReplacementCost") )
+    {
+        $item->{replacementprice} = $itemtype->defaultreplacecost;
+    }
 
     $amount = $item->{replacementprice} if ( $issuing_rule->{cap_fine_to_replacement_price} && $item->{replacementprice} && $amount > $item->{replacementprice} );
 
