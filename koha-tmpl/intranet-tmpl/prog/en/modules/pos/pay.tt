@@ -247,7 +247,6 @@
     [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
     function moneyFormat(textObj) {
         var newValue = textObj.value;
@@ -302,7 +301,7 @@
     function fnClickAddRow( table, invoiceCode, invoiceTitle, invoicePrice ) {
       var defaultPrice = { value: invoicePrice };
       moneyFormat(defaultPrice);
-      table.fnAddData( [
+      table.row.add( [
         invoiceTitle,
         defaultPrice.value,
         1,
@@ -310,7 +309,7 @@
         '<button class="btn btn-default btn-xs drop" type="button"><i class="fa fa-trash-can"></i> ' + _("Remove") + '</button>',
         invoiceCode
         ]
-      );
+      ).draw();
     }
 
     function updateChangeValues() {
@@ -334,7 +333,7 @@
     }
 
     $(document).ready(function() {
-        var sale_table = $("#sale").dataTable($.extend(true, {}, dataTablesDefaults, {
+        let sale_table = $("#sale").dataTable($.extend(true, {}, dataTablesDefaults, {
             "paginate": false,
             "searching": false,
             "info": false,
@@ -360,45 +359,61 @@
                 "searchable": false
             }],
             "order": [],
-            "drawCallback": function (oSettings) {
-                var local = this;
-                local.$('.editable').editable( function(value, settings) {
-                    var aPos = local.fnGetPosition( this );
-                    local.fnUpdate( value, aPos[0], aPos[1], true, false );
-                    return value;
-                },{
-                    type    : 'text',
-                    pattern : "^\\d+(\.\\d{2})?$",
-                    onblur  : 'submit',
-                    width   : "8em",
-                    tooltip : _("Click to edit")
-                });
-                local.$('.editable_int').editable( function(value, settings) {
-                    var aPos = local.fnGetPosition( this );
-                    local.fnUpdate( value, aPos[0], aPos[1], true, false );
-                    return value;
-                },{
-                    type    : 'text',
-                    pattern : "[0-9]*",
-                    onblur  : 'submit',
-                    width   : "4em",
-                    tooltip : _("Click to edit")
+            "drawCallback": function() {
+                const table = this;
+
+                // Loop through each header cell to find editable columns
+                $('#example thead th').each(function(index) {
+                    let $header = $(this);
+                    let isEditable = $header.hasClass('editable') || $header.hasClass('editable_int');
+
+                    // Check if the column should be editable
+                    if (isEditable) {
+                        const inputType = $header.hasClass('editable_int') ? 'number' : 'text';
+
+                        // Apply event delegation to make the column editable
+                        $(table.table().body()).on('click', 'td:eq(' + index + ')', function () {
+                            const cell = $(this);
+                            const originalContent = cell.text();
+                            const input = $('<input>', { type: inputType, value: originalContent });
+
+                            // Replace cell content with the input
+                            cell.empty().append(input);
+                            input.focus();
+
+                            input.on('blur keyup', function(e) {
+                                if (e.type === 'blur' || e.key === 'Enter') {
+                                    const newValue = $(this).val();
+                                    cell.text(newValue); // Set the new value in the cell
+                                    const dataTable = $('#example').DataTable();
+                                    dataTable.cell(cell).data(newValue).invalidate(); // Update DataTable data
+                                }
+                            });
+                        });
+                    }
                 });
             },
-            "rowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-                var iTotal = aData[1] * aData[2];
-                this.fnUpdate( iTotal, nRow, 3, false, false );
+            "rowCallback": function( row, data ) {
+                const total = data[1] * data[2];
+                data[3] = total;
+                this.DataTable().cell(row, 3).invalidate();
             },
-            "footerCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
-                var iTotalPrice = 0;
-                for ( var i=0 ; i<aData.length ; i++ )
-                {
-                    iTotalPrice += aData[i][3]*1;
+            "footerCallback": function(tfoot, data, start, end, display) {
+                let total_price = 0;
+
+                // Loop through the data to calculate the total
+                for (let i = 0; i < data.length; i++) {
+                    total_price += parseFloat(data[i][3]) || 0;
                 }
-                iTotalPrice = iTotalPrice.format_price();
-                nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice;
-                $('#paid').val(iTotalPrice);
-                $('#paid').trigger('change');
+
+                // Format the total price (assuming `format_price` is a custom function)
+                total_price = total_price.format_price();
+
+                // Update the footer cell
+                $(tfoot).find('td').eq(1).html(total_price);
+
+                // Update a related element and trigger change
+                $('#paid').val(total_price).trigger('change');
             },
             "autoWidth": false
         }));
@@ -416,7 +431,7 @@
 
         $("#invoices").on("click", ".add_button", function(e) {
             e.preventDefault();
-            fnClickAddRow(sale_table, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
+            fnClickAddRow(sale_table.DataTable(), $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
             if($('#invoices_filter').find('input[type=search]').val() !== ''){
                 items_table.DataTable().search('').draw();
             }
