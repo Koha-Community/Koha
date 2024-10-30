@@ -1860,7 +1860,8 @@ sub can_edit_items_from {
 
 Return the list of branchcodes(!) of libraries the patron is allowed to items for.
 The branchcodes are arbitrarily returned sorted.
-We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
+We are supposing here that the object is related to the logged in patron (use of
+C4::Context::only_my_library)
 
 An empty array means no restriction, the user can edit any item.
 
@@ -1880,13 +1881,18 @@ sub libraries_where_can_edit_items {
 
 =head3 libraries_where_can_see_patrons
 
-my $libraries = $patron->libraries_where_can_see_patrons;
+  my $libraries = $patron->libraries_where_can_see_patrons;
 
-Return the list of branchcodes(!) of libraries the patron is allowed to see other patron's infos.
+Return the list of branchcodes(!) of libraries the patron is allowed to see other
+patron's infos.
+
 The branchcodes are arbitrarily returned sorted.
-We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
 
-An empty array means no restriction, the patron can see patron's infos from any libraries.
+We are supposing here that the object is related to the logged in patron (use of
+C4::Context::only_my_library)
+
+An empty array means no restriction, the patron can see patron's infos from any
+libraries.
 
 =cut
 
@@ -1904,9 +1910,17 @@ sub libraries_where_can_see_patrons {
 
 =head3 can_see_things_from
 
-my $can_see = $patron->can_see_things_from( $branchcode );
+    my $can_see = $patron->can_see_things_from(
+        {
+            branchcode    => $branchcode,
+            permission    => $permission,
+            subpermission => $subpermission,
+            group_feature => $group_feature
+        }
+    );
 
-Return true if the I<Koha::Patron> can perform some action on the given thing
+Return true if the I<Koha::Patron> can perform some action, as described by a
+permission, subpermission, group_feature combination, at the passed library.
 
 =cut
 
@@ -1962,14 +1976,25 @@ sub can_log_into {
 
 =head3 libraries_where_can_see_things
 
-    my $libraries = $patron->libraries_where_can_see_things;
+    my $libraries = $patron->libraries_where_can_see_things(
+        {
+            permission    => $permission,
+            subpermission => $subpermission,
+            group_feature => $group_feature
+        }
+    );
 
-Returns a list of libraries where an aribitarary action is allowed to be taken by the logged in librarian
-against an object based on some branchcode related to the object ( patron branchcode, item homebranch, etc ).
+Returns a list of libraries where this user is allowed to perform an action, as
+defined by a permission, subpermission, group_feature combination.
 
-We are supposing here that the object is related to the logged in librarian (use of C4::Context::only_my_library)
+We account for `IndependentBranches` and permission/subpermission assignments
+before looking into library group allowances.
 
-An empty array means no restriction, the thing can see thing's infos from any libraries.
+We are assuming here that the object is related to the logged in librarian (use
+of C4::Context::only_my_library)
+
+An empty array means no restriction, the thing can see thing's infos from any
+libraries.
 
 =cut
 
