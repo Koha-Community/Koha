@@ -7,7 +7,6 @@
 <meta name="generator" content="Koha" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="csrf-token" content="[% Koha.GenerateCSRF | $raw %]">
-[% Asset.css("lib/jquery/responsive.dataTables.min.css") | $raw %]
 [% IF ( Koha.Preference('OpacMetaDescription') ) %]
     <meta name="description" content="[% Koha.Preference('OpacMetaDescription') | html %]" />
 [% END %]
