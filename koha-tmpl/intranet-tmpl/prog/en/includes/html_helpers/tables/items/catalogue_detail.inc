@@ -494,11 +494,13 @@
 
                     if ( row.lost_status ) {
                         let lost_lib = av_lost.get(row.lost_status.toString()) || _("Unavailable (lost or missing");
-                        const hasReturnClaims = row.return_claims && row.return_claims.filter(rc => !rc.resolution).length > 0 ? true : false
                         nodes += '<span class="lost">%s</span>'.format(escape_str(lost_lib));
-                        if(hasReturnClaims) {
-                            nodes += '<span class="claimed_returned">' + _("(Claimed returned)") + '</span>';
-                        }
+                        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+                            const hasReturnClaims = row.return_claims.filter(rc => !rc.resolution).length > 0 ? true : false
+                            if(hasReturnClaims) {
+                                nodes += '<span class="claimed_returned">' + _("(Claimed returned)") + '</span>';
+                            }
+                        [% END %]
                     }
 
                     if ( row.withdrawn ) {
