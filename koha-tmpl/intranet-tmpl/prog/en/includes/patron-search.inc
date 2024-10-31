@@ -601,7 +601,7 @@
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    return data ? escape_str($date(data)) : "";
+                                    return "<span class=\"dateexpiry" + (new Date(data) < new Date() ? ' expired' : '') + "\">" + (data ? escape_str($date(data)) : '') + "</span>";
                                 }
                             }
                             [% CASE 'borrowernotes' %]
