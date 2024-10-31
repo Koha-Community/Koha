@@ -21,7 +21,7 @@ return {
             $dbh->do("UPDATE illbatches SET backend = 'Standard' where backend = 'FreeForm'");
             say_success(
                 $out,
-                "Bug 35570: Updated ILL batches from 'FreeForm' to 'Standard'"
+                "Updated ILL batches from 'FreeForm' to 'Standard'"
             );
         }
 
@@ -35,7 +35,7 @@ return {
             $dbh->do("UPDATE illrequestattributes SET backend = 'Standard' where backend = 'FreeForm'");
             say_success(
                 $out,
-                "Bug 35570: Updated ILL request attributes from 'FreeForm' to 'Standard'"
+                "Updated ILL request attributes from 'FreeForm' to 'Standard'"
             );
         }
 
@@ -49,7 +49,7 @@ return {
             $dbh->do("UPDATE illrequests SET backend = 'Standard' where backend = 'FreeForm'");
             say_success(
                 $out,
-                "Bug 35570: Updated ILL requests from 'FreeForm' to 'Standard'"
+                "Updated ILL requests from 'FreeForm' to 'Standard'"
             );
         }
 
@@ -75,7 +75,7 @@ return {
                 $reports
             );
         } else {
-            say_info( $out, "Bug 35570: Finished database update." );
+            say_info( $out, "Finished database update." );
         }
 
     },
