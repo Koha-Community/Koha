@@ -364,7 +364,7 @@ if ($branchcount) {
         and warn "Found $branchcount $overduebranch_word with first message enabled: "
         . join( ', ', map { "'$_'" } @overduebranches ), "\n";
 } else {
-    die 'No branches with active overduerules';
+    $verbose and die 'No branches with active overduerules';
 }
 
 if (@branchcodes) {
