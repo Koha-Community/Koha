@@ -2653,7 +2653,8 @@ sub queue_notice {
                 message_name => $params->{message_name}
         } );
         @message_transports = ( keys %{ $messaging_prefs->{transports} } );
-        $letter_code = $messaging_prefs->{transports}->{$message_transports[0]} unless $letter_code;
+        $letter_code = $messaging_prefs->{transports}->{ $message_transports[0] } unless $letter_code;
+        return if ( $params->{message_name} eq 'Patron_Expiry' && !$messaging_prefs );
     } else {
         @message_transports = @{$params->{message_transports}};
     }

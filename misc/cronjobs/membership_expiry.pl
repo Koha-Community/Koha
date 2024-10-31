@@ -261,39 +261,28 @@ while ( my $expiring_patron = $upcoming_mem_expires->next ) {
         next;
     }
 
-    my $messaging_prefs = C4::Members::Messaging::GetMessagingPreferences(
-        {
-            borrowernumber => $expiring_patron->borrowernumber,
-            message_name   => "Patron_Expiry",
-        }
-    );
-    my @message_transports = ( keys %{ $messaging_prefs->{transports} } );
-    my $letter_code = $messaging_prefs->{letter_code};
-
-    # Skip this patron if they don't want a notification email for card expiry
-    next if !$messaging_prefs;
-
     my $which_notice;
     if ($renew) {
         $expiring_patron->renew_account;
         $which_notice = $letter_renew;
         $count_renewed++;
     } else {
-        $which_notice = $letter_code || $letter_expiry;
+        $which_notice = $letter_expiry;
     }
 
     my $from_address  = $expiring_patron->library->from_email_address;
     my $letter_params = {
-        module      => 'members',
-        letter_code => $which_notice,
-        branchcode  => $expiring_patron->branchcode,
-        lang        => $expiring_patron->lang,
+        module         => 'members',
+        letter_code    => $which_notice,
+        branchcode     => $expiring_patron->branchcode,
+        lang           => $expiring_patron->lang,
         borrowernumber => $expiring_patron->borrowernumber,
-        tables      => {
+        tables         => {
             borrowers => $expiring_patron->borrowernumber,
             branches  => $expiring_patron->branchcode,
         },
     };
+
 
     my $sending_params = {
         letter_params => $letter_params,
