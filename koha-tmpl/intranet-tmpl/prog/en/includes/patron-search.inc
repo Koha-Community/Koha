@@ -289,9 +289,8 @@
 
             // Build the aLengthMenu
             var aLengthMenu = [
-                [% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1
+                ...new Set([[% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1])
             ];
-            jQuery.unique(aLengthMenu);
             aLengthMenu.sort(function( a, b ){
                 // Put "All" at the end
                 if ( a == -1 ) {
