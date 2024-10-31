@@ -4,7 +4,8 @@
 <!-- columns_settings.inc -->
 
 <script>
-function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
+// default_filters is not used but keeping the same constructor as kohaTable for consistency
+function KohaTable(id_selector, dt_parameters, table_settings, add_filters, default_filters, filters_options) {
     var counter = 0;
     var hidden_ids = [];
     var included_ids = [];
@@ -260,6 +261,10 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         );
     }
 
+    if ( add_filters ) {
+        dt_parameters['orderCellsTop'] = true;
+    }
+
     var table = $(selector);
 
     var new_parameters = {}
@@ -303,12 +308,12 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
     }).columns( hidden_ids ).visible( false );
 
     if ( add_filters ) {
-        _dt_add_filters(table, table_dt);
+        _dt_add_filters(table, table_dt, filters_options);
     }
 
     table_dt.on("column-visibility.dt", function(){
         if ( add_filters ) {
-            _dt_add_filters(table, table_dt);
+            _dt_add_filters(table, table_dt, filters_options);
         }
     });
 

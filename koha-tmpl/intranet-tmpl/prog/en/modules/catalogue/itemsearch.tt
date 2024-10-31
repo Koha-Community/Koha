@@ -2,6 +2,8 @@
 [% USE To %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE ItemTypes %]
 [% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [%- BLOCK form_label -%]
@@ -517,7 +519,7 @@
                 + '        </div>'
                 + '    </div>'
                 + '    <table id="results">'
-                + '      <thead>' + tr + tr + '</thead>'
+                + '      <thead>' + tr + '</thead>'
                 + '      <tbody></tbody>'
                 + '    </table>'
                 + '</div>';
@@ -568,6 +570,63 @@
 
             var params = getParams($form);
 
+            const all_libraries = [% To.json(Branches.all) | $raw %];
+            const libraries_filters = all_libraries.map(e => {
+                        e["_id"] = e["branchcode"];
+                        e["_str"] = e["branchname"];
+                        return e;
+                    });
+            const libraries_names = new Map(all_libraries.map( l => [l.branchcode, l.branchname] ));
+            const all_item_types = [% To.json(ItemTypes.Get) | $raw %];
+            const item_types_filters = all_item_types.map(e => {
+                        e["_id"] = e["itemtype"];
+                        e["_str"] = e["translated_description"];
+                        return e;
+                    });
+            const item_types_notforloan = new Map(all_item_types.map( it => [it.itemtype, it.notforloan] ));
+            const all_ccodes = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.ccode' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+            } );
+            const all_locations = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.location' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+            } );
+            const all_notforloans = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.notforloan' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+            } );
+            const all_losts = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.itemlost' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+            } );
+            const all_withdrawns = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.withdrawn' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+             } );
+            const all_damageds = [% To.json(AuthorisedValues.GetDescriptionsByKohaField({ kohafield => 'items.damaged' })) | $raw %].map( av => {
+                av._id = av.authorised_value;
+                av._str = av.lib;
+                return av;
+            } );
+
+            let filters_options = {
+                4: () => all_ccodes,
+                9: () => all_libraries,
+                10: () => all_libraries,
+                11: () => all_locations,
+                12: () => all_item_types,
+                14: () => all_notforloans,
+                15: () => all_losts,
+                16: () => all_withdrawns,
+                17: () => all_damageds,
+            };
+
             var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
             KohaTable('results' , {
                 "bKohaColumnsUseNames": true,
@@ -592,7 +651,7 @@
                 'dom': 'C<"top pager"ilpB>tr<"bottom pager"ip>',
                 'order': [[1, 'asc']],
                 'columns': [
-                    { 'name': 'checkbox', 'orderable': false },
+                    { 'name': 'checkbox', 'orderable': false, searchable: false, },
                     { 'name': 'title' },
                     { 'name': 'publicationyear' },
                     { 'name': 'publishercode' },
@@ -613,68 +672,15 @@
                     { 'name': 'issues' },
                     { 'name': 'datelastborrowed' },
                     { 'name': 'date_due' },
-                    { 'name': 'actions', 'orderable': false }
+                    { 'name': 'actions', 'orderable': false, searchable: false, }
                 ],
                 "pagingType": "full_numbers",
                 "drawCallback": function( settings ) {
                     prepSelections();
                 },
                 fixedHeader: false // There is a bug on this view
-            }, table_settings ).columnFilter({
-                'sPlaceHolder': 'head:after',
-                "aoColumns": [
-                    null,
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    [% IF ccodes.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => ccodes %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
-                    { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
-                    [% IF locations.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => locations %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    [% IF itemtypes.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemtypes %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    { 'type': 'text' },
-                    [% IF notforloans.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => notforloans %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    [% IF itemlosts.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemlosts %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    [% IF withdrawns.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => withdrawns %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    [% IF damageds.size %]
-                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => damageds %] },
-                    [% ELSE %]
-                        null,
-                    [% END %]
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    null
-                ]
-            });
+            }, table_settings, true, null, filters_options );
+
             $('#results').on('draw.dt', function (e, settings) {
                 prepSelections();
                 $('[data-bs-toggle="tooltip"]').tooltip();
