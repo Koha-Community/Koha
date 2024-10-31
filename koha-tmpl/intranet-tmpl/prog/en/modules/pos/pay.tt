@@ -333,7 +333,8 @@
     }
 
     $(document).ready(function() {
-        let sale_table = $("#sale").dataTable($.extend(true, {}, dataTablesDefaults, {
+        const sale_table = document.getElementById('sale');
+        const saleDataTable = $("#sale").DataTable($.extend(true, {}, dataTablesDefaults, {
             "paginate": false,
             "searching": false,
             "info": false,
@@ -359,44 +360,10 @@
                 "searchable": false
             }],
             "order": [],
-            "drawCallback": function() {
-                const table = this;
-
-                // Loop through each header cell to find editable columns
-                $('#example thead th').each(function(index) {
-                    let $header = $(this);
-                    let isEditable = $header.hasClass('editable') || $header.hasClass('editable_int');
-
-                    // Check if the column should be editable
-                    if (isEditable) {
-                        const inputType = $header.hasClass('editable_int') ? 'number' : 'text';
-
-                        // Apply event delegation to make the column editable
-                        $(table.table().body()).on('click', 'td:eq(' + index + ')', function () {
-                            const cell = $(this);
-                            const originalContent = cell.text();
-                            const input = $('<input>', { type: inputType, value: originalContent });
-
-                            // Replace cell content with the input
-                            cell.empty().append(input);
-                            input.focus();
-
-                            input.on('blur keyup', function(e) {
-                                if (e.type === 'blur' || e.key === 'Enter') {
-                                    const newValue = $(this).val();
-                                    cell.text(newValue); // Set the new value in the cell
-                                    const dataTable = $('#example').DataTable();
-                                    dataTable.cell(cell).data(newValue).invalidate(); // Update DataTable data
-                                }
-                            });
-                        });
-                    }
-                });
-            },
             "rowCallback": function( row, data ) {
                 const total = data[1] * data[2];
                 data[3] = total;
-                this.DataTable().cell(row, 3).invalidate();
+                saleDataTable.cell(row, 3).invalidate();
             },
             "footerCallback": function(tfoot, data, start, end, display) {
                 let total_price = 0;
@@ -419,7 +386,52 @@
         }));
 
         $("#sale").on("click", "button.drop", function(){
-                sale_table.DataTable().row($(this).parents('tr')).remove().draw(false);
+                saleDataTable.row($(this).parents('tr')).remove().draw(false);
+        });
+
+        // Set up editable columns based on header classes
+        const editableColumns = Array.from(sale_table.querySelectorAll('thead th'))
+            .map((header, index) => {
+                if (header.classList.contains('editable') || header.classList.contains('editable_int')) {
+                    return { index: index, type: header.classList.contains('editable_int') ? 'number' : 'text' };
+                }
+                return null;
+            })
+            .filter(column => column !== null); // Filter out non-editable columns
+
+        sale_table.querySelector('tbody').addEventListener('click', function (event) {
+            const cell = event.target.closest('td');
+            if (!cell) return;
+
+            const cellIndex = cell.cellIndex;
+            const editableColumn = editableColumns.find(column => column.index === cellIndex);
+            if (editableColumn) {
+                const originalContent = cell.textContent.trim();
+                const input = document.createElement('input');
+                input.type = editableColumn.type;
+                input.value = originalContent;
+                input.style.width = '8em';
+
+                // Prevent click on numeric up/down buttons from closing input
+                input.addEventListener('click', (e) => e.stopPropagation());
+
+                // Replace cell content with the input
+                cell.textContent = '';
+                cell.appendChild(input);
+                input.focus();
+
+                // Handle blur and Enter key events
+                input.addEventListener('blur', updateCell);
+                input.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') updateCell();
+                });
+
+                function updateCell() {
+                    const newValue = input.value.trim() || originalContent; // Fallback to original content
+                    cell.textContent = newValue; // Set the final value in the cell
+                    saleDataTable.cell(cell).data(newValue).invalidate().draw(false); // Update DataTable data
+                }
+            }
         });
 
         var items_table_settings = [% TablesSettings.GetTableSettings('pos', 'pay', 'invoices', 'json') | $raw %];
@@ -431,7 +443,7 @@
 
         $("#invoices").on("click", ".add_button", function(e) {
             e.preventDefault();
-            fnClickAddRow(sale_table.DataTable(), $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
+            fnClickAddRow(saleDataTable, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
             if($('#invoices_filter').find('input[type=search]').val() !== ''){
                 items_table.DataTable().search('').draw();
             }
@@ -477,12 +489,12 @@
                 });
             }
 
-            // now, process the current & fresh contents of the sale_table
+            // now, process the current & fresh contents of the saleDataTable
             if (change != undefined && change.innerHTML > 0.00 && !checked) {
                 e.preventDefault();
                 $("#confirm_change_form").modal("show");
             } else {
-                var rows = sale_table.fnGetData();
+                var rows = saleDataTable.data().toArray();
                 rows.forEach(function (row, index) {
                     var sale = {
                         code: row[5],
