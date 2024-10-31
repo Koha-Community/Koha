@@ -113,7 +113,7 @@ function get_no_additional_fields_agreement() {
         ],
         extended_attributes: [],
         _strings: {
-            "additional_field_values": []
+            additional_field_values: [],
         },
     };
 }
@@ -1055,7 +1055,9 @@ describe("Additional Fields operations", () => {
         ).as("avcategories");
 
         cy.visit("/cgi-bin/koha/erm/agreements");
-        cy.get("#agreements_list table tbody tr:first").contains("Edit").click();
+        cy.get("#agreements_list table tbody tr:first")
+            .contains("Edit")
+            .click();
         cy.wait("@get-agreement");
         cy.wait(500); // Cypress is too fast! Vue hasn't populated the form yet!
 
@@ -1122,5 +1124,4 @@ describe("Additional Fields operations", () => {
             "#agreements_add form #additional_fields label[for='additional_field_3']"
         ).should("have.length", 2);
     });
-
 });

@@ -92,12 +92,12 @@ sub add {
 
                 my $body = $c->req->json;
 
-                my $periods    = delete $body->{periods} // [];
-                my $user_roles = delete $body->{user_roles} // [];
-                my $agreement_licenses = delete $body->{agreement_licenses} // [];
+                my $periods                 = delete $body->{periods}                 // [];
+                my $user_roles              = delete $body->{user_roles}              // [];
+                my $agreement_licenses      = delete $body->{agreement_licenses}      // [];
                 my $agreement_relationships = delete $body->{agreement_relationships} // [];
-                my $documents = delete $body->{documents} // [];
-                my $extended_attributes = delete $body->{extended_attributes} // [];
+                my $documents               = delete $body->{documents}               // [];
+                my $extended_attributes     = delete $body->{extended_attributes}     // [];
 
                 my $agreement = Koha::ERM::Agreement->new_from_api($body)->store;
                 $agreement->periods($periods);
@@ -106,7 +106,8 @@ sub add {
                 $agreement->agreement_relationships($agreement_relationships);
                 $agreement->documents($documents);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $agreement->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);
@@ -180,12 +181,12 @@ sub update {
 
                 my $body = $c->req->json;
 
-                my $periods    = delete $body->{periods} // [];
-                my $user_roles = delete $body->{user_roles} // [];
-                my $agreement_licenses = delete $body->{agreement_licenses} // [];
+                my $periods                 = delete $body->{periods}                 // [];
+                my $user_roles              = delete $body->{user_roles}              // [];
+                my $agreement_licenses      = delete $body->{agreement_licenses}      // [];
                 my $agreement_relationships = delete $body->{agreement_relationships} // [];
-                my $documents = delete $body->{documents} // [];
-                my $extended_attributes = delete $body->{extended_attributes} // [];
+                my $documents               = delete $body->{documents}               // [];
+                my $extended_attributes     = delete $body->{extended_attributes}     // [];
 
                 $agreement->set_from_api($body)->store;
                 $agreement->periods($periods);
@@ -194,7 +195,8 @@ sub update {
                 $agreement->agreement_relationships($agreement_relationships);
                 $agreement->documents($documents);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $agreement->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $agreement->agreement_id);

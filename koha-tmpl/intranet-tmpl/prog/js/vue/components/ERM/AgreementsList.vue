@@ -115,7 +115,9 @@ export default {
             searchable_av_options: [],
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "user_roles,vendor,extended_attributes,+strings" },
+                options: {
+                    embed: "user_roles,vendor,extended_attributes,+strings",
+                },
                 url: () => this.table_url(),
                 table_settings: this.agreement_table_settings,
                 add_filters: true,
@@ -186,7 +188,7 @@ export default {
                 error => {}
             )
         },
-	    async getSearchableAdditionalFields() {
+        async getSearchableAdditionalFields() {
             const client = APIClient.additional_fields
             await client.additional_fields.getAll("agreement").then(
                 searchable_additional_fields => {
