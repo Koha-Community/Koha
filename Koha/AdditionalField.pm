@@ -61,6 +61,7 @@ sub to_api {
         'aqinvoices'          => 'invoice',
         'erm_licenses'        => 'license',
         'erm_agreements'      => 'agreement',
+        'erm_packages'        => 'package',
         'aqorders'            => 'order',
     };
 

@@ -52,6 +52,7 @@ sub list {
         invoice   => 'aqinvoices',
         license   => 'erm_licenses',
         agreement => 'erm_agreements',
+        package   => 'erm_packages',
         order     => 'aqorders',
     };
 

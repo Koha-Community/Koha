@@ -63,6 +63,11 @@
                         </li>
                     </ol>
                 </fieldset>
+                <AdditionalFieldsEntry
+                    resource_type="package"
+                    :additional_field_values="erm_package.extended_attributes"
+                    @additional-fields-changed="additionalFieldsChanged"
+                />
                 <EHoldingsPackageAgreements
                     :package_agreements="erm_package.package_agreements"
                 />
@@ -87,6 +92,7 @@
 <script>
 import { inject } from "vue"
 import EHoldingsPackageAgreements from "./EHoldingsLocalPackageAgreements.vue"
+import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue"
 import FormSelectVendors from "../FormSelectVendors.vue"
 import { setMessage, setError, setWarning } from "../../messages"
 import { APIClient } from "../../fetch/api-client.js"
@@ -116,6 +122,7 @@ export default {
                 created_on: null,
                 resources: null,
                 package_agreements: [],
+                extended_attributes: [],
             },
             initialized: false,
         }
@@ -172,6 +179,7 @@ export default {
             delete erm_package.vendor
             delete erm_package.resources_count
             delete erm_package.is_selected
+            delete erm_package._strings
 
             erm_package.package_agreements = erm_package.package_agreements.map(
                 ({ package_id, agreement, ...keepAttrs }) => keepAttrs
@@ -200,10 +208,14 @@ export default {
                 )
             }
         },
+        additionalFieldsChanged(additionalFieldValues) {
+            this.erm_package.extended_attributes = additionalFieldValues
+        },
     },
     components: {
         EHoldingsPackageAgreements,
         FormSelectVendors,
+        AdditionalFieldsEntry,
     },
     name: "EHoldingsEBSCOPackagesFormAdd",
 }

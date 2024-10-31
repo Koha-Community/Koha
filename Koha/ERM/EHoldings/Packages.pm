@@ -22,7 +22,7 @@ use Koha::Database;
 
 use Koha::ERM::EHoldings::Package;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects::Mixin::AdditionalFields Koha::Objects);
 
 =head1 NAME
 

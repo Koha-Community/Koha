@@ -112,7 +112,7 @@ export class ERMAPIClient extends HttpClient {
                     endpoint: "eholdings/local/packages/" + id,
                     headers: {
                         "x-koha-embed":
-                            "package_agreements,package_agreements.agreement,resources+count,vendor",
+                            "package_agreements,package_agreements.agreement,resources+count,vendor,extended_attributes,+strings",
                     },
                 }),
             getAll: (query, params) =>

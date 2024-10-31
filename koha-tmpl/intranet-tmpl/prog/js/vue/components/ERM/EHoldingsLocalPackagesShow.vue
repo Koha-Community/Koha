@@ -102,6 +102,12 @@
                     />
                 </div>
             </fieldset>
+            <AdditionalFieldsDisplay
+                resource_type="package"
+                :additional_field_values="
+                    erm_package._strings.additional_field_values
+                "
+            />
             <fieldset class="action">
                 <router-link
                     :to="{ name: 'EHoldingsLocalPackagesList' }"
@@ -120,6 +126,7 @@ import EHoldingsPackageTitlesList from "./EHoldingsLocalPackageTitlesList.vue"
 import { APIClient } from "../../fetch/api-client.js"
 import Toolbar from "../Toolbar.vue"
 import ToolbarButton from "../ToolbarButton.vue"
+import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue"
 
 export default {
     setup() {
@@ -149,6 +156,8 @@ export default {
                 created_on: null,
                 resources: null,
                 package_agreements: [],
+                extended_attributes: [],
+                _strings: [],
             },
             initialized: false,
         }
@@ -206,6 +215,7 @@ export default {
         EHoldingsPackageTitlesList,
         Toolbar,
         ToolbarButton,
+        AdditionalFieldsDisplay,
     },
     name: "EHoldingsLocalPackagesShow",
 }
