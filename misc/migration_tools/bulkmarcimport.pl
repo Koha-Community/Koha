@@ -77,45 +77,45 @@ my $localcust;
 my $marc_mod_template    = '';
 my $marc_mod_template_id = -1;
 my $skip_indexing        = 0;
-my $strict_mode;
+my $skip_bad_records;
 $| = 1;
 
 GetOptions(
-    'commit:f'          => \$commit,
-    'file:s'            => \$input_marc_file,
-    'n:f'               => \$number,
-    'o|offset:f'        => \$offset,
-    'h|help'            => \$version,
-    'd|delete'          => \$delete,
-    't|test'            => \$test_parameter,
-    's'                 => \$skip_marc8_conversion,
-    'c:s'               => \$char_encoding,
-    'v|verbose:+'       => \$verbose,
-    'fk'                => \$fk_off,
-    'm:s'               => \$format,
-    'l:s'               => \$logfile,
-    'append'            => \$append,
-    'k|keepids:s'       => \$keepids,
-    'b|biblios'         => \$biblios,
-    'a|authorities'     => \$authorities,
-    'authtypes:s'       => \$authtypes,
-    'filter=s@'         => \$filters,
-    'insert'            => \$insert,
-    'update'            => \$update,
-    'all'               => \$all,
-    'match=s@'          => \$match,
-    'i|isbn'            => \$isbn_check,
-    'x:s'               => \$sourcetag,
-    'y:s'               => \$sourcesubfield,
-    'idmap:s'           => \$idmapfl,
-    'cleanisbn!'        => \$cleanisbn,
-    'yaml:s'            => \$yamlfile,
-    'dedupbarcode'      => \$dedup_barcode,
-    'framework=s'       => \$framework,
-    'custom:s'          => \$localcust,
-    'marcmodtemplate:s' => \$marc_mod_template,
-    'si|skip_indexing'  => \$skip_indexing,
-    'st|strict'         => \$strict_mode,
+    'commit:f'            => \$commit,
+    'file:s'              => \$input_marc_file,
+    'n:f'                 => \$number,
+    'o|offset:f'          => \$offset,
+    'h|help'              => \$version,
+    'd|delete'            => \$delete,
+    't|test'              => \$test_parameter,
+    's'                   => \$skip_marc8_conversion,
+    'c:s'                 => \$char_encoding,
+    'v|verbose:+'         => \$verbose,
+    'fk'                  => \$fk_off,
+    'm:s'                 => \$format,
+    'l:s'                 => \$logfile,
+    'append'              => \$append,
+    'k|keepids:s'         => \$keepids,
+    'b|biblios'           => \$biblios,
+    'a|authorities'       => \$authorities,
+    'authtypes:s'         => \$authtypes,
+    'filter=s@'           => \$filters,
+    'insert'              => \$insert,
+    'update'              => \$update,
+    'all'                 => \$all,
+    'match=s@'            => \$match,
+    'i|isbn'              => \$isbn_check,
+    'x:s'                 => \$sourcetag,
+    'y:s'                 => \$sourcesubfield,
+    'idmap:s'             => \$idmapfl,
+    'cleanisbn!'          => \$cleanisbn,
+    'yaml:s'              => \$yamlfile,
+    'dedupbarcode'        => \$dedup_barcode,
+    'framework=s'         => \$framework,
+    'custom:s'            => \$localcust,
+    'marcmodtemplate:s'   => \$marc_mod_template,
+    'si|skip_indexing'    => \$skip_indexing,
+    'sk|skip_bad_records' => \$skip_bad_records,
 );
 
 $biblios ||= !$authorities;
@@ -343,7 +343,7 @@ RECORD: while () {
     }
     if ($record) {
 
-        if ($strict_mode) {
+        if ($skip_bad_records) {
             my $xml = $record->as_xml_record();
             eval { MARC::Record::new_from_xml( $xml, 'UTF-8', "MARC21" ); };
             if ($@) {
@@ -1045,6 +1045,12 @@ If not specified, no MARC modification templates are used (default).
 If set, do not index the imported records with Zebra or Elasticsearch.
 Use this when you plan to do a complete reindex of your data after running
 bulkmarciport. This can increase performance and avoid unnecessary load.
+
+=item B<-sk, --skip_bad_records>
+
+If set, check the validity of records before adding. If they are invalid we will
+print the output of MARC::Lint->check_record and skip them during the import. Without
+this option bad records may kill the job.
 
 =back
 
