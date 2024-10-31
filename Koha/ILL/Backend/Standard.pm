@@ -1177,10 +1177,6 @@ sub _standard_request2biblio {
         ($record) = MarcToUTF8Record( $record, $marcflavour );
     }
 
-    my $marc_isbn;
-    my $marc_author;
-    my $marc_title;
-
     if( $marcflavour eq 'MARC21' ) {
         $record->append_fields(MARC::Field->new( '020', '', '', a => $isbn )) if $isbn;
         $record->append_fields(MARC::Field->new( '100', '1', '', a => $author )) if $author;
