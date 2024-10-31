@@ -132,7 +132,7 @@ foreach my $acct (@accounts) {
                 } else {
                     mkdir "$working_dir/archive" unless -d "$working_dir/archive";
                     say sprintf "Moving file to archive: %s", $filename if $verbose;
-                    move( $full_path, "$working_dir/archive/$filename" );
+                    # move( $full_path, "$working_dir/archive/$filename" );
                 }
             } else {
                 say sprintf "Error processing file: %s", $filename        if $verbose;

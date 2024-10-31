@@ -869,7 +869,8 @@ sub parse_input_into_order_line_fields {
     my @enumchrons          = $fields->{enumchrons}   ? @{ $fields->{enumchrons} }   : ();
     my @budget_codes        = $fields->{budget_codes} ? @{ $fields->{budget_codes} } : ();
     my $c_quantity          = $fields->{c_quantity};
-    my $c_budget_code       = $fields->{c_budget_code};
+    my $c_budget            = GetBudgetByCode( $fields->{c_budget_code} );
+    my $c_budget_code       = $c_budget->{budget_id};
     my $c_discount          = $fields->{c_discount};
     my $c_sort1             = $fields->{c_sort1};
     my $c_sort2             = $fields->{c_sort2};
@@ -919,17 +920,14 @@ sub parse_input_into_order_line_fields {
         c_replacement_price      => $c_replacement_price,
         c_price                  => $c_price,
         marcrecord               => $marcrecord,
+        tags                     => $fields->{tags},
+        subfields                => $fields->{subfields},
+        field_values             => $fields->{field_values},
+        serials                  => $fields->{serials},
+        order_vendornote         => $fields->{order_vendornote},
+        order_internalnote       => $fields->{order_internalnote},
+        all_currency             => $fields->{all_currency},
     };
-
-    if ($client) {
-        $order_line_fields->{tags}               = $fields->{tags};
-        $order_line_fields->{subfields}          = $fields->{subfields};
-        $order_line_fields->{field_values}       = $fields->{field_values};
-        $order_line_fields->{serials}            = $fields->{serials};
-        $order_line_fields->{order_vendornote}   = $fields->{order_vendornote};
-        $order_line_fields->{order_internalnote} = $fields->{order_internalnote};
-        $order_line_fields->{all_currency}       = $fields->{all_currency};
-    }
 
     return $order_line_fields;
 }
@@ -962,30 +960,32 @@ sub create_items_and_generate_order_hash {
     my $itemcreation    = 0;
     my @itemnumbers;
 
-    for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
-        $itemcreation = 1;
-        my $item = Koha::Item->new(
-            {
-                biblionumber             => $fields->{biblionumber},
-                homebranch               => @{ $fields->{homebranch} }[$i],
-                holdingbranch            => @{ $fields->{holdingbranch} }[$i],
-                itemnotes_nonpublic      => @{ $fields->{itemnotes_nonpublic} }[$i],
-                itemnotes                => @{ $fields->{itemnotes} }[$i],
-                location                 => @{ $fields->{location} }[$i],
-                ccode                    => @{ $fields->{ccode} }[$i],
-                itype                    => @{ $fields->{itype} }[$i],
-                notforloan               => @{ $fields->{notforloan} }[$i],
-                uri                      => @{ $fields->{uri} }[$i],
-                copynumber               => @{ $fields->{copynumber} }[$i],
-                price                    => @{ $fields->{price} }[$i],
-                replacementprice         => @{ $fields->{replacementprice} }[$i],
-                itemcallnumber           => @{ $fields->{itemcallnumber} }[$i],
-                coded_location_qualifier => @{ $fields->{coded_location_qualifier} }[$i],
-                barcode                  => @{ $fields->{barcode} }[$i],
-                enumchron                => @{ $fields->{enumchron} }[$i],
-            }
-        )->store;
-        push( @itemnumbers, $item->itemnumber );
+    if( C4::Context->preference('AcqCreateItem') ne 'cataloguing' ) {
+        for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
+            $itemcreation = 1;
+            my $item = Koha::Item->new(
+                {
+                    biblionumber             => $fields->{biblionumber},
+                    homebranch               => @{ $fields->{homebranch} }[$i],
+                    holdingbranch            => @{ $fields->{holdingbranch} }[$i],
+                    itemnotes_nonpublic      => @{ $fields->{itemnotes_nonpublic} }[$i],
+                    itemnotes                => @{ $fields->{itemnotes} }[$i],
+                    location                 => @{ $fields->{location} }[$i],
+                    ccode                    => @{ $fields->{ccode} }[$i],
+                    itype                    => @{ $fields->{itype} }[$i],
+                    notforloan               => @{ $fields->{notforloan} }[$i],
+                    uri                      => @{ $fields->{uri} }[$i],
+                    copynumber               => @{ $fields->{copynumber} }[$i],
+                    price                    => @{ $fields->{price} }[$i],
+                    replacementprice         => @{ $fields->{replacementprice} }[$i],
+                    itemcallnumber           => @{ $fields->{itemcallnumber} }[$i],
+                    coded_location_qualifier => @{ $fields->{coded_location_qualifier} }[$i],
+                    barcode                  => @{ $fields->{barcode} }[$i],
+                    enumchron                => @{ $fields->{enumchron} }[$i],
+                }
+            )->store;
+            push( @itemnumbers, $item->itemnumber );
+        }
     }
 
     if ( $itemcreation == 1 ) {
@@ -1106,12 +1106,12 @@ sub create_items_and_generate_order_hash {
         $order->store;
 
         my $basket = Koha::Acquisition::Baskets->find($basket_id);
-        if ( $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
-            my @tags         = @{ $fields->{tags} };
-            my @subfields    = @{ $fields->{subfields} };
-            my @field_values = @{ $fields->{field_values} };
-            my @serials      = @{ $fields->{serials} };
-            my $xml          = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
+        if ( C4::Context->preference('AcqCreateItem') ne 'cataloguing' && $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
+            my $tags         = $fields->{tags} || [];
+            my $subfields    = $fields->{subfields} || [];
+            my $field_values = $fields->{field_values} || [];
+            my $serials      = $fields->{serials} || [];
+            my $xml          = TransformHtmlToXml( $tags, $subfields, $field_values );
             my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for ( my $qtyloop = 1 ; $qtyloop <= $fields->{c_quantity} ; $qtyloop++ ) {
                 my ( $biblionumber, undef, $itemnumber ) =
