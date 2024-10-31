@@ -1807,11 +1807,11 @@ CREATE TABLE `categories` (
   `change_password` tinyint(1) DEFAULT NULL COMMENT 'if patrons of this category can change their passwords in the OAPC',
   `min_password_length` smallint(6) DEFAULT NULL COMMENT 'set minimum password length for patrons in this category',
   `require_strong_password` tinyint(1) DEFAULT NULL COMMENT 'set required password strength for patrons in this category',
+  `force_password_reset_when_set_by_staff` tinyint(1) DEFAULT NULL COMMENT 'if patrons of this category are required to reset password after being created by a staff member',
   `exclude_from_local_holds_priority` tinyint(1) DEFAULT NULL COMMENT 'Exclude patrons of this category from local holds priority',
   `noissuescharge` int(11) DEFAULT NULL COMMENT 'define maximum amount outstanding before checkouts are blocked',
   `noissueschargeguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount that the guarantees of a patron in this category can have outstanding before checkouts are blocked',
   `noissueschargeguarantorswithguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount that the guarantors with guarantees of a patron in this category can have outstanding before checkouts are blocked',
-  `force_password_reset_when_set_by_staff` tinyint(1) DEFAULT NULL COMMENT 'if patrons of this category are required to reset password after being created by a staff member',
   PRIMARY KEY (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
