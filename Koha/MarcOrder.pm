@@ -849,7 +849,7 @@ sub parse_input_into_order_line_fields {
     my $fields       = $args->{fields};
     my $marcrecord   = $args->{marcrecord};
 
-    my $quantity          = $fields->{quantity} || 1;
+    my $quantity          = $fields->{quantity} || $fields->{c_quantity} || 1;
     my @homebranches      = $fields->{homebranches}      ? @{ $fields->{homebranches} }      : ();
     my @holdingbranches   = $fields->{holdingbranches}   ? @{ $fields->{holdingbranches} }   : ();
     my @itypes            = $fields->{itypes}            ? @{ $fields->{itypes} }            : ();
@@ -869,7 +869,7 @@ sub parse_input_into_order_line_fields {
     my @enumchrons          = $fields->{enumchrons}   ? @{ $fields->{enumchrons} }   : ();
     my @budget_codes        = $fields->{budget_codes} ? @{ $fields->{budget_codes} } : ();
     my $c_quantity          = $fields->{c_quantity};
-    my $c_budget_id         = $fields->{c_budget_id};
+    my $c_budget_code       = $fields->{c_budget_code};
     my $c_discount          = $fields->{c_discount};
     my $c_sort1             = $fields->{c_sort1};
     my $c_sort2             = $fields->{c_sort2};
@@ -879,9 +879,9 @@ sub parse_input_into_order_line_fields {
     # If using the cronjob, we want to default to the account budget if not mapped on the record
     if ( !$client && ( !@budget_codes || scalar(@budget_codes) == 0 ) ) {
         for ( 1 .. $quantity ) {
-            my $item_budget = GetBudgetByCode($c_budget_id);
+            my $item_budget = GetBudgetByCode($c_budget_code);
             if ($item_budget) {
-                push( @budget_codes, $item_budget );
+                push( @budget_codes, $item_budget->{budget_id} );
             } else {
                 push( @budget_codes, $budget_id );
             }
@@ -912,7 +912,7 @@ sub parse_input_into_order_line_fields {
         basket_id                => $basket_id,
         budget_id                => $budget_id,
         c_quantity               => $c_quantity,
-        c_budget_id              => $c_budget_id,
+        c_budget_code            => $c_budget_code,
         c_discount               => $c_discount,
         c_sort1                  => $c_sort1,
         c_sort2                  => $c_sort2,
@@ -996,9 +996,9 @@ sub create_items_and_generate_order_hash {
         for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
             $budget_ids[$i] = $budget_id if !$budget_ids[$i];    # Use default budget if no budget provided
             $budget_hash->{ $budget_ids[$i] }->{quantity} += 1;
-            $budget_hash->{ $budget_ids[$i] }->{price} = @{ $fields->{price} }[$i];
+            $budget_hash->{ $budget_ids[$i] }->{price} = @{ $fields->{price} }[$i] || $fields->{c_price};
             $budget_hash->{ $budget_ids[$i] }->{replacementprice} =
-                @{ $fields->{replacementprice} }[$i];
+                @{ $fields->{replacementprice} }[$i] || $fields->{c_replacement_price};
             $budget_hash->{ $budget_ids[$i] }->{itemnumbers} //= [];
             push @{ $budget_hash->{ $budget_ids[$i] }->{itemnumbers} },
                 $itemnumbers[$i];
@@ -1062,7 +1062,7 @@ sub create_items_and_generate_order_hash {
             basketno           => $basket_id,
             quantity           => $fields->{c_quantity},
             branchcode         => C4::Context->userenv()->{'branch'},
-            budget_id          => $fields->{c_budget_id},
+            budget_id          => $fields->{c_budget_code},
             uncertainprice     => 1,
             sort1              => $fields->{c_sort1},
             sort2              => $fields->{c_sort2},
@@ -1242,6 +1242,7 @@ sub _create_item_fields_from_syspref {
         c_discount                => $marc_fields_to_order->{discount},
         c_sort1                   => $marc_fields_to_order->{sort1},
         c_sort2                   => $marc_fields_to_order->{sort2},
+        c_replacement_price       => $marc_fields_to_order->{replacementprice},
     };
 
     return $item_fields;
