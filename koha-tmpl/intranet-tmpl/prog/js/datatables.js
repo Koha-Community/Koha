@@ -70,8 +70,9 @@ var dataTablesDefaults = {
         //        _dt_add_delay(dt, table_node);
         //    }
         //}
-    }
+    },
 };
+DataTable.defaults.column.orderSequence = ['asc', 'desc'];
 
 function toggledClearFilter(searchText, tableId){
     if( searchText == "" ){
