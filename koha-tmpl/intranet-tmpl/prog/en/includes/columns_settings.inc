@@ -215,7 +215,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters) {
         }
     );
 
-    if ( table_settings ) {
+    /* No other exceptions should be added here! */
+    if ( table_settings && table_settings.page != 'itemsearch' ) {
         dt_parameters["buttons"].push(
             {
                 autoClose: true,

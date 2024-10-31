@@ -149,7 +149,8 @@
                                     </p>
                                 [% END %]
 
-                                [% IF modulename != 'opac' %]
+                                [%# No other exceptions should be added here! %]
+                                [% IF modulename != 'opac' && pagename != 'itemsearch' %]
                                     <p>
                                         [% SET option_name = pagename _ "|" _ tablename _ "_default_save_state" %]
                                         <label for="[% option_name | html %]" title="Save the column visibility, length of the table and order in session">Save configuration state on page change:</label>
