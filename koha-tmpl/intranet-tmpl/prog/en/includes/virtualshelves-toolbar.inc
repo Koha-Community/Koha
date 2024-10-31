@@ -17,7 +17,7 @@
                 <li><a class="dropdown-item" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
                 <li>
                     [% INCLUDE 'csrf-token.inc' %]
-                    <a class="submit-form-link dropdown-item" href="#" data-shelfnumber="[% shelf.shelfnumber | html %]" data-method="post" data-action="shelves.pl" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this list?') | html %]">Delete List</a>
+                    <a class="submit-form-link dropdown-item" href="#" data-shelfnumber="[% shelf.shelfnumber | html %]" data-method="post" data-action="shelves.pl" data-op="cud-delete" data-confirmation-msg="[% t('Are you sure you want to delete this list?') | html %]">Delete list</a>
                </li>
             </ul>
         </div>
