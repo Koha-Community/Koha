@@ -13,7 +13,7 @@ return {
 VALUES ('ForcePasswordResetWhenSetByStaff', '0', NULL,'Force a staff created patron account to reset its password after its first OPAC login.', 'YesNo')
         }
         );
-        say $out "Added new system preference 'ForcePasswordResetWhenSetByStaff'";
+        say_success( $out, "Added new system preference 'ForcePasswordResetWhenSetByStaff'" );
 
         if ( !column_exists( 'categories', 'force_password_reset_when_set_by_staff' ) ) {
             $dbh->do(
@@ -21,7 +21,7 @@ VALUES ('ForcePasswordResetWhenSetByStaff', '0', NULL,'Force a staff created pat
             );
         }
 
-        say $out "Added column to categories 'force_password_reset_when_set_by_staff'";
+        say_success( $out, "Added column 'categories.force_password_reset_when_set_by_staff'" );
 
     },
 };
