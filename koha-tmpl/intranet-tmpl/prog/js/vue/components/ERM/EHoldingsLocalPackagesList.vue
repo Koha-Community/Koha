@@ -134,7 +134,7 @@ export default {
                 error => {}
             )
         },
-	    async getSearchableAdditionalFields() {
+        async getSearchableAdditionalFields() {
             const client = APIClient.additional_fields
             await client.additional_fields.getAll("package").then(
                 searchable_additional_fields => {

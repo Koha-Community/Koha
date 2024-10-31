@@ -87,14 +87,15 @@ sub add {
 
                 my $body = $c->req->json;
 
-                my $package_agreements = delete $body->{package_agreements} // [];
+                my $package_agreements  = delete $body->{package_agreements}  // [];
                 my $extended_attributes = delete $body->{extended_attributes} // [];
                 delete $body->{external_id} unless $body->{external_id};
 
                 my $package = Koha::ERM::EHoldings::Package->new_from_api($body)->store;
                 $package->package_agreements($package_agreements);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $package->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);
@@ -163,7 +164,7 @@ sub update {
 
                 my $body = $c->req->json;
 
-                my $package_agreements = delete $body->{package_agreements} // [];
+                my $package_agreements  = delete $body->{package_agreements}  // [];
                 my $extended_attributes = delete $body->{extended_attributes} // [];
                 delete $body->{external_id} unless $body->{external_id};
 
@@ -173,7 +174,8 @@ sub update {
                 # ie. It's coming from EBSCO and we don't have local data linked to it
                 $package->package_agreements($package_agreements);
 
-                my @extended_attributes = map { {'id' => $_->{field_id}, 'value' => $_->{value}} } @{$extended_attributes};
+                my @extended_attributes =
+                    map { { 'id' => $_->{field_id}, 'value' => $_->{value} } } @{$extended_attributes};
                 $package->extended_attributes( \@extended_attributes );
 
                 $c->res->headers->location($c->req->url->to_string . '/' . $package->package_id);

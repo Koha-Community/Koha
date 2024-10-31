@@ -269,7 +269,7 @@ function get_no_additional_fields_package() {
         vendor: [cy.get_vendors_to_relate()[0]],
         extended_attributes: [],
         _strings: {
-            "additional_field_values": []
+            additional_field_values: [],
         },
     };
 }
@@ -1274,7 +1274,8 @@ describe("Additional Fields operations", () => {
     it("Additional Fields display - Table (eHoldings packages)", () => {
         let eholdings_package = get_package();
         let eholdings_packages = [eholdings_package];
-        let eholdings_package_additional_fields = get_packages_additional_fields();
+        let eholdings_package_additional_fields =
+            get_packages_additional_fields();
         let av_cats = get_av_cats();
 
         cy.intercept("GET", "/api/v1/extended_attribute_types*", {
@@ -1290,7 +1291,11 @@ describe("Additional Fields operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", eholdings_package);
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            eholdings_package
+        );
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
         cy.get("#packages_list").contains("Showing 1 to 1 of 1 entries");
 
@@ -1318,7 +1323,8 @@ describe("Additional Fields operations", () => {
         let eholdings_package = get_package();
         let eholdings_packages = [eholdings_package];
         let vendors = cy.get_vendors_to_relate();
-        let eholdings_package_additional_fields = get_packages_additional_fields();
+        let eholdings_package_additional_fields =
+            get_packages_additional_fields();
         let av_cats = get_av_cats();
 
         // Click the 'Edit' button from the list
@@ -1330,9 +1336,11 @@ describe("Additional Fields operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", empty_eholdings_package).as(
-            "get-empty-eholdings-package"
-        );
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            empty_eholdings_package
+        ).as("get-empty-eholdings-package");
 
         //Intercept vendors request
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
@@ -1368,9 +1376,11 @@ describe("Additional Fields operations", () => {
             }
         ).as("avcategories");
 
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", eholdings_package).as(
-            "get-eholdings-package"
-        );
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            eholdings_package
+        ).as("get-eholdings-package");
 
         // There are additional fields, fieldset should exist
         cy.visit("/cgi-bin/koha/erm/eholdings/local/packages");
@@ -1437,7 +1447,8 @@ describe("Additional Fields operations", () => {
 
     it("Additional Fields entry - Add (eHoldings packages)", () => {
         let vendors = cy.get_vendors_to_relate();
-        let eholdings_package_additional_fields = get_packages_additional_fields();
+        let eholdings_package_additional_fields =
+            get_packages_additional_fields();
         let av_cats = get_av_cats();
 
         //Intercept vendors request
@@ -1551,7 +1562,8 @@ describe("Additional Fields operations", () => {
         let eholdings_package = get_package();
         let eholdings_packages = [eholdings_package];
         let vendors = cy.get_vendors_to_relate();
-        let eholdings_package_additional_fields = get_packages_additional_fields();
+        let eholdings_package_additional_fields =
+            get_packages_additional_fields();
         let av_cats = get_av_cats();
 
         // Click the 'Edit' button from the list
@@ -1563,9 +1575,11 @@ describe("Additional Fields operations", () => {
                 "X-Total-Count": "1",
             },
         });
-        cy.intercept("GET", "/api/v1/erm/eholdings/local/packages/*", eholdings_package).as(
-            "get-eholdings-package"
-        );
+        cy.intercept(
+            "GET",
+            "/api/v1/erm/eholdings/local/packages/*",
+            eholdings_package
+        ).as("get-eholdings-package");
 
         //Intercept vendors request
         cy.intercept("GET", "/api/v1/acquisitions/vendors*", {
@@ -1615,14 +1629,20 @@ describe("Additional Fields operations", () => {
         )
             .parent()
             .children("input")
-            .should("have.value", eholdings_package.extended_attributes[2].value);
+            .should(
+                "have.value",
+                eholdings_package.extended_attributes[2].value
+            );
 
         cy.get(
             "#packages_add form #additional_fields label[for='additional_field_3']"
         )
             .parent()
             .children("input")
-            .should("have.value", eholdings_package.extended_attributes[3].value);
+            .should(
+                "have.value",
+                eholdings_package.extended_attributes[3].value
+            );
 
         cy.get("#additional_fields #additional_field_4 .vs__selected").contains(
             get_description_from_av_value(
@@ -1659,5 +1679,4 @@ describe("Additional Fields operations", () => {
             "#packages_add form #additional_fields label[for='additional_field_3']"
         ).should("have.length", 2);
     });
-
 });
