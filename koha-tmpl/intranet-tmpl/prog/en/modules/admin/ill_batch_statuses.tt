@@ -134,7 +134,7 @@
                                         <td class="actions">
                                             <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=add_form&amp;code=[% status.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
                                             [% IF !status.is_system %]
-                                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/ill_batch_statuses.pl?op=delete&amp;code=[% status.code | uri %]"><i class="fa fa-delete"></i> Delete</a>
+                                            <a class="btn btn-default btn-xs submit-form-link" href="#" data-action="/cgi-bin/koha/admin/ill_batch_statuses.pl" data-method="post" data-op="cud-delete" data-code="[% status.code | html %]"><i class="fa fa-delete"></i> Delete</a>
                                             [% END %]
                                         </td>
                                     </tr>
@@ -160,6 +160,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
 [% END %]
 
