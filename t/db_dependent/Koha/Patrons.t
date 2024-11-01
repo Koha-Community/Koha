@@ -1322,12 +1322,15 @@ subtest
     my $library_11 = $builder->build( { source => 'Branch' } );
     my $library_12 = $builder->build( { source => 'Branch' } );
     my $library_21 = $builder->build( { source => 'Branch' } );
+    my $library_31 = $builder->build( { source => 'Branch' } );
     $library_11 = Koha::Libraries->find( $library_11->{branchcode} );
     $library_12 = Koha::Libraries->find( $library_12->{branchcode} );
     $library_21 = Koha::Libraries->find( $library_21->{branchcode} );
+    $library_31 = Koha::Libraries->find( $library_31->{branchcode} );
     Koha::Library::Group->new( { branchcode => $library_11->branchcode, parent_id => $group_1->id } )->store;
     Koha::Library::Group->new( { branchcode => $library_12->branchcode, parent_id => $group_1->id } )->store;
     Koha::Library::Group->new( { branchcode => $library_21->branchcode, parent_id => $group_2->id } )->store;
+    # Library 31, not in any group
 
     my $sth =
         C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, ?, ?)|);
@@ -1358,6 +1361,12 @@ subtest
         { source => 'Borrower', value => { branchcode => $library_21->branchcode, flags => undef, } } );
     $patron_21 = Koha::Patrons->find( $patron_21->{borrowernumber} );
     $sth->execute( $patron_21->borrowernumber, 4, 'edit_borrowers' );
+
+    # 1 patron from library_31 (no group) can only see patron's info from its library
+    my $patron_31 = $builder->build(
+        { source => 'Borrower', value => { branchcode => $library_31->branchcode, flags => undef, } } );
+    $patron_31 = Koha::Patrons->find( $patron_31->{borrowernumber} );
+    $sth->execute( $patron_31->borrowernumber, 4, 'edit_borrowers' );
 
     # Pfiou, we can start now!
     subtest 'libraries_where_can_see_things' => sub {
@@ -1430,7 +1439,7 @@ subtest
     };
 
     subtest 'libraries_where_can_see_patrons' => sub {
-        plan tests => 3;
+        plan tests => 4;
 
         my @branchcodes;
 
@@ -1450,6 +1459,13 @@ subtest
         is_deeply(
             \@branchcodes, [ $library_21->branchcode ],
             q|patron_21 has not view_borrower_infos_from_any_libraries => Can only see patron's from its group|
+        );
+
+        t::lib::Mocks::mock_userenv( { patron => $patron_31 } );
+        @branchcodes = $patron_31->libraries_where_can_see_patrons;
+        is_deeply(
+            \@branchcodes, [ $library_31->branchcode ],
+            q|patron_31 has not view_borrower_infos_from_any_libraries => Can only see patron's from its library that is not in a group|
         );
     };
     subtest 'can_see_patron_infos' => sub {
@@ -1475,7 +1491,7 @@ subtest
 
         t::lib::Mocks::mock_userenv( { patron => $patron_11_1 } );
         $patron_11_1 = Koha::Patrons->find( $patron_11_1->borrowernumber );
-        my $total_number_of_patrons = $nb_of_patrons + 4;    #we added four in these tests
+        my $total_number_of_patrons = $nb_of_patrons + 5;    #we added five in these tests
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons' );
         is(
             Koha::Patrons->search_limited->count, $total_number_of_patrons,
@@ -1502,6 +1518,7 @@ subtest
     $patron_11_2->delete;
     $patron_12->delete;
     $patron_21->delete;
+    $patron_31->delete;
     };
 
 subtest 'account_locked' => sub {

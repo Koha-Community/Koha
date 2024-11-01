@@ -70,8 +70,8 @@ is( $retrieved_review_1_1->review, $new_review_1_1->review, 'Find a review by id
 
 subtest 'search_limited' => sub {
     plan tests => 2;
-    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
-    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1  } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1  } )->store;
     Koha::Library::Group->new({ parent_id => $group_1->id,  branchcode => $patron_1->branchcode })->store();
     Koha::Library::Group->new({ parent_id => $group_2->id,  branchcode => $patron_2->branchcode })->store();
     t::lib::Mocks::mock_userenv( { patron => $patron_1 } );

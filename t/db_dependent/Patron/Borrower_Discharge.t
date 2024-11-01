@@ -154,8 +154,8 @@ is( ref(Koha::Patron::Discharge::request({ borrowernumber => $patron->borrowernu
 subtest 'search_limited' => sub {
     plan tests => 4;
     $dbh->do(q|DELETE FROM discharges|);
-    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
-    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
     # $patron and $patron2 are from the same library, $patron3 from another one
     # Logged in user is $patron, superlibrarian
     t::lib::Mocks::mock_userenv({ patron => $patron });

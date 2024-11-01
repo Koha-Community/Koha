@@ -2041,8 +2041,9 @@ sub libraries_where_can_see_things {
 
                     }
                 }
+            } else {
+                push @restricted_branchcodes, $self->branchcode;
             }
-
         }
     }
 
