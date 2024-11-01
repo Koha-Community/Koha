@@ -650,7 +650,7 @@ subtest 'objects.search helper, search_limited() tests' => sub {
     my $t = Test::Mojo->new;
 
     my $mocked_patron = Test::MockModule->new('Koha::Patron');
-    $mocked_patron->mock( 'libraries_where_can_see_patrons', sub
+    $mocked_patron->mock( 'libraries_where_can_see_things', sub
         {
             return @libraries_where_can_see_patrons;
         }
