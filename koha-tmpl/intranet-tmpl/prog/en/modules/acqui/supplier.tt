@@ -535,12 +535,6 @@
     [% Asset.js("js/acq.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        function confirm_deletion() {
-            if (confirm(_("Confirm deletion of this vendor ?"))) {
-                window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&op=delete";
-            }
-        }
-
         function add_contact() {
             var new_contact = $('#contact-template').clone();
             var timestamp = new Date().getTime();
