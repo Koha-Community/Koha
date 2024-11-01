@@ -113,9 +113,9 @@ if ($authid) {
     # Manual (online ed., 1.0.0, 2023), pp. 350, 363, 385.
     if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         my $isnifield    = $record->field('010');
-        my $isnisubfield = $isnifield->subfield('a') if defined $isnifield;
-        my $isninumber   = $isnisubfield
-            if defined $isnisubfield && ( $auth_type->auth_tag_to_report =~ /^(200|210|220)$/ );
+        my $isnisubfield = $isnifield ? $isnifield->subfield('a') : undef;
+        my $isninumber =
+            defined $isnisubfield && ( $auth_type->auth_tag_to_report =~ /^(200|210|220)$/ ) ? $isnisubfield : undef;
         push( @subfield_loop, { marc_subfield => 'o', marc_values => $isninumber } ) if defined $isninumber;
     }
 
