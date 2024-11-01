@@ -8,13 +8,15 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(
-            q{
-            ALTER TABLE itemtypes ADD IF NOT EXISTS bookable INT(1) DEFAULT 0 AFTER automatic_checkin
-        }
-        );
+        if ( !column_exists( 'itemtypes', 'bookable' ) ) {
+            $dbh->do(
+                q{
+                ALTER TABLE itemtypes ADD COLUMN bookable INT(1) DEFAULT 0 AFTER automatic_checkin
+            }
+            );
 
-        say_success( $out, "Added column 'itemtypes.bookable'" );
+            say_success( $out, "Added column 'itemtypes.bookable'" );
+        }
 
         $dbh->do(
             q{
