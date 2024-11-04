@@ -521,19 +521,20 @@
           </li>
         [% END %]
         <li class="radio">
-
-        <label for="show_mine">Show my funds only:</label>
-            [% IF ( show_mine ) %]
-                <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" id="show_mine"  name="show_mine" value="1" />
-        [% END %]
+            <label for="show_mine">
+                [% IF ( show_mine ) %]
+                    <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="show_mine"  name="show_mine" value="1" />
+                [% END %]
+                Show my funds only
+            </label>
         </li>
         </ol>
     </fieldset>
     <fieldset class="action">
         <input type="hidden" name="op" value="list" />
-        <input type="submit" class="submit" name="filter" value="Go" />
+        <input type="submit" class="btn btn-primary" name="filter" value="Go" />
     </fieldset>
 </form>[% END %]
 

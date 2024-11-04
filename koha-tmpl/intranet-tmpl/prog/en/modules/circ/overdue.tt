@@ -172,12 +172,14 @@
     <fieldset><legend>Date due:</legend>
         <ol>
             <li class="radio">
-                <label for="showall">Show any items currently checked out:</label>
-                [% IF ( showall ) %]
+                <label for="showall">
+                    [% IF ( showall ) %]
                         <input type="checkbox" id="showall" name="showall" value="show" checked="checked" />
-                [% ELSE %]
-                    <input type="checkbox" id="showall" name="showall" value="show" />
-                [% END %]
+                    [% ELSE %]
+                        <input type="checkbox" id="showall" name="showall" value="show" />
+                    [% END %]
+                    Show any items currently checked out
+                </label>
             </li>
 
             <li class="date_due_filter">

@@ -53,8 +53,10 @@
                 </li>
                 [% IF Koha.Preference( 'RoutingSerials' ) %]
                     <li class="local">
-                        <label for="routinglist">Has routing list:</label>
-                        <input type="checkbox" id="routinglist" name="routinglist" />
+                        <label for="routinglist">
+                            <input type="checkbox" id="routinglist" name="routinglist" />
+                            Has routing list
+                        </label>
                     </li>
                 [% END %]
 

@@ -1245,12 +1245,14 @@
                                     <div id="filter_archived_information">
                                         <ol>
                                             <li>
-                                                <label for="archived" style="display: inline;">Include archived:</label>
-                                                [% IF filter_archived %]
-                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
-                                                [% ELSE %]
-                                                    <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
-                                                [% END %]
+                                                <label for="archived">
+                                                    [% IF filter_archived %]
+                                                        <input type="checkbox" id="archived" value="1" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" id="archived" value="1" name="filter_archived" title="Include archived suggestions in the search" />
+                                                    [% END %]
+                                                    Include archived
+                                                </label>
                                             </li>
                                         </ol>
                                     </div>
