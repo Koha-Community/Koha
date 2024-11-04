@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
             '<input type="text" id="custom-value" name="custom_value"> '+
             '<button type="button" class="btn btn-danger btn-sm ' +
             'delete-new-field">' +
-            '<span class="fa fa-delete">' +
-            '</span>Delete</button></li>';
+            '<span class="fa fa-trash">' +
+            '</span> '+__('Delete')+'</button></li>';
         $('#standard-fields').append(row);
     });
     $('#standard-fields').on('click', '.delete-new-field',
