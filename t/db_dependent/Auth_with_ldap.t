@@ -276,10 +276,11 @@ subtest 'checkpw_ldap tests' => sub {
         $welcome   = 0;
 
         # replicate testing with checkpw
+        my $time_now = dt_from_string()->ymd . ' ' . dt_from_string()->hms;
         C4::Auth::checkpw( 'hola', password => 'hey' );
         my $patron_replicated_from_auth = Koha::Patrons->search( { userid => 'hola' } )->next;
         is(
-            $patron_replicated_from_auth->updated_on, dt_from_string()->ymd . ' ' . dt_from_string()->hms,
+            $patron_replicated_from_auth->updated_on, $time_now,
             "updated_on correctly saved on newly created user"
         );
 
