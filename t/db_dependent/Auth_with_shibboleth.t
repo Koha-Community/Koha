@@ -309,6 +309,7 @@ subtest "checkpw_shib tests" => sub {
     $ENV{'emailpro'} = 'me@myemail.com';
     $ENV{branchcode} = $library->branchcode;      # needed since T::D::C does no longer hides the FK constraint
 
+    my $time_now = dt_from_string()->ymd . ' ' . dt_from_string()->hms;
     checkpw($shib_login);
     ok my $new_user_autocreated = $schema->resultset('Borrower')->search( { 'userid' => 'test43210' }, { rows => 1 } ),
         "new user found";
@@ -316,7 +317,7 @@ subtest "checkpw_shib tests" => sub {
     my $rec_autocreated = $new_user_autocreated->next;
     is_deeply(
         [ map { $rec_autocreated->$_ } qw/updated_on/ ],
-        [ dt_from_string()->ymd . ' ' . dt_from_string()->hms ],
+        [$time_now],
         'updated_on correctly saved on newly created user'
     );
 };
