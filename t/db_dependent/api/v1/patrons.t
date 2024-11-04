@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 22;
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
@@ -265,7 +265,7 @@ subtest 'get() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 9;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
 
