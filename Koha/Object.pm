@@ -210,6 +210,7 @@ sub store {
                     property => $property =~ /(\w+\.\w+)$/
                     ? $1
                     : $property,    # results in table.column without quotes or backtics
+                    value => $self->$property,
                 ) if $type eq 'enum';
             }
         }
