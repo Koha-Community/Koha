@@ -105,10 +105,10 @@
                         [% END %]
                     [% END %]
                 </ol>
-                <fieldset class="action">
-                    <input type="submit" class="btn btn-primary" value="Search" />
-                    <input type="button" value="Clear" class="btn btn-default clear_search" />
-                </fieldset>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" class="btn btn-primary" value="Search" />
+                <input type="button" value="Clear" class="btn btn-default clear_search" />
             </fieldset>
         </form>
     </aside>

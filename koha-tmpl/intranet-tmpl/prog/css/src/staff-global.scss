@@ -434,16 +434,8 @@ aside {
 
             & + .action {
                 background-color: #FFF;
-                display: flex;
                 margin-left: 0;
                 padding: 1rem;
-
-                input,
-                button,
-                a {
-                    display: block;
-                    flex-grow: 1;
-                }
             }
         }
     }
@@ -4803,6 +4795,29 @@ div .suggestion_note {
 
     .patroninfo-container {
         flex-direction: column;
+    }
+
+    aside {
+        fieldset {
+            &.brief {
+                & + .action {
+                    display: flex;
+                    gap: .5rem;
+
+                    input,
+                    button,
+                    a {
+                        display: block;
+                        flex-grow: 1;
+
+                        &.clear_search {
+                            flex-grow: 0;
+                            flex-shrink: 1;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

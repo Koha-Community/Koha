@@ -608,7 +608,7 @@ $(document).ready(function() {
     populateBackendFilter();
 
     // Clear all filters
-    $('#clear_search').click(function() {
+    $('.clear_search').click(function() {
         clearSearch();
     });
 
