@@ -2694,8 +2694,8 @@ subtest 'preferred_name' => sub {
 
     $schema->storage->txn_begin;
 
-    my $tmp_patron      = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $patron_data     = $tmp_patron->unblessed;
+    my $tmp_patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_data = $tmp_patron->unblessed;
     $tmp_patron->delete;
     delete $patron_data->{borrowernumber};
     delete $patron_data->{preferred_name};
@@ -2707,7 +2707,7 @@ subtest 'preferred_name' => sub {
         }
     )->store;
 
-    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on creation when not defined");
+    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on creation when not defined" );
 
     $patron->delete;
 
@@ -2720,12 +2720,12 @@ subtest 'preferred_name' => sub {
         }
     )->store;
 
-    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on creation when empty string");
+    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on creation when empty string" );
 
     $patron->delete;
 
     $patron_data->{preferred_name} = "Preferred";
-    $patron_data->{firstname} = "Not Preferred";
+    $patron_data->{firstname}      = "Not Preferred";
 
     $patron = Koha::Patron->new(
 
@@ -2734,15 +2734,15 @@ subtest 'preferred_name' => sub {
         }
     )->store;
 
-    is( $patron->preferred_name, "Preferred", "Preferred name set when passed on creation");
+    is( $patron->preferred_name, "Preferred", "Preferred name set when passed on creation" );
 
     $patron->preferred_name("")->store;
-    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on update when empty string");
+    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on update when empty string" );
 
     $patron->preferred_name(undef)->store();
-    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on update when undef");
+    is( $patron->preferred_name, $patron->firstname, "Preferred name set to first name on update when undef" );
 
     $patron->preferred_name("Preferred again")->store();
-    is( $patron->preferred_name, "Preferred again", "Preferred name set on update when passed");
+    is( $patron->preferred_name, "Preferred again", "Preferred name set on update when passed" );
 
 };
