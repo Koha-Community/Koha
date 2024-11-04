@@ -1,33 +1,12 @@
 <fieldset id="dvd-standard-fieldset" class="rows">
     <legend>DVD details</legend>
-    <ol id="publication-standard-fields">
-        <li>
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title" value="[% whole.value.other.title | html %]" />
-        </li>
-        <li>
-            <label for="author">Author:</label>
-            <input type="text" name="author" id="author" value="[% whole.value.other.author | html %]" />
-        </li>
-        <li>
-            <label for="studio">Studio:</label>
-            <input type="text" name="studio" id="studio" value="[% whole.value.other.studio | html %]" />
-        </li>
-        <li>
-            <label for="genre">Genre:</label>
-            <input type="text" name="genre" id="genre" value="[% whole.value.other.genre | html %]" />
-        </li>
-        <li>
-            <label for="year">Year:</label>
-            <input type="text" name="year" id="year" value="[% whole.value.other.year | html %]" />
-        </li>
-        <li>
-            <label for="format">Format:</label>
-            <input type="text" name="format" id="format" value="[% whole.value.other.format | html %]" />
-        </li>
-        <li>
-            <label for="language">Language:</label>
-            <input type="text" name="language" id="language" value="[% whole.value.other.language | html %]" />
-        </li>
+    <ol id="dvd-standard-fields">
+        [% PROCESS ill_text_input_field id = 'title' label = t('Title') value = whole.value.other.title %]
+        [% PROCESS ill_text_input_field id = 'author' label = t('Author') value = whole.value.other.author %]
+        [% PROCESS ill_text_input_field id = 'studio' label = t('Studio') value = whole.value.other.studio %]
+        [% PROCESS ill_text_input_field id = 'genre' label = t('Genre') value = whole.value.other.genre %]
+        [% PROCESS ill_text_input_field id = 'year' label = t('Year') value = whole.value.other.year %]
+        [% PROCESS ill_text_input_field id = 'format' label = t('Format') value = whole.value.other.format %]
+        [% PROCESS ill_text_input_field id = 'language' label = t('Language') value = whole.value.other.language %]
     </ol>
 </fieldset>
