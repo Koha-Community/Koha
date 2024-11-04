@@ -73,7 +73,7 @@
     [% END %]
     [% INCLUDE "${cwd}/shared-includes/custom_fields.inc" %]
     <fieldset class="action">
-      <input id="ill-submit" type="submit" value="Update"/>
+      <input id="ill-submit" class="btn btn-primary" type="submit" value="Update"/>
       <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl">Cancel</a>
     </fieldset>
     <input type="hidden" name="illrequest_id" value="[% whole.value.other.illrequest_id | html %]" />

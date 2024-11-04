@@ -104,7 +104,7 @@
   </fieldset>
 
   <fieldset class="action">
-    <input id="ill-submit" class="btn btn-default" type="submit" value="Create"/>
+    <input id="ill-submit" class="btn btn-primary" type="submit" value="Create"/>
     <a class="cancel" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
   </fieldset>
   <input type="hidden" name="op" value="cud-create" />

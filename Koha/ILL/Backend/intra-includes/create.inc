@@ -107,7 +107,7 @@
     </ol>
   </fieldset>
   <fieldset class="action">
-    <input id="ill-submit" type="submit" value="Create" disabled />
+    <input id="ill-submit" class="btn btn-primary" type="submit" value="Create" disabled />
     <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl">Cancel</a>
   </fieldset>
   <input type="hidden" name="method" value="create" />
