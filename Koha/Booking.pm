@@ -115,8 +115,13 @@ sub store {
                 $self->biblio_id( $self->item->biblionumber )
                     unless $self->biblio_id;
 
-                Koha::Exceptions::Object::FKConstraint->throw()
-                    unless ( $self->biblio_id == $self->item->biblionumber );
+                Koha::Exceptions::Object::FKConstraint->throw(
+                    broken_fk => 'item/biblio_id',
+                    value     => "item biblionumber: "
+                        . $self->item->biblionumber
+                        . " booking biblio_id: "
+                        . $self->biblio_id
+                ) unless ( $self->biblio_id == $self->item->biblionumber );
             }
 
             Koha::Exceptions::Object::FKConstraint->throw(
