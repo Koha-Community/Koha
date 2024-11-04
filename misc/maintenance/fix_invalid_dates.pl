@@ -27,6 +27,16 @@ use Koha::Script -cron;
 use Data::Dumper;
 use Koha::Database;
 
+=head1 NAME
+
+fix_invalid_dates.pl - Fix invalid dates
+
+=head1 DESCRIPTION
+
+This script fixes any date fields in the database that have '0000-00-00' values (for example: dateofbirth) by updating them to 'NULL'.
+
+=cut
+
 my $verbose = 0;
 my $doit    = 0;
 
