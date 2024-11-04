@@ -2,9 +2,9 @@
     <li>
       <label for="[% id | html %]">[% label | html %][% IF required %]*[% END %]</label>
       [% IF opac %]
-        <input class="form-control input-fluid" type="[% type | html %]" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
+        <input class="form-control input-fluid" type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
       [% ELSE %]
-        <input type="[% type | html %]" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
+        <input type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
       [% END %]
     </li>
     [% SET required = 0 %]
