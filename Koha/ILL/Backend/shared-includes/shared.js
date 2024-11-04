@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var row = '<li class="form-horizontal">' +
             '<input type="text" class="custom-name ' +
             ( opac ? 'form-control input-fluid custom-field-input' : '') +
-            '" name="custom_key" placeholder="key">' +
+            '" name="custom_key" placeholder="'+__('key')+'">' +
             '<input type="text" id="custom-value" name="custom_value" class="' +
-            ( opac ? 'form-control input-fluid custom-field-input' : '') +'" placeholder="value"> ' +
+            ( opac ? 'form-control input-fluid custom-field-input' : '') +'" placeholder="'+__('value')+'"> ' +
             '<button type="button" class="btn btn-danger btn-sm ' +
             'delete-new-field">' +
             '<span class="fa fa-trash">' +
