@@ -3,11 +3,11 @@
 [% IF whole.status == 'missing_identifier' %]
 <p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
 [% ELSIF whole.status == 'missing_branch' %]
-<p><em>Please Note:</em> Branch is a mandatory field.</p>
+<p><em>Please Note:</em> Destination library is a mandatory field.</p>
 [% ELSIF whole.status == 'invalid_borrower' %]
-<p><em>Please Note:</em> The borrower details you entered are invalid.</p>
+<p><em>Please Note:</em> The patron details you entered are invalid.</p>
 [% ELSIF whole.status == 'invalid_branch' %]
-<p><em>Please Note:</em> The branch you chose is invalid.</p>
+<p><em>Please Note:</em> The destination library you chose is invalid.</p>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
