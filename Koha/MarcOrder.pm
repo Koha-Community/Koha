@@ -527,7 +527,6 @@ sub add_items_from_import_record {
     }
 }
 
-
 =head3 match_file_to_account
 
     my $file_match = Koha::MarcOrder->match_file_to_account({
@@ -960,7 +959,7 @@ sub create_items_and_generate_order_hash {
     my $itemcreation    = 0;
     my @itemnumbers;
 
-    if( C4::Context->preference('AcqCreateItem') ne 'cataloguing' ) {
+    if ( C4::Context->preference('AcqCreateItem') ne 'cataloguing' ) {
         for ( my $i = 0 ; $i < $loop_limit ; $i++ ) {
             $itemcreation = 1;
             my $item = Koha::Item->new(
@@ -1106,11 +1105,14 @@ sub create_items_and_generate_order_hash {
         $order->store;
 
         my $basket = Koha::Acquisition::Baskets->find($basket_id);
-        if ( C4::Context->preference('AcqCreateItem') ne 'cataloguing' && $basket->effective_create_items eq 'ordering' && !$basket->is_standing ) {
-            my $tags         = $fields->{tags} || [];
-            my $subfields    = $fields->{subfields} || [];
+        if (   C4::Context->preference('AcqCreateItem') ne 'cataloguing'
+            && $basket->effective_create_items eq 'ordering'
+            && !$basket->is_standing )
+        {
+            my $tags         = $fields->{tags}         || [];
+            my $subfields    = $fields->{subfields}    || [];
             my $field_values = $fields->{field_values} || [];
-            my $serials      = $fields->{serials} || [];
+            my $serials      = $fields->{serials}      || [];
             my $xml          = TransformHtmlToXml( $tags, $subfields, $field_values );
             my $record       = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for ( my $qtyloop = 1 ; $qtyloop <= $fields->{c_quantity} ; $qtyloop++ ) {
@@ -1247,6 +1249,5 @@ sub _create_item_fields_from_syspref {
 
     return $item_fields;
 }
-
 
 1;
