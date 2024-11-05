@@ -292,21 +292,26 @@ sub filter_by_has_recalls {
 sub filter_by_available {
     my ($self) = @_;
 
-    my @all_itemnumbers       = $self->get_column('itemnumber');
-    my @item_types_notforloan = Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
+    my @all_itemnumbers = $self->get_column('itemnumber');
     my @not_available_itemnumbers;
     push @not_available_itemnumbers, $self->filter_by_checked_out->get_column('itemnumber');
     push @not_available_itemnumbers, $self->filter_by_in_transit->get_column('itemnumber');
-    push @not_available_itemnumbers, $self->search(
-        {
-            itemlost => 0, withdrawn => 0, damaged => 0, notforloan => 0,
-            itype => { -not_in => \@item_types_notforloan }, restricted => 0,
-        }
-    )->get_column('itemnumber');
+
     push @not_available_itemnumbers, $self->filter_by_has_holds->get_column('itemnumber');
     push @not_available_itemnumbers, $self->filter_by_has_recalls->get_column('itemnumber');
 
-    return Koha::Items->search( { 'me.itemnumber' => [ array_minus @all_itemnumbers, @not_available_itemnumbers ] } );
+    my @item_types_notforloan = Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
+    return Koha::Items->search(
+        {
+            'me.itemnumber' => [ array_minus @all_itemnumbers, @not_available_itemnumbers ],
+            itemlost        => 0,
+            withdrawn       => 0,
+            damaged         => 0,
+            notforloan      => { '<='    => 0 },
+            'me.itype'      => { -not_in => \@item_types_notforloan },
+            restricted      => [ { '!=' => 0 }, undef ],
+        }
+    );
 }
 
 =head3 move_to_biblio
@@ -607,7 +612,7 @@ sub search {
         if ( $status eq 'not_for_loan' ) {
             my @item_types_notforloan =
                 Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
-            $self = $self->search( [ { notforloan => { '!=' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
+            $self = $self->search( [ { notforloan => { '<=' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
         }
         if ( $status eq 'on_hold' ) {
             $self = $self->filter_by_has_holds;
@@ -621,7 +626,7 @@ sub search {
         }
 
         if ( $status eq 'restricted' ) {
-            $self = $self->search( { restricted => { '!=' => 0 } } );
+            $self = $self->search( { restricted => [ { '!=' => 0 }, undef ] } );
         }
     }
 
