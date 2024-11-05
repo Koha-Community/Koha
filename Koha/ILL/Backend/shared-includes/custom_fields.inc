@@ -10,8 +10,8 @@
                     <input type="text" placeholder="key" class="form-control input-fluid custom-field-input custom-name" name="custom_key" value="[% key | html %]">
                     <input type="text" placeholder="value" class="form-control input-fluid custom-field-input" name="custom_value" id="custom-value" value="[% values.$i | html %]">
                 [% ELSE %]
-                    <input type="text" class="custom-name" name="custom_key" value="[% key | html %]">
-                    <input type="text" name="custom_value" id="custom-value" value="[% values.$i | html %]">
+                    <input type="text" placeholder="key" class="custom-name" name="custom_key" value="[% key | html %]">
+                    <input type="text" placeholder="value" name="custom_value" id="custom-value" value="[% values.$i | html %]">
                 [% END %]
                 <button value="[% i | html %]" name="custom_delete" type="submit" class="btn btn-danger btn-sm delete-new-field">
                     <span class="fa fa-trash"></span> Delete
