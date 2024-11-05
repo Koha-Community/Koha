@@ -1034,7 +1034,6 @@
         var SuspendHoldsIntranet = [% ( Koha.Preference('SuspendHoldsIntranet') ) ? 1 : 0 | html %];
     </script>
     [% Asset.js("js/pages/circulation.js") | $raw %]
-    [% Asset.js("js/checkouts.js") | $raw %]
     [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
         [% Asset.js("js/resolve_claim_modal.js") | $raw %]
     [% END %]
@@ -1167,6 +1166,7 @@
     </script>
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
+    [% Asset.js("js/checkouts.js") | $raw %]
     [% Asset.js("js/tables/bookings.js") | $raw %]
     [% Asset.js("js/recalls.js") | $raw %]
 [% END %]
