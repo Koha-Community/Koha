@@ -317,7 +317,9 @@ if ( $op eq 'view' ) {
             $sortfield = 'title' if !$sortfield or !grep { $_ eq $sortfield } qw( title author copyrightdate itemcallnumber dateadded );
 
             my $rows;
-            unless ( $query->param('print') or $query->param('rss') ) {
+            if ( $query->param('print') or $query->param('rss') ) {
+                $page = "";
+            } else {
                 $rows = C4::Context->preference('OPACnumSearchResults') || 20;
             }
             my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
