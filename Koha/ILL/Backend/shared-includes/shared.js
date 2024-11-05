@@ -1,5 +1,5 @@
 var core = [ [% whole.core %] ];
-var opac = [ [% opac %] ];
+var opac = [% opac || 0 %];
 document.addEventListener('DOMContentLoaded', function() {
     $('#add-new-fields').click(function(e) {
         e.preventDefault();
