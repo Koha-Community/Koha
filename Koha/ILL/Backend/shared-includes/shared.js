@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             '<input type="text" class="custom-name ' +
             ( opac ? 'form-control input-fluid custom-field-input' : '') +
             '" name="custom_key" placeholder="'+__('key')+'">' +
+            ' ' +
             '<input type="text" id="custom-value" name="custom_value" class="' +
             ( opac ? 'form-control input-fluid custom-field-input' : '') +'" placeholder="'+__('value')+'"> ' +
             '<button type="button" class="btn btn-danger btn-sm ' +
