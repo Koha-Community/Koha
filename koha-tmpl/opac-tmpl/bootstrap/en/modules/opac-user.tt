@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE I18N %]
 [% USE ItemTypes %]
 [% USE Price %]
 [% USE AuthorisedValues %]
@@ -461,7 +462,7 @@
                                                                 <span class="renewalfee badge text-bg-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
                                                             [% END %]
                                                             <span class="renewals">(
-                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = ISSUE.renewsleft, renewals_allowed = ISSUE.renewsallowed }) %]
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
                                                                     / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                 [% END %]
@@ -479,7 +480,7 @@
                                                         [% ELSIF ISSUE.auto_too_much_oweing %]
                                                             <span class="usr-msg auto-renew-fines">Automatic renewal failed, you have unpaid fines.</span>
                                                             <span class="renewals">(
-                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = ISSUE.renewsleft, renewals_allowed = ISSUE.renewsallowed }) %]
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
                                                                     / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                 [% END %]
@@ -487,7 +488,7 @@
                                                         [% ELSIF ISSUE.auto_account_expired %]
                                                             <span class="usr-msg auto-renew-expired">Automatic renewal failed, your account is expired.</span>
                                                             <span class="renewals">(
-                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = ISSUE.renewsleft, renewals_allowed = ISSUE.renewsallowed }) %]
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
                                                                     / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                 [% END %]
@@ -495,7 +496,7 @@
                                                         [% ELSIF ( ISSUE.too_soon ) %]
                                                             <span class="usr-msg no-renewal-before">No renewal before [% ISSUE.soonestrenewdate | $KohaDates  as_due_date => 1 %]</span>
                                                             <span class="renewals">(
-                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = ISSUE.renewsleft, renewals_allowed = ISSUE.renewsallowed }) %]
                                                                 [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
                                                                     / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                 [% END %]
@@ -797,7 +798,7 @@
                                                                     <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber | uri %]&amp;bornum=[% OVERDUE.borrowernumber | uri %]">Renew</a>
                                                                 [% END %]
                                                                     <span class="renewals">(
-                                                                        [% OVERDUE.renewsleft | html %] of [% OVERDUE.renewsallowed | html %] renewals remaining
+                                                                        [% I18N.tx("{renewals_left} of {renewals_allowed} renewals remaining", { renewals_left = OVERDUE.renewsleft, renewals_allowed = OVERDUE.renewsallowed }) %]
                                                                         [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
                                                                             / [% OVERDUE.unseenleft | html %] of [% OVERDUE.unseenallowed | html %] renewals left before the item must be seen by the library
                                                                         [% END %]

@@ -363,9 +363,9 @@ function LoadIssuesTable() {
                     content += msg;
                     if ( can_renew || can_force_renew ) {
                         content += "<span class='renewals-info'>(";
-                        content += __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed);
+                        content += __x("{renewals_left} of {renewals_allowed} renewals remaining", {renewals_left: oObj.renewals_remaining, renewals_allowed: oObj.renewals_allowed});
                         if (UnseenRenewals && oObj.unseen_allowed) {
-                            content += __(" and %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
+                            content += __x(" and {renewals_left} of {renewals_allowed} unseen renewals remaining", {renewals_left: oObj.unseen_remaining, renewals_allowed: oObj.unseen_allowed});
                         }
                         content += ")</span>";
                     }
