@@ -407,8 +407,10 @@ exit;
         if ( $status == HTTP_UNAUTHORIZED || $status == HTTP_FORBIDDEN ) {
 
             # Our token might have expired. Re-authenticate and post again.
+            $ua                 = _ua();                 # fresh one, needs to authenticate
+            $self->{ua}         = $ua;
             $self->{csrf_token} = $self->authenticate;
-            $resp = $ua->post(
+            $resp               = $ua->post(
                 $base_url . IMPORT_SVC_URI,
                 $post_body,
                 csrf_token => $self->{csrf_token},
