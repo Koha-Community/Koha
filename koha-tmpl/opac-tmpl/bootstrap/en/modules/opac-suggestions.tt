@@ -570,7 +570,6 @@
     $(function() {
         $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
             "order": [[ 1, "asc" ]],
-            "autoWidth": false,
             "columnDefs": [
               [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %],
                 { "className": 'dtr-control', "orderable": false, "targets": -1 },

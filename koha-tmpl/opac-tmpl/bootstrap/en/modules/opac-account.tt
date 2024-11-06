@@ -92,7 +92,6 @@ $( document ).ready(function() {
          "order": [[ 0, "desc" ]],
          [% END %]
          "dom": '<"#filter_p">',
-         "autoWidth": false,
          "responsive": {
             "details": { "type": 'column',"target": -1 }
          },
@@ -105,7 +104,6 @@ $( document ).ready(function() {
     } ));
 
     $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
-         "autoWidth": false,
          "responsive": {
             "details": { "type": 'column',"target": -1 }
          },
