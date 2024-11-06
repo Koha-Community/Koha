@@ -60,7 +60,7 @@ if ($description) {
 }
 
 # We make an array with holiday's days
-our @holiday_list;
+our @holiday_list = ();
 if ($end_dt){
     for (my $dt = $first_dt->clone();
     $dt <= $end_dt;
