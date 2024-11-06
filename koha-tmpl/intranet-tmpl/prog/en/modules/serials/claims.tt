@@ -100,6 +100,7 @@
                             <th>Publication date</th>
                             <th>Claims count</th>
                             <th>Claim date</th>
+                            <th>Serial notes</th>
                             [% FOR field IN additional_fields_for_subscription %]
                                 <th>[% field.name | html %]</th>
                             [% END %]
@@ -127,6 +128,7 @@
                                 <td class="publisheddate" data-order="[% missingissue.publisheddate | html %]"> [% missingissue.publisheddate | $KohaDates %] </td>
                                 <td>[% missingissue.claims_count | html %]</td>
                                 <td data-order="[% missingissue.claimdate | html %]"> [% missingissue.claimdate | $KohaDates %] </td>
+                                <td> [% missingissue.notes | html %] </td>
                                 [% INCLUDE 'additional-fields-display.inc' available=additional_fields_for_subscription values=missingissue.additional_field_values value_only=1 is_table_cell=1 %]
                             </tr>
                         [% END # /FOREACH missingissue %]

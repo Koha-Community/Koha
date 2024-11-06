@@ -1937,7 +1937,7 @@ sub GetLateOrMissingIssues {
             "SELECT
                 serialid,      aqbooksellerid,        name,
                 biblio.title,  biblioitems.issn,      planneddate,    serialseq,
-                serial.status, serial.subscriptionid, claimdate, claims_count,
+                serial.status, serial.subscriptionid, claimdate, serial.notes AS notes, claims_count,
                 subscription.branchcode, serial.publisheddate
             FROM      serial
                 LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid
@@ -1955,7 +1955,7 @@ sub GetLateOrMissingIssues {
             "SELECT
             serialid,      aqbooksellerid,         name,
             biblio.title,  planneddate,           serialseq,
-                serial.status, serial.subscriptionid, claimdate, claims_count,
+                serial.status, serial.subscriptionid, claimdate, serial.notes AS notes, claims_count,
                 subscription.branchcode, serial.publisheddate
             FROM serial
                 LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
