@@ -24,7 +24,7 @@
             Actions
         </a>
 
-        <ul class="dropdown-menu [% pull_right | html %]" role="menu" aria-labelledby="[% aria_menu | html %]">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="[% aria_menu | html %]">
             <li>
                 <a class="ar-set-pending-request dropdown-item" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa fa-bars"></i>
@@ -37,7 +37,7 @@
                 </a>
 
                 [% IF id_arg && format=='SCAN' %]
-                <a class="ar-edit-urls" href="#" data-ar-id="[% id_arg | uri %]" href="#">
+                <a class="ar-edit-urls dropdown-item" href="#" data-ar-id="[% id_arg | uri %]" href="#">
                     <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                     Edit URLs
                 </a>
@@ -106,21 +106,25 @@
                 <div class="modal-body">
                     <p>Are you sure you want to cancel this article request?</p>
 
-                    <fieldset class="action">
+                    <fieldset class="brief">
                         [% SET ar_cancellation = AuthorisedValues.GetAuthValueDropbox('AR_CANCELLATION') %]
-                        [% IF ar_cancellation.count %]
-                            <label for="cancellation-reason" class="col-sm-4">Cancellation reason: </label>
-                            <select class="cancellation-reason col-sm-8" name="cancellation-reason" id="modal-cancellation-reason">
-                                <option value="" selected>Other reasons</option>
-                                [% FOREACH reason IN ar_cancellation %]
-                                    <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
-                                [% END %]
-                            </select>
-                        [% END %]
-                    </fieldset>
-                    <fieldset class="action">
-                        <div class="hint col-sm-offset-4">Enter reason</div>
-                        <input type="text" class="notes col-sm-offset-4 col-sm-8" name="notes" id="modal-notes"/>
+                        <ol>
+                            [% IF ar_cancellation.count %]
+                                <li>
+                                    <label for="cancellation-reason">Cancellation reason: </label>
+                                    <select class="cancellation-reason" name="cancellation-reason" id="modal-cancellation-reason">
+                                        <option value="" selected>Other reasons</option>
+                                        [% FOREACH reason IN ar_cancellation %]
+                                            <option value="[% reason.authorised_value | html %]">[% reason.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                            [% END %]
+                            <li>
+                                <label for="modal-notes">Enter reason:</label>
+                                <input type="text" class="notes" name="notes" id="modal-notes"/>
+                            </li>
+                        </ol>
                     </fieldset>
                 </div>
 
@@ -153,11 +157,11 @@
         <div class="row">
 
                 [% INCLUDE 'messages.inc' %]
-            [% IF Koha.Preference('CircSidebar') %]
-            <div class="col-md-10 order-md-2 order-sm-1">
-            [% ELSE %]
-            <div class="col-md-12 col-lg-10 col-lg-offset-1">
-            [% END %]
+                [% IF Koha.Preference('CircSidebar') %]
+                    <div class="col-md-10 order-md-2 order-sm-1">
+                [% ELSE %]
+                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                [% END %]
 
                 <h1>Article requests</h1>
                 [% PROCESS urls_modal %]
@@ -291,7 +295,7 @@
                                             </td>
                                             <td class="ar-date"><span title="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</span></td>
                                             <td class="ar-actions">
-                                                [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id format=ar.format pull_right='pull-right' aria_menu='ar-actions' %]
+                                                [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id format=ar.format aria_menu='ar-actions' %]
                                             </td>
                                         </tr>
                                     [% END %]
@@ -398,7 +402,7 @@
                                             </td>
                                             <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                             <td class="ar-actions">
-                                                [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id format=ar.format pull_right='pull-right' aria_menu='ar-actions' %]
+                                                [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id format=ar.format aria_menu='ar-actions' %]
                                             </td>
                                         </tr>
                                     [% END %]
@@ -502,7 +506,7 @@
                                             </td>
                                             <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                             <td class="ar-actions">
-                                                [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id format=ar.format pull_right='pull-right' aria_menu='ar-actions' %]
+                                                [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id format=ar.format aria_menu='ar-actions' %]
                                             </td>
                                         </tr>
                                     [% END %]
