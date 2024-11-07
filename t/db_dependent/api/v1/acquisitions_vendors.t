@@ -36,7 +36,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() and delete() tests | authorized user' => sub {
 
-    plan tests => 40;
+    plan tests => 44;
 
     $schema->storage->txn_begin;
 
@@ -99,6 +99,13 @@ subtest 'list() and delete() tests | authorized user' => sub {
       ->json_has('/0/aliases', 'aliases are embeded')
       ->json_is('/0/aliases/0/alias' => 'alias 1', 'alias 1 is embeded')
       ->json_is('/0/aliases/1/alias' => 'alias 2', 'alias 2 is embeded');
+
+    for ( 0 .. 1 ) {
+        $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
+    }
+    $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" => { 'x-koha-embed' => 'subscriptions+count' } )
+        ->status_is(200)->json_has( '/0/subscriptions_count', 'subscriptions_count is embeded' )
+        ->json_is( '/0/subscriptions_count' => '2', 'subscription count is 2' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )
       ->status_is(204, 'SWAGGER3.2.4')
