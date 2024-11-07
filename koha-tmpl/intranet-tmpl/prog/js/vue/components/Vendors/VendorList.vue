@@ -16,6 +16,7 @@
                 @edit="doEdit"
                 @delete="doDelete"
                 @select="doSelect"
+                @receive="doReceive"
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
@@ -44,6 +45,9 @@ export default {
 
         const table = ref();
 
+        const permissionsStore = inject("permissionsStore");
+        const { isUserPermitted } = permissionsStore;
+
         return {
             vendors,
             get_lib_from_av,
@@ -52,6 +56,7 @@ export default {
             setConfirmationDialog,
             setMessage,
             escape_str,
+            isUserPermitted,
         };
     },
     data() {
@@ -89,6 +94,17 @@ export default {
                                         row.subscriptions_count === 0),
                             },
                         },
+                        {
+                            receive: {
+                                text: this.$__("Receive shipments"),
+                                icon: "fa fa-inbox",
+                                should_display: row =>
+                                    row.active &&
+                                    this.isUserPermitted(
+                                        "CAN_user_acquisition_order_receive"
+                                    ),
+                            },
+                        },
                     ],
                 },
             },
@@ -120,6 +136,10 @@ export default {
                 name: "VendorShow",
                 params: { vendor_id: id },
             });
+        },
+        doReceive({ id }, dt, event) {
+            event.preventDefault();
+            window.open(`/cgi-bin/koha/acqui/parcels.pl?booksellerid=${id}`);
         },
         doEdit({ id }, dt, event) {
             this.$router.push({
