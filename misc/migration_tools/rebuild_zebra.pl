@@ -17,18 +17,23 @@
 
 use Modern::Perl;
 
-use Koha::Script;
-use C4::Context;
-use Getopt::Long        qw( GetOptions );
-use Fcntl               qw( LOCK_EX LOCK_NB LOCK_UN );
-use File::Temp          qw( tempdir );
-use File::Path          qw( mkpath rmtree );
-use C4::Biblio          qw( GetXmlBiblio );
-use C4::AuthoritiesMarc qw( GetAuthority GetAuthorityXML );
-use C4::Items           qw( Item2Marc );
-use Koha::RecordProcessor;
-use Koha::Caches;
+use Getopt::Long qw( GetOptions );
+use Fcntl        qw( LOCK_EX LOCK_NB LOCK_UN );
+use File::Temp   qw( tempdir );
+use File::Path   qw( mkpath rmtree );
+use Parallel::ForkManager;
+use POSIX qw/ceil/;
 use XML::LibXML;
+
+use C4::Context;
+use C4::AuthoritiesMarc qw( GetAuthority GetAuthorityXML );
+use C4::Biblio          qw( GetXmlBiblio );
+use C4::Items           qw( Item2Marc );
+use Koha::Authorities;
+use Koha::Biblios;
+use Koha::Caches;
+use Koha::RecordProcessor;
+use Koha::Script;
 
 use constant LOCK_FILENAME => 'rebuild..LCK';
 
@@ -65,6 +70,8 @@ my $run_user      = ( getpwuid($<) )[0];
 my $wait_for_lock = 0;
 my $use_flock;
 my $table        = 'biblioitems';
+my $forks        = 0;
+my $chunk_size   = 100000;
 my $is_memcached = Koha::Caches->get_instance->memcached_cache;
 
 my $verbose_logging  = 0;
@@ -93,6 +100,7 @@ my $result           = GetOptions(
     'run-as-root'   => \$run_as_root,
     'wait-for-lock' => \$wait_for_lock,
     't|table:s'     => \$table,
+    'forks:i'       => \$forks,
 );
 
 if ( not $result or $want_help ) {
@@ -409,9 +417,7 @@ sub index_records {
             mark_zebraqueue_batch_done($entries);
 
         } else {
-            my $sth = select_all_records($record_type);
-            $num_records_exported =
-                export_marc_records_from_sth( $record_type, $sth, "$directory/$record_type", $nosanitize );
+            $num_records_exported = export_marc_records( $record_type, "$directory/$record_type", $nosanitize );
             unless ($do_not_clear_zebraqueue) {
                 mark_all_zebraqueue_done($record_type);
             }
@@ -505,7 +511,9 @@ sub select_all_authorities {
     $strsth .= qq{ WHERE $where }          if ($where);
     $strsth .= qq{ LIMIT $length }         if ( $length && !$offset );
     $strsth .= qq{ LIMIT $offset,$length } if ( $length && $offset );
-    my $sth = $dbh->prepare($strsth);
+
+    # If we are forking, we use a new db handle to prevent a potential deadlock
+    my $sth = $forks ? C4::Context::_new_dbh->prepare($strsth) : $dbh->prepare($strsth);
     $sth->execute();
     return $sth;
 }
@@ -517,16 +525,48 @@ sub select_all_biblios {
     $strsth .= qq{ WHERE $where }          if ($where);
     $strsth .= qq{ LIMIT $length }         if ( $length && !$offset );
     $strsth .= qq{ LIMIT $offset,$length } if ($offset);
-    my $sth = $dbh->prepare($strsth);
+
+    # If we are forking, we use a new db handle to prevent a potential deadlock
+    my $sth = $forks ? C4::Context::_new_dbh->prepare($strsth) : $dbh->prepare($strsth);
     $sth->execute();
     return $sth;
 }
 
+sub export_marc_records {
+    my ( $record_type, $directory, $nosanitize ) = @_;
+    my $pm              = Parallel::ForkManager->new($forks);
+    my @original_params = ( $offset, $length );
+    $offset ||= 0;
+    $length ||= ( $record_type eq 'biblio' ? Koha::Biblios->count : Koha::Authorities->count );
+    my $chunk_size = $forks ? ceil( $length / $forks ) : $length;
+    my ( $seq, $num_records_exported ) = ( undef, 0 );
+    while ( $chunk_size > 0 ) {
+
+        # If you use forks, ->start forks after getting process slot
+        unless ( $pm->start ) {
+
+            # Child code (or parent when forks parameter is absent)
+            $length = $chunk_size;
+            my $sth = select_all_records($record_type);
+            export_marc_records_from_sth( $record_type, $sth, "$directory", $nosanitize, $seq );
+            $pm->finish;    # exit for child only
+        }
+        $offset               += $chunk_size;
+        $num_records_exported += $chunk_size;
+        $seq++;
+        $chunk_size = $length - $num_records_exported if $num_records_exported + $chunk_size > $length;
+    }
+    $pm->wait_all_children;
+    ( $offset, $length ) = @original_params;    # restore for a potential second run (with -a -b)
+    return $num_records_exported;
+}
+
 sub export_marc_records_from_sth {
-    my ( $record_type, $sth, $directory, $nosanitize ) = @_;
+    my ( $record_type, $sth, $directory, $nosanitize, $seq ) = @_;
+    $seq ||= q{};
 
     my $num_exported = 0;
-    open my $fh, '>:encoding(UTF-8) ', "$directory/exported_records" or die $!;
+    open my $fh, '>:encoding(UTF-8)', "$directory/exported_records$seq" or die $!;
 
     print {$fh} $marcxml_open;
 
