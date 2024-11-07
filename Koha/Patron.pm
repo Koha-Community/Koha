@@ -505,7 +505,7 @@ Returns a Koha::Library object representing the patron's home library.
 
 sub library {
     my ( $self ) = @_;
-    return Koha::Library->_new_from_dbic($self->_result->branchcode);
+    return Koha::Library->_new_from_dbic($self->_result->library);
 }
 
 =head3 sms_provider
