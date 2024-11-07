@@ -958,12 +958,11 @@ sub summary_info {
         { func => $patron->can("fine_items"),    fid => FID_FINE_ITEMS },
         { func => $patron->can("recall_items"),  fid => FID_RECALL_ITEMS },
         { func => $patron->can("unavail_holds"), fid => FID_UNAVAILABLE_HOLD_ITEMS },
-        { func => $patron->can("fine_items"),    fid => FID_FINE_ITEMS },
     );
 
     my $summary_type = index( $summary, 'Y' );
     return q{} if $summary_type == -1;    # No detailed information required.
-    return q{} if $summary_type > 6;      # Positions 7-9 are not defined in the sip spec,
+    return q{} if $summary_type > 5;      # Positions 6-9 are not defined in the sip spec,
                                           # and we have no extensions to handle them.
 
     siplog( "LOG_DEBUG", "Summary_info: index == '%d', field '%s'", $summary_type, $summary_map[$summary_type]->{fid} );
@@ -972,17 +971,9 @@ sub summary_info {
     my $fid      = $summary_map[$summary_type]->{fid};
     my $itemlist = &$func( $patron, $start, $end, $server );
 
-    # fine items use account_line as key
-    if ( $summary_type == 6 ) {
-        siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map { $_->{account_line} } @{$itemlist} ) );
-        foreach my $i ( @{$itemlist} ) {
-            $resp .= add_field( $fid, $i->{account_line}, $server );
-        }
-    } else {
-        siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map { $_->{barcode} } @{$itemlist} ) );
-        foreach my $i ( @{$itemlist} ) {
-            $resp .= add_field( $fid, $i->{barcode}, $server );
-        }
+    siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map { $_->{barcode} } @{$itemlist} ) );
+    foreach my $i ( @{$itemlist} ) {
+        $resp .= add_field( $fid, $i->{barcode}, $server );
     }
 
     return $resp;
