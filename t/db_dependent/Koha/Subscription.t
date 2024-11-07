@@ -80,17 +80,26 @@ subtest 'Notifications on new issues - add_subscriber|remove_subscriber|subscrib
 };
 
 subtest 'Koha::Subscription->vendor' => sub {
-    plan tests => 2;
-    my $vendor = $builder->build( { source => 'Aqbookseller' } );
-    my $subscription = $builder->build(
+    plan tests => 3;
+    my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
+    my $subscription = $builder->build_object(
         {
-            source => 'Subscription',
-            value  => { aqbooksellerid => $vendor->{id} }
+            class => 'Koha::Subscriptions',
+            value => { aqbooksellerid => $vendor->id }
         }
     );
-    my $object = Koha::Subscriptions->find( $subscription->{subscriptionid} );
-    is( ref($object->vendor), 'Koha::Acquisition::Bookseller', 'Koha::Subscription->vendor should return a Koha::Acquisition::Bookseller' );
-    is( $object->vendor->id, $subscription->{aqbooksellerid}, 'Koha::Subscription->vendor should return the correct vendor' );
+    is(
+        ref( $subscription->vendor ), 'Koha::Acquisition::Bookseller',
+        'Koha::Subscription->vendor should return a Koha::Acquisition::Bookseller'
+    );
+    is(
+        $subscription->vendor->id, $subscription->aqbooksellerid,
+        'Koha::Subscription->vendor should return the correct vendor'
+    );
+
+    $vendor->delete();
+    $subscription->discard_changes;
+    is( $subscription->vendor, undef, 'Koha::Subscription->vendor should return undef if the vendor is deleted' );
 };
 
 subtest 'Koha::Subscription->frequency' => sub {
