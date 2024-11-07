@@ -71,22 +71,42 @@ Output an informational message in blue.
 
 sub say_warning {
     my ( $fh, $msg ) = @_;
-    say $fh YELLOW, "$msg", RESET;
+
+    if ($fh) {
+        say $fh YELLOW, "$msg", RESET;
+    } else {
+        say YELLOW, "$msg", RESET;
+    }
 }
 
 sub say_failure {
     my ( $fh, $msg ) = @_;
-    say $fh RED, "$msg", RESET;
+
+    if ($fh) {
+        say $fh RED, "$msg", RESET;
+    } else {
+        say RED, "$msg", RESET;
+    }
 }
 
 sub say_success {
     my ( $fh, $msg ) = @_;
-    say $fh GREEN, "$msg", RESET;
+
+    if ($fh) {
+        say $fh GREEN, "$msg", RESET;
+    } else {
+        say GREEN, "$msg", RESET;
+    }
 }
 
 sub say_info {
     my ( $fh, $msg ) = @_;
-    say $fh BLUE, "$msg", RESET;
+
+    if ($fh) {
+        say $fh BLUE, "$msg", RESET;
+    } else {
+        say BLUE, "$msg", RESET;
+    }
 }
 
 =head1 AUTHORS
