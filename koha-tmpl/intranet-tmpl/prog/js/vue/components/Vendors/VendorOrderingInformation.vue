@@ -188,7 +188,7 @@
             <li>
                 <label for="discount">{{ $__("Discount") }}: </label>
                 <input
-                    type="text"
+                    type="number"
                     size="6"
                     id="discount"
                     name="discount"
@@ -199,7 +199,7 @@
             <li>
                 <label for="deliverytime">{{ $__("Delivery time") }}: </label>
                 <input
-                    type="text"
+                    type="number"
                     size="6"
                     id="deliverytime"
                     name="deliverytime"
