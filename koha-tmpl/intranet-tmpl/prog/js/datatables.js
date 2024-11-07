@@ -1143,7 +1143,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
             _dt_add_filters(this, table_dt, filters_options);
         }
 
-        table_dt.on("column-visibility.dt", function(){
+        table_dt.on("draw", function(){
             if ( add_filters ) {
                 _dt_add_filters(this, table_dt, filters_options);
             }
