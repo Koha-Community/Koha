@@ -53,12 +53,11 @@ foreach my $index ( ('biblios','authorities') ){
     # Now we get all the ids from Elasticsearch
     # The scroll lets us iterate through, it fetches chunks of 'size' as we move through
     my $scroll = $es->scroll_helper(
-        index => $searcher->index_name,
-        body => {
-            size => 5000,
-            query => {
-                match_all => {}
-            },
+        index   => $searcher->index_name,
+        _source => 0,
+        body    => {
+            size  => 5000,
+            query => { match_all => {} },
         },
     );
 
