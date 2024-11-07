@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 8;
 
 use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
@@ -53,3 +53,41 @@ like( $lines[3], qr/\e\[\d+mTesting info message\e\[0m/,    "Info message output
 
 # Remove the temporary file
 unlink $temp_file;
+
+# Next, test with no filehandler (letting say send to STDOUT by default)
+
+# Redirect STDOUT to a variable - we don't actually want to print to the console for testing
+my $temp_out;
+open my $oldout, qw{>&}, "STDOUT";
+close STDOUT;
+open STDOUT, '>:encoding(utf8)', \$temp_out;
+
+say_warning( undef, "Testing warning message with no fh" );
+say_failure( undef, "Testing failure message with no fh" );
+say_success( undef, "Testing success message with no fh" );
+say_info( undef, "Testing info message with no fh" );
+
+# Return STDOUT to previous state
+close STDOUT;
+open STDOUT, ">&", $oldout;
+
+# Split the contents of $temp_out into an array for testing
+my @nofh_lines = split( "\n", $temp_out );
+
+# Test the output content
+like(
+    $nofh_lines[0], qr/\e\[\d+mTesting warning message with no fh\e\[0m/,
+    "Warning message with no fh output with ANSI color code"
+);
+like(
+    $nofh_lines[1], qr/\e\[\d+mTesting failure message with no fh\e\[0m/,
+    "Failure message with no fh output with ANSI color code"
+);
+like(
+    $nofh_lines[2], qr/\e\[\d+mTesting success message with no fh\e\[0m/,
+    "Success message with no fh output with ANSI color code"
+);
+like(
+    $nofh_lines[3], qr/\e\[\d+mTesting info message with no fh\e\[0m/,
+    "Info message with no fh output with ANSI color code"
+);
