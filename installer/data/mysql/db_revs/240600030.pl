@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => '37601',
@@ -20,10 +20,7 @@ return {
             ALTER TABLE `bookings`
             ADD COLUMN `status` ENUM('new', 'cancelled', 'completed') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking' $after;
         SQL
-        if ( $dbh->do($statement) ) {
-            say_success( $out, q{Added column 'bookings.status'} );
-        } else {
-            say_failure( $out, q{Failed to add column 'bookings.status'} );
-        }
+        $dbh->do($statement);
+        say_success( $out, q{Added column 'bookings.status'} );
     },
 };

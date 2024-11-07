@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
+use Koha::Installer::Output qw(say_warning say_success say_info);
 use Try::Tiny;
 
 return {
@@ -10,19 +10,12 @@ return {
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
         if ( !column_exists( 'currency', 'p_cs_precedes' ) ) {
-            try {
-                $dbh->do(
-                    q{
+            $dbh->do(
+                q{
  ALTER TABLE `currency` ADD COLUMN `p_cs_precedes` tinyint(1) DEFAULT 1 AFTER p_sep_by_space
-                }
-                );
-                say_success( $out, "Added column 'currency.p_cs_precedes'" );
-            } catch {
-                say_failure(
-                    $out,
-                    "Adding column 'currency.p_cs_precedes' failed with errors: $_"
-                );
-            };
+            }
+            );
+            say_success( $out, "Added column 'currency.p_cs_precedes'" );
         } else {
             say_info( $out, "Column 'currency.p_cs_precedes' already exists" );
         }

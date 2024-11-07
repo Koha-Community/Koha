@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => '37592',
@@ -31,17 +31,11 @@ return {
             ALTER TABLE bookings ADD COLUMN modification_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'The datetime for when a booking has been updated'
         SQL
         if ( @{$existing_columns} == 0 ) {
-            if ( $dbh->do("$creation_date_statement AFTER `end_date`") ) {
-                say_success( $out, q{Added column 'bookings.creation_date'} );
-            } else {
-                say_failure( $out, q{Failed to add column 'bookings.creation_date': } . $dbh->errstr );
-            }
+            $dbh->do("$creation_date_statement AFTER `end_date`");
+            say_success( $out, q{Added column 'bookings.creation_date'} );
 
-            if ( $dbh->do("$modification_date_statement AFTER `creation_date`") ) {
-                say_success( $out, q{Added column 'bookings.modification_date'} );
-            } else {
-                say_failure( $out, q{Failed to add column 'bookings.modification_date': } . $dbh->errstr );
-            }
+            $dbh->do("$modification_date_statement AFTER `creation_date`");
+            say_success( $out, q{Added column 'bookings.modification_date'} );
 
             return;
         }
@@ -61,11 +55,8 @@ return {
                     $statement = "$modification_date_statement AFTER `creation_date`";
                 }
 
-                if ( $dbh->do($statement) ) {
-                    say_success( $out, "Added column 'bookings.$column'" );
-                } else {
-                    say_failure( $out, "Failed to add column 'bookings.$column': " . $dbh->errstr );
-                }
+                $dbh->do($statement);
+                say_success( $out, "Added column 'bookings.$column'" );
             }
         }
     },

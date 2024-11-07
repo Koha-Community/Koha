@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "23295",
@@ -14,14 +14,10 @@ return {
 
         say_success ( $out, "Added new system preference 'RestrictPatronsWithFailedNotices'" );
 
-        try {
-            $dbh->do(
-                q{INSERT IGNORE INTO restriction_types (code, display_text, is_system, is_default) VALUES ('NOTICE_FAILURE_SUSPENSION', 'Notice failure suspension', 1, 0)}
-            );
-            say_success( $out, "Added new system restriction type 'NOTICE_FAILURE_SUSPENSION'" );
-        } catch {
-            say_failure( $out, "Database modification failed with errors: $_" );
-        };
+        $dbh->do(
+            q{INSERT IGNORE INTO restriction_types (code, display_text, is_system, is_default) VALUES ('NOTICE_FAILURE_SUSPENSION', 'Notice failure suspension', 1, 0)}
+        );
+        say_success( $out, "Added new system restriction type 'NOTICE_FAILURE_SUSPENSION'" );
 
     },
 };

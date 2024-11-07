@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "BUG_NUMBER",
@@ -31,7 +31,6 @@ return {
         say $out "Added 'XXX' HTML customization";
 
         # Other information
-        say_failure( $out, "Use red for danger/failure" );
         say_success( $out, "Use green for success" );
         say_warning( $out, "Use yellow for warning/a call to action" );
         say_info( $out, "Use blue for further information" );
