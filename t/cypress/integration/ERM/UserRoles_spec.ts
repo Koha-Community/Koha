@@ -24,7 +24,7 @@ describe("Add/search user", () => {
         });
 
         //Intercept patrons request
-        cy.intercept("GET", "/api/v1/patrons*", {
+        cy.intercept("GET", "/api/v1/erm/users*", {
             statusCode: 200,
             body: [
                 {
