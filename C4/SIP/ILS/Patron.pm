@@ -215,14 +215,6 @@ sub new {
     # FIXME: populate recall_items
     $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
 
-    # fine items
-    my $debits = $patron->account->outstanding_debits;
-    my @fine_items;
-    while ( my $debit = $debits->next ) {
-        push @fine_items, { account_line => sprintf '%s %.02f', $debit->description, $debit->amountoutstanding };
-    }
-    $ilspatron{fine_items} =\@fine_items;
-
     my $pending_checkouts = $patron->pending_checkouts;
     my @barcodes;
     while ( my $c = $pending_checkouts->next ) {
@@ -447,9 +439,45 @@ sub charged_items {
     return $self->x_items('items', @_);
 }
 sub fine_items {
-    my $self = shift;
-    return $self->x_items('fine_items', @_);
+
+    require Koha::Database;
+    require Template;
+
+    my $self   = shift;
+    my $start  = shift;
+    my $end    = shift;
+    my $server = shift;
+
+    my @fees =
+      Koha::Database->new()->schema()->resultset('Accountline')->search(
+        {
+            borrowernumber    => $self->{borrowernumber},
+            amountoutstanding => { '>' => '0' },
+        }
+      );
+
+    $start = $start ? $start - 1 : 0;
+    $end   = $end   ? $end - 1   : scalar @fees - 1;
+
+    my $av_field_template =
+      $server ? $server->{account}->{av_field_template} : undef;
+    $av_field_template ||=
+"[% accountline.description %] [% accountline.amountoutstanding | format('%.2f') %]";
+
+    my @return_values;
+    for ( my $i = $start ; $i <= $end ; $i++ ) {
+        my $fee = $fees[$i];
+
+        next unless $fee;
+
+        my $output = process_tt( $av_field_template, { accountline => $fee } );
+        push( @return_values, { barcode => $output } );
+    }
+
+    return \@return_values;
+
 }
+
 sub recall_items {
     my $self = shift;
     return $self->x_items('recall_items', @_);
