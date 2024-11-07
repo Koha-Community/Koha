@@ -161,6 +161,9 @@ sub process_tt_block {
         # Already has trim filter
         or $tt_block =~ m{\|\s?trim}
 
+        # Already has safe_url filter
+        or $tt_block =~ m{\|\s?safe_url}
+
         # Specific for [% foo UNLESS bar %]
         or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)}
     ;
