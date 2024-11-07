@@ -899,6 +899,7 @@ subtest 'pickup_locations() tests' => sub {
             . '/pickup_locations?q={"marc_org_code": { "-like": "A%" }}' )->json_is( [ $libraries[0] ] );
 
     t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+    t::lib::Mocks::mock_preference( 'RESTdefaultPageSize',     20 );
 
     # biblio-level mock doesn't include libraries[1] and $libraries[2] as valid pickup location
     $_->{needs_override}            = Mojo::JSON->true for @libraries;
