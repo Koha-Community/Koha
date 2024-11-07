@@ -16,6 +16,16 @@ return {
             }
             );
 
+            my $fixed = $dbh->do(
+                q{
+                UPDATE subscription SET aqbooksellerid = NULL WHERE aqbooksellerid NOT IN (SELECT id FROM aqbooksellers)
+                }
+            );
+            say_info(
+                $out,
+                "Updated $fixed subscriptions with NULL aqbooksellersid where aqbooksellerid was not found in aqbooksellers"
+            ) if $fixed;
+
             $dbh->do(
                 q|
                 ALTER TABLE subscription
@@ -24,9 +34,9 @@ return {
                     REFERENCES aqbooksellers (id) ON DELETE SET NULL ON UPDATE CASCADE
             |
             );
-            say_success( $out, "Updated foreign key 'subscription_ibfk_4'" );
+            say_success( $out, "Added new foreign key 'subscription_ibfk_4'" );
         } else {
-            say_warning( $out, "Foreign key 'subscription_ibfk_4' already exists" );
+            say_info( $out, "Foreign key 'subscription_ibfk_4' already exists" );
         }
     },
 };
