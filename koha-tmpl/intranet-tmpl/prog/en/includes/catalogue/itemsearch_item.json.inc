@@ -25,7 +25,7 @@
   "[% Branches.GetName(item.holdingbranch) | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.location', authorised_value => item.location) | html %]",
   "[% ItemTypes.GetDescription(item.itype) | html %]",
-  "[% item.stocknumber | html  | $To %]",
+  "[% item.stocknumber | html | $To %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) || "" | html %]",
   "[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) || "" | html %]",
