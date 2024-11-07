@@ -532,15 +532,14 @@
                             }
                             [% CASE 'branch' %]
                             {
-                                "data": "library_id",
+                                "data": "library.name:me.library_id",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    let library_name = libraries_map[data].branchname
-                                    if( !singleBranchMode && data == logged_in_library_id ) {
-                                        return "<span class=\"currentlibrary\">" + escape_str(library_name) + "</span>";
+                                    if( !singleBranchMode && row.library.library_id == logged_in_library_id ) {
+                                        return "<span class=\"currentlibrary\">" + escape_str(row.library.name) + "</span>";
                                     } else {
-                                        return escape_str(library_name);
+                                        return escape_str(row.library.name);
                                     }
                                 }
                             }

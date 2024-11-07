@@ -2191,6 +2191,13 @@ __PACKAGE__->many_to_many("permissions", "user_permissions", "permission");
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-02 11:36:36
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jUOMoSonNmA3KwtZKVxqOA
 
+__PACKAGE__->belongs_to(
+  "library",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
 __PACKAGE__->has_many(
   "restrictions",
   "Koha::Schema::Result::BorrowerDebarment",
