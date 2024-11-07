@@ -8,9 +8,9 @@
             <a
                 v-if="isUserPermitted('CAN_user_serials')"
                 :href="`/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=${vendor.name}&searched=1`"
-                >{{ vendor.subscriptions.length }}</a
+                >{{ vendor.subscriptions_count }}</a
             >
-            <span v-else>{{ vendor.subscriptions.length }}</span>
+            <span v-else>{{ vendor.subscriptions_count }}</span>
         </p>
     </fieldset>
 </template>

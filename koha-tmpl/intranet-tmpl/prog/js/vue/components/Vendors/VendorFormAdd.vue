@@ -112,6 +112,7 @@ export default {
                 });
             }
             delete vendor.physical;
+            delete vendor.subscriptions_count;
 
             vendor.contacts = vendor.contacts.map(
                 ({ id, booksellerid, ...requiredProperties }) =>

@@ -62,7 +62,7 @@ export default {
             searchTerm: null,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "aliases,baskets,subscriptions" },
+                options: { embed: "aliases,baskets,subscriptions+count" },
                 url: () => this.tableURL(),
                 add_filters: true,
                 filters_options: {
@@ -85,8 +85,8 @@ export default {
                                 should_display: row =>
                                     (!row.baskets ||
                                         row.baskets.length === 0) &&
-                                    (!row.subscriptions ||
-                                        row.subscriptions.length === 0),
+                                    (!row.subscriptions_count ||
+                                        row.subscriptions_count === 0),
                             },
                         },
                     ],
@@ -234,13 +234,13 @@ export default {
                     searchable: false,
                     orderable: false,
                     render(data, type, row, meta) {
-                        return row.subscriptions.length
+                        return row.subscriptions_count
                             ? '<a href="/cgi-bin/koha/serials/serials-search.pl?bookseller_filter=' +
                                   row.name +
                                   "&searched=1" +
                                   '" class="show">' +
                                   escape_str(
-                                      `${row.subscriptions.length} subscription(s)`
+                                      `${row.subscriptions_count} subscription(s)`
                                   ) +
                                   "</a>"
                             : escape_str(__("No subscriptions"));
