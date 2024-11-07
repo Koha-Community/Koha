@@ -59,6 +59,5 @@ return {
                 say_info( $out, "Removed 'issuelimit' column from 'categories' table" );
             }
         }
-        say_info( $out, "Bug 35539: All done." );
     },
 };

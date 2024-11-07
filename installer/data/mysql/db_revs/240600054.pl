@@ -74,8 +74,6 @@ return {
                 $out,
                 $reports
             );
-        } else {
-            say_info( $out, "Finished database update." );
         }
 
     },

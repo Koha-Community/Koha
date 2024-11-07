@@ -16,6 +16,5 @@ return {
             );
             say_info( $out, "Added column 'service_platformerm_usage_data_providers'" );
         }
-        say_success( $out, "Done" );
     },
 };
