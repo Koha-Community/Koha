@@ -219,15 +219,16 @@ export default {
         let dt = this.$refs.table.dt()
         let table_node = dt.table().node()
         let add_filters = this.add_filters
+        let filters_options = this.filters_options
         if (add_filters) {
-            _dt_add_filters(table_node, dt, this.filters_options)
+            _dt_add_filters(table_node, dt, filters_options)
         }
 
         dt.on("column-visibility.dt", function () {
-            _dt_on_visibility(add_filters, table_node, dt)
+            if (add_filters) {
+                _dt_add_filters(table_node, dt, filters_options)
+            }
         })
-            .columns(this.hidden_ids)
-            .visible(false)
 
         dt.on("search.dt", function (e, settings) {
             toggledClearFilter(
