@@ -53,21 +53,20 @@
         [% END %]
 
         [% IF patron.account_locked %]
+            <li class="blocker [% patron.login_attempts < 0 ? 'account_admin_locked' : 'account_locked' | html %]">
             [% IF patron.login_attempts < 0 %]
-                <li class="blocker account_admin_locked">
                     <span class="circ-hlt">Locked: </span><span> Patron's account has been administratively locked</span>
-                </li>
             [% ELSE %]
-                <li class="blocker account_locked">
                 <span class="circ-hlt">Locked: </span><span> Patron's account has been locked (due to [% patron.login_attempts | html %] failed login attempts)</span>
+                [% END %]
                 [% IF CAN_user_borrowers_edit_borrowers %]
                     <span>
                         <a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Change password</a>
+                        <span data-bs-toggle="tooltip" title="Resetting password will remove lock on account" data-bs-placement="right" class="fa fa-info-circle"> </span>
                     </span>
                 [% END %]
                 </li>
             [% END %]
-        [% END %]
 
 
 
