@@ -129,6 +129,12 @@ sub record {
             'Koha::Biblio::Metadata->record called on unhandled format: ' . $format );
     }
 
+    # FIXME: Remove existing items from the MARC record. This should be handled
+    #        at store() time or pre-filtering in {Add|Mod}Biblio. Remove the FIXME
+    #        once we reach some consensus on how to handle this.
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber");
+    $record->delete_field( ( $record->field($itemtag) ) );
+
     if ( $embed_items ) {
         $self->_embed_items({ %$params, format => $format, record => $record });
     }
@@ -223,12 +229,7 @@ sub _embed_items {
 
     if ( $format eq 'marcxml' ) {
 
-        # First remove the existing items from the MARC record
         my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
-        foreach my $field ( $record->field($itemtag) ) {
-            $record->delete_field($field);
-        }
-
         my $biblio = Koha::Biblios->find($biblionumber);
 
         my $items = $biblio->items;

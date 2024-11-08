@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 5;
 use Test::Exception;
+use Test::MockModule;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -36,7 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'record() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->storage->txn_begin;
 
@@ -45,11 +46,32 @@ subtest 'record() tests' => sub {
     # Create a valid record
     my $record = MARC::Record->new();
     my $field  = MARC::Field->new( '245', '', '', 'a' => $title );
-    $record->append_fields($field);
+    my $f952_1 = MARC::Field->new(
+        '952', '', '', 0 => '1',
+        y => 'BK',
+        c => 'GEN',
+        d => '2001-06-25',
+    );
+    my $f952_2 = MARC::Field->new(
+        '952', '', '', 0 => '1',
+        y => 'BK',
+        c => 'GEN',
+        d => '2001-06-25',
+    );
+    $record->append_fields( $field, $f952_1, $f952_2 );
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, '' );
+
+    my @fields_952 = $record->field('952');
+    is( scalar @fields_952, 2, 'The record to be inserted contains 2 item fields' );
+
+    my $c4_biblio = Test::MockModule->new('C4::Biblio');
+    $c4_biblio->mock( 'GetMarcFromKohaField', sub { return '952'; } );
 
     my $metadata = Koha::Biblios->find($biblio_id)->metadata;
     my $record2  = $metadata->record;
+
+    @fields_952 = $record2->field('952');
+    is( scalar @fields_952, 0, 'Item fields stripped out then calling $metadata->record' );
 
     is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
     is( $record2->field('245')->subfield("a"),
