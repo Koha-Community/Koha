@@ -307,9 +307,9 @@ sub filter_by_available {
             itemlost        => 0,
             withdrawn       => 0,
             damaged         => 0,
-            notforloan      => { '<='    => 0 },
-            'me.itype'      => { -not_in => \@item_types_notforloan },
+            notforloan      => { '<=' => 0 },
             restricted      => [ { '!=' => 0 }, undef ],
+            'me.itype'      => { -not_in => \@item_types_notforloan },
         }
     );
 }
@@ -612,7 +612,7 @@ sub search {
         if ( $status eq 'not_for_loan' ) {
             my @item_types_notforloan =
                 Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
-            $self = $self->search( [ { notforloan => { '<=' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
+            $self = $self->search( [ { notforloan => { '>' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
         }
         if ( $status eq 'on_hold' ) {
             $self = $self->filter_by_has_holds;
@@ -626,10 +626,9 @@ sub search {
         }
 
         if ( $status eq 'restricted' ) {
-            $self = $self->search( { restricted => [ { '!=' => 0 }, undef ] } );
+            $self = $self->search( { restricted => [ { '!=' => 0 } ] } );
         }
     }
-
     return $self->SUPER::search( $params, $attributes );
 }
 
