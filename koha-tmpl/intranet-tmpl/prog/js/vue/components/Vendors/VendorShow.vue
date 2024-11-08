@@ -7,13 +7,31 @@
                 icon="plus"
                 :title="$__('New vendor')"
             />
-            <ButtonLink
+            <ToolbarButton
                 :to="{
                     name: 'VendorFormAddEdit',
                     params: { vendor_id: vendor.id },
                 }"
                 icon="pencil"
                 :title="$__('Edit vendor')"
+            />
+            <ToolbarButton
+                :to="{
+                    path: '/cgi-bin/koha/acqui/basketheader.pl',
+                    query: { booksellerid: vendor.id, op: 'add_form' },
+                }"
+                icon="plus"
+                :title="$__('New basket')"
+                callback="redirect"
+            />
+            <ToolbarButton
+                :to="{
+                    path: '/cgi-bin/koha/admin/aqcontract.pl',
+                    query: { booksellerid: vendor.id, op: 'add_form' },
+                }"
+                icon="plus"
+                :title="$__('New contract')"
+                callback="redirect"
             />
             <ToolbarButton
                 :to="{

@@ -2,7 +2,7 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="vendors_list">
         <Toolbar>
-            <ButtonLink
+            <ToolbarButton
                 :to="{ name: 'VendorFormAdd' }"
                 icon="plus"
                 :title="$__('New vendor')"
@@ -28,7 +28,7 @@
 <script>
 import flatPickr from "vue-flatpickr-component";
 import Toolbar from "../Toolbar.vue";
-import ButtonLink from "../ButtonLink.vue";
+import ToolbarButton from "../ToolbarButton.vue";
 import { inject, ref } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { storeToRefs } from "pinia";
@@ -269,7 +269,7 @@ export default {
             ];
         },
     },
-    components: { flatPickr, Toolbar, ButtonLink, KohaTable },
+    components: { flatPickr, Toolbar, ToolbarButton, KohaTable },
     name: "VendorList",
     emits: ["select-vendor", "close"],
 };
