@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "22421",
@@ -15,7 +16,7 @@ return {
             ADD COLUMN old_issue_id int(11) DEFAULT NULL AFTER issue_id
             }
             );
-            say $out "Added column 'accountlines.old_issue_id'";
+            say_success( $out, "Added column 'accountlines.old_issue_id'" );
         }
 
         unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_old_issues' ) ) {
@@ -30,7 +31,7 @@ return {
               ON UPDATE CASCADE
             }
             );
-            say $out "Added constraint 'accountlines.old_issues'";
+            say_success( $out, "Added constraint 'accountlines.old_issues'" );
         }
 
         # Add constraint for issue_id
@@ -48,7 +49,7 @@ return {
                 o.issue_id IS NOT NULL
             }
             );
-            say $out "Updated 'accountlines.old_issue_id' from 'old_issues'";
+            say_success( $out, "Updated 'accountlines.old_issue_id' from 'old_issues'" );
 
             $dbh->do(
                 q{
@@ -61,7 +62,7 @@ return {
                 i.issue_id IS NULL
             }
             );
-            say $out, "Fixed accountlines.issue_id where missing from issues";
+            say_success( $out, "Fixed 'accountlines.issue_id' where missing from issues" );
 
             $dbh->do(
                 q{
@@ -73,11 +74,9 @@ return {
                 ON UPDATE CASCADE
             }
             );
-            say $out "Added constraint 'accountlines.issues'";
+            say_success( $out, "Added constraint 'accountlines.issues'" );
         }
 
-        say $out "Add old_issue_id to accountlines and setup appropriate constraints)\n";
-
+        say_success( $out, "Added old_issue_id to accountlines and set up appropriate constraints)" );
     }
-
 };
