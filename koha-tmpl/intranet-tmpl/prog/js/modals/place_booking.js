@@ -815,8 +815,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             });
                             $("#booking_item_id").trigger("change.select2");
                         }
-                        // Range not set, reset field options
+                        // Range not set, reset field options and flatPickr state
                         else {
+                            boldDates = [];
+                            instance.set("maxDate", null);
                             $("#booking_item_id > option").each(function () {
                                 let option = $(this);
                                 if (option.data("pickup")) {
