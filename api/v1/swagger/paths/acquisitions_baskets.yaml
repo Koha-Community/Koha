@@ -14,18 +14,6 @@
       - $ref: "../swagger.yaml#/parameters/per_page"
       - $ref: "../swagger.yaml#/parameters/q_param"
       - $ref: "../swagger.yaml#/parameters/q_body"
-      - name: x-koha-embed
-        in: header
-        required: false
-        description: Embed list sent as a request header
-        type: array
-        items:
-          type: string
-          enum:
-            - orders
-            - creator
-            - basket_group
-        collectionFormat: csv
     produces:
       - application/json
     responses:

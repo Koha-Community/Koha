@@ -66,36 +66,27 @@
         <h1>
             {{ vendor.name }}
         </h1>
-        <template v-if="!basketView">
-            <div class="row">
-                <div class="col-sm-6">
-                    <VendorDetails :vendor="vendor" :display="true" />
-                    <VendorOrderingInformation
-                        :vendor="vendor"
-                        :display="true"
-                    />
-                    <VendorInterfaces
-                        :vendor="vendor"
-                        v-if="vendor.interfaces.length > 0"
-                        :display="true"
-                    />
-                </div>
-                <div class="col-sm-6">
-                    <VendorContacts :vendor="vendor" :display="true" />
-                    <VendorSubscriptions :vendor="vendor" />
-                </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <VendorDetails :vendor="vendor" :display="true" />
+                <VendorOrderingInformation :vendor="vendor" :display="true" />
+                <VendorInterfaces
+                    :vendor="vendor"
+                    v-if="vendor.interfaces.length > 0"
+                    :display="true"
+                />
             </div>
-            <div
-                class="page-section rows"
-                v-if="vendor.contracts && vendor.contracts.length > 0"
-            >
-                <VendorContracts :vendor="vendor" />
+            <div class="col-sm-6">
+                <VendorContacts :vendor="vendor" :display="true" />
+                <VendorSubscriptions :vendor="vendor" />
             </div>
-        </template>
-        <template v-if="basketView">
-            <h2>{{ $__("Baskets") }}</h2>
-            <VendorBaskets :basketCount="basketCount" :vendorId="vendor.id" />
-        </template>
+        </div>
+        <div
+            class="page-section rows"
+            v-if="vendor.contracts && vendor.contracts.length > 0"
+        >
+            <VendorContracts :vendor="vendor" />
+        </div>
     </div>
 </template>
 
@@ -110,7 +101,6 @@ import VendorInterfaces from "./VendorInterfaces.vue";
 import VendorContacts from "./VendorContacts.vue";
 import VendorSubscriptions from "./VendorSubscriptions.vue";
 import VendorContracts from "./VendorContracts.vue";
-import VendorBaskets from "./VendorBaskets.vue";
 import DropdownButtons from "../DropdownButtons.vue";
 
 export default {
@@ -126,20 +116,11 @@ export default {
         return {
             vendor: null,
             initialized: false,
-            basketView: false,
-            basketCount: null,
         };
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (to.path.includes("basket")) {
-                vm.basketView = true;
-                vm.getVendor(to.params.vendor_id).then(() =>
-                    vm.getBasketCount(to.params.vendor_id)
-                );
-            } else {
-                vm.getVendor(to.params.vendor_id);
-            }
+            vm.getVendor(to.params.vendor_id);
         });
     },
     methods: {
@@ -148,16 +129,6 @@ export default {
             await client.vendors.get(vendor_id).then(
                 vendor => {
                     this.vendor = vendor;
-                    this.initialized = true;
-                },
-                error => {}
-            );
-        },
-        async getBasketCount(booksellerid) {
-            const client = APIClient.acquisition;
-            await client.baskets.count({ booksellerid }).then(
-                count => {
-                    this.basketCount = count;
                     this.initialized = true;
                 },
                 error => {}
@@ -174,7 +145,6 @@ export default {
         VendorContacts,
         VendorSubscriptions,
         VendorContracts,
-        VendorBaskets,
     },
     name: "VendorShow",
 };

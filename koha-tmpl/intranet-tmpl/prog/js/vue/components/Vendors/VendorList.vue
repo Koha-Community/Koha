@@ -238,9 +238,9 @@ export default {
                     orderable: false,
                     render(data, type, row, meta) {
                         return row.baskets.length
-                            ? '<a href="/cgi-bin/koha/vendors/' +
+                            ? '<a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=' +
                                   row.id +
-                                  '/baskets" class="show">' +
+                                  '" class="show">' +
                                   escape_str(
                                       `${row.baskets.length} basket(s)`
                                   ) +

@@ -18,9 +18,8 @@ package Koha::REST::V1::Acquisitions::Baskets;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
-use Try::Tiny qw( catch try );
 
-use C4::Acquisition qw( CanUserManageBasket );
+use Try::Tiny qw( catch try );
 
 =head1 NAME
 
@@ -66,25 +65,13 @@ Return a list of baskets
 =cut
 
 sub list {
-    my $c      = shift->openapi->valid_input or return;
-    my $patron = $c->stash('koha.user');
+    my $c = shift->openapi->valid_input or return;
 
     return try {
 
-        my $baskets_rs = Koha::Acquisition::Baskets->new;
-        my $baskets    = $c->objects->search($baskets_rs);
-
-        my $userflags = C4::Auth::getuserflags( $patron->flags, $patron->userid );
-
-        my @user_baskets;
-        foreach my $basket (@$baskets) {
-            my $success = CanUserManageBasket( $patron->unblessed, $basket, $userflags );
-            push @user_baskets, $basket if $success;
-        }
-
         return $c->render(
             status  => 200,
-            openapi => \@user_baskets
+            openapi => $c->objects->search( Koha::Acquisition::Baskets->new ),
         );
     } catch {
         $c->unhandled_exception($_);

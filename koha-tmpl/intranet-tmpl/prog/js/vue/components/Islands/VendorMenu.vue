@@ -7,9 +7,10 @@
                     isUserPermitted('CAN_user_acquisition_order_manage')
                 "
             >
-                <a :href="`/cgi-bin/koha/vendors/${vendorId}/baskets`">{{
-                    $__("Baskets")
-                }}</a>
+                <a
+                    :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${vendorId}`"
+                    >{{ $__("Baskets") }}</a
+                >
             </li>
             <li
                 v-if="
