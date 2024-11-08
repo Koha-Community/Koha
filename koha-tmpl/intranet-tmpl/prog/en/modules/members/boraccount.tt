@@ -184,8 +184,8 @@
                                 [% IF account.is_credit && account.status != 'VOID' %]
                                     <button
                                         type="button"
-                                        data-toggle="modal"
-                                        data-target="#voidPaymentModal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#voidPaymentModal"
                                         data-accountline="[% account.accountlines_id | html %]"
                                         data-member="[% account.borrowernumber | html %]"
                                         class="btn btn-default btn-xs void-action"
@@ -195,8 +195,8 @@
                                 [% IF account.is_debit && account.amount == account.amountoutstanding && account.status != 'CANCELLED' && !(account.debit_type_code == 'PAYOUT') %]
                                     <button
                                         type="button"
-                                        data-toggle="modal"
-                                        data-target="#cancelChargeModal"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelChargeModal"
                                         data-accountlines_id="[% account.accountlines_id | html %]"
                                         data-borrowernumber="[% patron.borrowernumber | html %]"
                                         class="btn btn-default btn-xs void-action"
@@ -448,8 +448,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="voidPaymentLabel">Void payment</h4>
+                    <h1 class="modal-title" id="voidPaymentLabel">Void payment</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <fieldset class="rows">
@@ -486,8 +486,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="cancelChargeLabel">Cancel charge</h4>
+                    <h1 class="modal-title" id="cancelChargeLabel">Cancel charge</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <fieldset class="rows">
@@ -502,8 +502,8 @@
                 </div>
                 <!-- /.modal-body -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-default">Confirm</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
                 </div>
                 <!-- /.modal-footer -->
             </div>
