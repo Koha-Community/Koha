@@ -90,7 +90,7 @@ subtest 'get_balance() tests' => sub {
     $debit_2->discard_changes;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account")
-      ->status_is(200)->json_is(
+      ->status_is(200)->or(sub { diag $t->tx->res->body } )->json_is(
         {
             balance            => 100.01,
             outstanding_debits => {

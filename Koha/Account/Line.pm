@@ -982,6 +982,7 @@ sub to_api_mapping {
         borrowernumber    => 'patron_id',
         branchcode        => 'library_id',
         issue_id          => 'checkout_id',
+        old_issue_id      => 'old_checkout_id',
         itemnumber        => 'item_id',
         manager_id        => 'user_id',
         note              => 'internal_note',

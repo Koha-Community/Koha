@@ -48,6 +48,7 @@ sub to_api_mapping {
         borrowernumber    => 'patron_id',
         branchcode        => 'library_id',
         issue_id          => undef,
+        old_issue_id      => undef,
         itemnumber        => undef,
         manager_id        => 'user_id',
         note              => 'internal_note',
