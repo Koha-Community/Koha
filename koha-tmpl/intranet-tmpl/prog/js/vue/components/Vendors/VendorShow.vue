@@ -2,10 +2,30 @@
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="vendors_show">
         <Toolbar>
-            <ButtonLink
-                :to="{ name: 'VendorFormAdd' }"
-                icon="plus"
-                :title="$__('New vendor')"
+            <DropdownButtons
+                :items="[
+                    {
+                        to: {
+                            path: '/cgi-bin/koha/acqui/basketheader.pl',
+                            query: { booksellerid: vendor.id, op: 'add_form' },
+                        },
+                        title: 'Basket',
+                        callback: 'redirect',
+                    },
+                    {
+                        to: {
+                            path: '/cgi-bin/koha/admin/aqcontract.pl',
+                            query: { booksellerid: vendor.id, op: 'add_form' },
+                        },
+                        title: 'Contract',
+                        callback: 'redirect',
+                    },
+                    {
+                        to: { name: 'VendorFormAdd' },
+                        title: 'Vendor',
+                    },
+                ]"
+                :title="$__('New')"
             />
             <ToolbarButton
                 :to="{
@@ -91,6 +111,7 @@ import VendorContacts from "./VendorContacts.vue";
 import VendorSubscriptions from "./VendorSubscriptions.vue";
 import VendorContracts from "./VendorContracts.vue";
 import VendorBaskets from "./VendorBaskets.vue";
+import DropdownButtons from "../DropdownButtons.vue";
 
 export default {
     setup() {
