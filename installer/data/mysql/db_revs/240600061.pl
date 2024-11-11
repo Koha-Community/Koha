@@ -23,7 +23,7 @@ return {
             );
             say_info(
                 $out,
-                "Updated $fixed subscriptions with NULL aqbooksellersid where aqbooksellerid was not found in aqbooksellers"
+                "Updated $fixed subscriptions with NULL aqbooksellerid where aqbooksellerid was not found in aqbooksellers"
             ) if $fixed;
 
             $dbh->do(
