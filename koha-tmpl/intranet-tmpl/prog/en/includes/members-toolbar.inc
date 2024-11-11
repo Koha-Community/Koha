@@ -129,7 +129,7 @@
                         </li>
                     [% ELSE %]
                         <li data-bs-toggle="tooltip" data-bs-placement="left" title="Patron is an adult">
-                            <button class="dropdown-item disabled" aria-disabled="true" id="updatechild">Update child to adult patron</button>
+                            <a href="#" class="dropdown-item disabled" aria-disabled="true" id="updatechild">Update child to adult patron</a>
                         </li>
                     [% END %]
                 [% END %]
