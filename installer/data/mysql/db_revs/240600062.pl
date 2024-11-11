@@ -1,8 +1,9 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "34355",
-    description => "Add a table to allow creation of MARC order accounts and a syspref to activate it.",
+    description => "Add a table to allow creation of MARC order accounts and a system preference to activate it",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -32,22 +33,25 @@ return {
             }
             );
 
-            say $out "Added new table 'marc_order_accounts'";
+            say_success( $out, "Added new table 'marc_order_accounts'");
         } else {
-            say $out "Table 'marc_order_accounts' already exists";
+            say_info( $out, "Table 'marc_order_accounts' already exists");
         }
 
         $dbh->do(
             q{
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('MarcOrderingAutomation', '0', 'NULL', 'Enables automatic order line creation from MARC records', 'YesNo');
             }
+
         );
+                    say_success( $out, "Added new system preference 'MarcOrderingAutomation'");
 
         $dbh->do(
             q{
                 INSERT IGNORE INTO permissions (module_bit, code, description) values (11, 'marc_order_manage', 'Manage MARC ordering');
                 }
         );
+        say_success( $out, "Added new permission 'marc_order_manage'");
 
 
 
