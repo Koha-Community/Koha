@@ -3,15 +3,25 @@
 [% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
 [% IF whole.error %]
 [% IF whole.status == 'missing_identifier' %]
-<p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> Mandatory field Identifier is missing.
+    </div>
 [% ELSIF whole.status == 'missing_type' %]
-<p><em>Please Note:</em> Type is a mandatory field.</p>
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> Type is a mandatory field.
+    </div>
 [% ELSIF whole.status == 'missing_branch' %]
-<p><em>Please Note:</em> Destination library is a mandatory field.</p>
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> Library is a mandatory field.
+    </div>
 [% ELSIF whole.status == 'invalid_borrower' %]
-<p><em>Please Note:</em> The patron details you entered are invalid.</p>
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> The patron details you entered are invalid.
+    </div>
 [% ELSIF whole.status == 'invalid_branch' %]
-<p><em>Please Note:</em> The destination library you chose is invalid.</p>
+    <div class="alert alert-warning">
+        <strong>Please note:</strong> The library you chose is invalid.
+    </div>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
@@ -25,12 +35,11 @@
     <fieldset class="rows">
     <legend>Patron options</legend>
     <ol>
-      <li>
         [% WRAPPER ill_select_field required = 1 id = 'branchcode' label = t('Destination library') %]
-          <option value="" />
+          <option value=""></option>
           [% FOREACH branch IN branches %]
             [% IF whole.value.other.branchcode && branch.branchcode == whole.value.other.branchcode %]
-            <option value="[% branch.branchcode | html %]" selected>
+            <option value="[% branch.branchcode | html %]" selected="selected">
               [% branch.branchname | html %]
             </option>
             [% ELSE %]
@@ -40,15 +49,13 @@
             [% END %]
           [% END %]
         [% END #ill_select_field %]
-      </li>
     </ol>
   </fieldset>
   <fieldset class="rows">
     <legend>General details</legend>
     <ol id="general-standard-fields">
-    [% WRAPPER ill_select_field required = 1 id = 'type' label = t('Type') %]
-      <li>
-          <option value=""/>
+        [% WRAPPER ill_select_field required = 1 id = 'type' label = t('Type') %]
+          <option value=""></option>
           [% IF whole.value.other.type.lower == "book" %]
           <option value="book" selected="selected">Book</option>
           [% ELSE %]
@@ -94,8 +101,7 @@
           [% ELSE %]
           <option value="resource">Generic resource</option>
           [% END %]
-        </li>
-    [% END #ill_select_field %]
+        [% END #ill_select_field %]
     </ol>
   </fieldset>
   [% type = whole.value.other.type %]

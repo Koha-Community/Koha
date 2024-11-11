@@ -5,11 +5,11 @@
 [% IF whole.status == 'missing_identifier' %]
 <p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
 [% ELSIF whole.status == 'missing_branch' %]
-<p><em>Please Note:</em> Destination library is a mandatory field.</p>
+<p><em>Please Note:</em> Library is a mandatory field.</p>
 [% ELSIF whole.status == 'invalid_borrower' %]
 <p><em>Please Note:</em> The patron details you entered are invalid.</p>
 [% ELSIF whole.status == 'invalid_branch' %]
-<p><em>Please Note:</em> The destination library you chose is invalid.</p>
+<p><em>Please Note:</em> The library you chose is invalid.</p>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
@@ -87,8 +87,8 @@
         <label class="required" for="cardnumber">
           Card number, username or surname:
         </label>
-        <input type="text" name="cardnumber" id="cardnumber" autocomplete="off"
-               type="text" value="[% whole.value.other.cardnumber | html %]" />
+        <input type="text" name="cardnumber" id="cardnumber" autocomplete="off" type="text" value="[% whole.value.other.cardnumber | html %]" />
+        <span class="required">Required</span>
       </li>
       <li>
         <label class="required" for="branchcode">Destination library:</label>
@@ -104,6 +104,7 @@
             </option>
           [% END %]
         </select>
+        <span class="required">Required</span>
       </li>
     </ol>
   </fieldset>

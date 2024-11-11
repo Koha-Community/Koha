@@ -2,11 +2,11 @@
 [% IF whole.status == 'missing_identifier' %]
 <p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
 [% ELSIF whole.status == 'missing_branch' %]
-<p><em>Please Note:</em> Destination library is a mandatory field.</p>
+<p><em>Please Note:</em> Library is a mandatory field.</p>
 [% ELSIF whole.status == 'invalid_borrower' %]
-<p><em>Please Note:</em> The patron details you entered are invalid.</p>
+<p><em>Please Note:</em> The patrons details you entered are invalid.</p>
 [% ELSIF whole.status == 'invalid_branch' %]
-<p><em>Please Note:</em> The destination library you chose is invalid.</p>
+<p><em>Please Note:</em> The library you chose is invalid.</p>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
@@ -20,8 +20,8 @@
     <ol id="general-standard-fields">
       <li>
         <label class="required" for="type">Type:</label>
-        <select name="type" id="type">
-          <option value=""/>
+        <select class="form-select" name="type" id="type">
+          <option value=""></option>
           [% IF whole.value.other.type.lower == "book" %]
           <option value="book" selected="selected">Book</option>
           [% ELSE %]
@@ -68,6 +68,9 @@
           <option value="resource">Generic resource</option>
           [% END %]
         </select>
+        [% IF required %]
+            <div class="required_label required">Required</div>
+        [% END %]
       </li>
     </ol>
   </fieldset>
@@ -84,19 +87,20 @@
         <label class="required" for="cardnumber">
           Card number or surname:
         </label>
-        <input type="text" name="cardnumber" id="cardnumber"
-               type="text" value="" />
+        <input type="text" name="cardnumber" id="cardnumber" type="text" value="" />
+            <div class="required_label required">Required</div>
       </li>
       <li>
-        <label class="required" for="branchcode">Destination library:</label>
+        <label class="required" for="branchcode">Destination library:</label>xxx
         <select id="branchcode" name="branchcode">
-          <option value="" />
+          <option value=""></option>
           [% FOREACH branch IN branches %]
             <option value="[% branch.branchcode | html %]">
               [% branch.branchname | html %]
             </option>
           [% END %]
         </select>
+            <div class="required_label required">Required</div>
       </li>
     </ol>
   </fieldset>

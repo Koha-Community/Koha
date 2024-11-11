@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
             ( opac ? 'form-control input-fluid custom-field-input' : '') +'" placeholder="'+__('value')+'"> ' +
             '<button type="button" class="btn btn-danger btn-sm ' +
             'delete-new-field">' +
-            '<span class="fa fa-trash">' +
-            '</span> '+__('Delete')+'</button></li>';
+            '<span class="fa fa-trash-can"></span> ' +
+            __('Delete') +
+            '</button></li>';
         $('#standard-fields').append(row);
     });
     $('#standard-fields').on('click', '.delete-new-field',
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#standard-fields').on('keyup', '.custom-name', function() {
         var val = $(this).val();
         if (core.indexOf(val.toLowerCase()) > -1) {
-            $('#custom-warning').text(_('The name "' + val + '" is not permitted')).show();
+            $('#custom-warning').text(__('The name "' + val + '" is not permitted')).show();
             $('#ill-submit').attr('disabled', true);
             $('#add-new-fields').attr('disabled', true);
         } else {

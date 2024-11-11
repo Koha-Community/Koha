@@ -1,25 +1,33 @@
 [% BLOCK ill_text_input_field %]
     <li>
-      <label for="[% id | html %]">[% label | html %][% IF required %]*[% END %]</label>
-      [% IF opac %]
-        <input class="form-control input-fluid" type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
-      [% ELSE %]
-        <input type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
-      [% END %]
+        <label for="[% id | html %]">[% label | html %]:</label>
+        [% IF opac %]
+            <input class="form-control input-fluid" type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
+        [% ELSE %]
+            <input type="text" name="[% id | html %]" id="[% id | html%]" value="[% value | html %]" />
+        [% END %]
+        [% IF required %]
+            <div class="required_label required">Required</div>
+        [% END %]
+        [% SET required = 0 %]
     </li>
-    [% SET required = 0 %]
 [% END %]
 
 [% BLOCK ill_select_field %]
-      <label for="[% id | html %]">[% label | html %][% IF required %]*[% END %]</label>
-      [% IF opac %]
-        <select class="form-control input-fluid" name="[% id | html %]" id="[% id | html %]">
-      [% ELSE %]
-        <select name="[% id | html %]" id="[% id | html %]">
-      [% END %]
-        [% content | $raw %]
-      </select>
-      [% SET required = 0 %]
+    <li>
+        <label for="[% id | html %]">[% label | html %]:</label>
+        [% IF opac %]
+            <select class="form-select input-fluid" name="[% id | html %]" id="[% id | html %]">
+        [% ELSE %]
+            <select name="[% id | html %]" id="[% id | html %]">
+        [% END %]
+            [% content | $raw %]
+        </select>
+        [% IF required %]
+            <div class="required_label required">Required</div>
+        [% END %]
+        [% SET required = 0 %]
+    </li>
 [% END %]
 
 [% BLOCK book_text_input_fields %]
