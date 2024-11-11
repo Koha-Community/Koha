@@ -7,6 +7,8 @@ use Modern::Perl;
 use Test::More tests => 19;
 use Test::Warn;
 
+use DateTime;
+
 use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -771,7 +773,8 @@ subtest do_checkout_with_sysprefs_override => sub {
 };
 
 subtest do_checkout_with_patron_blocked => sub {
-    plan tests => 5;
+
+    plan tests => 8;
 
     my $mockILS     = Test::MockObject->new;
     my $server      = { ils => $mockILS };
@@ -804,17 +807,29 @@ subtest do_checkout_with_patron_blocked => sub {
         }
     );
 
+    my $date_expiry = DateTime->new( year => 2020, month => 1, day => 3 );
+
     my $expired_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
                 branchcode => $library->branchcode,
-                dateexpiry => '2020/01/03',
+                dateexpiry => $date_expiry,
             }
         }
     );
-    my $circ = $ils->checkout( $expired_patron->cardnumber, $item->barcode );
-    is( $circ->{screen_msg}, 'Patron expired on 01/03/2020', "Got correct expired screen message" );
+
+    my $circ;
+
+    foreach my $dateformat (qw{metric us iso dmydot}) {
+        t::lib::Mocks::mock_preference( 'dateformat', $dateformat );
+        $circ = $ils->checkout( $expired_patron->cardnumber, $item->barcode );
+        is(
+            $circ->{screen_msg},
+            'Patron expired on ' . output_pref( { dt => dt_from_string( $date_expiry, 'iso' ), dateonly => 1 } ),
+            "Got correct expired screen message"
+        );
+    }
 
     my $fines_patron = $builder->build_object(
         {
