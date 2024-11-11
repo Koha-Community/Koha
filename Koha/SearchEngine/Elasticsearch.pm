@@ -794,14 +794,15 @@ sub marc_records_to_documents {
 
                 #NOTE: Try to round-trip the record to prove it will work for retrieval after searching
                 my $decoded_usmarc_record = MARC::Record->new_from_usmarc($usmarc_record);
-                if ($decoded_usmarc_record->warnings()){
+                if ( $decoded_usmarc_record->warnings() ) {
+
                     #NOTE: We override the warnings since they're many and misleading
                     @warnings = (
                         "Warnings encountered while roundtripping a MARC record to/from USMARC. Failing over to MARCXML.",
                     );
                 }
 
-                my $marc_data = encode_base64(encode('UTF-8', $usmarc_record));
+                my $marc_data = encode_base64( encode( 'UTF-8', $usmarc_record ) );
                 $record_document->{'marc_data'} = $marc_data;
             }
             if (@warnings) {
