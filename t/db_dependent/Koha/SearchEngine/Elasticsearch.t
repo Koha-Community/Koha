@@ -756,20 +756,23 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     $marc_record_with_large_field->leader('     cam  22      a 4500');
 
     $marc_record_with_large_field->append_fields(
-        MARC::Field->new('100', '', '', a => 'Author 1'),
-        MARC::Field->new('245', '', '', a => 'Title:', b => 'record with large field'),
-        MARC::Field->new('500', '', '', a => 'X' x 15000),
-        MARC::Field->new('999', '', '', c => '1234567'),
+        MARC::Field->new( '100', '', '', a => 'Author 1' ),
+        MARC::Field->new( '245', '', '', a => 'Title:', b => 'record with large field' ),
+        MARC::Field->new( '500', '', '', a => 'X' x 15000 ),
+        MARC::Field->new( '999', '', '', c => '1234567' ),
     );
 
-    $docs = $see->marc_records_to_documents([$marc_record_with_large_field]);
+    $docs = $see->marc_records_to_documents( [$marc_record_with_large_field] );
 
-    is($docs->[0]->{marc_format}, 'MARCXML', 'For record with large field marc_format should be set correctly');
+    is( $docs->[0]->{marc_format}, 'MARCXML', 'For record with large field marc_format should be set correctly' );
 
-    $decoded_marc_record = $see->decode_record_from_result($docs->[0]);
+    $decoded_marc_record = $see->decode_record_from_result( $docs->[0] );
 
-    ok($decoded_marc_record->isa('MARC::Record'), "MARCXML record successfully decoded from result");
-    is($decoded_marc_record->as_xml_record(), $marc_record_with_large_field->as_xml_record(), "Decoded MARCXML record has same data as original record");
+    ok( $decoded_marc_record->isa('MARC::Record'), "MARCXML record successfully decoded from result" );
+    is(
+        $decoded_marc_record->as_xml_record(), $marc_record_with_large_field->as_xml_record(),
+        "Decoded MARCXML record has same data as original record"
+    );
 
 };
 
