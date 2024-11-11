@@ -328,7 +328,7 @@ subtest 'automatic_checkin' => sub {
     my $tomorrow  = dt_from_string->add( days => 1 );
     my $yesterday = dt_from_string->subtract( days => 1 );
 
-    # Checkout do for automatic checkin
+    # Checkout due for automatic checkin
     my $checkout_due_aci = Koha::Checkout->new(
         {
             borrowernumber => $patron->borrowernumber,

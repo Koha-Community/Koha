@@ -30,6 +30,8 @@ my $schema  = Koha::Database->new->schema;
 subtest 'overdue_fines' => sub {
     plan tests => 4;
 
+    $schema->storage->txn_begin;
+
     my $checkout = $builder->build_object(
         {
             class => 'Koha::Checkouts',
@@ -80,6 +82,8 @@ subtest 'overdue_fines' => sub {
         $overdue->id,
         'Koha::Checkout->overdue_fines should return the correct overdue_fines'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'library() tests' => sub {
