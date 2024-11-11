@@ -64,6 +64,13 @@ __PACKAGE__->table("borrower_modifications");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 preferred_name
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+patron/borrower's preferred name
+
 =head2 middle_name
 
   data_type: 'longtext'
@@ -471,6 +478,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "firstname",
   { data_type => "mediumtext", is_nullable => 1 },
+  "preferred_name",
+  { data_type => "longtext", is_nullable => 1 },
   "middle_name",
   { data_type => "longtext", is_nullable => 1 },
   "title",
@@ -646,8 +655,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-08 13:26:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pgmClJsT12pxLZHRYrRY9g
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 11:07:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QOqDkQ+8LuTY6qYrPhsQWw
 
 sub koha_object_class {
     'Koha::Patron::Modification';
