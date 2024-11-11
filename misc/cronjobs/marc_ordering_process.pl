@@ -20,7 +20,7 @@
 
 =head1 NAME
 
-marc_ordering_process.pl - cron script to retrieve marc files and create order lines
+marc_ordering_process.pl - cron script to retrieve MARC files and create order lines
 
 =head1 SYNOPSIS
 
@@ -32,7 +32,7 @@ or, in crontab:
 
 =head1 DESCRIPTION
 
-This script searches for new marc files in an SFTP location
+This script searches for new MARC files in an SFTP location
 If there are new files, it stages those files, adds bilbios/items and creates order lines
 
 =head1 OPTIONS
@@ -90,7 +90,7 @@ my @accounts = Koha::MarcOrderAccounts->search(
 )->as_list;
 
 if ( scalar(@accounts) == 0 ) {
-    print "No accounts found - you must create a Marc order account for this cronjob to run\n" if $verbose;
+    print "No accounts found - you must create a MARC order account for this cronjob to run\n" if $verbose;
 }
 
 foreach my $acct (@accounts) {

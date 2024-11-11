@@ -5,7 +5,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
-MARC Order Accounts
+MARC order accounts
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -26,11 +26,11 @@ MARC Order Accounts
 
         [% IF acct_form || delete_confirm %]
             [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC Order Accounts</a>
+                <a href="/cgi-bin/koha/admin/marc_order_accounts.pl">MARC order accounts</a>
             [% END %]
         [% ELSE %]
             [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>MARC Order Accounts</span>
+                <span>MARC order accounts</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -49,7 +49,7 @@ MARC Order Accounts
                     </a>
                     </div>
                     [% IF ( accounts ) %]
-                        <h1>Marc Ordering Accounts</h1>
+                        <h1>Marc ordering accounts</h1>
                         <div class="page-section">
                             <table>
                                 <tr>
@@ -77,7 +77,7 @@ MARC Order Accounts
                         </div>
                     [% ELSE %]
                         <div class="dialog message">
-                            There are no MARC Order accounts.
+                            There are no MARC order accounts.
                         </div>
                     [% END %]
                 [% END %]
@@ -107,7 +107,7 @@ MARC Order Accounts
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="budget_id">Budget: </label>
+                                    <label for="budget_id">Fund: </label>
                                     <select class="select2" name="budget_id" id="budget_id">
                                         [% FOREACH budget IN budgets %]
                                             [% IF account.budget_id == budget.budget_id %]
@@ -117,7 +117,7 @@ MARC Order Accounts
                                             [% END %]
                                         [% END %]
                                     </select>
-                                    <div class="hint">This budget will be used as the fallback value if the MARC records do not contain a mapped value for a budget code.</div>
+                                    <div class="hint">This fund will be used as the fallback value if the MARC records do not contain a mapped value for a fund code.</div>
                                 </li>
                                 <li>
                                     <label for="description">Description: </label>
@@ -126,12 +126,12 @@ MARC Order Accounts
                                 <li>
                                     <label for="download_directory">Download directory: </label>
                                     <input type="text" name="download_directory" id="download_directory" size="20" value="[% account.download_directory | html %]" />
-                                    <div class="hint">The download directory specifies the directory in your koha installation that should be searched for new files.</div>
+                                    <div class="hint">The download directory specifies the directory in your Koha installation that should be searched for new files.</div>
                                 </li>
                                 <li>
                                     <label for="match_field">Match field: </label>
                                     <input type="text" name="match_field" id="match_field" size="20" value="[% account.match_field | html %]" />
-                                    <div class="hint">(Optional): If you have files from multiple vendors in the same file directory, the match field is the field in the marc record that will be checked to see if the file should be processed by this account.</div>
+                                    <div class="hint">(Optional): If you have files from multiple vendors in the same file directory, the match field is the field in the MARC record that will be checked to see if the file should be processed by this account.</div>
                                     <div class="hint">The format for this field is the same as MARCFieldsToOrder - the field and the subfield separated by a dollar sign e.g. 245$a</div>
                                 </li>
                                 <li>
