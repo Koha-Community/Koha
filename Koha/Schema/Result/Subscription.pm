@@ -59,7 +59,7 @@ start date for this subscription
 =head2 aqbooksellerid
 
   data_type: 'integer'
-  default_value: 0
+  is_foreign_key: 1
   is_nullable: 1
 
 foreign key for aqbooksellers.id to link to the vendor
@@ -353,7 +353,7 @@ __PACKAGE__->add_columns(
   "startdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "aqbooksellerid",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "cost",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "aqbudgetid",
@@ -449,6 +449,26 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("subscriptionid");
 
 =head1 RELATIONS
+
+=head2 aqbooksellerid
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Aqbookseller>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "aqbooksellerid",
+  "Koha::Schema::Result::Aqbookseller",
+  { id => "aqbooksellerid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
 
 =head2 aqorders
 
@@ -566,8 +586,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-07-14 11:46:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LICIiWzag365cUAq5OYD2A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-11 14:57:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1Ht7Nfl870dv1NOs4vr04g
 
 __PACKAGE__->has_many(
   "additional_field_values",
