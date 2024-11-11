@@ -174,7 +174,7 @@ sub columns {
             "password"                    => __("Password"),
             "phone"                       => __("Primary phone"),
             "phonepro"                    => __("Secondary phone"),
-            "preferred_name"              => __("Preferred_name"),
+            "preferred_name"              => __("Preferred name"),
             "primary_contact_method"      => __("Primary contact method"),
             "privacy_guarantor_checkouts" => __("Show checkouts to guarantor"),
             "privacy_guarantor_fines"     => __("Show fines to guarantor"),
