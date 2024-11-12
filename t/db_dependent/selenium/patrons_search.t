@@ -84,15 +84,16 @@ sub setup {
             {
                 class => 'Koha::Patrons',
                 value => {
-                    surname       => "test_patron_" . $i++,
-                    firstname     => $firstname,
-                    middle_name   => q{}, # We don't want to copy the logic from patron_to_html
-                    othernames    => q{},
-                    categorycode  => $patron_category->categorycode,
-                    branchcode    => $library->branchcode,
-                    borrowernotes => $borrowernotes,
-                    address       => $address,
-                    email         => $email,
+                    surname        => "test_patron_" . $i++,
+                    firstname      => $firstname,
+                    preferred_name => $firstname,
+                    middle_name    => q{}, # We don't want to copy the logic from patron_to_html
+                    othernames     => q{},
+                    categorycode   => $patron_category->categorycode,
+                    branchcode     => $library->branchcode,
+                    borrowernotes  => $borrowernotes,
+                    address        => $address,
+                    email          => $email,
                 }
             }
           );
@@ -102,15 +103,16 @@ sub setup {
         {
             class => 'Koha::Patrons',
             value => {
-                surname       => "test",
-                firstname     => "not_p_a_t_r_o_n",                # won't match 'patron'
-                middle_name   => q{}, # We don't want to copy the logic from patron_to_html
-                othernames    => q{},
-                categorycode  => $patron_category->categorycode,
-                branchcode    => $library->branchcode,
-                borrowernotes => $borrowernotes,
-                address       => $address,
-                email         => $email,
+                surname        => "test",
+                firstname      => "not_p_a_t_r_o_n",                # won't match 'patron'
+                preferred_name => "not_p_a_t_r_o_n",
+                middle_name    => q{}, # We don't want to copy the logic from patron_to_html
+                othernames     => q{},
+                categorycode   => $patron_category->categorycode,
+                branchcode     => $library->branchcode,
+                borrowernotes  => $borrowernotes,
+                address        => $address,
+                email          => $email,
             }
         }
     );
@@ -127,16 +129,17 @@ sub setup {
         {
             class => 'Koha::Patrons',
             value => {
-                surname       => "test_patron_27",
-                firstname     => $firstname,
-                middle_name   => q{}, # We don't want to copy the logic from patron_to_html
-                othernames    => q{},
-                categorycode  => $patron_category->categorycode,
-                branchcode    => $library_2->branchcode,
-                borrowernotes => $borrowernotes,
-                address       => $address,
-                email         => $email,
-                dateofbirth   => '1980-06-17',
+                surname        => "test_patron_27",
+                firstname      => $firstname,
+                preferred_name => $firstname,
+                middle_name    => q{}, # We don't want to copy the logic from patron_to_html
+                othernames     => q{},
+                categorycode   => $patron_category->categorycode,
+                branchcode     => $library_2->branchcode,
+                borrowernotes  => $borrowernotes,
+                address        => $address,
+                email          => $email,
+                dateofbirth    => '1980-06-17',
             }
         }
       );
@@ -214,7 +217,7 @@ subtest 'Search patrons' => sub {
     C4::Context->set_preference('DefaultPatronSearchFields',"");
     C4::Context->set_preference('DefaultPatronSearchMethod',"contains");
     my $searchable_attributes = Koha::Patron::Attribute::Types->search({ staff_searchable => 1 })->count();
-    my $nb_standard_fields = 13 + $searchable_attributes; # Standard fields, plus one searchable attribute
+    my $nb_standard_fields = 14 + $searchable_attributes; # Standard fields, plus one searchable attribute
     $driver->get( $base_url . "/members/members-home.pl" );
     my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     is( scalar @adv_options, $nb_standard_fields + 1, 'All standard fields are searchable if DefaultPatronSearchFields not set. middle_name is there.');
@@ -225,16 +228,16 @@ subtest 'Search patrons' => sub {
     C4::Context->set_preference('DefaultPatronSearchFields',"firstname|initials");
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
-    is( scalar @adv_options, $nb_standard_fields, 'New option added when DefaultPatronSearchFields is populated with a field. Note that middle_name disappears, we do not want it if not part of DefaultPatronSearchFields');
+    is( scalar @adv_options, $nb_standard_fields - 1, 'New option added when DefaultPatronSearchFields is populated with a field. Note that middle_name and preferred_name disappears, we do not want it if not part of DefaultPatronSearchFields');
     is( $adv_options[0]->get_value(), 'standard', 'Standard search uses value "standard"');
     @filter_options = $driver->find_elements('//select[@class="searchfieldstype_filter"]/option');
-    is( scalar @filter_options, $nb_standard_fields, 'New filter option added when DefaultPatronSearchFields is populated with a field');
+    is( scalar @filter_options, $nb_standard_fields - 1, 'New filter option added when DefaultPatronSearchFields is populated with a field');
     is( $filter_options[0]->get_value(), 'standard', 'Standard filter uses value "standard"');
     $driver->get( $base_url . "/members/members-home.pl" );
     @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
     @filter_options = $driver->find_elements('//select[@class="searchfieldstype_filter"]/option');
-    is( scalar @adv_options, $nb_standard_fields, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
-    is( scalar @filter_options, $nb_standard_fields, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @adv_options, $nb_standard_fields - 1, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @filter_options, $nb_standard_fields - 1, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
 
     # NOTE: We should probably ensure the bad field is removed from 'standard' search here, else searches are broken
     C4::Context->set_preference('DefaultPatronSearchFields',"");
@@ -425,11 +428,13 @@ subtest 'Search patrons' => sub {
         my $patron_27 = Koha::Patrons->search( { surname => 'test_patron_27' } )->next;
         is( is_patron_shown($patron_27), 1, 'search by correct year shows the patron' );
         $dob_search_filter->clear;
+        $dob_search_filter = $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
 
         $dob_search_filter->send_keys('1986');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 0, 'search by incorrect year does not show the patron' );
         $dob_search_filter->clear;
+        $dob_search_filter = $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
 
         $dob_search_filter->send_keys('1980-06');
         sleep $DT_delay && $s->wait_for_ajax;
