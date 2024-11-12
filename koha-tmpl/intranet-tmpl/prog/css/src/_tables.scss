@@ -478,6 +478,8 @@ div {
 
         .dt-buttons {
             display: flex;
+            flex-grow: 1;
+            justify-content: flex-end;
 
             > .dt-button {
                 background: transparent none;
@@ -488,6 +490,10 @@ div {
                 &:hover:not( .disabled ) {
                     background: #EEE none;
                     border: 1px solid #666;
+                }
+
+                &.dt_button_clear_filter {
+                    margin-right: auto;
                 }
             }
         }
@@ -584,10 +590,6 @@ div {
                     }
                 }
             }
-        }
-
-        .dt-search {
-            flex-grow: 1;
         }
     }
 
