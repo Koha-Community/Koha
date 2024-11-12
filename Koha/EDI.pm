@@ -290,8 +290,7 @@ sub process_invoice {
                 )->single;
             }
             if ( !$vendor_acct ) {
-                carp
-"Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in $invoice_message->filename";
+                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in $invoice_message->filename";
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
@@ -313,100 +312,100 @@ sub process_invoice {
 
             foreach my $line ( @{$lines} ) {
                 my $ordernumber = $line->ordernumber;
-                if (!$ordernumber ) {
-                   $logger->trace( "Skipping invoice line, no associated ordernumber" );
-                   next;
-                }
-
-                $logger->trace( "Receipting order:$ordernumber Qty: ",
-                    $line->quantity );
-
-                my $order = $schema->resultset('Aqorder')->find($ordernumber);
-                if (my $bib = $order->biblionumber) {
-                    my $b = $bib->biblionumber;
-                    my $id = $line->item_number_id;
-                    $logger->trace("Updating bib:$b id:$id");
+                if ( !$ordernumber ) {
+                    $logger->error("Skipping invoice line, no associated ordernumber");
+                    next;
                 }
 
                 # ModReceiveOrder does not validate that $ordernumber exists validate here
-                if ($order) {
-
-                    # check suggestions
-                    my $s = $schema->resultset('Suggestion')->search(
-                        {
-                            biblionumber => $order->biblionumber->biblionumber,
-                        }
-                    )->single;
-                    if ($s) {
-                        ModSuggestion(
-                            {
-                                suggestionid => $s->suggestionid,
-                                STATUS       => 'AVAILABLE',
-                            }
-                        );
-                    }
-                    # If quantity_invoiced is present use it in preference
-                    my $quantity = $line->quantity_invoiced;
-                    if (!$quantity) {
-                        $quantity = $line->quantity;
-                    }
-
-                    my ( $price, $price_excl_tax ) = _get_invoiced_price($line, $quantity);
-                    my $tax_rate = $line->tax_rate;
-                    if ($tax_rate && $tax_rate->{rate} != 0) {
-                       $tax_rate->{rate} /= 100;
-                    }
-
-                    if ( $order->quantity > $quantity ) {
-                        my $ordered = $order->quantity;
-
-                        # part receipt
-                        $order->orderstatus('partial');
-                        $order->quantity( $ordered - $quantity );
-                        $order->update;
-                        my $received_order = $order->copy(
-                            {
-                                ordernumber            => undef,
-                                quantity               => $quantity,
-                                quantityreceived       => $quantity,
-                                orderstatus            => 'complete',
-                                unitprice              => $price,
-                                unitprice_tax_included => $price,
-                                unitprice_tax_excluded => $price_excl_tax,
-                                invoiceid              => $invoiceid,
-                                datereceived           => $msg_date,
-                                tax_rate_on_receiving  => $tax_rate->{rate},
-                                tax_value_on_receiving => $quantity * $price_excl_tax * $tax_rate->{rate},
-                            }
-                        );
-                        transfer_items( $schema, $line, $order,
-                            $received_order, $quantity );
-                        receipt_items( $schema, $line,
-                            $received_order->ordernumber, $quantity );
-                    }
-                    else {    # simple receipt all copies on order
-                        $order->quantityreceived( $quantity );
-                        $order->datereceived($msg_date);
-                        $order->invoiceid($invoiceid);
-                        $order->unitprice($price);
-                        $order->unitprice_tax_excluded($price_excl_tax);
-                        $order->unitprice_tax_included($price);
-                        $order->tax_rate_on_receiving($tax_rate->{rate});
-                        $order->tax_value_on_receiving( $quantity * $price_excl_tax * $tax_rate->{rate});
-                        $order->orderstatus('complete');
-                        $order->update;
-                        receipt_items( $schema, $line, $ordernumber, $quantity );
-                    }
+                my $order = $schema->resultset('Aqorder')->find($ordernumber);
+                if ( !$order ) {
+                    $logger->error("Skipping invoice line, no order found for $ordernumber, invoice:$invoicenumber");
+                    next;
                 }
-                else {
+
+                my $bib = $order->biblionumber;
+                if ( !$bib ) {
                     $logger->error(
-                        "No order found for $ordernumber Invoice:$invoicenumber"
+                        "Skipping invoice line, no bibliographic record found for $ordernumber, invoice:$invoicenumber"
                     );
                     next;
                 }
 
-            }
+                $logger->trace( "Receipting order:$ordernumber Qty: " . $line->quantity );
+                $logger->trace( "Updating bib:" . $bib->biblionumber . " id:" . $line->item_number_id );
 
+                # check suggestions
+                my $s = $schema->resultset('Suggestion')->search(
+                    {
+                        biblionumber => $bib->biblionumber,
+                    }
+                )->single;
+                if ($s) {
+                    ModSuggestion(
+                        {
+                            suggestionid => $s->suggestionid,
+                            STATUS       => 'AVAILABLE',
+                        }
+                    );
+                }
+
+                # If quantity_invoiced is present use it in preference
+                my $quantity = $line->quantity_invoiced;
+                if ( !$quantity ) {
+                    $quantity = $line->quantity;
+                }
+
+                my ( $price, $price_excl_tax ) = _get_invoiced_price( $line, $quantity );
+                my $tax_rate = $line->tax_rate;
+                if ( $tax_rate && $tax_rate->{rate} != 0 ) {
+                    $tax_rate->{rate} /= 100;
+                }
+
+                if ( $order->quantity > $quantity ) {
+                    my $ordered = $order->quantity;
+
+                    # part receipt
+                    $order->orderstatus('partial');
+                    $order->quantity( $ordered - $quantity );
+                    $order->update;
+                    my $received_order = $order->copy(
+                        {
+                            ordernumber            => undef,
+                            quantity               => $quantity,
+                            quantityreceived       => $quantity,
+                            orderstatus            => 'complete',
+                            unitprice              => $price,
+                            unitprice_tax_included => $price,
+                            unitprice_tax_excluded => $price_excl_tax,
+                            invoiceid              => $invoiceid,
+                            datereceived           => $msg_date,
+                            tax_rate_on_receiving  => $tax_rate->{rate},
+                            tax_value_on_receiving => $quantity * $price_excl_tax * $tax_rate->{rate},
+                        }
+                    );
+                    transfer_items(
+                        $schema,         $line, $order,
+                        $received_order, $quantity
+                    );
+                    receipt_items(
+                        $schema,                      $line,
+                        $received_order->ordernumber, $quantity
+                    );
+                } else {    # simple receipt all copies on order
+                    $order->quantityreceived($quantity);
+                    $order->datereceived($msg_date);
+                    $order->invoiceid($invoiceid);
+                    $order->unitprice($price);
+                    $order->unitprice_tax_excluded($price_excl_tax);
+                    $order->unitprice_tax_included($price);
+                    $order->tax_rate_on_receiving( $tax_rate->{rate} );
+                    $order->tax_value_on_receiving( $quantity * $price_excl_tax * $tax_rate->{rate} );
+                    $order->orderstatus('complete');
+                    $order->update;
+                    receipt_items( $schema, $line, $ordernumber, $quantity );
+                }
+            }
         }
     }
 
