@@ -24,7 +24,7 @@ return {
             say_info(
                 $out,
                 "Updated $fixed subscriptions with NULL aqbooksellerid where aqbooksellerid was not found in aqbooksellers"
-            ) if $fixed;
+            ) if ( $fixed && $fixed ne '0E0' );
 
             $dbh->do(
                 q|
