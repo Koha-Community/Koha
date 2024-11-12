@@ -9,13 +9,24 @@
     [% IF CAN_user_borrowers_edit_borrowers %]
         <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
     [% END %]
-
+    [% SET guarantee_categories = Categories.limited( can_be_guarantee => 1 ).unblessed  %]
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF patron.is_adult AND Koha.Preference("borrowerRelationship") %]
-            <a id="addchild" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> Add guarantee</a>
-        [% END %]
+            [% IF guarantee_categories.size > 1 %]
+                <div id="addchild" class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-plus"></i> Add guarantee</button>
+                        <ul class="dropdown-menu">
+                            [% FOREACH cat IN guarantee_categories %]
+                                <li><a class="dropdown-item" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]&categorycode=[%  cat.categorycode | html %]">[% cat.description | html%]</a></li>
+                            [% END %]
+                        </ul>
+                </div>
+            [% ELSE %]
+                <a id="addchild" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=add_form&amp;guarantor_id=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> Add guarantee</a>
+            [% END %]
         <a id="changepassword" class="btn btn-default" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]"><i class="fa fa-lock"></i> Change password</a>
         <a id="duplicate" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber | html %]"><i class="fa fa-copy"></i> Duplicate</a>
+        [% END %]
     [% END %]
 
     [% IF CAN_user_circulate_circulate_remaining_permissions %]
