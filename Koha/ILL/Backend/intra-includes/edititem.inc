@@ -2,7 +2,7 @@
 [% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
 [% IF whole.error %]
 [% IF whole.status == 'missing_type' %]
-<p><em>Please Note:</em> Mandatory field Type is missing.</p>
+<p><em>Please note:</em> Mandatory field 'type' is missing.</p>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]

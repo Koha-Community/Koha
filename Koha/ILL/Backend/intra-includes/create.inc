@@ -3,13 +3,13 @@
 [% PROCESS "${cwd}/shared-includes/form_input_helpers.inc" %]
 [% IF whole.error %]
 [% IF whole.status == 'missing_identifier' %]
-<p><em>Please Note:</em> Mandatory field Identifier is missing.</p>
+<p><em>Please note:</em> Mandatory field Identifier is missing.</p>
 [% ELSIF whole.status == 'missing_branch' %]
-<p><em>Please Note:</em> Library is a mandatory field.</p>
+<p><em>Please note:</em> Library is a mandatory field.</p>
 [% ELSIF whole.status == 'invalid_borrower' %]
-<p><em>Please Note:</em> The patron details you entered are invalid.</p>
+<p><em>Please note:</em> The patron details you entered are invalid.</p>
 [% ELSIF whole.status == 'invalid_branch' %]
-<p><em>Please Note:</em> The library you chose is invalid.</p>
+<p><em>Please note:</em> The library you chose is invalid.</p>
 [% ELSE %]
 <p>Unhandled error</p>
 [% END %]
