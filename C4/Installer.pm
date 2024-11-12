@@ -30,6 +30,7 @@ use C4::Context;
 use Koha::Schema;
 use Koha;
 use Koha::Installer;
+use Koha::Installer::Output qw ( say_failure );
 
 use vars qw(@ISA @EXPORT);
 BEGIN {
@@ -742,6 +743,7 @@ sub run_db_rev {
         );
     }
     catch {
+        say_failure( $outfh, "ERROR: " . $_ );
         $error = $_;
     };
 

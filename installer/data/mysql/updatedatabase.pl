@@ -24302,7 +24302,7 @@ unless ( $ENV{HTTP_HOST} ) { # Is that correct?
     }
     for my $e ( @{ $report->{error} } ) {
         say Encode::encode_utf8(join "\n", @{$e->{output}});
-        say_failure( undef, Encode::encode_utf8("ERROR - " . $e->{error}) );
+        #say_failure( undef, Encode::encode_utf8("ERROR - " . $e->{error}) );
         $error_code = 1;
     }
 
@@ -24313,7 +24313,7 @@ unless ( $ENV{HTTP_HOST} ) { # Is that correct?
     }
     for my $e ( @{ $report->{error} } ) {
         say Encode::encode_utf8(join "\n", @{$e->{output}});
-        say_failure( undef, Encode::encode_utf8("ERROR - " . $e->{error}) );
+        #say_failure( undef, Encode::encode_utf8("ERROR - " . $e->{error}) );
         $error_code = 1;
     }
     exit $error_code;
