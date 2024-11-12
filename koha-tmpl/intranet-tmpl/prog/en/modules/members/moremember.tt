@@ -732,7 +732,7 @@
             </div> <!-- /.col-sm-2 order-sm-2 order-md-1 -->
         </div> <!-- /.row -->
 
-        [% IF Koha.Preference('ClaimReturnedLostValue') %]
+        [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
             [% INCLUDE 'modals/resolve_return_claim.inc' %]
         [% END %]
 
