@@ -21,66 +21,66 @@ use Getopt::Long qw( GetOptions );
 use Pod::Usage   qw( pod2usage );
 
 use Koha::Script -cron;
-
-use C4::Context;
+use C4::Biblio qw( DelBiblio );
 use Koha::Items;
 
-my $dbh = C4::Context->dbh();
-
-my $query = { target_items => q|SELECT itemnumber, biblionumber from items| };
-
-my $GLOBAL = { query => $query, sth => {} };
-
-my $OPTIONS = {
-    where => [],
-    flags => {
-        verbose => '', commit => ''
-        , help    => ''
-        , manual  => ''
-        , version => ''
-    }
-};
+my @where          = ();
+my $verbose        = 0;
+my $help           = 0;
+my $manual         = 0;
+my $commit         = 0;
+my $delete_biblios = 0;
 
 GetOptions(
-    'where=s' => $OPTIONS->{where}, 'v|verbose' => sub { $OPTIONS->{flags}->{verbose} = 1 }
-    , 'V|version' => sub { $OPTIONS->{flags}->{version} = 1 }
-    , 'h|help'    => sub { $OPTIONS->{flags}->{help}    = 1 }
-    , 'm|manual'  => sub { $OPTIONS->{flags}->{manual}  = 1 }
-    , 'c|commit'  => sub { $OPTIONS->{flags}->{commit}  = 1 }    # aka DO-EET!
+    'where=s'  => \@where, 'v|verbose' => \$verbose,
+    'h|help'   => \$help,
+    'm|manual' => \$manual,
+    'c|commit' => \$commit,
+    'del_bibs' => \$delete_biblios
 );
 
-my @where = @{ $OPTIONS->{where} };
+pod2usage( -verbose => 2 )                                                            if $manual;
+pod2usage( -verbose => 1 )                                                            if $help;
+pod2usage( -verbose => 1, -message => 'You must supply at least one --where option' ) if scalar @where == 0;
 
-pod2usage( -verbose => 2 )                                                       if $OPTIONS->{flags}->{manual};
-pod2usage( -verbose => 1 )                                                       if $OPTIONS->{flags}->{help};
-pod2usage( -verbose => 1 -msg => 'You must supply at least one --where option' ) if scalar @where == 0;
+my $where_clause = join( " AND ", @where );
 
-sub verbose {
-    say @_ if $OPTIONS->{flags}->{verbose};
+$verbose && say "Where statement: $where_clause";
+if ($delete_biblios) {
+    $verbose && say "Deleting bibliographic records when all items are deleted!";
 }
 
-my $where_clause = ' where ' . join( " and ", @where );
+print "Test run only! No data will be deleted.\n" unless $commit;
+my $deleted_string = $commit ? "Deleted" : "Would have deleted";
 
-verbose "Where statement: $where_clause";
+my $items = Koha::Items->search( \$where_clause );
 
-# FIXME Use Koha::Items instead
-$GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_clause );
-$GLOBAL->{sth}->{target_items}->execute();
+DELITEM: while ( my $item = $items->next ) {
 
-DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
-
-    my $item_object    = Koha::Items->find( $item->{itemnumber} );
-    my $safe_to_delete = $item_object->safe_to_delete;
+    my $safe_to_delete = $item->safe_to_delete;
+    my $error;
     if ($safe_to_delete) {
-        $item_object->safe_delete
-            if $OPTIONS->{flags}->{commit};
-        verbose "Deleting '$item->{itemnumber}'";
+        my $holdings_count = $item->biblio->items->count - 1;
+        $item->safe_delete
+            if $commit;
+        $verbose && say "$deleted_string item " . $item->itemnumber . " ($holdings_count items remain on record)";
+
+        if ( $delete_biblios && $holdings_count == 0 ) {    # aka DO-EET for empty bibs!
+            $error = &DelBiblio( $item->biblionumber ) if $commit;
+            if ($error) {
+                $verbose && say "Could not delete bib " . $item->biblionumber . ": $error";
+            } else {
+                $verbose && say "No items remaining. $deleted_string bibliographic record " . $item->biblionumber;
+            }
+        }
     } else {
-        verbose sprintf "Item '%s' (Barcode: '%s', Title: '%s') not deleted: %s",
-            $item->{itemnumber},
-            $item_object->barcode,
-            $item_object->biblio->title,
-            @{ $safe_to_delete->messages }[0]->message;
+        say sprintf(
+            "Item '%s' (Barcode: '%s', Title: '%s') cannot deleted: %s",
+            $item->itemnumber,
+            $item->barcode,
+            $item->biblio->title,
+            @{ $safe_to_delete->messages }[0]->message
+        ) if $verbose;
     }
 }
 
@@ -122,6 +122,10 @@ clause querying the items table. These are joined by C<AND>.
 =item B<--commit>
 
 No items will be deleted unless the C<--commit> flag is present.
+
+=item B<--del_bibs>
+
+Deletes the bibliographic record if the last item is deleted.
 
 =back
 
