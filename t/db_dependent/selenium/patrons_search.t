@@ -411,6 +411,10 @@ subtest 'Search patrons' => sub {
 
         C4::Context->set_preference( 'dateformat', 'metric' );
 
+        sub get_dob_search_filter {
+            return $s->driver->find_element( '//table[@id="' . shift . '"]//th[@aria-label="Date of birth: activate to sort column ascending"]/input' );
+        }
+
         # We have a patron with date of birth=1980-06-17 => formatted as 17/06/1980
 
         $driver->get( $base_url . "/members/members-home.pl" );
@@ -420,46 +424,43 @@ subtest 'Search patrons' => sub {
         sleep $DT_delay && $s->wait_for_ajax;
 
         $s->show_all_entries( '//div[@id="' . $table_id . '_wrapper"]' );
-        my $dob_search_filter =
-            $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
 
-        $dob_search_filter->send_keys('1980');
+        get_dob_search_filter($table_id)->send_keys('1980');
         sleep $DT_delay && $s->wait_for_ajax;
         my $patron_27 = Koha::Patrons->search( { surname => 'test_patron_27' } )->next;
         is( is_patron_shown($patron_27), 1, 'search by correct year shows the patron' );
-        $dob_search_filter->clear;
-        $dob_search_filter = $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('1986');
+        get_dob_search_filter($table_id)->send_keys('1986');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 0, 'search by incorrect year does not show the patron' );
-        $dob_search_filter->clear;
-        $dob_search_filter = $s->driver->find_element( '//table[@id="' . $table_id . '"]//input[@placeholder="Date of birth search"]' );
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('1980-06');
+        get_dob_search_filter($table_id)->send_keys('1980-06');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 1, 'search by correct year-month shows the patron' );
-        $dob_search_filter->clear;
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('1980-06-17');
+        get_dob_search_filter($table_id)->send_keys('1980-06-17');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 1, 'search by correct full iso date shows the patron' );
-        $dob_search_filter->clear;
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('1986-06-17');
+        get_dob_search_filter($table_id)->send_keys('1986-06-17');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 0, 'search by incorrect full iso date does not show the patron' );
-        $dob_search_filter->clear;
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('17/06/1980');
+        get_dob_search_filter($table_id)->send_keys('17/06/1980');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 1, 'search by correct full formatted date shows the patron' );
-        $dob_search_filter->clear;
+        get_dob_search_filter($table_id)->clear;
 
-        $dob_search_filter->send_keys('17/06/1986');
+        get_dob_search_filter($table_id)->send_keys('17/06/1986');
         sleep $DT_delay && $s->wait_for_ajax;
         is( is_patron_shown($patron_27), 0, 'search by incorrect full formatted date does not show the patron' );
-        $dob_search_filter->clear;
+        get_dob_search_filter($table_id)->clear;
+
     };
 
     teardown();
