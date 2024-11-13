@@ -291,7 +291,7 @@ subtest 'Fine items, currency, start and end item response in patron info' => su
     my $siprequest =
           PATRON_INFO
         . 'engYYYYMMDDZZZZHHMMSS'
-        . '      Y   '
+        . '   Y      '
         . FID_INST_ID
         . $branchcode . '|'
         . FID_PATRON_ID
