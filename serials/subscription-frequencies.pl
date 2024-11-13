@@ -75,7 +75,8 @@ if($op && ($op eq 'savenew' || $op eq 'savemod')) {
     foreach (qw/ description unit issuesperunit unitsperissue displayorder /) {
         $frequency->{$_} = $input->param($_);
     }
-    $frequency->{unit} = undef if $frequency->{unit} eq '';
+    $frequency->{unit}         = undef if $frequency->{unit} eq '';
+    $frequency->{displayorder} = undef if $frequency->{displayorder} eq '';
     foreach (qw/issuesperunit unitsperissue/) {
         $frequency->{$_} = 1 if $frequency->{$_} !~ /\d+/;
     }
