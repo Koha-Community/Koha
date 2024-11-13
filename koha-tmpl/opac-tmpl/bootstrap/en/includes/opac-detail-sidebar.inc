@@ -17,7 +17,7 @@
     [% END %]
 
     <li><a class="print-large btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>
-    <li><a class="cite btn btn-link btn-lg" href="#" id="cite" data-toggle="modal" data-target="#citeModal"><i class="fa fa-fw fa-quote-left" aria-hidden="true"></i> Cite</a></li>
+    <li><a class="cite btn btn-link btn-lg" href="#" id="cite" data-bs-toggle="modal" data-bs-target="#citeModal"><i class="fa fa-fw fa-quote-left" aria-hidden="true"></i> Cite</a></li>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF artreqpossible %]
