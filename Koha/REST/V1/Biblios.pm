@@ -24,7 +24,7 @@ use Koha::DateUtils;
 use Koha::Ratings;
 use Koha::RecordSources;
 use C4::Biblio qw( DelBiblio AddBiblio ModBiblio );
-use C4::Search qw( FindDuplicate );
+use C4::Search;
 
 use C4::Auth qw( haspermission );
 use C4::Barcodes::ValueBuilder;
@@ -674,15 +674,14 @@ sub add {
 
         my $confirm_not_duplicate = $headers->header('x-confirm-not-duplicate');
 
-        if ( !$confirm_not_duplicate ) {
-            my ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
-
+        my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $record, $frameworkcode );
+        if ( $duplicate && ( $duplicate->{forbid_duplicate_creation} || !$confirm_not_duplicate ) ) {
             return $c->render(
                 status  => 400,
                 openapi => {
-                    error => "Duplicate biblio $duplicatebiblionumber",
+                    error => "Duplicate biblio $duplicate->{biblionumber}",
                 }
-            ) if $duplicatebiblionumber;
+            );
         }
 
         my ($biblio_id) = C4::Biblio::AddBiblio( $record, $frameworkcode, { record_source_id => $record_source_id } );

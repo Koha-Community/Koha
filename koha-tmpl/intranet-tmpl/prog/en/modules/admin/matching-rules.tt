@@ -590,6 +590,7 @@
                         <th>#</th>
                         <th>Code</th>
                         <th>Description</th>
+                        <th>Record type</th>
                         <th class="no-export">Actions</th>
                     </tr>
                     [% FOREACH available_matching_rule IN available_matching_rules %]
@@ -597,6 +598,7 @@
                             <td>[% available_matching_rule.matcher_id | html %]</td>
                             <td>[% available_matching_rule.code | html %]</td>
                             <td>[% available_matching_rule.description | html %]</td>
+                            <td>[% available_matching_rule.record_type | html %]</td>
                             <td class="actions">
                                 <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/matching-rules.pl?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"
                                     ><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a

@@ -83,7 +83,7 @@ use C4::Biblio      qw(
 );
 use C4::Output qw( output_and_exit output_html_with_http_headers );
 use C4::Members;
-use C4::Search qw( FindDuplicate );
+use C4::Search;
 
 #needed for z3950 import:
 use C4::ImportBatch qw( SetImportRecordStatus SetMatchedBiblionumber GetImportRecordMarc );
@@ -175,15 +175,32 @@ if ( $ordernumber eq '' and defined $breedingid ) {
         $marcrecord->delete_field($item);
     }
 
-    my $duplicatetitle;
-
-    #look for duplicates
-    ( $biblionumber, $duplicatetitle ) = FindDuplicate($marcrecord);
-    if ( $biblionumber && $op ne 'cud-use_external_source' ) {
+    # look for duplicates
+    my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $marcrecord, $frameworkcode );
+    if ( $duplicate && $op ne 'cud-use_external_source' ) {
 
         #if duplicate record found and user did not decide yet, first warn user
         #and let them choose between using a new record or an existing record
-        Load_Duplicate($duplicatetitle);
+        #(if the matching rule does not forbid it)
+        my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+            {
+                template_name => "acqui/neworderempty_duplicate.tt",
+                query         => $input,
+                type          => "intranet",
+                flagsrequired => { acquisition => 'order_manage' },
+            }
+        );
+
+        my $marcflavour = uc C4::Context->preference("marcflavour");
+        $template->param(
+            basketno     => $basketno,
+            booksellerid => $basket->{'booksellerid'},
+            breedingid   => $breedingid,
+            duplicate    => $duplicate,
+            $marcflavour => 1
+        );
+
+        output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
 
@@ -639,27 +656,4 @@ sub MARCfindbreeding {
         }
     }
     return -1;
-}
-
-sub Load_Duplicate {
-    my ($duplicatetitle) = @_;
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name => "acqui/neworderempty_duplicate.tt",
-            query         => $input,
-            type          => "intranet",
-            flagsrequired => { acquisition => 'order_manage' },
-        }
-    );
-
-    $template->param(
-        biblionumber                                     => $biblionumber,
-        basketno                                         => $basketno,
-        booksellerid                                     => $basket->{'booksellerid'},
-        breedingid                                       => $breedingid,
-        duplicatetitle                                   => $duplicatetitle,
-        ( uc( C4::Context->preference("marcflavour") ) ) => 1
-    );
-
-    output_html_with_http_headers $input, $cookie, $template->output;
 }

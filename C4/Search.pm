@@ -45,7 +45,9 @@ use XML::Simple;
 use C4::XSLT     qw( XSLTParse4Display );
 use C4::Reserves qw( GetReserveStatus );
 use C4::Charset  qw( SetUTF8Flag );
+use C4::Matcher;
 use Koha::AuthorisedValues;
+use Koha::BiblioFrameworkMarcMatchers;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Logger;
@@ -141,6 +143,74 @@ sub FindDuplicate {
         }
     }
     return @results;
+}
+
+=head2 FindDuplicateWithMatchingRules
+
+    @duplicates = FindDuplicateWithMatchingRules($record);
+    @duplicates = FindDuplicateWithMatchingRules( $record, $frameworkcode );
+
+This function attempts to find duplicate records using the record matching rule
+configured for the given C<$frameworkcode> (or the default MARC framework if
+not given).
+
+If no record matching rule is configured for the given framework, it tries to
+find duplicates using C<FindDuplicate>.
+
+It returns a list of hashrefs (one per duplicate found), containing the following keys:
+
+=over
+
+=item * C<biblionumber>
+
+=item * C<title>, the biblio title
+
+=item * C<forbid_duplicate_creation>, if true, Koha should not offer to create
+        a duplicate record
+
+=back
+
+=cut
+
+sub FindDuplicateWithMatchingRules {
+    my ( $record, $frameworkcode ) = @_;
+
+    $frameworkcode //= '';
+
+    my $biblio_framework_marc_matcher = Koha::BiblioFrameworkMarcMatchers->find($frameworkcode);
+    if ($biblio_framework_marc_matcher) {
+        my $matcher = C4::Matcher->fetch( $biblio_framework_marc_matcher->marc_matcher_id );
+        if ($matcher) {
+            my @duplicates;
+            my $max_matches = 1;
+            my @matches     = $matcher->get_matches( $record, $max_matches );
+            foreach my $match (@matches) {
+                my $biblio = Koha::Biblios->find( $match->{record_id} );
+                if ($biblio) {
+                    push @duplicates, {
+                        biblionumber              => $biblio->biblionumber,
+                        title                     => $biblio->title,
+                        forbid_duplicate_creation => $biblio_framework_marc_matcher->forbid_duplicate_creation,
+                    };
+                }
+            }
+
+            return @duplicates;
+        }
+    }
+
+    # If no matcher can be used, default to FindDuplicate
+    my @results = FindDuplicate($record);
+    my @duplicates;
+    while ( ( my $biblionumber = shift @results ) && ( my $title = shift @results ) ) {
+        push @duplicates, {
+            biblionumber              => $biblionumber,
+            title                     => $title,
+            forbid_duplicate_creation => 0,
+        };
+    }
+
+    return @duplicates;
 }
 
 =head2 SimpleSearch

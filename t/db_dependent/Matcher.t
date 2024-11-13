@@ -34,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'GetMatcherList' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     $schema->resultset('MarcMatcher')->delete_all;
     my $matcher1 = $builder->build(
@@ -72,6 +72,10 @@ subtest 'GetMatcherList' => sub {
 
     $testmatcher->description('match on ISSN');
     is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
+
+    @matchers = C4::Matcher::GetMatcherList( { record_type => 'blue' } );
+    is( scalar @matchers,            1,      'Filtering works' );
+    is( $matchers[0]->{record_type}, 'blue', 'Filtering on record type works' );
 };
 
 subtest '_get_match_keys() tests' => sub {

@@ -31,6 +31,23 @@ Koha::BiblioFramework - Koha BiblioFramework Object class
 
 =cut
 
+=head3 delete
+
+See L<Koha::Object/delete>
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $biblio_framework_marc_matcher = Koha::BiblioFrameworkMarcMatchers->find( $self->frameworkcode );
+    if ($biblio_framework_marc_matcher) {
+        $biblio_framework_marc_matcher->delete();
+    }
+
+    $self->SUPER::delete();
+}
+
 =head3 type
 
 =cut

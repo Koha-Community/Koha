@@ -20,6 +20,7 @@ use Modern::Perl;
 use utf8;
 
 use C4::AuthoritiesMarc qw( SearchAuthorities );
+use C4::Matcher;
 use C4::XSLT;
 require C4::Context;
 
@@ -27,13 +28,15 @@ require C4::Context;
 use open ':std', ':encoding(utf8)';
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::Mocks::Zebra;
 
 use Koha::Caches;
+use Koha::Database;
+use Koha::DateUtils;
 
 use MARC::Record;
 use File::Spec;
@@ -42,6 +45,7 @@ use File::Find;
 
 use File::Temp qw/ tempdir /;
 use File::Path;
+use DateTime;
 
 # Fall back to make sure that the Zebra process
 # and files get cleaned up
@@ -1367,6 +1371,77 @@ subtest 'FindDuplicate' => sub {
         q/isbn:9780307744432 OR 0307744434/, "Term correctly formed and passed to $engine";
     }
 
+};
+
+subtest 'FindDuplicateWithMatchingRules' => sub {
+    plan tests => 3;
+
+    my $marcflavour = 'MARC21';
+    my $mock_zebra  = t::lib::Mocks::Zebra->new( { marcflavour => $marcflavour } );
+    push @cleanup, $mock_zebra;
+
+    mock_GetMarcSubfieldStructure($marcflavour);
+
+    my $sourcedir = dirname(__FILE__) . "/data";
+    $mock_zebra->load_records(
+        sprintf( "%s/%s/zebraexport/biblio", $sourcedir, lc($marcflavour) ),
+        'iso2709', 'biblios', 1
+    );
+    $mock_zebra->launch_zebra;
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Zebra' );
+
+    my $schema = Koha::Database->schema;
+
+    # Unlike with FindDuplicate, we need the biblio to exist
+    my $biblio = Koha::Biblios->find(51);
+    unless ($biblio) {
+        $schema->resultset('Biblio')->create(
+            {
+                biblionumber  => 51,
+                frameworkcode => '',
+                title         => 'Administração da produção /',
+                datecreated   => Koha::DateUtils::dt_from_string(),
+            }
+        );
+    }
+
+    $schema->txn_begin;
+
+    $schema->resultset('MarcMatcher')->delete;
+
+    my $record = MARC::Record->new;
+    $record->add_fields(
+        [ '020', ' ', ' ', a => '9788522421718' ],
+        [ '245', '0', '0', a => 'Administração da produção /' ]
+    );
+    my ($duplicate) = C4::Search::FindDuplicateWithMatchingRules($record);
+    is( $duplicate && $duplicate->{biblionumber}, 51, 'Without any matcher, same result than FindDuplicate' );
+
+    # Make sure the matcher is used by configuring it badly first, it should return no duplicate
+    my $matcher = C4::Matcher->new( 'biblio', 1000 );
+    $matcher->add_matchpoint( 'issn', 1000, [ { tag => '020', subfields => 'a', offset => 0 } ] );
+    $matcher->store();
+
+    my $biblio_framework_marc_matcher = Koha::BiblioFrameworkMarcMatcher->new(
+        {
+            frameworkcode   => '',
+            marc_matcher_id => $matcher->{id},
+        }
+    );
+    $biblio_framework_marc_matcher->store();
+
+    ($duplicate) = C4::Search::FindDuplicateWithMatchingRules($record);
+    ok( !defined $duplicate, 'Matcher is used and returns no duplicates' );
+
+    # Now fix the matcher and make sure it returns a duplicate
+    $matcher->{matchpoints} = [];
+    $matcher->add_matchpoint( 'isbn', 1000, [ { tag => '020', subfields => 'a', offset => 0 } ] );
+    $matcher->store();
+
+    ($duplicate) = C4::Search::FindDuplicateWithMatchingRules($record);
+    is( $duplicate && $duplicate->{biblionumber}, 51, 'Matcher is used and returns a duplicate' );
+
+    $schema->txn_rollback;
 };
 
 # Make sure that following tests are not using our config settings

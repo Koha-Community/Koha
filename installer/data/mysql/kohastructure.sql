@@ -1140,6 +1140,23 @@ CREATE TABLE `biblio_framework` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `biblio_framework_marc_matcher`
+--
+
+DROP TABLE IF EXISTS `biblio_framework_marc_matcher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biblio_framework_marc_matcher` (
+  `frameworkcode` varchar(4) NOT NULL COMMENT 'MARC framework code',
+  `marc_matcher_id` int(11) NOT NULL COMMENT 'MARC matcher id',
+  `forbid_duplicate_creation` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Do not show an option to create a duplicate record when a duplicate is found',
+  PRIMARY KEY (`frameworkcode`),
+  KEY `biblio_framework_marc_matcher_ibfk_1` (`marc_matcher_id`),
+  CONSTRAINT `biblio_framework_marc_matcher_ibfk_1` FOREIGN KEY (`marc_matcher_id`) REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `biblio_metadata`
 --
 

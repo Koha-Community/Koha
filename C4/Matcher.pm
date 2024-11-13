@@ -19,6 +19,7 @@ package C4::Matcher;
 
 use Modern::Perl;
 
+use Koha::Database;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
@@ -70,7 +71,7 @@ C4::Matcher - find MARC records matching another one
 
 =head2 GetMatcherList
 
-  my @matchers = C4::Matcher::GetMatcherList();
+  my @matchers = C4::Matcher::GetMatcherList($filters);
 
 Returns an array of hashrefs list all matchers
 present in the database.  Each hashref includes:
@@ -78,19 +79,32 @@ present in the database.  Each hashref includes:
  * matcher_id
  * code
  * description
+ * record_type
+
+C<$filters> is an optional hashref parameter that allows to filter the result. Useful keys are:
+
+=over
+
+=item * C<record_type>
+
+=back
+
+See L<DBIx::Class::ResultSet/search> for more info
+
+=head3 Examples
+
+    @matchers = C4::Matcher::GetMatcherList();
+    @matchers = C4::Matcher::GetMatcherList({ record_type => 'biblio' });
+    @matchers = C4::Matcher::GetMatcherList({ record_type => 'authority' });
 
 =cut
 
 sub GetMatcherList {
-    my $dbh = C4::Context->dbh;
+    my ($filters) = @_;
 
-    my $sth = $dbh->prepare_cached("SELECT matcher_id, code, description FROM marc_matchers ORDER BY matcher_id");
-    $sth->execute();
-    my @results = ();
-    while ( my $row = $sth->fetchrow_hashref ) {
-        push @results, $row;
-    }
-    return @results;
+    my $rs = Koha::Database->schema->resultset('MarcMatcher');
+
+    return $rs->search( $filters // {}, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } )->all;
 }
 
 =head2 GetMatcherId
@@ -171,12 +185,8 @@ sub fetch {
     $sth->finish();
     return unless defined $row;
 
-    my $self = {};
-    $self->{'id'}          = $row->{'matcher_id'};
-    $self->{'record_type'} = $row->{'record_type'};
-    $self->{'code'}        = $row->{'code'};
-    $self->{'description'} = $row->{'description'};
-    $self->{'threshold'}   = int( $row->{'threshold'} );
+    my $self = {%$row};
+    $self->{id} = delete $self->{matcher_id};
     bless $self, $class;
 
     # matchpoints

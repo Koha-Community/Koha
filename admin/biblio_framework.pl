@@ -23,14 +23,18 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
+use C4::Matcher;
 use Koha::Biblios;
 use Koha::BiblioFramework;
 use Koha::BiblioFrameworks;
+use Koha::BiblioFrameworkMarcMatcher;
+use Koha::BiblioFrameworkMarcMatchers;
 use Koha::Caches;
+use Koha::I18N;
 
 my $input         = CGI->new;
-my $frameworkcode = $input->param('frameworkcode') || q||;
-my $op            = $input->param('op')            || q|list|;
+my $frameworkcode = $input->param('frameworkcode');
+my $op            = $input->param('op') || q|list|;
 my $cache         = Koha::Caches->get_instance();
 my @messages;
 
@@ -46,41 +50,62 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $dbh = C4::Context->dbh;
 if ( $op eq 'add_form' ) {
     my $framework;
-    if ($frameworkcode) {
-        $framework = Koha::BiblioFrameworks->find($frameworkcode);
-    }
-    $template->param( framework => $framework );
-} elsif ( $op eq 'cud-add_validate' ) {
-    my $frameworkcode = $input->param('frameworkcode');
-    my $frameworktext = $input->param('frameworktext');
-    my $is_a_modif    = $input->param('is_a_modif');
-    my $is_fast_add   = $input->param('is_fast_add') // 0;
+    my $biblio_framework_marc_matcher;
+    if ( defined $frameworkcode ) {
+        if ( $frameworkcode ne '' ) {
+            $framework = Koha::BiblioFrameworks->find($frameworkcode);
+        } else {
+            $framework =
+                Koha::BiblioFramework->new( { frameworkcode => '', frameworktext => __('Default framework') } );
+        }
 
-    if ($is_a_modif) {
-        my $framework = Koha::BiblioFrameworks->find($frameworkcode);
-        $framework->frameworktext($frameworktext);
-        $framework->is_fast_add($is_fast_add);
-        eval { $framework->store; };
-        if ($@) {
-            push @messages, { type => 'error', code => 'error_on_update' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_update' };
-        }
-    } else {
-        my $framework = Koha::BiblioFramework->new(
-            {
-                frameworkcode => $frameworkcode,
-                frameworktext => $frameworktext,
-                is_fast_add   => $is_fast_add,
-            }
-        );
-        eval { $framework->store; };
-        if ($@) {
-            push @messages, { type => 'error', code => 'error_on_insert' };
-        } else {
-            push @messages, { type => 'message', code => 'success_on_insert' };
-        }
+        $biblio_framework_marc_matcher = Koha::BiblioFrameworkMarcMatchers->find($frameworkcode);
     }
+    $template->param( framework                     => $framework );
+    $template->param( biblio_framework_marc_matcher => $biblio_framework_marc_matcher );
+
+    my @matchers = C4::Matcher::GetMatcherList();
+    $template->param( 'marc_matchers' => \@matchers );
+} elsif ( $op eq 'cud-add_validate' ) {
+    my $frameworkcode             = $input->param('frameworkcode');
+    my $frameworktext             = $input->param('frameworktext');
+    my $marc_matcher_id           = $input->param('marc_matcher_id');
+    my $forbid_duplicate_creation = $input->param('forbid_duplicate_creation') // 0;
+    my $is_a_modif                = $input->param('is_a_modif');
+    my $is_fast_add               = $input->param('is_fast_add') // 0;
+
+    my $framework;
+    if ( $is_a_modif && $frameworkcode ne '' ) {
+        $framework = Koha::BiblioFrameworks->find($frameworkcode);
+    } else {
+        $framework = Koha::BiblioFramework->new( { frameworkcode => $frameworkcode } );
+    }
+
+    $framework->frameworktext($frameworktext);
+    $framework->is_fast_add($is_fast_add);
+    eval {
+        $framework->store() unless $framework->frameworkcode eq '';
+
+        my $biblio_framework_marc_matcher = Koha::BiblioFrameworkMarcMatchers->find($frameworkcode);
+        if ($marc_matcher_id) {
+            unless ($biblio_framework_marc_matcher) {
+                $biblio_framework_marc_matcher =
+                    Koha::BiblioFrameworkMarcMatcher->new( { frameworkcode => $frameworkcode } );
+            }
+            $biblio_framework_marc_matcher->marc_matcher_id($marc_matcher_id);
+            $biblio_framework_marc_matcher->forbid_duplicate_creation($forbid_duplicate_creation);
+            $biblio_framework_marc_matcher->store();
+        } elsif ($biblio_framework_marc_matcher) {
+            $biblio_framework_marc_matcher->delete();
+        }
+    };
+
+    if ($@) {
+        push @messages, { type => 'error', code => $is_a_modif ? 'error_on_update' : 'error_on_insert' };
+    } else {
+        push @messages, { type => 'message', code => $is_a_modif ? 'success_on_update' : 'success_on_insert' };
+    }
+
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");

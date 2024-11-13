@@ -37,7 +37,7 @@ use C4::Biblio qw(
     TransformHtmlToMarc
     ApplyMarcOverlayRules
 );
-use C4::Search qw( FindDuplicate enabled_staff_search_views );
+use C4::Search qw( enabled_staff_search_views );
 use C4::Auth   qw( get_template_and_user haspermission );
 use C4::Context;
 use MARC::Record;
@@ -709,14 +709,14 @@ if ( $op eq "cud-addbiblio" ) {
     $record = TransformHtmlToMarc( $input, 1 );
 
     # check for a duplicate
-    my ( $duplicatebiblionumber, $duplicatetitle );
+    my $duplicate;
     if ( !$is_a_modif ) {
-        ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
+        ($duplicate) = C4::Search::FindDuplicateWithMatchingRules( $record, $frameworkcode );
     }
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
-    if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {
+    if ( !$duplicate or ( !$duplicate->{forbid_duplicate_creation} and $confirm_not_duplicate ) ) {
         my $oldbibitemnum;
         if ($is_a_modif) {
             ModBiblio(
@@ -844,6 +844,7 @@ if ( $op eq "cud-addbiblio" ) {
             duplicatebibid          => $duplicatebiblionumber,
             duplicatetitle          => $duplicatetitle,
             duplicateadditionalinfo => $duplicate_additional_info,
+            duplicate               => $duplicate,
         );
     }
 

@@ -131,9 +131,36 @@
                         </li>
                     [% END %]
                     <li>
-                        <label for="description" class="required">Description: </label>
-                        <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% framework.frameworktext | html %]" required="required" class="required" />
-                        <span class="required">Required</span>
+                        [% IF framework && frameworkcode == '' %]
+                            <label for="description">Description: </label>
+                            <span>[% framework.frameworktext | html %]</span>
+                        [% ELSE %]
+                            <label for="description" class="required">Description: </label>
+                            <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="[% framework.frameworktext | html %]" required="required" class="required" />
+                            <span class="required">Required</span>
+                        [% END %]
+                    </li>
+
+                    [% IF marc_matchers.size > 0 %]
+                        <li>
+                            <label for="marc_matcher_id">[% t('Matching rules used to find duplicates:') | html %]</label>
+                            <select name="marc_matcher_id" id="marc_matcher_id">
+                                <option value="">[% t('None (use the default duplicates finding mechanism)') | html %]</option>
+
+                                [% FOREACH marc_matcher IN marc_matchers %]
+                                    [% SET selected = marc_matcher.matcher_id == biblio_framework_marc_matcher.marc_matcher_id %]
+                                    <option value="[% marc_matcher.matcher_id | html %]" [% IF selected %]selected[% END %]> [% marc_matcher.description | html %] </option>
+                                [% END %]
+                            </select>
+                        </li>
+                    [% END %]
+
+                    <li>
+                        <label for="forbid_duplicate_creation">[% t('Forbid creation of duplicate') | html %]</label>
+                        <input type="checkbox" id="forbid_duplicate_creation" name="forbid_duplicate_creation" value="1" [% IF biblio_framework_marc_matcher.forbid_duplicate_creation %]checked[% END %] />
+                        <div class="hint">
+                            [% t('If the selected matching rule finds a duplicate and this option is enabled, it will not be possible to create a duplicate. This has no effect if no matching rule is selected.') | html %]
+                        </div>
                     </li>
                     <li>
                         <label for="is_fast_add">Use as a Fast add framework: </label>
@@ -198,6 +225,9 @@
                                 <ul class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode | html %]">
                                     <li
                                         ><a class="dropdown-item" href="marctagstructure.pl?frameworkcode="><i class="fa-solid fa-eye"></i> MARC structure</a></li
+                                    >
+                                    <li
+                                        ><a class="dropdown-item" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&frameworkcode="><i class="fa-solid fa-pencil"></i> Edit</a></li
                                     >
                                     <!-- Trigger modal -->
                                     <li
