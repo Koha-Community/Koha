@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#standard-fields').on('keyup', '.custom-name', function() {
         var val = $(this).val();
         if (core.indexOf(val.toLowerCase()) > -1) {
-            $('#custom-warning').text(__('The name "' + val + '" is not permitted')).show();
+            $('#custom-warning').text(__("The name '%s' is not permitted").format(val)).show();
             $('#ill-submit').attr('disabled', true);
             $('#add-new-fields').attr('disabled', true);
         } else {
