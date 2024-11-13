@@ -70,7 +70,7 @@ subtest 'list() tests' => sub {
         }
     );
 
-    # Two erm_users created, onyl self is returned without permission to view_any_borrower
+    # Two erm_users created, only self is returned without permission to view_any_borrower
     $t->get_ok("//$userid:$password@/api/v1/erm/users")->status_is(200)
         ->json_is( [ $librarian->to_api( { user => $librarian } ) ] );
 
