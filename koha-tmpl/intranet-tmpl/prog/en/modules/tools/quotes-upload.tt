@@ -111,9 +111,8 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
-        var oTable; //DataTable object
+        let table_dt; //DataTable object
         $(document).ready(function() {
 
             $("#cancel_upload").on("click",function(e){
@@ -265,7 +264,7 @@
             $('#quotes_editor').show();
             $("#save_quotes").on("click", yuiGetData);
 
-            oTable = $('#quotes_editor').dataTable( {
+            let table = $('#quotes_editor').dataTable( {
                 "autoWidth"        : false,
                 "paging"         : true,
                 "ordering"             : false,
@@ -276,21 +275,20 @@
                 "fixedHeader": true,
                 "columns"         : [
                     {
-                        "sTitle"  : _("Number"),
-                        "sWidth"  : "2%",
+                        title  : _("Number"),
+                        width  : "2%",
                     },
                     {
-                        "sTitle"  : _("Source"),
-                        "sWidth"  : "15%",
+                        title    : _("Source"),
+                        width    : "15%",
+                        className: "editable",
                     },
                     {
-                        "sTitle"  : _("Quote"),
-                        "sWidth"  : "83%",
+                        title    : _("Quote"),
+                        width    : "83%",
+                        className: "editable",
                     },
                 ],
-               "preDrawCallback": function(oSettings) {
-                    return true;
-                },
                 "rowCallback": function( nRow, aData, iDisplayIndex ) {
                     /* do foo on various cells in the current row */
                     var quoteNum = $('td', nRow)[0].innerHTML;
@@ -302,29 +300,54 @@
                     }
                     return nRow;
                 },
-               "drawCallback": function(oSettings) {
-                    /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
-                    $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
-                            value = escape_str(value);
-                            var cellPosition = oTable.fnGetPosition( this );
-                            oTable.fnUpdate(value, cellPosition[0], cellPosition[1], false, false);
-                            return(value);
-                        },
-                        {
-                            "callback"      : function( sValue, y ) {
-                                oTable.fnDraw(false); /* no filter/sort or we lose our pagination */
-                            },
-                            "cancel" : _("Cancel"),
-                            "height": "none",
-                            "inputcssclass": "jeditable-text",
-                            "onblur": "ignore",
-                            "style": "",
-                            "submit" : _("Save"),
-                            "type": "textarea",
-                            "width": "none",
-                        }
-                    );
-               },
+            });
+            table_dt = table.DataTable();
+
+            let table_node = document.getElementById("quotes_editor");
+            // Set up editable columns based on header classes
+            const editableColumns = Array.from(table_node.querySelectorAll('thead th'))
+                .map((header, index) => {
+                    if (header.classList.contains('editable')) {
+                        return { index: index, type: 'text' };
+                    }
+                    return null;
+                })
+                .filter(column => column !== null); // Filter out non-editable columns
+
+
+            table_node.querySelector('tbody').addEventListener('click', function (event) {
+                const cell = event.target.closest('td');
+                if (!cell) return;
+
+                const cellIndex = cell.cellIndex;
+                const editableColumn = editableColumns.find(column => column.index === cellIndex);
+                if (editableColumn) {
+                    const originalContent = cell.textContent.trim();
+                    const input = document.createElement('input');
+                    input.type = editableColumn.type;
+                    input.value = originalContent;
+                    input.style.width = '8em';
+
+                    // Prevent click on numeric up/down buttons from closing input
+                    input.addEventListener('click', (e) => e.stopPropagation());
+
+                    // Replace cell content with the input
+                    cell.textContent = '';
+                    cell.appendChild(input);
+                    input.focus();
+
+                    // Handle blur and Enter key events
+                    input.addEventListener('blur', updateCell);
+                    input.addEventListener('keyup', function(e) {
+                        if (e.key === 'Enter') updateCell();
+                    });
+
+                    function updateCell() {
+                        const newValue = input.value.trim() || originalContent; // Fallback to original content
+                        cell.textContent = newValue; // Set the final value in the cell
+                        table_dt.cell(cell).data(newValue).invalidate().draw(false); // Update DataTable data
+                    }
+                }
             });
             $('#footer').show();
         }
@@ -378,7 +401,7 @@
         var MSG_IMPORT_SUCCESS = _("%s quotes imported successfully");
         var MSG_IMPORT_ERROR   = _("%s quotes have not been imported. An error occurred");
         function fnGetData(element) {
-            var lines = oTable.fnGetData();
+            var lines = table_dt.data().toArray();
             $(lines).each(function(line){
                 var s = this[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
                 var t = this[2].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
