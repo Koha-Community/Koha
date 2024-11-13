@@ -549,7 +549,7 @@
                                                 [%- END -%]
 
                                                 [%- IF !transfer -%]
-                                                    <a id="remove_item_from_stage_[% item_id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" action="/cgi-bin/koha/tools/stockrotation.pl" data-op="cud-remove_item_from_stage" data-item_id="[% sritem.id | html %]" data-stage_id="[% sritem.stage.stage_id | html %]" data-rota_id="[% rota.id | html %]" data-method="post" data-confirmation-msg="[% t('Are you sure you wish to remove this item from its rota?') %]">
+                                                    <a id="remove_item_from_stage_[% item_id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" action="/cgi-bin/koha/tools/stockrotation.pl" data-op="cud-remove_item_from_stage" data-item_id="[% sritem.id | html %]" data-stage_id="[% sritem.stage.stage_id | html %]" data-rota_id="[% rota.id | html %]" data-method="post" data-confirmation-msg="[% t('Are you sure you wish to remove this item from its rota?') | html %]">
                                                 [%- ELSE -%]
                                                     <a class="btn btn-default btn-xs" disabled="disabled">
                                                 [%- END -%]
