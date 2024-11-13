@@ -743,8 +743,8 @@ sub run_db_rev {
         );
     }
     catch {
-        say_failure( $outfh, "ERROR: " . $_ );
         $error = $_;
+        say_failure( $outfh, "ERROR: " . $error );
     };
 
     close $outfh;
