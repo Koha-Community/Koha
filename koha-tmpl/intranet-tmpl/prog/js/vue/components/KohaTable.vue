@@ -224,7 +224,7 @@ export default {
             _dt_add_filters(table_node, dt, filters_options)
         }
 
-        dt.on("draw", function () {
+        dt.on("column-visibility.dt", function () {
             if (add_filters) {
                 _dt_add_filters(table_node, dt, filters_options)
             }
