@@ -125,7 +125,7 @@
 
     function update_columns_visibility(settings){
         let table = settings.oInstance.api();
-        table.columns().visible(true);
+        table.columns().visible(true, false);
         table.columns().every(function(i){
             let is_empty = true;
             let nodes = this.nodes();
@@ -136,7 +136,7 @@
                 }
             });
             if ( is_empty ) {
-                table.columns(i).visible(false);
+                table.columns(i).visible(false, false);
             }
         });
     }
