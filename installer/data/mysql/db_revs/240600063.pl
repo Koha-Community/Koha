@@ -13,7 +13,7 @@ return {
                 q{
                 ALTER TABLE issues
                 ADD COLUMN checkin_library varchar(10) DEFAULT NULL
-                COMMENT 'foreign key, linking to the branches table for the location the item was returned'
+                COMMENT 'library the item was checked in at'
                 AFTER returndate
              }
             );
@@ -24,7 +24,7 @@ return {
                 q{
                 ALTER TABLE old_issues
                 ADD COLUMN checkin_library varchar(10) DEFAULT NULL
-                COMMENT 'foreign key, linking to the branches table for the location the item was returned'
+                COMMENT 'library the item was checked in at'
                 AFTER returndate
              }
             );
