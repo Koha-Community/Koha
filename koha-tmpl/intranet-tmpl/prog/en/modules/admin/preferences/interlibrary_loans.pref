@@ -64,6 +64,13 @@ Interlibrary loans:
                   0: "Don't check"
             - external sources for availability during the request process.
         -
+            - pref: ILLHistoryCheck
+              default: 0
+              choices:
+                  1: Check
+                  0: "Don't check"
+            - if an ILL request has already been placed during the request process.
+        -
             - "If the ILL backend supports it, adding YAML will enable the request type disclaimer stage in request creation, prompting the user with a request type specific disclaimer as defined (staff interface and OPAC)."
             - "For each request type, you can have 3 configuration options: <code>text</code>, <code>av_category_code</code> and <code>bypass</code><ul>"
             - "<li><code>text</code> is the HTML that will be visible for the specified request type.</li>"

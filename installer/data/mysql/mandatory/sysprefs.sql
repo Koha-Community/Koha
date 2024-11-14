@@ -326,6 +326,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ILLCheckAvailability', 0, '', 'If ON, during the ILL request process third party sources will be checked for current availability', 'YesNo'),
 ('ILLDefaultStaffEmail', '', NULL, 'Fallback email address for staff ILL notices to be sent to in the absence of a branch address', 'Free'),
 ('ILLHiddenRequestStatuses', NULL, NULL, 'ILL statuses that are considered finished and should not be displayed in the ILL module', 'multiple'),
+('ILLHistoryCheck', 0, '', 'If ON, during the ILL request process, a check is performed to see if the ILL request has already been previously placed', 'YesNo'),
 ('IllLog', 0, '', 'If ON, log information about ILL requests', 'YesNo'),
 ('ILLModule','0','If ON, enables the interlibrary loans module.','','YesNo'),
 ('ILLModuleDisclaimerByType','','','YAML defining disclaimer settings for each ILL request type','Textarea'),
