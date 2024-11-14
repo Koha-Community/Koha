@@ -673,7 +673,7 @@
                             [% IF request.notesstaff %]
                                 <li class="notesstaff">
                                     <span class="label notes_staff">Staff notes:</span>
-                                    <p>[% request.notesstaff | html %]</p>
+                                    <p>[% request.notesstaff | $raw %]</p>
                                 </li>
                             [% END %]
                             [% IF request.notesopac %]
