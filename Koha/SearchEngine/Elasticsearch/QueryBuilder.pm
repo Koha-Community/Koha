@@ -854,10 +854,9 @@ sub _modify_string_by_type {
             my $until = $2 || '*';
             $str = "[$from TO $until]";
         }
-    }
-    elsif($type eq 'st-date-normalized'){
-        if ($str =~ /^(.*) - (.*)$/) {
-         my $from = $1 || '*';
+    } elsif ( $type eq 'st-date-normalized' ) {
+        if ( $str =~ /^(.*) - (.*)$/ ) {
+            my $from  = $1 || '*';
             my $until = $2 || '*';
             $str = "[$from TO $until]";
         }
@@ -1171,11 +1170,10 @@ sub _fix_limit_special_cases {
             else {
                 push @new_lim, $term;
             }
-        }
-        elsif ($l =~ /^acqdate,st-date-normalized=/ ) {
+        } elsif ( $l =~ /^acqdate,st-date-normalized=/ ) {
             my ($date) = ( $l =~ /^acqdate,st-date-normalized=(.*)$/ );
             next unless defined($date);
-            $date = $self->_modify_string_by_type(type => 'st-date-normalized', operand => $date);
+            $date = $self->_modify_string_by_type( type => 'st-date-normalized', operand => $date );
             push @new_lim, "date-of-acquisition.raw:$date";
         }
         else {

@@ -671,34 +671,42 @@ subtest 'build_query tests' => sub {
     is( $limit_cgi,'&limit=author%3ADillinger%20Escaplan&limit=mc-itype%2Cphr%3ABOOK&limit=mc-itype%2Cphr%3ACD', "Limit CGI formed correctly when no search terms");
     is( $limit_desc,'(author:("Dillinger Escaplan")) AND itype:(("BOOK") OR ("CD"))',"Limit desc formed correctly when no search terms");
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['barcode123123'], ['bc'],
-        ['acqdate,st-date-normalized= - '] );
+    ( undef, $query ) = $qb->build_query_compat(
+        undef, ['barcode123123'], ['bc'],
+        ['acqdate,st-date-normalized= - ']
+    );
     is(
         $query->{query}{query_string}{query},
         '(barcode:barcode123123) AND date-of-acquisition.raw:[* TO *]',
         'If no date all date-of-acquisition are selected'
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['barcode123123'], ['bc'],
-        ['acqdate,st-date-normalized=2024-08-01 - '] );
+    ( undef, $query ) = $qb->build_query_compat(
+        undef, ['barcode123123'], ['bc'],
+        ['acqdate,st-date-normalized=2024-08-01 - ']
+    );
     is(
         $query->{query}{query_string}{query},
         '(barcode:barcode123123) AND date-of-acquisition.raw:[2024-08-01 TO *]',
         'Open start date in date range of an st-date-normalized search is handled properly'
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['barcode123123'], ['bc'],
-        ['acqdate,st-date-normalized= - 2024-08-30'] );
+    ( undef, $query ) = $qb->build_query_compat(
+        undef, ['barcode123123'], ['bc'],
+        ['acqdate,st-date-normalized= - 2024-08-30']
+    );
     is(
         $query->{query}{query_string}{query},
         '(barcode:barcode123123) AND date-of-acquisition.raw:[* TO 2024-08-30]',
         'Open end date in date range of an st-date-normalized search is handled properly'
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['barcode123123'], ['bc'],
-        ['acqdate,st-date-normalized=2024-08-01 - 2024-08-30'] );
-   is(
-       $query->{query}{query_string}{query},
+    ( undef, $query ) = $qb->build_query_compat(
+        undef, ['barcode123123'], ['bc'],
+        ['acqdate,st-date-normalized=2024-08-01 - 2024-08-30']
+    );
+    is(
+        $query->{query}{query_string}{query},
         '(barcode:barcode123123) AND date-of-acquisition.raw:[2024-08-01 TO 2024-08-30]',
         'Date range in an st-date-normalized search is handled properly'
     );
