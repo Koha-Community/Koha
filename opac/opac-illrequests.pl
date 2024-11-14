@@ -37,6 +37,7 @@ use Koha::Libraries;
 use Koha::Patrons;
 use Koha::ILL::Request::Workflow::Availability;
 use Koha::ILL::Request::Workflow::ConfirmAuto;
+use Koha::ILL::Request::Workflow::HistoryCheck;
 use Koha::ILL::Request::Workflow::TypeDisclaimer;
 
 my $query = CGI->new;
@@ -128,12 +129,22 @@ if ( $op eq 'list' ) {
         my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
 
         # Before request creation operations - Preparation
+        my $history_check   = Koha::ILL::Request::Workflow::HistoryCheck->new( $params, 'opac' );
         my $availability    = Koha::ILL::Request::Workflow::Availability->new( $params, 'opac' );
         my $type_disclaimer = Koha::ILL::Request::Workflow::TypeDisclaimer->new( $params, 'opac' );
         my $confirm_auto    = Koha::ILL::Request::Workflow::ConfirmAuto->new( $params, 'opac' );
 
-        # ILLCheckAvailability operation
-        if ( $availability->show_availability($request) ) {
+        # ILLHistoryCheck operation
+        if ( $history_check->show_history_check($request) ) {
+            $op = 'historycheck';
+            $template->param( $history_check->history_check_template_params($params) );
+            output_html_with_http_headers $query, $cookie,
+                $template->output, undef,
+                { force_no_caching => 1 };
+            exit;
+
+            # ILLCheckAvailability operation
+        } elsif ( $availability->show_availability($request) ) {
             $op = 'availability';
             $template->param( $availability->availability_template_params($params) );
             output_html_with_http_headers $query, $cookie,
@@ -189,6 +200,9 @@ if ( $op eq 'list' ) {
                 # After creation actions
                 if ( $params->{type_disclaimer_submitted} ) {
                     $type_disclaimer->after_request_created( $params, $request );
+                }
+                if ( C4::Context->preference('ILLHistoryCheck') ) {
+                    $history_check->after_request_created( $params, $request );
                 }
                 if ( C4::Context->preference('ILLOpacUnauthenticatedRequest') && !$patron ) {
                     my $sessionID = $query->cookie('CGISESSID');

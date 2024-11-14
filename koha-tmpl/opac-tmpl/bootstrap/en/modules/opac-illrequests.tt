@@ -309,6 +309,44 @@
                                     </fieldset>
                                 </form>
                             </div>
+                        [% ELSIF op == 'historycheck' %]
+                            <h1>Request history check</h1>
+                            <div id="results" class="page-section">
+                                [% INCLUDE messages %]
+                                <form method="post" id="historycheck-form">
+                                    [%# This will get its name="op" value="cud-" from the loop over whole.keys below %]
+                                    [% INCLUDE 'csrf-token.inc' %]
+                                    <p>You have requested this interlibrary loan before:</p>
+                                    [% IF matching_requests_for_patron.size %]
+                                        <ul class="list-unstyled">
+                                            [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id %]</a>
+                                                </li>
+                                            [% END %]
+                                        </ul>
+                                    [% END %]
+                                    <fieldset class="action">
+                                        [% FOREACH key IN whole.keys %]
+                                            [% value = whole.$key %]
+                                            [% IF key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' %]
+                                                <input type="hidden" name="[% key | html %]" value="[% value | html %]" />
+                                            [% END %]
+                                        [% END %]
+                                        [% custom_keys = whole.custom_key.split('\0') %]
+                                        [% custom_values = whole.custom_value.split('\0') %]
+                                        [% i = 0 %]
+                                        [% FOREACH custom_key IN custom_keys %]
+                                            <input type="hidden" name="custom_key" value="[% custom_key | html %]" />
+                                            <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]" />
+                                            [% i = i + 1 %]
+                                        [% END %]
+                                        <input type="hidden" name="history_check_submitted" value="1" />
+                                        <input type="submit" class="btn btn-primary" value="Submit anyway" />
+                                        <a class="action" href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a>
+                                    </fieldset>
+                                </form>
+                            </div>
                         [% ELSIF op == 'confirmautoill' %]
                             <h1>Confirming request</h1>
                             <div id="results" class="page-section">
