@@ -305,7 +305,7 @@ subtest 'AutoRemoveOverduesRestrictions' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Pass return_branch to old_issues' => sub {
+subtest 'Pass checkin_library to old_issues' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
@@ -330,7 +330,7 @@ subtest 'Pass return_branch to old_issues' => sub {
 
     is( $issue_id, $issue->issue_id, 'Item has been returned' );
     my $old_issue = Koha::Old::Checkouts->find( $issue_id );
-    is( $old_issue->return_branch, $library->branchcode, 'Return branch is passed correctly' );
+    is( $old_issue->checkin_library, $library->branchcode, 'Return branch is passed correctly' );
 
     $schema->storage->txn_rollback
 };

@@ -3,32 +3,32 @@ use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "33641",
-    description => "Added issues.return_branch and old_issues.return_branch",
+    description => "Added issues.checkin_library and old_issues.checkin_library",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        if ( !column_exists( 'issues', 'return_branch' ) ) {
+        if ( !column_exists( 'issues', 'checkin_library' ) ) {
             $dbh->do(
                 q{
                 ALTER TABLE issues
-                ADD COLUMN return_branch varchar(10) DEFAULT NULL
+                ADD COLUMN checkin_library varchar(10) DEFAULT NULL
                 COMMENT 'foreign key, linking to the branches table for the location the item was returned'
                 AFTER returndate
              }
             );
-            say_success( $out, "Added column 'issues.return_branch'" );
+            say_success( $out, "Added column 'issues.checkin_library'" );
         }
-        if ( !column_exists( 'old_issues', 'return_branch' ) ) {
+        if ( !column_exists( 'old_issues', 'checkin_library' ) ) {
             $dbh->do(
                 q{
                 ALTER TABLE old_issues
-                ADD COLUMN return_branch varchar(10) DEFAULT NULL
+                ADD COLUMN checkin_library varchar(10) DEFAULT NULL
                 COMMENT 'foreign key, linking to the branches table for the location the item was returned'
                 AFTER returndate
              }
             );
-            say_success( $out, "Added column 'old_issues.return_branch'" );
+            say_success( $out, "Added column 'old_issues.checkin_library'" );
         }
 
     },
