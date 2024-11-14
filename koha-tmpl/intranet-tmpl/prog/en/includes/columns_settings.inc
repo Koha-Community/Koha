@@ -173,7 +173,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
         );
     [% END %]
 
-    dt_parameters[ "buttons" ] = [
+    $.fn.dataTable.ext.buttons.clear_filter =
         {
             fade: 100,
             className: "dt_button_clear_filter",
@@ -184,8 +184,9 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
                 dt.search( "" ).draw("page");
                 node.addClass("disabled");
             }
-        }
-    ];
+        };
+
+    dt_parameters[ "buttons" ] = ['clear_filter'];
 
     if( included_ids.length > 0 ){
         dt_parameters[ "buttons" ].push(
