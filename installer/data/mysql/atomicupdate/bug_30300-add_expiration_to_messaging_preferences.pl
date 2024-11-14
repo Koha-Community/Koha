@@ -1,5 +1,7 @@
 use Modern::Perl;
 
+use Koha::Patrons;
+
 return {
     bug_number  => "30300",
     description => "Add Patron expiry to messaging preference",
@@ -44,6 +46,20 @@ return {
 
             );
             say $out "MEMBERSHIP_EXPIRY added to message_transports";
+
+            my $days_notice = C4::Context->preference('MembershipExpiryDaysNotice');
+            if($days_notice) {
+                my $patrons = Koha::Patrons->search();
+                while ( my $patron = $patrons->next ) {
+                    C4::Members::Messaging::SetMessagingPreference(
+                        {
+                            borrowernumber          => $patron->borrowernumber,
+                            message_attribute_id    => $message_attribute_id,
+                            message_transport_types => ['email'],
+                        }
+                    );
+                }
+            }
         } else {
             say $out "Patron_Expiry message attribute exists, skipping update";
         }
