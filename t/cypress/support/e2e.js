@@ -214,6 +214,147 @@ cy.get_agreement = () => {
                 uploaded_on: "2022-10-27T11:57:02+00:00",
             },
         ],
+        extended_attributes: [
+            {
+                field_id: 1,
+                id: "1",
+                record_id: "1",
+                value: "REF",
+            },
+            {
+                field_id: 1,
+                id: "2",
+                record_id: "1",
+                value: "NFIC",
+            },
+            {
+                field_id: 2,
+                id: "3",
+                record_id: "1",
+                value: "some text",
+            },
+            {
+                field_id: 3,
+                id: "4",
+                record_id: "1",
+                value: "some repeatable text",
+            },
+            {
+                field_id: 4,
+                id: "5",
+                record_id: "1",
+                value: "AF",
+            },
+        ],
+        _strings: {
+            additional_field_values: [
+                {
+                    field_id: 1,
+                    field_label: "AV Repeatable",
+                    type: "av",
+                    value_str: "Reference, Non-fiction",
+                },
+                {
+                    field_id: 2,
+                    field_label: "Text non-repeatable",
+                    type: "text",
+                    value_str: "some text",
+                },
+                {
+                    field_id: 3,
+                    field_label: "Text repeatable",
+                    type: "text",
+                    value_str: "some repeatable text",
+                },
+                {
+                    field_id: 4,
+                    field_label: "AV Searchable",
+                    type: "av",
+                    value_str: "Afghanistan",
+                },
+            ],
+        }
+    };
+}
+
+cy.get_package = () => {
+    return {
+        package_id: 1,
+        name: "package 1",
+        package_type: "complete",
+        content_type: "Print",
+        package_agreements: [
+            {
+                agreement: {
+                    agreement_id: 2,
+                    description: "agreement description",
+                    name: "agreement name",
+                },
+                agreement_id: 2,
+                package_id: 1,
+            },
+        ],
+        extended_attributes: [
+            {
+                field_id: 1,
+                id: "1",
+                record_id: "1",
+                value: "REF",
+            },
+            {
+                field_id: 1,
+                id: "2",
+                record_id: "1",
+                value: "NFIC",
+            },
+            {
+                field_id: 2,
+                id: "3",
+                record_id: "1",
+                value: "some text",
+            },
+            {
+                field_id: 3,
+                id: "4",
+                record_id: "1",
+                value: "some repeatable text",
+            },
+            {
+                field_id: 4,
+                id: "5",
+                record_id: "1",
+                value: "AF",
+            },
+        ],
+        _strings: {
+            additional_field_values: [
+                {
+                    field_id: 1,
+                    field_label: "AV Repeatable",
+                    type: "av",
+                    value_str: "Reference, Non-fiction",
+                },
+                {
+                    field_id: 2,
+                    field_label: "Text non-repeatable",
+                    type: "text",
+                    value_str: "some text",
+                },
+                {
+                    field_id: 3,
+                    field_label: "Text repeatable",
+                    type: "text",
+                    value_str: "some repeatable text",
+                },
+                {
+                    field_id: 4,
+                    field_label: "AV Searchable",
+                    type: "av",
+                    value_str: "Afghanistan",
+                },
+            ],
+        },
+        resources_count: 0,
     };
 }
 

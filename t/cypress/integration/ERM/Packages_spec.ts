@@ -2,27 +2,6 @@ import { mount } from "@cypress/vue";
 const dayjs = require("dayjs"); /* Cannot use our calendar JS code, it's in an include file (!)
                                    Also note that moment.js is deprecated */
 
-function get_package() {
-    return {
-        package_id: 1,
-        name: "package 1",
-        package_type: "complete",
-        content_type: "Print",
-        package_agreements: [
-            {
-                agreement: {
-                    agreement_id: 2,
-                    description: "agreement description",
-                    name: "agreement name",
-                },
-                agreement_id: 2,
-                package_id: 1,
-            },
-        ],
-        resources_count: 0,
-    };
-}
-
 describe("Package CRUD operations", () => {
     beforeEach(() => {
         cy.login();
@@ -58,7 +37,7 @@ describe("Package CRUD operations", () => {
         cy.get("#packages_list").contains("There are no packages defined");
 
         // GET packages returns something
-        let erm_package = get_package();
+        let erm_package = cy.get_package();
         let packages = [erm_package];
 
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
@@ -88,7 +67,7 @@ describe("Package CRUD operations", () => {
         cy.left_menu_active_item_is("Packages");
 
         // Fill in the form for normal attributes
-        let erm_package = get_package();
+        let erm_package = cy.get_package();
 
         cy.get("#packages_add").contains("Submit").click();
         cy.get("input:invalid,textarea:invalid,select:invalid").should(
@@ -146,7 +125,7 @@ describe("Package CRUD operations", () => {
     });
 
     it("Edit package", () => {
-        let erm_package = get_package();
+        let erm_package = cy.get_package();
         let packages = [erm_package];
         // Click the 'Edit' button from the list
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
@@ -205,7 +184,7 @@ describe("Package CRUD operations", () => {
     });
 
     it("Show package", () => {
-        let erm_package = get_package();
+        let erm_package = cy.get_package();
         let packages = [erm_package];
         // Click the "name" link from the list
         cy.intercept("GET", "/api/v1/erm/eholdings/local/packages*", {
@@ -277,7 +256,7 @@ describe("Package CRUD operations", () => {
     });
 
     it("Delete package", () => {
-        let erm_package = get_package();
+        let erm_package = cy.get_package();
         let packages = [erm_package];
 
         // Click the 'Delete' button from the list
