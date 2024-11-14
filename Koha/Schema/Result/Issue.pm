@@ -79,6 +79,14 @@ foreign key, linking to the branches table for the location the item was checked
 
 date the item was returned, will be NULL until moved to old_issues
 
+=head2 checkin_library
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+library the item was checked in at
+
 =head2 lastreneweddate
 
   data_type: 'datetime'
@@ -191,6 +199,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "checkin_library",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "lastreneweddate",
   {
     data_type => "datetime",
@@ -326,8 +336,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2024-02-08 14:18:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7VMPEayWBRQ9ga7uhQGR4w
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-14 13:08:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Azy+cns0/GJMwsXWJdkolg
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
