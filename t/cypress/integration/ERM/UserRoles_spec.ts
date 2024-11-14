@@ -12,7 +12,6 @@ describe("Add/search user", () => {
     });
 
     it("Add agreement", () => {
-        let vendors = cy.get_vendors_to_relate();
         // No agreement, no license yet
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
@@ -31,15 +30,22 @@ describe("Add/search user", () => {
                     patron_id: 1,
                     firstname: "foo",
                     surname: "bar",
+                    preferred_name: "foo",
                     category_id: "S",
-                    library_id: "CPL",
+                    library: {
+                        library_id: "CPL",
+                        name: "Centerville",
+                    },
                 },
                 {
                     patron_id: 2,
                     firstname: "foofoo",
                     surname: "barbar",
                     category_id: "S",
-                    library_id: "CPL",
+                    library: {
+                        library_id: "CPL",
+                        name: "Centerville",
+                    },
                 },
             ],
             headers: {
@@ -54,8 +60,12 @@ describe("Add/search user", () => {
                 patron_id: 1,
                 firstname: "foo",
                 surname: "bar",
+                preferred_name: "foo",
                 category_id: "S",
-                library_id: "CPL",
+                library: {
+                    library_id: "CPL",
+                    name: "Centerville",
+                },
             },
         });
 
