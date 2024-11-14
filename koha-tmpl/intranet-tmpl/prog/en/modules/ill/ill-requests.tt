@@ -65,6 +65,8 @@
                 [% ELSE %]
                     <span>Confirm request</span>
                 [% END %]
+            [% ELSIF op == 'historycheck' %]
+                <span>Request history check</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
@@ -896,6 +898,71 @@
                             <input type="hidden" name="stage" value="form" />
                             <input type="hidden" name="type_disclaimer_submitted" value="1" />
                             <input type="submit" value="Submit" />
+                            <a class="cancel" href="ill-requests.pl">Cancel</a>
+                        </fieldset>
+                    </form>
+                </div>
+            [% ELSIF op == 'historycheck' %]
+                <!-- historycheck -->
+                <h1>Request history check</h1>
+                <div id="results" class="page-section">
+                    <form method="post" id="historycheck-form">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <h3>You are attempting to place the following request:</h3>
+                        <table>
+                            [% FOREACH key IN whole.keys %]
+                                [% value = whole.$key %]
+                                [% IF key != 'op' && key != 'method' && key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' && value %]
+                                    <tr>
+                                        <td>[% key_mapping(key) || key | html %]</td>
+                                        <td>[% value | html %]</td>
+                                    </tr>
+                                [% END %]
+                            [% END %]
+                        </table>
+                        &nbsp;
+                        <h3>This interlibrary loan has been requested before:</h3>
+                        [% IF matching_requests_for_patron.size %]
+                            <h4>By this patron [%- INCLUDE 'patron-title.inc' patron => request_patron_obj hide_patron_infos_if_needed => 1 -%]:</h4>
+                            <ul class="list-unstyled">
+                                [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
+                                    <li>
+                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id %]</a>
+                                    </li>
+                                [% END %]
+                            </ul>
+                        [% END %]
+                        [% IF remaining_matching_requests.size %]
+                            [% IF matching_requests_for_patron.size %]
+                                <h4>By other patrons:</h4>
+                            [% END %]
+                            <ul class="list-unstyled">
+                                [% FOREACH remaining_matching_request IN remaining_matching_requests %]
+                                    <li>
+                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% remaining_matching_request.illrequest_id %]">ILL Request #[% remaining_matching_request.illrequest_id %]</a> by [%- INCLUDE 'patron-title.inc' patron => remaining_matching_request.patron hide_patron_infos_if_needed => 1 -%]
+                                    </li>
+                                [% END %]
+                            </ul>
+                        [% END %]
+                        <fieldset class="action">
+                            [% FOREACH key IN whole.keys %]
+                                [% value = whole.$key %]
+                                [% IF key != 'op' && key != 'method' && key != 'custom_key' && key != 'custom_value' && key != 'csrf_token' %]
+                                    <input type="hidden" name="[% key | html %]" value="[% value | html %]" />
+                                [% END %]
+                            [% END %]
+                            [% custom_keys = whole.custom_key.split('\0') %]
+                            [% custom_values = whole.custom_value.split('\0') %]
+                            [% i = 0 %]
+                            [% FOREACH custom_key IN custom_keys %]
+                                <input type="hidden" name="custom_key" value="[% custom_key | html %]" />
+                                <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]" />
+                                [% i = i + 1 %]
+                            [% END %]
+                            <input type="hidden" name="op" value="cud-create" />
+                            <input type="hidden" name="stage" value="form" />
+                            <input type="hidden" name="history_check_submitted" value="1" />
+                            <input type="submit" class="btn btn-primary" value="Submit anyway" />
                             <a class="cancel" href="ill-requests.pl">Cancel</a>
                         </fieldset>
                     </form>
