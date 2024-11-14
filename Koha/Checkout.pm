@@ -223,6 +223,7 @@ on the API.
 
 sub to_api_mapping {
     return {
+        checkin_library => 'checkin_library_id',
         issue_id        => 'checkout_id',
         borrowernumber  => 'patron_id',
         itemnumber      => 'item_id',
