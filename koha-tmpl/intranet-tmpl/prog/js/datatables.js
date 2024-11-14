@@ -75,10 +75,11 @@ var dataTablesDefaults = {
 DataTable.defaults.column.orderSequence = ['asc', 'desc'];
 
 function toggledClearFilter(searchText, tableId){
+    let clear_filter_button = $("#" + tableId + "_wrapper").find(".dt_button_clear_filter");
     if( searchText == "" ){
-        $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").addClass("disabled");
+        clear_filter_button.addClass("disabled");
     } else {
-        $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").removeClass("disabled");
+        clear_filter_button.removeClass("disabled");
     }
 }
 
@@ -1076,7 +1077,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
             // When the DataTables search function is triggered,
             // enable or disable the "Clear filter" button based on
             // the presence of a search string
-            toggledClearFilter(settings.oPreviousSearch.sSearch, settings.nTable.id);
+            toggledClearFilter(table_dt.search(), settings.nTable.id);
         });
 
         return table;

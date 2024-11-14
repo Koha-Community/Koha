@@ -318,6 +318,13 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
         }
     });
 
+    table_dt.on( 'search.dt', function ( e, settings ) {
+        // When the DataTables search function is triggered,
+        // enable or disable the "Clear filter" button based on
+        // the presence of a search string
+        toggledClearFilter(table_dt.search(), settings.nTable.id);
+    });
+
     return table;
 }
 </script>
