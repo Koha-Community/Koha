@@ -68,7 +68,6 @@ my $subscription = $builder->build({
         biblionumber    => $biblio->biblionumber,
         startdate       => '2015-01-01',
         enddate         => '2015-12-31',
-        aqbooksellerid  => 1,
         periodicity     => $frequency->{id},
         numberpattern   => $pattern->{id},
         monthlength     => 12,
