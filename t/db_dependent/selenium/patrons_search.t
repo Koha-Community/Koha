@@ -62,9 +62,12 @@ my $branchname              = q|<strong>just 'another" library</strong> \123 ❤
 my $firstname               = q|<strong>fir's"tname</strong> \123 ❤|;
 my $address                 = q|<strong>add'res"s</strong> \123 ❤|;
 my $email                   = q|a<strong>bad_email</strong>@example\123 ❤.com|;
-my ($attribute_type, $attribute_type_searchable_1, $attribute_type_searchable_2, $attribute_type_searchable_not_default);
+my (
+    $attribute_type, $attribute_type_searchable_1, $attribute_type_searchable_2,
+    $attribute_type_searchable_not_default, $patron_category, $library
+);
 sub setup {
-    my $patron_category = $builder->build_object(
+    $patron_category = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
             value => { category_type => 'A' }
@@ -72,7 +75,7 @@ sub setup {
     );
     push @cleanup, $patron_category;
 
-    my $library = $builder->build_object(
+    $library = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
     push @cleanup, $library;
@@ -366,6 +369,21 @@ subtest 'Search patrons' => sub {
     $s->driver->find_element('//table[@id="'.$table_id.'"]//input[@placeholder="Name search"]')->send_keys($first_patron->surname);
     sleep $DT_delay && $s->wait_for_ajax;
     is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', 1, 1, $total_number_of_patrons), 'Refining with header filters works to further filter the original query' );
+
+    subtest 'limited categories' => sub {
+
+        plan tests => 1;
+
+        $patron_category->replace_library_limits( [$library->id] );
+        C4::Context->set_preference( 'PatronsPerPage', 5 );
+        $driver->get( $base_url . "/members/members-home.pl" );
+        clear_filters();
+        $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
+        $s->submit_form;
+        sleep $DT_delay && $s->wait_for_ajax;
+        is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Search works when category of patrons is limited to a library we are not signed in at' );
+
+    };
 
     subtest 'remember_search' => sub {
 
