@@ -9,39 +9,39 @@
 [% BLOCK build_table %]
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
-            <th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>
+            <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="NoSort"></th>
             [% IF Koha.Preference('LocalCoverImages') %]
-                <th id="[% tab | html %]_cover_image" data-colname="[% tab | html %]_cover_image">Cover image</th>
+                <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
             [% END %]
-            [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
-            <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current library</th>
-            <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
-            <th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>
+            [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="itype">Item type</th>[% END %]
+            <th id="[% tab | html %]_holdingbranch" data-colname="holdingbranch">Current library</th>
+            <th id="[% tab | html %]_homebranch" data-colname="homebranch">Home library</th>
+            <th id="[% tab | html %]_ccode" data-colname="ccode">Collection</th>
             [% IF Koha.Preference('EnableItemGroups') %]
-                <th id="[% tab | html %]_item_group" data-colname="[% tab | html %]_item_group">Item group</th>
+                <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
             [% END %]
-            <th id="[% tab | html %]_itemcallnumber" data-colname="[% tab | html %]_itemcallnumber">Call number</th>
-            <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
-            <th id="[% tab | html %]_status" data-colname="[% tab | html %]_status">Status</th>
-            <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen">Last seen</th>
-            <th id="[% tab | html %]_issues" data-colname="[% tab | html %]_issues">Checkouts</th>
-            <th id="[% tab | html %]_renewals" data-colname="[% tab | html %]_renewals">Renewals</th>
-            <th id="[% tab | html %]_localuse" data-colname="[% tab | html %]_localuse">Local uses</th>
-            <th id="[% tab | html %]_dateaccessioned" data-colname="[% tab | html %]_dateaccessioned">Date accessioned</th>
-            <th id="[% tab | html %]_datelastborrowed" data-colname="[% tab | html %]_datelastborrowed">Date last borrowed</th>
-            <th id="[% tab | html %]_booksellerid" data-colname="[% tab | html %]_booksellerid">Source of acquisition</th>
-            <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
-            <th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>
-            <th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>
-            <th id="[% tab | html %]_stocknumber" data-colname="[% tab | html %]_stocknumber">Inventory number</th>
-            <th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>
-            <th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>
-            <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>
-            [% IF Koha.Preference('EasyAnalyticalRecords') %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
-            [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
-            [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course reserves</th>[% END %]
-            [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions" class="NoSort noExport">&nbsp;</th>[% END %]
+            <th id="[% tab | html %]_itemcallnumber" data-colname="itemcallnumber">Call number</th>
+            <th id="[% tab | html %]_enumchron" data-colname="enumchron">Serial enumeration / chronology</th>
+            <th id="[% tab | html %]_status" data-colname="status">Status</th>
+            <th id="[% tab | html %]_lastseen" data-colname="lastseen">Last seen</th>
+            <th id="[% tab | html %]_issues" data-colname="issues">Checkouts</th>
+            <th id="[% tab | html %]_renewals" data-colname="renewals">Renewals</th>
+            <th id="[% tab | html %]_localuse" data-colname="localuse">Local uses</th>
+            <th id="[% tab | html %]_dateaccessioned" data-colname="dateaccessioned">Date accessioned</th>
+            <th id="[% tab | html %]_datelastborrowed" data-colname="datelastborrowed">Date last borrowed</th>
+            <th id="[% tab | html %]_booksellerid" data-colname="booksellerid">Source of acquisition</th>
+            <th id="[% tab | html %]_barcode" data-colname="barcode">Barcode</th>
+            <th id="[% tab | html %]_uri" data-colname="uri">URL</th>
+            <th id="[% tab | html %]_copynumber" data-colname="copynumber">Copy number</th>
+            <th id="[% tab | html %]_stocknumber" data-colname="stocknumber">Inventory number</th>
+            <th id="[% tab | html %]_materials" data-colname="materials">Materials specified</th>
+            <th id="[% tab | html %]_itemnotes" data-colname="itemnotes">Public notes</th>
+            <th id="[% tab | html %]_itemnotes_nonpublic" data-colname="itemnotes_nonpublic">Non-public notes</th>
+            [% IF Koha.Preference('EasyAnalyticalRecords') %]<th id="[% tab | html %]_hostrecord" data-colname="hostrecord">Host records</th>[% END %]
+            [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="usedin">Used in</th><th></th>[% END %]
+            [% IF Koha.Preference('UseCourseReserves') %]<th id="[% tab | html %]_course_reserves" data-colname="course_reserves">Course reserves</th>[% END %]
+            [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="spinelabel" class="NoSort">Spine label</th>[% END %]
+            [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="actions" class="NoSort noExport">&nbsp;</th>[% END %]
             </tr>
         </thead>
     </table>
