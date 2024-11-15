@@ -746,6 +746,7 @@ function _dt_visibility(table_settings, table_dt){
         let use_names = $(table_dt.table().node()).data('bKohaColumnsUseNames');
         if ( use_names ) {
             let hidden_columns = table_settings.columns.filter(c => c.is_hidden);
+            if (!hidden_columns.length) return [];
             table_dt.columns(hidden_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(',')).every(function(){
                 hidden_ids.push(this.index());
             });
