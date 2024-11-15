@@ -69,6 +69,7 @@ subtest 'Test indexer calls' => sub {
     skip 'Elasticsearch configuration not available', 20
             if scalar @engines == 1;
     }
+    t::lib::Mocks::mock_userenv();
 
     t::lib::Mocks::mock_preference( 'AutoLinkBiblios', 0 );
 
