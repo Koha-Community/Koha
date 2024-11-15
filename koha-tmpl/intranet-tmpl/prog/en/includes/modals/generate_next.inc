@@ -11,6 +11,7 @@
                         <legend>Do you really want to generate next serial?</legend>
                         <input type="hidden" name="op" value="cud-gennext" />
                         <input type="hidden" name="subscriptionid" value="[% subscriptionidlist || subscriptionid | html %]" />
+                        <input type="hidden" name="referrer" value="[% referrer | html %]" />
                     </fieldset>
                 </div>
 
