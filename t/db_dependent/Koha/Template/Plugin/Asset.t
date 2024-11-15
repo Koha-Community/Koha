@@ -47,8 +47,8 @@ $template->process(url_template("js/global.js"), $opac_vars, \$output);
 is($output, "/opac-tmpl/bootstrap/js/global_$version.js");
 
 $output = '';
-$template->process(url_template("lib/jquery/plugins/jquery.dataTables.min.js"), $opac_vars, \$output);
-is($output, "/opac-tmpl/lib/jquery/plugins/jquery.dataTables.min_$version.js");
+$template->process(url_template("lib/datatables/datatables.min.js"), $opac_vars, \$output);
+is($output, "/opac-tmpl/lib/datatables/datatables.min_$version.js");
 
 $output = '';
 $template->process(url_template("css/opac.css"), $opac_vars, \$output);
