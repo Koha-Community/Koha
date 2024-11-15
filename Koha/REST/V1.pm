@@ -62,6 +62,17 @@ sub startup {
               if C4::Context->preference('AccessControlAllowOrigin');
         }
     );
+    $self->hook(
+        around_action => sub {
+            my ($next, $c, $action, $last) = @_;
+
+            # Flush memory caches before every request
+            Koha::Caches->flush_L1_caches();
+            Koha::Cache::Memory::Lite->flush();
+
+            return $next->();
+        }
+    );
 
     # Force charset=utf8 in Content-Type header for JSON responses
     $self->types->type( json    => 'application/json; charset=utf8' );
