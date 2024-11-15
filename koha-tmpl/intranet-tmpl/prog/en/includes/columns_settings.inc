@@ -6,9 +6,6 @@
 <script>
 // default_filters is not used but keeping the same constructor as kohaTable for consistency
 function KohaTable(id_selector, dt_parameters, table_settings, add_filters, default_filters, filters_options) {
-    var counter = 0;
-    var hidden_ids = [];
-    var included_ids = [];
     var selector = '#' + id_selector;
 
     if ( table_settings ) {
@@ -30,10 +27,9 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
             localStorage.setItem( table_key, JSON.stringify(data) )
         }
 
-        function set_default(table_settings, settings){
+        function set_default(table_settings, table_dt){
             let columns = new Array(table_settings.columns.length).fill({visible: true});
-            let hidden_ids, included_ids;
-            [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, $("#"+settings.nTable.id));
+            let hidden_ids = _dt_visibility(table_settings, table_dt);
             hidden_ids.forEach((id, i) => { columns[id] = { visible: false } } );
             // State is not loaded if time is not passed
             return { columns, time: new Date() };
@@ -48,10 +44,10 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
                 return JSON.parse(atob(state_from_url));
             }
 
-            if (!default_save_state) return set_default(table_settings, settings);
+            if (!default_save_state) return set_default(table_settings, this.api());
 
             let state = localStorage.getItem(table_key);
-            if (!state) return set_default(table_settings, settings);
+            if (!state) return set_default(table_settings, this.api());
 
             state = JSON.parse(state);
 
@@ -63,20 +59,6 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
             }
             return state;
         }
-
-        $(columns_settings).each( function() {
-            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
-            var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : counter;
-            if ( used_id == -1 ) return;
-
-            if ( this['is_hidden'] == "1" ) {
-                hidden_ids.push( used_id );
-            }
-            if ( this['cannot_be_toggled'] == "0" ) {
-                included_ids.push( used_id );
-            }
-            counter++;
-        });
 
         if ( table_settings.hasOwnProperty('default_save_state') && table_settings['default_save_state'] === 0 ) {
             localStorage.removeItem(table_key);
@@ -188,12 +170,13 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
 
     dt_parameters[ "buttons" ] = ['clear_filter'];
 
-    if( included_ids.length > 0 ){
+    let included_columns = table_settings.columns.filter(c => !c.cannot_be_toggled);
+    if( included_columns.length > 0 ){
         dt_parameters[ "buttons" ].push(
             {
                 extend: 'colvis',
                 fade: 100,
-                columns: included_ids,
+                columns: included_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(','),
                 className: "columns_controls",
                 titleAttr: _("Columns settings"),
                 text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
@@ -297,6 +280,8 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
         }
     }
 
+    $(table).data('bKohaColumnsUseNames', dt_parameters.bKohaColumnsUseNames);
+
     table.dataTable(new_parameters);
     var table_dt = table.DataTable();
     table_dt.on("column-visibility.dt", function(){
@@ -306,7 +291,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
             // has been updated according to the table's configuration
             columnsInit(this);
         }
-    }).columns( hidden_ids ).visible( false );
+    });
 
     if ( add_filters ) {
         _dt_add_filters(table, table_dt, filters_options);
