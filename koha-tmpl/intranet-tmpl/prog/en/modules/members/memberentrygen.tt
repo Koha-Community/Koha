@@ -2043,7 +2043,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                             });
                            new_field.appendTo("#quick_add_list");
                        } else {
-                           let orig_input_id = orig_li.children("input,textarea,select").attr("id");
+                           let orig_input_id = orig_li.children("input,textarea,select").last().attr("id");
                            if ( orig_input_id ) {
                                let new_field = orig_li.clone();
                                new_field.children("#"+orig_input_id).attr("id",orig_input_id + "_quick_add");
