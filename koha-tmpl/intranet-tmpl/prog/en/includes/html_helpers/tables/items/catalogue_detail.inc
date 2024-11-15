@@ -125,8 +125,8 @@
 
     function update_columns_visibility(settings){
         let table = settings.oInstance.api();
-        table.columns().visible(true, false);
-        table.columns().every(function(i){
+        table.columns().every(function(){
+            let i = this.index();
             let is_empty = true;
             let nodes = this.nodes();
             nodes.each((td, ii) => {
