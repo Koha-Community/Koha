@@ -4,6 +4,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE TablesSettings %]
+[% USE To %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -57,8 +58,24 @@
                                 <h4>Refine results</h4>
                                 <ol>
                                     <li>
-                                        <label for="library">Holding library:</label>
-                                        <select name="library" id="library">
+                                        <label for="holding_library">Holding library:</label>
+                                        <select name="holding_library" id="holding_library">
+                                            [% SET libraries = Branches.all( only_from_group => 1 ) %]
+                                            [% IF libraries.size != 1 %]
+                                                <option value="">Any</option>
+                                            [% END %]
+                                            [% FOREACH l IN libraries %]
+                                                [% IF (l.branchcode == branchcode) %]
+                                                    <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="pickup_library">Pickup library:</label>
+                                        <select name="pickup_library" id="pickup_library">
                                             [% SET libraries = Branches.all( only_from_group => 1 ) %]
                                             [% IF libraries.size != 1 %]
                                                 <option value="">Any</option>
@@ -130,10 +147,23 @@
                        }
                     },
                     'item.holding_library_id': function() {
-                       let library = $("#library").find(":selected").val();
+                       let library = $("#holding_library").find(":selected").val();
                        return library;
                     },
-                    status: { '!=': 'waiting' },
+                    'pickup_library_id': function() {
+                        let library = $("#pickup_library").find(":selected").val();
+                        return library;
+                    }
+                };
+
+                [% SET libraries = Branches.all %]
+                let all_libraries  = [% To.json(libraries) | $raw %].map(e => {
+                    e['_id'] = e.branchcode;
+                    e['_str'] = e.branchname;
+                    return e;
+                });
+                let filters_options = {
+                    [1] : () => all_libraries,
                 };
 
                 var bookings_table_url = '/api/v1/bookings?';
@@ -155,7 +185,7 @@
                         "visible": false
                     },
                     {
-                        "data": "pickup_library.name",
+                        "data": "pickup_library.name:me.pickup_library_id",
                         "title": _("Pickup library"),
                         "searchable": true,
                         "orderable": true,
@@ -237,17 +267,8 @@
                         "render": function(data, type, row, meta) {
                             return $date(row.start_date) + ' - ' + $date(row.end_date);
                         }
-                    },
-                    {
-                        "name": "actions",
-                        "title": _("Actions"),
-                        "searchable": false,
-                        "orderable": false,
-                        "render": function(data,type,row,meta){
-                            return "";
-                        }
                     }]
-                }, table_settings, 1, additional_filters);
+                }, table_settings, 1, additional_filters, filters_options);
 
                 /** Date filtering */
                 $("#bookingsf").on("submit", function(e){
