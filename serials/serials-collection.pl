@@ -49,6 +49,7 @@ my $biblionumber   = $query->param('biblionumber');
 my @subscriptionid = $query->multi_param('subscriptionid');
 my $skip_issues    = $query->param('skip_issues') || 0;
 my $count_forward  = $skip_issues + 1;
+my $referrer       = $query->param('referrer');
 
 @subscriptionid = uniq @subscriptionid;
 @subscriptionid = sort @subscriptionid;
@@ -117,7 +118,12 @@ if ( $op eq 'cud-gennext' && @subscriptionid ) {
         last if $nbissues == 1;
         last if HasSubscriptionExpired($subscriptionid) > 0;
     }
-    print $query->redirect( '/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=' . $subscriptionid );
+    if ( $referrer eq "serials-edit" ) {
+        print $query->redirect(
+            '/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=' . $subscriptionid . '&serstatus=1,3' );
+    } else {
+        print $query->redirect( '/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=' . $subscriptionid );
+    }
     exit;
 }
 
