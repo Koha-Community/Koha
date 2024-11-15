@@ -596,7 +596,6 @@ function _dt_default_ajax (params){
 }
 
 function _dt_buttons(params){
-    let included_ids = params.included_ids || [];
     let settings = params.settings || {};
     let table_settings = params.table_settings;
 
@@ -665,12 +664,13 @@ function _dt_buttons(params){
         }
     );
 
-    if( included_ids.length > 0 ){
+    let included_columns = table_settings.columns.filter(c => !c.cannot_be_toggled);
+    if( included_columns.length > 0 ){
         buttons.push(
             {
                 extend: 'colvis',
                 fade: 100,
-                columns: included_ids,
+                columns: included_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(','),
                 className: "columns_controls",
                 titleAttr: __("Columns settings"),
                 text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + __("Columns") + '</span>',
@@ -738,37 +738,26 @@ function _dt_buttons(params){
     return buttons;
 }
 
-function _dt_visibility(table_settings, settings, node){
-    var counter = 0;
+function _dt_visibility(table_settings, table_dt){
     let hidden_ids = [];
-    let included_ids = [];
     if ( table_settings ) {
-        var columns_settings = table_settings['columns'];
-        $(columns_settings).each( function() {
-            let used_id = counter;
-            let use_names = $(node).data('bKohaColumnsUseNames');
-            if ( use_names ) {
-                if (!node){
-                    console.err("bKohaColumnsUseNames is set but node not passed");
-                    return;
+        var columns_settings = table_settings.columns;
+        let i = 0;
+        let use_names = $(table_dt.table().node()).data('bKohaColumnsUseNames');
+        if ( use_names ) {
+            let hidden_columns = table_settings.columns.filter(c => c.is_hidden);
+            table_dt.columns(hidden_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(',')).every(function(){
+                hidden_ids.push(this.index());
+            });
+        } else {
+            $(columns_settings).each( function(i, c) {
+                if ( c.is_hidden == '1' ) {
+                    hidden_ids.push(i);
                 }
-                let selector = '#' + node.attr('id');
-                var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
-                used_id = named_id;
-            }
-
-            if ( used_id == -1 ) return;
-
-            if ( this['is_hidden'] == "1" ) {
-                hidden_ids.push( used_id );
-            }
-            if ( this['cannot_be_toggled'] == "0" ) {
-                included_ids.push( used_id );
-            }
-            counter++;
-        });
+            });
+        }
     }
-    return [hidden_ids, included_ids];
+    return hidden_ids;
 }
 
 function _dt_on_visibility(add_filters, table_node, table_dt){
@@ -894,10 +883,9 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         localStorage.setItem( table_key, JSON.stringify(data) )
     }
 
-    function set_default(table_settings, settings){
-        let columns = new Array(table_settings.columns.length).fill({visible: true});
-        let hidden_ids, included_ids;
-        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, $("#"+settings.nTable.id));
+    function set_default(table_settings, table_dt){
+        let columns = new Array(table_dt.columns()[0].length).fill({visible: true});
+        let hidden_ids = _dt_visibility(table_settings, table_dt);
         hidden_ids.forEach((id, i) => { columns[id] = { visible: false } } );
         // State is not loaded if time is not passed
         return { columns, time: new Date() };
@@ -911,10 +899,10 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
             return JSON.parse(atob(state_from_url));
         }
 
-        if (!default_save_state) return set_default(table_settings, settings);
+        if (!default_save_state) return set_default(table_settings, this.api());
 
         let state = localStorage.getItem(table_key);
-        if (!state) return set_default(table_settings, settings);
+        if (!state) return set_default(table_settings, this.api());
 
         state = JSON.parse(state);
 
@@ -1039,10 +1027,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
                     }, options);
         }
 
-        let hidden_ids, included_ids;
-        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, this)
-
-        settings["buttons"] = _dt_buttons({included_ids, settings, table_settings});
+        settings["buttons"] = _dt_buttons({settings, table_settings});
 
         if ( add_filters ) {
             settings['orderCellsTop'] = true;
