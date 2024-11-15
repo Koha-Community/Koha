@@ -63,7 +63,4 @@ const { removeMessages } = mainStore;
 router.beforeEach((to, from) => {
     navigationStore.$patch({ current: to.matched, params: to.params || {} });
     removeMessages(); // This will actually flag the messages as displayed already
-    if (to.external || to.meta.self.parent.external) {
-        window.location.href = to.path;
-    }
 });
