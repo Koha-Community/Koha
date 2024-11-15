@@ -664,13 +664,23 @@ function _dt_buttons(params){
         }
     );
 
-    let included_columns = table_settings.columns.filter(c => !c.cannot_be_toggled);
+    // Retrieving bKohaColumnsUseNames from the options passed to the constructor, not DT's settings
+    // But ideally should be retrieved using table.data()
+    let use_names = settings.bKohaColumnsUseNames;
+    let included_columns = [];
+    if ( use_names ) {
+        // bKohaColumnsUseNames is set, identify columns by their data-colname
+        included_columns = table_settings.columns.filter(c => !c.cannot_be_toggled).map(c => "[data-colname='%s']".format(c.columnname)).join(',');
+    } else {
+        // Not set, columns are ordered the same than in the columns settings
+        included_columns = table_settings.columns.map((c, i) => !c.cannot_be_toggled ? i : null).filter(i => i !== null);
+    }
     if( included_columns.length > 0 ){
         buttons.push(
             {
                 extend: 'colvis',
                 fade: 100,
-                columns: included_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(','),
+                columns: included_columns,
                 className: "columns_controls",
                 titleAttr: __("Columns settings"),
                 text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + __("Columns") + '</span>',
