@@ -165,6 +165,8 @@ subtest 'patron' => sub {
         }
     )->store;
 
+    t::lib::Mocks::mock_userenv( { branchcode => $library->{branchcode} } );
+
     my $p = $checkout->patron;
     is( ref($p), 'Koha::Patron',
         'Koha::Checkout->patron should return a Koha::Patron' );

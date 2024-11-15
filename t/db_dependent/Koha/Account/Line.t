@@ -394,6 +394,7 @@ subtest 'apply() tests' => sub {
     is( $messages[0]->payload->{success}, 1, "'success' key in payload" );
 
     t::lib::Mocks::mock_preference( 'MarkLostItemsAsReturned', 'onpayment');
+    t::lib::Mocks::mock_userenv( { branchcode => $library->id } );
     my $loser  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $loser_account = $loser->account;
 
@@ -442,8 +443,6 @@ subtest 'apply() tests' => sub {
     $pay_lost->apply( { debits => $pay_lines, offset_type => 'Credit applied' } );
 
     is( $loser->checkouts->next, undef, "Item has been returned");
-
-
 
     $schema->storage->txn_rollback;
 };

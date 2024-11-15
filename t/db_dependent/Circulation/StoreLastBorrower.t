@@ -38,10 +38,11 @@ subtest 'Test StoreLastBorrower' => sub {
 
     t::lib::Mocks::mock_preference( 'StoreLastBorrower', '1' );
 
-    my $patron = $builder->build(
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build(
         {
             source => 'Borrower',
-            value  => { privacy => 1, }
+            value  => { privacy => 1, branchcode => $library->branchcode }
         }
     );
 
@@ -56,6 +57,8 @@ subtest 'Test StoreLastBorrower' => sub {
             },
         }
     );
+
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
 
     $item = $item->get_from_storage;
     my $patron_object = $item->last_returned_by();

@@ -292,6 +292,8 @@ $query =
 $dbh->do( $query, {}, $borrower_id1, $item_id1, $samplebranch1->{branchcode} );
 
 t::lib::Mocks::mock_preference( 'CataloguingLog', 1 );
+t::lib::Mocks::mock_userenv( { branchcode => $samplebranch2->{branchcode} } );
+
 my $log_count_before = $schema->resultset('ActionLog')->search({module => 'CATALOGUING'})->count();
 my ($doreturn, $messages, $iteminformation, $borrower) = AddReturn('barcode_1',
     $samplebranch2->{branchcode});
