@@ -454,7 +454,11 @@ $(document).ready(function () {
                     data: "staff_notes",
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        return escape_str(data);
+                        if (data?.length > 100) {
+                            data = data.substr(0, 100) + "...";
+                        }
+
+                        return data;
                     },
                 },
                 {
