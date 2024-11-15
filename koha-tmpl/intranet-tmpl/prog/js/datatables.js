@@ -746,9 +746,10 @@ function _dt_visibility(table_settings, settings, node){
         var columns_settings = table_settings['columns'];
         $(columns_settings).each( function() {
             let used_id = counter;
-            if ( settings.bKohaColumnsUseNames ) {
+            let use_names = $(node).data('bKohaColumnsUseNames');
+            if ( use_names ) {
                 if (!node){
-                    console.err("settings.bKohaColumnsUseNames is set but node not passed");
+                    console.err("bKohaColumnsUseNames is set but node not passed");
                     return;
                 }
                 let selector = '#' + node.attr('id');
@@ -1060,6 +1061,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
             }
         }
 
+        $(this).data('bKohaColumnsUseNames', settings.bKohaColumnsUseNames);
         var table = $(this).dataTable(settings);
 
         var table_dt = table.DataTable();
