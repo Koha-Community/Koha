@@ -8,37 +8,6 @@
 [% PROCESS 'opac-authorities.inc' %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% PROCESS 'i18n.inc' %]
-[% BLOCK pagination %]
-    <nav class="pagination pagination-sm noprint" aria-label="Search results pagination">
-        <ul class="pagination">
-            [% IF ( displayprev ) %]
-                <li class="page-item">
-                    <a class="page-link" href="opac-authorities-home.pl?startfrom=[% startfromprev | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to the previous page">
-                        <i class="fa fa-fw fa-angle-left" aria-hidden="true"></i>  Previous
-                    </a>
-                </li>
-            [% END %]
-            [% FOREACH number IN numbers %]
-                [% IF ( number.highlight ) %]
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#" aria-label="Current page: Page [% number.number | html %]">[% number.number | html %]</a>
-                    </li>
-                [% ELSE %]
-                    <li class="page-item">
-                        <a class="page-link" href="opac-authorities-home.pl?startfrom=[% number.startfrom | uri %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to page [% number.number | html %]">[% number.number | html %]</a>
-                    </li>
-                [% END %]
-            [% END %]
-            [% IF ( displaynext ) %]
-                <li class="page-item">
-                    <a class="page-link" href="opac-authorities-home.pl?startfrom=[% startfromnext | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]" aria-label="Go to the next page">
-                        Next <i class="fa fa-fw fa-angle-double-right" aria-hidden="true"></i>
-                    </a>
-                </li>
-            [% END %]
-        </ul>
-    </nav> <!-- / #pages -->
-[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("Results") | html %] &rsaquo;
