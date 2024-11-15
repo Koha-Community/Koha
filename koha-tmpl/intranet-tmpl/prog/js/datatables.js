@@ -907,7 +907,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         const url = new URL(window.location.href);
         let state_from_url = url.searchParams.get( table_key + '_state');
         if ( state_from_url ) {
-            settings.loaded_from_state = true;
+            $("#" + settings.nTable.id).data('loaded_from_state', true);
             return JSON.parse(atob(state_from_url));
         }
 
@@ -919,7 +919,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         state = JSON.parse(state);
 
         if (default_save_state_search ) {
-            settings.loaded_from_state = true;
+            $("#" + settings.nTable.id).data('loaded_from_state', true);
         } else {
             delete state.search;
             state.columns.forEach(c => delete c.search );
@@ -953,7 +953,7 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
         );
     };
     let stateLoadParams = function (settings, data) {
-        if (!settings.loaded_from_state) return;
+        if (!$("#" + settings.nTable.id).data('loaded_from_state')) return;
 
         if (data.external_filters) {
             Object.keys(external_filter_nodes).forEach((k, i) => {
@@ -1036,7 +1036,6 @@ function _dt_save_restore_state(table_settings, external_filter_nodes={}){
                             'emptyTable': (options.emptyTable) ? options.emptyTable : __("No data available in table")
                         },
                         'ajax': _dt_default_ajax({default_filters, options}),
-                        loaded_from_state: false,
                     }, options);
         }
 

@@ -423,13 +423,15 @@
             [% END %]
             [% SET order_column_index = 0 %]
             [% SET embed = ['extended_attributes','library'] %]
-            patrons_table = $("#[% table_id | html %]").kohaTable({
+            let table_node = $("#[% table_id | html %]");
+            patrons_table = table_node.kohaTable({
                 "ajax": {
                     "url": patron_search_url,
                     "dataSrc": function ( json ) {
                         [% IF redirect_if_one_result %]
                             // redirect if there is only 1 result.
                             // Do not redirect if state has been loaded
+                            let loaded_from_state = table_node.data('loaded_from_state');
                             if ( !loaded_from_state && first_draw && json.recordsFiltered == 1 ) {
                                 let url = '[% redirect_url | url %]'.indexOf("?") != -1
                                     ? '[% redirect_url | url %]&borrowernumber=' + json.data[0].patron_id
@@ -777,8 +779,7 @@
                 parent_block.find(".searchpattern").parent().hide();
             });
 
-            let table_dt = patrons_table.DataTable();
-            let loaded_from_state = table_dt.settings()[0].loaded_from_state;
+            let loaded_from_state = patrons_table.data('loaded_from_state');
             if ( !defer_loading || loaded_from_state ) {
                 patron_search_form.submit();
             }
@@ -882,7 +883,7 @@
             $("#[% table_id | html %]_search_results").show();
 
             let table_dt = patrons_table.DataTable();
-            let loaded_from_state = table_dt.settings()[0].loaded_from_state;
+            let loaded_from_state = patrons_table.data('loaded_from_state');
             if ( !loaded_from_state ) {
                 table_dt.search("").columns().search("");
                 [% FOR c IN columns %]
@@ -898,7 +899,7 @@
                     [% END %]
                 [% END %]
             }
-            table_dt.settings()[0].loaded_from_state = false;
+            patrons_table.data('loaded_from_state', false);
             first_draw = 1; // Only redirect if we are coming from here
             table_dt.draw();
             [% IF display_search_description %]
