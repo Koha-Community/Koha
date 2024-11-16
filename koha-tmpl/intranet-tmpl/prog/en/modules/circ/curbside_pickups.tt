@@ -527,6 +527,10 @@
                 $('#find-patron').focus();
             });
 
+            [% IF tab == 'schedule-pickup_panel' %]
+                $('#find-patron').focus();
+            [% END %]
+
             const pickup_date = document.querySelector("#pickup_date");
             if ( pickup_date ) {
                 const fp = pickup_date._flatpickr;
