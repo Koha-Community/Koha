@@ -668,12 +668,19 @@ function _dt_buttons(params){
     // But ideally should be retrieved using table.data()
     let use_names = settings.bKohaColumnsUseNames;
     let included_columns = [];
-    if ( use_names ) {
-        // bKohaColumnsUseNames is set, identify columns by their data-colname
-        included_columns = table_settings.columns.filter(c => !c.cannot_be_toggled).map(c => "[data-colname='%s']".format(c.columnname)).join(',');
-    } else {
-        // Not set, columns are ordered the same than in the columns settings
-        included_columns = table_settings.columns.map((c, i) => !c.cannot_be_toggled ? i : null).filter(i => i !== null);
+    if (table_settings) {
+        if (use_names) {
+            // bKohaColumnsUseNames is set, identify columns by their data-colname
+            included_columns = table_settings.columns
+                .filter(c => !c.cannot_be_toggled)
+                .map(c => "[data-colname='%s']".format(c.columnname))
+                .join(",");
+        } else {
+            // Not set, columns are ordered the same than in the columns settings
+            included_columns = table_settings.columns
+                .map((c, i) => (!c.cannot_be_toggled ? i : null))
+                .filter(i => i !== null);
+        }
     }
     if( included_columns.length > 0 ){
         buttons.push(
