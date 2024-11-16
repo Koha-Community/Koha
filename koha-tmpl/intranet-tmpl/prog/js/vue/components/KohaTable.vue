@@ -22,13 +22,8 @@ DataTable.use(DataTablesLib)
 export default {
     name: "KohaTable",
     data() {
-        let hidden_ids, included_ids
-        ;[hidden_ids, included_ids] = _dt_visibility(
-            this.table_settings,
-            this.options
-        )
         let buttons = _dt_buttons({
-            included_ids,
+            settings: this.options,
             table_settings: this.table_settings,
         })
 
@@ -91,8 +86,6 @@ export default {
                 ],
                 ...this.options,
             },
-            hidden_ids,
-            included_ids,
         }
     },
     setup() {
