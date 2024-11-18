@@ -727,7 +727,8 @@ sub import_biblios_list {
                 my $quantity = delete $iteminfos->{quantity} || 1;
 
                 # Handle incorrectly named original parameters for MarcItemFieldsToOrder
-                $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
+                $iteminfos->{location} = delete $iteminfos->{loc} if $iteminfos->{loc};
+
                 # Convert budget code to a budget id
                 my $item_budget_code = delete $iteminfos->{budget_code};
                 if ($item_budget_code) {
