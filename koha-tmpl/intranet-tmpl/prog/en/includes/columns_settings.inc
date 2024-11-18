@@ -28,7 +28,7 @@ function KohaTable(id_selector, dt_parameters, table_settings, add_filters, defa
         }
 
         function set_default(table_settings, table_dt){
-            let columns = new Array(table_settings.columns.length).fill({visible: true});
+            let columns = new Array(table_dt.columns()[0].length).fill({visible: true});
             let hidden_ids = _dt_visibility(table_settings, table_dt);
             hidden_ids.forEach((id, i) => { columns[id] = { visible: false } } );
             // State is not loaded if time is not passed
