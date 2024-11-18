@@ -285,7 +285,7 @@ sub import_from_kbart_file {
         if ( $file->{filename} !~ /\.csv$/ && $file->{filename} !~ /\.tsv$/ ) {
             return $c->render(
                 status  => 201,
-                openapi => { invalid_filetype => 1 }
+                openapi => { warnings => { invalid_filetype => 1 } }
             );
         }
 
