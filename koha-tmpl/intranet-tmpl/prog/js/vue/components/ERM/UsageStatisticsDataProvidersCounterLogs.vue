@@ -23,13 +23,11 @@ import KohaTable from "../KohaTable.vue"
 export default {
     setup() {
         const { setConfirmationDialog, setMessage } = inject("mainStore")
-        const patron_to_html = $patron_to_html
 
         const table = ref()
 
         return {
             table,
-            patron_to_html,
             setConfirmationDialog,
             setMessage,
         }
