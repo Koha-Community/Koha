@@ -2519,6 +2519,10 @@ sub to_api {
                                     ? Mojo::JSON->true
                                     : Mojo::JSON->false;
 
+    $json_patron->{expired} = ( $self->is_expired )
+                                    ? Mojo::JSON->true
+                                    : Mojo::JSON->false;
+
     return $json_patron;
 }
 

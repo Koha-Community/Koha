@@ -695,12 +695,6 @@ function patron_autocomplete(node, options) {
         } else {
             loggedInClass = "";
         }
-        let new_date = new Date();
-        let today = Date.parse($date_to_rfc3339($date(new_date.toString())));
-        let expiration = Date.parse(
-            $date_to_rfc3339($date(item.expiry_date.toString()))
-        );
-        let expired = today > expiration;
         return $("<li></li>")
             .addClass(loggedInClass)
             .data("ui-autocomplete-item", item)
@@ -735,7 +729,7 @@ function patron_autocomplete(node, options) {
                           item.library.name.escapeHtml() +
                           "</span>"
                         : "") +
-                    (expired
+                    (item.expired
                         ? '<span class="badge text-bg-warning">' +
                           __("Expired") +
                           "</span>"
