@@ -145,6 +145,20 @@ sub setup {
       );
     unshift @cleanup, $patron_27;
 
+    my $patron_28 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                surname      => "expired_patron_surname",
+                firstname    => 'expired_patron',
+                categorycode => $patron_category->categorycode,
+                branchcode   => $library_2->branchcode,
+                dateexpiry   => '2000-12-01',
+            }
+        }
+    );
+    unshift @cleanup, $patron_28;
+
     $attribute_type = Koha::Patron::Attribute::Type->new(
         {
             code        => 'my code1',
@@ -207,7 +221,7 @@ sub teardown {
 }
 
 subtest 'Search patrons' => sub {
-    plan tests => 28;
+    plan tests => 29;
 
     setup();
     my $total_number_of_patrons = Koha::Patrons->search->count;
@@ -461,6 +475,69 @@ subtest 'Search patrons' => sub {
         is( is_patron_shown($patron_27), 0, 'search by incorrect full formatted date does not show the patron' );
         get_dob_search_filter($table_id)->clear;
 
+    };
+
+    subtest 'expired and restricted badges' => sub {
+        plan tests => 5;
+
+        my $patron_28 = Koha::Patrons->search( { surname => 'expired_patron_surname' } )->next;
+
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        like(
+            $driver->find_element('//ul[@id="ui-id-2"]/li/a')->get_text,
+            qr[\Qexpired_patron_surname\E],
+            'expired_patron is shown'
+        );
+
+        is(
+            $driver->find_element('//ul[@id="ui-id-2"]/li/a/span[@class="badge text-bg-warning"]')->get_text,
+            'Expired',
+            'Expired badge is shown'
+        );
+
+        $patron_28->dateexpiry('2999-12-01')->store;
+
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        my @expired_badges = $driver->find_elements('//ul[@id="ui-id-2"]/li/a/span[@class="badge text-bg-warning"]');
+        is(
+            scalar @expired_badges, 0,
+            'No expired badge is shown'
+        );
+
+        $patron_28->debarred('2048-11-18')->store;
+
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        my @restricted_badges = $driver->find_elements('//ul[@id="ui-id-2"]/li/a/span[@class="badge text-bg-danger"]');
+        is(
+            $driver->find_element('//ul[@id="ui-id-2"]/li/a/span[@class="badge text-bg-danger"]')->get_text,
+            'Restricted',
+            'Restricted badge is shown'
+        );
+
+        $patron_28->dateexpiry('2000-12-01')->store;
+
+        $driver->get( $base_url . "/members/members-home.pl" );
+        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+
+        sleep $DT_delay && $s->wait_for_ajax;
+
+        is(
+            $driver->find_element('//ul[@id="ui-id-2"]/li/a/span[@class="badge text-bg-warning"]')->get_text,
+            'Expired',
+            'Both badges are shown'
+        );
     };
 
     teardown();
