@@ -386,7 +386,7 @@ function LoadIssuesTable() {
                     } else if ( oObj.can_renew_error == "on_reserve" ) {
                         return "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + __("On hold") + "</a>";
                     } else if ( oObj.materials ) {
-                        return __("Confirm (%s)".format(oObj.materials.escapeHtml()));
+                        return __("Confirm (%s)").format(oObj.materials.escapeHtml());
                     } else {
                         return "<input type='checkbox' class='checkin' id='checkin_" + oObj.itemnumber + "' name='checkin' value='" + oObj.itemnumber +"'></input>";
                     }
