@@ -149,8 +149,8 @@ sub setup {
         {
             class => 'Koha::Patrons',
             value => {
-                surname      => "expired_patron_surname",
-                firstname    => 'expired_patron',
+                surname      => "test_expired_patron_surname",
+                firstname    => 'test_expired_patron',
                 categorycode => $patron_category->categorycode,
                 branchcode   => $library_2->branchcode,
                 dateexpiry   => '2000-12-01',
@@ -316,7 +316,7 @@ subtest 'Search patrons' => sub {
     $s->submit_form;
 
     sleep $DT_delay && $s->wait_for_ajax;
-    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons) );
+    is( $driver->find_element('//div[@id="'.$table_id.'_wrapper"]//div[@class="dt-info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 27, $total_number_of_patrons) );
     $driver->find_element('//form[@class="patron_search_form"]//*[@class="btn btn-default clear_search"]')->click();
     $s->submit_form;
     sleep $DT_delay && $s->wait_for_ajax;
@@ -480,17 +480,17 @@ subtest 'Search patrons' => sub {
     subtest 'expired and restricted badges' => sub {
         plan tests => 5;
 
-        my $patron_28 = Koha::Patrons->search( { surname => 'expired_patron_surname' } )->next;
+        my $patron_28 = Koha::Patrons->search( { surname => 'test_expired_patron_surname' } )->next;
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+        $s->fill_form( { 'searchmember' => 'test_expired_patron' } );
 
         sleep $DT_delay && $s->wait_for_ajax;
 
         like(
             $driver->find_element('//ul[@id="ui-id-2"]/li/a')->get_text,
-            qr[\Qexpired_patron_surname\E],
-            'expired_patron is shown'
+            qr[\Qtest_expired_patron_surname\E],
+            'test_expired_patron is shown'
         );
 
         is(
@@ -502,7 +502,7 @@ subtest 'Search patrons' => sub {
         $patron_28->dateexpiry('2999-12-01')->store;
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+        $s->fill_form( { 'searchmember' => 'test_expired_patron' } );
 
         sleep $DT_delay && $s->wait_for_ajax;
 
@@ -515,7 +515,7 @@ subtest 'Search patrons' => sub {
         $patron_28->debarred('2048-11-18')->store;
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+        $s->fill_form( { 'searchmember' => 'test_expired_patron' } );
 
         sleep $DT_delay && $s->wait_for_ajax;
 
@@ -529,7 +529,7 @@ subtest 'Search patrons' => sub {
         $patron_28->dateexpiry('2000-12-01')->store;
 
         $driver->get( $base_url . "/members/members-home.pl" );
-        $s->fill_form( { 'searchmember' => 'expired_patron' } );
+        $s->fill_form( { 'searchmember' => 'test_expired_patron' } );
 
         sleep $DT_delay && $s->wait_for_ajax;
 
