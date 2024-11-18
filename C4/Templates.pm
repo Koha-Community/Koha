@@ -31,6 +31,7 @@ C4::Templates - Object for manipulating templates for use with Koha
 
 use base qw(Class::Accessor);
 use Template;
+use Template::Filters;
 use C4::Languages qw( get_bidi getTranslatedLanguages regex_lang_subtags );
 
 use C4::Context;
@@ -41,6 +42,7 @@ use Koha::Exceptions;
 __PACKAGE__->mk_accessors(qw( theme activethemes preferredtheme lang filename htdocs interface vars));
 
 
+Template::Filters->use_rfc3986();
 
 sub new {
     my $class     = shift;
