@@ -1826,7 +1826,7 @@
     [% Asset.js("js/place_booking_modal.js") | $raw %]
     <script>
         var browser;
-        browser = KOHA.browser('[% searchid | html %]', parseInt(biblionumber, 10));
+        browser = KOHA.browser("[% searchid | html %]", parseInt(biblionumber, 10));
         browser.show();
 
         [% IF bundlesEnabled %]
