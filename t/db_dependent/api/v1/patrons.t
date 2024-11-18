@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 21;
+        plan tests => 15;
 
         $schema->storage->txn_begin;
 
@@ -137,19 +137,33 @@ subtest 'list() tests' => sub {
           ->status_is(200)
           ->json_is('/0/address2' => $librarian->address2);
 
-        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
-        AddDebarment( { borrowernumber => $patron->borrowernumber } );
+        subtest 'restricted & expired' => sub {
 
-        $t->get_ok("//$userid:$password@/api/v1/patrons?restricted=" . Mojo::JSON->true . "&cardnumber=" . $patron->cardnumber )
-          ->status_is(200)
-          ->json_has('/0/restricted')
-          ->json_is( '/0/restricted' => Mojo::JSON->true )
-          ->json_hasnt('/1');
+            plan tests => 13;
 
-        $t->get_ok( "//$userid:$password@/api/v1/patrons?"
-              . 'q={"extended_attributes.type":"CODE"}' =>
-              { 'x-koha-embed' => 'extended_attributes' } )
-          ->status_is( 200, "Works, doesn't explode" );
+            my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+            AddDebarment( { borrowernumber => $patron->borrowernumber } );
+
+            $t->get_ok("//$userid:$password@/api/v1/patrons?restricted=" . Mojo::JSON->true . "&cardnumber=" . $patron->cardnumber )
+              ->status_is(200)
+              ->json_has('/0/restricted')
+              ->json_is( '/0/restricted' => Mojo::JSON->true )
+              ->json_has('/0/expired')
+              ->json_is( '/0/expired' => Mojo::JSON->false )
+              ->json_hasnt('/1');
+
+            $patron->dateexpiry(dt_from_string->subtract(days => 2))->store;
+            $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
+              ->status_is(200)
+              ->json_has('/expired')
+              ->json_is( '/expired' => Mojo::JSON->true );
+
+            $t->get_ok( "//$userid:$password@/api/v1/patrons?"
+                  . 'q={"extended_attributes.type":"CODE"}' =>
+                  { 'x-koha-embed' => 'extended_attributes' } )
+              ->status_is( 200, "Works, doesn't explode" );
+        };
 
         subtest 'searching date and date-time fields' => sub {
 
@@ -443,6 +457,7 @@ subtest 'add() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{expired};
         delete $newpatron->{anonymized};
 
         # Create a library just to make sure its ID doesn't exist on the DB
@@ -488,6 +503,7 @@ subtest 'add() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{expired};
         delete $newpatron->{anonymized};
         $patron_to_delete->delete;
 
@@ -739,6 +755,7 @@ subtest 'update() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{expired};
         delete $newpatron->{anonymized};
 
         $t->put_ok("//$userid:$password@/api/v1/patrons/-1" => json => $newpatron)
@@ -814,6 +831,7 @@ subtest 'update() tests' => sub {
         # Put back the RO attributes
         $newpatron->{patron_id} = $unauthorized_patron->to_api({ user => $authorized_patron })->{patron_id};
         $newpatron->{restricted} = $unauthorized_patron->to_api({ user => $authorized_patron })->{restricted};
+        $newpatron->{expired} = $unauthorized_patron->to_api({ user => $authorized_patron })->{expired};
         $newpatron->{anonymized} = $unauthorized_patron->to_api({ user => $authorized_patron })->{anonymized};
 
         my $got = $result->tx->res->json;
@@ -845,6 +863,7 @@ subtest 'update() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{expired};
         delete $newpatron->{anonymized};
 
         # attempt to update
