@@ -1405,10 +1405,10 @@
             [% IF reserve_id %]
                 $(".print-slip").on('click', function(e) {
                     e.preventDefault();
-                    Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
+                    Dopop("hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]");
                 });
                 [% IF print_slip %]
-                    Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
+                    Dopop("hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]");
                 [% END %]
             [% END %]
             var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
