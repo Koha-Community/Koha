@@ -1,5 +1,4 @@
 use Modern::Perl;
-use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 
 return {
     bug_number  => "37954",
@@ -14,7 +13,7 @@ return {
         }
         );
         if ($existing_holdings_barcode_setting) {
-            say_info( $out, "Settings already exist" );
+            say $out "Settings already exist";
         } else {
             my ( $cannot_be_toggled, $is_hidden ) = $dbh->selectrow_array(
                 q{
@@ -29,9 +28,9 @@ return {
                     ('catalogue', 'detail', 'holdings_table', 'holdings_barcode', $cannot_be_toggled, $is_hidden )
                 }
                 );
-                say_success( $out, "Settings moved to holdings_barcode" );
+                say $out "Settings moved to holdings_barcode";
             } else {
-                say_info( $out, "No settings for holdings_barcodes found" );
+                say $out "No settings for holdings_barcodes found";
             }
         }
         $dbh->do(
