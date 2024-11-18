@@ -86,9 +86,10 @@ import { ref, inject } from "vue"
 
 export default {
     setup() {
-        const { setMessage } = inject("mainStore")
+        const { setMessage, setWarning } = inject("mainStore")
         return {
             setMessage,
+            setWarning,
         }
     },
     data() {
@@ -171,11 +172,11 @@ export default {
                         )}</p>`
                         this.setMessage(message, true)
                     }
-                    if (success.invalid_filetype) {
+                    if (success.warnings.invalid_filetype) {
                         message += `<p>${this.$__(
                             "The file must be in .tsv or .csv format, please convert your file and try again."
                         )}</p>`
-                        setWarning(message)
+                        this.setWarning(message)
                     }
                 },
                 error => {}
