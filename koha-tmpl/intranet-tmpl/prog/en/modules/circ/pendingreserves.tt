@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE To %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -251,27 +252,6 @@
         </tr>
         [% END %]
     </tbody>
-    <tfoot>
-        <tr>
-        <td><input type="text" class="filter" data-column_num="0" placeholder="Pull this many items" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="3" placeholder="Patron name" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="4" placeholder="Title" style="width:95%"/></td>
-        <td id="homebranchfilter"></td>
-        <td></td>
-        <td><input type="text" class="filter" data-column_num="7" placeholder="Call number" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="8" placeholder="Available copy" style="width:95%"/></td>
-        <td><input type="text" class="filter" data-column_num="9" placeholder="Available enumeration" style="width:95%"/></td>
-        <td id="itemtype-filter"></td>
-        <td id="locationfilter"></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td id="pickup-location"></td>
-        <td></td>
-        </tr>
-    </tfoot>
     </table>
     [% ELSE %]
         <strong>No items found.</strong>
@@ -326,57 +306,35 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        function add_select(column){
-            // Create select element
-            let select = document.createElement('select');
-            select.add(new Option(''));
-            column.footer().replaceChildren(select);
-
-            // Apply listener for user change in value
-            select.addEventListener('change', function () {
-                column
-                    .search(select.value, {exact: false})
-                    .draw();
-            });
-
+        function get_options(column){
             let regex = /(<([^>]+)>)/ig; // Remove html tags
-            // Add list of options
-            column
+            let options = [... new Set(column
                 .data()
+                .toArray()
                 .map(d => d.replace(regex, '').trim().split(/\n/gi).flat())
-                .unique()
-                .sort()
-                .each(function (d, j) {
-                    select.add(new Option(d));
+                .flat()
+                .sort())];
+
+            return options
+                .map(e => {
+                    return {_id: e, _str: e}
                 });
         }
 
         $(document).ready(function() {
+                [% SET libraries = Branches.all %]
+                let filters_options = {
+                    [5] : (table_dt) => get_options(table_dt.column(5)),
+                    [10] : (table_dt) => get_options(table_dt.column(10)),
+                    [11] : (table_dt) => get_options(table_dt.column(11)),
+                    [15] : (table_dt) => get_options(table_dt.column(15)),
+                };
+
+
           var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
           var holdst = KohaTable("holdst", {
             "pagingType": "full_numbers",
-            initComplete: function () {
-                // homebranch
-                add_select(
-                    this.api()
-                    .column(5));
-
-                // itemtype
-                add_select(
-                    this.api()
-                    .column(10));
-
-                // location
-                add_select(
-                    this.api()
-                    .column(11));
-
-                // pickup-location
-                add_select(
-                    this.api()
-                    .column(15));
-                },
-          }, table_settings);
+          }, table_settings, true, null, filters_options);
         });
     </script>
 [% END %]

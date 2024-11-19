@@ -816,7 +816,7 @@ function _dt_add_filters(table_node, table_dt, filters_options = {}) {
                 if ( !filters_options.hasOwnProperty(i) ) {
                     filters_options[i] = eval(filter_type)
                 } else if ( typeof filters_options[i] === "function" ) {
-                    filters_options[i] = filters_options[i]()
+                    filters_options[i] = filters_options[i](table_dt)
                 }
                 $(filters_options[i]).each(function(){
                     let o = $('<option value="%s">%s</option>'.format(this._id, this._str));
