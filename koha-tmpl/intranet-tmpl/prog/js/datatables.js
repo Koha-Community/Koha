@@ -739,14 +739,17 @@ function _dt_buttons(params){
     }
 
     if ( table_settings && CAN_user_parameters_manage_column_config ) {
+        let href = '/cgi-bin/koha/admin/columns_settings.pl?module=%s&page=%s&table=%s'.format(table_settings.module, table_settings.page, table_settings.table);
         buttons.push(
             {
+                tag: "a",
+                attr: { href },
                 className: "dt_button_configure_table",
                 fade: 100,
                 titleAttr: __("Configure table"),
                 text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
                 action: function() {
-                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
+                    window.location = href;
                 },
             }
         );
