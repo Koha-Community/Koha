@@ -138,11 +138,35 @@ sub checkout {
     # BEGIN TRANSACTION
     $circ->patron( $patron = C4::SIP::ILS::Patron->new($patron_id) );
     $circ->item( $item     = C4::SIP::ILS::Item->new($item_id) );
+
     if ($fee_ack) {
         $circ->fee_ack($fee_ack);
     }
+
     if ( !$patron ) {
         $circ->screen_msg("Invalid Patron");
+    }
+    elsif ( !$item ) {
+        $circ->screen_msg("Invalid Item");
+    }
+    elsif ( $no_block_due_date ) {
+        # A no block due date means we need check this item out to the patron
+        # regardless if fines, restrictions or any other things that would
+        # typically prevent a patron from checking out.
+        # A no block transaction is used for send offline ( store and forward )
+        # transaction to Koha. The patron already has possession of the item
+        # so it should be checked out to the patron no matter what.
+        $circ->do_checkout( $account, $no_block_due_date );
+
+        $item->{borrowernumber} = $patron_id;
+        $item->{due_date}       = $circ->{due};
+        push( @{ $patron->{items} }, { barcode => $item_id } );
+        $circ->desensitize( !$item->magnetic_media );
+
+        siplog(
+            "LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s via a no block checkout",
+            $patron_id,  join( ', ', map { $_->{barcode} } @{ $patron->{items} } )
+        );
     }
     elsif ( !$patron->charge_ok ) {
         if ($patron->debarred) {
@@ -163,9 +187,6 @@ sub checkout {
             $circ->screen_msg("Patron blocked");
         }
     }
-    elsif ( !$item ) {
-        $circ->screen_msg("Invalid Item");
-    }
     elsif (
         $item->{borrowernumber}
             && !C4::Context->preference('AllowItemsOnLoanCheckoutSIP')
@@ -178,7 +199,9 @@ sub checkout {
         $circ->screen_msg("Item type cannot be checked out at this checkout location");
     }
     else {
-        $circ->do_checkout($account, $no_block_due_date);
+        # No block checkouts were handled earlier so there is no need
+        # to bass the no block due date here.
+        $circ->do_checkout($account);
         if ( $circ->ok ) {
 
             # If the item is already associated with this patron, then
