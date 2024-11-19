@@ -283,7 +283,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
@@ -538,6 +538,37 @@ subtest 'SearchItems test' => sub {
     };
     ($items, $total_results) = SearchItems($filter,$params);
     is($items->[0]->{barcode}, $item1->barcode, 'Items sorted as expected by availability');
+
+    subtest 'Sort items by callnumber' => sub {
+        plan tests => 2;
+
+        # Add two items
+        my $item1 = $builder->build_sample_item(
+            {
+                itemcallnumber => 'D102.D3 1930',
+                cn_source      => 'lcc'
+            }
+        );
+        my $item2 = $builder->build_sample_item(
+            {
+                library        => $item1->homebranch,
+                itemcallnumber => 'D1015.B4 1965',
+                cn_source      => 'lcc'
+            }
+        );
+        my $filter = {
+            field    => 'homebranch',
+            query    => $item1->homebranch,
+            operator => '=',
+        };
+        my $params = {
+            sortby    => 'itemcallnumber',
+            sortorder => 'DESC',
+        };
+        ( $items, $total_results ) = SearchItems( $filter, $params );
+        is( $items->[0]->{barcode}, $item2->barcode, 'Items sorted by cn_sort correctly' );
+        is( $items->[1]->{barcode}, $item1->barcode, 'Items sorted by cn_sort correctly' );
+    };
 
     subtest 'Search items by ISSN and ISBN with variations' => sub {
         plan tests => 4;
