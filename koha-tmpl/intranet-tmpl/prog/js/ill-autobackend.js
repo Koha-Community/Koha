@@ -24,7 +24,7 @@ $(document).ready(function () {
                 auto_backend.available = 0;
             },
             success: function (data) {
-                _addSuccessMessage(auto_backend.name);
+                _addSuccessMessage(auto_backend.name, data);
                 auto_backend.available = 1;
             },
             error: function (request, textstatus) {
@@ -84,11 +84,13 @@ $(document).ready(function () {
         _addBackendOption("Standard");
     }
 
-    function _addSuccessMessage(auto_backend_name) {
+    function _addSuccessMessage(auto_backend_name, data) {
         _removeVerifyingMessage(auto_backend_name);
         $(auto_ill_el + " > #backend-" + auto_backend_name).append(
             '<span class="text-success"><i class="fa-solid fa-check"></i> ' +
                 __("Available.").format(auto_backend_name) +
+                " " +
+                data.success +
                 "</span>"
         );
     }
