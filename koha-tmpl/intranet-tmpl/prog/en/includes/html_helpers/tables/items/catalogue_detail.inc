@@ -123,9 +123,11 @@
         }
     }
 
-    function update_columns_visibility(settings){
-        let table = settings.oInstance.api();
-        table.columns().every(function(){
+    function update_columns_visibility(table_dt, table_settings, user_colvis){
+        table_dt.columns().visible(true, false);
+        let hidden_ids = _dt_visibility(table_settings, table_dt);
+        table_dt.columns(hidden_ids).visible(false, false);
+        table_dt.columns().every(function(){
             let i = this.index();
             let is_empty = true;
             let nodes = this.nodes();
@@ -136,9 +138,12 @@
                 }
             });
             if ( is_empty ) {
-                table.columns(i).visible(false, false);
+                table_dt.columns(i).visible(false, false);
             }
         });
+        for (const [key, value] of Object.entries(user_colvis)) {
+            table_dt.columns(key).visible(value, false);
+        }
     }
 
 
@@ -264,6 +269,7 @@
         otherholdings: [% TablesSettings.GetTableSettings('catalogue', 'detail','otherholdings_table','json')  | $raw %],
     };
 
+    let user_colvis = {holdings: {}, otherholdings: {}};
     let table_nodes = {
         holdings: "[% PROCESS 'build_table' tab="holdings" | collapse | $tojson %]",
         otherholdings: "[% PROCESS 'build_table' tab="otherholdings" | collapse | $tojson %]",
@@ -849,7 +855,7 @@
                 [% END %]
 
                 if ( api.data().length ) {
-                    update_columns_visibility(settings);
+                    update_columns_visibility(api, items_table_settings[tab_id], user_colvis[tab_id]);
                 }
 
                 if ( drawcallback ) { drawcallback(this); }
@@ -862,6 +868,15 @@
         filters_options,
         );
 
+        let table_dt = items_table.DataTable();
+        table_dt.on("column-visibility.dt", function(e, settings, column, state, recalc ){
+            if (recalc === false) return;
+
+            _dt_add_filters(this, table_dt, filters_options);
+
+            user_colvis[tab_id][column] = state;
+
+        });
         return items_table;
     }
     function safe_link(uri,link_text) {
