@@ -2424,3 +2424,35 @@ subtest 'filter_by_bookable' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'filter_by_checked_out' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_checked_out->count, 0, "Filtered 0 checked out items" );
+
+    C4::Circulation::AddIssue( $patron, $item_1->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 1, "Filtered 1 checked out items" );
+
+    C4::Circulation::AddIssue( $patron, $item_2->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 2, "Filtered 2 checked out items" );
+
+    # Do the returns
+    C4::Circulation::AddReturn( $item_1->barcode );
+    C4::Circulation::AddReturn( $item_2->barcode );
+
+    is( $biblio->items->filter_by_checked_out->count, 0, "Filtered 0 checked out items" );
+
+    $schema->storage->txn_rollback;
+
+};
