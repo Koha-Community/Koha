@@ -1238,6 +1238,7 @@ sub SearchItems {
     } else {
         my $sortby = (0 < grep {$params->{sortby} eq $_} @columns)
             ? $params->{sortby} : 'itemnumber';
+        $sortby = 'cn_sort' if $sortby eq 'itemcallnumber';
         my $sortorder = (uc($params->{sortorder}) eq 'ASC') ? 'ASC' : 'DESC';
         $query .= qq{ ORDER BY $sortby $sortorder };
     }
