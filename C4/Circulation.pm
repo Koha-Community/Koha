@@ -2836,8 +2836,6 @@ sub AddReturn {
             }
         );
 
-        Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $item->biblionumber ] } )
-            if C4::Context->preference('RealTimeHoldsQueue');
     }
 
     return ( $doreturn, $messages, $issue, ( $patron ? $patron->unblessed : {} ) );

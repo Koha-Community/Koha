@@ -257,6 +257,14 @@ if ( $op eq 'cud-dotransfer' ) {
     $transfer->transit;
 }
 
+if ( $op eq 'cud-ignore_reserve' ) {
+    my $ignored_item = $query->param('ignoreitem');
+    my $item         = Koha::Items->find($ignored_item);
+    Koha::BackgroundJob::BatchUpdateBiblioHoldsQueue->new->enqueue( { biblio_ids => [ $item->biblionumber ] } )
+        if C4::Context->preference('RealTimeHoldsQueue');
+
+}
+
 if ( $transit && $op eq 'cud-transfer' ) {
     my $transfer = Koha::Item::Transfers->find($transit);
     if ($canceltransfer) {
