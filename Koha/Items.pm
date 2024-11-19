@@ -612,7 +612,7 @@ sub search {
         if ( $status eq 'not_for_loan' ) {
             my @item_types_notforloan =
                 Koha::ItemTypes->search( { notforloan => { '!=' => 0 } } )->get_column('itemtype');
-            $self = $self->search( [ { notforloan => { '>' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
+            $self = $self->search( [ { notforloan => { '!=' => 0 } }, { 'me.itype' => \@item_types_notforloan } ] );
         }
         if ( $status eq 'on_hold' ) {
             $self = $self->filter_by_has_holds;
