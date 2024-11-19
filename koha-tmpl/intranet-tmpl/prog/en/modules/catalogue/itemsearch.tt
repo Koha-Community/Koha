@@ -361,7 +361,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     <script>
         var authorised_values = [% authorised_values_json | $raw %];
