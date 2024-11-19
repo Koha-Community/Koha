@@ -151,22 +151,6 @@ sub authorities {
     return $results;
 }
 
-=head2 preferred_authorities
-
-  my $preferred_authorities = $heading->preferred_authorities;
-
-Return a list of authority records for headings
-that are a preferred form of the heading.
-
-=cut
-
-sub preferred_authorities {
-    my $self = shift;
-    my $skipmetadata = shift || undef;
-    my ( $results, $total ) = _search( 'see-from', $skipmetadata );
-    return $results;
-}
-
 =head2 valid_heading_subfield
 
     if (C4::Heading::valid_heading_subfield('100', 'e', '')) ...
