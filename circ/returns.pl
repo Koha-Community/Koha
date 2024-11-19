@@ -586,7 +586,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     my $item = Koha::Items->find($messages->{'WrongTransferItem'});
     my $old_transfer = $item->get_transfer;
     my $new_transfer = $item->request_transfer(
-        { to => $old_transfer->tobranch, reason => $old_transfer->reason, replace => 'WrongTransfer' } );
+        { to => $old_transfer->to_library, reason => $old_transfer->reason, replace => 'WrongTransfer' } );
     $template->param(
         NewTransfer => $new_transfer->id
     );
