@@ -898,10 +898,27 @@ subtest do_checkout_with_patron_blocked => sub {
 };
 
 subtest do_checkout_with_noblock => sub {
-    plan tests => 3;
+    plan tests => 1;
+
+    my $mockILS = Test::MockObject->new;
+    my $server  = { ils => $mockILS };
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron  = $builder->build_object(
+
+    my $institution = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils = C4::SIP::ILS->new($institution);
+
+    my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
             value => {
@@ -911,7 +928,8 @@ subtest do_checkout_with_noblock => sub {
         }
     );
 
-    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode, flags => 1 } );
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
 
     my $item = $builder->build_sample_item(
         {
@@ -919,21 +937,15 @@ subtest do_checkout_with_noblock => sub {
         }
     );
 
-    my $sip_patron     = C4::SIP::ILS::Patron->new( $patron->cardnumber );
-    my $sip_item       = C4::SIP::ILS::Item->new( $item->barcode );
-    my $co_transaction = C4::SIP::ILS::Transaction::Checkout->new();
-    is(
-        $co_transaction->patron($sip_patron),
-        $sip_patron, "Patron assigned to transaction"
-    );
-    is(
-        $co_transaction->item($sip_item),
-        $sip_item, "Item assigned to transaction"
-    );
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item   = C4::SIP::ILS::Item->new( $item->barcode );
 
-    $co_transaction->do_checkout( undef, '19990102    030405' );
+    my $circ =
+      $ils->checkout( $patron->cardnumber, $item->barcode, undef, undef,
+        $server->{account}, '19990102    030405' );
 
-    is( $patron->checkouts->count, 1, 'No Block checkout was performed for debarred patron' );
+    is( $patron->checkouts->count,
+        1, 'No Block checkout was performed for debarred patron' );
 };
 
 subtest do_checkout_with_holds => sub {
