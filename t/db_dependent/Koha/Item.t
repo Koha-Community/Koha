@@ -21,7 +21,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 39;
+use Test::More tests => 40;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -45,6 +45,144 @@ use t::lib::Dates;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest '_status' => sub {
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $item    = $builder->build_sample_item();
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 1 );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my @test_cases = (
+        {
+            setup => sub {
+                my $onloan_item = $builder->build_sample_item();
+                AddIssue( $patron, $onloan_item->barcode, dt_from_string );
+                return $onloan_item;
+            },
+            expected_status => 'checked_out',
+            description     => 'Checked out status correctly returned',
+        },
+        {
+            setup => sub {
+                my $onsite_item = $builder->build_sample_item();
+                AddIssue(
+                    $patron, $onsite_item->barcode, dt_from_string, undef, undef, undef,
+                    { onsite_checkout => 1 }
+                );
+                return $onsite_item;
+            },
+            expected_status => 'local_use',
+            description     => 'Local use status correctly returned',
+        },
+        {
+            setup => sub {
+                return $item;
+            },
+            expected_status => 'available',
+            description     => 'Available status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->itemlost(1)->store();
+                return $item;
+            },
+            expected_status => 'lost',
+            description     => 'Lost status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->withdrawn(1)->store();
+                return $item;
+            },
+            expected_status => qr/lost,withdrawn/,
+            description     => 'Lost and withdrawn status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->damaged(1)->store();
+                return $item;
+            },
+            expected_status => qr/lost,withdrawn,damaged/,
+            description     => 'Lost, withdrawn, and damaged status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->notforloan(1)->store();
+                return $item;
+            },
+            expected_status => 'not_for_loan',
+            description     => 'Positive not_for_loan status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->notforloan(-1)->store();
+                return $item;
+            },
+            expected_status => 'not_for_loan',
+            description     => 'Negative not_for_loan status correctly returned',
+        },
+        {
+            setup => sub {
+                my $itemtype = $builder->build_object( { class => "Koha::ItemTypes", value => { notforloan => 1 } } );
+                my $notforloan_item = $builder->build_sample_item( { itype => $itemtype->itemtype, } );
+                return $notforloan_item;
+            },
+            expected_status => 'not_for_loan',
+            description     => 'Item type not_for_loan status correctly returned',
+        },
+        {
+            setup => sub {
+                my $onhold_item = $builder->build_sample_item();
+                C4::Reserves::AddReserve(
+                    {
+                        branchcode     => $library->branchcode,
+                        borrowernumber => $patron->borrowernumber,
+                        biblionumber   => $onhold_item->biblionumber,
+                        itemnumber     => $onhold_item->itemnumber,
+                    }
+                );
+                return $onhold_item;
+            },
+            expected_status => 'on_hold',
+            description     => 'On hold status correctly returned',
+        },
+        {
+            setup => sub {
+                my $recalled_item = $builder->build_sample_item();
+                AddIssue( $patron, $recalled_item->barcode, dt_from_string );
+                Koha::Recalls->add_recall(
+                    { biblio => $recalled_item->biblio, item => $recalled_item, patron => $patron } );
+                return $recalled_item;
+            },
+            expected_status => 'recalled',
+            description     => 'Recalled status correctly returned',
+        },
+        {
+            setup => sub {
+                $item->restricted(1)->store();
+                return $item;
+            },
+            expected_status => 'restricted',
+            description     => 'Restricted status correctly returned',
+        },
+    );
+
+    foreach my $test_case (@test_cases) {
+        my $item = $test_case->{setup}->();
+        ok( $item->_status() =~ /$test_case->{expected_status}/, $test_case->{description} );
+    }
+
+    t::lib::Mocks::mock_preference( 'UseRecalls', 0 );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'z3950_status' => sub {
     plan tests => 9;
