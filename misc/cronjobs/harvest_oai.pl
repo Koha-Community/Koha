@@ -99,14 +99,13 @@ try {
     exit;
 };
 
-cronlogaction( { action => 'Start', info => "Starting OAI Harvest" } );
-cronlogaction( { info   => "Command line: $command_line_options" } );
+cronlogaction( { info => $command_line_options } );
 
 my $harvester =
     Koha::OAI::Client::Harvester->new( { server => $server, days => $days, force => $force, logger => \&logFunction } );
 $harvester->init();
 
-cronlogaction( { action => 'End', info => "Ending OAI Harvest" } );
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub logFunction {
     my $message = shift;

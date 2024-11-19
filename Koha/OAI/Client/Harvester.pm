@@ -52,11 +52,6 @@ use Date::Calc qw(
     Today
 );
 
-my $strp = DateTime::Format::Strptime->new(
-    pattern   => '%FT%TZ',
-    time_zone => 'floating',
-);
-
 our $xslt_engine = Koha::XSLT::Base->new;
 
 =head2 new
@@ -136,7 +131,7 @@ sub init {
         # Change this to yyyy-mm-dd
         my ( $nowyear, $nowmonth, $nowday ) = Today();
         my @date     = Add_Delta_Days( $nowyear, $nowmonth, $nowday, -$days );
-        my $dt_start = DateTime->new( year => $date[0], month => $date[1], day => $date[2] );
+        my $dt_start = dt_from_string( $date[0] . '-' . $date[1] . '-' . $date[2] );
         $start_date = $dt_start->ymd();
         $self->printlog("Harvesting from $start_date");
     }
