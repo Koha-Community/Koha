@@ -307,7 +307,7 @@ sub filter_by_available {
             itemlost        => 0,
             withdrawn       => 0,
             damaged         => 0,
-            notforloan      => { '<=' => 0 },
+            notforloan      => 0,
             restricted      => [ { '!=' => 0 }, undef ],
             'me.itype'      => { -not_in => \@item_types_notforloan },
         }
