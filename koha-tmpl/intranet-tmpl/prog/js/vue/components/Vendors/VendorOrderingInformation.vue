@@ -48,9 +48,7 @@
             </li>
             <li>
                 <label>{{ $__("Tax rate") }}:</label>
-                <span>
-                    {{ (vendor.tax_rate || 0) * 100 }}
-                </span>
+                <span> {{ formatTaxRate(vendor.tax_rate) }}% </span>
             </li>
             <li v-if="vendor.deliverytime">
                 <label>{{ $__("Delivery time") }}:</label>
@@ -240,6 +238,14 @@ export default {
             currencies,
             gstValues,
         };
+    },
+    methods: {
+        formatTaxRate(taxRate) {
+            if (!taxRate) return 0;
+            const decimalPlaces = taxRate.toString().split(".")[1]?.length || 0;
+            const multiplier = 10 ** decimalPlaces;
+            return Math.round(taxRate * multiplier) / (multiplier / 100);
+        },
     },
 };
 </script>
