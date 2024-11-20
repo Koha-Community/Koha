@@ -1,24 +1,31 @@
 [% USE TablesSettings %]
 
 <script>
-function KohaTable(selector, dt_parameters, columns_settings) {
-    var id = 0;
-    var hidden_ids = [];
-    var included_ids = [];
-    $(columns_settings).each( function() {
-        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector+' th' );
 
-        var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : id;
-        if ( used_id == -1 ) return;
+function _dt_visibility(table_settings, table_dt){
+    let hidden_ids = [];
+    if ( table_settings ) {
+        var columns_settings = table_settings.columns;
+        let i = 0;
+        let use_names = $(table_dt.table().node()).data('bKohaColumnsUseNames');
+        if ( use_names ) {
+            let hidden_columns = table_settings.columns.filter(c => c.is_hidden);
+            if (!hidden_columns.length) return [];
+            table_dt.columns(hidden_columns.map(c => "[data-colname='%s']".format(c.columnname)).join(',')).every(function(){
+                hidden_ids.push(this.index());
+            });
+        } else {
+            $(columns_settings).each( function(i, c) {
+                if ( c.is_hidden == '1' ) {
+                    hidden_ids.push(i);
+                }
+            });
+        }
+    }
+    return hidden_ids;
+}
 
-        if ( this['is_hidden'] == "1" ) {
-            hidden_ids.push( used_id );
-        }
-        if ( this['cannot_be_toggled'] == "0" ) {
-            included_ids.push( used_id );
-        }
-        id++;
-    });
+function KohaTable(selector, dt_parameters, table_settings) {
 
     // By default we include all visible columns in exports and print unless they have the "noExport" class
     var exportColumns = ":visible:not(.noExport)";
@@ -79,12 +86,31 @@ function KohaTable(selector, dt_parameters, columns_settings) {
         }
     ];
 
-    if( included_ids.length > 0 ){
+    // Retrieving bKohaColumnsUseNames from the options passed to the constructor, not DT settings
+    // But ideally should be retrieved using table.data()
+    let use_names = dt_parameters.bKohaColumnsUseNames;
+    let included_columns = [];
+    if (table_settings) {
+        if (use_names) {
+            // bKohaColumnsUseNames is set, identify columns by their data-colname
+            included_columns = table_settings.columns
+                .filter(c => !c.cannot_be_toggled)
+                .map(c => "[data-colname='%s']".format(c.columnname))
+                .join(",");
+        } else {
+            // Not set, columns are ordered the same than in the columns settings
+            included_columns = table_settings.columns
+                .map((c, i) => (!c.cannot_be_toggled ? i : null))
+                .filter(i => i !== null);
+        }
+    }
+
+    if( included_columns.length > 0 ){
         dt_parameters[ "buttons" ].push(
             {
                 extend: 'colvis',
                 fade: 100,
-                columns: included_ids,
+                columns: included_columns,
                 className: "columns_controls",
                 titleAttr: _("Columns settings"),
                 text: '<i class="fa fa-lg fa-gear" aria-hidden="true"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
@@ -96,6 +122,7 @@ function KohaTable(selector, dt_parameters, columns_settings) {
     }
 
     var table = $(selector);
+
     var new_parameters = {}
     $.extend(true, new_parameters, dataTablesDefaults, dt_parameters);
     var default_column_defs = [
@@ -109,8 +136,13 @@ function KohaTable(selector, dt_parameters, columns_settings) {
         $.extend(true, new_parameters, default_column_defs);
     }
 
+    $(table).data('bKohaColumnsUseNames', dt_parameters.bKohaColumnsUseNames);
+
     table.dataTable(new_parameters);
-    table.DataTable().on("column-visibility.dt", function () {
+    var table_dt = table.DataTable();
+
+    let hidden_ids = _dt_visibility(table_settings, table_dt);
+    table_dt.on("column-visibility.dt", function () {
         if (typeof columnsInit == 'function') {
             // This function can be created separately and used to trigger
             // an event after the DataTable has loaded AND column visibility
@@ -118,8 +150,6 @@ function KohaTable(selector, dt_parameters, columns_settings) {
             columnsInit();
         }
     }).columns(hidden_ids).visible(false);
-
-    $(".dt_button_clear_filter, .columns_controls, .export_controls").tooltip();
 
     return table;
 }

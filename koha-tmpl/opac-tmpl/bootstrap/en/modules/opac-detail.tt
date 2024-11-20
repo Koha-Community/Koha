@@ -1742,7 +1742,7 @@
                 });
             [% END # /IF OpacBrowseResults %]
 
-            var columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
+            var table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
 
             KohaTable("#holdingst", {
                 dom: '<"clearfix">t',
@@ -1753,7 +1753,7 @@
                 "responsive": {
                     "details": { "type": 'column', "target": -1 }
                 }
-            }, columns_settings);
+            }, table_settings);
 
             KohaTable("#otherholdingst", {
                 dom: '<"clearfix">t',
@@ -1764,9 +1764,9 @@
                 "responsive": {
                     "details": { "type": 'column', "target": -1 }
                 }
-            }, columns_settings);
+            }, table_settings);
 
-            var serial_column_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
+            var serial_table_settings = [% TablesSettings.GetTableSettings( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
             KohaTable("#subscriptionst", {
                 dom: '<"clearfix">t',
@@ -1778,7 +1778,7 @@
                 "columnDefs": [
                     { "className": "dtr-control", "orderable": false, "targets": -1 }
                 ],
-            }, serial_column_settings);
+            }, serial_table_settings);
 
             var dTables = $("#holdingst,#subscriptionst,#otherholdingst");
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
