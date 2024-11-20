@@ -95,6 +95,13 @@ Authorities:
             - Display the MARC field/subfields
             - pref: AdditionalFieldsInZ3950ResultAuthSearch
             - " in the 'Additional fields' column of Z39.50 search results (use comma as delimiter e.g.: \"<code>001, 035$a</code>\")"
+        -
+            - pref: ConsiderHeadingUse
+              default: no
+              choices:
+                  1: Do
+                  0: "Don't"
+            - consider the intended use of authority records (008/14-16) during cataloging and linking.
 
     Linker:
         -
