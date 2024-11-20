@@ -151,8 +151,8 @@ $template->param(
 );
 
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
-my @parcels = GetInvoices(
-    supplierid => $booksellerid,
+my @parcels    = GetInvoices(
+    supplierid    => $booksellerid,
     invoicenumber => $code,
     ( $datefrom ? ( shipmentdatefrom => $datefrom ) : () ),
     ( $dateto   ? ( shipmentdateto   => $dateto   ) : () ),
