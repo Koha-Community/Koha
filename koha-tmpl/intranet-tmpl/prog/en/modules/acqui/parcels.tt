@@ -34,11 +34,7 @@
 
 <div class="main container-fluid">
     <div class="row">
-        [% IF ( count ) %]
             <div class="col-md-10 order-md-2 order-sm-2">
-        [% ELSE %]
-            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-        [% END %]
             <main>
                 [% INCLUDE 'messages.inc' %]
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
@@ -202,7 +198,7 @@
 </main>
 </div> <!-- /.col-md-10.order-md-2 -->
 
-[% IF ( count ) %]
+
 <div class="col-md-2 order-sm-2 order-md-1">
     <aside>
     <form method="get" action="parcels.pl">
@@ -250,7 +246,7 @@
 </form>
 </aside>
 </div>  <!-- /.col-md-2.order-md-1 -->
-[% END %]
+
 </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
