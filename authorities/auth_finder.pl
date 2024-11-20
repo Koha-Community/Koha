@@ -68,6 +68,25 @@ if ( $op eq "do_search" ) {
     my $startfrom      = $query->param('startfrom')      || 0;
     my $resultsperpage = $query->param('resultsperpage') || 20;
 
+    if ( C4::Context->preference('ConsiderHeadingUse') ) {
+        my $marcflavour = C4::Context->preference('marcflavour');
+        my $biblio_tag  = substr( $index, 4, 3 );
+        if ( $marcflavour eq 'MARC21' ) {
+            my $heading_use_search_field =
+                  $biblio_tag =~ /^[127]/ ? 'Heading-use-main-or-added-entry'
+                : $biblio_tag =~ /^6/     ? 'Heading-use-subject-added-entry'
+                : $biblio_tag =~ /^[48]/  ? 'Heading-use-series-added-entry'
+                :                           undef;
+            if ($heading_use_search_field) {
+                push @marclist,  $heading_use_search_field;
+                push @and_or,    'and';
+                push @excluding, '';
+                push @operator,  'is';
+                push @value,     'a';
+            }
+        }
+    }
+
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $searcher = Koha::SearchEngine::Search->new(
