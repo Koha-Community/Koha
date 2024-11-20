@@ -653,7 +653,7 @@
                 ],
                 [% IF only_one_order %]
                     "drawCallback": function( settings ) {
-                        $(this).find("tbody tr td:last-child a.order_edit_toggle").click();
+                        $("#order_edit").modal("show");
                     },
                 [% END %]
             };
