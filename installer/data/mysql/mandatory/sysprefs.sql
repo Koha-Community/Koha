@@ -173,6 +173,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ComponentSortField','title','call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('ComponentSortOrder','asc','asc|dsc|az|za','Specify the default sort order','Choice'),
 ('ConfirmFutureHolds','0','','Number of days for confirming future holds','Integer'),
+('ConsiderHeadingUse', '0', NULL, 'Consider authority heading use (main/added entry, or subject, or series title) in cataloging and linking', 'YesNo'),
 ('ConsiderLibraryHoursInCirculation', 'close', 'close|open|ignore', "Take library opening hours into consideration to calculate due date when circulating.", 'Choice'),
 ('ConsiderOnSiteCheckoutsAsNormalCheckouts','1',NULL,'Consider on-site checkouts as normal checkouts','YesNo'),
 ('ContentWarningField', '', NULL, 'MARC field to use for content warnings', 'Free'),
