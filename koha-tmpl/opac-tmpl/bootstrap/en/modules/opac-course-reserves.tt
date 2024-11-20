@@ -6,6 +6,7 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE HtmlScrubber %]
 <title
     >[% FILTER collapse %]
         [% t("Course reserves") | html %]
@@ -63,7 +64,7 @@
                                             >
                                         [% END %]
                                     </td>
-                                    <td>[% c.public_note | $raw %]</td>
+                                    <td>[% c.public_note | scrub_html type => 'note' | $raw %]</td>
                                     <td></td>
                                 </tr>
                             [% END %]
