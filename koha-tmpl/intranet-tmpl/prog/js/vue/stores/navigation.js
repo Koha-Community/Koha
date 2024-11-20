@@ -139,18 +139,23 @@ export const useNavigationStore = defineStore("navigation", () => {
             }
 
             function _mapMatches(currentMatches, params) {
-                return currentMatches
+                const matches = currentMatches
                     .filter(match => _isBaseOrNotStub(match.meta.self))
                     .filter(match => _isEmptyNode(match.meta.self))
                     .map(match => {
                         let path = _getPath(match, params);
-                        return {
+                        const externalPath = path.includes(".pl");
+                        const test = {
                             ...match.meta.self,
                             icon: null,
-                            path,
+                            ...(externalPath
+                                ? { href: path, path: null }
+                                : { path }),
                             children: null,
                         };
+                        return test;
                     });
+                return matches;
             }
         }),
         leftNavigation: computed(() => {
