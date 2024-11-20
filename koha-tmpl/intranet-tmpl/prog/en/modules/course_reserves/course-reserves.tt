@@ -3,6 +3,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE TablesSettings %]
+[% USE HtmlScrubber %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -76,7 +77,7 @@
                                             [% END %]
                                         </td>
                                         <td>[% c.staff_note | html %]</td>
-                                        <td>[% c.public_note | $raw %]</td>
+                                        <td>[% c.public_note | scrub_html type => 'note' | $raw %]</td>
                                         <td>[% c.students_count | html %]</td>
                                         <td>
                                             [% IF c.enabled == 'yes' %]

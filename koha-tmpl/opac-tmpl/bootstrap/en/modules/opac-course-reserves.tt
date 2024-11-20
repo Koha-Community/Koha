@@ -6,6 +6,7 @@
 [% PROCESS 'i18n.inc' %]
 [% PROCESS 'html_helpers.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% USE HtmlScrubber %]
 <title>[% FILTER collapse %]
     [% t("Course reserves") | html %] &rsaquo;
     [% PROCESS 'library_name_title' %]
@@ -58,7 +59,7 @@
                                           <div class="instructor"><span class="inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
                                       [% END %]
                                     </td>
-                                    <td>[% c.public_note | $raw %]</td>
+                                    <td>[% c.public_note | scrub_html type => 'note' | $raw %]</td>
                                     <td></td>
                             [% END %]
                         </tbody>
