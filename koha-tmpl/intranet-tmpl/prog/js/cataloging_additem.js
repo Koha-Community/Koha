@@ -138,19 +138,6 @@ $(document).ready(function(){
             return $("#" + $(this).data("item") + "-delete-item-form").submit();
         }
     }) ;
-
-    /* On page load, check for location.hash in the page URL */
-    /* If present the location hash will be used to scroll to the relevant anchor */
-    var hash = location.hash;
-    var hashPieces = hash.split('?');
-    if( hashPieces[0] !== "" ){
-        $( hashPieces[0] )[0].scrollIntoView();
-    }
-
-    $("#newitem_jump").on("click", function(e){
-        e.preventDefault();
-        document.getElementById("additema").scrollIntoView();
-    });
 });
 
 function CheckTemplateForm(f) {
