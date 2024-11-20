@@ -87,6 +87,7 @@ my $code           = $input->param('filter');
 my $datefrom       = $input->param('datefrom');
 my $dateto         = $input->param('dateto');
 my $resultsperpage = $input->param('resultsperpage');
+my $include_closed = $input->param('filter_include_closed');
 my $op             = $input->param('op');
 $resultsperpage ||= 20;
 
@@ -155,7 +156,8 @@ my @parcels = GetInvoices(
     invoicenumber => $code,
     ( $datefrom ? ( shipmentdatefrom => $datefrom ) : () ),
     ( $dateto   ? ( shipmentdateto   => $dateto   ) : () ),
-    order_by => $order
+    order_by => $order,
+    ( $include_closed ? () : ( closedate => undef ) ),
 );
 my $count_parcels = @parcels;
 
@@ -210,6 +212,7 @@ $template->param(
     datefrom                 => $datefrom,
     dateto                   => $dateto,
     resultsperpage           => $resultsperpage,
+    filter_include_closed    => $include_closed,
     name                     => $bookseller->name,
     shipmentdate_today       => dt_from_string,
     booksellerid             => $booksellerid,

@@ -2456,6 +2456,14 @@ sub GetInvoices {
         push @bind_strs, " aqinvoices.message_id = ? ";
         push @bind_args, $args{message_id};
     }
+    if ( exists $args{closedate} ) {
+        if ( $args{closedate} ) {
+            push @bind_strs, " aqinvoices.closedate = ? ";
+            push @bind_args, $args{closedate};
+        } else {
+            push @bind_strs, " aqinvoices.closedate IS NULL ";
+        }
+    }
 
     $query .= " WHERE " . join(" AND ", @bind_strs) if @bind_strs;
 

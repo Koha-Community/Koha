@@ -233,6 +233,17 @@
                 <option value="50">50</option>
                 <option value="100">100</option>
                 </select></li>
+            <li>
+                <label for="filter_include_closed">
+                    [% IF filter_include_closed %]
+                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" checked="checked" title="Include closed invoices in the search" />
+                    [% ELSE %]
+                        <input type="checkbox" id="filter_include_closed" value="1" name="filter_include_closed" title="Include closed invoices in the search" />
+                    [% END %]
+                    Include closed invoices
+                </label>
+
+            </li>
         </ol>
         <fieldset class="action"><input type="submit" class="btn btn-default" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a></fieldset>
     </fieldset>
