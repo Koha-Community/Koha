@@ -714,7 +714,7 @@ function _dt_buttons(params){
                     let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
                     if( navigator.clipboard && navigator.clipboard.writeText){
                         navigator.clipboard.writeText( url );
-                        $(node).tooltip({trigger: 'manual', title: _("Copied!")}).tooltip('show');
+                        $(node).tooltip({trigger: 'manual', title: __("Copied!")}).tooltip('show');
                     }
                 },
             }

@@ -7,11 +7,11 @@ function addItem( node, unique_item_fields ) {
     //We need to verify the item form before saving
     var empty_item_mandatory = CheckMandatorySubfields(item_form);
     if (empty_item_mandatory > 0) {
-        var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
+        var _alertString= __("Form not submitted because of the following problem(s)")+"\n";
 
         _alertString +="-------------------------------------------------------------------\n\n";
         _alertString +=
-            "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
+            "\n- " + __("%s item mandatory fields empty").format(empty_item_mandatory);
         alert(_alertString);
         return false;
     }

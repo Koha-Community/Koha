@@ -211,12 +211,12 @@ function removeLocalImage(imagenumber) {
                 location.href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=" + biblionumber;
             } else {
                 thumbnail.html( copy );
-                alert(_("An error occurred on deleting this image"));
+                alert(__("An error occurred on deleting this image"));
             }
         },
         error => {
             thumbnail.html( copy );
-            alert(_("An error occurred on deleting this image"));
+            alert(__("An error occurred on deleting this image"));
             console.warn("Something wrong happened: %s".format(error));
         }
     );

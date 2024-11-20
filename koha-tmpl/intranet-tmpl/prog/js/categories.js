@@ -120,12 +120,12 @@ $(document).ready(function () {
 
     let blocked_actions_select = $("select#block_expired[multiple='multiple']");
     blocked_actions_select.multipleSelect({
-        placeholder: _("Please select ..."),
+        placeholder: __("Please select ..."),
         selectAll: false,
         hideOptgroupCheckboxes: true,
-        allSelected: _("All selected"),
-        countSelected: _("# of % selected"),
-        noMatchesFound: _("No matches found"),
+        allSelected: __("All selected"),
+        countSelected: __("# of % selected"),
+        noMatchesFound: __("No matches found"),
         onClick: function (view) {
             if (
                 view.value == "follow_syspref_BlockExpiredPatronOpacActions" &&

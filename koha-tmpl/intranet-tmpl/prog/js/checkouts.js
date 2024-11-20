@@ -793,7 +793,7 @@ $(document).ready(function() {
             // Prevent form submit
             return false;
         } else {
-            alert(_("There are no items to be renewed."));
+            alert(__("There are no items to be renewed."));
         }
     });
 

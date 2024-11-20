@@ -95,14 +95,14 @@ $(document).ready(function() {
 
     if ( $('#clubs_panel').length ) {
         $('#clubs-tab').on('click', function() {
-            $('#clubs_panel').text(_("Loading..."));
+            $('#clubs_panel').text(__("Loading..."));
             $('#clubs_panel').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=' + borrowernumber );
         });
     }
 
     if ( $('#pat_lists_panel').length ) {
         $('#pat_lists-tab').on('click', function() {
-            $('#pat_lists_panel').text(_("Loading..."));
+            $('#pat_lists_panel').text(__("Loading..."));
             $('#pat_lists_panel').load('/cgi-bin/koha/patron_lists/patron-lists-tab.pl?borrowernumber=' + borrowernumber );
         });
     }
