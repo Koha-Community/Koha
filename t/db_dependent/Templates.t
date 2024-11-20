@@ -19,11 +19,12 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Deep;
 use Test::MockModule;
 use Test::Warn;
 use File::Temp qw/tempfile/;
+use URI::Escape;
 
 use t::lib::Mocks;
 
@@ -173,4 +174,27 @@ subtest "Absolute path change in _get_template_file" => sub {
     );
     $template->param( quality => 'good-for-nothing' );
     like( $template->output, qr/a good.+template.+doubt/, 'Testing a template with an absolute path' );
+};
+
+subtest "Template::Toolkit uses RFC3986" => sub {
+    plan tests => 1;
+
+    my $s = q{console.log("alert('boo!')");};
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context::temporary_directory );
+    print $fh q{URI=[% filter_me | uri %], URL=[% filter_me | url %]};
+    close $fh;
+    my ( $template, $login, $cookie ) = C4::Auth::get_template_and_user(
+        {
+            template_name   => $fn,
+            query           => CGI::new,
+            type            => "opac",
+            authnotrequired => 1,
+        }
+    );
+    $template->param( filter_me => $s );
+    my $filtered_s = uri_escape $s;
+    is(
+        $template->output, sprintf( q{URI=%s, URL=%s}, $filtered_s, $filtered_s ),
+        'Testing a template with an absolute path'
+    );
 };
