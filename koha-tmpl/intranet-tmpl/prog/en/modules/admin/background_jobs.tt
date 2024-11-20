@@ -158,6 +158,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
@@ -340,7 +341,7 @@
                         "data": function( row, type, val, meta ) {
                             var result = '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id='+ encodeURIComponent(row.job_id) +'"><i class="fa-solid fa-eye aria-hidden="true"></i> '+_("View")+'</a>'+"\n";
                             if ( row.status == 'new' || row.status == 'started' ) {
-                                result += '<a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id='+ encodeURIComponent(row.job_id) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Cancel")+'</a>';
+                                result += '<a class="btn btn-default btn-xs submit-form-link" role="button" href="#" data-action="/cgi-bin/koha/admin/background_jobs.pl" data-method="post" data-op="cud-cancel" data-id="'+ encodeURIComponent(row.job_id) +'"><i class="fa fa-trash-can" aria-hidden="true"></i> '+_("Cancel")+'</a>';
                             }
                             return result;
                         },
