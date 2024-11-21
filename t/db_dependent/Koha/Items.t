@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 use Test::MockModule;
 use Test::Exception;
@@ -2452,6 +2452,53 @@ subtest 'filter_by_checked_out' => sub {
     C4::Circulation::AddReturn( $item_2->barcode );
 
     is( $biblio->items->filter_by_checked_out->count, 0, "Filtered 0 checked out items" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_in_transit' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_in_transit->count, 0, "Filtered 0 in transit items" );
+
+    my $transfer_1 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_1->itemnumber,
+                frombranch => $library_1->{branchcode},
+                tobranch   => $library_2->{branchcode},
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_in_transit->count, 1, "Filtered 1 in transit items" );
+
+    my $transfer_2 = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $item_2->itemnumber,
+                frombranch => $library_2->{branchcode},
+                tobranch   => $library_1->{branchcode},
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_in_transit->count, 2, "Filtered 2 in transit items" );
 
     $schema->storage->txn_rollback;
 
