@@ -10,6 +10,9 @@ const objects = {
     },
 };
 const generateMockData = type => {
+    if (Array.isArray(type)) {
+        type = type.filter(t => t != '"null"')[0];
+    }
     switch (type) {
         case "string":
             return faker.lorem.words(3);
