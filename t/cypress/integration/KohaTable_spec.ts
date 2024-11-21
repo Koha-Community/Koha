@@ -133,8 +133,7 @@ describe("kohaTable (using REST API)", () => {
             });
         });
 
-        /* TODO Missing mock, we assume that 'Save state' is ON */
-        it("One column hidden by default then shown by user", () => {
+        it("One column hidden by default then shown by user - Save state OFF", () => {
             cy.task("buildSampleObjects", {
                 object: "library",
                 count: RESTdefaultPageSize,
@@ -152,6 +151,7 @@ describe("kohaTable (using REST API)", () => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
+                    win.table_settings.default_save_state = 0;
                     win.table_settings.columns = win.table_settings.columns.map(
                         c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
                     );
@@ -181,6 +181,74 @@ describe("kohaTable (using REST API)", () => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
+                    win.table_settings.default_save_state = 0;
+                    win.table_settings.columns = win.table_settings.columns.map(
+                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
+                    );
+                    win.table_settings.columns.find(
+                        c => c.columnname == "library_code"
+                    ).is_hidden = 1;
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        win.table_settings.columns.length
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                });
+            });
+        });
+
+        it("One column hidden by default then shown by user - Save state is ON", () => {
+            cy.task("buildSampleObjects", {
+                object: "library",
+                count: RESTdefaultPageSize,
+                values: { library_hours: [] },
+            }).then(libraries => {
+                cy.intercept("GET", "/api/v1/libraries*", {
+                    statusCode: 200,
+                    body: libraries,
+                    headers: {
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
+                    },
+                });
+
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.window().then(win => {
+                    win.table_settings.default_save_state = 1;
+                    win.table_settings.columns = win.table_settings.columns.map(
+                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
+                    );
+                    win.table_settings.columns.find(
+                        c => c.columnname == "library_code"
+                    ).is_hidden = 1;
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        win.table_settings.columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                    cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                    cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                        .contains("Code")
+                        .click();
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        win.table_settings.columns.length
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`).contains("Code");
+                });
+
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                cy.window().then(win => {
+                    win.table_settings.default_save_state = 1;
                     win.table_settings.columns = win.table_settings.columns.map(
                         c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
                     );
