@@ -161,6 +161,20 @@ my @parcels    = GetInvoices(
 );
 my $count_parcels = @parcels;
 
+unless ($include_closed) {
+
+    # FIXME Implement and use Koha::Acquisition::Bookseller->invoices;
+    my $closed_invoices = Koha::Acquisition::Invoices->search(
+        {
+            booksellerid => $booksellerid,
+            ( $datefrom ? ( shipmentdatefrom => $datefrom ) : () ),
+            ( $dateto   ? ( shipmentdateto   => $dateto )   : () ),
+            closedate => { '!=' => undef },
+        }
+    );
+    $template->param( closed_invoices => $closed_invoices->count );
+}
+
 # multi page display gestion
 $startfrom ||= 0;
 if ( $count_parcels > $resultsperpage ) {

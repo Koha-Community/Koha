@@ -39,6 +39,10 @@
                 [% INCLUDE 'messages.inc' %]
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
+    [% IF closed_invoices %]
+        <p>[% I18N.tnx("There is one closed invoice not included in this search.", "There are {closed_invoices} closed invoices not included in this search.", closed_invoices, { closed_invoices => closed_invoices }) %]</p>
+    [% END %]
+
 [% IF ( error_failed_to_create_invoice ) %]
     <div id="error" class="alert alert-warning">
         <p>An error has occurred. Invoice cannot be created.</p>
