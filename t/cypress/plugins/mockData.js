@@ -1,6 +1,14 @@
 const { faker } = require("@faker-js/faker");
 const { readYamlFile } = require("./../plugins/readYamlFile.js");
 
+const objects = {
+    patron: {
+        spec: "patron",
+    },
+    library: {
+        spec: "library",
+    },
+};
 const generateMockData = type => {
     switch (type) {
         case "string":
@@ -26,35 +34,24 @@ const generateDataFromSchema = properties => {
     return mockData;
 };
 
-const buildSamplePatrons = (count = 1) => {
-    const yamlPath = "api/v1/swagger/definitions/patron.yaml";
+const buildSampleObjects = ({ object, count = 1 }) => {
+    if (!objects.hasOwnProperty(object)) {
+        throw new Error(`Object type not supported: ${object}`);
+    }
+    const yamlPath = `api/v1/swagger/definitions/${objects[object].spec}.yaml`;
     const schema = readYamlFile(yamlPath);
     return Array.from({ length: count }, () =>
         generateDataFromSchema(schema.properties)
     );
 };
 
-const buildSamplePatron = () => {
-    return buildSamplePatrons()[0];
-};
-
-const buildSampleLibraries = (count = 1) => {
-    const yamlPath = "api/v1/swagger/definitions/library.yaml";
-    const schema = readYamlFile(yamlPath);
-    return Array.from({ length: count }, () =>
-        generateDataFromSchema(schema.properties)
-    );
-};
-
-const buildSampleLibrary = () => {
-    return buildSampleLibraries()[0];
+const buildSampleObject = object => {
+    return buildSampleObjects({ object })[0];
 };
 
 module.exports = {
     generateMockData,
     generateDataFromSchema,
-    buildSamplePatron,
-    buildSamplePatrons,
-    buildSampleLibrary,
-    buildSampleLibraries,
+    buildSampleObject,
+    buildSampleObjects,
 };
