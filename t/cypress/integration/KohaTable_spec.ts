@@ -1,5 +1,26 @@
 import { mount } from "@cypress/vue";
 
+const RESTdefaultPageSize = "20"; // FIXME Mock this
+const baseTotalCount = "42";
+
+function build_libraries() {
+    return cy
+        .task("buildSampleObjects", {
+            object: "library",
+            count: RESTdefaultPageSize,
+            values: { library_hours: [] },
+        })
+        .then(libraries => {
+            cy.intercept("GET", "/api/v1/libraries*", {
+                statusCode: 200,
+                body: libraries,
+                headers: {
+                    "X-Base-Total-Count": baseTotalCount,
+                    "X-Total-Count": baseTotalCount,
+                },
+            });
+        });
+}
 describe("kohaTable (using REST API)", () => {
     beforeEach(() => {
         cy.login();
@@ -11,27 +32,11 @@ describe("kohaTable (using REST API)", () => {
 
     afterEach(() => {});
 
-    const RESTdefaultPageSize = "20"; // FIXME Mock this
-    const baseTotalCount = "42";
-
     describe("Simple tables", () => {
         const table_id = "libraries";
 
         it("Input search bar and clear filter ", () => {
-            cy.task("buildSampleObjects", {
-                object: "library",
-                count: RESTdefaultPageSize,
-                values: { library_hours: [] },
-            }).then(libraries => {
-                cy.intercept("GET", "/api/v1/libraries*", {
-                    statusCode: 200,
-                    body: libraries,
-                    headers: {
-                        "X-Base-Total-Count": baseTotalCount,
-                        "X-Total-Count": baseTotalCount,
-                    },
-                });
-
+            build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
@@ -69,20 +74,7 @@ describe("kohaTable (using REST API)", () => {
         });
 
         it("All columns displayed", () => {
-            cy.task("buildSampleObjects", {
-                object: "library",
-                count: RESTdefaultPageSize,
-                values: { library_hours: [] },
-            }).then(libraries => {
-                cy.intercept("GET", "/api/v1/libraries*", {
-                    statusCode: 200,
-                    body: libraries,
-                    headers: {
-                        "X-Base-Total-Count": baseTotalCount,
-                        "X-Total-Count": baseTotalCount,
-                    },
-                });
-
+            build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
@@ -98,20 +90,7 @@ describe("kohaTable (using REST API)", () => {
         });
 
         it("One column hidden by default", () => {
-            cy.task("buildSampleObjects", {
-                object: "library",
-                count: RESTdefaultPageSize,
-                values: { library_hours: [] },
-            }).then(libraries => {
-                cy.intercept("GET", "/api/v1/libraries*", {
-                    statusCode: 200,
-                    body: libraries,
-                    headers: {
-                        "X-Base-Total-Count": baseTotalCount,
-                        "X-Total-Count": baseTotalCount,
-                    },
-                });
-
+            build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
@@ -134,20 +113,7 @@ describe("kohaTable (using REST API)", () => {
         });
 
         it("One column hidden by default then shown by user - Save state OFF", () => {
-            cy.task("buildSampleObjects", {
-                object: "library",
-                count: RESTdefaultPageSize,
-                values: { library_hours: [] },
-            }).then(libraries => {
-                cy.intercept("GET", "/api/v1/libraries*", {
-                    statusCode: 200,
-                    body: libraries,
-                    headers: {
-                        "X-Base-Total-Count": baseTotalCount,
-                        "X-Total-Count": baseTotalCount,
-                    },
-                });
-
+            build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
@@ -201,20 +167,7 @@ describe("kohaTable (using REST API)", () => {
         });
 
         it("One column hidden by default then shown by user - Save state is ON", () => {
-            cy.task("buildSampleObjects", {
-                object: "library",
-                count: RESTdefaultPageSize,
-                values: { library_hours: [] },
-            }).then(libraries => {
-                cy.intercept("GET", "/api/v1/libraries*", {
-                    statusCode: 200,
-                    body: libraries,
-                    headers: {
-                        "X-Base-Total-Count": baseTotalCount,
-                        "X-Total-Count": baseTotalCount,
-                    },
-                });
-
+            build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
                 cy.window().then(win => {
