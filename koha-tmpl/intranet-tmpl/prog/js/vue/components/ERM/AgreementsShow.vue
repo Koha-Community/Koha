@@ -278,7 +278,7 @@
                                             agreement_package.package.name
                                         }}</router-link
                                     >
-                                    {{ $__("(local)") }}</span
+                                    ({{ $__("local") }})</span
                                 >
                             </div>
                         </div>
