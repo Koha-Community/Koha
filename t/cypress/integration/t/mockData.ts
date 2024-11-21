@@ -12,6 +12,7 @@ describe("Generate Random Patron", () => {
             values: { surname: "test_surname" },
         }).then(mockPatron => {
             expect(mockPatron.surname).to.equal("test_surname");
+            expect(mockPatron.overdues_count).to.be.a("number");
         });
     });
 });
