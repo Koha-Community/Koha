@@ -167,24 +167,24 @@
                     [% IF !whole.stage || whole.stage == 'form' %]
                         <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
-                        <div class="alert">This item cannot be checked out as it has no bibliographic record associated with it</div>
+                        <div class="alert alert-warning">This item cannot be checked out as it has no bibliographic record associated with it</div>
                         [% END %]
                         [% IF whole.value.errors.itemcount %]
-                        <div class="alert">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
+                        <div class="alert alert-warning">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
                         [% END %]
                         [% IF whole.value.errors.item_creation %]
-                        <div class="alert">An unknown error occurred while trying to add an item</div>
+                        <div class="alert alert-warning">An unknown error occurred while trying to add an item</div>
                         [% END %]
                         [% IF whole.value.errors.item_check_out %]
-                        <div class="alert">An unknown error occurred while trying to check out the item</div>
+                        <div class="alert alert-warning">An unknown error occurred while trying to check out the item</div>
                         [% END %]
                         [% IF whole.value.check_out_errors %]
                             [% IF whole.value.check_out_errors.error.STATS %]
-                            <div class="alert">
+                            <div class="alert alert-warning">
                                 Local use recorded
                             </div>
                             [% ELSE %]
-                            <div class="alert">
+                            <div class="alert alert-warning">
                                 There was a problem checking this item out, please check for problems with the <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% whole.value.patron.borrowernumber | uri %]">patron's account</a>
                             </div>
                             [% END %]
@@ -314,16 +314,16 @@
                     <h1>Place request with partner libraries</h1>
                   [% IF error %]
                     [% IF error == 'no_target_email' %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             No target email addresses found. Either select at least
                             one partner or check your ILL partner library records.
                         </div>
                     [% ELSIF error == 'no_library_email' %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             Your library has no usable email address. Please set it.
                         </div>
                     [% ELSIF error == 'unkown_error' %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             Unknown error processing your request. Contact your administrator.
                         </div>
                     [% END %]
@@ -531,7 +531,7 @@
 
                     [% IF error %]
                       [% IF error == 'migrate_target' %]
-                          <div class="alert">
+                          <div class="alert alert-warning">
                               The backend you tried to migrate to does not yet support migrations, please try again with an alternative target.
                           </div>
                       [% END %]
@@ -545,7 +545,7 @@
                         [% IF tran_success.match('sms') %]
                             [% succ_methods.push('SMS') %]
                         [% END %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             The requested notice was queued for delivery by [% succ_methods.join(', ') | html %]
                         </div>
                     [% END %]
@@ -557,7 +557,7 @@
                         [% IF tran_fail.match('sms') %]
                             [% fail_methods.push('SMS') %]
                         [% END %]
-                        <div class="alert">
+                        <div class="alert alert-warning">
                             The requested notice was NOT queued for delivery by [% fail_methods.join(', ') | html %]
                         </div>
                     [% END %]
@@ -877,7 +877,7 @@
                             <input type="hidden" name="op" value="cud-create">
                             <input type="hidden" name="stage" value="form">
                             <input type="hidden" name="checked_availability" value="1">
-                            <div id="continue-request-row" class="alert">
+                            <div id="continue-request-row" class="alert alert-warning">
                                 If you can't find what you are looking for, you can
                                 <button class="button" type="submit">continue creating your request</button> or
                                 <a href="/cgi-bin/koha/ill/ill-requests.pl">cancel your request</a>
