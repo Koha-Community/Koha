@@ -25,6 +25,8 @@ use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Notice::Template;
+use Koha::Notice::Templates;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -341,8 +343,8 @@ subtest 'store() tests' => sub {
         # Cancel both bookings so we can check that cancelled bookings are allowed in the auto-assign
         $booking->status('cancelled')->store();
         $second_booking->status('cancelled')->store();
-        is($booking->status, 'cancelled', "Booking is cancelled");
-        is($second_booking->status, 'cancelled', "Second booking is cancelled");
+        is( $booking->status,        'cancelled', "Booking is cancelled" );
+        is( $second_booking->status, 'cancelled', "Second booking is cancelled" );
 
         # Test randomness of selection
         my %seen_items;
@@ -368,6 +370,39 @@ subtest 'store() tests' => sub {
 
     subtest 'confirmation notice trigger' => sub {
         plan tests => 2;
+
+        # FIXME: This is a bandaid solution to prevent test failures when running
+        # the Koha_Main_My8 job because notices are not added at upgrade time.
+        my $template = Koha::Notice::Templates->search(
+            {
+                module                 => 'bookings',
+                code                   => 'BOOKING_CONFIRMATION',
+                message_transport_type => 'email',
+            }
+        )->single;
+
+        if ( !$template ) {
+            my $default_content = Koha::Notice::Template->new(
+                {
+                    module                 => 'bookings',
+                    code                   => 'BOOKING_CONFIRMATION',
+                    lang                   => 'default',
+                    message_transport_type => 'email',
+                }
+            )->get_default();
+
+            Koha::Notice::Template->new(
+                {
+                    module                 => 'bookings',
+                    code                   => 'BOOKING_CONFIRMATION',
+                    name                   => 'BOOKING_CONFIRMATION Test Notice',
+                    title                  => 'BOOKING_CONFIRMATION Test Notice',
+                    content                => $default_content || 'Dummy content for BOOKING_CONFIRMATION.',
+                    branchcode             => undef,
+                    message_transport_type => 'email',
+                }
+            )->store;
+        }
 
         my $original_notices_count = Koha::Notice::Messages->search(
             {
@@ -419,6 +454,41 @@ subtest 'store() tests' => sub {
 
     subtest 'modification/cancellation notice triggers' => sub {
         plan tests => 5;
+
+        # FIXME: This is a bandaid solution to prevent test failures when running
+        # the Koha_Main_My8 job because notices are not added at upgrade time.
+        for my $notice_type (qw(BOOKING_MODIFICATION BOOKING_CANCELLATION)) {
+            my $template = Koha::Notice::Templates->search(
+                {
+                    module                 => 'bookings',
+                    code                   => $notice_type,
+                    message_transport_type => 'email',
+                }
+            )->single;
+
+            if ( !$template ) {
+                my $default_content = Koha::Notice::Template->new(
+                    {
+                        module                 => 'bookings',
+                        code                   => $notice_type,
+                        lang                   => 'default',
+                        message_transport_type => 'email',
+                    }
+                )->get_default();
+
+                Koha::Notice::Template->new(
+                    {
+                        module                 => 'bookings',
+                        code                   => $notice_type,
+                        name                   => "$notice_type Test Notice",
+                        title                  => "$notice_type Test Notice",
+                        content                => $default_content || "Dummy content for $notice_type.",
+                        branchcode             => undef,
+                        message_transport_type => 'email',
+                    }
+                )->store;
+            }
+        }
 
         my $original_modification_notices_count = Koha::Notice::Messages->search(
             {
