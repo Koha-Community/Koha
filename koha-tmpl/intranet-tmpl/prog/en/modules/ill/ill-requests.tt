@@ -183,6 +183,10 @@
                             <div class="alert alert-warning">
                                 Local use recorded
                             </div>
+                            [% ELSIF whole.value.check_out_errors.error.UNKNOWN_BARCODE %]
+                            <div class="alert alert-warning">
+                                The bibliographic record's item contains an unknown (or empty) barcode.
+                            </div>
                             [% ELSE %]
                             <div class="alert alert-warning">
                                 There was a problem checking this item out, please check for problems with the <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% whole.value.patron.borrowernumber | uri %]">patron's account</a>
@@ -196,7 +200,7 @@
                                     <legend>Check out details</legend>
                                     [% items = whole.value.biblio.items.unblessed %]
                                     [% IF items.size == 1 %]
-                                        <p>The bibliographic record for this request already has an item attached to it, you are about to check it out</p>
+                                        <p><a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% whole.value.biblio.biblionumber | uri %]">The bibliographic record</a> for this request already has an item attached to it, you are about to check it out</p>
                                     [% ELSE %]
                                         <p>A bibliographic record for this request exists, but no item. You are about to create an item and check it out</p>
                                     [% END %]
