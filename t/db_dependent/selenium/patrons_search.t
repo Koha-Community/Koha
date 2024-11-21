@@ -63,8 +63,8 @@ my $firstname               = q|<strong>fir's"tname</strong> \123 ❤|;
 my $address                 = q|<strong>add'res"s</strong> \123 ❤|;
 my $email                   = q|a<strong>bad_email</strong>@example\123 ❤.com|;
 my (
-    $attribute_type, $attribute_type_searchable_1, $attribute_type_searchable_2,
-    $attribute_type_searchable_not_default, $patron_category, $library
+    $attribute_type,                        $attribute_type_searchable_1, $attribute_type_searchable_2,
+    $attribute_type_searchable_not_default, $patron_category,             $library
 );
 sub setup {
     $patron_category = $builder->build_object(
@@ -75,9 +75,7 @@ sub setup {
     );
     push @cleanup, $patron_category;
 
-    $library = $builder->build_object(
-        { class => 'Koha::Libraries', value => { branchname => $branchname } }
-    );
+    $library = $builder->build_object( { class => 'Koha::Libraries', value => { branchname => $branchname } } );
     push @cleanup, $library;
 
     my @patrons;
@@ -374,14 +372,21 @@ subtest 'Search patrons' => sub {
 
         plan tests => 1;
 
-        $patron_category->replace_library_limits( [$library->id] );
+        $patron_category->replace_library_limits( [ $library->id ] );
         C4::Context->set_preference( 'PatronsPerPage', 5 );
         $driver->get( $base_url . "/members/members-home.pl" );
         clear_filters();
         $s->fill_form( { 'search_patron_filter' => 'test_patron' } );
         $s->submit_form;
         sleep $DT_delay && $s->wait_for_ajax;
-        is( $driver->find_element('//div[@id="'.$table_id.'_info"]')->get_text, sprintf('Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26, $total_number_of_patrons), 'Search works when category of patrons is limited to a library we are not signed in at' );
+        is(
+            $driver->find_element( '//div[@id="' . $table_id . '_info"]' )->get_text,
+            sprintf(
+                'Showing 1 to %s of %s entries (filtered from %s total entries)', $PatronsPerPage, 26,
+                $total_number_of_patrons
+            ),
+            'Search works when category of patrons is limited to a library we are not signed in at'
+        );
 
     };
 
