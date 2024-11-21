@@ -26,14 +26,21 @@ const generateDataFromSchema = properties => {
     return mockData;
 };
 
-const buildSamplePatron = () => {
+const buildSamplePatrons = (count = 1) => {
     const yamlPath = "api/v1/swagger/definitions/patron.yaml";
     const schema = readYamlFile(yamlPath);
-    return generateDataFromSchema(schema.properties);
+    return Array.from({ length: count }, () =>
+        generateDataFromSchema(schema.properties)
+    );
+};
+
+const buildSamplePatron = () => {
+    return buildSamplePatrons()[0];
 };
 
 module.exports = {
     generateMockData,
     generateDataFromSchema,
     buildSamplePatron,
+    buildSamplePatrons,
 };
