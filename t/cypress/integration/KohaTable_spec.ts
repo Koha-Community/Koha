@@ -21,6 +21,35 @@ function build_libraries() {
             });
         });
 }
+
+function mock_table_settings(settings) {
+    cy.window().then(win => {
+        win.table_settings.columns = win.table_settings.columns.map(c => ({
+            ...c,
+            is_hidden: 0,
+            cannot_be_toggled: 0,
+        }));
+        if (settings && settings.hasOwnProperty("default_save_state")) {
+            win.table_settings.default_save_state = settings.default_save_state;
+        }
+        if (settings && settings.hasOwnProperty("default_save_state_search")) {
+            win.table_settings.default_save_state_search =
+                settings.default_save_state_search;
+        }
+
+        if (settings && settings.columns) {
+            Object.entries(settings.columns).forEach(([name, values]) => {
+                let column = win.table_settings.columns.find(
+                    cc => cc.columnname == name
+                );
+                Object.entries(values).forEach(([prop, value]) => {
+                    column[prop] = value;
+                });
+            });
+        }
+        cy.wrap(win.table_settings.columns).as("columns");
+    });
+}
 describe("kohaTable (using REST API)", () => {
     beforeEach(() => {
         cy.login();
@@ -77,13 +106,11 @@ describe("kohaTable (using REST API)", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
+                mock_table_settings();
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length
+                        columns.length
                     );
                 });
             });
@@ -93,22 +120,19 @@ describe("kohaTable (using REST API)", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
-                    win.table_settings.columns.find(
-                        c => c.columnname == "library_code"
-                    ).is_hidden = 1;
+                mock_table_settings({
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length - 1
+                        columns.length - 1
                     );
-                    cy.get(`#${table_id} th`).contains("Name");
-                    cy.get(`#${table_id} th`)
-                        .contains("Code")
-                        .should("not.exist");
                 });
+
+                cy.get(`#${table_id} th`).contains("Name");
+                cy.get(`#${table_id} th`).contains("Code").should("not.exist");
             });
         });
 
@@ -116,17 +140,15 @@ describe("kohaTable (using REST API)", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.default_save_state = 0;
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
-                    win.table_settings.columns.find(
-                        c => c.columnname == "library_code"
-                    ).is_hidden = 1;
+                mock_table_settings({
+                    default_save_state: 0,
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length - 1
+                        columns.length - 1
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`)
@@ -138,7 +160,7 @@ describe("kohaTable (using REST API)", () => {
                         .click();
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length
+                        columns.length
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`).contains("Code");
@@ -146,17 +168,15 @@ describe("kohaTable (using REST API)", () => {
 
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.default_save_state = 0;
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
-                    win.table_settings.columns.find(
-                        c => c.columnname == "library_code"
-                    ).is_hidden = 1;
+                mock_table_settings({
+                    default_save_state: 0,
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length
+                        columns.length
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`)
@@ -170,17 +190,15 @@ describe("kohaTable (using REST API)", () => {
             build_libraries().then(() => {
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.default_save_state = 1;
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
-                    win.table_settings.columns.find(
-                        c => c.columnname == "library_code"
-                    ).is_hidden = 1;
+                mock_table_settings({
+                    default_save_state: 1,
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length - 1
+                        columns.length - 1
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`)
@@ -192,7 +210,7 @@ describe("kohaTable (using REST API)", () => {
                         .click();
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length
+                        columns.length
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`).contains("Code");
@@ -200,17 +218,15 @@ describe("kohaTable (using REST API)", () => {
 
                 cy.visit("/cgi-bin/koha/admin/branches.pl");
 
-                cy.window().then(win => {
-                    win.table_settings.default_save_state = 1;
-                    win.table_settings.columns = win.table_settings.columns.map(
-                        c => ({ ...c, is_hidden: 0, cannot_be_toggled: 0 })
-                    );
-                    win.table_settings.columns.find(
-                        c => c.columnname == "library_code"
-                    ).is_hidden = 1;
+                mock_table_settings({
+                    default_save_state: 1,
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
                     cy.get(`#${table_id} th`).should(
                         "have.length",
-                        win.table_settings.columns.length
+                        columns.length
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`).contains("Code");
