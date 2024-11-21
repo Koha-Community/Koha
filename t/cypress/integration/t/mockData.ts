@@ -16,3 +16,20 @@ describe("Generate Random Patrons", () => {
         });
     });
 });
+
+describe("Generate Random Library", () => {
+    it("should generate a random library from the schema", () => {
+        cy.task("buildSampleLibrary").then(mockLibrary => {
+            expect(mockLibrary).to.have.property("library_id");
+        });
+    });
+});
+
+describe("Generate Random Libraries", () => {
+    it("should generate 42 random library from the schema", () => {
+        cy.task("buildSampleLibraries", 42).then(mockLibraries => {
+            expect(mockLibraries.length).to.equal(42);
+            expect(mockLibraries[0]).to.have.property("library_id");
+        });
+    });
+});
