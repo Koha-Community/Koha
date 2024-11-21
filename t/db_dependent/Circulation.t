@@ -2258,7 +2258,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
 }
 
 subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
-    plan tests => 24;
+    plan tests => 26;
 
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
@@ -2305,6 +2305,10 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, 'KohaIsAwesome' );
     ok( $error->{UNKNOWN_BARCODE}, '"KohaIsAwesome" is not a valid barcode as expected.' );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, undef );
+    ok( $error->{UNKNOWN_BARCODE}, 'undef is not a valid barcode as expected.' );
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, '' );
+    ok( $error->{UNKNOWN_BARCODE}, '"" is not a valid barcode as expected.' );
     ## Can be issued from homebranch
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->barcode );
