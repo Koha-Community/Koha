@@ -1572,7 +1572,7 @@ subtest 'Custom statuses' => sub {
 
 subtest 'Checking in hook' => sub {
 
-    plan tests => 2;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -1625,6 +1625,75 @@ subtest 'Checking in hook' => sub {
     # refresh request
     $illrq->discard_changes;
     is( $illrq->status, 'RET' );
+
+    my $request_for_checkout_out = $builder->build_sample_ill_request();
+    $builder->build(
+        {
+            source => 'Illrequestattribute',
+            value  => { illrequest_id => $request_for_checkout_out->illrequest_id, type => 'type', value => 'book' }
+        }
+    );
+
+    my $newly_created_biblio = Koha::Biblios->find( { biblionumber => $request_for_checkout_out->biblio_id } );
+    is( $newly_created_biblio->items->count, 0, 'Biblio created without items' );
+
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => {
+                notforloan                  => 0,
+                rentalcharge                => 0,
+                rentalcharge_daily          => 1,
+                rentalcharge_daily_calendar => 0
+            }
+        }
+    )->store;
+
+    my $check_out = $request_for_checkout_out->check_out(
+        {
+            'branchcode'    => $request_for_checkout_out->branchcode,
+            'item_type'     => $itemtype->itemtype,
+            'illrequest_id' => $request_for_checkout_out->illrequest_id,
+            'stage'         => 'form',
+        }
+    );
+
+    is( $newly_created_biblio->items->count, 1,     'A new item was created after checking out' );
+    is( $check_out->{value}->{errors},       undef, 'No errors. Check-out was successful' );
+
+    # Test if biblio already has an item with no barcode
+
+    my $another_checkout_out_request = $builder->build_sample_ill_request();
+    $builder->build(
+        {
+            source => 'Illrequestattribute',
+            value  => { illrequest_id => $another_checkout_out_request->illrequest_id, type => 'type', value => 'book' }
+        }
+    );
+    my $another_newly_created_biblio =
+        Koha::Biblios->find( { biblionumber => $another_checkout_out_request->biblio_id } );
+
+    Koha::Item->new(
+        {
+            biblionumber  => $another_newly_created_biblio->biblionumber,
+            homebranch    => $another_checkout_out_request->branchcode,
+            holdingbranch => $another_checkout_out_request->branchcode,
+            barcode       => ''
+        }
+    )->store;
+
+    my $another_check_out = $another_checkout_out_request->check_out(
+        {
+            'branchcode'    => $another_checkout_out_request->branchcode,
+            'item_type'     => $itemtype->itemtype,
+            'illrequest_id' => $another_checkout_out_request->illrequest_id,
+            'stage'         => 'form',
+        }
+    );
+    is(
+        $another_check_out->{value}->{check_out_errors}->{error}->{UNKNOWN_BARCODE}, 1,
+        'Barcode related error is set because existing item does not have a barcode'
+    );
 
     $schema->storage->txn_rollback;
 };
