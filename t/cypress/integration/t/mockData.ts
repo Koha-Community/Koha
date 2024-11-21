@@ -6,6 +6,14 @@ describe("Generate Random Patron", () => {
             expect(mockPatron).to.have.property("patron_id");
         });
     });
+    it("should generate a random patron with predefined values", () => {
+        cy.task("buildSampleObject", {
+            object: "patron",
+            values: { surname: "test_surname" },
+        }).then(mockPatron => {
+            expect(mockPatron.surname).to.equal("test_surname");
+        });
+    });
 });
 
 describe("Generate Random Patrons", () => {

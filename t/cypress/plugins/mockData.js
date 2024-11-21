@@ -26,27 +26,31 @@ const generateMockData = type => {
     }
 };
 
-const generateDataFromSchema = properties => {
+const generateDataFromSchema = (properties, values = {}) => {
     const mockData = {};
     Object.entries(properties).forEach(([key, value]) => {
-        mockData[key] = generateMockData(value.type);
+        if (values.hasOwnProperty(key)) {
+            mockData[key] = values[key];
+        } else {
+            mockData[key] = generateMockData(value.type);
+        }
     });
     return mockData;
 };
 
-const buildSampleObjects = ({ object, count = 1 }) => {
+const buildSampleObjects = ({ object, values, count = 1 }) => {
     if (!objects.hasOwnProperty(object)) {
         throw new Error(`Object type not supported: ${object}`);
     }
     const yamlPath = `api/v1/swagger/definitions/${objects[object].spec}.yaml`;
     const schema = readYamlFile(yamlPath);
     return Array.from({ length: count }, () =>
-        generateDataFromSchema(schema.properties)
+        generateDataFromSchema(schema.properties, values)
     );
 };
 
-const buildSampleObject = object => {
-    return buildSampleObjects({ object })[0];
+const buildSampleObject = ({ object, values = {} }) => {
+    return buildSampleObjects({ object, values })[0];
 };
 
 module.exports = {
