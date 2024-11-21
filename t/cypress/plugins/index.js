@@ -18,11 +18,12 @@ module.exports = (on, config) => {
     mysql.configurePlugin(on);
 };
 
-const { buildSamplePatron } = require("./mockData.js");
+const { buildSamplePatron, buildSamplePatrons } = require("./mockData.js");
 
 module.exports = (on, config) => {
     on("task", {
         buildSamplePatron,
+        buildSamplePatrons,
     });
     return config;
 };

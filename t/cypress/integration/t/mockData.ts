@@ -7,3 +7,12 @@ describe("Generate Random Patron", () => {
         });
     });
 });
+
+describe("Generate Random Patrons", () => {
+    it("should generate 42 random patron from the schema", () => {
+        cy.task("buildSamplePatrons", 42).then(mockPatrons => {
+            expect(mockPatrons.length).to.equal(42);
+            expect(mockPatrons[0]).to.have.property("patron_id");
+        });
+    });
+});
