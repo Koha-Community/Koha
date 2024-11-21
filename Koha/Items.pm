@@ -225,6 +225,14 @@ sub filter_by_bookable {
     );
 }
 
+=head3 filter_by_checked_out
+
+  my $checked_out_items = $items->filter_by_checked_out;
+
+Returns a new resultset, containing only those items that are currently checked out.
+
+=cut
+
 sub filter_by_checked_out {
     my ( $self, $params ) = @_;
 
@@ -239,6 +247,14 @@ sub filter_by_checked_out {
 
     return $self->search( { 'me.itemnumber' => { '-in' => $checkouts } } );
 }
+
+=head3 filter_by_in_transit
+
+  my $in_tranist_items = $items->filter_by_in_transit;
+
+Returns a new resultset, containing only those items that are currently in transit.
+
+=cut
 
 sub filter_by_in_transit {
     my ( $self, $params ) = @_;
@@ -255,9 +271,13 @@ sub filter_by_in_transit {
     return $self->search( { 'me.itemnumber' => { '-in' => $transfers } } );
 }
 
-sub filter_by_for_loan {
+=head3 filter_by_has_holds
 
-}
+  my $has_hold_items = $items->filter_by_has_holds;
+
+Returns a new resultset, containing only those items that currently have holds.
+
+=cut
 
 sub filter_by_has_holds {
     my ( $self, $params ) = @_;
@@ -274,6 +294,14 @@ sub filter_by_has_holds {
     return $self->search( { 'me.itemnumber' => { '-in' => $holds } } );
 }
 
+=head3 filter_by_has_recalls
+
+  my $has_recalls_items = $items->filter_by_has_recalls;
+
+Returns a new resultset, containing only those items that currently have recalls.
+
+=cut
+
 sub filter_by_has_recalls {
     my ( $self, $params ) = @_;
 
@@ -288,6 +316,14 @@ sub filter_by_has_recalls {
 
     return $self->search( { 'me.itemnumber' => { '-in' => $recalls } } );
 }
+
+=head3 filter_by_available
+
+  my $available_items = $items->filter_by_available;
+
+Returns a new resultset, containing only those items that are currently available.
+
+=cut
 
 sub filter_by_available {
     my ($self) = @_;
@@ -586,6 +622,14 @@ sub apply_regex {
 
     return $value;
 }
+
+=head3 search
+
+  my $search_result = $object->search( $params, $attributes );
+
+Filters items based on the specified status.
+
+=cut
 
 sub search {
     my ( $self, $params, $attributes ) = @_;
