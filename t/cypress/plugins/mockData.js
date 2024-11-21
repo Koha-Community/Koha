@@ -38,9 +38,23 @@ const buildSamplePatron = () => {
     return buildSamplePatrons()[0];
 };
 
+const buildSampleLibraries = (count = 1) => {
+    const yamlPath = "api/v1/swagger/definitions/library.yaml";
+    const schema = readYamlFile(yamlPath);
+    return Array.from({ length: count }, () =>
+        generateDataFromSchema(schema.properties)
+    );
+};
+
+const buildSampleLibrary = () => {
+    return buildSampleLibraries()[0];
+};
+
 module.exports = {
     generateMockData,
     generateDataFromSchema,
     buildSamplePatron,
     buildSamplePatrons,
+    buildSampleLibrary,
+    buildSampleLibraries,
 };
