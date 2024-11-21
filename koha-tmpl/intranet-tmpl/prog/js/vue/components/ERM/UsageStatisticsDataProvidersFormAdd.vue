@@ -421,8 +421,8 @@ export default {
             initialized: false,
             previous_route: "",
             statuses: [
-                { description: __("Active"), value: 1 },
-                { description: __("Inactive"), value: 0 },
+                { description: this.$__("Active"), value: 1 },
+                { description: this.$__("Inactive"), value: 0 },
             ],
             registry_data: [],
             valid_report_types: [...this.av_report_types],

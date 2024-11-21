@@ -18,25 +18,25 @@
                                 :options="[
                                     {
                                         value: 'monthly',
-                                        description: __('By month'),
+                                        description: $__('By month'),
                                     },
                                     {
                                         value: 'monthly_with_totals',
-                                        description: __(
+                                        description: $__(
                                             'By month with period total'
                                         ),
                                     },
                                     {
                                         value: 'yearly',
-                                        description: __('By year'),
+                                        description: $__('By year'),
                                     },
                                     {
                                         value: 'metric_type',
-                                        description: __('By metric type'),
+                                        description: $__('By metric type'),
                                     },
                                     {
                                         value: 'usage_data_provider',
-                                        description: __(
+                                        description: $__(
                                             'By data provider totals'
                                         ),
                                     },
@@ -225,7 +225,7 @@
                             class="checkbox_options"
                         >
                             <label :for="prop.name" class="checkbox"
-                                >{{ $prop.name }}:</label
+                                >{{ prop.name }}:</label
                             >
                             <input
                                 type="checkbox"
@@ -310,7 +310,7 @@
                                 class="month_selectors"
                             >
                                 <label for="month" class="month_labels">
-                                    {{ $month.short }}
+                                    {{ month.short }}
                                 </label>
                                 <input
                                     type="checkbox"

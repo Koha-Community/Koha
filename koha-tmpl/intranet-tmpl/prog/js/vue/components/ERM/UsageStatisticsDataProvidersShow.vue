@@ -58,7 +58,7 @@
                         v-bind:class="
                             tab_content === item.data_type ? 'active' : ''
                         "
-                        >{{ $item.tab_name }}</a
+                        >{{ item.tab_name }}</a
                     >
                 </li>
                 <li class="nav-item">
