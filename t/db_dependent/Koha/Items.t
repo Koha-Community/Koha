@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 use Test::MockModule;
 use Test::Exception;
@@ -35,6 +35,7 @@ use Koha::Items;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Statistics;
+use Koha::Recalls;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -2499,6 +2500,49 @@ subtest 'filter_by_in_transit' => sub {
     );
 
     is( $biblio->items->filter_by_in_transit->count, 2, "Filtered 2 in transit items" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_has_holds' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_has_holds->count, 0, "Filtered to 0 holds" );
+
+    my $hold_1 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_1->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_has_holds->count, 1, "Filtered to 1 hold" );
+
+    my $hold_2 = $builder->build(
+        {
+            source => 'Reserve',
+            value  => {
+                itemnumber => $item_2->itemnumber, reservedate => dt_from_string,
+            }
+        }
+    );
+
+    is( $biblio->items->filter_by_has_holds->count, 2, "Filtered to 2 holds" );
 
     $schema->storage->txn_rollback;
 
