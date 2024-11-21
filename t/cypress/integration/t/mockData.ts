@@ -13,6 +13,11 @@ describe("Generate Random Patron", () => {
         }).then(mockPatron => {
             expect(mockPatron.surname).to.equal("test_surname");
             expect(mockPatron.overdues_count).to.be.a("number");
+            expect(mockPatron.date_of_birth).to.match(/^\d{4}-\d{2}-\d{2}$/);
+            // TODO We are not testing for timezone part
+            expect(mockPatron.updated_on).to.match(
+                /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/
+            );
         });
     });
 });

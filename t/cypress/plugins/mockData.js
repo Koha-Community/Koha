@@ -24,6 +24,10 @@ const generateMockData = type => {
             return [faker.lorem.word(), faker.lorem.word()];
         case "number":
             return faker.number.float();
+        case "date":
+            return new Date().toISOString().split("T")[0];
+        case "date-time":
+            return new Date().toISOString();
         default:
             return faker.lorem.word();
     }
@@ -35,7 +39,11 @@ const generateDataFromSchema = (properties, values = {}) => {
         if (values.hasOwnProperty(key)) {
             mockData[key] = values[key];
         } else {
-            mockData[key] = generateMockData(value.type);
+            let type =
+                value?.format == "date" || value?.format == "date-time"
+                    ? value.format
+                    : value.type;
+            mockData[key] = generateMockData(type);
         }
     });
     return mockData;
