@@ -8,94 +8,131 @@ describe("kohaTable (using REST API)", () => {
 
     afterEach(() => {});
 
-    const RESTdefaultPageSize = 20; // FIXME Mock this
+    const RESTdefaultPageSize = "20"; // FIXME Mock this
+    const baseTotalCount = "42";
 
-    it("Simple tables", () => {
+    describe("Simple tables", () => {
         const table_id = "libraries";
 
         it("Input search bar and clear filter ", () => {
-            cy.visit("/cgi-bin/koha/admin/branches.pl");
+            cy.task("buildSampleObjects", {
+                object: "library",
+                count: RESTdefaultPageSize,
+                values: { library_hours: [] },
+            }).then(libraries => {
+                cy.intercept("GET", "/api/v1/libraries*", {
+                    statusCode: 200,
+                    body: libraries,
+                    headers: {
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
+                    },
+                });
 
-            cy.query("SELECT COUNT(*) as count FROM branches").then(result => {
-                let count = result[0].count;
-                let display = Math.min(RESTdefaultPageSize, count);
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
-                    `Showing 1 to ${display} of ${count} entries`
+                    `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+                );
+
+                // Should be disabled by default - empty search bar
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
+                    "have.class",
+                    "disabled"
+                );
+
+                // Type something in the input search bar
+                cy.get(`#${table_id}_wrapper input.dt-input`).type(
+                    "centerville"
+                );
+                cy.get(`#${table_id}_wrapper input.dt-input`).should(
+                    "have.value",
+                    "centerville"
+                );
+
+                // Should no longer be disabled
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
+                    "not.have.class",
+                    "disabled"
+                );
+
+                // Click the clear_filter button
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click();
+                cy.get(`#${table_id}_wrapper input.dt-input`).should(
+                    "have.value",
+                    ""
                 );
             });
-
-            // Should be disabled by default - empty search bar
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                "have.class",
-                "disabled"
-            );
-
-            // Type something in the input search bar
-            cy.get(`#${table_id}_wrapper input.dt-input`).type("centerville");
-            cy.get(`#${table_id}_wrapper input.dt-input`).should(
-                "have.value",
-                "centerville"
-            );
-
-            // Should no longer be disabled
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                "not.have.class",
-                "disabled"
-            );
-
-            // Click the clear_filter button
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click();
-            cy.get(`#${table_id}_wrapper input.dt-input`).should(
-                "have.value",
-                ""
-            );
         });
     });
 
-    it("Patrons search", () => {
+    describe("Patrons search", () => {
         const table_id = "memberresultst";
 
         it("Input search bar and clear filter ", () => {
-            cy.visit("/cgi-bin/koha/members/members-home.pl");
+            cy.task("buildSampleObjects", {
+                object: "patron",
+                count: RESTdefaultPageSize,
+                values: {},
+            }).then(patrons => {
+                // Needs more properties to not explode
+                // account_balace: balance_str.escapeHtml(...).format_price is not a function
+                patrons = patrons.map(p => ({ ...p, account_balance: 0 }));
 
-            cy.get("form.patron_search_form input[type='submit']").click();
+                cy.intercept("GET", "/api/v1/patrons*", {
+                    statusCode: 200,
+                    body: patrons,
+                    headers: {
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
+                    },
+                });
 
-            cy.query("SELECT COUNT(*) as count FROM borrowers").then(result => {
-                let count = result[0].count;
-                let display = Math.min(RESTdefaultPageSize, count);
+                cy.visit("/cgi-bin/koha/members/members-home.pl");
+
+                cy.window().then(win => {
+                    win.categories_map = patrons.reduce((map, p) => {
+                        map[p.category_id] = p.category_id;
+                        return map;
+                    }, {});
+                });
+                cy.get("form.patron_search_form input[type='submit']").click();
+
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
-                    `Showing 1 to ${display} of ${count} entries`
+                    `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
+                );
+
+                // Should be disabled by default - empty search bar
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
+                    "have.class",
+                    "disabled"
+                );
+
+                // Type something in the input search bar
+                cy.get(`#${table_id}_wrapper input.dt-input`).type(
+                    "edna",
+                    { force: true } // Needs to force because of sticky header? It's not clear what's happening, Cypress bug?
+                );
+                cy.get(`#${table_id}_wrapper input.dt-input`).should(
+                    "have.value",
+                    "edna"
+                );
+
+                // Should no longer be disabled
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
+                    "not.have.class",
+                    "disabled"
+                );
+
+                // Click the clear_filter button
+                cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click({
+                    force: true,
+                }); // #searchheader is on top of it
+                cy.get(`#${table_id}_wrapper input.dt-input`).should(
+                    "have.value",
+                    ""
                 );
             });
-
-            // Should be disabled by default - empty search bar
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                "have.class",
-                "disabled"
-            );
-
-            // Type something in the input search bar
-            cy.get(`#${table_id}_wrapper input.dt-input`).type(
-                "edna",
-                { force: true } // Needs to force because of sticky header? It's not clear what's happening, Cypress bug?
-            );
-            cy.get(`#${table_id}_wrapper input.dt-input`).should(
-                "have.value",
-                "edna"
-            );
-
-            // Should no longer be disabled
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).should(
-                "not.have.class",
-                "disabled"
-            );
-
-            // Click the clear_filter button
-            cy.get(`#${table_id}_wrapper .dt_button_clear_filter`).click();
-            cy.get(`#${table_id}_wrapper input.dt-input`).should(
-                "have.value",
-                ""
-            );
         });
     });
 });
