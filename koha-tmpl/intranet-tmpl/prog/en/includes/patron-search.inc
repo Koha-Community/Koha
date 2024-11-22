@@ -130,13 +130,13 @@
     [% END %]
 
     [% IF filter == 'suggestions_managers' %]
-        <div class="note">Only staff with superlibrarian or full suggestions permissions are returned in the search results</div>
+        <div class="alert alert-info">Only staff with superlibrarian or full suggestions permissions are returned in the search results</div>
     [% ELSIF filter == 'orders_managers' OR filter == 'baskets_managers' %]
-        <div class="note">Only staff with superlibrarian or acquisitions permissions (or order_manage permission if granular permissions are enabled) are returned in the search results</div>
+        <div class="alert alert-info">Only staff with superlibrarian or acquisitions permissions (or order_manage permission if granular permissions are enabled) are returned in the search results</div>
     [% ELSIF filter == 'funds_owners' OR filter == 'funds_users' %]
-        <div class="note">Only staff with superlibrarian or acquisitions permissions (or budget_modify permission if granular permissions are enabled) are returned in the search results</div>
+        <div class="alert alert-info">Only staff with superlibrarian or acquisitions permissions (or budget_modify permission if granular permissions are enabled) are returned in the search results</div>
     [% ELSIF filter == 'erm_users' %]
-        <div class="note">Only staff with superlibrarian or ERM permissions are returned in the search results</div>
+        <div class="alert alert-info">Only staff with superlibrarian or ERM permissions are returned in the search results</div>
     [% END %]
 
     <div class="browse">

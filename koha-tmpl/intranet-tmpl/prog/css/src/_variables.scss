@@ -301,14 +301,14 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary:       $yellow;
-$secondary:     $gray-600;
-$success:       $green;
-$info:          $blue-100;
-$warning:       $yellow;
-$danger:        $red;
-$light:         #FFF;
-$dark:          #352c2e;
+$primary:       $yellow; // $blue !default;
+$secondary:     $gray-600; // $gray-600 !default;
+$success:       $green; // $green !default;
+$info:          $blue-300; // $blue-100; // $cyan !default;
+$warning:       $yellow; // $yellow !default;
+$danger:        $red; // $red !default;
+$light:         #FFF; // $gray-100 !default;
+$dark:          #352c2e; // $gray-900 !default;
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
@@ -325,12 +325,12 @@ $theme-colors: (
 // scss-docs-end theme-colors-map
 
 // scss-docs-start theme-text-variables
-$primary-text-emphasis:   shade-color($primary, 60%);
-$secondary-text-emphasis: shade-color($secondary, 60%);
-$success-text-emphasis:   shade-color($success, 60%);
-$info-text-emphasis:      shade-color($info, 60%);
-$warning-text-emphasis:   $black; // shade-color($warning, 60%);
-$danger-text-emphasis:    shade-color($danger, 60%);
+$primary-text-emphasis:   $gray-900; // shade-color($primary, 60%);
+$secondary-text-emphasis: $gray-900; // shade-color($secondary, 60%);
+$success-text-emphasis:   $gray-900; // shade-color($success, 60%);
+$info-text-emphasis:      $gray-900; // shade-color($info, 60%);
+$warning-text-emphasis:   $gray-900; // shade-color($warning, 60%);
+$danger-text-emphasis:    $gray-900; // shade-color($danger, 60%);
 $light-text-emphasis:     $gray-700;
 $dark-text-emphasis:      $gray-700;
 // scss-docs-end theme-text-variables
@@ -385,7 +385,7 @@ $enable-rfs:                  true;
 $enable-validation-icons:     true;
 $enable-negative-margins:     false;
 $enable-deprecation-messages: true;
-$enable-important-utilities:  true;
+$enable-important-utilities:  false;
 
 $enable-dark-mode:            true;
 $color-mode-type:             data; // `data` or `media-query`
@@ -1769,10 +1769,6 @@ $language-footer-min-height: 30px;
 $table-border-color: #BCBCBC;
 $table-header-background: #FFF;
 $table-odd-row: #f3f4f4;
-
-// $body-bg:                   $white;
-// $body-color:                $gray-900;
-// $body-text-align:           null;
 
 $default-bs-btn-bg: #FFF;
 $default-bs-btn-border-color: #555;
