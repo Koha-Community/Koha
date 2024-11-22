@@ -716,7 +716,10 @@ sub LinkBibHeadingsToAuthorities {
                 $memory_cache->get_from_cache( "LinkBibHeadingsToAuthorities:AuthorityType:" . $heading->auth_type() );
             unless ($authority_type) {
                 $authority_type = Koha::Authority::Types->find( $heading->auth_type() );
-                $memory_cache->set_in_cache( "LinkBibHeadingsToAuthorities:AuthorityType:" . $heading->auth_type() );
+                $memory_cache->set_in_cache(
+                    "LinkBibHeadingsToAuthorities:AuthorityType:" . $heading->auth_type(),
+                    $authority_type
+                );
             }
             if ( defined $current_link
                 && (!$allowrelink || C4::Context->preference('LinkerKeepStale')) )
