@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::MockModule;
 use Test::Warn;
 use List::MoreUtils qw( uniq );
@@ -29,6 +29,7 @@ use t::lib::TestBuilder;
 use Koha::ActionLogs;
 use Koha::Database;
 use Koha::Caches;
+use Koha::Cache::Memory::Lite;
 use Koha::MarcSubfieldStructures;
 
 use C4::Linker::Default qw( get_link );
@@ -234,6 +235,51 @@ subtest "Authority creation with default linker" => sub {
     ok( !defined $results->{added}, "If we have multiple matches, we shouldn't create a new record on second instance");
 };
 
+subtest "Test caching of authority types in LinkBibHeadingsToAuthorities" => sub {
+    plan tests => 3;
+    Koha::Cache::Memory::Lite->flush();    #Clear cache like we have a new request
+    my $cache = Koha::Cache::Memory::Lite->get_instance();
+
+    # No automatic authority creation
+    t::lib::Mocks::mock_preference( 'LinkerModule',          'Default' );
+    t::lib::Mocks::mock_preference( 'AutoLinkBiblios',       1 );
+    t::lib::Mocks::mock_preference( 'AutoCreateAuthorities', 0 );
+    t::lib::Mocks::mock_preference( 'marcflavour',           'MARC21' );
+    my $linker          = C4::Linker::Default->new( {} );
+    my $authorities_mod = Test::MockModule->new('C4::Heading');
+    $authorities_mod->mock(
+        'authorities',
+        sub {
+            my $results = [];
+            return $results;
+        }
+    );
+    my $authorities_type = Test::MockModule->new('Koha::Authority::Types');
+    $authorities_type->mock(
+        'find',
+        sub {
+            my ( $self, $params ) = @_;
+            warn "Finding auth type $params";
+            return $authorities_type->original("find")->( $self, $params );
+        }
+    );
+    my $marc_record = MARC::Record->new();
+    my $field1      = MARC::Field->new( 655, ' ', ' ', 'a' => 'Magical realism' );
+    my $field2      = MARC::Field->new( 655, ' ', ' ', 'a' => 'Magical falsism' );
+    $marc_record->append_fields( ( $field1, $field2 ) );
+    my ( $num_changed, $results );
+    warning_like { ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef ) }
+    qr/Finding auth type GENRE\/FORM/,
+        "Type fetched only once";
+    my $gf_type = $cache->get_from_cache("LinkBibHeadingsToAuthorities:AuthorityType:GENRE/FORM");
+    ok( $gf_type, "GENRE/FORM type is found in cache" );
+
+    warning_like { ( $num_changed, $results ) = LinkBibHeadingsToAuthorities( $linker, $marc_record, "", undef ) }
+    undef,
+        "Type not fetched a second time";
+
+};
+
 
 
 # Mocking variables
@@ -285,6 +331,7 @@ $currency->mock(
 
 sub run_tests {
 
+    Koha::Cache::Memory::Lite->flush();    #Clear cache like we have a new request
     my $marcflavour = shift;
     t::lib::Mocks::mock_preference('marcflavour', $marcflavour);
     # Authority tests don't interact well with Elasticsearch at the moment due to the fact that there's currently no way to
@@ -470,7 +517,7 @@ sub run_tests {
     is( @$marcurl, 2, 'GetMarcUrls returns two URLs' );
     like( $marcurl->[0]->{MARCURL}, qr/^https/, 'GetMarcUrls did not stumble over a preceding space' );
     ok( $marcflavour ne 'MARC21' || $marcurl->[1]->{MARCURL} =~ /^http:\/\//,
-        'GetMarcUrls prefixed a MARC21 URL with http://' );
+        "GetMarcUrls prefixed a $marcflavour URL with http://" );
 
     # Automatic authority creation
     t::lib::Mocks::mock_preference('AutoLinkBiblios', 1);
@@ -519,6 +566,7 @@ sub run_tests {
     # Reset settings
     t::lib::Mocks::mock_preference('AutoLinkBiblios', 0);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 0);
+    Koha::Cache::Memory::Lite->flush();    # Since we may have changed flavours
 }
 
 sub get_title_field {
