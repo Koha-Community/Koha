@@ -71,7 +71,7 @@ if($op eq 'cud-gennext' && @subscriptionid){
             my $planneddate = $date_received_today ? dt_from_string : $issue->{planneddate};
             ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                     $planneddate, $issue->{publisheddate},
-                    $issue->{publisheddatetext}, $status, "", $count_forward );
+                    $issue->{publisheddatetext}, $status, $issue->{notes}, $count_forward );
         } else {
             require C4::Serials::Numberpattern;
             my $subscription = GetSubscription($subscriptionid);
