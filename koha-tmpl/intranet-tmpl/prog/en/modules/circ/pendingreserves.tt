@@ -83,7 +83,7 @@
         <th>Earliest hold date</th>
         <th>Hold notes</th>
         <th class="string-sort">Pickup location</th>
-        <th>Action</th>
+        <th class="NoSort">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -334,6 +334,9 @@
           var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
           var holdst = KohaTable("holdst", {
             "pagingType": "full_numbers",
+            "columnDefs": [
+                { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+            ],
           }, table_settings, true, null, filters_options);
         });
     </script>
