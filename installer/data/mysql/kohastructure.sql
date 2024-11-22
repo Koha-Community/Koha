@@ -2966,7 +2966,7 @@ CREATE TABLE `erm_agreements` (
   `closure_reason` varchar(80) DEFAULT NULL COMMENT 'reason of the closure',
   `is_perpetual` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the agreement perpetual',
   `renewal_priority` varchar(80) DEFAULT NULL COMMENT 'priority of the renewal',
-  `license_info` varchar(80) DEFAULT NULL COMMENT 'info about the license',
+  `license_info` mediumtext DEFAULT NULL COMMENT 'info about the license',
   PRIMARY KEY (`agreement_id`),
   KEY `erm_agreements_ibfk_1` (`vendor_id`),
   CONSTRAINT `erm_agreements_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
