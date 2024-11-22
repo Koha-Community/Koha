@@ -222,7 +222,7 @@ sub teardown {
 }
 
 subtest 'Search patrons' => sub {
-    plan tests => 29;
+    plan tests => 30;
 
     setup();
     my $total_number_of_patrons = Koha::Patrons->search->count;
