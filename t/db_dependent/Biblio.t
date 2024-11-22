@@ -124,6 +124,11 @@ subtest 'AddBiblio' => sub {
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     plan tests => 27;
 
+    # Add second mapping for copyrightdate
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '264', tagsubfield => 'c' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '264', tagsubfield => 'c', kohafield => "biblio.copyrightdate" })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+
     my @columns = qw(
         tagfield tagsubfield liblibrarian libopac repeatable mandatory kohafield tab
         authorised_value authtypecode value_builder isurl hidden frameworkcode
