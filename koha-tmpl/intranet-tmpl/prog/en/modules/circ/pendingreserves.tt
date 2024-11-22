@@ -1,5 +1,4 @@
 [% USE raw %]
-[% USE To %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -322,22 +321,21 @@
         }
 
         $(document).ready(function() {
-                [% SET libraries = Branches.all %]
-                let filters_options = {
-                    [5] : (table_dt) => get_options(table_dt.column(5)),
-                    [10] : (table_dt) => get_options(table_dt.column(10)),
-                    [11] : (table_dt) => get_options(table_dt.column(11)),
-                    [15] : (table_dt) => get_options(table_dt.column(15)),
-                };
+            let filters_options = {
+                [5] : (table_dt) => get_options(table_dt.column(5)),
+                [10] : (table_dt) => get_options(table_dt.column(10)),
+                [11] : (table_dt) => get_options(table_dt.column(11)),
+                [15] : (table_dt) => get_options(table_dt.column(15)),
+            };
 
 
-          var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
-          var holdst = KohaTable("holdst", {
-            "pagingType": "full_numbers",
-            "columnDefs": [
-                { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
-            ],
-          }, table_settings, true, null, filters_options);
+            var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
+            var holdst = KohaTable("holdst", {
+                "pagingType": "full_numbers",
+                "columnDefs": [
+                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
+                ],
+            }, table_settings, true, null, filters_options);
         });
     </script>
 [% END %]
