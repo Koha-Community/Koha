@@ -307,13 +307,12 @@ sub filter_by_has_recalls {
 
     $params //= {};
     my $recalls = Koha::Recalls->search(
-        { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], },
+        { %$params, 'me.itemnumber' => [ $self->get_column('itemnumber') ], 'me.item_level' => 1, },
         {
             columns  => ['itemnumber'],
             distinct => 1
         }
     )->_resultset->as_query;
-
     return $self->search( { 'me.itemnumber' => { '-in' => $recalls } } );
 }
 
