@@ -1289,7 +1289,7 @@
                                         [% END %]
                                         [% branchcodes = branchcodes.unique %]
                                         [% IF ( branchcodes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1319,7 +1319,7 @@
                                         [% END %]
                                         [% itemtypes = itemtypes.unique %]
                                         [% IF ( itemtypes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1352,7 +1352,7 @@
                                         [% END %]
                                         [% branchcodes = branchcodes.unique %]
                                         [% IF ( branchcodes.empty ) %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% ELSE %]
@@ -1403,7 +1403,7 @@
                                         [% IF ( biblioloo.reserveloop.size ) %]
                                             [% INCLUDE holds_table.inc holds=biblioloo.reserveloop %]
                                         [% ELSE %]
-                                            <div class="note">
+                                            <div class="alert alert-info">
                                                 There are no holds on this title.
                                             </div>
                                         [% END %]
