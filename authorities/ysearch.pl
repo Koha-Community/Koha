@@ -49,14 +49,34 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-    my @value      = $query->multi_param('term');
-    my $searchtype = $query->param('querytype');
-    my @marclist  = ($searchtype);
+    my @value        = $query->multi_param('term');
+    my $searchtype   = $query->param('querytype');
+    my @marclist     = ($searchtype);
+    my $index        = $query->param('index');
     my $authtypecode = $query->param('authtypecode');
-    my @and_or    = $query->multi_param('and_or');
-    my @excluding = $query->multi_param('excluding');
-    my @operator  = $query->multi_param('operator');
-    my $orderby   = $query->param('orderby');
+    my @and_or       = $query->multi_param('and_or');
+    my @excluding    = $query->multi_param('excluding');
+    my @operator     = $query->multi_param('operator');
+    my $orderby      = $query->param('orderby');
+
+    if ( C4::Context->preference('ConsiderHeadingUse') ) {
+        my $marcflavour = C4::Context->preference('marcflavour');
+        my $biblio_tag  = substr( $index, 4, 3 );
+        if ( $marcflavour eq 'MARC21' ) {
+            my $heading_use_search_field =
+                  $biblio_tag =~ /^[127]/ ? 'Heading-use-main-or-added-entry'
+                : $biblio_tag =~ /^6/     ? 'Heading-use-subject-added-entry'
+                : $biblio_tag =~ /^[48]/  ? 'Heading-use-series-added-entry'
+                :                           undef;
+            if ($heading_use_search_field) {
+                push @marclist,  $heading_use_search_field;
+                push @and_or,    'and';
+                push @excluding, '';
+                push @operator,  'is';
+                push @value,     'a';
+            }
+        }
+    }
 
     my $resultsperpage = 50;
     my $startfrom = 0;
