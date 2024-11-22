@@ -10,10 +10,16 @@
                 <fieldset class="rows">
                     <ol>
                         <li
-                            v-for="(attr, index) in resource_attrs"
+                            v-for="(attr, index) in resource_attrs.filter(
+                                attr => attr.type !== 'relationship'
+                            )"
                             v-bind:key="index"
                         >
-                            <FormElement :resource="agreement" :attr="attr" />
+                            <FormElement
+                                :resource="agreement"
+                                :attr="attr"
+                                :index="index"
+                            />
                         </li>
                     </ol>
                 </fieldset>
@@ -23,13 +29,21 @@
                     @additional-fields-changed="additionalFieldsChanged"
                 />
                 <!-- These relationships need DRY -->
-                <AgreementPeriods :periods="agreement.periods" />
+                <template
+                    v-for="(attr, index) in resource_attrs.filter(
+                        attr => attr.type === 'relationship'
+                    )"
+                    v-bind:key="'rel-' + index"
+                >
+                    <FormElement :resource="agreement" :attr="attr" />
+                </template>
+                <!-- <AgreementPeriods :periods="agreement.periods" />
                 <UserRoles
                     :user_type="$__('Agreement user %s')"
                     :user_roles="agreement.user_roles"
-                    :av_user_roles="authorisedValues['av_user_roles']"
-                />
-                <AgreementLicenses
+                    :av_user_roles="av_user_roles"
+                /> -->
+                <!-- <AgreementLicenses
                     :agreement_licenses="agreement.agreement_licenses"
                     :av_agreement_license_statuses="
                         authorisedValues['av_agreement_license_statuses']
@@ -37,15 +51,15 @@
                     :av_agreement_license_location="
                         authorisedValues['av_agreement_license_location']
                     "
-                />
-                <AgreementRelationships
+                /> -->
+                <!-- <AgreementRelationships
                     :agreement_id="agreement.agreement_id"
                     :relationships="agreement.agreement_relationships"
                     :av_agreement_relationships="
                         authorisedValues['av_agreement_relationships']
                     "
                 />
-                <Documents :documents="agreement.documents" />
+                <Documents :documents="agreement.documents" /> -->
                 <!-- These relationships need DRY -->
                 <fieldset class="action">
                     <ButtonSubmit />

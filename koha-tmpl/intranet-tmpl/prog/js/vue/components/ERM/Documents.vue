@@ -15,7 +15,15 @@
                 >
             </legend>
             <ol>
-                <li>
+                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                    <FormElement
+                        :resource="document"
+                        :attr="attr"
+                        :index="counter"
+                    />
+                </li>
+
+                <!-- <li>
                     <label>{{ $__("File") }}:</label>
                     <div class="file_information">
                         <span v-if="!document.file_name">
@@ -96,7 +104,7 @@
                         v-model="document.notes"
                         :placeholder="$__('Notes')"
                     />
-                </li>
+                </li> -->
             </ol>
         </fieldset>
         <a class="btn btn-default" @click="addDocument"
@@ -106,7 +114,9 @@
 </template>
 
 <script>
+import FormElement from "../FormElement.vue";
 export default {
+    components: { FormElement },
     setup() {
         const format_date = $date;
         return { format_date };
@@ -142,6 +152,7 @@ export default {
     name: "Documents",
     props: {
         documents: Array,
+        subFields: Array,
     },
 };
 </script>

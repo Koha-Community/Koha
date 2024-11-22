@@ -14,7 +14,15 @@
                 >
             </legend>
             <ol>
-                <li>
+                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                    <FormElement
+                        :resource="user_role"
+                        :attr="attr"
+                        :index="counter"
+                    />
+                </li>
+
+                <!-- <li>
                     <label :for="`user_id_${counter}`" class="required"
                         >{{ $__("User") }}:</label
                     >
@@ -30,8 +38,8 @@
                         ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
                     >
                     <span class="required">{{ $__("Required") }}</span>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <label :for="`user_role_${counter}`" class="required"
                         >{{ $__("Role") }}:</label
                     >
@@ -52,7 +60,7 @@
                         </template>
                     </v-select>
                     <span class="required">{{ $__("Required") }}</span>
-                </li>
+                </li> -->
             </ol>
         </fieldset>
         <input
@@ -68,13 +76,16 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js";
+import FormElement from "../FormElement.vue";
 
 export default {
+    components: { FormElement },
     name: "UserRoles",
     props: {
         user_type: String,
         av_user_roles: Array,
         user_roles: Array,
+        subFields: Array,
     },
     beforeCreate() {
         this.user_roles.forEach(u => {

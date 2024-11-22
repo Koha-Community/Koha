@@ -15,7 +15,16 @@
                 >
             </legend>
             <ol>
-                <li>
+                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                    <FormElement
+                        :resource="relationship"
+                        :attr="attr"
+                        :index="counter"
+                        :options="agreements"
+                    />
+                </li>
+
+                <!-- <li>
                     <label
                         :for="`related_agreement_id_${counter}`"
                         class="required"
@@ -72,7 +81,7 @@
                         v-model="relationship.notes"
                         :placeholder="$__('Notes')"
                     />
-                </li>
+                </li> -->
             </ol>
         </fieldset>
         <a
@@ -90,8 +99,10 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js";
+import FormElement from "../FormElement.vue";
 
 export default {
+    components: { FormElement },
     data() {
         return {
             agreements: [],
@@ -125,6 +136,7 @@ export default {
         agreement_id: Number,
         av_agreement_relationships: Array,
         relationships: Array,
+        subFields: Array,
     },
     name: "AgreementRelationships",
 };

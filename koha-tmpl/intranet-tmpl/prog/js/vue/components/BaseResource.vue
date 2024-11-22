@@ -137,6 +137,26 @@ export default {
                 attr => attr.show_in_table
             );
         },
+        assignAVs(attrs) {
+            attrs.forEach(attr => {
+                if (attr.type === "select" && typeof attr.av_cat === "string") {
+                    const av_key = attr.av_cat;
+                    attr.options = this[av_key];
+                    attr.requiredKey = "value";
+                    attr.selectLabel = "description";
+                }
+                if (attr.type == "relationship" && attr.props) {
+                    Object.keys(attr.props).forEach(key => {
+                        if (attr.props[key].type == "av") {
+                            attr.props[key].av = this[key];
+                        }
+                    });
+                }
+                if (attr.subFields?.length) {
+                    this.assignAVs(attr.subFields);
+                }
+            });
+        },
     },
     name: "BaseResource",
     props: {

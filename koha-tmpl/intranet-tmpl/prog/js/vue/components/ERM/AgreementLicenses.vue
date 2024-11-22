@@ -15,7 +15,15 @@
                 >
             </legend>
             <ol>
-                <li>
+                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                    <FormElement
+                        :resource="agreement_license"
+                        :attr="attr"
+                        :index="index"
+                    />
+                </li>
+
+                <!-- <li>
                     <label :for="`license_id_${counter}`" class="required"
                         >{{ $__("License") }}:</label
                     >
@@ -83,7 +91,7 @@
                         v-model="agreement_license.uri"
                         :placeholder="$__('URI')"
                     />
-                </li>
+                </li> -->
             </ol>
         </fieldset>
         <a v-if="license_count > 0" class="btn btn-default" @click="addLicense"
@@ -95,7 +103,8 @@
 
 <script>
 import { APIClient } from "../../fetch/api-client.js";
-import InfiniteScrollSelect from "../InfiniteScrollSelect.vue";
+import FormElement from "../FormElement.vue";
+// import InfiniteScrollSelect from "../InfiniteScrollSelect.vue"
 
 export default {
     name: "AgreementLicenses",
@@ -108,6 +117,7 @@ export default {
         av_agreement_license_statuses: Array,
         av_agreement_license_location: Array,
         agreement_licenses: Array,
+        subFields: Array,
     },
     beforeCreate() {
         const client = APIClient.erm;
@@ -135,7 +145,8 @@ export default {
         },
     },
     components: {
-        InfiniteScrollSelect,
+        // InfiniteScrollSelect,
+        FormElement,
     },
 };
 </script>

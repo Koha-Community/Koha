@@ -15,7 +15,15 @@
                 >
             </legend>
             <ol>
-                <li>
+                <li v-for="(attr, index) in subFields" v-bind:key="index">
+                    <FormElement
+                        :resource="period"
+                        :attr="attr"
+                        :index="counter"
+                    />
+                </li>
+
+                <!-- <li>
                     <label :for="`started_on_${counter}`" class="required"
                         >{{ $__("Start date") }}:
                     </label>
@@ -57,7 +65,7 @@
                         :name="`notes_${counter}`"
                         v-model="period.notes"
                     />
-                </li>
+                </li> -->
             </ol>
         </fieldset>
         <a class="btn btn-default" @click="addPeriod"
@@ -67,7 +75,7 @@
 </template>
 
 <script>
-import flatPickr from "vue-flatpickr-component";
+import FormElement from "../FormElement.vue";
 export default {
     name: "AgreementPeriods",
     data() {
@@ -77,6 +85,7 @@ export default {
     },
     props: {
         periods: Array,
+        subFields: Array,
     },
     methods: {
         addPeriod() {
@@ -92,7 +101,7 @@ export default {
         },
     },
     components: {
-        flatPickr,
+        FormElement,
     },
 };
 </script>
