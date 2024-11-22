@@ -31,6 +31,24 @@ Interlibrary loans:
             - pref: ILLPartnerCode
               choices: patron-categories
             - "as partners to place ILL requests with."
+        -
+            - "Add customizable tabs to interlibrary loan requests list:"
+            - pref: ILLRequestsTabs
+              syntax: text/x-yaml
+              class: code
+              type: textarea
+            - "This is a list that defines tab names and statuses that will be sorted under that tab.<br/><br/>"
+            - "Examples:<br/>"
+            - "<pre>- name: Closed</pre>"
+            - "<pre>  status:</pre>"
+            - "<pre>    - COMP</pre>"
+            - "<pre>- name: Ordered</pre>"
+            - "<pre>  status:</pre>"
+            - "<pre>    - REQ</pre>"
+            - "<pre>    - ANOTHER_ORDER_STATUS</pre>"
+            - "<pre>- name: On loan</pre>"
+            - "<pre>  status:</pre>"
+            - "<pre>    - CHK</pre>"
     Notifications:
         -
             - "Send these ILL notices to staff when appropriate:"
