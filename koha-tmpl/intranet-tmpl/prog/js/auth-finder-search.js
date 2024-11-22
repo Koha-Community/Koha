@@ -19,6 +19,7 @@ $(document).ready(function () {
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
                 data: {
+                    index: index,
                     authtypecode: authtypecode,
                     term: request.term,
                     op: "do_search",
@@ -52,6 +53,7 @@ $(document).ready(function () {
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
                 data: {
+                    index: index,
                     authtypecode: authtypecode,
                     term: request.term,
                     op: "do_search",
@@ -85,6 +87,7 @@ $(document).ready(function () {
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
                 data: {
+                    index: index,
                     authtypecode: authtypecode,
                     term: request.term,
                     op: "do_search",
@@ -118,6 +121,7 @@ $(document).ready(function () {
                 url: "/cgi-bin/koha/authorities/ysearch.pl",
                 dataType: "json",
                 data: {
+                    index: index,
                     authtypecode: authtypecode,
                     term: request.term,
                     op: "do_search",
