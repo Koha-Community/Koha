@@ -65,7 +65,7 @@ subtest "UNIMARC tests" => sub {
 
 subtest "_search tests" => sub {
 
-    plan tests => 10;
+    plan tests => 14;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
@@ -80,7 +80,8 @@ subtest "_search tests" => sub {
         return ($search_query, 1 );
     });
 
-    t::lib::Mocks::mock_preference('LinkerConsiderThesaurus', '0');
+    t::lib::Mocks::mock_preference( 'LinkerConsiderThesaurus', '0' );
+    t::lib::Mocks::mock_preference( 'ConsiderHeadingUse',      '0' );
 
     my $field = MARC::Field->new( '650', ' ', '0', a => 'Uncles', x => 'Fiction' );
     my $heading = C4::Heading->new_from_field($field);
@@ -193,5 +194,57 @@ subtest "_search tests" => sub {
         { term => { 'match-heading.ci_raw' => 'Uncles generalsubdiv Fiction' } },
     ];
     is_deeply( $terms, $expected_terms, "When thesaurus in subfield 2, and nothing is found, we don't search again if LinkerConsiderThesaurusDisabled");
+
+    t::lib::Mocks::mock_preference( 'ConsiderHeadingUse', '1' );
+
+    ($search_query) = $heading->_search('match-heading');
+    $terms          = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw'                   => 'Uncles generalsubdiv Fiction' } },
+        { term => { 'heading-use-subject-added-entry.ci_raw' => 'a' } },
+    ];
+    is_deeply(
+        $terms, $expected_terms,
+        "With ConsiderHeadingUse on and 650 tag Heading-use-subject-added-entry = 'a' is required in search query"
+    );
+    use Data::Dumper;
+
+    my $field_700   = MARC::Field->new( '700', '1', '2', a => 'Shakespeare William', t => 'Othello' );
+    my $heading_700 = C4::Heading->new_from_field($field_700);
+    ($search_query) = $heading_700->_search('match-heading');
+    $terms          = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw'                   => 'Shakespeare William Othello' } },
+        { term => { 'heading-use-main-or-added-entry.ci_raw' => 'a' } },
+    ];
+    is_deeply(
+        $terms, $expected_terms,
+        "With ConsiderHeadingUse on and 700 tag Heading-use-main-or-added-entry = 'a' is required in search query"
+    );
+
+    my $field_800   = MARC::Field->new( '800', '1', ' ', a => 'Shakespeare William', t => 'Collected works' );
+    my $heading_800 = C4::Heading->new_from_field($field_800);
+    ($search_query) = $heading_800->_search('match-heading');
+    $terms          = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw'                  => 'Shakespeare William Collected works' } },
+        { term => { 'heading-use-series-added-entry.ci_raw' => 'a' } },
+    ];
+    is_deeply(
+        $terms, $expected_terms,
+        "With ConsiderHeadingUse on and 800 tag Heading-use-series-added-entry = 'a' is required in search query"
+    );
+
+    t::lib::Mocks::mock_preference( 'ConsiderHeadingUse', '0' );
+
+    ($search_query) = $heading_800->_search('match-heading');
+    $terms          = $search_query->{query}->{bool}->{must};
+    $expected_terms = [
+        { term => { 'match-heading.ci_raw' => 'Shakespeare William Collected works' } },
+    ];
+    is_deeply(
+        $terms, $expected_terms,
+        "With ConsiderHeadingUse off and 800 tag there is no Heading-use-series-added-entry condition in search query"
+    );
 
 };
