@@ -22,7 +22,7 @@ use Modern::Perl;
 use MARC::Field;
 use C4::Context;
 use Module::Load qw( load );
-use List::Util   qw( none );
+use List::Util   qw( none first );
 
 =head1 NAME
 
@@ -210,6 +210,25 @@ sub _search {
         push @value,     $thesaurus;
     }
 
+    if ( C4::Context->preference('ConsiderHeadingUse') ) {
+        my $marcflavour = C4::Context->preference('marcflavour');
+        my $biblio_tag  = $self->{'field'}->tag;
+        if ( $marcflavour eq 'MARC21' ) {
+            my $heading_use_search_field =
+                  $biblio_tag =~ /^[127]/ ? 'Heading-use-main-or-added-entry'
+                : $biblio_tag =~ /^6/     ? 'Heading-use-subject-added-entry'
+                : $biblio_tag =~ /^[48]/  ? 'Heading-use-series-added-entry'
+                :                           undef;
+            if ($heading_use_search_field) {
+                push @marclist,  $heading_use_search_field;
+                push @and_or,    'and';
+                push @excluding, '';
+                push @operator,  'is';
+                push @value,     'a';
+            }
+        }
+    }
+
     require Koha::SearchEngine::QueryBuilder;
     require Koha::SearchEngine::Search;
 
@@ -240,8 +259,8 @@ sub _search {
         )
         )
     {
-        pop @value;
-        push @value, 'notdefined';
+        my $thesaurus_idx = first { $marclist[$_] eq 'thesaurus' } 0 .. $#marclist;
+        $value[$thesaurus_idx] = 'notdefined';
         $search_query = $builder->build_authorities_query_compat(
             \@marclist,  \@and_or,
             \@excluding, \@operator, \@value, $self->{'auth_type'},
