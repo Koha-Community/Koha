@@ -11,7 +11,7 @@ return {
         $dbh->do(
             q{
                 ALTER TABLE borrower_attribute_types
-                MODIFY COLUMN `mandatory` tinyint(1) DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not in the staff client'
+                MODIFY COLUMN `mandatory` tinyint(1) DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not in the staff interface'
             }
         );
 
