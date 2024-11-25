@@ -20,9 +20,11 @@ use Modern::Perl;
 use Test::More tests => 4;
 use Test::MockModule;
 use Test::MockObject;
+use Test::Warn;
+
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::Warn;
+use t::lib::Dates;
 
 use C4::Context;
 use C4::Auth;
@@ -276,11 +278,10 @@ subtest 'checkpw_ldap tests' => sub {
         $welcome   = 0;
 
         # replicate testing with checkpw
-        my $time_now = dt_from_string()->ymd . ' ' . dt_from_string()->hms;
         C4::Auth::checkpw( 'hola', password => 'hey' );
         my $patron_replicated_from_auth = Koha::Patrons->search( { userid => 'hola' } )->next;
         is(
-            $patron_replicated_from_auth->updated_on, $time_now,
+            t::lib::Dates::compare( $patron_replicated_from_auth->updated_on, dt_from_string ), 0,
             "updated_on correctly saved on newly created user"
         );
 
