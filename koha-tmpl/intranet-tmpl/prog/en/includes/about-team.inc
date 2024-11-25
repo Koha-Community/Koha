@@ -32,6 +32,7 @@
     [%- CASE 'meeting_facilitator'   -%]<span>Meeting facilitator</span>
     [%- CASE 'ktd'                   -%]<span>Developer tooling</span>
     [%- CASE 'website'               -%]<span>Website administrator</span>
+    [%- CASE 'security_manager'      -%]<span>Security release manager</span>
     [%- CASE -%]<span>MISSING MAP FOR ROLE: [% role.key | html %]</span>
   [%- END -%]
   [%- IF ex %] - [% ex | html %][% END -%]
@@ -77,6 +78,12 @@
       [% ELSE %]
             <p>This is the team who are responsible for the next release of Koha and the ongoing maintenance of your
             currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next team will be elected.</p>
+
+            [% FOREACH s IN t.security_manager %]
+                <li><strong>Security release manager:</strong>
+                      [% INCLUDE person p=s %]
+                </li>
+            [% END %]
 
             [% FOREACH m IN t.maintainer %]
                 [% IF m.version == ( v ) %]
