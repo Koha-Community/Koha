@@ -2113,6 +2113,8 @@ sub RevertWaitingStatus {
         }
     )->next;
 
+    my $original = C4::Context->preference('HoldsLog') ? $hold->unblessed : undef;
+
     ## Increment the priority of all other non-waiting
     ## reserves for this bib record
     my $holds = Koha::Holds->search({ biblionumber => $hold->biblionumber, priority => { '>' => 0 } })
@@ -2129,7 +2131,7 @@ sub RevertWaitingStatus {
         }
     )->store( { hold_reverted => 1 } );
 
-    logaction( 'HOLDS', 'MODIFY', $hold->id, $hold )
+    logaction( 'HOLDS', 'MODIFY', $hold->id, $hold, undef, $original )
         if C4::Context->preference('HoldsLog');
 
     _FixPriority( { biblionumber => $hold->biblionumber } );
