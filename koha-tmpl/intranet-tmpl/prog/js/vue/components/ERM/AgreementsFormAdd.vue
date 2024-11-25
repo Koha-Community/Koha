@@ -28,7 +28,6 @@
                     :additional_field_values="agreement.extended_attributes"
                     @additional-fields-changed="additionalFieldsChanged"
                 />
-                <!-- These relationships need DRY -->
                 <template
                     v-for="(attr, index) in resource_attrs.filter(
                         attr => attr.type === 'relationship'
@@ -37,30 +36,6 @@
                 >
                     <FormElement :resource="agreement" :attr="attr" />
                 </template>
-                <!-- <AgreementPeriods :periods="agreement.periods" />
-                <UserRoles
-                    :user_type="$__('Agreement user %s')"
-                    :user_roles="agreement.user_roles"
-                    :av_user_roles="av_user_roles"
-                /> -->
-                <!-- <AgreementLicenses
-                    :agreement_licenses="agreement.agreement_licenses"
-                    :av_agreement_license_statuses="
-                        authorisedValues['av_agreement_license_statuses']
-                    "
-                    :av_agreement_license_location="
-                        authorisedValues['av_agreement_license_location']
-                    "
-                /> -->
-                <!-- <AgreementRelationships
-                    :agreement_id="agreement.agreement_id"
-                    :relationships="agreement.agreement_relationships"
-                    :av_agreement_relationships="
-                        authorisedValues['av_agreement_relationships']
-                    "
-                />
-                <Documents :documents="agreement.documents" /> -->
-                <!-- These relationships need DRY -->
                 <fieldset class="action">
                     <ButtonSubmit />
                     <router-link
@@ -76,12 +51,7 @@
 </template>
 
 <script>
-import AgreementPeriods from "./AgreementPeriods.vue";
-import UserRoles from "./UserRoles.vue";
 import FormElement from "../FormElement.vue";
-import AgreementLicenses from "./AgreementLicenses.vue";
-import AgreementRelationships from "./AgreementRelationships.vue";
-import Documents from "./Documents.vue";
 import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
 import { setMessage, setError, setWarning } from "../../messages";
@@ -292,11 +262,6 @@ export default {
         },
     },
     components: {
-        AgreementPeriods,
-        UserRoles,
-        AgreementLicenses,
-        AgreementRelationships,
-        Documents,
         ButtonSubmit,
         FormElement,
         AdditionalFieldsEntry,
