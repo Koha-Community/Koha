@@ -2,7 +2,7 @@
 --
 -- Host: db    Database: koha_kohadev
 -- ------------------------------------------------------
--- Server version	11.3.2-MariaDB-1:11.3.2+maria~ubu2204
+-- Server version	11.5.2-MariaDB-ubu2404
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -159,7 +159,6 @@ CREATE TABLE `accountlines` (
   CONSTRAINT `accountlines_ibfk_registers` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `action_logs`
@@ -1151,7 +1150,7 @@ CREATE TABLE `biblio_metadata` (
   KEY `timestamp` (`timestamp`),
   KEY `record_metadata_fk_2` (`record_source_id`),
   CONSTRAINT `record_metadata_fk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `record_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `record_metadata_fk_2` FOREIGN KEY (`record_source_id`) REFERENCES `record_sources` (`record_source_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1225,7 +1224,7 @@ CREATE TABLE `bookings` (
   `end_date` datetime DEFAULT NULL COMMENT 'the end date of the booking',
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'the timestamp for when a booking was created',
   `modification_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'the timestamp for when a booking has been updated',
-  `status` enum('new', 'cancelled', 'completed') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking',
+  `status` enum('new','cancelled','completed') NOT NULL DEFAULT 'new' COMMENT 'current status of the booking',
   `cancellation_reason` varchar(80) DEFAULT NULL COMMENT 'optional authorised value BOOKING_CANCELLATION',
   PRIMARY KEY (`booking_id`),
   KEY `patron_id` (`patron_id`),
@@ -3834,6 +3833,48 @@ CREATE TABLE `import_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `import_oai_authorities`
+--
+
+DROP TABLE IF EXISTS `import_oai_authorities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_oai_authorities` (
+  `import_oai_authority_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+  `authid` bigint(20) unsigned NOT NULL COMMENT 'unique identifier assigned to each koha record',
+  `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
+  `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
+  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
+  `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
+  `last_modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`import_oai_authority_id`),
+  KEY `authid` (`authid`),
+  CONSTRAINT `FK_import_oai_authorities_1` FOREIGN KEY (`authid`) REFERENCES `auth_header` (`authid`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `import_oai_biblios`
+--
+
+DROP TABLE IF EXISTS `import_oai_biblios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `import_oai_biblios` (
+  `import_oai_biblio_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+  `biblionumber` int(11) NOT NULL COMMENT 'unique identifier assigned to each koha record',
+  `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
+  `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
+  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
+  `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
+  `last_modified` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`import_oai_biblio_id`),
+  KEY `biblionumber` (`biblionumber`),
+  CONSTRAINT `FK_import_oai_biblios_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `import_record_matches`
 --
 
@@ -4503,6 +4544,8 @@ CREATE TABLE `marc_order_accounts` (
   `match_field` varchar(10) DEFAULT NULL COMMENT 'the field that a vendor account has been mapped to in a marc record',
   `match_value` varchar(50) DEFAULT NULL COMMENT 'the value to be matched against the marc record',
   PRIMARY KEY (`id`),
+  KEY `marc_ordering_account_ibfk_1` (`vendor_id`),
+  KEY `marc_ordering_account_ibfk_2` (`budget_id`),
   CONSTRAINT `marc_ordering_account_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `marc_ordering_account_ibfk_2` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -4832,6 +4875,25 @@ CREATE TABLE `need_merge_authorities` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `oai_servers`
+--
+
+DROP TABLE IF EXISTS `oai_servers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oai_servers` (
+  `oai_server_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
+  `endpoint` varchar(255) NOT NULL COMMENT 'OAI endpoint (host + port + path)',
+  `oai_set` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
+  `servername` longtext NOT NULL COMMENT 'name given to the target by the library',
+  `dataformat` enum('oai_dc','marc-xml','marcxml') NOT NULL DEFAULT 'oai_dc' COMMENT 'data format',
+  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'server contains bibliographic or authority records',
+  `add_xslt` longtext DEFAULT NULL COMMENT 'zero or more paths to XSLT files to be processed on the search results',
+  PRIMARY KEY (`oai_server_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `oai_sets`
 --
 
@@ -4897,64 +4959,6 @@ CREATE TABLE `oai_sets_mappings` (
   CONSTRAINT `oai_sets_mappings_ibfk_1` FOREIGN KEY (`set_id`) REFERENCES `oai_sets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `oai_servers`
---
-
-DROP TABLE IF EXISTS `oai_servers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `oai_servers` (
-  `oai_server_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `endpoint` varchar(255) NOT NULL COMMENT 'OAI endpoint (host + port + path)',
-  `oai_set` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
-  `servername` longtext NOT NULL COMMENT 'name given to the target by the library',
-  `dataformat` enum('oai_dc','marc-xml', 'marcxml') NOT NULL DEFAULT 'oai_dc' COMMENT 'data format',
-  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'server contains bibliographic or authority records',
-  `add_xslt` longtext DEFAULT NULL COMMENT 'zero or more paths to XSLT files to be processed on the search results',
-  PRIMARY KEY (`oai_server_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `import_oai_biblios`
---
-
-DROP TABLE IF EXISTS `import_oai_biblios`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_oai_biblios` (
-  `import_oai_biblio_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `biblionumber` int(11) NOT NULL COMMENT 'unique identifier assigned to each koha record',
-  `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
-  `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
-  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
-  `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
-  `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (import_oai_biblio_id),
-  KEY biblionumber (biblionumber),
-  CONSTRAINT FK_import_oai_biblios_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `import_oai_authorities`
---
-
-DROP TABLE IF EXISTS `import_oai_authorities`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `import_oai_authorities` (
-  `import_oai_authority_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'unique identifier assigned by Koha',
-  `authid` bigint(20) unsigned NOT NULL COMMENT 'unique identifier assigned to each koha record',
-  `identifier` varchar(255) NOT NULL COMMENT 'OAI record identifier',
-  `repository` varchar(255) NOT NULL COMMENT 'OAI repository',
-  `recordtype` enum('authority','biblio') NOT NULL DEFAULT 'biblio' COMMENT 'is the record bibliographic or authority',
-  `datestamp` varchar(255) DEFAULT NULL COMMENT 'OAI set to harvest',
-  `last_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (import_oai_authority_id),
-  KEY authid (authid),
-  CONSTRAINT FK_import_oai_authorities_1 FOREIGN KEY (authid) REFERENCES auth_header (authid) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `oauth_access_tokens`
@@ -6750,4 +6754,4 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-27 12:58:11
+-- Dump completed on 2024-11-25 12:13:27
