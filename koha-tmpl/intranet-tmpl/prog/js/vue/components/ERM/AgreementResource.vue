@@ -111,6 +111,32 @@ export default {
                 {
                     name: "periods",
                     type: "relationship",
+                    showElement: {
+                        type: "table",
+                        columnData: "periods",
+                        hidden: agreement => agreement.periods?.length,
+                        columns: [
+                            {
+                                name: __("Period start"),
+                                value: "started_on",
+                                format: this.format_date,
+                            },
+                            {
+                                name: __("Period end"),
+                                value: "ended_on",
+                                format: this.format_date,
+                            },
+                            {
+                                name: __("Cancellation deadline"),
+                                value: "cancellation_deadline",
+                                format: this.format_date,
+                            },
+                            {
+                                name: __("Notes"),
+                                value: "notes",
+                            },
+                        ],
+                    },
                     label: __("Periods"),
                     componentPath: "./ERM/AgreementPeriods.vue",
                     props: {
@@ -184,6 +210,23 @@ export default {
                     type: "relationship",
                     label: __("Users"),
                     componentPath: "./ERM/UserRoles.vue",
+                    showElement: {
+                        type: "table",
+                        columnData: "user_roles",
+                        hidden: agreement => agreement.user_roles?.length,
+                        columns: [
+                            {
+                                name: __("Name"),
+                                value: "patron",
+                                format: this.patron_to_html,
+                            },
+                            {
+                                name: __("Role"),
+                                value: "role",
+                                av: "av_user_roles",
+                            },
+                        ],
+                    },
                     props: {
                         user_roles: {
                             type: "resourceProperty",
@@ -243,6 +286,37 @@ export default {
                     type: "relationship",
                     label: __("Licenses"),
                     componentPath: "./ERM/AgreementLicenses.vue",
+                    showElement: {
+                        type: "table",
+                        columnData: "agreement_licenses",
+                        hidden: agreement =>
+                            agreement.agreement_licenses?.length,
+                        columns: [
+                            {
+                                name: __("Name"),
+                                value: "license.name",
+                                format: this.accessNestedProperty,
+                            },
+                            {
+                                name: __("Status"),
+                                value: "status",
+                                av: "av_agreement_license_statuses",
+                            },
+                            {
+                                name: __("Physical location"),
+                                value: "physical_location",
+                                av: "av_agreement_license_location",
+                            },
+                            {
+                                name: __("Notes"),
+                                value: "notes",
+                            },
+                            {
+                                name: __("URI"),
+                                value: "uri",
+                            },
+                        ],
+                    },
                     props: {
                         agreement_licenses: {
                             type: "resourceProperty",

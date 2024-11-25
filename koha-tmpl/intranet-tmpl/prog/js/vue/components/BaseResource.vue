@@ -6,12 +6,16 @@ export default {
         //global setup for all resource (list and show for now, but maybe others?) components here
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
+
+        const format_date = $date;
+
         return {
             ...props,
             setConfirmationDialog,
             setMessage,
             setError,
             setWarning,
+            format_date,
         };
     },
     methods: {
@@ -156,6 +160,10 @@ export default {
                     this.assignAVs(attr.subFields);
                 }
             });
+        },
+        accessNestedProperty(path, obj) {
+            const keys = path.split(".");
+            return keys.reduce((acc, key) => acc[key], obj);
         },
     },
     name: "BaseResource",
