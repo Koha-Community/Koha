@@ -296,6 +296,12 @@ export default {
                                 name: __("Name"),
                                 value: "license.name",
                                 format: this.accessNestedProperty,
+                                link: {
+                                    name: "LicensesShow",
+                                    params: {
+                                        license_id: "license_id",
+                                    },
+                                },
                             },
                             {
                                 name: __("Status"),
