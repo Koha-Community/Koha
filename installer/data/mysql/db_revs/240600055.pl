@@ -17,7 +17,11 @@ VALUES ('ForcePasswordResetWhenSetByStaff', '0', NULL,'Force a staff created pat
 
         if ( !column_exists( 'categories', 'force_password_reset_when_set_by_staff' ) ) {
             $dbh->do(
-                "ALTER TABLE categories ADD COLUMN `force_password_reset_when_set_by_staff` TINYINT(1) NULL DEFAULT NULL AFTER `require_strong_password` -- if patrons of this category are required to reset password after being created by a staff member"
+                q{
+                ALTER TABLE categories ADD COLUMN `force_password_reset_when_set_by_staff` TINYINT(1) NULL DEFAULT NULL
+                COMMENT "if patrons of this category are required to reset password after being created by a staff member"
+                AFTER `require_strong_password`
+                }
             );
         }
 

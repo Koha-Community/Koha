@@ -11,7 +11,9 @@ return {
         if ( !column_exists( 'itemtypes', 'bookable' ) ) {
             $dbh->do(
                 q{
-                ALTER TABLE itemtypes ADD COLUMN bookable tinyint(1) NOT NULL DEFAULT 0 AFTER automatic_checkin
+                ALTER TABLE itemtypes ADD COLUMN bookable tinyint(1) NOT NULL DEFAULT 0
+                COMMENT "Activate bookable feature for items related to this item type"
+                AFTER automatic_checkin
             }
             );
 

@@ -12,7 +12,7 @@ return {
             $dbh->do(
                 q{
                     ALTER TABLE additional_fields ADD COLUMN `repeatable` tinyint(1) NOT NULL DEFAULT 0 COMMENT
-                        'does the field allow more than one option?' AFTER searchable
+                        'is the field repeatable?' AFTER searchable
                 }
             );
             say_success( $out, "Added repeatable column to additional_fields table" );
