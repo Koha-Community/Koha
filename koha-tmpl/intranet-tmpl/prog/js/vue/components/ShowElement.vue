@@ -1,50 +1,53 @@
 <template>
     <div
         v-if="
-            attr.type == 'text' ||
-            attr.type == 'textarea' ||
-            (attr.type == 'select' && !attr.av_cat) ||
-            attr.showElement?.type == 'text'
+            attribute.type == 'text' ||
+            attribute.type == 'textarea' ||
+            (attribute.type == 'select' && !attribute.av_cat) ||
+            attribute?.type == 'text'
         "
     >
-        <label>{{ attr.label }}:</label>
-        <LinkWrapper :linkData="attr.showElement?.link" :resource="resource">
+        <label>{{ attribute.label }}:</label>
+        <LinkWrapper :linkData="attribute?.link" :resource="resource">
             <span>
                 {{
-                    attr.showElement?.format
-                        ? attr.showElement?.format(
-                              attr.showElement.value,
+                    attribute?.format
+                        ? attribute?.format(
+                              resource[attribute.value]
+                                  ? resource[attribute.value]
+                                  : attribute.value,
                               resource
                           )
-                        : resource[attr.name]
+                        : resource[attribute.name]
                 }}
             </span>
         </LinkWrapper>
     </div>
     <div
-        v-else-if="attr.type == 'av' || (attr.type == 'select' && attr.av_cat)"
-    >
-        <label>{{ attr.label }}:</label>
-        <LinkWrapper :linkData="attr.showElement?.link" :resource="resource">
-            <span>{{ get_lib_from_av(attr.av_cat, resource[attr.name]) }}</span>
-        </LinkWrapper>
-    </div>
-    <div v-else-if="attr.type == 'boolean'">
-        <label>{{ attr.label }}:</label>
-        <span v-if="resource[attr.name]">{{ $__("Yes") }}</span>
-        <span v-else>{{ $__("No") }}</span>
-    </div>
-    <div
         v-else-if="
-            attr.type == 'relationship' && attr.showElement.type === 'table'
+            attribute.type == 'av' ||
+            (attribute.type == 'select' && attribute.av_cat)
         "
     >
-        <template v-if="attr.showElement.hidden(resource)">
-            <label>{{ attr.label }}</label>
+        <label>{{ attribute.label }}:</label>
+        <LinkWrapper :linkData="attribute?.link" :resource="resource">
+            <span>{{
+                get_lib_from_av(attribute.av_cat, resource[attribute.name])
+            }}</span>
+        </LinkWrapper>
+    </div>
+    <div v-else-if="attribute.type == 'boolean'">
+        <label>{{ attribute.label }}:</label>
+        <span v-if="resource[attribute.name]">{{ $__("Yes") }}</span>
+        <span v-else>{{ $__("No") }}</span>
+    </div>
+    <div v-else-if="attribute.type === 'table'">
+        <template v-if="attribute.hidden(resource)">
+            <label>{{ attribute.label }}</label>
             <table>
                 <thead>
                     <th
-                        v-for="column in attr.showElement.columns"
+                        v-for="column in attribute.columns"
                         :key="column.name + 'head'"
                     >
                         {{ column.name }}
@@ -52,13 +55,11 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="(row, counter) in resource[
-                            attr.showElement.columnData
-                        ]"
+                        v-for="(row, counter) in resource[attribute.columnData]"
                         v-bind:key="counter"
                     >
                         <td
-                            v-for="dataColumn in attr.showElement.columns"
+                            v-for="dataColumn in attribute.columns"
                             :key="dataColumn.name + 'data'"
                         >
                             <template v-if="dataColumn.format">
@@ -103,11 +104,11 @@
             </table>
         </template>
     </div>
-    <div v-else-if="attr.showElement?.type === 'component'">
-        <template v-if="attr.showElement.hidden(resource)">
+    <div v-else-if="attribute?.type === 'component'">
+        <template v-if="attribute.hidden(resource)">
             <component
                 :is="requiredComponent"
-                v-bind="requiredProps()"
+                v-bind="requiredProps(true)"
             ></component>
         </template>
     </div>
@@ -116,15 +117,17 @@
 <script>
 import { inject } from "vue";
 import LinkWrapper from "./LinkWrapper.vue";
-import { defineAsyncComponent } from "vue";
+import BaseElement from "./BaseElement.vue";
 
 export default {
     components: { LinkWrapper },
+    extends: BaseElement,
     setup() {
         const AVStore = inject("AVStore");
         const { get_lib_from_av } = AVStore;
 
         return {
+            ...BaseElement.setup(),
             get_lib_from_av,
         };
     },
@@ -134,9 +137,8 @@ export default {
     },
     computed: {
         requiredComponent() {
-            return defineAsyncComponent(
-                () => import(`${this.attr.showElement.componentPath}`)
-            );
+            const component = this.identifyAndImportComponent(this.attr, true);
+            return component;
         },
         selectOptions() {
             if (this.attr.options) {
@@ -144,43 +146,11 @@ export default {
             }
             return this.options;
         },
-    },
-    methods: {
-        requiredProps() {
-            if (!this.attr.showElement.props) {
-                return {};
+        attribute() {
+            if (this.attr.showElement) {
+                return { ...this.attr, ...this.attr.showElement };
             }
-            const props = Object.keys(this.attr.showElement.props).reduce(
-                (acc, key) => {
-                    // This might be better in a switch statement
-                    const prop = this.attr.showElement.props[key];
-                    if (prop.type === "resource") {
-                        acc[key] = this.resource;
-                    }
-                    if (prop.type === "resourceProperty") {
-                        acc[key] = this.resource[prop.resourceProperty];
-                    }
-                    if (prop.type === "av") {
-                        acc[key] = prop.av;
-                    }
-                    if (prop.type === "string") {
-                        if (prop.indexRequired && this.index > -1) {
-                            acc[key] = `${prop.value}${this.index}`;
-                        } else {
-                            acc[key] = prop.value;
-                        }
-                    }
-                    if (prop.type === "boolean") {
-                        acc[key] = prop.value;
-                    }
-                    return acc;
-                },
-                {}
-            );
-            if (this.attr.showElement.subFields?.length) {
-                props.subFields = this.attr.showElement.subFields;
-            }
-            return props;
+            return this.attr;
         },
     },
     name: "ShowElement",

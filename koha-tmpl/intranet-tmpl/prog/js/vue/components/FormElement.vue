@@ -103,6 +103,7 @@
 <script>
 import BaseElement from "./BaseElement.vue";
 import { defineAsyncComponent } from "vue";
+import BaseElement from "./BaseElement.vue";
 
 export default {
     props: {
@@ -111,11 +112,16 @@ export default {
         index: Number | null,
         options: Array,
     },
+    extends: BaseElement,
+    setup() {
+        return {
+            ...BaseElement.setup(),
+        };
+    },
     computed: {
         requiredComponent() {
-            return defineAsyncComponent(
-                () => import(`${this.attr.componentPath}`)
-            );
+            const component = this.identifyAndImportComponent(this.attr);
+            return component;
         },
         selectOptions() {
             if (this.attr.options) {
