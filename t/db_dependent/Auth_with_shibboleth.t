@@ -29,6 +29,7 @@ use File::Temp qw(tempdir);
 use t::lib::Mocks;
 use t::lib::Mocks::Logger;
 use t::lib::TestBuilder;
+use t::lib::Dates;
 
 use C4::Auth_with_shibboleth qw( shib_ok login_shib_url get_login_shib checkpw_shib );
 use Koha::Database;
@@ -288,15 +289,14 @@ subtest "checkpw_shib tests" => sub {
     $ENV{'emailpro'} = 'me@myemail.com';
     $ENV{branchcode} = $library->branchcode;      # needed since T::D::C does no longer hides the FK constraint
 
-    my $time_now = dt_from_string()->ymd . ' ' . dt_from_string()->hms;
     checkpw($shib_login);
-    ok my $new_user_autocreated = $schema->resultset('Borrower')->search( { 'userid' => 'test43210' }, { rows => 1 } ),
-        "new user found";
+    ok(
+        my $new_user_autocreated = Koha::Patrons->find( { userid => 'test43210' } ),
+        "new user found"
+    );
 
-    my $rec_autocreated = $new_user_autocreated->next;
-    is_deeply(
-        [ map { $rec_autocreated->$_ } qw/updated_on/ ],
-        [$time_now],
+    is(
+        t::lib::Dates::compare( $new_user_autocreated->updated_on, dt_from_string ), 0,
         'updated_on correctly saved on newly created user'
     );
 };
