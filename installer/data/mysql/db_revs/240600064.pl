@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "38436",
-    description => "Adjust column names for holdings tables",
+    description => "Adjust column names for holdings tables in the table settings",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
