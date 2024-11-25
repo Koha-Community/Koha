@@ -25,10 +25,10 @@ return {
         }
 
         my $creation_date_statement = <<~'SQL';
-            ALTER TABLE bookings ADD COLUMN creation_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT 'the datetime for when a bookings was created'
+            ALTER TABLE bookings ADD COLUMN creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT 'the datetime for when a bookings was created'
         SQL
         my $modification_date_statement = <<~'SQL';
-            ALTER TABLE bookings ADD COLUMN modification_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'the datetime for when a booking has been updated'
+            ALTER TABLE bookings ADD COLUMN modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'the datetime for when a booking has been updated'
         SQL
         if ( @{$existing_columns} == 0 ) {
             $dbh->do("$creation_date_statement AFTER `end_date`");
