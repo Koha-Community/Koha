@@ -95,7 +95,7 @@
         ></component>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </div>
-    <template v-else-if="attr.type == 'relationship'">
+    <template v-else-if="attr.type == 'relationship' && attr.componentPath">
         <component :is="requiredComponent" v-bind="requiredProps()"></component>
     </template>
 </template>

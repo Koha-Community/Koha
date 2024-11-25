@@ -56,6 +56,17 @@ export default {
                     name: "vendor_id",
                     type: "component",
                     label: __("Vendor"),
+                    showElement: {
+                        type: "text",
+                        format: this.accessNestedProperty,
+                        value: "vendor.name",
+                        link: {
+                            href: "/cgi-bin/koha/acqui/supplier.pl",
+                            params: {
+                                bookseller_id: "vendor_id",
+                            },
+                        },
+                    },
                     componentPath: "./FormSelectVendors.vue",
                     props: {
                         id: {
@@ -402,6 +413,19 @@ export default {
                     name: "relationships",
                     type: "relationship",
                     componentPath: "./ERM/AgreementRelationships.vue",
+                    showElement: {
+                        type: "component",
+                        hidden: agreement =>
+                            agreement.agreement_relationships?.length,
+                        componentPath:
+                            "./ERM/AgreementRelationshipsDisplay.vue",
+                        props: {
+                            agreement: {
+                                type: "resource",
+                                value: null,
+                            },
+                        },
+                    },
                     props: {
                         agreement_id: {
                             type: "resourceProperty",
@@ -439,9 +463,37 @@ export default {
                     ],
                 },
                 {
+                    name: "packages",
+                    type: "relationship",
+                    componentPath: null,
+                    showElement: {
+                        type: "component",
+                        hidden: agreement =>
+                            agreement.agreement_packages?.length,
+                        componentPath: "./ERM/AgreementPackagesDisplay.vue",
+                        props: {
+                            agreement: {
+                                type: "resource",
+                                value: null,
+                            },
+                        },
+                    },
+                },
+                {
                     name: "documents",
                     type: "relationship",
                     componentPath: "./ERM/Documents.vue",
+                    showElement: {
+                        type: "component",
+                        hidden: agreement => agreement.documents?.length,
+                        componentPath: "./DocumentDisplay.vue",
+                        props: {
+                            resource: {
+                                type: "resource",
+                                value: null,
+                            },
+                        },
+                    },
                     props: {
                         documents: {
                             type: "resourceProperty",

@@ -139,7 +139,7 @@
                         </table>
                     </li> -->
 
-                    <li v-if="agreement.agreement_relationships.length">
+                    <!-- <li v-if="agreement.agreement_relationships.length">
                         <label>{{ $__("Related agreements") }}</label>
                         <div id="agreement_relationships">
                             <div
@@ -171,9 +171,9 @@
                                 {{ agreement.name }}
                             </div>
                         </div>
-                    </li>
+                    </li> -->
 
-                    <li v-if="agreement.agreement_packages.length">
+                    <!-- <li v-if="agreement.agreement_packages.length">
                         <label>{{ $__("Packages") }}</label>
                         <div id="agreement_packages">
                             <div
@@ -220,9 +220,9 @@
                                 >
                             </div>
                         </div>
-                    </li>
+                    </li> -->
 
-                    <li v-if="agreement.documents.length">
+                    <!-- <li v-if="agreement.documents.length">
                         <label>{{ $__("Documents") }}</label>
                         <div id="agreement_documents">
                             <ul>
@@ -258,7 +258,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
                 </ol>
             </fieldset>
             <AdditionalFieldsDisplay
