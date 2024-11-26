@@ -223,9 +223,9 @@
     <script>
         $(document).ready(function(){
             [%- IF ( active ) -%]
-                $("#pending_updates_group a[href='#panel-" + [% active | html %] + "_panel']").click();
+                $("#panel-" + [% active | html %] + "_panel").collapse("show");
             [%- ELSE -%]
-                $("#pending_updates_group a.collapsed:eq(0)").click();
+                $(".panel-collapse:eq(0)").collapse("show");
             [%- END -%]
         });
     </script>
