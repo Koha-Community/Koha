@@ -38,6 +38,10 @@
         h3.collapsed i.fa.fa-caret-down::before {
             content: "\f0da";
         }
+        #items_submenu {
+            max-height: 500px;
+            overflow: auto;
+        }
     </style>
 [% END %]
 </head>
@@ -134,9 +138,14 @@
         [% FOREACH ITEM_DAT IN ITEM_DATA %]
             <h3 id="item[% ITEM_DAT.itemnumber | html %]" class="expanded">
                 <i class="fa fa-caret-down" title="Collapse this section"></i>
-                Barcode [% ITEM_DAT.barcode | html %] [% IF not_for_loan %][% not_for_loan_description | html %][% END %]
+                [% IF ITEM_DAT.barcode -%]
+                    Barcode [% ITEM_DAT.barcode | html %]
+                [% ELSE -%]
+                    Item number [% ITEM_DAT.itemnumber | html %]
+                [% END %]
+                [% IF not_for_loan %][% not_for_loan_description | html %][% END %]
             </h3>
-            <div class="page-section clearfix">
+            <div id="collapse_item[% ITEM_DAT.itemnumber | html %]" class="page-section clearfix">
                 [% SET not_for_loan = 0 %]
                 [% IF ITEM_DAT.notforloan || ITEM_DAT.effective_itemtype.notforloan %]
                     [% SET not_for_loan = 1 %]
@@ -584,6 +593,22 @@
                 window.scrollTo( 0, getScrollto( linkid, "" ) );
                 togglePanel( $(this) );
             });
+
+            $(".item_sublink").on("click", function () {
+                /* If the user clicks a sub-menu link in the sidebar,
+                check to see if it is collapsed. If so, expand it */
+                var href = $(this).attr("href");
+                href = href.replace("#", "");
+                var panel = $("#collapse_" + href);
+                if (panel.is(":hidden")) {
+                    $("#" + href)
+                        .addClass("expanded")
+                        .removeClass("collapsed")
+                        .attr("title", __("Collapse this section"));
+                    panel.show();
+                }
+            });
+
         });
 
         function togglePanel( node ){
