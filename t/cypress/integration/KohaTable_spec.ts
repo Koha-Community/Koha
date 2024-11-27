@@ -233,6 +233,98 @@ describe("kohaTable (using REST API)", () => {
                 });
             });
         });
+
+        it("Shareable link", { scrollBehavior: false }, () => {
+            build_libraries().then(() => {
+                cy.visit("/cgi-bin/koha/admin/branches.pl");
+
+                mock_table_settings({
+                    default_save_state: 1,
+                    columns: { library_code: { is_hidden: 1 } },
+                });
+
+                cy.get("@columns").then(columns => {
+                    // Code is not shown
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length - 1
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`)
+                        .contains("Code")
+                        .should("not.exist");
+                    cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                    // Show Code
+                    cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                        .contains("Code")
+                        .click();
+                    cy.get(`#${table_id} th`).should(
+                        "have.length",
+                        columns.length
+                    );
+                    cy.get(`#${table_id} th`).contains("Name");
+                    cy.get(`#${table_id} th`).contains("Code");
+
+                    // Close the 'Columns' list
+                    cy.get(".dt-button-background").click();
+                    cy.get(".dt-button-background").should("not.exist");
+
+                    // Copy the shareable link (Name and Code shown)
+                    cy.get(
+                        `#${table_id}_wrapper .copyConditions_controls`
+                    ).click({ force: true });
+                    cy.get(".tooltip").contains("Copied!");
+                });
+
+                cy.window().then(win => {
+                    // Retrieve the content of the clipboard
+                    win.navigator.clipboard.readText().then(url => {
+                        expect(url).to.match(
+                            /branches.pl\?DataTables_admin_libraries_libraries_state=/
+                        );
+
+                        // Remove localStorage
+                        win.localStorage.clear();
+
+                        // Use it
+                        cy.visit(url);
+
+                        // Code is shown whereas it is hidden in the config
+                        cy.get("@columns").then(columns => {
+                            cy.get(`#${table_id} th`).should(
+                                "have.length",
+                                columns.length
+                            );
+                            cy.get(`#${table_id} th`).contains("Name");
+                            cy.get(`#${table_id} th`).contains("Code");
+
+                            // Hide "Name"
+                            cy.get(
+                                `#${table_id}_wrapper .buttons-colvis`
+                            ).click();
+                            cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                                .contains("Name")
+                                .click();
+                        });
+
+                        // Go to the shareable link
+                        // but do not remove localStorage!
+                        cy.visit(url);
+
+                        // Name is hidden and Code is shown
+                        cy.get("@columns").then(columns => {
+                            cy.get(`#${table_id} th`).should(
+                                "have.length",
+                                columns.length
+                            );
+
+                            cy.get(`#${table_id} th`).contains("Name");
+                            cy.get(`#${table_id} th`).contains("Code");
+                        });
+                    });
+                });
+            });
+        });
     });
 
     describe("Patrons search", () => {
