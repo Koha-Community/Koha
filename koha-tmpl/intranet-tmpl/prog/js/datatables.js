@@ -728,6 +728,10 @@ function _dt_buttons(params){
     );
 
     if ( table_settings ) {
+        const writeToClipboard= async (text, node) => {
+            await navigator.clipboard.writeText(text);
+            $(node).tooltip({trigger: 'manual', title: __("Copied!")}).tooltip('show');
+        };
         buttons.push(
             {
                 autoClose: true,
@@ -745,10 +749,10 @@ function _dt_buttons(params){
                     delete state.time;
                     let searchParams = new URLSearchParams(window.location.search);
                     searchParams.set(table_key + '_state', btoa(state));
+
                     let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
                     if( navigator.clipboard && navigator.clipboard.writeText){
-                        navigator.clipboard.writeText( url );
-                        $(node).tooltip({trigger: 'manual', title: __("Copied!")}).tooltip('show');
+                        writeToClipboard(url, node);
                     }
                 },
             }

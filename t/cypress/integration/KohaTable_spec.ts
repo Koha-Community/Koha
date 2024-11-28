@@ -268,8 +268,10 @@ describe("kohaTable (using REST API)", () => {
                     // Close the 'Columns' list
                     cy.get(".dt-button-background").click();
                     cy.get(".dt-button-background").should("not.exist");
+                    cy.wait(500); // ensure the animation completes, random failures?
 
                     // Copy the shareable link (Name and Code shown)
+                    cy.window().focus();
                     cy.get(
                         `#${table_id}_wrapper .copyConditions_controls`
                     ).click({ force: true });
