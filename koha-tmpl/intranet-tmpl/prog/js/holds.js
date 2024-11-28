@@ -143,8 +143,7 @@ $(document).ready(function () {
         var holds = new Array();
         if (!holdsTable) {
             var title;
-            holdsTable = KohaTable(
-                "holds-table",
+            holdsTable = $("#holds-table").kohaTable(
                 {
                     autoWidth: false,
                     dom: '<"table_controls"B>rt',

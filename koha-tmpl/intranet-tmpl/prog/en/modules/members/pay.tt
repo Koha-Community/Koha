@@ -226,7 +226,6 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
@@ -281,10 +280,13 @@
             });
 
             var table_settings = [% TablesSettings.GetTableSettings('members', 'pay', 'pay-fines-table', 'json') | $raw %];
-            KohaTable("finest", {
-                "paging": false,
-                "autoWidth": false
-            }, table_settings );
+            $("#finest").kohaTable(
+                {
+                    paging: false,
+                    autoWidth: false,
+                },
+                table_settings
+            );
         });
     </script>
 [% END %]

@@ -375,7 +375,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'select2.inc' %]
     <script>
         var authorised_values = [% authorised_values_json | $raw %];
@@ -644,7 +643,7 @@
             };
 
             var table_settings = [% TablesSettings.GetTableSettings( 'catalogue', 'itemsearch', 'results', 'json' ) | $raw %];
-            KohaTable('results' , {
+            $('#results').kohaTable( {
                 "bKohaColumnsUseNames": true,
                 "destroy": true,
                 "serverSide": true,

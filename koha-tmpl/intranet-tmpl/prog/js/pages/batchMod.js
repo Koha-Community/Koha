@@ -1,4 +1,4 @@
-/* global KohaTable allColumns Cookies */
+/* global kohaTable allColumns Cookies */
 // Set expiration date for cookies
 var date = new Date();
 date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000);
@@ -170,7 +170,7 @@ function hideAllColumns() {
 }
 
 $(document).ready(function () {
-    var items_table = KohaTable("itemst", {
+    var items_table = $("#itemst").kohaTable({
         columnDefs: [
             { targets: [0, 1], orderable: false, searchable: true },
             { targets: [0], visible: false },

@@ -360,7 +360,6 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/file-upload.js") | $raw %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;
@@ -493,8 +492,7 @@
             table_settings['columns'].splice(5, 1);
         [% END %]
         $(document).ready(function() {
-            KohaTable("uploadresults",{
-            }, table_settings);
+            $("#uploadresults").kohaTable({}, table_settings);
 
             [% IF msg %]
                 ShowAlerts( [% msg | html %] );

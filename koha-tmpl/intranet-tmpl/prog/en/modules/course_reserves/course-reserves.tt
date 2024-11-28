@@ -93,14 +93,16 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'courses', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function() {
-            var ctable = KohaTable("course_reserves_table", {
-                "pagingType": "full",
-                "autoWidth": false
-            }, table_settings );
+            var ctable = $("#course_reserves_table").kohaTable(
+                {
+                    pagingType: "full",
+                    autoWidth: false,
+                },
+                table_settings
+            );
         });
     </script>
 [% END %]

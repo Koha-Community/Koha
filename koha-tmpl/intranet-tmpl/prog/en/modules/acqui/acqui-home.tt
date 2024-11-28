@@ -206,13 +206,12 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         dt_overwrite_html_sorting_localeCompare();
 
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'acq_acqui-home', 'accounts', 'json' ) | $raw %];
-            var oTable = KohaTable("accounts", {
+            var oTable = $("#accounts").kohaTable({
                 "drawCallback": function ( oSettings ) {
                     if ( oSettings.aiDisplay.length == 0 )
                     {

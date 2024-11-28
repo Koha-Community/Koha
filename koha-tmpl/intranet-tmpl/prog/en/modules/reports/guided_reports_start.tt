@@ -1699,7 +1699,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% IF ( saved1 ) %]
-        [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js( "lib/jsdiff/jsdiff.min.js" ) | $raw %]
     [% END %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
@@ -2153,15 +2152,17 @@
 
             [% IF (saved1) %]
                 var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
-                var rtable = KohaTable("table_reports", {
-                    "autoWidth": false,
-                    "pagingType": 'full',
-                    "order": [[ 1, "asc" ]],
-                    "language": {
-                        "zeroRecords": _("No matching reports found")
+                var rtable = $("#table_reports").kohaTable(
+                    {
+                        autoWidth: false,
+                        pagingType: "full",
+                        order: [[1, "asc"]],
+                        language: {
+                            zeroRecords: _("No matching reports found"),
+                        },
                     },
-
-                }, table_settings);
+                    table_settings
+                );
                 let table_dt = rtable.DataTable();
 
                 $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {

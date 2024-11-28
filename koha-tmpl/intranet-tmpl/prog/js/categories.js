@@ -33,8 +33,7 @@ jQuery.validator.addMethod(
 );
 
 $(document).ready(function () {
-    KohaTable(
-        "patron_categories",
+    $("#patron_categories").kohaTable(
         {
             columnDefs: [
                 {

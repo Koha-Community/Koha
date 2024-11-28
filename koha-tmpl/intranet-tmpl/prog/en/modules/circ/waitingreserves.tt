@@ -186,7 +186,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var MSG_CANCEL_SELECTED = _("Cancel selected (%s)");
         var holdst_table_settings  = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdst',  'json' ) | $raw %];
@@ -194,21 +193,29 @@
         var holdscr_table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holds_awaiting_pickup', 'holdscr', 'json' ) | $raw %];
 
         $(document).ready(function() {
+            $("#holdst").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[1, "asc"]],
+                },
+                holdst_table_settings
+            );
 
-            KohaTable("holdst", {
-                "pagingType": "full",
-                "order": [[1, 'asc']]
-            }, holdst_table_settings);
+            $("#holdso").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[1, "asc"]],
+                },
+                holdso_table_settings
+            );
 
-            KohaTable("holdso", {
-                "pagingType": "full",
-                "order": [[1, 'asc']]
-            }, holdso_table_settings);
-
-            KohaTable("holdscr", {
-                "pagingType": "full",
-                "order": [[1, 'asc']]
-            }, holdscr_table_settings);
+            $("#holdscr").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[1, "asc"]],
+                },
+                holdscr_table_settings
+            );
 
             let cancel_link;
 

@@ -407,7 +407,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function checkForm() {
             if ( $('#uploadbarcodes').val() && $('#barcodelist').val() ) {
@@ -461,7 +460,7 @@
 
         $(document).ready(function(){
             var table_settings = [% TablesSettings.GetTableSettings( 'tools', 'inventory', 'inventoryt', 'json' ) | $raw %];
-            inventorydt = KohaTable("inventoryt", {
+            inventorydt = $("#inventoryt").kohaTable({
                 "pagingType": 'full_numbers',
                 [% IF compareinv2barcd %]
                     // sort on callnumber

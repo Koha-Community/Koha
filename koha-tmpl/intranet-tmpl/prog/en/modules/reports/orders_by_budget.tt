@@ -168,13 +168,15 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'orders_by_fund', 'funds-table', 'json' ) | $raw %];
         $(document).ready( function () {
-            var funds_table = KohaTable("funds", {
-                'autoWidth': false,
-            }, table_settings );
+            var funds_table = $("#funds").kohaTable(
+                {
+                    autoWidth: false,
+                },
+                table_settings
+            );
 
             showallbudgets = $('#budgetfilter').html();
             $('#budgetfilter .b_inactive').remove();

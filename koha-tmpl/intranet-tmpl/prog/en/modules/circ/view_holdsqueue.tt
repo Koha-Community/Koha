@@ -347,7 +347,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
             var holdst;
@@ -366,11 +365,14 @@
             $('#holdst thead input').on('change keyup keydown', filterColumn);
 
             var table_settings = [% TablesSettings.GetTableSettings('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
-            var holdst = KohaTable("holdst", {
-                "dom": 'B<"clearfix">t',
-                "orderCellsTop":  true,
-                "paginate": false
-            }, table_settings);
+            var holdst = $("#holdst").kohaTable(
+                {
+                    dom: 'B<"clearfix">t',
+                    orderCellsTop: true,
+                    paginate: false,
+                },
+                table_settings
+            );
 
         });
     </script>

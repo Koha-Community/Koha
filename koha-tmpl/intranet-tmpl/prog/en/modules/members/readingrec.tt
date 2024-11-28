@@ -160,7 +160,6 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'modals/checkout_renewals.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% INCLUDE 'js-patron-format.inc' %]
@@ -168,15 +167,19 @@
     <script id="js">
         $(document).ready(function() {
             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
+                // FIXME This cannot work without bKohaColumnsUseNames
                 var column_sort = 11;
             [% ELSE %]
                 var column_sort = 10;
             [% END %]
             var table_settings = [% TablesSettings.GetTableSettings('members', 'checkouthistory', 'checkouthistory-table', 'json') | $raw %];
-            var table = KohaTable("table_readingrec", {
-                "pagingType": "full",
-                "order": [[column_sort, 'desc']]
-            }, table_settings);
+            var table = $("#table_readingrec").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[column_sort, "desc"]],
+                },
+                table_settings
+            );
 
             let table_dt = table.DataTable();
             $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {

@@ -1,5 +1,5 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form no_op_set code interface theme KohaTable table_settings */
+/* global _ module add_form copy_form no_op_set code interface theme kohaTable table_settings */
 
 var modal_loading =
     '<div id="loading"><img src="' +
@@ -82,8 +82,7 @@ function confirmFormatOverwrite(event) {
 }
 
 $(document).ready(function () {
-    var ntable = KohaTable(
-        "lettert",
+    var ntable = $("#lettert").kohaTable(
         {
             autoWidth: false,
             paging: false,

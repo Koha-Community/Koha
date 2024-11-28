@@ -1426,11 +1426,10 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'format_price.inc' %]
     <script>
         $(document).ready(function () {
-            KohaTable("default-circulation-rules", {
+            $("#default-circulation-rules").kohaTable({
                 columnDefs: [
                     { visible: false, targets: [0, 2] },
                     { orderable: false, targets: ["_all"] },

@@ -272,21 +272,21 @@
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'z3950_search.inc' %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function(){
             var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
-            var thetable = KohaTable("resultst", {
-                "columnDefs": [
-                    { "targets": [ 1 ], "type": "nsb-nse" },
-                ],
-                "paginate": false,
-                "searching": false,
-                "info": false
-            }, table_settings );
+            var thetable = $("#resultst").kohaTable(
+                {
+                    columnDefs: [{ targets: [1], type: "nsb-nse" }],
+                    paginate: false,
+                    searching: false,
+                    info: false,
+                },
+                table_settings
+            );
             InitLastAction();
         });
 

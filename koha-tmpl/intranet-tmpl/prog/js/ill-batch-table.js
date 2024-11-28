@@ -45,9 +45,8 @@
     }
 
     // Initialise the Datatable
-    // FIXME: This should be a kohaTable not KohaTable
     var initTable = function () {
-        return KohaTable("ill-batch-requests", {
+        return $("#ill-batch-requests").kohaTable({
             data: batchesProxy.data,
             columns: [
                 {

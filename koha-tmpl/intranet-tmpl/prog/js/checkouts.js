@@ -54,8 +54,7 @@ function LoadIssuesTable() {
             c => c.columnname == "export"
         ).is_hidden = 1;
     }
-    issuesTable = KohaTable(
-        "issues-table",
+    issuesTable = $("#issues-table").kohaTable(
         {
             language: {
                 emptyTable: msg_loading,
@@ -1089,8 +1088,7 @@ $(document).ready(function () {
     var relativesIssuesTable;
     $("#relatives-issues-tab").click(function () {
         if (!relativesIssuesTable) {
-            relativesIssuesTable = KohaTable(
-                "relatives-issues-table",
+            relativesIssuesTable = $("#relatives-issues-table").kohaTable(
                 {
                     autoWidth: false,
                     dom: '<"table_controls"B>rt',

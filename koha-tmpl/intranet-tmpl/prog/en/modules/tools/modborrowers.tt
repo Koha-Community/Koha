@@ -483,7 +483,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("js/members-patron-selections.js") | $raw %]
     <script>
@@ -501,10 +500,13 @@
         [% END %]
         $(document).ready(function() {
             [% IF borrowers %]
-                let patron_table = KohaTable("borrowerst", {
-                    "order": [[ 1, "asc" ]],
-                    "autoWidth": true,
-                }, table_settings);
+                let patron_table = $("#borrowerst").kohaTable(
+                    {
+                        order: [[1, "asc"]],
+                        autoWidth: true,
+                    },
+                    table_settings
+                );
 
                 $("#selectallbutton").click(function() {
                     $("#borrowerst").find("input:checkbox").each(function() {

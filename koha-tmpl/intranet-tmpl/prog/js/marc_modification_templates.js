@@ -1,4 +1,4 @@
-/* global __ KohaTable table_settings */
+/* global __ kohaTable table_settings */
 $(document).ready(function () {
     window.modaction_legend_innerhtml = $("#modaction_legend").text();
     window.action_submit_value = $("#action_submit").val();
@@ -139,7 +139,7 @@ $(document).ready(function () {
         updateAllEvery();
     });
 
-    KohaTable("templatest", {}, table_settings);
+    $("#templatest").kohaTable({}, table_settings);
 
     $(".confirm-delete-action").on("click", function () {
         return confirm(

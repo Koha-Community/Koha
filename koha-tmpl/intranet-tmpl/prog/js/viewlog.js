@@ -120,8 +120,7 @@ $(document).ready(function () {
         }
     });
 
-    var logst = KohaTable(
-        "logst",
+    var logst = $("#logst").kohaTable(
         {
             autoWidth: false,
             order: [[0, "desc"]],

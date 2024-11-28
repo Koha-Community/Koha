@@ -312,7 +312,6 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/acq.js") | $raw %]
     [% Asset.js("js/funds_sorts.js") | $raw %]
     <script>
@@ -329,8 +328,8 @@
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
             $('span.hint').hide();
-            KohaTable("table_orders", {
-                "paginate": false
+            $("#table_orders").kohaTable({
+                paginate: false,
             });
 
             [% IF op == 'search' OR op == 'select' %]

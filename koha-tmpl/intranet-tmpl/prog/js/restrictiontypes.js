@@ -26,7 +26,7 @@ jQuery.validator.addMethod(
 );
 
 $(document).ready(function () {
-    KohaTable("restriction_types", {
+    $("#restriction_types").kohaTable({
         columnDefs: [
             {
                 targets: [-1],

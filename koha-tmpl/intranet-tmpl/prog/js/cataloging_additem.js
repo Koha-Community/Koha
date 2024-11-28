@@ -1,4 +1,4 @@
-/* global KOHA searchid biblionumber frameworkcode popup op LABEL_EDIT_ITEM LABEL_DELETE_ITEM MSG_FORM_NOT_SUBMITTED MSG_MANDATORY_FIELDS_EMPTY MSG_ADD_MULTIPLE_ITEMS MSG_ENTER_NUM_ITEMS MSG_CONFIRM_DELETE_ITEM MSG_CONFIRM_ADD_ITEM columns_settings CheckMandatorySubfields CheckMultipleAdd */
+/* global KOHA searchid biblionumber frameworkcode popup op LABEL_EDIT_ITEM LABEL_DELETE_ITEM MSG_FORM_NOT_SUBMITTED MSG_MANDATORY_FIELDS_EMPTY MSG_ADD_MULTIPLE_ITEMS MSG_ENTER_NUM_ITEMS MSG_CONFIRM_DELETE_ITEM MSG_CONFIRM_ADD_ITEM table_settings CheckMandatorySubfields CheckMultipleAdd */
 
 var browser = KOHA.browser(searchid, parseInt(biblionumber, 10));
 browser.show();
@@ -58,8 +58,7 @@ $(document).ready(function () {
     // Skip the first column
     table_settings["columns"].unshift({ cannot_be_toggled: "1" });
 
-    var itemst = KohaTable(
-        "itemst",
+    var itemst = $("#itemst").kohaTable(
         {
             paging: false,
             info: false,

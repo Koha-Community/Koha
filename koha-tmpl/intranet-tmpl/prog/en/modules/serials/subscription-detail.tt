@@ -454,7 +454,6 @@
     [% Asset.js("js/mana.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         // the english words used in display purposes
         var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose hemisphere:"),_("Northern"),_("Southern",
@@ -467,16 +466,18 @@
             })
 
             var table_settings = [% TablesSettings.GetTableSettings( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
-            var table = KohaTable("orders", {
-                "columnDefs": [
-                    { "visible": false, "targets": [ 'NoVisible' ] },
-                    { "orderable": false, "targets": ["_all"] },
-                ],
-
-                "paginate": false,
-                "autoWidth": false,
-                "ordering": false,
-            }, table_settings);
+            var table = $("#orders").kohaTable(
+                {
+                    columnDefs: [
+                        { visible: false, targets: ["NoVisible"] },
+                        { orderable: false, targets: ["_all"] },
+                    ],
+                    paginate: false,
+                    autoWidth: false,
+                    ordering: false,
+                },
+                table_settings
+            );
 
             [% IF orders_grouped.size %]
                 $(table).treetable({

@@ -341,7 +341,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function changeRemovedDateTrStatus() {
             var Cellvalue = $("input[name='Cellvalue']:checked").val();
@@ -365,6 +364,7 @@
             });
             changeRemovedDateTrStatus();
 
+            // FIXME This does not work, we need to pass table settings, not the columns
             columns_settings = [% FILTER collapse %]
                 [
                     {
@@ -390,10 +390,13 @@
                 ];
             [% END %]
 
-            var catalogue_stats = KohaTable("catalogue_stats", {
-                'autoWidth': false,
-                'paging': false,
-            }, columns_settings );
+            var catalogue_stats = $("#catalogue_stats").kohaTable(
+                {
+                    autoWidth: false,
+                    paging: false,
+                },
+                columns_settings
+            );
         });
     </script>
 [% END %]

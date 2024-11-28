@@ -121,7 +121,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
@@ -131,10 +130,13 @@
               //Remove item type column settings
               table_settings['columns'] = table_settings['columns'].filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
-            var table = KohaTable("table_holdshistory", {
-                "pagingType": "full",
-                "order": [[4, 'desc']]
-            }, table_settings);
+            var table = $("#table_holdshistory").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[4, "desc"]],
+                },
+                table_settings
+            );
         });
     </script>
 [% END %]

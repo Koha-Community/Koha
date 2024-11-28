@@ -373,7 +373,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     <script>
         var late_orderst;
@@ -390,7 +389,7 @@
         $(document).ready(function() {
 
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'lateorders', 'late_orders', 'json' ) | $raw %];
-            late_orderst = KohaTable("late_orders", {
+            late_orderst = $("#late_orders").kohaTable({
                 "sorting": [[ 1, "asc" ]],
                 "pagingType": "full",
                 "autoWidth": false,

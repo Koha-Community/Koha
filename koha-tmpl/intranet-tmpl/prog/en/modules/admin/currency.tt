@@ -266,7 +266,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function check_currency(val) {
             if ( val == 1.0 ) {
@@ -280,9 +279,8 @@
         }
 
         $(document).ready(function() {
-            columns_settings = [% TablesSettings.GetTableSettings( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
-            var issuest = KohaTable("currencies-table", {
-            }, columns_settings );
+            let table_settings = [% TablesSettings.GetTableSettings( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
+            $("#currencies-table").kohaTable({}, table_settings);
 
             // prevents users to check active with a currency != 1
             $("#rate").keyup(function() {

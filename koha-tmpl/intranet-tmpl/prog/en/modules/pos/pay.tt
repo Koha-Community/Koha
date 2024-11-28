@@ -248,7 +248,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function moneyFormat(textObj) {
             var newValue = textObj.value;
@@ -437,11 +436,15 @@
             });
 
             var items_table_settings = [% TablesSettings.GetTableSettings('pos', 'pay', 'invoices', 'json') | $raw %];
-            var items_table = KohaTable("invoices", {
-                   "pagingType": "full",
-                   "order": [[ 0, "asc" ]],
-                   "autoWidth": false
-            }, items_table_settings, false);
+            var items_table = $("#invoices").kohaTable(
+                {
+                    pagingType: "full",
+                    order: [[0, "asc"]],
+                    autoWidth: false,
+                },
+                items_table_settings,
+                false
+            );
 
             $("#invoices").on("click", ".add_button", function(e) {
                 e.preventDefault();

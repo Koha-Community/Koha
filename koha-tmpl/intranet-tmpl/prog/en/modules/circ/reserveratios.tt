@@ -214,19 +214,24 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
          $(document).ready(function() {
-             KohaTable("holds-ratios", {
-                 "order": [ [2,'desc'], [3,'asc'] ],
-                   "columnDefs": [
-                       { "type": "anti-the", "targets":  [ "anti-the" ] },
-                       { "type": "natural", "targets":  [ "natural" ] },
+             $("#holds-ratios").kohaTable(
+                 {
+                     order: [
+                         [2, "desc"],
+                         [3, "asc"],
                      ],
-                 "pagingType": "full",
-                 "autoWidth": false
-             }, table_settings);
+                     columnDefs: [
+                         { type: "anti-the", targets: ["anti-the"] },
+                         { type: "natural", targets: ["natural"] },
+                     ],
+                     pagingType: "full",
+                     autoWidth: false,
+                 },
+                 table_settings
+             );
         });
     </script>
 [% END %]

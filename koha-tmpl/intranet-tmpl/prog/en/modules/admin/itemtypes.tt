@@ -535,7 +535,6 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
            var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
@@ -544,9 +543,12 @@
            [% END %]
 
            $(document).ready(function() {
-               KohaTable("table_item_type", {
-               "pagingType": "full"
-               }, table_settings);
+               $("#table_item_type").kohaTable(
+                   {
+                       pagingType: "full",
+                   },
+                   table_settings
+               );
            });
 
            $( "#itemtypeentry" ).validate({

@@ -292,7 +292,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         function get_options(column){
             let regex = /(<([^>]+)>)/ig; // Remove html tags
@@ -319,12 +318,18 @@
 
 
             var table_settings = [% TablesSettings.GetTableSettings('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
-            var holdst = KohaTable("holdst", {
-                "pagingType": "full_numbers",
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
-                ],
-            }, table_settings, true, null, filters_options);
+            var holdst = $("#holdst").kohaTable(
+                {
+                    pagingType: "full_numbers",
+                    columnDefs: [
+                        { orderable: false, searchable: false, targets: ["NoSort"] },
+                    ],
+                },
+                table_settings,
+                true,
+                null,
+                filters_options
+            );
         });
     </script>
 [% END %]

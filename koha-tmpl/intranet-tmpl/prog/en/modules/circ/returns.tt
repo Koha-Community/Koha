@@ -1466,7 +1466,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/pages/circulation.js") | $raw %]
     [% Asset.js("js/modal_printer.js") | $raw %]
@@ -1527,13 +1526,16 @@
                 Dopop('/cgi-bin/koha/recalls/recall_pickup_slip.pl?recall_id=[% recall_id | uri %]');
             [% END %]
 
-            var returns_table = KohaTable("checkedintable", {
-                    "searching":false,
-                    "paginate":false,
-                    "info": false,
-                    "ordering":false,
-                    "dom": '<"table_controls"B>rt',
-                    }, table_settings);
+            var returns_table = $("#checkedintable").kohaTable(
+                {
+                    searching: false,
+                    paginate: false,
+                    info: false,
+                    ordering: false,
+                    dom: '<"table_controls"B>rt',
+                },
+                table_settings
+            );
 
             $("#exemptcheck").change(function () {
                 if (this.checked == true) {

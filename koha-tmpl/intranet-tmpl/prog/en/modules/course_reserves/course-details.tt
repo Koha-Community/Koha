@@ -331,7 +331,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
@@ -345,10 +344,13 @@
                 $('#rm_items').submit();
             });
 
-            var rtable = KohaTable("course_reserves_table", {
-                "pagingType": "full",
-                "autoWidth": false,
-            }, table_settings );
+            var rtable = $("#course_reserves_table").kohaTable(
+                {
+                    pagingType: "full",
+                    autoWidth: false,
+                },
+                table_settings
+            );
 
             $("#course_reserves_table").on( 'click', " .delete_item", function(e){
                 e.preventDefault();

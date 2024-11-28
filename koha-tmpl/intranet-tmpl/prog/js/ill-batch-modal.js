@@ -1003,7 +1003,7 @@
     }
 
     function buildTable(identifiers) {
-        table = KohaTable("identifier-table", {
+        table = $("#identifier-table").kohaTable({
             processing: true,
             ordering: false,
             paging: false,

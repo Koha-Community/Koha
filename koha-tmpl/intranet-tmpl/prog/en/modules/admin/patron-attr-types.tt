@@ -406,7 +406,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function () {
             function toggle_search_default() {
@@ -460,8 +459,7 @@
 
             $(".patron_attributes_types").each(function () {
                 var tableid = $(this).attr("id");
-                KohaTable(
-                    tableid,
+                $(tableid).kohaTable(
                     {
                         paginate: false,
                         autoWidth: false,

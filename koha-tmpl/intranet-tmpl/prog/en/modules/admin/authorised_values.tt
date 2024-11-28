@@ -403,10 +403,9 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function () {
-            KohaTable("categoriest", {
+            $("#categoriest").kohaTable({
                 order: [[0, "asc"]],
                 pagingType: "full",
             });

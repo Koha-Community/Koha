@@ -284,7 +284,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
             //Set focus to cataloging search
@@ -329,9 +328,12 @@
             });
 
             var table_settings = [% TablesSettings.GetTableSettings( 'cataloguing', 'addbooks', 'reservoir-table', 'json' ) | $raw %]
-            var reservoirt = KohaTable("reservoir-table", {
-                "pagingType": "simple"
-            }, table_settings );
+            var reservoirt = $("#reservoir-table").kohaTable(
+                {
+                    pagingType: "simple",
+                },
+                table_settings
+            );
         });
 
         /* this function open a popup to search on z3950 server.  */

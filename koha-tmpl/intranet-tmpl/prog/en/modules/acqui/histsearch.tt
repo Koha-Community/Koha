@@ -167,14 +167,16 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
-            KohaTable("histsearcht", {
-                "pagingType": "full"
-            }, table_settings );
+            $("#histsearcht").kohaTable(
+                {
+                    pagingType: "full",
+                },
+                table_settings
+            );
 
             function AddPatron( patron_name, value, container, input_name ) {
                 div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash-can' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";

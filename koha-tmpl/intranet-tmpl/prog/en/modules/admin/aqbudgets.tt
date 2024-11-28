@@ -676,12 +676,11 @@
         [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1, table_id => 'patron_search_modal_owner_table' %]
     [% ELSIF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
         <script>
             $(document).ready(function() {
                 [% IF budgets %]
-                    var oTable = KohaTable("budgeth", {
+                    var oTable = $("#budgeth").kohaTable({
                         "drawCallback": function ( oSettings ) {
                             if ( oSettings.aiDisplay.length == 0 )
                             {

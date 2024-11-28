@@ -193,23 +193,27 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
             var table_settings = [% TablesSettings.GetTableSettings( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
             [% IF csv_profiles.count %]
                 // Add the first (checkbox) column if it is displayed
+                // FIXME This cannot work without bKohaColumnsUseNames
                 table_settings['columns'].unshift({cannot_be_modified: 1, cannot_be_toggled: 1, columnname: 'itemnumber', is_hidden: 0});
             [% END %]
 
-            var lostitems_table = KohaTable("lostitems-table", {
-                "order": [],
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] }
-                ],
-                "autoWidth": false,
-                "paginate": false,
-            }, table_settings, 'with_filters');
+            var lostitems_table = $("#lostitems-table").kohaTable(
+                {
+                    order: [],
+                    columnDefs: [
+                        { orderable: false, searchable: false, targets: ["NoSort"] },
+                    ],
+                    autoWidth: false,
+                    paginate: false,
+                },
+                table_settings,
+                "with_filters"
+            );
 
             function itemSelectionBuildExportLink() {
                 var itemnumbers = new Array();

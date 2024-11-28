@@ -172,30 +172,38 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'slip-print.inc' #printThenClose %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var checkouts_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-checkouts', 'json' ) | $raw %];
         var holds_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-holds', 'json' ) | $raw %];
         var fines_columns = [% TablesSettings.GetTableSettings( 'circ', 'print_summary', 'print-summary-fines', 'json' ) | $raw %];
 
         function initTables(){
-            KohaTable("print-summary-checkouts", {
-                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
-                "paging": false,
-                "autoWidth": false,
-            }, checkouts_columns);
+            $("#print-summary-checkouts").kohaTable(
+                {
+                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
+                    paging: false,
+                    autoWidth: false,
+                },
+                checkouts_columns
+            );
 
-            KohaTable("print-summary-holds", {
-                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
-                "paging": false,
-                "autoWidth": false,
-            }, holds_columns);
+            $("#print-summary-holds").kohaTable(
+                {
+                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
+                    paging: false,
+                    autoWidth: false,
+                },
+                holds_columns
+            );
 
-            KohaTable("print-summary-fines", {
-                "dom": '<"dt-info"><"top pager"<"table_controls"B>>t',
-                "paging": false,
-                "autoWidth": false,
-            }, fines_columns);
+            $("#print-summary-fines").kohaTable(
+                {
+                    dom: '<"dt-info"><"top pager"<"table_controls"B>>t',
+                    paging: false,
+                    autoWidth: false,
+                },
+                fines_columns
+            );
         }
 
         if( autoprint ){

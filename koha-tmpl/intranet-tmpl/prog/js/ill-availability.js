@@ -248,7 +248,7 @@ $(document).ready(function () {
                     .find(".dt-paging");
                 pagination.toggle(this.api().page.info().pages > 1);
             };
-            KohaTable(service.id, tableDef, table_settings);
+            $("#" + service.id).kohaTable(tableDef, table_settings);
         });
     };
 });

@@ -6,7 +6,6 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
 <title
     >[% FILTER collapse %]
         [% list.name | html %]
@@ -241,9 +240,12 @@
             $('#patrons_to_add_fieldset').hide();
 
                 var table_settings = [% TablesSettings.GetTableSettings('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
-                KohaTable('patron-list-table', {
-                    "pagingType": "full"
-                }, table_settings);
+                $("#patron-list-table").kohaTable(
+                    {
+                        pagingType: "full",
+                    },
+                    table_settings
+                );
 
             function AddPatron( patron_name, value, container, input_name ) {
                 div = "<div id='borrower_" + value + "'>" + patron_name + " ( <a href='#' class='removePatron'><i class='fa fa-trash-can' aria-hidden='true'></i> " + MSG_REMOVE_PATRON + " </a> ) <input type='hidden' name='" + input_name + "' value='" + value + "' /></div>";

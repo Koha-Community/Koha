@@ -417,14 +417,13 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function () {
             $(".delete").click(function () {
                 return confirm(_("Are you sure you want to delete this delivery?"));
             });
         });
-        KohaTable("deliveries", {
+        $("#deliveries").kohaTable({
             pagingType: "full",
             autoWidth: false,
         });

@@ -1,4 +1,4 @@
-/* global KohaTable columns_settings Sortable */
+/* global kohaTable columns_settings Sortable */
 
 function init() {
     $("#ajax_status").hide();
@@ -71,8 +71,7 @@ $(document).ready(function () {
         });
     }
 
-    KohaTable(
-        "stock_rotation_manage_items",
+    $("#stock_rotation_manage_items").kohaTable(
         {
             columnDefs: [
                 { orderable: false, searchable: false, targets: ["NoSort"] },
@@ -84,8 +83,7 @@ $(document).ready(function () {
         stock_rotation_items_table_settings
     );
 
-    KohaTable(
-        "stock_rotation",
+    $("#stock_rotation").kohaTable(
         {
             columnDefs: [
                 { orderable: false, searchable: false, targets: ["NoSort"] },

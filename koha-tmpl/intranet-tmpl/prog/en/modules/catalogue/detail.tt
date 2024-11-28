@@ -1700,7 +1700,6 @@
 </script>
     [% END %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'js-date-format.inc' %]
     [% Asset.js("lib/dayjs/plugin/isSameOrAfter.js") | $raw %]
     [% Asset.js("lib/dayjs/plugin/isSameOrBefore.js") | $raw %]
@@ -2072,12 +2071,15 @@
 
             [% IF Koha.Preference('AcquisitionDetails') %]
                 var table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'acquisitiondetails-table', 'json') | $raw %];
-                var acquisitiondetails_table = KohaTable("orders", {
-                    "dom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-                    "paginate": false,
-                    "autoWidth": false,
-                    "order": [[ 4, "desc" ]],
-                }, table_settings);
+                var acquisitiondetails_table = $("#orders").kohaTable(
+                    {
+                        dom: 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                        paginate: false,
+                        autoWidth: false,
+                        order: [[4, "desc"]],
+                    },
+                    table_settings
+                );
             [% END %]
 
             [% IF suggestions.count %]
@@ -2092,11 +2094,14 @@
 
             [% IF ( reviews ) %]
                 var comment_table_settings = [% TablesSettings.GetTableSettings('catalogue', 'detail', 'comments-table', 'json') | $raw %];
-                var comments_table = KohaTable("comments_table", {
-                    "paginate": false,
-                    "autoWidth": false,
-                    "order": [[ 2, "desc" ]],
-                }, comment_table_settings);
+                var comments_table = $("#comments_table").kohaTable(
+                    {
+                        paginate: false,
+                        autoWidth: false,
+                        order: [[2, "desc"]],
+                    },
+                    comment_table_settings
+                );
             [% END %]
         });
 
