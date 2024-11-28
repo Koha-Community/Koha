@@ -334,32 +334,32 @@
         }
 
         $(document).ready(function() {
-            var osrlt = $("#opened_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pagingType": "full",
-                "order": [[ 2, "asc" ]],
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
-                    { "type": "anti-the", "targets":  [ 'anti-the'] }
-                ]
-            }));
+            var osrlt = $("#opened_panel table").kohaTable({
+                pagingType: "full",
+                order: [[2, "asc"]],
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+            });
 
-            var csrlt = $("#closed_panel table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var csrlt = $("#closed_panel table").kohaTable({
                 // FIXME sort function of additional_fields!
-                "order": [[ 2, "asc" ]],
-                "pagingType": "full",
-                "columnDefs": [
-                    { "orderable": false, "targets": [ 'NoSort' ] },
-                    { "type": "anti-the", "targets":  [ 'anti-the'] }
-                ]
-            }));
+                order: [[2, "asc"]],
+                pagingType: "full",
+                columnDefs: [
+                    { orderable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+            });
 
-            var manarlt = $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pagingType": "full",
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
-                    { "type": "anti-the", "targets":  [ 'anti-the'] }
-                ]
-            }));
+            var manarlt = $("#mana_results_datatable").kohaTable({
+                pagingType: "full",
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+            });
 
             $("#reopensub").click(function(){
                 return confirm(_("Are you sure you want to reopen this subscription?"));

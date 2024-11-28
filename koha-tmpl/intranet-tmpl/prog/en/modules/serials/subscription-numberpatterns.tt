@@ -390,12 +390,10 @@
         }
         $(document).ready(function(){
 
-            $("#numberpatternst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ],
-                "pagingType": "full"
-            }));
+            $("#numberpatternst").kohaTable({
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                pagingType: "full",
+            });
 
             $(".delete_pattern").on("click",function(){
                 return confirmDelete();

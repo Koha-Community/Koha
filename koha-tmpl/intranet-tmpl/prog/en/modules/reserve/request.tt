@@ -1508,11 +1508,10 @@
                 });
             [% END %]
 
-            var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "paginate": false,
-                "dom": '<"top pager"ilf>t',
-            }));
-
+            var my_table = $("#requestspecific").kohaTable({
+                paginate: false,
+                dom: '<"top pager"ilf>t',
+            });
 
             $("#club-request-form").on("submit", function() {
                 let $t = $(this);

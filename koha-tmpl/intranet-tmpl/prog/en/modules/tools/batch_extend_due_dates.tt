@@ -267,29 +267,25 @@
 
             $("#selectall").click();
 
-            $("#checkouts").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { targets: [0, 3], orderable: false, searchable: false },
-                        { targets: [1], type: "num-html" },
-                    ],
-                    dom: "t",
-                    order: [],
-                    paginate: false,
-                })
-            );
+            $("#checkouts").kohaTable({
+                columnDefs: [
+                    { targets: [0, 3], orderable: false, searchable: false },
+                    { targets: [1], type: "num-html" },
+                ],
+                dom: "t",
+                order: [],
+                paginate: false,
+            });
 
-            $("#checkouts_result").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { targets: [0, 3], orderable: false, searchable: false },
-                        { targets: [1], type: "num-html" },
-                    ],
-                    dom: "t",
-                    order: [],
-                    paginate: false,
-                })
-            );
+            $("#checkouts_result").kohaTable({
+                columnDefs: [
+                    { targets: [0, 3], orderable: false, searchable: false },
+                    { targets: [1], type: "num-html" },
+                ],
+                dom: "t",
+                order: [],
+                paginate: false,
+            });
 
             $("#extend_due_dates_form").on("submit", function (e) {
                 var new_hard_due_date = $("#new_hard_due_date").val();

@@ -556,25 +556,19 @@ function mana_search() {
         $("#mana_search_result_label").text(
             __("Results from Mana Knowledge Base")
         );
-        $("#mana_results_datatable").dataTable(
-            $.extend(true, {}, dataTablesDefaults, {
-                pagingType: "full",
-                order: [
-                    [4, "desc"],
-                    [5, "desc"],
-                ],
-                autoWidth: false,
-                columnDefs: [{ width: "35%", targets: 1 }],
-                columnDefs: [
-                    {
-                        orderable: false,
-                        searchable: false,
-                        targets: ["NoSort"],
-                    },
-                    { type: "anti-the", targets: ["anti-the"] },
-                ],
-            })
-        );
+        $("#mana_results_datatable").kohaTable({
+            pagingType: "full",
+            order: [
+                [4, "desc"],
+                [5, "desc"],
+            ],
+            autoWidth: false,
+            columnDefs: [{ width: "35%", targets: 1 }],
+            columnDefs: [
+                { orderable: false, searchable: false, targets: ["NoSort"] },
+                { type: "anti-the", targets: ["anti-the"] },
+            ],
+        });
         if (
             $("#mana_results_datatable").length &&
             $("td.dataTables_empty").length == 0

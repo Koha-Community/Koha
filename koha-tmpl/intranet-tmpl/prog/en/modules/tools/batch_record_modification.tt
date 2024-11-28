@@ -353,25 +353,25 @@
 
             $("#selectall").click();
 
-            $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [0, 3], "orderable": false, "searchable":  false },
-                    { "targets": [1], "type": "num-html" }
+            $("#biblios").kohaTable({
+                columnDefs: [
+                    { targets: [0, 3], orderable: false, searchable: false },
+                    { targets: [1], type: "num-html" },
                 ],
-                "dom": 't',
-                "order": [],
-                "paginate": false
-            }));
+                dom: "t",
+                order: [],
+                paginate: false,
+            });
 
-            $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [0, 3], "orderable": false, "searchable":  false },
-                    { "targets": [1], "type": "num-html" }
+            $("#authorities").kohaTable({
+                columnDefs: [
+                    { targets: [0, 3], orderable: false, searchable: false },
+                    { targets: [1], type: "num-html" },
                 ],
-                "dom": 't',
-                "order": [],
-                "paginate": false
-            }));
+                dom: "t",
+                order: [],
+                paginate: false,
+            });
 
             $("#mainformsubmit").click(function() {
                 if ($("input[type=checkbox][name='record_id']:checked").length == 0) {

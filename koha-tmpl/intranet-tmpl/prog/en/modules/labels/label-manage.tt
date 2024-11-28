@@ -216,13 +216,11 @@
             $(".delete").on("click", function(){
                 return confirmDelete( _("Are you sure you want to delete this?") );
             });
-            $("#labels-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "pagingType": "full",
-                "order": [[ 1, "asc" ]],
-                "columnDefs": [
-                    { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                ]
-            }));
+            $("#labels-table").kohaTable({
+                pagingType: "full",
+                order: [[1, "asc"]],
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+            });
         });
     </script>
 [% END %]

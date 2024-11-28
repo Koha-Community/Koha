@@ -3,16 +3,14 @@
 var importing = false;
 
 $(document).ready(function () {
-    $("#authtypes").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { targets: [-1], orderable: false, searchable: false },
-                { targets: [0, 1], type: "natural" },
-            ],
-            ordering: true,
-            pagingType: "full",
-        })
-    );
+    $("#authtypes").kohaTable({
+        columnDefs: [
+            { targets: [-1], orderable: false, searchable: false },
+            { targets: [0, 1], type: "natural" },
+        ],
+        ordering: true,
+        pagingType: "full",
+    });
 
     $("body").css("cursor", "auto");
     $(".import_export_options").hide();

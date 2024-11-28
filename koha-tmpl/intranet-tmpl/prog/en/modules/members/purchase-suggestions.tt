@@ -135,14 +135,12 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#suggestions").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    paginate: false,
-                    searching: false,
-                    info: false,
-                    dom: "t",
-                })
-            );
+            $("#suggestions").kohaTable({
+                paginate: false,
+                searching: false,
+                info: false,
+                dom: "t",
+            });
         });
     </script>
 [% END %]

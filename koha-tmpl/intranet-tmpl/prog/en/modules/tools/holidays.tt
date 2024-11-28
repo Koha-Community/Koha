@@ -608,20 +608,24 @@
                 var first_td = $(this).find('td').first();
                 first_td.html(weekdays[first_td.html()]);
             });
-            $("#holidayweeklyrepeatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "paginate": false
-            }));
-            var tables = $("#holidayexceptions, #holidaysyearlyrepeatable, #holidaysunique").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "paginate": false,
-                "createdRow": function( row, data, dataIndex ) {
+            $("#holidayweeklyrepeatable").kohaTable({
+                dom: "t",
+                paginate: false,
+            });
+
+            let dt_params = {
+                dom: "t",
+                paginate: false,
+                createdRow: function (row, data, dataIndex) {
                     var holiday = $(row).data("date");
-                    if( holiday < datestring ){
+                    if (holiday < datestring) {
                         $(row).addClass("date_past");
                     }
-                }
-            }));
+                },
+            };
+            $("#holidayexceptions").kohaTable(dt_params);
+            $("#holidaysyearlyrepeatable").kohaTable(dt_params);
+            $("#holidaysunique").kohaTable(dt_params);
 
             $(".show_past").on("change", function(){
                 tables.draw();

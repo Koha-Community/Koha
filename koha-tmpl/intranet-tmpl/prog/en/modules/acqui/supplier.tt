@@ -687,12 +687,12 @@
         }
 
          $(document).ready(function() {
-            var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] }
+            var contractst = $("#contractst").kohaTable({
+                columnDefs: [
+                    { orderable: false, searchable:  false, targets: [ 'NoSort' ] }
                 ],
-                "dom": 't'
-            } ) );
+                dom: 't'
+            } );
             $('body').on('click', '.delete-contact', null, delete_contact);
             $('#add-contact').click(add_contact);
             $('body').on('click', '.contact_acqprimary', null, function () {

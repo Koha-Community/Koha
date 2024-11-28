@@ -263,16 +263,14 @@
     [% Asset.js("js/acq.js") | $raw %]
     <script>
         $(document).ready(function () {
-            $("table.baskets").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    dom: "t",
-                    paginate: false,
-                    searching: false,
-                    info: false,
-                    order: [[1, "asc"]],
-                    columnDefs: [{ targets: [-1], orderable: false }],
-                })
-            );
+            $("table.baskets").kohaTable({
+                dom: "t",
+                paginate: false,
+                searching: false,
+                info: false,
+                order: [[1, "asc"]],
+                columnDefs: [{ targets: [-1], orderable: false }],
+            });
             $("#supplierlist").change(function () {
                 var id = $(this).find("option:selected").val();
                 window.location.href = "#vendor" + id;

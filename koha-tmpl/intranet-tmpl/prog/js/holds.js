@@ -105,7 +105,7 @@ function display_pickup_location(state) {
     };
 })(jQuery);
 
-/* global __ dataTablesDefaults borrowernumber SuspendHoldsIntranet */
+/* global __ borrowernumber SuspendHoldsIntranet */
 $(document).ready(function () {
     function suspend_hold(hold_id, end_date) {
         var params;

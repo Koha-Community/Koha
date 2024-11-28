@@ -265,14 +265,12 @@
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function () {
-            $("#resultst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    dom: "t",
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-                    order: [[1, "asc"]],
-                    paginate: false,
-                })
-            );
+            $("#resultst").kohaTable({
+                dom: "t",
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                order: [[1, "asc"]],
+                paginate: false,
+            });
             InitLastAction();
         });
     </script>

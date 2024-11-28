@@ -148,13 +148,11 @@
 
             let selectedPatronLists = new Array();
 
-            $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "autoWidth": false,
-                "columnDefs": [
-                    { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] }
-                ],
-                "pagingType": "full"
-            } ));
+            $("#patron-lists-table").kohaTable({
+                autoWidth: false,
+                columnDefs: [{ orderable: false, searchable: false, targets: ["NoSort"] }],
+                pagingType: "full",
+            });
             $(".delete_patron").on("click", function(){
                 $(".dropdown").removeClass("open");
                 var list = $(this).data("list-name");

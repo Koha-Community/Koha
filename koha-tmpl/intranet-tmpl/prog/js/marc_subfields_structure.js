@@ -1,4 +1,4 @@
-/* global dataTablesDefaults tagsubfield selectBsTabByHash */
+/* global tagsubfield selectBsTabByHash */
 $(document).ready(function () {
     if (tagsubfield && tagsubfield == "@") {
         $("#subfieldtabs a[href='#AT_panel']").tab("show");
@@ -29,13 +29,11 @@ $(document).ready(function () {
     $("input[id^='hidden-']").each(function () {
         populateHiddenCheckboxes($(this).attr("id").split("-")[1]);
     });
-    $("#table_marcsubfieldstructure").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [{ sortable: false, targets: ["NoSort"] }],
-            order: [],
-            paginate: false,
-        })
-    );
+    $("#table_marcsubfieldstructure").kohaTable({
+        columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+        order: [],
+        paginate: false,
+    });
 
     selectBsTabByHash("subfieldtabs");
 });

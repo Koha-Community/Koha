@@ -560,22 +560,20 @@
         }
 
         $(document).ready(function() {
-            $("#orderst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "info": false,
-                "paging": false,
-                "searching": false,
-                "dom": "t",
-                "columnDefs": [
-                    { "type": "anti-the", "targets": [ "anti-the" ] }
-                ]
-            }));
+            $("#orderst").kohaTable({
+                info: false,
+                paging: false,
+                searching: false,
+                dom: "t",
+                columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
+            });
             [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
-                $("#invoice_files_table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "info": false,
-                    "paging": false,
-                    "searching": false,
-                    "dom": "t"
-                }));
+                $("#invoice_files_table").kohaTable({
+                    info: false,
+                    paging: false,
+                    searching: false,
+                    dom: "t",
+                });
             [% END %]
             $("#show_all_details").click(function(){
                 updateColumnsVisibility( $(this).is(":checked") );

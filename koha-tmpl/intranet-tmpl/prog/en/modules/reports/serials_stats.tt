@@ -147,11 +147,9 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#resulttable").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    paginate: false,
-                })
-            );
+            $("#resulttable").kohaTable({
+                paginate: false,
+            });
         });
     </script>
 [% END %]

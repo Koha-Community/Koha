@@ -108,12 +108,10 @@
             }
         }
         $(document).ready(function () {
-            $("#kohafields").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-                    paging: false,
-                })
-            );
+            $("#kohafields").kohaTable({
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                paging: false,
+            });
 
             $(".addfld").on("click", function (e) {
                 e.preventDefault();

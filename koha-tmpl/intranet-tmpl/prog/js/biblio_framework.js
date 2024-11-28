@@ -4,16 +4,14 @@
 var importing = false;
 
 $(document).ready(function () {
-    $("#table_biblio_frameworks").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { targets: [-1], orderable: false, searchable: false },
-                { targets: [0, 1], type: "natural" },
-            ],
-            ordering: true,
-            pagingType: "full",
-        })
-    );
+    $("#table_biblio_frameworks").kohaTable({
+        columnDefs: [
+            { targets: [-1], orderable: false, searchable: false },
+            { targets: [0, 1], type: "natural" },
+        ],
+        ordering: true,
+        pagingType: "full",
+    });
 
     $("body").css("cursor", "auto");
     $(".import_export_options").hide();

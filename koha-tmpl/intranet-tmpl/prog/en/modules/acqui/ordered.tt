@@ -120,12 +120,10 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#spent").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
-                    pagingType: "full",
-                })
-            );
+            $("#spent").kohaTable({
+                columnDefs: [{ type: "anti-the", targets: ["anti-the"] }],
+                pagingType: "full",
+            });
         });
     </script>
 [% END %]

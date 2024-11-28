@@ -118,13 +118,13 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function() {
-           var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
-               "columnDefs": [
-                   { "targets": [ 0 ],  "visible": false, "searchable":  true }, // must be searchable for filtering
-                   { "targets": [ -1 ], "orderable": false, "searchable":  false },
+           var suggestionst = $("#suggestionst").kohaTable({
+               columnDefs: [
+                   { targets: [0], visible: false, searchable: true }, // must be searchable for filtering
+                   { targets: [-1], orderable: false, searchable: false },
                ],
-               "pagingType": "full"
-           }));
+               pagingType: "full",
+           });
            let table_dt = suggestionst.DataTable();
            $("#show_only_mine").on('click', function(e){
                e.preventDefault();

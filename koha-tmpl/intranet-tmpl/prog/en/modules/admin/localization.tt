@@ -198,14 +198,12 @@
         $(document).ready(function() {
             $(".dialog").hide();
 
-            var table = $("#localization").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "dom": 't',
-                "columnDefs": [
-                    { 'sortable': false, 'targets': [ 'NoSort' ] }
-                ],
-                "paginate": false,
-                'autoWidth': false,
-            }));
+            var table = $("#localization").kohaTable({
+                dom: "t",
+                columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+                paginate: false,
+                autoWidth: false,
+            });
 
             var languages_select = $('<select name="lang" id="lang"></select>');
             [% FOR language IN languages %]

@@ -369,19 +369,20 @@
             });
 
             if ( $("#receivedt").length ) {
-                var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "stateSave": true, // We do not have table settings on this table
-                    "pageLength": 10,
-                    "lengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
-                    "columnDefs": [
-                        { "targets": [ 5, -1 ], "orderable": false, "searchable":  false },
+                var receivedt = $("#receivedt").kohaTable({
+                    stateSave: true, // We do not have table settings on this table
+                    pageLength: 10,
+                    lengthMenu: [
+                        [5, 10, 20, 50, 100, -1],
+                        [5, 10, 20, 50, 100, _("All")],
                     ],
-                    "columns": [
-                        { "type": "html" },
-                        { "type": "html" },
-                        { "type": "html" },
-                        { "type": "num-html" },
-                        { "type": "anti-the" },
+                    columnDefs: [{ targets: [5, -1], orderable: false, searchable: false }],
+                    columns: [
+                        { type: "html" },
+                        { type: "html" },
+                        { type: "html" },
+                        { type: "num-html" },
+                        { type: "anti-the" },
                         null,
                         null,
                         null,
@@ -389,10 +390,10 @@
                         null,
                         null,
                         null,
-                        null
+                        null,
                     ],
-                    "pagingType": "full"
-                }));
+                    pagingType: "full",
+                });
             }
 
             var options = {

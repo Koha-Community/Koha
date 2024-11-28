@@ -74,16 +74,14 @@ var success_test_call = function () {
 };
 
 $(document).ready(function () {
-    $("#tagst").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
-            order: [[2, "desc"]],
-            pagingType: "full",
-        })
-    );
+    $("#tagst").kohaTable({
+        columnDefs: [
+            { orderable: false, searchable: false, targets: ["NoSort"] },
+            { type: "anti-the", targets: ["anti-the"] },
+        ],
+        order: [[2, "desc"]],
+        pagingType: "full",
+    });
     $(".ajax_buttons").css({ visibility: "visible" });
     $("p.check").html(
         '<div id="searchheader"><a id="CheckAll" href="/cgi-bin/koha/tags/review.pl"><i class="fa fa-check" aria-hidden="false"><\/i> ' +

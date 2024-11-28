@@ -67,12 +67,10 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#files").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1], orderSequence: ["desc", "asc"], searchable: false }],
-                    paginate: false,
-                })
-            );
+            $("#files").kohaTable({
+                columnDefs: [{ targets: [-1], orderSequence: ["desc", "asc"], searchable: false }],
+                paginate: false,
+            });
         });
     </script>
 [% END %]

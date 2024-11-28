@@ -1332,22 +1332,29 @@ function update_search_description(
                 };
             }
 
+            if (options.ajax) {
+                options.ajax = Object.assign(
+                    {},
+                    options.ajax,
+                    _dt_default_ajax({ default_filters, options })
+                );
+                options.serverSide = true;
+                options.processing = true;
+                options.pagingType = "full_numbers";
+            }
+
             settings = $.extend(
                 true,
                 {},
                 dataTablesDefaults,
                 {
                     paging: true,
-                    serverSide: true,
                     searching: true,
-                    pagingType: "full_numbers",
-                    processing: true,
                     language: {
                         emptyTable: options.emptyTable
                             ? options.emptyTable
                             : __("No data available in table"),
                     },
-                    ajax: _dt_default_ajax({ default_filters, options }),
                 },
                 options
             );

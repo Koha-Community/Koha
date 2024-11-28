@@ -333,18 +333,16 @@
     [% Asset.js("js/z3950_search.js") | $raw %]
     <script>
         $(document).ready(function () {
-            var resultst = $("#resultst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { targets: [-1, -2], orderable: false, searchable: false },
-                        { targets: [1], type: "nsb-nse" },
-                    ],
-                    order: [[1, "asc"]],
-                    paginate: false,
-                    searching: false,
-                    info: false,
-                })
-            );
+            var resultst = $("#resultst").kohaTable({
+                columnDefs: [
+                    { targets: [-1, -2], orderable: false, searchable: false },
+                    { targets: [1], type: "nsb-nse" },
+                ],
+                order: [[1, "asc"]],
+                paginate: false,
+                searching: false,
+                info: false,
+            });
             InitLastAction();
         });
     </script>

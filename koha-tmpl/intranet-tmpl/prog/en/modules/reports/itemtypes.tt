@@ -102,12 +102,10 @@
         [% INCLUDE 'datatables.inc' %]
         <script>
             $(document).ready(function () {
-                $("#itemtypest").dataTable(
-                    $.extend(true, {}, dataTablesDefaults, {
-                        dom: "t",
-                        paginate: false,
-                    })
-                );
+                $("#itemtypest").kohaTable({
+                    dom: "t",
+                    paginate: false,
+                });
             });
         </script>
     [% END %]

@@ -1,4 +1,4 @@
-/* global _ dataTablesDefaults */
+/* global _ */
 
 $(document).ready(function () {
     $("#barcode").focus();
@@ -21,14 +21,12 @@ $(document).ready(function () {
     });
 
     if ($("#rotating-collections-table").length > 0) {
-        $("#rotating-collections-table").dataTable(
-            $.extend(true, {}, dataTablesDefaults, {
-                autoWidth: false,
-                columnDefs: [
-                    { targets: [-1], orderable: false, searchable: false },
-                ],
-                pagingType: "full",
-            })
-        );
+        $("#rotating-collections-table").kohaTable({
+            autoWidth: false,
+            columnDefs: [
+                { targets: [-1], orderable: false, searchable: false },
+            ],
+            pagingType: "full",
+        });
     }
 });

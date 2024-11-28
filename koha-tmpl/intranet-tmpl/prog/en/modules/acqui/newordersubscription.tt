@@ -124,15 +124,13 @@
         }
 
         $(document).ready(function () {
-            $("#srlt").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { orderable: false, searchable: false, targets: ["NoSort"] },
-                        { type: "anti-the", targets: ["anti-the"] },
-                    ],
-                    pagingType: "full",
-                })
-            );
+            $("#srlt").kohaTable({
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+                pagingType: "full",
+            });
 
             $("#show_only_renewed").click(function () {
                 updateRowsVisibility($(this).is(":checked"));

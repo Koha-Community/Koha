@@ -498,16 +498,14 @@
                     });
             });
 
-            var resultst = $("table.result").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    paging: false,
-                    columnDefs: [
-                        { orderable: false, targets: [1, -1] },
-                        { visible: false, targets: [0] },
-                    ],
-                    autoWidth: false,
-                })
-            );
+            var resultst = $("table.result").kohaTable({
+                paging: false,
+                columnDefs: [
+                    { orderable: false, targets: [1, -1] },
+                    { visible: false, targets: [0] },
+                ],
+                autoWidth: false,
+            });
 
             $(".show_only_subscription").prop("checked", false);
 

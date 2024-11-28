@@ -257,21 +257,19 @@
         $(document).ready(function () {
             var txtActivefilter = _("Filter system debit types");
             var txtInactivefilter = _("Show all debit types");
-            var table_debit_types = $("#table_debit_types").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { targets: [-1], orderable: false, searchable: false },
-                        { targets: [0, 1], orderable: false, visible: false },
-                    ],
-                    order: [
-                        [0, "asc"],
-                        [2, "asc"],
-                    ],
-                    dom: 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
-                    pageLength: 20,
-                    pagingType: "full_numbers",
-                })
-            );
+            var table_debit_types = $("#table_debit_types").kohaTable({
+                columnDefs: [
+                    { targets: [-1], orderable: false, searchable: false },
+                    { targets: [0, 1], orderable: false, visible: false },
+                ],
+                order: [
+                    [0, "asc"],
+                    [2, "asc"],
+                ],
+                dom: 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
+                pageLength: 20,
+                pagingType: "full_numbers",
+            });
             $("#filter_s").html('<p><a href="#" id="filter_system"><i class="fa fa-filter"></i> ' + txtActivefilter + "</a>");
             $("#filter_system").click(function (e) {
                 e.preventDefault();

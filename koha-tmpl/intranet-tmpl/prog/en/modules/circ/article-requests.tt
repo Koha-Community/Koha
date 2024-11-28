@@ -574,22 +574,15 @@
                 if( link.length > 0 ) link[0].focus();
             });
 
-            requested_datatable = $("#article-requests-requested-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [0, -1], "orderable": false, "searchable":  false },
-                ],
-            }));
-
-            pending_datatable = $("#article-requests-pending-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [0, -1], "orderable": false, "searchable":  false },
-                ],
-            }));
-            processing_datatable = $("#article-requests-processing-table").DataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { "targets": [0, -1], "orderable": false, "searchable":  false },
-                ],
-            }));
+            requested_datatable = $("#article-requests-requested-table").kohaTable({
+                columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }],
+            });
+            pending_datatable = $("#article-requests-pending-table").kohaTable({
+                columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }],
+            });
+            processing_datatable = $("#article-requests-processing-table").kohaTable({
+                columnDefs: [{ targets: [0, -1], orderable: false, searchable: false }],
+            });
             active_datatable = requested_datatable;
             activateBatchActions( active_tab );
         });

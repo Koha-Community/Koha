@@ -1706,12 +1706,15 @@
                 });
             });
 
-            $('#items-bundle-contents-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "searching": false,
-                "paginate": false,
-                "info": false,
-                "order": [[ 1, 'asc' ], [ 0, 'asc' ]]
-            }));
+            $("#items-bundle-contents-table").kohaTable({
+                searching: false,
+                paginate: false,
+                info: false,
+                order: [
+                    [1, "asc"],
+                    [0, "asc"],
+                ],
+            });
 
             [% IF ( !(Koha.Preference('TransfersBlockCirc')) && Koha.Preference('AutomaticConfirmTransfer') ) %]
                 $("#wrong-transfer-modal").on('hidden.bs.modal',function(){

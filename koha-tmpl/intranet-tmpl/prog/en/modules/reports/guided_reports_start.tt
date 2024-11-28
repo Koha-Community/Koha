@@ -2539,7 +2539,7 @@
                         $(".mana_search_status").hide();
                         $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
                         $("#mana-loading").hide();
-                        $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults,{
+                        $("#mana_results_datatable").kohaTable({
                             "pagingType": "full",
                             "autoWidth": false,
                             "columnDefs": [
@@ -2549,7 +2549,7 @@
                                 { "orderable": false, "searchable":  false, "targets": [ 'NoSort' ] },
                                 { "type": "anti-the", "targets":  [ 'anti-the'] }
                             ]
-                        }));
+                        });
 
                         $(".showbutton").on("click", function(e){
                             e.preventDefault();

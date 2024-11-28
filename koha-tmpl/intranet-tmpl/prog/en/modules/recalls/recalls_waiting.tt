@@ -157,13 +157,11 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function () {
-            $("#recallswaiting-table, #recallsover-table").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    autoWidth: false,
-                    columnDefs: [{ orderable: false, targets: ["nosort"] }],
-                    pagingType: "full_numbers",
-                })
-            );
+            $("#recallswaiting-table, #recallsover-table").kohaTable({
+                autoWidth: false,
+                columnDefs: [{ orderable: false, targets: ["nosort"] }],
+                pagingType: "full_numbers",
+            });
 
             $(".revert_recall").click(function (e) {
                 return confirmDelete(_("Are you sure you want to revert this recall's status from Waiting?"));

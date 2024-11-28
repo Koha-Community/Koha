@@ -393,7 +393,7 @@
                     });
             }
 
-            $('#marc-overlay-rules').dataTable($.extend(true, {}, dataTablesDefaults, {
+            $('#marc-overlay-rules').kohaTable({
                 "columns": [
                     {"searchable":  false, "orderable": false},
                     {"orderDataType": "dom-input"},
@@ -408,7 +408,7 @@
                     {"searchable":  false, "orderable": false}
                 ],
                 "pagingType": "simple"
-            }));
+            });
 
             var overlay_rules_presets = {};
             overlay_rules_presets["protect"] = {

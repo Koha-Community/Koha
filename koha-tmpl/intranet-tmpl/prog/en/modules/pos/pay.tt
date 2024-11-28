@@ -336,7 +336,7 @@
 
         $(document).ready(function() {
             const sale_table = document.getElementById('sale');
-            const saleDataTable = $("#sale").DataTable($.extend(true, {}, dataTablesDefaults, {
+            const saleDataTable = $("#sale").kohaTable({
                 "paginate": false,
                 "searching": false,
                 "info": false,
@@ -385,7 +385,7 @@
                     $('#paid').val(total_price).trigger('change');
                 },
                 "autoWidth": false
-            }));
+            });
 
             $("#sale").on("click", "button.drop", function(){
                     saleDataTable.row($(this).parents('tr')).remove().draw(false);

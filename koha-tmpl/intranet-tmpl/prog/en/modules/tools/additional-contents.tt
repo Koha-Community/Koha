@@ -604,16 +604,14 @@
             });
 
             $(document).ready(function () {
-                var table = $("#table_additional_contents").DataTable(
-                    $.extend(true, {}, dataTablesDefaults, {
-                        order: [[4, "desc"]],
-                        columnDefs: [
-                            { sortable: false, searchable: false, targets: ["NoSort"] },
-                            { type: "anti-the", targets: ["anti-the"] },
-                        ],
-                        pagingType: "full_numbers",
-                    })
-                );
+                var table = $("#table_additional_contents").kohaTable({
+                    order: [[4, "desc"]],
+                    columnDefs: [
+                        { sortable: false, searchable: false, targets: ["NoSort"] },
+                        { type: "anti-the", targets: ["anti-the"] },
+                    ],
+                    pagingType: "full_numbers",
+                });
 
                 $("#del_form").on("click", ".delete_news", function (e) {
                     e.preventDefault();

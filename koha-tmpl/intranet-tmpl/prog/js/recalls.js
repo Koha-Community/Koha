@@ -127,16 +127,14 @@ $(document).ready(function () {
         }
     });
 
-    $("#recalls-table").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { orderable: false, targets: ["nosort"] },
-                { type: "title-string", targets: ["title-string"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
-            pagingType: "full_numbers",
-        })
-    );
+    $("#recalls-table").kohaTable({
+        columnDefs: [
+            { orderable: false, targets: ["nosort"] },
+            { type: "title-string", targets: ["title-string"] },
+            { type: "anti-the", targets: ["anti-the"] },
+        ],
+        pagingType: "full_numbers",
+    });
 
     $("#cancel_selected").click(function (e) {
         if ($("input[name='recall_ids']:checked").length > 0) {

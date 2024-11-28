@@ -152,16 +152,14 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function () {
-            $("#recalls-table").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [
-                        { orderable: false, targets: ["nosort"] },
-                        { type: "title-string", targets: ["title-string"] },
-                        { type: "anti-the", targets: ["anti-the"] },
-                    ],
-                    pagingType: "full_numbers",
-                })
-            );
+            $("#recalls-table").kohaTable({
+                columnDefs: [
+                    { orderable: false, targets: ["nosort"] },
+                    { type: "title-string", targets: ["title-string"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+                pagingType: "full_numbers",
+            });
 
             $(".cancelreturn").click(function () {
                 return confirmDelete(_("Are you sure you want to remove this recall and return the item to its home library?"));

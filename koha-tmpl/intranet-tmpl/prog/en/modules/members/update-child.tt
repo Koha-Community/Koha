@@ -65,14 +65,12 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#catst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    dom: "t",
-                    order: [[2, "asc"]],
-                    columnDefs: [{ targets: [0], orderable: false, searchable: false }],
-                    paginate: false,
-                })
-            );
+            $("#catst").kohaTable({
+                dom: "t",
+                order: [[2, "asc"]],
+                columnDefs: [{ targets: [0], orderable: false, searchable: false }],
+                paginate: false,
+            });
             $("#updatechildf").validate({
                 rules: {
                     catcode: {

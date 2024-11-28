@@ -215,10 +215,10 @@
             $("#income").text('[% ctotal | $Price %] ([% cctotal | $Price %])');
             $("#outgoing").text('[% dtotal | $Price %] ([% cdtotal | $Price %])');
 
-            var registers_table = $("#registers").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "searching": false,
-                "paginationType": "full"
-            }));
+            var registers_table = $("#registers").kohaTable({
+                searching: false,
+                paginationType: "full",
+            });
 
             $("#confirmCashupModal").on("shown.bs.modal", function(e){
                var button = $(e.relatedTarget);

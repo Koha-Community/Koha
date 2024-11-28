@@ -82,70 +82,62 @@ export default {
             let lists = this.logged_in_user_lists;
             let table_id = this.table_id;
             let import_from_list = this.import_from_list;
-            $("#" + table_id).dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    data: lists,
-                    order: [[0, "asc"]],
-                    autoWidth: false,
-                    columns: [
-                        {
-                            title: __("Name"),
-                            data: "shelfname",
-                            searchable: true,
-                            orderable: true,
-                            width: "100%",
-                            render: function (data, type, row, meta) {
-                                return (
-                                    row.shelfname +
-                                    " (#" +
-                                    row.shelfnumber +
-                                    ")"
-                                );
-                            },
+            $("#" + table_id).kohaTable({
+                data: lists,
+                order: [[0, "asc"]],
+                autoWidth: false,
+                columns: [
+                    {
+                        title: __("Name"),
+                        data: "shelfname",
+                        searchable: true,
+                        orderable: true,
+                        width: "100%",
+                        render: function (data, type, row, meta) {
+                            return (
+                                row.shelfname + " (#" + row.shelfnumber + ")"
+                            );
                         },
-                        {
-                            title: __("Actions"),
-                            data: function (row, type, val, meta) {
-                                return '<div class="actions"></div>';
-                            },
-                            className: "actions noExport",
-                            searchable: false,
-                            orderable: false,
-                        },
-                    ],
-                    drawCallback: function (settings) {
-                        var api = new $.fn.dataTable.Api(settings);
-
-                        $.each(
-                            $(this).find("td .actions"),
-                            function (index, e) {
-                                let tr = $(this).parent().parent();
-                                let list_id = api.row(tr).data().shelfnumber;
-                                let importButton = createVNode(
-                                    "a",
-                                    {
-                                        class: "btn btn-default btn-xs",
-                                        role: "button",
-                                        onClick: () => {
-                                            import_from_list(list_id);
-                                        },
-                                    },
-                                    [
-                                        createVNode("i", {
-                                            class: "fa fa-download",
-                                            "aria-hidden": "true",
-                                        }),
-                                        __("Import"),
-                                    ]
-                                );
-
-                                let n = createVNode("span", {}, [importButton]);
-                                render(n, e);
-                            }
-                        );
                     },
-                })
-            );
+                    {
+                        title: __("Actions"),
+                        data: function (row, type, val, meta) {
+                            return '<div class="actions"></div>';
+                        },
+                        className: "actions noExport",
+                        searchable: false,
+                        orderable: false,
+                    },
+                ],
+                drawCallback: function (settings) {
+                    var api = new $.fn.dataTable.Api(settings);
+
+                    $.each($(this).find("td .actions"), function (index, e) {
+                        let tr = $(this).parent().parent();
+                        let list_id = api.row(tr).data().shelfnumber;
+                        let importButton = createVNode(
+                            "a",
+                            {
+                                class: "btn btn-default btn-xs",
+                                role: "button",
+                                onClick: () => {
+                                    import_from_list(list_id);
+                                },
+                            },
+                            [
+                                createVNode("i", {
+                                    class: "fa fa-download",
+                                    "aria-hidden": "true",
+                                }),
+                                __("Import"),
+                            ]
+                        );
+
+                        let n = createVNode("span", {}, [importButton]);
+                        render(n, e);
+                    });
+                },
+            });
         },
     },
     mounted() {

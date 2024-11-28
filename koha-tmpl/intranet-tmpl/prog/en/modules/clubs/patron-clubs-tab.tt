@@ -59,12 +59,12 @@
     </table>
 [% END %]
 <script>
-    $("#table_clubnoenrollmemnts, #table_clubenrollments").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "columnDefs": [
-            { 'sortable': false, 'targets': [ 'NoSort' ] }
-        ],
-        paginate: true
-    }));
+    let dt_params = {
+        columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+        paginate: true,
+    };
+    $("#table_clubnoenrollmemnts").kohaTable(dt_params);
+    $("#table_clubenrollments").kohaTable(dt_params);
 
     [% IF CAN_user_clubs_enroll %]
     function loadEnrollmentForm( id, enrollent_id = 0 ) {

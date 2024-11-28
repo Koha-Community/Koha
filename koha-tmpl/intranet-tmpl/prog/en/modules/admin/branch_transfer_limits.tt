@@ -135,54 +135,55 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $(document).ready(function () {
-            $("#CheckAll").on("click", function (e) {
+        $(document).ready(function(){
+            $("#CheckAll").on("click", function(e){
                 e.preventDefault();
-                $(".cb").each(function () {
+                $(".cb").each(function(){
                     $(this).prop("checked", true);
                 });
             });
 
-            $("#UncheckAll").on("click", function (e) {
+            $("#UncheckAll").on("click", function(e){
                 e.preventDefault();
-                $(".cb").each(function () {
+                $(".cb").each(function(){
                     $(this).prop("checked", false);
                 });
             });
 
-            if ($("#transferlimit_tabs .tab-pane.active").length < 1) {
-                $("#transferlimit_tabs a:first").tab("show");
+            if( $("#transferlimit_tabs .tab-pane.active").length < 1 ){
+                  $("#transferlimit_tabs a:first").tab("show");
             }
 
-            $("#branchselect").change(function () {
-                $("#selectlibrary").submit();
-            });
+             $('#branchselect').change(function() {
+                $('#selectlibrary').submit();
+             });
 
             var checkall = $(".checkall");
             var uncheckall = $(".uncheckall");
 
-            $(checkall).on("click", function (e) {
+            $(checkall).on("click", function(e){
                 e.preventDefault();
                 var tid = $(this).data("cb");
-                $(".cb" + tid).each(function () {
+                $(".cb" + tid ).each(function(){
                     $(this).prop("checked", true);
-                });
+                })
             });
 
-            $(uncheckall).on("click", function (e) {
+            $(uncheckall).on("click", function(e){
                 e.preventDefault();
                 var tid = $(this).data("cb");
-                $(".cb" + tid).each(function () {
+                $(".cb" + tid ).each(function(){
                     $(this).prop("checked", false);
-                });
+                })
             });
 
-            $(".sorted").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
+
+            [% FOREACH codes_loo IN codes_loop %]
+                $("#[% codes_loo.code | html %]table").kohaTable({
                     columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
                     paginate: false,
-                })
-            );
+                });
+            [% END %]
         });
     </script>
 [% END %]

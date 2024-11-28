@@ -204,12 +204,10 @@
     <script>
         actTotal = "";
         $(document).ready(function () {
-            $("#tbl_cash_register_stats").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    pageLength: 50,
-                    pagingType: "full_numbers",
-                })
-            );
+            $("#tbl_cash_register_stats").kohaTable({
+                pageLength: 50,
+                pagingType: "full_numbers",
+            });
 
             $("#branch").on("change", function () {
                 var selectedBranch = $("#branch").children("option:selected").val();

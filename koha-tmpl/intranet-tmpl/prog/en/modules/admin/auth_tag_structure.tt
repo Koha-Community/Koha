@@ -289,12 +289,10 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
-            $("#table_authtagstructure").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-                    pagingType: "full",
-                })
-            );
+            $("#table_authtagstructure").kohaTable({
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                pagingType: "full",
+            });
         });
     </script>
 [% END %]

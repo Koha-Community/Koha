@@ -1,4 +1,5 @@
-/* global KOHA CodeMirror to_highlight search_jumped humanMsg dataTablesDefaults themelang */
+/* keep tidy */
+/* global KOHA CodeMirror to_highlight search_jumped humanMsg themelang */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
@@ -207,14 +208,12 @@ function addConsentDeleteHandler() {
     });
 }
 
-$("table.preferences").dataTable(
-    $.extend(true, {}, dataTablesDefaults, {
-        dom: "t",
-        columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-        paging: false,
-        fixedHeader: false,
-    })
-);
+$("table.preferences").kohaTable({
+    dom: "t",
+    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+    paging: false,
+    fixedHeader: false,
+});
 
 $(".prefs-tab")
     .find("input.preference, textarea.preference")

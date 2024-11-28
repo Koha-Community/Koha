@@ -325,12 +325,10 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         $(document).ready(function () {
-            $("#table_marctagstructure").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-                    pagingType: "full",
-                })
-            );
+            $("#table_marctagstructure").kohaTable({
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                pagingType: "full",
+            });
             $("#select_display").on("change", function () {
                 var checked = $(this).prop("checked") ? 1 : 0;
                 Cookies.set("marctagstructure_selectdisplay", checked, { sameSite: "Lax" });

@@ -437,13 +437,11 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
-            $("#table_authsubfieldstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "columnDefs": [
-                    { 'sortable': false, 'targets': [ 'NoSort' ] }
-                ],
+            $("#table_authsubfieldstructure").kohaTable({
+                columnDefs: [{ sortable: false, targets: ["NoSort"] }],
                 aaSorting: [],
-                paginate: false
-            }));
+                paginate: false,
+            });
 
             if ($("#subfieldtabs").length > 0) {
                 [% IF ( tagsubfield && tagsubfield == "@") %]

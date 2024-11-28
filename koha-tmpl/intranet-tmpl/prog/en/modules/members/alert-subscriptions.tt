@@ -94,7 +94,7 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#subscriptions").dataTable($.extend(true, {}, dataTablesDefaults, {}));
+            $("#subscriptions").kohaTable();
             $(".unsubscribe").submit(function () {
                 var patron = $(this).data("patron");
                 var title = $(this).data("title");

@@ -270,11 +270,9 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            var parcelst = $("#parcelst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    paginate: false,
-                })
-            );
+            $("#parcelst").kohaTable({
+                paginate: false,
+            });
 
             //keep a copy of all budgets before removing the inactives
             var budgetId = $("#shipmentcost_budgetid");

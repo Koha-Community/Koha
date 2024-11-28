@@ -1380,7 +1380,7 @@ $(document).ready(function () {
     }
     function loadReturnClaimsTable() {
         if (!returnClaimsTable) {
-            returnClaimsTable = $("#return-claims-table").dataTable({
+            returnClaimsTable = $("#return-claims-table").kohaTable({
                 autoWidth: false,
                 dom: "rt",
                 order: [],

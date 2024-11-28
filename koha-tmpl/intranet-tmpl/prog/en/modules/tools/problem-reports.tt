@@ -142,16 +142,14 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#problemreportstable").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    order: [[1, "asc"]],
-                    columnDefs: [
-                        { orderable: false, searchable: false, targets: ["NoSort"] },
-                        { type: "anti-the", targets: ["anti-the"] },
-                    ],
-                    pagingType: "full",
-                })
-            );
+            $("#problemreportstable").kohaTable({
+                order: [[1, "asc"]],
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+                pagingType: "full",
+            });
 
             $(".SelectAll").on("click", function () {
                 $("input[name='report_ids'][type='checkbox']").prop("checked", true);

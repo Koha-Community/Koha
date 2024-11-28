@@ -217,16 +217,14 @@
     <script>
         var sTable;
         $(document).ready(function () {
-            sTable = $("#claimst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    dom: "t",
-                    columnDefs: [
-                        { targets: [0], orderable: false, searchable: false },
-                        { type: "anti-the", targets: ["anti-the"] },
-                    ],
-                    paginate: false,
-                })
-            );
+            sTable = $("#claimst").kohaTable({
+                dom: "t",
+                columnDefs: [
+                    { targets: [0], orderable: false, searchable: false },
+                    { type: "anti-the", targets: ["anti-the"] },
+                ],
+                paginate: false,
+            });
             $("#supplierid").change(function () {
                 $("#claims").submit();
             });

@@ -1,17 +1,15 @@
-/* global dataTablesDefaults __ template_path */
+/* global __ template_path */
 
 $(document).ready(function () {
     $("#Aform").preventDoubleFormSubmit();
-    $("#files").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-            ],
-            pagingType: "full",
-            order: [],
-        })
-    );
+    $("#files").kohaTable({
+        columnDefs: [
+            { orderable: false, searchable: false, targets: ["NoSort"] },
+            { type: "anti-the", targets: ["anti-the"] },
+        ],
+        pagingType: "full",
+        order: [],
+    });
 
     checkOrderBudgets();
     var all_budget_id = $("#all_budget_id");

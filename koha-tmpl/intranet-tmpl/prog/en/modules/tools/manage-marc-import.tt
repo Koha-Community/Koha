@@ -470,7 +470,7 @@
             });
 
             [% IF import_batch_id %]
-                $("#records-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                $("#records-table").kohaTable({
                     "autoWidth": false,
                     "searching": false,
                     "processing": true,
@@ -596,7 +596,7 @@
                             );
                         }
                     },
-                }));
+                });
                 $("#revert_batch_form").on("submit", function() {
                     return confirm(_("Are you sure you want to undo the import of this batch into the catalog?"));
                 });

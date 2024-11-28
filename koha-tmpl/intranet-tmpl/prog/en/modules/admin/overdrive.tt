@@ -72,12 +72,10 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#od_info").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
-                    pagingType: "full",
-                })
-            );
+            $("#od_info").kohaTable({
+                columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                pagingType: "full",
+            });
         });
     </script>
 [% END %]

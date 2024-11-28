@@ -308,19 +308,17 @@
                 $("#selecttable").submit();
             });
 
-            $("#fieldst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    autoWidth: false,
-                    dom: 't<"bottom pager"ilpf>',
-                    pagingType: "full",
-                    lengthMenu: [
-                        [10, 20, 50, 100, -1],
-                        [10, 20, 50, 100, "All"],
-                    ],
-                    pageLength: 20,
-                    order: [[0, "asc"]],
-                })
-            );
+            $("#fieldst").kohaTable({
+                autoWidth: false,
+                dom: 't<"bottom pager"ilpf>',
+                pagingType: "full",
+                lengthMenu: [
+                    [10, 20, 50, 100, -1],
+                    [10, 20, 50, 100, "All"],
+                ],
+                pageLength: 20,
+                order: [[0, "asc"]],
+            });
 
             $("#add_field").on("submit", function () {
                 if ($("#marcfield").length && $("select[name='authorised_value_category']").length) {

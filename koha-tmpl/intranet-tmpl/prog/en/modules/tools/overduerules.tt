@@ -188,13 +188,11 @@
             if ($("#rulestabs .tab-pane.active").length < 1) {
                 $("#rulestabs a:first").tab("show");
             }
-            $(".overduerulest").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: ["NoSort"], orderable: false, searchable: false }],
-                    dom: '<"top pager"f>rt<"clear">',
-                    paginate: false,
-                })
-            );
+            $(".overduerulest").kohaTable({
+                columnDefs: [{ targets: ["NoSort"], orderable: false, searchable: false }],
+                dom: '<"top pager"f>rt<"clear">',
+                paginate: false,
+            });
 
             $("#overduerulesf").on("submit", function (e) {
                 $(".overduerulest").DataTable().search("").draw();

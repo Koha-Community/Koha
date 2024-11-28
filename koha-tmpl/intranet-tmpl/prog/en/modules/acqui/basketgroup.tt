@@ -423,34 +423,32 @@
                 $("#basket_groups a[href='#opened']").tab("show");
             [% END %]
             [% UNLESS ( grouping ) %]
-                $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "columnDefs": [
-                        { "targets": [ -1 ], "orderable": false, "searchable":  false },
-                    ],
-                    "autoWidth": false,
-                    "pagingType": "full"
-                } ));
+                let dt_params = {
+                    columnDefs: [{ targets: [-1], orderable: false, searchable: false }],
+                    autoWidth: false,
+                    pagingType: "full",
+                };
+                $("#ungrouped").kohaTable(dt_params);
+                $("#grouped").kohaTable(dt_params);
+                $("#basket_group_opened").kohaTable(dt_params);
+                $("#basket_group_closed").kohaTable(dt_params);
             [% ELSE %]
-                grouped = $("#grouped").DataTable($.extend(true, {}, dataTablesDefaults, {
-                    "dom": 't',
-                    "columnDefs": [
-                        { 'sortable': false, 'targets': [ 'NoSort' ] }
-                    ],
-                    'autoWidth': false,
-                    "language": {
-                        "emptyTable": _("There are no baskets in this group")
-                    }
-                } ));
-                ungrouped = $("#ungrouped").DataTable($.extend(true, {}, dataTablesDefaults, {
-                    "dom": 't',
-                    "columnDefs": [
-                        { 'sortable': false, 'targets': [ 'NoSort' ] }
-                    ],
-                    'autoWidth': false,
-                    "language": {
-                        "emptyTable": _("There are no ungrouped baskets")
-                    }
-                } ));
+                grouped = $("#grouped").kohaTable({
+                    dom: "t",
+                    columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+                    autoWidth: false,
+                    language: {
+                        emptyTable: _("There are no baskets in this group"),
+                    },
+                });
+                ungrouped = $("#ungrouped").kohaTable({
+                    dom: "t",
+                    columnDefs: [{ sortable: false, targets: ["NoSort"] }],
+                    autoWidth: false,
+                    language: {
+                        emptyTable: _("There are no ungrouped baskets"),
+                    },
+                });
             [% END %]
 
             $("#basketgroupcolumns").on("click", ".addtogroup", function(){

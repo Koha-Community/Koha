@@ -253,13 +253,11 @@
         }
 
         $(document).ready(function () {
-            var crtable = $("#table_cash_registers").DataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
-                    order: [[1, "asc"]],
-                    paginationType: "full",
-                })
-            );
+            var crtable = $("#table_cash_registers").kohaTable({
+                columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
+                order: [[1, "asc"]],
+                paginationType: "full",
+            });
 
             $("#branch_filter").on("change", function () {
                 // Table must be filtered by the <option>'s text, not its value

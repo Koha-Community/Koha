@@ -1,4 +1,4 @@
-/* global __ dataTablesDefaults */
+/* global __ */
 
 function clean_line(line) {
     $(line).find('input[type="text"]').val("");
@@ -52,16 +52,13 @@ function tableInit(oldtabid, newtabid) {
         oldTableId.DataTable().destroy();
     }
 
-    var newTableId = $("#" + newtabid + "_table");
-    newTableId.DataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-            ],
-            paging: false,
-            autoWidth: false,
-        })
-    );
+    $("#" + newtabid + "_table").kohaTable({
+        columnDefs: [
+            { orderable: false, searchable: false, targets: ["NoSort"] },
+        ],
+        paging: false,
+        autoWidth: false,
+    });
 }
 
 $(document).ready(function () {

@@ -663,7 +663,7 @@
                             'vs.lastmodified',
                             ];
 
-                var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                var dtListResults = $("#listresultst").kohaTable({
                     order: [[ 5, "asc" ]],
                     serverSide:  true,
                     ajax:  {
@@ -701,7 +701,7 @@
                     "searching": false,
                     "processing": true,
                     "orderCellsTop":  true
-                }));
+                });
                 _dt_add_delay_filters(dtListResults.api(), $("#listresultst"));
 
                 /* Select correct tab based on URL parameter */

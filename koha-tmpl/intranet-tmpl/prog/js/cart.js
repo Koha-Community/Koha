@@ -1,4 +1,4 @@
-/* global __ dataTablesDefaults showMore showLess delSelRecords addSelToShelf sendBasket printBasket delBasket openBiblio selRecord */
+/* global __ showMore showLess delSelRecords addSelToShelf sendBasket printBasket delBasket openBiblio selRecord */
 
 function placeHold() {
     var checkedItems = $("input:checkbox:checked");
@@ -94,18 +94,16 @@ $(document).ready(function () {
     $(".hold").text(__("Place hold"));
     $("#downloadcartc").empty();
 
-    $("#itemst").dataTable(
-        $.extend(true, {}, dataTablesDefaults, {
-            dom: "t",
-            columnDefs: [
-                { orderable: false, searchable: false, targets: ["NoSort"] },
-                { type: "anti-the", targets: ["anti-the"] },
-                { type: "callnumbers", targets: ["callnumbers"] },
-            ],
-            order: [[1, "asc"]],
-            paging: false,
-        })
-    );
+    $("#itemst").kohaTable({
+        dom: "t",
+        columnDefs: [
+            { orderable: false, searchable: false, targets: ["NoSort"] },
+            { type: "anti-the", targets: ["anti-the"] },
+            { type: "callnumbers", targets: ["callnumbers"] },
+        ],
+        order: [[1, "asc"]],
+        paging: false,
+    });
 
     $(".showdetails").on("click", function (e) {
         e.preventDefault();

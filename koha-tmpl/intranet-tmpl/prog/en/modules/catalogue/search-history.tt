@@ -222,13 +222,11 @@
         $(document).ready(function () {
             // We show table ordered by descending dates by default
             // (so that the more recent query is shown first)
-            $(".historyt").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    order: [[1, "desc"]],
-                    columnDefs: [{ targets: [0], orderable: false, searchable: false }],
-                    pagingType: "full_numbers",
-                })
-            );
+            $(".historyt").kohaTable({
+                order: [[1, "desc"]],
+                columnDefs: [{ targets: [0], orderable: false, searchable: false }],
+                pagingType: "full_numbers",
+            });
 
             // DataTables removes hidden rows from the DOM, so we can't expect a
             // "regular" submit to work and we need to build another form containing
@@ -237,7 +235,7 @@
                 e.preventDefault();
 
                 var form = $(this);
-                var table = form.find("table").dataTable();
+                var table = form.find("table").kohaTable();
 
                 var new_form = $("<form>").attr("action", form.attr("action")).attr("method", form.attr("method"));
                 form.find('input[type="hidden"]')
@@ -275,7 +273,7 @@
             $(".action_delete").click(function (e) {
                 e.preventDefault();
                 var form = $(this).parents("form").first();
-                var table = form.find("table").dataTable();
+                var table = form.find("table").kohaTable();
                 var ids = $("input:checkbox:checked", table);
                 if ($(ids).length < 1) {
                     return false;

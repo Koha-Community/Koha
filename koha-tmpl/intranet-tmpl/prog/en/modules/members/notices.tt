@@ -182,12 +182,10 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
-            $("#noticestable").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    order: [[3, "desc"]],
-                    pagingType: "full",
-                })
-            );
+            $("#noticestable").kohaTable({
+                order: [[3, "desc"]],
+                pagingType: "full",
+            });
 
             $("#noticestable").on("click", ".notice-title", function (e) {
                 e.preventDefault();
