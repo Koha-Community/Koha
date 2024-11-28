@@ -595,6 +595,20 @@ function _dt_default_ajax (params){
     }
 }
 
+function build_url_with_state(dt, table_settings){
+    let table_key = 'DataTables_%s_%s_%s'.format(
+        table_settings.module,
+        table_settings.page,
+        table_settings.table);
+
+    let state = JSON.stringify(dt.state());
+    delete state.time;
+    let searchParams = new URLSearchParams(window.location.search);
+    searchParams.set(table_key + '_state', btoa(state));
+
+    return window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
+}
+
 function _dt_buttons(params){
     let settings = params.settings || {};
     let table_settings = params.table_settings;
@@ -740,17 +754,8 @@ function _dt_buttons(params){
                 titleAttr: __("Copy shareable link"),
                 text: '<i class="fa fa-lg fa-copy"></i> <span class="dt-button-text">' + __("Copy shareable link") + '</span>',
                 action: function (e, dt, node, config) {
-                    let table_key = 'DataTables_%s_%s_%s'.format(
-                        table_settings.module,
-                        table_settings.page,
-                        table_settings.table);
+                    const url = build_url_with_state(dt, table_settings);
 
-                    let state = JSON.stringify(dt.state());
-                    delete state.time;
-                    let searchParams = new URLSearchParams(window.location.search);
-                    searchParams.set(table_key + '_state', btoa(state));
-
-                    let url = window.location.origin + window.location.pathname + '?' + searchParams.toString() + window.location.hash;
                     if( navigator.clipboard && navigator.clipboard.writeText){
                         writeToClipboard(url, node);
                     }

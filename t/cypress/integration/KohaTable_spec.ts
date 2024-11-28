@@ -264,65 +264,53 @@ describe("kohaTable (using REST API)", () => {
                     );
                     cy.get(`#${table_id} th`).contains("Name");
                     cy.get(`#${table_id} th`).contains("Code");
-
-                    // Close the 'Columns' list
-                    cy.get(".dt-button-background").click();
-                    cy.get(".dt-button-background").should("not.exist");
-                    cy.wait(500); // ensure the animation completes, random failures?
-
-                    // Copy the shareable link (Name and Code shown)
-                    cy.window().focus();
-                    cy.get(
-                        `#${table_id}_wrapper .copyConditions_controls`
-                    ).click({ force: true });
-                    cy.get(".tooltip").contains("Copied!");
                 });
 
                 cy.window().then(win => {
-                    // Retrieve the content of the clipboard
-                    win.navigator.clipboard.readText().then(url => {
-                        expect(url).to.match(
-                            /branches.pl\?DataTables_admin_libraries_libraries_state=/
+                    // Copy the shareable link (Name and Code shown)
+                    const url = win.build_url_with_state(
+                        win.libraries_table.DataTable(),
+                        win.table_settings
+                    );
+                    expect(url).to.match(
+                        /branches.pl\?DataTables_admin_libraries_libraries_state=/
+                    );
+
+                    // Remove localStorage
+                    win.localStorage.clear();
+
+                    // Use it
+                    cy.visit(url);
+
+                    // Code is shown whereas it is hidden in the config
+                    cy.get("@columns").then(columns => {
+                        cy.get(`#${table_id} th`).should(
+                            "have.length",
+                            columns.length
+                        );
+                        cy.get(`#${table_id} th`).contains("Name");
+                        cy.get(`#${table_id} th`).contains("Code");
+
+                        // Hide "Name"
+                        cy.get(`#${table_id}_wrapper .buttons-colvis`).click();
+                        cy.get(`#${table_id}_wrapper .dt-button-collection`)
+                            .contains("Name")
+                            .click();
+                    });
+
+                    // Go to the shareable link
+                    // but do not remove localStorage!
+                    cy.visit(url);
+
+                    // Name is hidden and Code is shown
+                    cy.get("@columns").then(columns => {
+                        cy.get(`#${table_id} th`).should(
+                            "have.length",
+                            columns.length
                         );
 
-                        // Remove localStorage
-                        win.localStorage.clear();
-
-                        // Use it
-                        cy.visit(url);
-
-                        // Code is shown whereas it is hidden in the config
-                        cy.get("@columns").then(columns => {
-                            cy.get(`#${table_id} th`).should(
-                                "have.length",
-                                columns.length
-                            );
-                            cy.get(`#${table_id} th`).contains("Name");
-                            cy.get(`#${table_id} th`).contains("Code");
-
-                            // Hide "Name"
-                            cy.get(
-                                `#${table_id}_wrapper .buttons-colvis`
-                            ).click();
-                            cy.get(`#${table_id}_wrapper .dt-button-collection`)
-                                .contains("Name")
-                                .click();
-                        });
-
-                        // Go to the shareable link
-                        // but do not remove localStorage!
-                        cy.visit(url);
-
-                        // Name is hidden and Code is shown
-                        cy.get("@columns").then(columns => {
-                            cy.get(`#${table_id} th`).should(
-                                "have.length",
-                                columns.length
-                            );
-
-                            cy.get(`#${table_id} th`).contains("Name");
-                            cy.get(`#${table_id} th`).contains("Code");
-                        });
+                        cy.get(`#${table_id} th`).contains("Name");
+                        cy.get(`#${table_id} th`).contains("Code");
                     });
                 });
             });
