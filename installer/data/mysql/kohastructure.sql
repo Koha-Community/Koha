@@ -4863,7 +4863,8 @@ CREATE TABLE `oauth_access_tokens` (
   `access_token` varchar(191) NOT NULL COMMENT 'generarated access token',
   `client_id` varchar(191) NOT NULL COMMENT 'the client id the access token belongs to',
   `expires` int(11) NOT NULL COMMENT 'expiration time in seconds',
-  PRIMARY KEY (`access_token`)
+  PRIMARY KEY (`access_token`),
+  KEY `expires` (`expires`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
