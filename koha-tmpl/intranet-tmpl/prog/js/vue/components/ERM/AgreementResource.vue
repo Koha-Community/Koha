@@ -58,7 +58,6 @@ export default {
                     label: __("Vendor"),
                     showElement: {
                         type: "text",
-                        format: this.accessNestedProperty,
                         value: "vendor.name",
                         link: {
                             href: "/cgi-bin/koha/acqui/supplier.pl",
@@ -120,12 +119,55 @@ export default {
                     label: __("License info"),
                 },
                 {
+                    name: "additional_fields",
+                    type: "relationship",
+                    showElement: {
+                        type: "relationship",
+                        hidden: agreement =>
+                            !!agreement._strings?.additional_field_values
+                                ?.length,
+                        componentPath: "./AdditionalFieldsDisplay.vue",
+                        props: {
+                            resource_type: {
+                                type: "string",
+                                value: "agreement",
+                            },
+                            additional_field_values: {
+                                type: "resourceProperty",
+                                resourceProperty:
+                                    "_strings.additional_field_values",
+                            },
+                        },
+                    },
+                    componentPath: "./AdditionalFieldsEntry.vue",
+                    props: {
+                        resource_type: {
+                            type: "string",
+                            value: "agreement",
+                        },
+                        additional_field_values: {
+                            type: "resourceProperty",
+                            resourceProperty: "extended_attributes",
+                        },
+                        resource: {
+                            type: "resource",
+                            value: "agreement",
+                        },
+                    },
+                    events: [
+                        {
+                            name: "additional-fields-changed",
+                            callback: this.additionalFieldsChanged,
+                        },
+                    ],
+                },
+                {
                     name: "periods",
                     type: "relationship",
                     showElement: {
                         type: "table",
                         columnData: "periods",
-                        hidden: agreement => agreement.periods?.length,
+                        hidden: agreement => !!agreement.periods?.length,
                         columns: [
                             {
                                 name: __("Period start"),
@@ -224,7 +266,7 @@ export default {
                     showElement: {
                         type: "table",
                         columnData: "user_roles",
-                        hidden: agreement => agreement.user_roles?.length,
+                        hidden: agreement => !!agreement.user_roles?.length,
                         columns: [
                             {
                                 name: __("Name"),
@@ -301,12 +343,11 @@ export default {
                         type: "table",
                         columnData: "agreement_licenses",
                         hidden: agreement =>
-                            agreement.agreement_licenses?.length,
+                            !!agreement.agreement_licenses?.length,
                         columns: [
                             {
                                 name: __("Name"),
                                 value: "license.name",
-                                format: this.accessNestedProperty,
                                 link: {
                                     name: "LicensesShow",
                                     params: {
@@ -416,7 +457,7 @@ export default {
                     showElement: {
                         type: "component",
                         hidden: agreement =>
-                            agreement.agreement_relationships?.length,
+                            !!agreement.agreement_relationships?.length,
                         componentPath:
                             "./ERM/AgreementRelationshipsDisplay.vue",
                         props: {
@@ -469,7 +510,7 @@ export default {
                     showElement: {
                         type: "component",
                         hidden: agreement =>
-                            agreement.agreement_packages?.length,
+                            !!agreement.agreement_packages?.length,
                         componentPath: "./ERM/AgreementPackagesDisplay.vue",
                         props: {
                             agreement: {
@@ -485,7 +526,7 @@ export default {
                     componentPath: "./ERM/Documents.vue",
                     showElement: {
                         type: "component",
-                        hidden: agreement => agreement.documents?.length,
+                        hidden: agreement => !!agreement.documents?.length,
                         componentPath: "./DocumentDisplay.vue",
                         props: {
                             resource: {

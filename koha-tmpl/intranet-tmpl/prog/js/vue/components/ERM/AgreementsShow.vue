@@ -19,19 +19,27 @@
             <fieldset class="rows">
                 <ol>
                     <li
-                        v-for="(attr, index) in resource_attrs"
+                        v-for="(attr, index) in resource_attrs.filter(
+                            attr => attr.showElement?.type !== 'relationship'
+                        )"
                         v-bind:key="index"
                     >
-                        <ShowElement :resource="agreement" :attr="attr" />
+                        <ShowElement
+                            :resource="agreement"
+                            :attr="attr"
+                            :index="index"
+                        />
                     </li>
                 </ol>
             </fieldset>
-            <AdditionalFieldsDisplay
-                resource_type="agreement"
-                :additional_field_values="
-                    agreement._strings.additional_field_values
-                "
-            />
+            <template
+                v-for="(attr, index) in resource_attrs.filter(
+                    attr => attr.showElement?.type === 'relationship'
+                )"
+                v-bind:key="'rel-' + index"
+            >
+                <ShowElement :resource="agreement" :attr="attr" />
+            </template>
             <fieldset class="action">
                 <router-link
                     :to="{ name: 'AgreementsList' }"
@@ -45,28 +53,17 @@
 </template>
 
 <script>
-import { inject } from "vue";
 import { APIClient } from "../../fetch/api-client.js";
 import Toolbar from "../Toolbar.vue";
 import ToolbarButton from "../ToolbarButton.vue";
-import AdditionalFieldsDisplay from "../AdditionalFieldsDisplay.vue";
 import AgreementResource from "./AgreementResource.vue";
 import ShowElement from "../ShowElement.vue";
 
 export default {
     extends: AgreementResource,
     setup() {
-        const format_date = $date;
-        const patron_to_html = $patron_to_html;
-
-        const ERMStore = inject("ERMStore");
-        const { get_lib_from_av } = ERMStore;
-
         return {
             ...AgreementResource.setup(),
-            format_date,
-            patron_to_html,
-            get_lib_from_av,
         };
     },
     data() {
@@ -111,12 +108,7 @@ export default {
             );
         },
     },
-    components: {
-        Toolbar,
-        ToolbarButton,
-        AdditionalFieldsDisplay,
-        ShowElement,
-    },
+    components: { Toolbar, ToolbarButton, ShowElement },
     name: "AgreementsShow",
 };
 </script>

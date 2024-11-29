@@ -23,11 +23,6 @@
                         </li>
                     </ol>
                 </fieldset>
-                <AdditionalFieldsEntry
-                    resource_type="agreement"
-                    :additional_field_values="agreement.extended_attributes"
-                    @additional-fields-changed="additionalFieldsChanged"
-                />
                 <template
                     v-for="(attr, index) in resource_attrs.filter(
                         attr => attr.type === 'relationship'
@@ -52,9 +47,8 @@
 
 <script>
 import FormElement from "../FormElement.vue";
-import AdditionalFieldsEntry from "../AdditionalFieldsEntry.vue";
 import ButtonSubmit from "../ButtonSubmit.vue";
-import { setMessage, setError, setWarning } from "../../messages";
+import { setMessage, setWarning } from "../../messages";
 import { APIClient } from "../../fetch/api-client.js";
 import AgreementResource from "./AgreementResource.vue";
 
@@ -68,7 +62,6 @@ export default {
     },
     data() {
         return {
-            ...AgreementResource.data(),
             agreement: {
                 agreement_id: null,
                 name: "",
@@ -257,14 +250,10 @@ export default {
                 );
             }
         },
-        additionalFieldsChanged(additionalFieldValues) {
-            this.agreement.extended_attributes = additionalFieldValues;
-        },
     },
     components: {
         ButtonSubmit,
         FormElement,
-        AdditionalFieldsEntry,
     },
     name: "AgreementsFormAdd",
 };

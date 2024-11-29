@@ -79,7 +79,10 @@
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </div>
     <div v-else-if="attr.type == 'component'">
-        <label :for="attr.name" :class="{ required: attr.required }"
+        <label
+            v-if="attr.label"
+            :for="attr.name"
+            :class="{ required: attr.required }"
             >{{ attr.label }}:</label
         >
         <component
@@ -87,11 +90,13 @@
             :is="requiredComponent"
             v-bind="requiredProps()"
             v-model="resource[attr.name]"
+            v-on="getEventHandlers()"
         ></component>
         <component
             v-else
             :is="requiredComponent"
             v-bind="requiredProps()"
+            v-on="getEventHandlers()"
         ></component>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </div>
@@ -131,48 +136,26 @@ export default {
         },
     },
     methods: {
-        requiredProps() {
-            if (!this.attr.props) {
-                return {};
-            }
-            const props = Object.keys(this.attr.props).reduce((acc, key) => {
-                // This might be better in a switch statement
-                const prop = this.attr.props[key];
-                if (prop.type === "resource") {
-                    acc[key] = this.resource;
-                }
-                if (prop.type === "resourceProperty") {
-                    acc[key] = this.resource[prop.resourceProperty];
-                }
-                if (prop.type === "av") {
-                    acc[key] = prop.av;
-                }
-                if (prop.type === "string") {
-                    if (prop.indexRequired && this.index > -1) {
-                        acc[key] = `${prop.value}${this.index}`;
-                    } else {
-                        acc[key] = prop.value;
-                    }
-                }
-                if (prop.type === "boolean") {
-                    acc[key] = prop.value;
-                }
-                return acc;
-            }, {});
-            if (this.attr.subFields?.length) {
-                props.subFields = this.attr.subFields;
-            }
-            return props;
-        },
         isVModelRequired(componentPath) {
             let vModelRequired = true;
-            const componentsNotRequiringVModel = ["PatronSearch", "Documents"];
+            const componentsNotRequiringVModel = [
+                "PatronSearch",
+                "Documents",
+                "AdditionalFields",
+            ];
             componentsNotRequiringVModel.forEach(component => {
                 if (componentPath.includes(component)) {
                     vModelRequired = false;
                 }
             });
             return vModelRequired;
+        },
+        getEventHandlers() {
+            if (this.attr.events == null) return {};
+            return this.attr.events.reduce((acc, event) => {
+                acc[event.name] = event.callback;
+                return acc;
+            }, {});
         },
     },
     name: "FormElement",

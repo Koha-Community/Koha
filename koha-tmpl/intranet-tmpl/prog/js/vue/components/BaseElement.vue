@@ -35,7 +35,14 @@ export default {
                     acc[key] = this.resource;
                 }
                 if (prop.type === "resourceProperty") {
-                    acc[key] = this.resource[prop.resourceProperty];
+                    if (prop.resourceProperty.includes(".")) {
+                        acc[key] = this.accessNestedProperty(
+                            prop.resourceProperty,
+                            this.resource
+                        );
+                    } else {
+                        acc[key] = this.resource[prop.resourceProperty];
+                    }
                 }
                 if (prop.type === "av") {
                     acc[key] = prop.av;
@@ -52,10 +59,26 @@ export default {
                 }
                 return acc;
             }, {});
-            if (this.attr.showElement.subFields?.length) {
-                props.subFields = this.attr.showElement.subFields;
+            const attr = show ? this.attr.showElement : this.attr;
+            if (attr.subFields?.length) {
+                props.subFields = attr.subFields;
             }
             return props;
+        },
+        accessNestedProperty(path, obj) {
+            const keys = path.split(".");
+            let property = null;
+            let current = obj;
+            keys.forEach(key => {
+                if (current.hasOwnProperty(key) && current[key]) {
+                    property = current[key];
+                    current = current[key];
+                } else {
+                    property = null;
+                    current = {};
+                }
+            });
+            return property;
         },
     },
     name: "BaseElement",

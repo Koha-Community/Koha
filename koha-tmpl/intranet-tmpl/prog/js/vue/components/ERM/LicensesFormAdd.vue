@@ -109,11 +109,11 @@
                         </li>
                     </ol>
                 </fieldset>
-                <AdditionalFieldsEntry
+                <!-- <AdditionalFieldsEntry
                     resource_type="license"
                     :additional_field_values="license.extended_attributes"
                     @additional-fields-changed="additionalFieldsChanged"
-                />
+                /> -->
                 <UserRoles
                     :user_type="$__('License user %s')"
                     :user_roles="license.user_roles"
@@ -269,9 +269,9 @@ export default {
                 );
             }
         },
-        additionalFieldsChanged(additionalFieldValues) {
-            this.license.extended_attributes = additionalFieldValues;
-        },
+        // additionalFieldsChanged(additionalFieldValues) {
+        //     this.license.extended_attributes = additionalFieldValues
+        // },
     },
     components: {
         flatPickr,

@@ -65,11 +65,11 @@
                         </li>
                     </ol>
                 </fieldset>
-                <AdditionalFieldsEntry
+                <!-- <AdditionalFieldsEntry
                     resource_type="package"
                     :additional_field_values="erm_package.extended_attributes"
                     @additional-fields-changed="additionalFieldsChanged"
-                />
+                /> -->
                 <EHoldingsPackageAgreements
                     :package_agreements="erm_package.package_agreements"
                 />
@@ -208,9 +208,9 @@ export default {
                 );
             }
         },
-        additionalFieldsChanged(additionalFieldValues) {
-            this.erm_package.extended_attributes = additionalFieldValues;
-        },
+        // additionalFieldsChanged(additionalFieldValues) {
+        //     this.erm_package.extended_attributes = additionalFieldValues
+        // },
     },
     components: {
         EHoldingsPackageAgreements,

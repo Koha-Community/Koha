@@ -8,6 +8,7 @@ export default {
             inject("mainStore");
 
         const format_date = $date;
+        const patron_to_html = $patron_to_html;
 
         return {
             ...props,
@@ -16,6 +17,7 @@ export default {
             setError,
             setWarning,
             format_date,
+            patron_to_html,
         };
     },
     methods: {
@@ -161,9 +163,8 @@ export default {
                 }
             });
         },
-        accessNestedProperty(path, obj) {
-            const keys = path.split(".");
-            return keys.reduce((acc, key) => acc[key], obj);
+        additionalFieldsChanged(additionalFieldValues, resource) {
+            resource.extended_attributes = additionalFieldValues;
         },
     },
     name: "BaseResource",

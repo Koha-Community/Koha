@@ -287,13 +287,18 @@ export default {
                 }
             });
 
-            this.$emit("additional-fields-changed", updatedAdditionalFields);
+            this.$emit(
+                "additional-fields-changed",
+                updatedAdditionalFields,
+                this.resource
+            );
         },
     },
     name: "AdditionalFieldsEntry",
     props: {
         resource_type: String,
         additional_field_values: Array,
+        resource: Object,
     },
 };
 </script>

@@ -11,13 +11,9 @@
         <LinkWrapper :linkData="attribute?.link" :resource="resource">
             <span>
                 {{
-                    attribute?.format
-                        ? attribute?.format(
-                              resource[attribute.value]
-                                  ? resource[attribute.value]
-                                  : attribute.value,
-                              resource
-                          )
+                    attribute?.format ||
+                    (attribute.value && attribute?.value.includes("."))
+                        ? formatValue(attribute, resource)
                         : resource[attribute.name]
                 }}
             </span>
@@ -42,7 +38,7 @@
         <span v-else>{{ $__("No") }}</span>
     </div>
     <div v-else-if="attribute.type === 'table'">
-        <template v-if="attribute.hidden(resource)">
+        <template v-if="attribute.hidden && attribute.hidden(resource)">
             <label>{{ attribute.label }}</label>
             <table>
                 <thead>
@@ -62,19 +58,17 @@
                             v-for="dataColumn in attribute.columns"
                             :key="dataColumn.name + 'data'"
                         >
-                            <template v-if="dataColumn.format">
+                            <template
+                                v-if="
+                                    dataColumn.format ||
+                                    dataColumn.value.includes('.')
+                                "
+                            >
                                 <LinkWrapper
                                     :linkData="dataColumn.link"
                                     :resource="row"
                                 >
-                                    {{
-                                        dataColumn.format(
-                                            row[dataColumn.value]
-                                                ? row[dataColumn.value]
-                                                : dataColumn.value,
-                                            row
-                                        )
-                                    }}
+                                    {{ formatValue(dataColumn, row) }}
                                 </LinkWrapper>
                             </template>
                             <template v-else-if="dataColumn.av">
@@ -105,13 +99,21 @@
         </template>
     </div>
     <div v-else-if="attribute?.type === 'component'">
-        <template v-if="attribute.hidden(resource)">
+        <template v-if="attribute.hidden && attribute.hidden(resource)">
             <component
                 :is="requiredComponent"
                 v-bind="requiredProps(true)"
             ></component>
         </template>
     </div>
+    <template v-else-if="attr.type == 'relationship' && attr.componentPath">
+        <template v-if="attribute.hidden && attribute.hidden(resource)">
+            <component
+                :is="requiredComponent"
+                v-bind="requiredProps(true)"
+            ></component>
+        </template>
+    </template>
 </template>
 
 <script>
@@ -127,7 +129,7 @@ export default {
         const { get_lib_from_av } = AVStore;
 
         return {
-            ...BaseElement.setup(),
+            ...BaseElement.setup({}),
             get_lib_from_av,
         };
     },
@@ -140,17 +142,22 @@ export default {
             const component = this.identifyAndImportComponent(this.attr, true);
             return component;
         },
-        selectOptions() {
-            if (this.attr.options) {
-                return this.attr.options;
-            }
-            return this.options;
-        },
         attribute() {
             if (this.attr.showElement) {
                 return { ...this.attr, ...this.attr.showElement };
             }
             return this.attr;
+        },
+    },
+    methods: {
+        formatValue(attr, resource) {
+            if (attr.value.includes(".")) {
+                return this.accessNestedProperty(attr.value, resource);
+            }
+            return attr.format(
+                resource[attr.value] ? resource[attr.value] : attr.value,
+                resource
+            );
         },
     },
     name: "ShowElement",
