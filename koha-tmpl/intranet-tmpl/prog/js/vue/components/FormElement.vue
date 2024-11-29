@@ -65,7 +65,8 @@
             :reduce="av => av[attr.requiredKey]"
             :options="selectOptions"
             :required="!resource[attr.name] && attr.required"
-            :disabled="attr.disabled"
+            :disabled="disabled"
+            @option:selected="attr.onSelected && attr.onSelected(resource)"
         >
             <template v-if="attr.required" #search="{ attributes, events }">
                 <input
@@ -101,7 +102,11 @@
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
     </div>
     <template v-else-if="attr.type == 'relationship' && attr.componentPath">
-        <component :is="requiredComponent" v-bind="requiredProps()"></component>
+        <component
+            :is="requiredComponent"
+            v-bind="requiredProps()"
+            v-on="getEventHandlers()"
+        ></component>
     </template>
 </template>
 
@@ -133,6 +138,13 @@ export default {
                 return this.attr.options;
             }
             return this.options;
+        },
+        disabled() {
+            if (typeof this.attr.disabled === "function") {
+                return this.attr.disabled(this.resource);
+            } else {
+                return this.attr.disabled || false;
+            }
         },
     },
     methods: {

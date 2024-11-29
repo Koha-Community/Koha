@@ -1,9 +1,5 @@
-<template>
-    <slot />
-</template>
-
 <script>
-import { defineAsyncComponent, inject } from "vue";
+import { inject } from "vue";
 
 export default {
     setup(props) {

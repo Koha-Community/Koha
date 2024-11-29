@@ -91,20 +91,6 @@ export default {
             }
         });
     },
-    watch: {
-        "agreement.status": function (newVal, oldVal) {
-            var index = this.resource_attrs.findIndex(function (attr) {
-                return attr.name === "closure_reason";
-            });
-
-            if (newVal != "closed") {
-                this.agreement.closure_reason = "";
-                this.resource_attrs[index].disabled = true;
-            } else {
-                this.resource_attrs[index].disabled = false;
-            }
-        },
-    },
     methods: {
         async getAgreement(agreement_id) {
             const client = APIClient.erm;

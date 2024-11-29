@@ -9,11 +9,6 @@ import ResourceShow from "./ResourceShow.vue";
 
 export default {
     components: { ResourceShow, BaseResource },
-    data() {
-        return {
-            component: null,
-        };
-    },
     methods: {
         getComponent() {
             const routeResource = this.$route.meta.self.parent.resource;
@@ -23,12 +18,7 @@ export default {
             const importPath = `./${
                 resourceModule ? `${resourceModule}/` : ""
             }${componentName}Resource.vue`;
-            const component = defineAsyncComponent(
-                () => import(`${importPath}`)
-            );
-            this.component = component;
-
-            return component;
+            return defineAsyncComponent(() => import(`${importPath}`));
         },
     },
     computed: {

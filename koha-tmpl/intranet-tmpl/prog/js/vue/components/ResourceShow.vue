@@ -4,11 +4,11 @@
         <Toolbar>
             <ToolbarButton
                 action="edit"
-                @go-to-edit-resource="goToResourceEdit"
+                @go-to-edit-resource="goToResourceEdit(resource)"
             />
             <ToolbarButton
                 action="delete"
-                @delete-resource="doResourceDelete"
+                @delete-resource="doResourceDelete(resource)"
             />
         </Toolbar>
 

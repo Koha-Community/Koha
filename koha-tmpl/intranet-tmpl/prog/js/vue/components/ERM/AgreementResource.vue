@@ -11,6 +11,18 @@
             doResourceDelete,
         }"
     />
+    <ResourceFormAdd
+        v-if="['add', 'edit'].includes(action)"
+        v-bind="{
+            id_attr,
+            api_client,
+            i18n,
+            resource_attrs,
+            list_component,
+            resource: newResource,
+            onSubmit,
+        }"
+    />
 </template>
 
 <script>
@@ -19,9 +31,10 @@ import BaseResource from "../BaseResource.vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import ResourceShow from "../ResourceShow.vue";
+import ResourceFormAdd from "../ResourceFormAdd.vue";
 
 export default {
-    components: { ResourceShow },
+    components: { ResourceShow, ResourceFormAdd },
     extends: BaseResource,
     props: {
         action: String,
@@ -110,6 +123,12 @@ export default {
                     label: __("Status"),
                     av_cat: "av_agreement_statuses",
                     show_in_table: true,
+                    onSelected: resource => {
+                        if (resource.status !== "closed") {
+                            resource.closure_reason = null;
+                        }
+                        return resource;
+                    },
                 },
                 {
                     name: "closure_reason",
@@ -117,6 +136,7 @@ export default {
                     label: __("Closure reason"),
                     av_cat: "av_agreement_closure_reasons",
                     show_in_table: true,
+                    disabled: agreement => agreement.status !== "closed",
                 },
                 {
                     name: "is_perpetual",
@@ -594,7 +614,173 @@ export default {
                     ],
                 },
             ],
+            agreement: {
+                agreement_id: null,
+                name: "",
+                vendor_id: null,
+                description: "",
+                status: "",
+                closure_reason: "",
+                is_perpetual: false,
+                renewal_priority: "",
+                license_info: "",
+                periods: [],
+                user_roles: [],
+                agreement_licenses: [],
+                agreement_relationships: [],
+                documents: [],
+                extended_attributes: [],
+            },
         };
+    },
+    methods: {
+        checkForm(agreement) {
+            let errors = [];
+
+            let agreement_licenses = agreement.agreement_licenses;
+            // Do not use al.license.name here! Its name is not the one linked with al.license_id
+            // At this point al.license is meaningless, form/template only modified al.license_id
+            const license_ids = agreement_licenses.map(al => al.license_id);
+            const duplicate_license_ids = license_ids.filter(
+                (id, i) => license_ids.indexOf(id) !== i
+            );
+
+            if (duplicate_license_ids.length) {
+                errors.push(this.$__("A license is used several times"));
+            }
+
+            const related_agreement_ids = agreement.agreement_relationships.map(
+                rs => rs.related_agreement_id
+            );
+            const duplicate_related_agreement_ids =
+                related_agreement_ids.filter(
+                    (id, i) => related_agreement_ids.indexOf(id) !== i
+                );
+
+            if (duplicate_related_agreement_ids.length) {
+                errors.push(
+                    this.$__(
+                        "An agreement is used as relationship several times"
+                    )
+                );
+            }
+
+            if (
+                agreement_licenses.filter(al => al.status == "controlling")
+                    .length > 1
+            ) {
+                errors.push(
+                    this.$__("Only one controlling license is allowed")
+                );
+            }
+
+            if (
+                agreement_licenses.filter(al => al.status == "controlling")
+                    .length > 1
+            ) {
+                errors.push(
+                    this.$__("Only one controlling license is allowed")
+                );
+            }
+
+            let documents_with_uploaded_files = agreement.documents.filter(
+                doc => typeof doc.file_content !== "undefined"
+            );
+            if (
+                documents_with_uploaded_files.filter(
+                    doc => atob(doc.file_content).length >= max_allowed_packet
+                ).length >= 1
+            ) {
+                errors.push(
+                    this.$__("File size exceeds maximum allowed: %s MB").format(
+                        (max_allowed_packet / (1024 * 1024)).toFixed(2)
+                    )
+                );
+            }
+            agreement.user_roles.forEach((user, i) => {
+                if (user.patron_str === "") {
+                    errors.push(
+                        this.$__("Agreement user %s is missing a user").format(
+                            i + 1
+                        )
+                    );
+                }
+            });
+            this.setWarning(errors.join("<br>"));
+            return !errors.length;
+        },
+        onSubmit(e, agreementToSave) {
+            e.preventDefault();
+
+            //let agreement= Object.assign( {} ,this.agreement); // copy
+            let agreement = JSON.parse(JSON.stringify(agreementToSave)); // copy
+            let agreement_id = agreement.agreement_id;
+
+            if (!this.checkForm(agreement)) {
+                return false;
+            }
+
+            delete agreement.agreement_id;
+            delete agreement.vendor;
+            delete agreement._strings;
+            agreement.is_perpetual = agreement.is_perpetual ? true : false;
+
+            if (agreement.vendor_id == "") {
+                agreement.vendor_id = null;
+            }
+
+            agreement.periods = agreement.periods.map(
+                ({ agreement_id, agreement_period_id, ...keepAttrs }) =>
+                    keepAttrs
+            );
+
+            agreement.user_roles = agreement.user_roles.map(
+                ({ patron, patron_str, ...keepAttrs }) => keepAttrs
+            );
+
+            agreement.agreement_licenses = agreement.agreement_licenses.map(
+                ({
+                    license,
+                    agreement_id,
+                    agreement_license_id,
+                    ...keepAttrs
+                }) => keepAttrs
+            );
+
+            agreement.agreement_relationships =
+                agreement.agreement_relationships.map(
+                    ({ related_agreement, ...keepAttrs }) => keepAttrs
+                );
+
+            agreement.documents = agreement.documents.map(
+                ({ file_type, uploaded_on, ...keepAttrs }) => keepAttrs
+            );
+
+            delete agreement.agreement_packages;
+
+            if (agreement_id) {
+                this.api_client.update(agreement, agreement_id).then(
+                    success => {
+                        this.setMessage(this.$__("Agreement updated"));
+                        this.$router.push({ name: "AgreementsList" });
+                    },
+                    error => {}
+                );
+            } else {
+                this.api_client.create(agreement).then(
+                    success => {
+                        this.setMessage(this.$__("Agreement created"));
+                        this.$router.push({ name: "AgreementsList" });
+                    },
+                    error => {}
+                );
+            }
+        },
+    },
+    computed: {
+        newResource() {
+            return this[this.resource_name];
+        },
     },
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
