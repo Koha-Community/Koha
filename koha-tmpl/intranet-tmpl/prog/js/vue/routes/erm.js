@@ -28,6 +28,8 @@ import UsageStatisticsDataProvidersShow from "../components/ERM/UsageStatisticsD
 import UsageStatisticsReportsHome from "../components/ERM/UsageStatisticsReportsHome.vue";
 import UsageStatisticsReportsViewer from "../components/ERM/UsageStatisticsReportsViewer.vue";
 
+import ResourceWrapper from "../components/ResourceWrapper.vue";
+
 import { $__ } from "../i18n";
 
 export const routes = [
@@ -48,6 +50,8 @@ export const routes = [
                 title: $__("Agreements"),
                 icon: "fa fa-check-circle",
                 is_end_node: true,
+                resource: "agreement",
+                module: "ERM",
                 children: [
                     {
                         path: "",
@@ -57,7 +61,7 @@ export const routes = [
                     {
                         path: ":agreement_id",
                         name: "AgreementsShow",
-                        component: markRaw(AgreementsShow),
+                        component: markRaw(ResourceWrapper),
                         title: $__("Show agreement"),
                     },
                     {

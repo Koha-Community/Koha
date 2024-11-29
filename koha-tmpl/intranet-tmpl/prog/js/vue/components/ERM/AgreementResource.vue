@@ -1,11 +1,31 @@
+<template>
+    <ResourceShow
+        v-if="action === 'show'"
+        v-bind="{
+            id_attr,
+            api_client,
+            i18n,
+            resource_attrs,
+            list_component,
+            goToResourceEdit,
+            doResourceDelete,
+        }"
+    />
+</template>
+
 <script>
 import { inject } from "vue";
 import BaseResource from "../BaseResource.vue";
 import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
+import ResourceShow from "../ResourceShow.vue";
 
 export default {
+    components: { ResourceShow },
     extends: BaseResource,
+    props: {
+        action: String,
+    },
     setup(props) {
         const AVStore = inject("AVStore");
         const {
