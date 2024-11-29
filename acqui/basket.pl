@@ -94,7 +94,17 @@ my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 my $schema = Koha::Database->new()->schema();
 my $rs = $schema->resultset('VendorEdiAccount')->search(
     { vendor_id => $booksellerid, } );
-$template->param( ediaccount => ($rs->count > 0));
+my $ediaccount = ( $rs->count > 0 );
+$template->param( ediaccount => $ediaccount );
+if ($ediaccount) {
+    my @eans = $schema->resultset('EdifactEan')->search(
+        {},
+        {
+            join => 'branch',
+        }
+    );
+    $template->param( eans => \@eans );
+}
 
 unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
     $template->param(
