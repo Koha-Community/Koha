@@ -82,7 +82,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
             table_settings = [% TablesSettings.GetTableSettings( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
