@@ -1,11 +1,15 @@
 <script>
 import { inject } from "vue";
+import { build_url } from "../composables/datatables";
 
 export default {
     setup(props) {
         //global setup for all resource (list and show for now, but maybe others?) components here
         const { setConfirmationDialog, setMessage, setError, setWarning } =
             inject("mainStore");
+
+        const AVStore = inject("AVStore");
+        const { get_lib_from_av, map_av_dt_filter } = AVStore;
 
         const format_date = $date;
         const patron_to_html = $patron_to_html;
@@ -18,6 +22,11 @@ export default {
             setWarning,
             format_date,
             patron_to_html,
+            logged_in_user,
+            escape_str,
+            get_lib_from_av,
+            map_av_dt_filter,
+            build_url,
         };
     },
     methods: {
@@ -165,6 +174,26 @@ export default {
         },
         additionalFieldsChanged(additionalFieldValues, resource) {
             resource.extended_attributes = additionalFieldValues;
+        },
+        getFilters(query, filterData) {
+            const filters = filterData ? filterData : this.tableFilters;
+            const filterOptions = filters.reduce((acc, filter) => {
+                acc[filter.name] = filter.value;
+                return acc;
+            }, {});
+
+            Object.keys(query).forEach(key => {
+                if (
+                    filterOptions.hasOwnProperty(key) &&
+                    query[key] !== filterOptions[key]
+                ) {
+                    filterOptions[key] = query[key];
+                }
+                if (!filterOptions.hasOwnProperty(key)) {
+                    filterOptions[key] = query[key];
+                }
+            });
+            return filterOptions;
         },
     },
     name: "BaseResource",

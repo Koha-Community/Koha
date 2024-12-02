@@ -1,4 +1,21 @@
 <template>
+    <ResourceList
+        v-if="action === 'list'"
+        v-bind="{
+            api_client,
+            i18n,
+            tableOptions,
+            resource_name,
+            goToResourceShow,
+            goToResourceEdit,
+            doResourceDelete,
+            goToResourceAdd,
+            tableFilters,
+            getFilters,
+            filterTable,
+            tableUrl,
+        }"
+    />
     <ResourceShow
         v-if="action === 'show'"
         v-bind="{
@@ -32,9 +49,10 @@ import { storeToRefs } from "pinia";
 import { APIClient } from "../../fetch/api-client.js";
 import ResourceShow from "../ResourceShow.vue";
 import ResourceFormAdd from "../ResourceFormAdd.vue";
+import ResourceList from "../ResourceList.vue";
 
 export default {
-    components: { ResourceShow, ResourceFormAdd },
+    components: { ResourceShow, ResourceFormAdd, ResourceList },
     extends: BaseResource,
     props: {
         action: String,
@@ -51,6 +69,9 @@ export default {
             av_agreement_relationships,
         } = storeToRefs(AVStore);
 
+        const vendorStore = inject("vendorStore");
+        const { vendors } = storeToRefs(vendorStore);
+
         return {
             ...BaseResource.setup({
                 resource_name: "agreement",
@@ -64,6 +85,8 @@ export default {
                 resource_table_url: APIClient.erm._baseURL + "agreements",
                 i18n: {
                     display_name: __("Agreement"),
+                    display_name_lc: __("agreement"),
+                    display_name_plural: __("agreements"),
                 },
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
@@ -72,10 +95,15 @@ export default {
                 av_agreement_license_statuses,
                 av_agreement_license_location,
                 av_agreement_relationships,
+                agreement_table_settings,
+                vendors,
             }),
         };
     },
     data() {
+        const tableFilters = this.getTableFilters();
+        const defaults = this.getFilters(this.$route.query, tableFilters);
+
         return {
             resource_attrs: [
                 {
@@ -631,6 +659,55 @@ export default {
                 documents: [],
                 extended_attributes: [],
             },
+            tableOptions: {
+                columns: this.getTableColumns(),
+                options: {
+                    embed: "user_roles,vendor,extended_attributes,+strings",
+                },
+                url: () => this.tableUrl(defaults),
+                table_settings: this.agreement_table_settings,
+                add_filters: true,
+                filters_options: {
+                    1: () =>
+                        this.vendors.map(e => {
+                            e["_id"] = e["id"];
+                            e["_str"] = e["name"];
+                            return e;
+                        }),
+                    3: () => this.map_av_dt_filter("av_agreement_statuses"),
+                    4: () =>
+                        this.map_av_dt_filter("av_agreement_closure_reasons"),
+                    5: [
+                        { _id: 0, _str: this.$__("No") },
+                        { _id: 1, _str: this.$__("Yes") },
+                    ],
+                    6: () =>
+                        this.map_av_dt_filter(
+                            "av_agreement_renewal_priorities"
+                        ),
+                },
+                actions: {
+                    0: ["show"],
+                    "-1": this.embedded
+                        ? [
+                              {
+                                  select: {
+                                      text: this.$__("Select"),
+                                      icon: "fa fa-check",
+                                  },
+                              },
+                          ]
+                        : ["edit", "delete"],
+                },
+                default_filters: {
+                    "user_roles.user_id": function () {
+                        return defaults.by_mine
+                            ? logged_in_user.borrowernumber
+                            : "";
+                    },
+                },
+            },
+            tableFilters,
         };
     },
     methods: {
@@ -775,6 +852,162 @@ export default {
                     error => {}
                 );
             }
+        },
+        getTableColumns() {
+            let get_lib_from_av = this.get_lib_from_av;
+            let escape_str = this.escape_str;
+
+            return [
+                {
+                    title: __("Name"),
+                    data: "me.name:me.agreement_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return (
+                            '<a role="button" class="show">' +
+                            escape_str(`${row.name} (#${row.agreement_id})`) +
+                            "</a>"
+                        );
+                    },
+                },
+                {
+                    title: __("Vendor"),
+                    data: "vendor_id",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return row.vendor_id != undefined
+                            ? '<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=' +
+                                  row.vendor_id +
+                                  '">' +
+                                  escape_str(row.vendor.name) +
+                                  "</a>"
+                            : "";
+                    },
+                },
+                {
+                    title: __("Description"),
+                    data: "description",
+                    searchable: true,
+                    orderable: true,
+                },
+                {
+                    title: __("Status"),
+                    data: "status",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av("av_agreement_statuses", row.status)
+                        );
+                    },
+                },
+                {
+                    title: __("Closure reason"),
+                    data: "closure_reason",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_agreement_closure_reasons",
+                                row.closure_reason
+                            )
+                        );
+                    },
+                },
+                {
+                    title: __("Is perpetual"),
+                    data: "is_perpetual",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            row.is_perpetual ? __("Yes") : __("No")
+                        );
+                    },
+                },
+                {
+                    title: __("Renewal priority"),
+                    data: "renewal_priority",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        return escape_str(
+                            get_lib_from_av(
+                                "av_agreement_renewal_priorities",
+                                row.renewal_priority
+                            )
+                        );
+                    },
+                },
+            ];
+        },
+        getTableFilters() {
+            return [
+                {
+                    name: "by_expired",
+                    type: "checkbox",
+                    label: __("Filter by expired"),
+                    value: false,
+                    onChange: function (filters) {
+                        if (filters.by_expired) {
+                            filters.max_expiration_date = new Date()
+                                .toISOString()
+                                .substring(0, 10);
+                        } else {
+                            filters.max_expiration_date = "";
+                        }
+                        return filters;
+                    },
+                },
+                {
+                    name: "max_expiration_date",
+                    type: "component",
+                    label: __("on"),
+                    componentPath: "./FlatPickrWrapper.vue",
+                    props: {
+                        id: {
+                            type: "string",
+                            value: "max_expiration_date_filter",
+                        },
+                        disabled: {
+                            type: "resourceProperty",
+                            resourceProperty: "by_expired",
+                        },
+                    },
+                    value: "",
+                },
+                {
+                    name: "by_mine",
+                    type: "checkbox",
+                    label: __("Show mine only"),
+                    value: false,
+                },
+            ];
+        },
+        tableUrl(filters) {
+            let url = this.getResourceTableUrl();
+            if (filters?.by_expired)
+                url += "?max_expiration_date=" + filters.max_expiration_date;
+            return url;
+        },
+        async filterTable(filters, table, embedded = false) {
+            if (!embedded) {
+                if (filters.by_expired && !filters.max_expiration_date) {
+                    filters.max_expiration_date = new Date()
+                        .toISOString()
+                        .substring(0, 10);
+                }
+                if (!filters.by_expired) {
+                    filters.max_expiration_date = "";
+                }
+                let { href } = this.$router.resolve({ name: "AgreementsList" });
+                let new_route = this.build_url(href, filters);
+                this.$router.push(new_route);
+            }
+            table.redraw(this.tableUrl(filters));
         },
     },
     computed: {

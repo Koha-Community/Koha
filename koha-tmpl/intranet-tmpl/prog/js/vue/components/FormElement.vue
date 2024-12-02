@@ -1,5 +1,5 @@
 <template>
-    <div v-if="attr.type == 'text'">
+    <template v-if="attr.type == 'text'">
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
@@ -12,8 +12,8 @@
             :required="attr.required ? true : false"
         />
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
-    </div>
-    <div v-else-if="attr.type == 'textarea'">
+    </template>
+    <template v-else-if="attr.type == 'textarea'">
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
@@ -28,8 +28,22 @@
             :required="attr.required ? true : false"
         />
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
-    </div>
-    <div v-else-if="attr.type == 'boolean'">
+    </template>
+    <template v-else-if="attr.type == 'checkbox'">
+        <label
+            :for="`${attr.name}${index}`"
+            :class="{ required: attr.required }"
+            >{{ attr.label }}:</label
+        >
+        <input
+            type="checkbox"
+            :id="`${attr.name}${index}`"
+            v-model="resource[attr.name]"
+            @change="attr.onChange && attr.onChange(resource)"
+        />
+        <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
+    </template>
+    <template v-else-if="attr.type == 'boolean'">
         <label :for="`${attr.name}${index}`">{{ attr.label }}:</label>
         <label class="radio" :for="`${attr.name}${index}` + '_yes'"
             >{{ $__("Yes") }}:
@@ -51,8 +65,8 @@
                 v-model="resource[attr.name]"
             />
         </label>
-    </div>
-    <div v-else-if="attr.type == 'select'">
+    </template>
+    <template v-else-if="attr.type == 'select'">
         <label
             :for="`${attr.name}${index}`"
             :class="{ required: attr.required }"
@@ -78,8 +92,8 @@
             </template>
         </v-select>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
-    </div>
-    <div v-else-if="attr.type == 'component'">
+    </template>
+    <template v-else-if="attr.type == 'component'">
         <label
             v-if="attr.label"
             :for="attr.name"
@@ -100,7 +114,7 @@
             v-on="getEventHandlers()"
         ></component>
         <span v-if="attr.required" class="required">{{ $__("Required") }}</span>
-    </div>
+    </template>
     <template v-else-if="attr.type == 'relationship' && attr.componentPath">
         <component
             :is="requiredComponent"

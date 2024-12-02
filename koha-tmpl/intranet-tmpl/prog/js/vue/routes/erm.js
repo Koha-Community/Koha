@@ -56,7 +56,7 @@ export const routes = [
                     {
                         path: "",
                         name: "AgreementsList",
-                        component: markRaw(AgreementsList),
+                        component: markRaw(ResourceWrapper),
                     },
                     {
                         path: ":agreement_id",

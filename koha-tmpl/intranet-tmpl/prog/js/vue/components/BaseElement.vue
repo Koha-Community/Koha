@@ -57,6 +57,11 @@ export default {
                 if (prop.type === "boolean") {
                     acc[key] = prop.value;
                 }
+
+                if (key === "disabled") {
+                    const currentValue = acc[key];
+                    acc[key] = !!currentValue;
+                }
                 return acc;
             }, {});
             const attr = show ? this.attr.showElement : this.attr;
