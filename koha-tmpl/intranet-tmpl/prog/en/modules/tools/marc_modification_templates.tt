@@ -379,7 +379,6 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         table_settings = [% TablesSettings.GetTableSettings('tools', 'marc-modification-templates', 'templatest', 'json') | $raw %];
         [% IF ActionsLoop %]

@@ -27,7 +27,6 @@
     [% MACRO jsinclude BLOCK %]
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
-        [% INCLUDE 'columns_settings.inc' %]
         [% INCLUDE 'js-patron-format.inc' %]
         [% INCLUDE 'js-date-format.inc' %]
         <script>
@@ -54,5 +53,5 @@
         [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
         [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1 %]
     [% END %]
-    [% INCLUDE 'intranet-bottom.inc' %]
-</div>
+    [% INCLUDE 'intranet-bottom.inc' %]</div
+>

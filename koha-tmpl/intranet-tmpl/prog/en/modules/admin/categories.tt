@@ -867,7 +867,6 @@
     [% Asset.js("lib/jquery/plugins/multiple-select/multiple-select.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
     <script>
         var table_settings = [% TablesSettings.GetTableSettings( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>

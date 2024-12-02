@@ -1,5 +1,4 @@
 [% USE Koha %]
-[% INCLUDE 'columns_settings.inc' %]
 
 [% BLOCK report %]
     [% SET report = job.report %]
