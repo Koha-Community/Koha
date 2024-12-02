@@ -229,21 +229,24 @@
                 $('#sortform').submit();
             });
 
-            var table = KohaTable("#readingrec", {
-                "dom": '<"top"<"table_entries"i><"table_controls"fB>>t',
-                "language": {
-                    "search": "_INPUT_",
-                    "searchPlaceholder": _("Search")
+            var table = $("#readingrec").kohaTable(
+                {
+                    dom: '<"top"<"table_entries"i><"table_controls"fB>>t',
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: _("Search"),
+                    },
+                    responsive: {
+                        details: { type: "column", target: -1 },
+                    },
+                    columnDefs: [
+                        { className: "dtr-control", orderable: false, targets: [-1] },
+                        { visible: false, targets: [0] },
+                        { orderable: false, targets: [1] },
+                    ],
                 },
-                "responsive": {
-                    "details": {"type": 'column',"target": -1}
-                },
-                "columnDefs": [
-                    { "className": "dtr-control","orderable": false,"targets": [-1] },
-                    { "visible": false, "targets": [0]},
-                    { "orderable": false, "targets": [1]}
-                ],
-            });
+            );
+
             let table_dt = table.DataTable();
 
             $("#tabs a[data-bs-toggle='tab']").on("shown.bs.tab", function (e) {

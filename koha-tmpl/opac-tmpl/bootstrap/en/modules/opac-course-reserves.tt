@@ -86,23 +86,24 @@
     <script>
         $(document).ready(function() {
             table_settings = [% TablesSettings.GetTableSettings( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
-            KohaTable("#course_reserves_table", {
-                "dom": '<"top"<"table_controls"f>>rt<"clear">',
-                "sorting": [[ 1, "asc" ]],
-                "asColumnDefs": [
-                    { "aTargets": [ 1 ], "sType": "nsb-nse" },
-                ],
-                "language": {
-                    "search": "_INPUT_",
-                    "searchPlaceholder": _("Search courses")
+            $("#course_reserves_table").kohaTable(
+                {
+                    dom: '<"top"<"table_controls"f>>rt<"clear">',
+                    sorting: [[1, "asc"]],
+                    asColumnDefs: [{ aTargets: [1], sType: "nsb-nse" }],
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: _("Search courses"),
+                    },
+                    responsive: {
+                        details: { type: "column", target: -1 },
+                    },
+                    cColumnDefs: [
+                        { className: "dtr-control", orderable: false, targets: -1 },
+                    ],
                 },
-                "responsive": {
-                    "details": { "type": 'column',"target": -1 }
-                },
-                "cColumnDefs": [
-                    { "className": 'dtr-control', "orderable": false, "targets": -1 },
-                ],
-            }, table_settings );
+                table_settings
+            );
         });
     </script>
 [% END %]
