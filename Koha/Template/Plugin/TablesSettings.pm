@@ -40,8 +40,8 @@ Koha::Template::Plugin::TablesSettings
     . . .
 
     <script>
-        var columns_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
-        var table = KohaTable("id", { "autoWidth": false }, columns_settings );
+        var table_settings = [% TablesSettings.GetTableSettings( 'module', 'page', 'table', 'json' ) | $raw %];
+        var table = $("#id").kohaTable({ "autoWidth": false }, table_settings );
     </script>
 
 This plugin allows to get the column configuration for a table. It should be used both in table markup
@@ -60,40 +60,6 @@ use C4::Context;
 use C4::Utils::DataTables::TablesSettings;
 
 =head1 FUNCTIONS
-
-=head2 GetColumns
-
-    <script>
-        var tables_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
-        var table = KohaTable("id", { "autoWidth": false }, tables_settings );
-    </script>
-
-Used to get the full column settings configuration for datatables, usually requires a format of 'json' to pass into
-datatables instantiator.
-
-=cut
-
-=head3 GetColumns
-
-var columns_settings = [% TablesSettings.GetColumns( module, page, table 'json' ) | $raw%]
-
-This method is usually be used to retrieve the columns settings for a DataTable init.
-
-So the 'json' format will be provided and the columns_settings JS var will be
-passed as argument of the constructor.
-
-=cut
-
-sub GetColumns {
-    my ( $self, $module, $page, $table, $format ) = @_;
-    $format //= q{};
-
-    my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
-
-    return $format eq 'json'
-        ? to_json( $columns )
-        : $columns
-}
 
 =head2 is_hidden
 
