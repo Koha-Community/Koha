@@ -1311,6 +1311,9 @@ function update_search_description(
     ) {
         var settings = null;
 
+        // Early return if the node does not exist
+        if (!this.length) return;
+
         if (options) {
             // Don't redefine the default initComplete
             if (options.initComplete) {
