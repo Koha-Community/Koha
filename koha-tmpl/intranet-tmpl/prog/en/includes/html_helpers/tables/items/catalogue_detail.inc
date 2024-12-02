@@ -536,20 +536,20 @@
                     }
 
                     [% IF Koha.Preference('UseRecalls') %]
-                        if ( row.recall ) {
+                        if ( row.recall && ( row.item_id === row.recall.item_id ) ) {
                             if ( row.recall.waiting_date ) {
-                                nodes += '<span>%s</span>'.format(_("Waiting at %s since %s").format(escape_str(row.recall.pickup_library_id.str), $date(row.recall.waiting_date)));
+                                nodes += '<span>%s</span>'.format(_("Waiting recall at %s since %s").format(escape_str(row.recall._strings.pickup_library_id.str), $date(row.recall.waiting_date)));
                             } else {
                                 [%# Hacky for patron_to_html in case we simply want to display the patron's library name %]
                                 row.recall.patron.library = { name: libraries_names.get(row.recall.patron.library_id) };
 
                                 let patron_to_html = $patron_to_html(row.recall.patron, {url: true, display_cardnumber: true, hide_patron_name });
-                                nodes += '<span>%s</span>'.format(_("recalled by %s on %s").format(patron_to_html, $date(row.recall.created_date)))
+                                nodes += '<span>%s</span>'.format(_("Recalled by %s on %s").format(patron_to_html, $date(row.recall.created_date)))
                             }
                         }
                     [% END %]
 
-                    if ( ! ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
+                    if ( ! ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || ( row.recall && ( row.item_id === row.recall.item_id ) ) )) {
                         nodes += ' <span>%s</span>'.format(_("Available"))
                     }
 
