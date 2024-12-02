@@ -334,12 +334,10 @@
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "columnDefs": [
-                { "targets": [ -1 ], "sortable": false, "searchable": false }
-            ],
-            "order": [[ 3, "desc" ]],
-        }));
+        $("#illrequestlist").kohaTable({
+            columnDefs: [{ targets: [-1], sortable: false, searchable: false }],
+            order: [[3, "desc"]],
+        });
         $("#backend-dropdown-options").removeClass("nojs");
         [% IF services_json.length > 0 %]
             var services = [% services_json | $raw %];

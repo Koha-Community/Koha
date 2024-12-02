@@ -147,22 +147,20 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(function () {
-            $("#topissuest").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    sorting: [[3, "desc"]],
-                    columnDefs: [
-                        { sortable: false, searchable: false, targets: ["NoSort"] },
-                        { type: "anti-the", targets: ["anti-the"] },
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                    ],
-                    responsive: {
-                        details: {
-                            type: "column",
-                            target: -1,
-                        },
+            $("#topissuest").kohaTable({
+                sorting: [[3, "desc"]],
+                columnDefs: [
+                    { sortable: false, searchable: false, targets: ["NoSort"] },
+                    { type: "anti-the", targets: ["anti-the"] },
+                    { className: "dtr-control", orderable: false, targets: -1 },
+                ],
+                responsive: {
+                    details: {
+                        type: "column",
+                        target: -1,
                     },
-                })
-            );
+                },
+            });
         });
     </script>
 [% END %]

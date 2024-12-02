@@ -595,7 +595,7 @@
         [% END %]
 
         $(function() {
-            $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#suggestt").kohaTable({
                 "order": [[ 1, "asc" ]],
                 "columnDefs": [
                   [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %],
@@ -618,7 +618,7 @@
                         target: -1
                     }
                 },
-            }));
+            });
             [% IF ( loggedinusername ) %]$("span.clearall").html("<a id=\"CheckNone\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Clear all")+"<\/a>");
             $("span.checkall").html("<a id=\"CheckAll\" class=\"btn btn-link btn-sm\" href=\"#\">"+_("Select all")+"<\/a>");
             $("#CheckAll").on("click",function(e){

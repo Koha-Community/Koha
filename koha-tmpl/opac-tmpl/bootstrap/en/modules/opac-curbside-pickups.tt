@@ -325,17 +325,15 @@
         });
 
         $(document).ready(function() {
-            $('#pickups-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "searching": false,
-                "paging": false,
-                "info": false,
-                "responsive": {
-                    "details": { "type": 'column',"target": -1 }
+            $("#pickups-table").kohaTable({
+                searching: false,
+                paging: false,
+                info: false,
+                responsive: {
+                    details: { type: "column", target: -1 },
                 },
-                "columnDefs": [
-                    { "className": 'dtr-control', "orderable": false, "targets": -1 }
-                ],
-            }));
+                columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
+            });
             $("#pickup-branch option").each(function(){
                 if ( $(this).val() != "" && !policies[$(this).val()].enabled ) {
                     $(this).prop("disabled", "disabled");

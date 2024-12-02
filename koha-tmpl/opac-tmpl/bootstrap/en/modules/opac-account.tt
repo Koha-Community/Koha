@@ -89,7 +89,7 @@
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
 
-            var fines_table = $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var fines_table = $("#finestable").kohaTable({
                  [% IF ENABLE_OPAC_PAYMENTS %]
                  "order": [[ 1, "desc" ]],
                  [% ELSE %]
@@ -102,22 +102,22 @@
                  "columnDefs": [
                     { "className": 'dtr-control', "orderable": false, "targets": -1 }
                  ],
-                 'fnDrawCallback': function() {
+                 'drawCallback': function() {
                     show_hiddentfoot('#finestable');
                  }
-            } ));
+            } );
 
-            $('table[id^="finestable-"]').dataTable($.extend(true, {}, dataTablesDefaults, {
+            $('table[id^="finestable-"]').kohaTable({
                  "responsive": {
                     "details": { "type": 'column',"target": -1 }
                  },
                  "columnDefs": [
                     { "className": 'dtr-control', "orderable": false, "targets": -1 }
                  ],
-                 'fnDrawCallback': function() {
+                 'drawCallback': function() {
                     show_hiddentfoot('table[id^="finestable-"]');
                  }
-            } ));
+            });
 
             function show_hiddentfoot(selector) {
                 $('.finestable tfoot .sum').show();

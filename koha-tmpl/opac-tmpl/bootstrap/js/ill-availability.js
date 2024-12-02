@@ -199,9 +199,7 @@ $(document).ready(function () {
                 });
             };
             // Initialise the table
-            $("#" + service.id).dataTable(
-                $.extend(true, {}, dataTablesDefaults, tableDef)
-            );
+            $("#" + service.id).kohaTable(tableDef);
         });
     };
 });

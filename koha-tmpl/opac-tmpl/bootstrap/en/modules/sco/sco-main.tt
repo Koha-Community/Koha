@@ -457,27 +457,27 @@
                 var dTables = $("#loanTable, #holdst, #finestable");
                 dTables.each(function(){
                     var thIndex = $(this).find("th.psort").index();
-                    $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-                        "sorting" : [[ thIndex, 'asc' ]],
-                        "dom": '<"top"<"table_entries"><"table_controls"f>>t<"clear">',
-                        "columnDefs": [
-                            { "targets": [ "nosort" ],"sortable": false,"searchable": false },
-                            { "targets": [ "noshow" ], "visible": false, "searchable": false },
-                            { "type": "anti-the", "targets" : [ "anti-the" ] },
-                            { "visible": false, "targets" : [ "hidden" ] },
-                            { "className": 'dtr-control', "orderable": false, "targets": -1 }
+                    $(this).kohaTable({
+                        sorting: [[thIndex, "asc"]],
+                        dom: '<"top"<"table_entries"><"table_controls"f>>t<"clear">',
+                        columnDefs: [
+                            { targets: ["nosort"], sortable: false, searchable: false },
+                            { targets: ["noshow"], visible: false, searchable: false },
+                            { type: "anti-the", targets: ["anti-the"] },
+                            { visible: false, targets: ["hidden"] },
+                            { className: "dtr-control", orderable: false, targets: -1 },
                         ],
-                        "language": {
-                            "search": "_INPUT_",
-                            "searchPlaceholder": _("Search")
+                        language: {
+                            search: "_INPUT_",
+                            searchPlaceholder: _("Search"),
                         },
-                        "responsive": {
+                        responsive: {
                             details: {
-                                type: 'column',
-                                target: -1
-                            }
-                        }
-                    }));
+                                type: "column",
+                                target: -1,
+                            },
+                        },
+                    });
                 });
 
                 $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {

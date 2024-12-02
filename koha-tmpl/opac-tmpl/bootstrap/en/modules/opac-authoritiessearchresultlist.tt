@@ -121,17 +121,15 @@
     [% INCLUDE 'datatables.inc' %]
     <script type="text/JavaScript">
         $(document).ready(function () {
-            $(".table").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    searching: false,
-                    paging: false,
-                    info: false,
-                    responsive: {
-                        details: { type: "column", target: -1 },
-                    },
-                    columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
-                })
-            );
+            $(".table").kohaTable({
+                searching: false,
+                paging: false,
+                info: false,
+                responsive: {
+                    details: { type: "column", target: -1 },
+                },
+                columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
+            });
         });
     </script>
 [% END %]

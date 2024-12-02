@@ -98,18 +98,18 @@
 
         var Tables = $("#clubs-table-enrolled,#clubs-table-unenrolled");
         Tables.each(function(){
-            $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-                "searching": false,
-                "paging": false,
-                "info": false,
-                "responsive": {
-                    "details": { "type": "column", "target": -1 }
+            $(this).kohaTable({
+                searching: false,
+                paging: false,
+                info: false,
+                responsive: {
+                    details: { type: "column", target: -1 },
                 },
-                "columnDefs": [
-                    { "orderable": false, "searchable": false, "targets": [ 'NoSort' ] },
-                    { "className": "dtr-control", "orderable": false, "targets": -1 },
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: ["NoSort"] },
+                    { className: "dtr-control", orderable: false, targets: -1 },
                 ],
-            }));
+            });
         });
 
         $(".cancel_enrollment").on("click", function(e){

@@ -1206,7 +1206,7 @@
                 $(this).on("init.dt", function() {
                         tableInit( $(this).attr("id") );
                     })
-                    .dataTable($.extend(true, {}, dataTablesDefaults, {
+                    .kohaTable({
                     "sorting" : [[ thIndex, 'asc' ]],
                     "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
                     "columnDefs": [
@@ -1243,22 +1243,20 @@
                             }
                         }
                     ]
-                }));
+                });
             });
 
             var dataTables = $("#recalls-table,#article-requests-table");
             dataTables.each(function(){
-                $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "searching": false,
-                    "paging": false,
-                    "info": false,
-                    "responsive": {
-                        "details": { "type": 'column',"target": -1 }
+                $(this).kohaTable({
+                    searching: false,
+                    paging: false,
+                    info: false,
+                    responsive: {
+                        details: { type: "column", target: -1 },
                     },
-                    "columnDefs": [
-                        { "className": 'dtr-control', "orderable": false, "targets": -1 }
-                    ],
-                }));
+                    columnDefs: [{ className: "dtr-control", orderable: false, targets: -1 }],
+                });
             });
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (event) {
                 dTables.DataTable().responsive.recalc();

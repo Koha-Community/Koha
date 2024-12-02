@@ -207,9 +207,9 @@
                 $(this).addClass("currentsubtab");
                 showlayer( year );
             });
-            $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "order": [[ 0, "desc" ]]
-            }));
+            $(".subscriptionstclass").kohaTable({
+                order: [[0, "desc"]],
+            });
         });
 
         // Filters initialization

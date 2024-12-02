@@ -295,23 +295,21 @@
                 }
             });
 
-            $("#mytagst").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    sorting: [[2, "asc"]],
-                    columnDefs: [
-                        { targets: [0], sortable: false, searchable: false },
-                        { sType: "anti-the", aTargets: ["anti-the"] },
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                        { responsivePriority: 1, targets: 2 },
-                    ],
-                    responsive: {
-                        details: {
-                            type: "column",
-                            target: -1,
-                        },
+            $("#mytagst").kohaTable({
+                sorting: [[2, "asc"]],
+                columnDefs: [
+                    { targets: [0], sortable: false, searchable: false },
+                    { sType: "anti-the", aTargets: ["anti-the"] },
+                    { className: "dtr-control", orderable: false, targets: -1 },
+                    { responsivePriority: 1, targets: 2 },
+                ],
+                responsive: {
+                    details: {
+                        type: "column",
+                        target: -1,
                     },
-                })
-            );
+                },
+            });
         });
     </script>
 [% END %]

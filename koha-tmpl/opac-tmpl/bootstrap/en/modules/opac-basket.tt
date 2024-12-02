@@ -544,19 +544,11 @@
             });
 
             if( $("#itemst").length > 0 ){
-                var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "order": [[ 1, "asc" ]],
-                    "columnDefs": [
-                      { "targets": [ 0,-1 ], "sortable": false, "searchable": false }
-                    ],
-                    "columns": [
-                        null,
-                        { "type": "anti-the" },
-                        null,
-                        null,
-                        null
-                    ],
-                }));
+                var itemst = $("#itemst").kohaTable({
+                    order: [[1, "asc"]],
+                    columnDefs: [{ targets: [0, -1], sortable: false, searchable: false }],
+                    columns: [null, { type: "anti-the" }, null, null, null],
+                });
 
                 var buttons = new $.fn.dataTable.Buttons(itemst, {
                      buttons: [

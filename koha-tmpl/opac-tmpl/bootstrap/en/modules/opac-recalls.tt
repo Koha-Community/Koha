@@ -135,18 +135,16 @@
             $(".cancel_recall").click(function () {
                 return confirmDelete(_("Are you sure you want to remove this recall?"));
             });
-            $("#recalls-table").dataTable(
-                $.extend(true, {}, dataTablesDefaults, {
-                    responsive: {
-                        details: { type: "column", target: -1 },
-                    },
-                    columnDefs: [
-                        { targets: ["nosort"], sortable: false, searchable: false },
-                        { type: "anti-the", targets: ["anti-the"] },
-                        { className: "dtr-control", orderable: false, targets: -1 },
-                    ],
-                })
-            );
+            $("#recalls-table").kohaTable({
+                responsive: {
+                    details: { type: "column", target: -1 },
+                },
+                columnDefs: [
+                    { targets: ["nosort"], sortable: false, searchable: false },
+                    { type: "anti-the", targets: ["anti-the"] },
+                    { className: "dtr-control", orderable: false, targets: -1 },
+                ],
+            });
         });
     </script>
 [% END %]
