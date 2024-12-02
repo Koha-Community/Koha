@@ -294,7 +294,6 @@
     $(document).ready(function() {
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
-        var columns_settings = []; // Empty because there are no columns we want to be configurable
         var table = KohaTable(".historyt", {
             "order": [[ 1, "desc" ]],
             "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
@@ -309,7 +308,7 @@
             "responsive": {
                 "details": { "type": 'column',"target": -1 }
             },
-        }, columns_settings);
+        });
 
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
             table.DataTable().responsive.recalc();
