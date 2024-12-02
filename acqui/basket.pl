@@ -252,6 +252,7 @@ if ( $op eq 'cud-delete-order' ) {
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 }
 elsif ( $op eq 'cud-ediorder' ) {
+    $template->param( booksellername => $bookseller->name );
     edi_close_and_order()
 } elsif ( $op eq 'cud-mod_users' ) {
     my $basketusers_ids = $query->param('users_ids');
