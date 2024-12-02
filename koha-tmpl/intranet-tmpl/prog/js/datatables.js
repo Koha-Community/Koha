@@ -68,21 +68,10 @@ var dataTablesDefaults = {
     fixedHeader: true,
     initComplete: function (settings) {
         var tableId = settings.nTable.id;
-        let table_node = $("#" + tableId);
-
         state = settings.oLoadedState;
         state &&
             state.search &&
             toggledClearFilter(state.search.search, tableId);
-
-        //if (settings.ajax) {
-        //    if ( typeof this.api === 'function' ) {
-        //        _dt_add_delay(this.api(), table_node);
-        //    } else {
-        //        let dt = $(table_node).DataTable();
-        //        _dt_add_delay(dt, table_node);
-        //    }
-        //}
     },
 };
 DataTable.defaults.column.orderSequence = ["asc", "desc"];
