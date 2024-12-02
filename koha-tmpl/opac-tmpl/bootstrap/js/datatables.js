@@ -54,6 +54,7 @@ var dataTablesDefaults = {
         });
     }
 };
+DataTable.defaults.column.orderSequence = ['asc', 'desc'];
 
 $.fn.dataTable.ext.buttons.clearFilter = {
     fade: 100,
