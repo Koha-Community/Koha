@@ -1820,6 +1820,7 @@ CREATE TABLE `categories` (
   `noissuescharge` int(11) DEFAULT NULL COMMENT 'define maximum amount outstanding before checkouts are blocked',
   `noissueschargeguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount that the guarantees of a patron in this category can have outstanding before checkouts are blocked',
   `noissueschargeguarantorswithguarantees` int(11) DEFAULT NULL COMMENT 'define maximum amount that the guarantors with guarantees of a patron in this category can have outstanding before checkouts are blocked',
+  `enforce_expiry_notice` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'enforce the patron expiry notice for this category',
   PRIMARY KEY (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
