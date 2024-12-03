@@ -3,7 +3,7 @@ use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "37292",
-    description => "'oauth_access_tokens.expires' needs an index",
+    description => "Add index on 'oauth_access_tokens.expires'",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -14,7 +14,7 @@ return {
             ALTER TABLE `oauth_access_tokens` ADD INDEX `expires` (`expires`)
             }
             );
-            say_success( $out, "Added new index on 'oauth_access_tokens.expires'" );
+            say_success( $out, "Added index on 'oauth_access_tokens.expires'" );
         }
     },
 };
