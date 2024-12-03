@@ -222,6 +222,14 @@ define maximum amount that the guarantees of a patron in this category can have 
 
 define maximum amount that the guarantors with guarantees of a patron in this category can have outstanding before checkouts are blocked
 
+=head2 enforce_expiry_notice
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+enforce the patron expiry notice for this category
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -293,6 +301,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "noissueschargeguarantorswithguarantees",
   { data_type => "integer", is_nullable => 1 },
+  "enforce_expiry_notice",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -400,8 +410,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-11-08 11:06:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f8BSmD9RKHL/QAvHuuLIyw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-03 15:46:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jiQq3bW+ZfdYpUpfZq1Rzw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
@@ -436,6 +446,7 @@ __PACKAGE__->add_columns(
     '+overduenoticerequired'                  => { is_boolean => 1 },
     '+require_strong_password'                => { is_boolean => 1 },
     '+reset_password'                         => { is_boolean => 1 },
+    '+enforce_expiry_notice'                  => { is_boolean => 1 },
 );
 
 1;
