@@ -94,8 +94,13 @@ sub drop_hold {
     my $holds = $item->holds->search( { borrowernumber => $patron->borrowernumber } );
 
     return $self unless $holds->count;
+    my $hold = $holds->next;
 
-    $holds->next->cancel;
+    if ( C4::Context->preference('HoldCancellationRequestSIP') ) {
+        $hold->add_cancellation_request;
+    } else {
+        $hold->cancel;
+    }
 
     $self->ok(1);
     return $self;

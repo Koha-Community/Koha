@@ -471,8 +471,11 @@ sub cancel_hold {
             last;    # ?? should we keep going, in case there are multiples
         }
     }
-
-    $trans->screen_msg("Hold Cancelled.");
+    if ( C4::Context->preference('HoldCancellationRequestSIP') ) {
+        $trans->screen_msg("Hold Cancellation Requested.");
+    } else {
+        $trans->screen_msg("Hold Cancelled.");
+    }
 
     return $trans;
 }
