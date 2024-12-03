@@ -539,7 +539,7 @@
             [% END %]
         </optgroup>
         [% SET staff_available_options = [ 'IntranetmainUserblock', 'StaffAcquisitionsHome', 'StaffAuthoritiesHome', 'StaffCataloguingHome', 'StaffListsHome', 'StaffPatronsHome', 'StaffPOSHome', 'StaffSerialsHome' ] %]
-        <optgroup label="Staff">
+        <optgroup label="Staff interface">
             [% FOREACH l IN staff_available_options.sort %]
                 [% IF l == location %]
                     <option value="[% l | html %]" selected="selected">[% l | html %]</option>
