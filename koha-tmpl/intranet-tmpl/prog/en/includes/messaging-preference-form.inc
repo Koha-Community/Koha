@@ -22,6 +22,7 @@
         [% FOREACH messaging_preference IN messaging_preferences %]
             [% NEXT IF !Koha.Preference( 'ILLModule' ) && messaging_preference.message_name.match('^Ill_') %]
             [% NEXT IF !Koha.Preference('MembershipExpiryDaysNotice') && messaging_preference.Patron_Expiry %]
+            [% NEXT IF messaging_preference.Patron_Expiry && (category.enforce_expiry_notice || patron.category.enforce_expiry_notice) %]
             [% NEXT IF messaging_preference.Auto_Renewals && Koha.Preference('AutoRenewalNotices') != 'preferences' %]
             [% NEXT IF !Koha.Preference('UseRecalls') && messaging_preference.message_name.match('^Recall_') %]
             <tr id="[% messaging_preference.message_name _ "_message" | lower | html %]">
@@ -43,7 +44,7 @@
                             <span>Item checkout</span>
                         [% END %]
                     [% ELSIF ( messaging_preference.Patron_Expiry ) %]
-                        <span>Patron account expiry</span>
+                        <span>Patron expiry</span>
                     [% ELSIF ( messaging_preference.Ill_ready ) %]
                         <span>Interlibrary loan ready</span>
                     [% ELSIF ( messaging_preference.Ill_unavailable ) %]
@@ -62,15 +63,27 @@
                 </td>
                 [% IF ( messaging_preference.takes_days ) %]
                     <td>
-                        <select name="[% messaging_preference.message_attribute_id | html %]-DAYS" [% IF messaging_form_inactive %]disabled="disabled"[% END %]>
-                            [% FOREACH select_day IN messaging_preference.select_days %]
-                                [% IF ( select_day.selected ) %]
-                                    <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
-                                [% ELSE %]
-                                    <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                        [% IF ( messaging_form_inactive ) %]
+                            <select name="[% messaging_preference.message_attribute_id | html %]-DAYS" disabled="disabled">
+                                [% FOREACH select_day IN messaging_preference.select_days %]
+                                    [% IF ( select_day.selected ) %]
+                                        <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                    [% END %]
                                 [% END %]
-                            [% END %]
-                        </select>
+                            </select>
+                        [% ELSE %]
+                            <select name="[% messaging_preference.message_attribute_id | html %]-DAYS">
+                                [% FOREACH select_day IN messaging_preference.select_days %]
+                                    [% IF ( select_day.selected ) %]
+                                        <option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        [% END %]
                     </td>
                 [% ELSE %]
                     <td>-</td>

@@ -79,6 +79,7 @@ if ( $op eq 'add_form' ) {
     my $noissuescharge                         = $input->param('noissuescharge')                         || undef;
     my $noissueschargeguarantees               = $input->param('noissueschargeguarantees')               || undef;
     my $noissueschargeguarantorswithguarantees = $input->param('noissueschargeguarantorswithguarantees') || undef;
+    my $enforce_expiry_notice                  = $input->param('enforce_expiry_notice');
 
     my @branches                               = grep { $_ ne q{} } $input->multi_param('branches');
     my $can_be_guarantee                       = $input->param('can_be_guarantee');
@@ -120,6 +121,7 @@ if ( $op eq 'add_form' ) {
         $category->noissueschargeguarantees($noissueschargeguarantees);
         $category->noissueschargeguarantorswithguarantees($noissueschargeguarantorswithguarantees);
         $category->force_password_reset_when_set_by_staff($force_password_reset_when_set_by_staff);
+        $category->enforce_expiry_notice($enforce_expiry_notice);
         eval {
             $category->store;
             $category->replace_library_limits( \@branches );
@@ -157,6 +159,7 @@ if ( $op eq 'add_form' ) {
                 noissuescharge                         => $noissuescharge,
                 noissueschargeguarantees               => $noissueschargeguarantees,
                 noissueschargeguarantorswithguarantees => $noissueschargeguarantorswithguarantees,
+                enforce_expiry_notice                  => $enforce_expiry_notice,
                 force_password_reset_when_set_by_staff => $force_password_reset_when_set_by_staff,
             }
         );

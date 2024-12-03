@@ -84,6 +84,7 @@ $template->param(
     SMSnumber             => $patron->smsalertnumber,                    # FIXME This is already sent 2 lines above
     SMSSendDriver         => C4::Context->preference("SMSSendDriver"),
     TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"),
+    enforce_expiry_notice => $patron->category->enforce_expiry_notice,
 );
 
 if ( $opac_messaging && C4::Context->preference("SMSSendDriver") eq 'Email' ) {
