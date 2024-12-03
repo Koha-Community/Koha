@@ -112,7 +112,7 @@
                                         [% IF Koha.Preference('EDIFACT') && ediaccount %]
                                             <div class="btn-group">
                                                 [% UNLESS eans.size %]
-                                                    <a title="You must define an EAN in Administration -> Library EANs" class="btn btn-default btn-xs" diasbled="disabled" href="#"><i class="fa fa-download"></i> Create EDIFACT order</a>
+                                                    <a title="You must define an EAN in Administration -> Library EANs" class="btn btn-default btn-xs" disabled="disabled" href="#"><i class="fa fa-download"></i> Create EDIFACT order</a>
                                                 [% ELSIF eans.size == 1 %]
                                                     <a class="btn btn-default btn-xs submit-form-link" href="#" data-ean="[% eans.0 | html %]" data-basketno="[% basketno | html %]" data-action="basket.pl" data-method="post" data-op="cud-ediorder"><i class="fa fa-download"></i> Create EDIFACT order</a>
                                                 [% ELSE %]
