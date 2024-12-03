@@ -255,6 +255,8 @@ my $upcoming_mem_expires = Koha::Patrons->search_upcoming_membership_expires(
         after  => $after,
     }
 );
+my @mandatory_expiry_notice_categories =
+    map { $_->categorycode } Koha::Patron::Categories->search( { 'me.enforce_expiry_notice' => 1 } )->as_list;
 
 my $where_literal = join ' AND ', @where;
 $upcoming_mem_expires = $upcoming_mem_expires->search( \$where_literal ) if @where;

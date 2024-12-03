@@ -2831,6 +2831,10 @@ sub queue_notice {
         @message_transports = @{ $params->{message_transports} };
     }
     return unless defined $letter_code;
+    if ( $params->{expiry_notice_mandatory} ) {
+        push( @message_transports, $params->{primary_contact_method} || 'print' ) if scalar(@message_transports) == 0;
+    }
+
     $letter_params->{letter_code} = $letter_code;
     my $print_sent = 0;
     my %return;
