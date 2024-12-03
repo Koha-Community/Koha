@@ -1,4 +1,5 @@
 <div id="serials-menu" class="sidebar_menu">
+    [% INCLUDE "serials-filters.inc" %]
     <h5>Serials</h5>
     <ul>
         [% IF ( subscriptionid ) %]

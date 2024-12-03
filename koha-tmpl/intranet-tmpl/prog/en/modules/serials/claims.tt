@@ -67,6 +67,7 @@
                 <div class="alert alert-warning">No missing issues found.</div>
             [% ELSE %]
                 <div class="alert alert-info">Please choose a vendor.</div>
+                [% PROCESS select_vendor context => "main" %]
             [% END %]
         [% END %]
     [% END %]
@@ -79,45 +80,16 @@
         <div class="alert alert-warning"> No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>. </div>
     [% END %]
 
-    <form id="claims" name="claims" action="claims.pl" method="get">
-        <fieldset>
-            <label for="supplierid">Vendor: </label>
-            <select id="supplierid" name="supplierid">
-                [% FOREACH suploo IN suploop %]
-                    <option value="[% suploo.id | html %]" [% IF suploo.selected %]selected="selected"[% END %]> [% suploo.name | html %] ([% suploo.count | html %]) </option>
-                [% END %]
-            </select>
-            <input type="submit" class="btn btn-primary" value="OK" />
-        </fieldset>
-    </form>
-    <!-- /#claims -->
-
     [% IF ( missingissues ) %]
         <h3>Missing issues</h3>
-        <form method="get" action="claims.pl" id="filter_claims_form">
-            <fieldset class="rows">
-                <legend>Filters:</legend>
-                <ol>
-                    <li>
-                        <label for="from">From:</label>
-                        <input type="text" name="begindate" id="from" value="[% begindate | html %]" size="10" maxlength="10" class="flatpickr" data-date_to="to" />
-                        <label for="to" style="float:none;">To:</label>
-                        <input type="text" name="enddate" id="to" value="[% enddate | html %]" size="10" maxlength="10" class="flatpickr" />
-                        <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                        <input id="filterByDate" type="button" value="OK" />
-                        <a href="#" id="clearfilter"><i class="fa fa-times"></i> Clear filter</a>
-                    </li>
-                </ol>
-            </fieldset>
-        </form>
 
-        <fieldset>
-            <form action="claims.pl" method="post" id="claims_form">
+        <form action="claims.pl" method="post" id="claims_form">
+            <div class="page-section">
                 [% INCLUDE 'csrf-token.inc' %]
                 <table id="claimst">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="CheckAll" /></th>
+                            <th class="NoSort"><input type="checkbox" id="CheckAll" /></th>
                             <th>Vendor</th>
                             <th>Library</th>
                             <th class="anti-the">Title</th>
@@ -138,7 +110,7 @@
                             <tr>
                                 <td>
                                     [% UNLESS missingissue.cannot_claim %]
-                                        <input type="checkbox" name="serialid" value="[% missingissue.serialid | html %]" />
+                                        <input type="checkbox" class="select_serial" name="serialid" value="[% missingissue.serialid | html %]" />
                                     [% END %]
                                 </td>
                                 <td>[% missingissue.name | html %]</td>
@@ -179,36 +151,82 @@
                     </tfoot>
                 </table>
                 <!-- /#claimst -->
+            </div>
+            <!-- /.page-section -->
 
+            <hr />
+
+            <div class="row">
                 [% IF csv_profiles.count %]
-                    <fieldset class="action">
-                        <label for="csv_code">Select CSV profile:</label>
-                        <select id="csv_profile_for_export">
-                            [% FOR csv IN csv_profiles %]
-                                <option value="[% csv.export_format_id | html %]">[% csv.profile | html %]</option>
-                            [% END %]
-                        </select>
-                        <span class="exportSelected"><a id="ExportSelected" href="/cgi-bin/koha/serials/claims.pl">Download selected claims</a></span>
-                    </fieldset>
+                    <div class="col">
+                        <fieldset class="serial_batch_op" disabled="disabled">
+                            <fieldset class="brief">
+                                <legend>Download selected claims</legend>
+                                <label for="csv_profile_for_export">Select CSV profile:</label>
+                                <select id="csv_profile_for_export">
+                                    [% FOR csv IN csv_profiles %]
+                                        <option value="[% csv.export_format_id | html %]">[% csv.profile | html %]</option>
+                                    [% END %]
+                                </select>
+                                <fieldset class="action">
+                                    <button class="btn btn-primary" id="ExportSelected" type="button">Download selected claims</button>
+                                </fieldset>
+                            </fieldset>
+                        </fieldset>
+                    </div>
                 [% END %]
 
                 [% IF letters %]
-                    <fieldset class="action">
-                        <label for="letter_code">Select notice:</label>
-                        <select name="letter_code" id="letter_code">
-                            [% FOREACH letter IN letters %]
-                                <option value="[% letter.code | html %]">[% letter.name | html %]</option>
-                            [% END %]
-                        </select>
-                        <input type="hidden" name="op" value="cud-send_alert" />
-                        <input type="hidden" name="supplierid" value="[% supplierid | html %]" />
-                        <input type="submit" name="submit" class="btn btn-primary" value="Send notification" />
-                    </fieldset>
+                    <div class="col">
+                        <fieldset class="serial_batch_op" disabled="disabled">
+                            <fieldset class="brief">
+                                <legend>Send claim notification</legend>
+                                <label for="letter_code">Select notice:</label>
+                                <select name="letter_code" id="letter_code">
+                                    [% FOREACH letter IN letters %]
+                                        <option value="[% letter.code | html %]">[% letter.name | html %]</option>
+                                    [% END %]
+                                </select>
+                                <fieldset class="action">
+                                    <input type="hidden" name="op" value="cud-send_alert" />
+                                    <input type="hidden" name="supplierid" value="[% supplierid | html %]" />
+                                    <input type="submit" name="submit" class="btn btn-primary" value="Send notification" />
+                                </fieldset>
+                            </fieldset>
+                        </fieldset>
+                    </div>
                 [% END %]
-            </form>
-            <!-- /#claims_form -->
-        </fieldset>
+            </div>
+        </form>
+        <!-- /#claims_form -->
     [% END # /missingissues %]
+[% END %]
+
+[% BLOCK select_vendor %]
+    <form class="select_vendor" name="claims" action="claims.pl" method="get">
+        [% IF ( context == "main") %]
+            [% SET form_class = "rows" %]
+        [% ELSE %]
+            [% SET form_class = "brief" %]
+        [% END %]
+        <fieldset class="[% form_class | html %]">
+            <h4>Choose vendor</h4>
+            <label class="sr-only" for="supplierid">Choose vendor: </label>
+            <select id="supplierid" name="supplierid">
+                [% FOREACH suploo IN suploop %]
+                    [% IF ( suploo.selected ) %]
+                        <option value="[% suploo.id | html %]" selected="selected"> [% suploo.name | html %] ([% suploo.count | html %]) </option>
+                    [% ELSE %]
+                        <option value="[% suploo.id | html %]"> [% suploo.name | html %] ([% suploo.count | html %]) </option>
+                    [% END %]
+                [% END %]
+            </select>
+        </fieldset>
+        <fieldset class="action">
+            <input type="submit" class="btn btn-primary" value="OK" />
+        </fieldset>
+    </form>
+    <!-- /#claims -->
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -217,16 +235,15 @@
     <script>
         var sTable;
         $(document).ready(function () {
+            enableSelectedActions();
             sTable = $("#claimst").kohaTable({
                 dom: "t",
+                order: [[7, "asc"]],
                 columnDefs: [
-                    { targets: [0], orderable: false, searchable: false },
+                    { sortable: false, targets: ["NoSort"] },
                     { type: "anti-the", targets: ["anti-the"] },
                 ],
-                paginate: false,
-            });
-            $("#supplierid").change(function () {
-                $("#claims").submit();
+                paging: false,
             });
 
             // Checkboxes : Select All / None
@@ -234,6 +251,7 @@
 
             $("#CheckAll").click(function () {
                 $("#claimst tr:visible :checkbox").prop("checked", $("#CheckAll").is(":checked"));
+                enableSelectedActions();
             });
 
             // Generates a dynamic link for exporting the selections data as CSV
@@ -272,7 +290,20 @@
             $("#filter_claims_form").on("submit", function () {
                 return false;
             });
+
+            $(".select_serial").on("change", function () {
+                enableSelectedActions();
+            });
         });
+
+        function enableSelectedActions() {
+            var checkedBoxes = $(".select_serial:checked");
+            if (checkedBoxes.length) {
+                $(".serial_batch_op").prop("disabled", false);
+            } else {
+                $(".serial_batch_op").prop("disabled", true);
+            }
+        }
 
         // Checks if the form can be sent (at least one checkbox must be checked)
         function checkForm() {
