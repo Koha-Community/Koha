@@ -2565,6 +2565,25 @@ for Koha
 - Chloe Zermatten (5)
 - Anneli Österman (5)
 
+And people who contributed to the Koha manual during the release cycle of Koha 24.11.00
+
+- Rudolf Byker (5)
+- Manu B (8)
+- Catrina Berka (3)
+- Aude Charillon (24)
+- Caroline Cyr La Rose (194)
+- Jonathan Field (5)
+- Heather Hernandez (4)
+- Thibault Keromnès (2)
+- Jan Kissig (1)
+- Cécile Lambour (1)
+- Brendan Lawlor (1)
+- David Nind (1)
+- Philip Orr (16)
+- Eric Phetteplace (1)
+- Heather Rommens (3)
+- Mathieu Saby (1)
+
 We regret any omissions.  If a contributor has been inadvertently missed,
 please send a patch against these release notes to koha-devel@lists.koha-community.org.
 
