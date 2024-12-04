@@ -468,3 +468,65 @@ describe("ERM ", () => {
         });
     });
 });
+
+describe("Hit all tables", () => {
+    beforeEach(() => {
+        cy.login();
+        cy.title().should("eq", "Koha staff interface");
+        cy.window().then(win => {
+            win.localStorage.clear();
+        });
+    });
+
+    describe("catalogue/detail/holdings_table", () => {
+        const table_id = "holdings_table";
+        it("correctly init", () => {
+            const biblio_id = 1;
+            cy.task("buildsampleobjects", {
+                object: "item",
+                count: restdefaultpagesize,
+                values: {
+                    biblio_id,
+                    checkout: null,
+                    transfer: null,
+                    lost_status: 0,
+                    withdrawn: 0,
+                    damaged_status: 0,
+                    not_for_loan_status: 0,
+                    course_item: null,
+                },
+            }).then(items => {
+                cy.intercept("get", `/api/v1/biblios/${biblio_id}/items*`, {
+                    statuscode: 200,
+                    body: items,
+                    headers: {
+                        "x-base-total-count": basetotalcount,
+                        "x-total-count": basetotalcount,
+                    },
+                });
+
+                cy.visit(
+                    "/cgi-bin/koha/catalogue/detail.pl?biblionumber=" +
+                        biblio_id
+                );
+
+                cy.window().then(win => {
+                    win.libraries_map = items.reduce((map, i) => {
+                        map[i.library_id] = i.library_id;
+                        return map;
+                    }, {});
+                });
+
+                cy.get(`#${table_id}_wrapper tbody tr`).should(
+                    "have.length",
+                    restdefaultpagesize
+                );
+
+                cy.get(".show_filters").click();
+                cy.get(`#${table_id}_wrapper .dt-info`).contains(
+                    `showing 1 to ${restdefaultpagesize} of ${basetotalcount} entries`
+                );
+            });
+        });
+    });
+});
