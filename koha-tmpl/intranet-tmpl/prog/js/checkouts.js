@@ -26,17 +26,22 @@ $(document).ready(function() {
         }
     };
 
+    var CheckRenewCheckinBoxes = function() {
+        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
+        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
+    }
+
     // Handle the select all/none links for checkouts table columns
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
         $(".renew:visible").prop("checked", true);
-        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
+        CheckRenewCheckinBoxes();
         showHideOnHoldRenewal();
         return false;
     });
     $("#UncheckAllRenewals").on("click",function(){
         $(".renew:visible").prop("checked", false);
-        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
+        CheckRenewCheckinBoxes();
         showHideOnHoldRenewal();
         return false;
     });
@@ -44,12 +49,12 @@ $(document).ready(function() {
     $("#CheckAllCheckins").on("click",function(){
         $("#UncheckAllRenewals").click();
         $(".checkin:visible").prop("checked", true);
-        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
+        CheckRenewCheckinBoxes();
         return false;
     });
     $("#UncheckAllCheckins").on("click",function(){
         $(".checkin:visible").prop("checked", false);
-        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
+        CheckRenewCheckinBoxes();
         return false;
     });
 
@@ -68,15 +73,13 @@ $(document).ready(function() {
         if ( $(this).is(":checked") ) {
             $( "#checkin_" + $(this).val() ).prop("checked", false);
         }
-        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
-        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
+        CheckRenewCheckinBoxes();
     });
     $(document).on("change", '.checkin', function(){
         if ( $(this).is(":checked") ) {
             $( "#renew_" + $(this).val() ).prop("checked", false);
         }
-        $('#CheckinChecked').prop('disabled', !$('.checkin:checked').length );
-        $('#RenewChecked').prop('disabled', !$('.renew:checked').length );
+        CheckRenewCheckinBoxes();
     });
 
     // Display on hold due dates input when an on hold item is
@@ -154,7 +157,7 @@ $(document).ready(function() {
         if ( refresh_table ) {
             RefreshIssuesTable();
         }
-        $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+        CheckRenewCheckinBoxes();
         // Prevent form submit
         return false;
     });
@@ -248,6 +251,7 @@ $(document).ready(function() {
 
         if ( refresh_table ) {
             RefreshIssuesTable();
+            CheckRenewCheckinBoxes();
         }
         // Prevent form submit
         return false;
@@ -258,7 +262,7 @@ $(document).ready(function() {
         $("#UncheckAllCheckins").click();
         showHideOnHoldRenewal();
         $("#RenewChecked").click();
-        $('#RenewChecked').prop('disabled' , true );
+        CheckRenewCheckinBoxes();
         // Prevent form submit
         return false;
     });
@@ -301,7 +305,7 @@ $(document).ready(function() {
             return this.value;
         }).get();
         table.ajax.reload( function() {
-            $('#RenewChecked, #CheckinChecked').prop('disabled' , true );
+            CheckRenewCheckinBoxes();
             if ( renewchecked.length ) {
                 $('#RenewChecked').prop('disabled' , false );
                 renewchecked.forEach( function(checked) {
@@ -728,6 +732,7 @@ $(document).ready(function() {
                 }
             },
             "initComplete": function(oSettings, json) {
+                CheckRenewCheckinBoxes();
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
                     obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
