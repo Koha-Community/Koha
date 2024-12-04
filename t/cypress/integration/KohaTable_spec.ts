@@ -482,9 +482,9 @@ describe("Hit all tables", () => {
         const table_id = "holdings_table";
         it("correctly init", () => {
             const biblio_id = 1;
-            cy.task("buildsampleobjects", {
+            cy.task("buildSampleObjects", {
                 object: "item",
-                count: restdefaultpagesize,
+                count: RESTdefaultPageSize,
                 values: {
                     biblio_id,
                     checkout: null,
@@ -500,8 +500,8 @@ describe("Hit all tables", () => {
                     statuscode: 200,
                     body: items,
                     headers: {
-                        "x-base-total-count": basetotalcount,
-                        "x-total-count": basetotalcount,
+                        "X-Base-Total-Count": baseTotalCount,
+                        "X-Total-Count": baseTotalCount,
                     },
                 });
 
@@ -519,12 +519,12 @@ describe("Hit all tables", () => {
 
                 cy.get(`#${table_id}_wrapper tbody tr`).should(
                     "have.length",
-                    restdefaultpagesize
+                    RESTdefaultPageSize
                 );
 
                 cy.get(".show_filters").click();
                 cy.get(`#${table_id}_wrapper .dt-info`).contains(
-                    `showing 1 to ${restdefaultpagesize} of ${basetotalcount} entries`
+                    `Showing 1 to ${RESTdefaultPageSize} of ${baseTotalCount} entries`
                 );
             });
         });
