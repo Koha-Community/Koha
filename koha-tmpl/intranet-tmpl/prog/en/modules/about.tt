@@ -355,7 +355,7 @@
                 [% END %]
                 [% IF ai_biblioitems %]
                     <h4>Bibliographic records</h4>
-                    <p>The following IDs exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblioitems" | $HtmlTags tag="strong" %]:</p>
+                    <p>The following IDs exist in both tables [% "biblioitems" | $HtmlTags tag="strong" %] and [% "deletedbiblioitems" | $HtmlTags tag="strong" %]:</p>
                     <p>
                         [% FOR b IN ai_biblioitems %]
                             [% b.biblioitemnumber | html %]
