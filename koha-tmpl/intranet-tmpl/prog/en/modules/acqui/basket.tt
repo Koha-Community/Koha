@@ -280,7 +280,7 @@
                                 [% END %]
                             </ul>
                         </div>
-                        <a href="booksellers.pl">Go back to vendor page</a>
+                        <a href="/cgi-bin/koha/vendors">Go back to vendor page</a>
                     [% ELSE %]
                         <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a>
                         <a href="/cgi-bin/koha/vendors" class="btn btn-default btn-sm">Show all active baskets</a>
@@ -304,7 +304,7 @@
                         </div>
                     [% END # /FOR m %]
 
-                    <h1>[% UNLESS ( basketno ) %]New[% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
+                    <h1>[% UNLESS ( basketno ) %]New[% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
 
                     [% IF ( basketno ) %]
                         <div id="acqui_basket_summary" class="row">

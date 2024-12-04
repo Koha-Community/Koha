@@ -58,7 +58,7 @@
                     [% FOREACH account IN accounts %]
                         <tr>
                             <td>[% account.id | html %]</td>
-                            <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
+                            <td><a href="/cgi-bin/koha/vendors/[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
                             <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% account.budget.budget_period_id | uri %]">[% account.budget.budget_name | html %]</a></td>
                             <td>[% account.description | html %]</td>
                             <td>[% account.download_directory | html %]</td>
