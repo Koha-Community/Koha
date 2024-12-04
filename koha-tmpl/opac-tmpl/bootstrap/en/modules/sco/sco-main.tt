@@ -55,6 +55,7 @@
 [% END %]
 [% Asset.js('js/Gettext.js') | $raw %]
 [% Asset.js('js/i18n.js') | $raw %]
+[% Asset.js('js/timeout.js') | $raw %]
 </head>
 <body id="sco_main" class="sco">
 <div id="wrapper">
@@ -328,7 +329,7 @@
                                                             <input type="password" id="patronpw" class="form-control" size="20" name="patronpw" autocomplete="off" />
                                                         </div>
                                                         <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-primary">Log in</button>
+                                                            <button id="sco_patron_login" type="submit" class="btn btn-primary">Log in</button>
                                                         </div>
                                                     </div>
                                                     <!-- /.row -->
@@ -341,7 +342,7 @@
                                                             <input type="text" id="patronid" class="form-control focus" size="20" name="patronid" autocomplete="off" />
                                                         </div>
                                                         <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                            <button id="sco_patron_login" type="submit" class="btn btn-primary">Submit</button>
                                                         </div>
                                                     </div>
                                                     <!-- /.row -->
@@ -401,11 +402,23 @@
                         history.replaceState(null, document.title, window.location.href);
                     }
                 }
-                var mainTimeout;
-                function sco_init() {
-                    mainTimeout = setTimeout(function() {
-                        location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
-                    }, [% SelfCheckTimeout | html %]);
+                document.addEventListener("DOMContentLoaded",function(){
+                    if ( document.querySelector('#sco_patron_login,#logout_form') ){
+                        login_timeout();
+                    }
+                });
+                function login_timeout(){
+                    //NOTE: There can only be 1 sco_login_timer at a time
+                    if ( ! window.sco_login_timer ){
+                        const idleTimeout = "[% Koha.Preference('SelfCheckTimeout') || 120 | html %]";
+                        const home_href = "/cgi-bin/koha/sco/sco-main.pl?op=logout";
+                        const sco_timer = new sc_timer({
+                            "idle_timeout": idleTimeout,
+                            "redirect_url": home_href
+                        });
+                        window.sco_login_timer = sco_timer;
+                        sco_timer.start_timer();
+                    }
                 }
                 function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
                     // alert("dofocus called");
@@ -458,7 +471,6 @@
 
                 $(document).ready(function() {
                     dofocus();
-                    [% IF ( patronid ) %]sco_init();[% END %]
 
                     var dTables = $("#loanTable, #holdst, #finestable");
                     dTables.each(function(){
@@ -490,18 +502,16 @@
 
                     $("#logout_form").on("click", function(e){
                         e.preventDefault(e);
-                        clearTimeout(mainTimeout);
                         [% IF Koha.Preference('SelfCheckReceiptPrompt') %]
                             var confirmStart = Date.now();
                             confirmModal("", _("Would you like to print a receipt?"), _("Print receipt and end session"), _("End session"), function(result) {
-                                if ( result && (Date.now() - confirmStart) < [% SelfCheckTimeout | html %] ) {
+                                if ( result && (Date.now() - confirmStart) < [% Koha.Preference('SelfCheckTimeout') | html %] ) {
                                     var win = window.open("/cgi-bin/koha/sco/printslip.pl?print=qslip");
                                     location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                                 } else {
                                     location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                                 }
                             })
-                        sco_init();
                         [% ELSE %]
                             location.href = '/cgi-bin/koha/sco/sco-main.pl?op=logout';
                         [% END %]
