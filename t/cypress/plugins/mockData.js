@@ -1,14 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const { readYamlFile } = require("./../plugins/readYamlFile.js");
+const fs = require('fs');
 
-const objects = {
-    patron: {
-        spec: "patron",
-    },
-    library: {
-        spec: "library",
-    },
-};
 const generateMockData = type => {
     if (Array.isArray(type)) {
         type = type.filter(t => t != '"null"')[0];
@@ -50,10 +43,12 @@ const generateDataFromSchema = (properties, values = {}) => {
 };
 
 const buildSampleObjects = ({ object, values, count = 1 }) => {
-    if (!objects.hasOwnProperty(object)) {
-        throw new Error(`Object type not supported: ${object}`);
+    const yamlPath = `api/v1/swagger/definitions/${object}.yaml`;
+    if (!fs.existsSync(yamlPath)) {
+        throw new Error(
+            `Object type not supported: '${object}'. No spec file.`
+        );
     }
-    const yamlPath = `api/v1/swagger/definitions/${objects[object].spec}.yaml`;
     const schema = readYamlFile(yamlPath);
     return Array.from({ length: count }, () =>
         generateDataFromSchema(schema.properties, values)
