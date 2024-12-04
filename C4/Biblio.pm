@@ -1351,7 +1351,7 @@ sub GetMarcPrice {
         @listtags = ( '345', '020' );
         $subfield = "c";
     } elsif ( $marcflavour eq "UNIMARC" ) {
-        @listtags = ( '345', '010' );
+        @listtags = ( '345', '010', '071' );
         $subfield = "d";
     } else {
         return;
