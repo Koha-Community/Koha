@@ -93,7 +93,7 @@ use Modern::Perl;
 use CGI             qw ( -utf8 );
 use C4::Auth        qw( get_template_and_user );
 use C4::Output      qw( output_html_with_http_headers );
-use C4::Suggestions qw( ConnectSuggestionAndBiblio );
+use C4::Suggestions qw( ConnectSuggestionAndBiblio ModSuggestion );
 use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;
@@ -130,9 +130,24 @@ if ( $op eq 'connectDuplicate' ) {
 }
 
 if ( $op eq 'cud-link_order' and $link_order ) {
-    my $order      = Koha::Acquisition::Orders->find($link_order);
-    my $suggestion = Koha::Suggestions->find($suggestionid);
-    $suggestion->update( { biblionumber => $order->biblionumber } ) if $order->biblionumber;
+    my $order = Koha::Acquisition::Orders->find($link_order);
+
+    if ( $order->biblionumber ) {
+        ModSuggestion(
+            {
+                suggestionid => $suggestionid,
+                biblionumber => $order->biblionumber,
+                STATUS       => 'ORDERED',
+            }
+        );
+        if ( C4::Context->preference('PlaceHoldsOnOrdersFromSuggestions') ) {
+            my $suggestion = Koha::Suggestions->find($suggestionid);
+            if ($suggestion) {
+                $suggestion->place_hold();
+            }
+        }
+    }
+
     print $input->redirect( "/cgi-bin/koha/acqui/basket.pl?basketno=" . $basketno );
 }
 
