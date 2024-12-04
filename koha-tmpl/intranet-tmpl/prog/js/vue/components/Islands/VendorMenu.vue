@@ -109,7 +109,7 @@ export default {
         };
     },
     data() {
-        const vendorId = this.vendorid ? this.vendorid : this.params.vendor_id;
+        const vendorId = this.vendorid ? this.vendorid : this.params.id;
         return {
             vendorId,
         };

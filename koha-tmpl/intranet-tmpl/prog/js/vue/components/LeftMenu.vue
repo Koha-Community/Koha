@@ -1,5 +1,5 @@
 <template>
-    <aside>
+    <aside v-if="leftNavigation !== 'none'">
         <div class="sidebar_menu">
             <VendorMenu v-if="leftNavigation === 'VendorMenu'" />
             <AcquisitionsMenu

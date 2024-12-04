@@ -70,8 +70,8 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (to.params.vendor_id) {
-                vm.getVendor(to.params.vendor_id);
+            if (to.params.id) {
+                vm.getVendor(to.params.id);
             } else {
                 vm.initialized = true;
             }
