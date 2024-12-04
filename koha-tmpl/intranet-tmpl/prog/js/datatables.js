@@ -1324,7 +1324,7 @@ function update_search_description(
                 };
             }
 
-            if (options.ajax) {
+            if (options.ajax && !options.bKohaAjaxSVC) {
                 options.ajax = Object.assign(
                     {},
                     options.ajax,
@@ -1383,6 +1383,7 @@ function update_search_description(
         }
 
         $(this).data("bKohaColumnsUseNames", settings.bKohaColumnsUseNames);
+        $(this).data("bKohaAjaxSVC", settings.bKohaAjaxSVC); // Must not be used for new tables!
         var table = $(this).dataTable(settings);
 
         var table_dt = table.DataTable();

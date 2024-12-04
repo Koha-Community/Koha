@@ -484,6 +484,7 @@ $(document).ready(function () {
                             d.borrowernumber = borrowernumber;
                         },
                     },
+                    bKohaAjaxSVC: true,
                 },
                 table_settings_holds_table
             );

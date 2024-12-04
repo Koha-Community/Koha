@@ -653,6 +653,7 @@ function LoadIssuesTable() {
                     borrowernumber
                 ),
             },
+            bKohaAjaxSVC: true,
             rowGroup: {
                 dataSrc: "issued_today",
                 startRender: function (rows, group) {
@@ -1325,6 +1326,7 @@ $(document).ready(function () {
                                 .join("&")
                         ),
                     },
+                    bKohaAjaxSVC: true,
                 },
                 table_settings_relatives_issues_table
             );
@@ -1581,6 +1583,7 @@ $(document).ready(function () {
                         }
                     },
                 },
+                bKohaAjaxSVC: true,
                 search: { search: "is_unresolved" },
                 footerCallback: function (row, data, start, end, display) {
                     var api = this.api();
