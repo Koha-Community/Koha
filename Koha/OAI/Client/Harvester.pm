@@ -46,11 +46,7 @@ use MARC::Record;
 use Modern::Perl;
 use DateTime;
 use DateTime::Format::Strptime;
-use Try::Tiny  qw( catch try );
-use Date::Calc qw(
-    Add_Delta_Days
-    Today
-);
+use Try::Tiny qw( catch try );
 
 our $xslt_engine = Koha::XSLT::Base->new;
 
@@ -129,9 +125,7 @@ sub init {
     if ($days) {
 
         # Change this to yyyy-mm-dd
-        my ( $nowyear, $nowmonth, $nowday ) = Today();
-        my @date     = Add_Delta_Days( $nowyear, $nowmonth, $nowday, -$days );
-        my $dt_start = dt_from_string( $date[0] . '-' . $date[1] . '-' . $date[2] );
+        my $dt_start = dt_from_string->subtract( days => $days );
         $start_date = $dt_start->ymd();
         $self->printlog("Harvesting from $start_date");
     }
