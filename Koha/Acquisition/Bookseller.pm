@@ -60,9 +60,27 @@ Returns the list of contacts for the vendor
 =cut
 
 sub contacts {
-    my ($self) = @_;
-    my $contacts_rs = $self->_result->aqcontacts;
-    return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic($contacts_rs);
+    my ( $self, $contacts ) = @_;
+
+    if ($contacts) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                $self->contacts->delete;
+                for my $contact (@$contacts) {
+                    Koha::Acquisition::Bookseller::Contact->new(
+                        {
+                            %$contact,
+                            booksellerid => $self->id,
+                        }
+                    )->store;
+                }
+            }
+        );
+    }
+
+    my $rs = $self->_result->aqcontacts;
+    return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic($rs);
 }
 
 =head3 contracts

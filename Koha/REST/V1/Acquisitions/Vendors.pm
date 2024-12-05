@@ -98,10 +98,7 @@ sub add {
     return try {
         $vendor_to_store->store;
 
-        foreach my $contact (@$contacts) {
-            $contact->{booksellerid} = $vendor_to_store->id;
-            Koha::Acquisition::Bookseller::Contact->new($contact)->store;
-        }
+        $vendor_to_store->contacts($contacts)     if scalar($contacts) > 0;
         $vendor_to_store->aliases($aliases)       if scalar($aliases) > 0;
         $vendor_to_store->interfaces($interfaces) if scalar($interfaces) > 0;
 
@@ -142,10 +139,7 @@ sub update {
         $vendor->set_from_api($vendor_update);
         $vendor->store();
 
-        foreach my $contact (@$contacts) {
-            $contact->{booksellerid} = $vendor_id;
-            Koha::Acquisition::Bookseller::Contact->new($contact)->store;
-        }
+        $vendor->contacts($contacts)     if scalar($contacts) > 0;
         $vendor->aliases($aliases)       if scalar($aliases) > 0;
         $vendor->interfaces($interfaces) if scalar($interfaces) > 0;
 

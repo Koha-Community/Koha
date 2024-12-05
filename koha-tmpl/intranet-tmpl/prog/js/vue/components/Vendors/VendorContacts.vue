@@ -149,7 +149,7 @@
             <div style="display: flex">
                 <div>
                     <fieldset class="rows">
-                        <legend>Acquisitions options</legend>
+                        <legend>{{ $__("Acquisitions options") }}</legend>
                         <ol class="radio">
                             <li>
                                 <label>
@@ -216,7 +216,7 @@
                 </div>
                 <div>
                     <fieldset class="rows">
-                        <legend>Serials options</legend>
+                        <legend>{{ $__("Serials options") }}</legend>
                         <ol class="radio">
                             <li>
                                 <label>
