@@ -187,6 +187,21 @@ sub issues {
     return Koha::Acquisition::Bookseller::Issues->_new_from_dbic($rs);
 }
 
+=head3 invoices
+
+    my $vendor  = Koha::Acquisition::Booksellers->find( $id );
+    my @invoices = $vendor->invoices();
+
+Returns the list of invoices for the vendor
+
+=cut
+
+sub invoices {
+    my ($self) = @_;
+    my $invoices_rs = $self->_result->aqinvoices;
+    return Koha::Acquisition::Invoices->_new_from_dbic($invoices_rs);
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Acquisition::Bookseller object

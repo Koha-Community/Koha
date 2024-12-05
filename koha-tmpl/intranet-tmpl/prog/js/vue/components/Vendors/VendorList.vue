@@ -67,7 +67,9 @@ export default {
             searchTerm: null,
             tableOptions: {
                 columns: this.getTableColumns(),
-                options: { embed: "aliases,baskets,subscriptions+count" },
+                options: {
+                    embed: "aliases,baskets,subscriptions+count,invoices",
+                },
                 url: () => this.tableURL(),
                 add_filters: true,
                 filters_options: {
@@ -91,7 +93,9 @@ export default {
                                     (!row.baskets ||
                                         row.baskets.length === 0) &&
                                     (!row.subscriptions_count ||
-                                        row.subscriptions_count === 0),
+                                        row.subscriptions_count === 0) &&
+                                    (!row.invoices ||
+                                        row.invoices.length === 0),
                             },
                         },
                         {
