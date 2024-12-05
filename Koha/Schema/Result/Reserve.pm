@@ -57,6 +57,13 @@ the date the hold was placed
 
 foreign key from the biblio table defining which bib record this hold is on
 
+=head2 deleted_biblionumber
+
+  data_type: 'integer'
+  is_nullable: 1
+
+links the reserve to the deleted bibliographic record (deletedbiblio.biblionumber)
+
 =head2 item_group_id
 
   data_type: 'integer'
@@ -243,6 +250,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "deleted_biblionumber",
+  { data_type => "integer", is_nullable => 1 },
   "item_group_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
@@ -456,8 +465,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-11-01 18:21:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6BAjuPSwjtyWJaJN9fcOtg
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-05 16:46:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ljjbd9tYWR6AXmEyrg/sog
 
 __PACKAGE__->belongs_to(
   "item",
