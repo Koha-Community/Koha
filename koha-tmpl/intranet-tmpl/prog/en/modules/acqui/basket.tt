@@ -304,7 +304,7 @@
                         </div>
                     [% END # /FOR m %]
 
-                    <h1>[% UNLESS ( basketno ) %]New[% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="cgi-bin/koha/vendors/[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
+                    <h1>[% UNLESS ( basketno ) %]New[% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="../vendors/[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
 
                     [% IF ( basketno ) %]
                         <div id="acqui_basket_summary" class="row">
