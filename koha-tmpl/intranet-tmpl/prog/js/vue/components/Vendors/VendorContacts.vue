@@ -154,19 +154,16 @@
                             <li>
                                 <label>
                                     <input
-                                        v-if="contact.acqprimary"
-                                        type="checkbox"
-                                        :id="`contact_acqprimary_${i}`"
-                                        class="contact_acqprimary"
-                                        checked="checked"
-                                        v-model="contact.acqprimary"
-                                    />
-                                    <input
-                                        v-else
                                         type="checkbox"
                                         :id="`contact_acqprimary_${i}`"
                                         class="contact_acqprimary"
                                         v-model="contact.acqprimary"
+                                        @change="
+                                            handlePrimaryContact(
+                                                'acqprimary',
+                                                i
+                                            )
+                                        "
                                     />
                                     {{ $__("Primary acquisitions contact") }}
                                 </label>
@@ -174,15 +171,6 @@
                             <li>
                                 <label>
                                     <input
-                                        v-if="contact.orderacquisition"
-                                        type="checkbox"
-                                        :id="`contact_orderacquisition_${i}`"
-                                        class="contact_orderacquisition"
-                                        checked="checked"
-                                        v-model="contact.orderacquisition"
-                                    />
-                                    <input
-                                        v-else
                                         type="checkbox"
                                         :id="`contact_orderacquisition_${i}`"
                                         class="contact_orderacquisition"
@@ -194,18 +182,9 @@
                             <li>
                                 <label>
                                     <input
-                                        v-if="contact.claimacquisition"
                                         type="checkbox"
                                         :id="`contact_claimacquisition_${i}`"
                                         class="contact_claimacquisition"
-                                        checked="checked"
-                                        v-model="contact.claimacquisition"
-                                    />
-                                    <input
-                                        v-else
-                                        type="checkbox"
-                                        :id="`contact_claimacqu isition_${i}`"
-                                        class="contact_claimacqu isition"
                                         v-model="contact.claimacquisition"
                                     />
                                     {{ $__("Contact about late orders") }}
@@ -221,19 +200,16 @@
                             <li>
                                 <label>
                                     <input
-                                        v-if="contact.serialsprimary"
-                                        type="checkbox"
-                                        :id="`contact_serialsprimary_${i}`"
-                                        class="contact_serialsprimary"
-                                        checked="checked"
-                                        v-model="contact.serialsprimary"
-                                    />
-                                    <input
-                                        v-else
                                         type="checkbox"
                                         :id="`contact_serialsprimary_${i}`"
                                         class="contact_serialsprimary"
                                         v-model="contact.serialsprimary"
+                                        @change="
+                                            handlePrimaryContact(
+                                                'serialsprimary',
+                                                i
+                                            )
+                                        "
                                     />
                                     {{ $__("Primary serials contact") }}
                                 </label>
@@ -241,15 +217,6 @@
                             <li>
                                 <label>
                                     <input
-                                        v-if="contact.claimissues"
-                                        type="checkbox"
-                                        :id="`contact_claimissues_${i}`"
-                                        class="contact_claimissues"
-                                        checked="checked"
-                                        v-model="contact.claimissues"
-                                    />
-                                    <input
-                                        v-else
                                         type="checkbox"
                                         :id="`contact_claimissues_${i}`"
                                         class="contact_claimissues"
@@ -296,6 +263,16 @@ export default {
                 serialsprimary: false,
                 claimissues: false,
             });
+        },
+        handlePrimaryContact(type, i) {
+            const contact = this.vendor.contacts[i];
+            if (contact[type]) {
+                this.vendor.contacts.forEach((contact, j) => {
+                    if (j !== i) {
+                        contact[type] = false;
+                    }
+                });
+            }
         },
         deleteContact(i) {
             this.vendor.contacts.splice(i, 1);
