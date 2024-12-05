@@ -38,6 +38,7 @@ sub startup {
     $self->plugin('RESTV1');
 
     $self->plugin('CSRF');
+    $self->plugin('Language');
 
     $self->hook(before_dispatch => \&_before_dispatch);
     $self->hook(around_action => \&_around_action);

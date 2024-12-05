@@ -166,6 +166,7 @@ sub startup {
         $self->app->log->warn( "Warning: Failed to fetch oauth configuration: " . $_ );
     };
 
+    $self->plugin('Koha::App::Plugin::Language');
     $self->plugin('Koha::REST::Plugin::Pagination');
     $self->plugin('Koha::REST::Plugin::Query');
     $self->plugin('Koha::REST::Plugin::Objects');

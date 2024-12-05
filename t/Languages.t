@@ -18,10 +18,11 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use CGI qw ( -utf8 );
 use Koha::Cache::Memory::Lite;
+use Koha::Language;
 
 BEGIN {
     use_ok('C4::Languages', qw( getlanguage ));
@@ -32,6 +33,7 @@ my @languages = (); # stores the list of active languages
 my $return_undef = 0;
 
 my $module_context = Test::MockModule->new('C4::Context');
+my $module_languages = Test::MockModule->new('C4::Languages');
 
 $module_context->mock(
     preference => sub {
@@ -44,6 +46,12 @@ $module_context->mock(
             return 'XXX';
         }
   },
+);
+
+$module_languages->mock(
+    _get_language_dirs => sub {
+        return @languages
+    }
 );
 
 delete $ENV{HTTP_ACCEPT_LANGUAGE};
@@ -59,3 +67,24 @@ is(C4::Languages::getlanguage($query), 'en', 'default to English if no language 
 Koha::Cache::Memory::Lite->get_instance()->clear_from_cache('getlanguage');
 $return_undef = 1;
 is(C4::Languages::getlanguage($query), 'en', 'default to English if no database');
+
+subtest 'when interface is not intranet or opac' => sub {
+    plan tests => 3;
+
+    my $cache = Koha::Cache::Memory::Lite->get_instance;
+    C4::Context->interface('api');
+
+    @languages = ('fr-FR', 'de-DE', 'en');
+
+    $ENV{HTTP_ACCEPT_LANGUAGE} = 'de-DE';
+    $cache->clear_from_cache('getlanguage');
+    is(C4::Languages::getlanguage(), 'de-DE', 'Accept-Language HTTP header is respected');
+
+    Koha::Language->set_requested_language('fr-FR');
+    $cache->clear_from_cache('getlanguage');
+    is(C4::Languages::getlanguage(), 'fr-FR', 'but language requested through Koha::Language is prefered');
+
+    @languages = ();
+    $cache->clear_from_cache('getlanguage');
+    is(C4::Languages::getlanguage(), 'en', 'fallback to english when no language is available');
+};

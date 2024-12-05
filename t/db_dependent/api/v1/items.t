@@ -32,6 +32,7 @@ use Mojo::JSON qw(encode_json);
 use C4::Auth;
 use Koha::Items;
 use Koha::Database;
+use Koha::Language;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -256,7 +257,7 @@ subtest 'list_public() tests' => sub {
 
 subtest 'get() tests' => sub {
 
-    plan tests => 34;
+    plan tests => 37;
 
     $schema->storage->txn_begin;
 
@@ -345,6 +346,13 @@ subtest 'get() tests' => sub {
       ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 3, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0' );
+
+    my $module = Test::MockModule->new('C4::Languages');
+    $module->mock( _get_language_dirs => sub { return 'en', 'de-DE' } );
+    $schema->resultset('Localization')->create({ entity => 'itemtypes', code => $itype->itemtype, lang => 'de-DE', translation => 'translated' });
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber, { 'X-Koha-Embed' => '+strings', Cookie => 'KohaOpacLanguage=de-DE', 'Accept-Language' => 'en' } )
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '/_strings/item_type_id/str' => 'translated', 'translations in _strings use language set in KohaOpacLanguage cookie' );
 
     $schema->storage->txn_rollback;
 };

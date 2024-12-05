@@ -28,6 +28,7 @@ use List::MoreUtils qw( any );
 use C4::Context;
 use Koha::Caches;
 use Koha::Cache::Memory::Lite;
+use Koha::Language;
 
 our (@ISA, @EXPORT_OK);
 BEGIN {
@@ -111,12 +112,17 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getTranslatedLanguages {
-    my ($interface, $theme, $current_language, $which) = @_;
+    my ($interface, $theme, $current_language) = @_;
     my @languages;
-    my @enabled_languages =
-      ( $interface && $interface eq 'intranet' )
-      ? split ",", C4::Context->preference('StaffInterfaceLanguages')
-      : split ",", C4::Context->preference('OPACLanguages');
+
+    my @enabled_languages;
+    if ($interface) {
+        if ($interface eq 'intranet') {
+            @enabled_languages = split ",", C4::Context->preference('StaffInterfaceLanguages');
+        } elsif ($interface eq 'opac') {
+            @enabled_languages = split ",", C4::Context->preference('OPACLanguages');
+        }
+    }
 
     my $cache = Koha::Caches->get_instance;
     my $cache_key = "languages_${interface}_${theme}";
@@ -642,8 +648,26 @@ sub accept_language {
 
 =head2 getlanguage
 
-    Select a language based on the URL parameter 'language', a cookie,
-    syspref available languages & browser
+Select a language based on:
+
+=over
+
+=item * the URL parameter 'language' (staff and opac interfaces only),
+
+=item * the 'KohaOpacLanguage' cookie (staff and opac interfaces only),
+
+=item * the language set by C<Koha::Language::set_requested_language>
+(interfaces other than staff and opac only). The REST API sets this to the
+value of 'KohaOpacLanguage' cookie,
+
+=item * syspref StaffInterfaceLanguages (staff only)
+
+=item * syspref OpacLanguages (opac only),
+
+=item * HTTP header Accept-Language (more precisely, environment variable
+HTTP_ACCEPT_LANGUAGE)
+
+=back
 
 =cut
 
@@ -657,29 +681,36 @@ sub getlanguage {
         return $cached if $cached;
     }
 
-    $cgi //= CGI->new;
     my $interface = C4::Context->interface;
-    my $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
+    my $theme = '';
     my $language;
-
-    my $preference_to_check =
-      $interface eq 'intranet' ? 'StaffInterfaceLanguages' : 'OPACLanguages';
-    # Get the available/valid languages list
     my @languages;
-    my $preference_value = C4::Context->preference($preference_to_check);
-    if ($preference_value) {
-        @languages = split /,/, $preference_value;
-    }
 
-    # Chose language from the URL
-    my $cgi_param_language = $cgi->param( 'language' );
-    if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages) {
-        $language = $cgi_param_language;
-    }
+    if ($interface eq 'opac' || $interface eq 'intranet') {
+        $cgi //= CGI->new;
+        $theme = C4::Context->preference( ( $interface eq 'opac' ) ? 'opacthemes' : 'template' );
 
-    # cookie
-    if (not $language and my $cgi_cookie_language = $cgi->cookie('KohaOpacLanguage') ) {
-        ( $language = $cgi_cookie_language ) =~ s/[^a-zA-Z_-]*//; # sanitize cookie
+        my $preference_to_check =
+          $interface eq 'intranet' ? 'StaffInterfaceLanguages' : 'OPACLanguages';
+        # Get the available/valid languages list
+        my $preference_value = C4::Context->preference($preference_to_check);
+        if ($preference_value) {
+            @languages = split /,/, $preference_value;
+        }
+
+        # Chose language from the URL
+        my $cgi_param_language = $cgi->param( 'language' );
+        if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages) {
+            $language = $cgi_param_language;
+        }
+
+        # cookie
+        if (not $language and my $cgi_cookie_language = $cgi->cookie('KohaOpacLanguage') ) {
+            ( $language = $cgi_cookie_language ) =~ s/[^a-zA-Z_-]*//; # sanitize cookie
+        }
+    } else {
+        @languages = map { $_->{rfc4646_subtag} } @{ getTranslatedLanguages($interface, $theme) };
+        $language = Koha::Language->get_requested_language();
     }
 
     # HTTP_ACCEPT_LANGUAGE
