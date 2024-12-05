@@ -50,7 +50,7 @@ export default {
                 notes: "",
                 postal: "",
                 url: "",
-                active: false,
+                active: true,
                 list_currency: null,
                 invoice_currency: null,
                 tax_rate: null,

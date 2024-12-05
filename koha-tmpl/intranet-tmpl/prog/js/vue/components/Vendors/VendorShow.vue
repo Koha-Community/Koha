@@ -37,24 +37,6 @@
             />
             <ToolbarButton
                 :to="{
-                    path: '/cgi-bin/koha/acqui/basketheader.pl',
-                    query: { booksellerid: vendor.id, op: 'add_form' },
-                }"
-                icon="plus"
-                :title="$__('New basket')"
-                callback="redirect"
-            />
-            <ToolbarButton
-                :to="{
-                    path: '/cgi-bin/koha/admin/aqcontract.pl',
-                    query: { booksellerid: vendor.id, op: 'add_form' },
-                }"
-                icon="plus"
-                :title="$__('New contract')"
-                callback="redirect"
-            />
-            <ToolbarButton
-                :to="{
                     path: '/cgi-bin/koha/acqui/parcels.pl',
                     query: { booksellerid: vendor.id },
                 }"
