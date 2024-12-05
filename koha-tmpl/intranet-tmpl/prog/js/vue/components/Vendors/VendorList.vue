@@ -100,6 +100,7 @@ export default {
                                 icon: "fa fa-inbox",
                                 should_display: row =>
                                     row.active &&
+                                    row.baskets?.length > 0 &&
                                     this.isUserPermitted(
                                         "CAN_user_acquisition_order_receive"
                                     ),
