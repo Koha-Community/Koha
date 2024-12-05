@@ -142,6 +142,14 @@ requestor email
 
 report types provided by the harvester
 
+=head2 service_platform
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
+platform if provider requires it
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -175,6 +183,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "report_types",
   { data_type => "varchar", is_nullable => 1, size => 255 },
+  "service_platform",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -328,8 +338,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2023-10-11 10:09:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MSvyv/Abt3S3fqZF21v/7w
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-05 19:06:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VzC6luzfNA1QBZ7slRs6OQ
 
 # __PACKAGE__->add_columns(
 #     '+active' => { is_boolean => 1 }

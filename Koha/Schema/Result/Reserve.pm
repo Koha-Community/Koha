@@ -62,7 +62,7 @@ foreign key from the biblio table defining which bib record this hold is on
   data_type: 'integer'
   is_nullable: 1
 
-links the reserve to the deleted bibliographic record (deletedbiblio.biblionumber)
+links the hold to the deleted bibliographic record (deletedbiblio.biblionumber)
 
 =head2 item_group_id
 
@@ -465,8 +465,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-05 16:46:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ljjbd9tYWR6AXmEyrg/sog
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-12-05 19:06:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OU6N7F+5LfbGfkhJMv53GA
 
 __PACKAGE__->belongs_to(
   "item",
