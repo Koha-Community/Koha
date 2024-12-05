@@ -138,13 +138,13 @@ subtest 'generate_subfield_form class sources' => sub {
         },
     );
 
-    my @class_sources = Koha::ClassSources->search( { used => 1 }, { order_by => 'cn_source' } )->as_list;
-    my %labels        = map { $_->cn_source => $_->description } @class_sources;
-    my @values        = ( '', map { $_->cn_source } @class_sources );
+    my @class_sources = Koha::ClassSources->search({used => 1}, {order_by => 'cn_source'})->as_list;
+    my %labels = map { $_->cn_source => $_->description } @class_sources;
+    my @values = ('', map { $_->cn_source } @class_sources);
 
-    is( $subfield->{marc_value}->{type}, 'select' );
-    is_deeply( $subfield->{marc_value}->{labels}, \%labels );
-    is_deeply( $subfield->{marc_value}->{values}, \@values );
+    is($subfield->{marc_value}->{type}, 'select');
+    is_deeply($subfield->{marc_value}->{labels}, \%labels);
+    is_deeply($subfield->{marc_value}->{values}, \@values);
 };
 
 subtest 'generate_subfield_form authorised value' => sub {

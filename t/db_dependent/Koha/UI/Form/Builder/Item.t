@@ -23,7 +23,6 @@ use utf8;
 
 use List::MoreUtils qw( uniq );
 
-use Koha::ClassSources;
 use Koha::Libraries;
 use Koha::MarcSubfieldStructures;
 use Koha::UI::Form::Builder::Item;
@@ -100,16 +99,16 @@ subtest 'authorised values' => sub {
     };
 
     subtest 'cn_source' => sub {
-        plan tests => 3;
-        my ($subfield) = grep { $_->{kohafield} eq 'items.cn_source' } @$subfields;
-
-        my @class_sources = Koha::ClassSources->search( { used => 1 }, { order_by => 'cn_source' } )->as_list;
-        my %labels        = map { $_->cn_source => $_->description } @class_sources;
-        my @values        = ( '', map { $_->cn_source } @class_sources );
-
-        is( $subfield->{marc_value}->{type}, 'select' );
-        is_deeply( $subfield->{marc_value}->{labels}, \%labels );
-        is_deeply( $subfield->{marc_value}->{values}, \@values );
+        plan tests => 2;
+        my ( $subfield ) = grep { $_->{kohafield} eq 'items.cn_source' } @$subfields;
+        is_deeply( $subfield->{marc_value}->{values}, [ '', 'ddc', 'lcc' ] );
+        is_deeply(
+            $subfield->{marc_value}->{labels},
+            {
+                ddc => "Dewey Decimal Classification",
+                lcc => "Library of Congress Classification",
+            }
+        );
     };
     subtest 'branches' => sub {
         plan tests => 2;

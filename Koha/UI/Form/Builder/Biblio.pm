@@ -16,8 +16,6 @@ package Koha::UI::Form::Builder::Biblio;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use feature qw(fc);
-
 use C4::Context;
 use C4::ClassSource qw( GetClassSources );
 use Koha::DateUtils qw( dt_from_string );
@@ -332,7 +330,7 @@ sub build_authorized_values_list {
 
         my $default_source = C4::Context->preference("DefaultClassificationSource");
 
-        foreach my $class_source (sort {fc($a) cmp fc($b)} keys %$class_sources) {
+        foreach my $class_source (sort keys %$class_sources) {
             next unless $class_sources->{$class_source}->{'used'} or
                         ($value and $class_source eq $value) or
                         ($class_source eq $default_source);
