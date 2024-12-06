@@ -17,6 +17,8 @@ export default {
         const permissionsStore = inject("permissionsStore");
         const { isUserPermitted } = permissionsStore;
 
+        const format_date = $date;
+
         const table_id = "vendor_contracts_table";
         useDataTable(table_id);
 
@@ -24,6 +26,7 @@ export default {
             isUserPermitted,
             table_id,
             escape_str,
+            format_date,
         };
     },
     methods: {
@@ -31,6 +34,7 @@ export default {
             let contracts = this.vendor.contracts;
             let table_id = this.table_id;
             let isUserPermitted = this.isUserPermitted;
+            let format_date = this.format_date;
 
             $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(
                 search => search.name != "apply_filter"
@@ -71,12 +75,18 @@ export default {
                             data: "contractstartdate",
                             searchable: false,
                             orderable: false,
+                            render: function (data, type, row, meta) {
+                                return format_date(row.contractstartdate);
+                            },
                         },
                         {
                             title: __("End date"),
                             data: "contractenddate",
                             searchable: false,
                             orderable: false,
+                            render: function (data, type, row, meta) {
+                                return format_date(row.contractenddate);
+                            },
                         },
                         ...(isUserPermitted(
                             "CAN_user_acquisition_contracts_manage"

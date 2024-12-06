@@ -52,11 +52,11 @@
             </li>
             <li v-if="vendor.deliverytime">
                 <label>{{ $__("Delivery time") }}:</label>
-                <span> {{ vendor.deliverytime }} days </span>
+                <span> {{ vendor.deliverytime + " " + $__("days") }}</span>
             </li>
             <li v-if="vendor.notes">
                 <label>{{ $__("Notes") }}:</label>
-                <span> {{ vendor.notes }} days </span>
+                <span> {{ vendor.notes }}</span>
             </li>
         </ol>
     </fieldset>
