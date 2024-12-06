@@ -1149,7 +1149,7 @@
 
             // Handle checkout for fast cataloging
             // Check the referrer to prevent csrf, fill and submit form
-            if(document.referrer.split('?')[0] === window.location.origin +'/cgi-bin/koha/cataloguing/additem.pl') {
+            if(document.referrer.split(window.location.origin + '/cgi-bin/koha/cataloguing/additem.pl?')[1].match(/frameworkcode=FA&circborrowernumber=/) ) {
                 let urlParams = new URLSearchParams(window.location.search);
                 let barcode = urlParams.get('barcode');
                 $('#barcode').val(barcode);
