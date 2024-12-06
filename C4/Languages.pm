@@ -191,57 +191,79 @@ sub getLanguages {
     my $lang = shift;
     my $isFiltered = shift;
 
-    my @languages_loop;
-    my $dbh=C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
+
     my $default_language = 'en';
     my $current_language = $default_language;
-    my $language_list = $isFiltered ? C4::Context->preference("AdvancedSearchLanguages") : undef;
     if ($lang) {
         $current_language = regex_lang_subtags($lang)->{'language'};
     }
-    my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\' ORDER BY description');
-    $sth->execute();
-    while (my $language_subtag_registry = $sth->fetchrow_hashref) {
-        my $desc;
-        # check if language name is stored in current language
-        my $sth4= $dbh->prepare("SELECT description FROM language_descriptions WHERE type='language' AND subtag =? AND lang = ?");
-        $sth4->execute($language_subtag_registry->{subtag},$current_language);
-        while (my $language_desc = $sth4->fetchrow_hashref) {
-             $desc=$language_desc->{description};
-        }
-        my $sth2= $dbh->prepare("SELECT * FROM language_descriptions LEFT JOIN language_rfc4646_to_iso639 on language_rfc4646_to_iso639.rfc4646_subtag = language_descriptions.subtag WHERE type='language' AND subtag =? AND language_descriptions.lang = ?");
-        if ($desc) {
-            $sth2->execute($language_subtag_registry->{subtag},$current_language);
-        }
-        else {
-            $sth2->execute($language_subtag_registry->{subtag},$default_language);
-        }
-        my $sth3 = $dbh->prepare("SELECT description FROM language_descriptions WHERE type='language' AND subtag=? AND lang=?");
-        # add the correct description info
-        while (my $language_descriptions = $sth2->fetchrow_hashref) {
-            $sth3->execute($language_subtag_registry->{subtag},$language_subtag_registry->{subtag});
-            my $native_description;
-            while (my $description = $sth3->fetchrow_hashref) {
-                $native_description = $description->{description};
-            }
 
-            # fill in the ISO6329 code
-            $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
-            # fill in the current selected ui language's translation, as well as the native description of the language
-            if ($native_description) {
-                $language_subtag_registry->{language_description} = $language_descriptions->{description} || q{};
-                $language_subtag_registry->{language_description} .= " ($native_description)";
-            }
-            else {
-                $language_subtag_registry->{language_description} = $language_descriptions->{description};
-            }
-        }
-        # Do not push unless valid iso639-2 code
-        if ( $language_subtag_registry->{ iso639_2_code } and ( !$language_list || index (  $language_list, $language_subtag_registry->{ iso639_2_code } ) >= 0) ) {
-            push @languages_loop, $language_subtag_registry;
-        }
+    my $language_list = $isFiltered ? C4::Context->preference("AdvancedSearchLanguages") : undef;
+    my $language_list_cond = $language_list ? 'HAVING FIND_IN_SET(language_rfc4646_to_iso639.iso639_2_code, ?)' : '';
+
+    my $sth = $dbh->prepare("
+    SELECT
+    language_subtag_registry.*,
+    language_rfc4646_to_iso639.iso639_2_code,
+    CASE
+        -- If user's localized name of given lang is available
+        WHEN current_language_descriptions.description IS NOT NULL
+        THEN
+            CASE
+                -- Append native translation of given language if possible
+                WHEN native_language_descriptions.description IS NOT NULL
+                    AND native_language_descriptions.description != current_language_descriptions.description
+                THEN CONCAT(current_language_descriptions.description, ' (', native_language_descriptions.description, ')')
+                ELSE current_language_descriptions.description
+            END
+        ELSE -- fall back to English description
+            CASE
+                -- Append native translation of given language if possible
+                WHEN native_language_descriptions.description IS NOT NULL
+                    AND native_language_descriptions.description != language_subtag_registry.description
+                THEN CONCAT(language_subtag_registry.description, ' (', native_language_descriptions.description, ')')
+                ELSE language_subtag_registry.description
+            END
+    END AS language_description
+
+    -- Useful if debugging the query:
+    -- current_language_descriptions.description AS _current_language_descriptions_description,
+    -- native_language_descriptions.description AS _native_language_descriptions_description
+
+    FROM language_subtag_registry
+
+    -- Grab ISO code for language
+    INNER JOIN language_rfc4646_to_iso639
+    ON language_rfc4646_to_iso639.rfc4646_subtag = language_subtag_registry.subtag
+    AND language_rfc4646_to_iso639.iso639_2_code IS NOT NULL
+
+    -- Grab language name in user's current language
+    LEFT JOIN language_descriptions current_language_descriptions
+    ON current_language_descriptions.subtag = language_subtag_registry.subtag
+    AND current_language_descriptions.lang = ?
+    AND current_language_descriptions.type = 'language'
+
+    -- Grab language name in the given language itself
+    LEFT JOIN language_descriptions native_language_descriptions
+    ON native_language_descriptions.subtag = language_subtag_registry.subtag
+    AND native_language_descriptions.lang = language_subtag_registry.subtag
+    AND native_language_descriptions.type = 'language'
+
+    WHERE language_subtag_registry.type = 'language'
+    ${language_list_cond}");
+
+    if ($language_list) {
+        $sth->execute($current_language, join ',' => split(/,|\|/, $language_list));
+    } else {
+        $sth->execute($current_language);
     }
-    return \@languages_loop;
+
+    my @languages_list;
+    while (my $row = $sth->fetchrow_hashref) {
+        push @languages_list, $row;
+    }
+    return \@languages_list;
 }
 
 sub _get_opac_language_dirs {
