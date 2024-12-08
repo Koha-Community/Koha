@@ -180,7 +180,7 @@ a.add, a.delete {
                                         [% ELSE %]
                                             <select name="search_field_type">
                                         [% END %]
-                                            <option value=""></option>
+                                            <option value="">Default</option>
                                             [% IF search_field.type == "string" %]
                                                 <option value="string" selected="selected">String</option>
                                             [% ELSE %]
@@ -217,14 +217,14 @@ a.add, a.delete {
                                                 <option value="isbn">ISBN</option>
                                             [% END %]
                                             [% IF search_field.type == "stdno" %]
-                                                <option value="stdno" selected="selected">Std. Number</option>
+                                                <option value="stdno" selected="selected">Identifier</option>
                                             [% ELSE %]
-                                                <option value="stdno">Std. Number</option>
+                                                <option value="stdno">Identifier</option>
                                             [% END %]
                                             [% IF search_field.type == "callnumber" %]
-                                                <option value="callnumber" selected="selected">Call Number</option>
+                                                <option value="callnumber" selected="selected">Call number</option>
                                             [% ELSE %]
-                                                <option value="callnumber">Call Number</option>
+                                                <option value="callnumber">Call number</option>
                                             [% END %]
                                             [% IF search_field.type == "geo_point" %]
                                               <option value="geo_point" selected="selected">Geo point</option>
@@ -283,7 +283,7 @@ a.add, a.delete {
                                 </td>
                                 <td>
                                     <select data-id="search_field_type">
-                                        <option value=""></option>
+                                        <option value="">Default</option>
                                         <option value="string">String</option>
                                         <option value="date">Date</option>
                                         <option value="year">Year</option>
@@ -291,8 +291,8 @@ a.add, a.delete {
                                         <option value="boolean">Boolean</option>
                                         <option value="sum">Sum</option>
                                         <option value="isbn">ISBN</option>
-                                        <option value="stdno">Std. Number</option>
-                                        <option value="callnumber">Call Number</option>
+                                        <option value="stdno">Identifierr</option>
+                                        <option value="callnumber">Call number</option>
                                         <option value="geo_point">Geo point</option>
                                     </select>
                                 </td>
