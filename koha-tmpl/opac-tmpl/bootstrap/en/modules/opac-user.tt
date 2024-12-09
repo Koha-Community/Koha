@@ -1116,7 +1116,6 @@
                 var hold_title = $(this).data("title");
                 var reserve_id = $(this).data("reserve_id");
                 confirmModal( hold_title, _("Are you sure you want to cancel this hold?"), _("Yes, cancel hold"), _("No, do not cancel hold"), function( result ){
-                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#delete_hold_" + reserve_id ).submit();
                         }
@@ -1129,7 +1128,6 @@
                 var hold_title = $(this).data("title");
                 var reserve_id = $(this).data("reserve_id");
                 confirmModal( hold_title, _("Are you sure you want to request cancelling this hold?"), _("Yes"), _("No"), function( result ){
-                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#req_cancel_hold_" + reserve_id ).submit();
                         }
@@ -1143,7 +1141,6 @@
                 var article_request_id = $(this).data("article-request_id");
                 (function(row){
                     var doCancel = function( result ){
-                        $("#bootstrap-confirm-box-modal").remove();
                         if( result ){
                             $.ajax({
                                 type: "DELETE",
@@ -1194,7 +1191,6 @@
                 var title = _("Are you sure you want to suspend all holds?");
                 var body = _("All holds will be suspended.");
                 confirmModal( body, title, _("Yes, suspend all holds"), "", function( result ){
-                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#suspend_all_holds").submit();
                         }
@@ -1207,7 +1203,6 @@
                 var title = _("Are you sure you want to resume all suspended holds?");
                 var body = _("All holds will resume.");
                 confirmModal( body, title, _("Yes, resume all holds"), _("No, do not resume holds"), function( result ){
-                        $("#bootstrap-confirm-box-modal").remove()
                         if( result ){
                             $("#resume_all_holds").submit();
                         }
