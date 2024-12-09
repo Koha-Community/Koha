@@ -1015,7 +1015,6 @@ $(function() {
                     });
                 }
                 confirmModal( message, title, yes_label, no_label, function( result ){
-                    $("#bootstrap-confirm-box-modal").remove();
                     if( result ){
                         if( href ){
                             location.href= href;
@@ -1074,7 +1073,6 @@ $(function() {
             message += "<p>" + _("This list is shared. Other users will lose access to it.") + "</p>";
         }
         confirmModal( message, _("Are you sure you want to delete this list?"), _("Yes, delete"), _("No, do not delete"), function( result ){
-                $("#bootstrap-confirm-box-modal").remove();
                 if( result ){
                     $("#deleteshelf" + shelf_number ).submit();
                 }
@@ -1087,7 +1085,6 @@ $(function() {
         var shelf_name = $(this).data("shelfname");
         var shelf_number = $(this).data("shelfnumber");
         confirmModal( shelf_name, _("Are you sure you want to remove sharing? You will no longer have access to the list."), _("Yes, remove sharing"), _("No, do not remove sharing"), function( result ){
-                $("#bootstrap-confirm-box-modal").remove();
                 if( result ){
                     $("#unshare" + shelf_number ).submit();
                 }

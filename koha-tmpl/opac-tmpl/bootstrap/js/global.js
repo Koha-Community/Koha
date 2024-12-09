@@ -135,8 +135,10 @@ function confirmModal(message, title, yes_label, no_label, callback) {
             return false;
         });
         $("#bootstrap-confirm-box-modal").on("hide.bs.modal", function () {
-            if (callback)
+            if (callback) {
                 callback($("#bootstrap-confirm-box-modal").data("confirm-yes"));
+                $("#bootstrap-confirm-box-modal").remove();
+            }
         });
     }
 
