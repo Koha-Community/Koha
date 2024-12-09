@@ -439,6 +439,17 @@ aside {
             }
         }
     }
+
+    .breadcrumb-item {
+        + .breadcrumb-item {
+            &::before {
+                background: transparent none;
+                display: none;
+                height: unset;
+                width: unset;
+            }
+        }
+    }
 }
 
 .sidebar_menu {
