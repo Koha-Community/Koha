@@ -275,12 +275,15 @@
     function build_items_table (tab_id, add_filters, dt_options, drawcallback) {
 
         if ( dt_options && dt_options.hasOwnProperty('destroy') ) {
+            // Keep a copy of the user settings, the destroy is going to trigger the column-visibility.dt event for all columns
+            let user_colvis_bak= Object.assign({}, user_colvis[tab_id]);
             let table_id = "#"+tab_id+"_table";
             if( $.fn.dataTable.isDataTable(table_id) ) {
                 $(table_id).DataTable().destroy();
             }
             $(table_id).replaceWith(table_nodes[tab_id]);
             dt_options['destroy'] = null;
+            user_colvis[tab_id] = user_colvis_bak;
         }
         let default_filters = {};
         [% IF Koha.Preference('SeparateHoldings') %]
