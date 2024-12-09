@@ -1135,7 +1135,7 @@ subtest 'reserves.item_level_hold' => sub {
 
 subtest 'MoveReserve additional test' => sub {
 
-    plan tests => 4;
+    plan tests => 8;
 
     # Create the items and patrons we need
     my $biblio = $builder->build_sample_biblio();
@@ -1175,13 +1175,36 @@ subtest 'MoveReserve additional test' => sub {
         ( $patron_1->borrowernumber, $biblio->biblionumber, $item_1->itemnumber, $item_1->homebranch, 0, $reserve_1 )
     );
 
-    # The 2nd hold should be filed even if the item is preselected for the first hold
+    # The 2nd hold should be filled even if the item is preselected for the first hold
     MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
     is( $patron_2->holds->count, 0, "The 2nd patrons no longer has a hold" );
     is(
         $patron_2->old_holds->next()->reserve_id, $reserve_2,
         "The 2nd patrons hold was filled and moved to old holds"
     );
+
+    my $reserve_3 = AddReserve(
+        {
+            branchcode     => $item_2->homebranch,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+            itemnumber     => $item_2->itemnumber,
+        }
+    );
+
+    # The 3rd hold should not be filled as it is an item level hold on a different item
+    MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
+    is( $patron_2->holds->count,     1, "The 2nd patron still has a hold" );
+    is( $patron_2->old_holds->count, 1, "The 2nd patron has only 1 old holds" );
+
+    my $hold_3 = Koha::Holds->find($reserve_3);
+    $hold_3->item_level_hold(0)->store();
+
+    # The 3rd hold should now be filled as it is a title level hold, even though associated with a different item
+    MoveReserve( $item_1->itemnumber, $patron_2->borrowernumber );
+    is( $patron_2->holds->count,       0, "The 2nd patron no longer has a hold" );
+    is( $patron_2->old_holds->count(), 2, "The 2nd patron's hold was filled and moved to old holds" );
 
 };
 
