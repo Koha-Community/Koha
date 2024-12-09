@@ -8,11 +8,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
-        $dbh->do(q{ALTER TABLE erm_agreements MODIFY COLUMN license_info mediumtext});
-
-        # Print useful stuff here
-        # tables
-        say $out "Set erm_agreements.license_info to type mediumtext.";
+        $dbh->do(q{ALTER TABLE erm_agreements MODIFY COLUMN license_info mediumtext DEFAULT NULL COMMENT 'info about the license'});
+        say_success( $out, "Updated erm_agreements.license_info to mediumtext." );
     },
 };
