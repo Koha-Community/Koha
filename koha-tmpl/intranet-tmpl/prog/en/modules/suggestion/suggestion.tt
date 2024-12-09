@@ -1303,8 +1303,13 @@
     <script>
         function select_manager(borrowernumber, borrower) {
             let tab = $('#suggestiontabs .active table').data('tab-name');
-            var managedby_name = $("#managedby_name-"+tab);
-            var managedby = $("#managedby-"+tab);
+            if ( tab ) {
+                var managedby_name = $("#managedby_name-"+tab);
+                var managedby = $("#managedby-"+tab);
+            } else {
+                var managedby_name = $("#managedby_name");
+                var managedby = $("#managedby");
+            }
             managedby_name.empty();
             managedby.val('');
             var borrowername = borrower.firstname + ' ' + borrower.surname;
