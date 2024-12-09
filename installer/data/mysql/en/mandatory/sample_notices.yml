@@ -738,12 +738,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item(s) are now due:"
-            - ""
-            - "<<items.content>>"
-            - ""
+            - "[% FOREACH checkout IN checkouts %]"
+            - "[% checkout.title %], [% checkout.author %] ([% checkout.barcode %])"
+            - "[% END %]"
             - "Thank you."
 
         - module: circulation
@@ -755,9 +755,9 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have <<count>> item(s) that are now due"
+            - "You have [% checkouts.size %] item(s) that are now due"
             - ""
             - "Thank you."
 
@@ -954,12 +954,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "The following item(s) will be due soon:"
-            - ""
-            - "<<items.content>>"
-            - ""
+            - "[% FOREACH checkout IN checkouts %]"
+            - "[% checkout.title %], [% checkout.author %] ([% checkout.barcode %])"
+            - "[% END %]"
             - "Thank you."
 
         - module: circulation
@@ -971,9 +971,9 @@ tables:
           message_transport_type: sms
           lang: default
           content:
-            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
-            - "You have <<count>> item(s) that will be due soon."
+            - "You have [% checkouts.size %] item(s) that will be due soon."
             - ""
             - "Thank you."
 
