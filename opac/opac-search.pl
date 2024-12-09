@@ -799,9 +799,8 @@ for (my $i=0;$i<@servers;$i++) {
                 SEARCH_RESULTS => \@newresults,
                 suppress_result_number => $hide,
                             );
-            if (C4::Context->preference("OPACLocalCoverImages")){
-            $template->param(OPACLocalCoverImages => 1);
-            $template->param(OPACLocalCoverImagesPriority => C4::Context->preference("OPACLocalCoverImagesPriority"));
+            if ( C4::Context->preference("OPACLocalCoverImages") ) {
+                $template->param( OPACLocalCoverImages => 1 );
             }
             ## Build the page numbers on the bottom of the page
             my ( $page_numbers, $hits_to_paginate, $pages, $current_page_number, $previous_page_offset, $next_page_offset, $last_page_offset ) =
