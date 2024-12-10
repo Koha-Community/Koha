@@ -133,6 +133,14 @@
                         [% END %]
                     </ul>
                 [% END %]
+                [% IF CAN_user_parameters_manage_libraries %]
+                    <h3>Admin</h3>
+                    <ul>
+                        [% IF CAN_user_parameters_manage_libraries %]
+                            [% WRAPPER table_option value="branches" %]<span>Libraries</span>[% END %]
+                        [% END %]
+                    </ul>
+                [% END %]
                 [% IF CAN_user_erm %]
                     <h2>E-resource management</h2>
                     <ul>
