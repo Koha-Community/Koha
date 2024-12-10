@@ -125,19 +125,21 @@
                 [% IF CAN_user_acquisition_order_manage || CAN_user_acquisition_edit_invoices %]
                     <h3>Acquisitions</h3>
                     <ul>
+                        [% IF CAN_user_acquisition_edit_invoices %]
+                            [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
+                        [% END %]
                         [% IF CAN_user_acquisition_order_manage %]
                             [% WRAPPER table_option value="aqbasket" %]<span>Order baskets</span>[% END %]
                             [% WRAPPER table_option value="aqorders" %]<span>Order lines</span>[% END %]
                         [% END %]
-                        [% IF CAN_user_acquisition_edit_invoices %]
-                            [% WRAPPER table_option value="aqinvoices" %]<span>Invoices</span>[% END %]
-                        [% END %]
                     </ul>
                 [% END %]
-                [% IF CAN_user_serials_edit_subscription %]
-                    <h3>Serials</h3>
+                [% IF CAN_user_erm %]
+                    <h3>E-resource management</h3>
                     <ul>
-                        [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
+                        [% WRAPPER table_option value="erm_agreements" %]ERM agreements[% END %]
+                        [% WRAPPER table_option value="erm_licenses" %]ERM licenses[% END %]
+                        [% WRAPPER table_option value="erm_packages" %]ERM packages[% END %]
                     </ul>
                 [% END %]
                 [% IF CAN_user_updatecharges_remaining_permissions %]
@@ -147,12 +149,10 @@
                         [% WRAPPER table_option value="accountlines:debit" %]Account lines (debit)[% END %]
                     </ul>
                 [% END %]
-                [% IF CAN_user_erm %]
-                    <h3>E-resource management</h3>
+                [% IF CAN_user_serials_edit_subscription %]
+                    <h3>Serials</h3>
                     <ul>
-                        [% WRAPPER table_option value="erm_licenses" %]ERM licenses[% END %]
-                        [% WRAPPER table_option value="erm_agreements" %]ERM agreements[% END %]
-                        [% WRAPPER table_option value="erm_packages" %]ERM packages[% END %]
+                        [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
                     </ul>
                 [% END %]
             [% ELSE %]
