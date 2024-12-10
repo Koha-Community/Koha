@@ -357,6 +357,7 @@
     <script>
         var sales_table = $("#sales").dataTable($.extend(true, {}, dataTablesDefaults, {
             orderFixed: [ 0, 'asc'],
+            ordering: false,
             columnDefs: [ {
                 targets: [ 0, 1 ],
                 visible: false
@@ -383,6 +384,7 @@
 
         var past_sales_table = $("#past_sales").dataTable($.extend(true, {}, dataTablesDefaults, {
             orderFixed: [ 0, 'asc'],
+            ordering: false,
             columnDefs: [ {
                 targets: [ 0, 1 ],
                 visible: false
