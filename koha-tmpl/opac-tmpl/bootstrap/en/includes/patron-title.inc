@@ -1,5 +1,5 @@
 [%- IF patron.category.category_type == 'I' -%]
-    [% patron.surname | html %][% IF patron.othernames %]([% patron.othernames | html %])[%- END -%]
+    <span class="surname">[% patron.surname | html %]</span>[% IF patron.othernames %]<span class="othername">([% ' ' _ patron.othernames | html %])</span>[%- END -%]
 [%- ELSE -%]
     [%- IF patron.title -%]
         [%- IF no_html -%]
@@ -8,7 +8,5 @@
             <span class="patron-title"></span>
         [%- END -%]
     [%- END -%]
-    [% patron.preferred_name | html %]
-    [% patron.middle_name | html %]
-    [% patron.surname | html %]
+    <span class="preferred_name">[% patron.preferred_name | html %]</span> <span class="middle_name">[% patron.middle_name | html %]</span> <span class="surname">[% patron.surname | html %] </span>
 [%- END -%]
