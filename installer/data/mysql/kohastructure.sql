@@ -247,7 +247,7 @@ DROP TABLE IF EXISTS `additional_field_values`;
 CREATE TABLE `additional_field_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key identifier',
   `field_id` int(11) NOT NULL COMMENT 'foreign key references additional_fields(id)',
-  `record_id` int(11) NOT NULL COMMENT 'record_id',
+  `record_id` varchar(11) NOT NULL COMMENT 'record_id',
   `value` varchar(255) NOT NULL DEFAULT '' COMMENT 'value for this field',
   PRIMARY KEY (`id`),
   KEY `afv_fk` (`field_id`),
