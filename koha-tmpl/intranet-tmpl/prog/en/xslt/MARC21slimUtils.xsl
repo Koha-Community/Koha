@@ -679,6 +679,9 @@
                             </a>
                         </xsl:otherwise>
                     </xsl:choose>
+                    <xsl:if test="marc:subfield[@code='d']">
+                        <xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='d']"/>
+                    </xsl:if>
                     <xsl:if test="marc:subfield[@code='g']">
                         <xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/>
                     </xsl:if>
