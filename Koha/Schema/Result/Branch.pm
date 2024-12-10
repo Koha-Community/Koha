@@ -999,6 +999,22 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-05-03 13:13:25
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HiH1QNlDqKcq9GeM85Pu0A
 
+__PACKAGE__->has_many(
+    "additional_field_values",
+    "Koha::Schema::Result::AdditionalFieldValue",
+    sub {
+        my ($args) = @_;
+
+        return {
+            "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.branchcode" },
+
+            "$args->{foreign_alias}.field_id" =>
+                { -in => \'(SELECT id FROM additional_fields WHERE tablename="branches")' },
+        };
+    },
+    { cascade_copy => 0, cascade_delete => 0 },
+);
+
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 },
     '+public'          => { is_boolean => 1 }
