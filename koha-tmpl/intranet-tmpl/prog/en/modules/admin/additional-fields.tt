@@ -13,10 +13,10 @@
             [% ELSE %]
                 [% t("New field") | html %] &rsaquo;
             [% END %]
-            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %] &rsaquo;
         [% CASE 'list' %]
-            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %]
-    [% END %] &rsaquo;
+            [% tx("Table '{table_name}'", { table_name = tablename } ) | html %] &rsaquo;
+    [% END %]
     [% t("Additional fields") | html %] &rsaquo;
     [% t("Administration") | html %] &rsaquo;
     [% t("Koha") | html %]
