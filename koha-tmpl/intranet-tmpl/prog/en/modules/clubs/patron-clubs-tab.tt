@@ -59,12 +59,12 @@
     </table>
 [% END %]
 <script>
-    let dt_params = {
+    var clubs_dt_params = {
         columnDefs: [{ sortable: false, targets: ["NoSort"] }],
         paginate: true,
     };
-    $("#table_clubnoenrollmemnts").kohaTable(dt_params);
-    $("#table_clubenrollments").kohaTable(dt_params);
+    $("#table_clubnoenrollmemnts").kohaTable(clubs_dt_params);
+    $("#table_clubenrollments").kohaTable(clubs_dt_params);
 
     [% IF CAN_user_clubs_enroll %]
     function loadEnrollmentForm( id, enrollent_id = 0 ) {

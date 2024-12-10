@@ -111,12 +111,12 @@
     </div>
 [% END %]
 <script>
-    let dt_params = {
+    var patron_lists_dt_params = {
         columnDefs: [{ sortable: false, bSearchable: false, targets: ["NoSort"] }],
         sPaginationType: "full",
     };
-    $("#table_listnopatron").kohaTable(dt_params);
-    $("#table_inlists").kohaTable(dt_params);
+    $("#table_listnopatron").kohaTable(patron_lists_dt_params);
+    $("#table_inlists").kohaTable(patron_lists_dt_params);
 
     [% IF CAN_user_tools_manage_patron_lists %]
         function addToList() {
