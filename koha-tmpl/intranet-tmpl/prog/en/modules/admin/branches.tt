@@ -370,6 +370,7 @@
                     </li>
                 </ol>
             </fieldset>
+            [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />
                 <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
@@ -613,6 +614,12 @@
             <!-- /.col-sm-6 -->
         </div>
         <!-- /.row -->
+        [% IF additional_fields && additional_field_values %]
+            <div class="rows page-section">
+                <h2>Additional fields</h2>
+                [% INCLUDE 'additional-fields-display.inc' available=additional_fields values=additional_field_values %]
+            </div>
+        [% END %]
         [% IF OpacLibraryInfo %]
             <!-- opac_info -->
             <div class="row page-section">
@@ -629,6 +636,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
