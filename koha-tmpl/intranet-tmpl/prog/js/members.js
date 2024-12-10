@@ -118,6 +118,7 @@ function select_user(borrowernumber, borrower, relationship) {
 
         var guarantor_relationship = $('#relationship').val();
         fieldset.find('.new_guarantor_relationship').first().val( guarantor_relationship );
+        $('#relationship').find('option:eq(0)').prop('selected', true);
 
         fieldset.find('.guarantor-details').first().attr( 'data-borrowernumber', borrowernumber );
 
