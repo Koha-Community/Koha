@@ -539,8 +539,6 @@ sub CheckForInvalidFields {
         my ( $low, $high ) = ( $borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit );
         if ( ( $high && ( $age > $high ) ) or ( $age < $low ) ) {
             push @invalidFields, 'ERROR_age_limitations';
-            $template->param( age_low => $low);
-            $template->param( age_high => $high);
         }
     }
 
