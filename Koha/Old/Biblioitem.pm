@@ -27,7 +27,55 @@ Koha::Old::Biblioitem - Koha Old::Biblioitem Object class
 
 =head2 Class methods
 
+=head3 public_read_list
+
+This method returns the list of publicly readable database fields for both API and UI output purposes
+
 =cut
+
+sub public_read_list {
+    return [
+        'volume',           'number',                'isbn',
+        'issn',             'ean',                   'publicationyear',
+        'publishercode',    'volumedate',            'volumedesc',
+        'collectiontitle',  'collectionissn',        'collectionvolume',
+        'editionstatement', 'editionresponsibility', 'pages',
+        'place',            'lccn',                  'url',
+        'cn_source',        'cn_class',              'cn_item',
+        'cn_suffix',        'cn_sort',               'agerestriction',
+        'totalissues'
+    ];
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Biblioitem object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        agerestriction        => 'age_restriction',
+        biblionumber          => 'biblio_id',
+        biblioitemnumber      => undef,                   # meaningless
+        collectionissn        => 'collection_issn',
+        collectiontitle       => 'collection_title',
+        collectionvolume      => 'collection_volume',
+        editionresponsibility => undef,                   # obsolete, not mapped
+        editionstatement      => 'edition_statement',
+        illus                 => 'illustrations',
+        itemtype              => 'item_type',
+        lccn                  => 'lc_control_number',
+        place                 => 'publication_place',
+        publicationyear       => 'publication_year',
+        publishercode         => 'publisher',
+        size                  => 'material_size',
+        totalissues           => 'serial_total_issues',
+        volumedate            => 'volume_date',
+        volumedesc            => 'volume_description',
+    };
+}
 
 =head2 Internal methods
 
