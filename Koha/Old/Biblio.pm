@@ -126,7 +126,7 @@ sub to_api_mapping {
         seriestitle   => 'series_title',
         copyrightdate => 'copyright_date',
         datecreated   => 'creation_date',
-        deleted_on    => 'timestamp',
+        timestamp     => 'deleted_on',
     };
 }
 
