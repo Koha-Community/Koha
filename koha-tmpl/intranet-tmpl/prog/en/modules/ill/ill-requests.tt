@@ -25,37 +25,22 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-        [% IF op == 'cud-create' %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>New request</span>
-            [% END %]
-        [% ELSIF op == 'illview' %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
-            [% END %]
-        [% ELSIF op == 'typedisclaimer' %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Request type disclaimer</span>
-            [% END %]
-        [% ELSIF op == 'confirmautoill' %]
-            [% WRAPPER breadcrumb_item %]
-                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-            [% END %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
-                <span>Confirm request</span>
-            [% END %]
-        [% ELSE %]
-            [% WRAPPER breadcrumb_item bc_active= 1 %]
+        [% WRAPPER breadcrumb_item bc_active = (op == 'illlist' ? 1 : 0) %]
+            [% IF op == 'illlist' %]
                 <span>ILL requests</span>
+            [% ELSE %]
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+            [% END %]
+        [% END %]
+        [% WRAPPER breadcrumb_item bc_active= 1 %]
+            [% IF op == 'cud-create' %]
+                <span>New request</span>
+            [% ELSIF op == 'illview' %]
+                <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'typedisclaimer' %]
+                <span>Request type disclaimer</span>
+            [% ELSIF op == 'confirmautoill' %]
+                <span>Confirm request</span>
             [% END %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
