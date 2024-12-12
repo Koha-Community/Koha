@@ -290,7 +290,7 @@ sub process_invoice {
                 )->single;
             }
             if ( !$vendor_acct ) {
-                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in $invoice_message->filename";
+                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in ".$invoice_message->filename;
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
