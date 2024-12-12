@@ -39,8 +39,8 @@ use C4::Biblio qw(
 use Koha::Edifact::Order;
 use Koha::Edifact;
 use C4::Log qw( logaction );
-use Log::Log4perl;
 use Text::Unidecode qw( unidecode );
+use Koha::Logger;
 use Koha::Plugins; # Adds plugin dirs to @INC
 use Koha::Plugins::Handler;
 use Koha::Acquisition::Baskets;
@@ -173,7 +173,7 @@ sub process_ordrsp {
     $response_message->status('processing');
     $response_message->update;
     my $schema = Koha::Database->new()->schema();
-    my $logger = Log::Log4perl->get_logger();
+    my $logger = Koha::Logger->get({ interface => 'edi' });
     my $vendor_acct;
     my $edi =
       Koha::Edifact->new( { transmission => $response_message->raw_msg, } );
@@ -227,7 +227,7 @@ sub process_invoice {
     $invoice_message->status('processing');
     $invoice_message->update;
     my $schema = Koha::Database->new()->schema();
-    my $logger = Log::Log4perl->get_logger();
+    my $logger = Koha::Logger->get({ interface => 'edi' });
     my $vendor_acct;
 
     my $plugin_class = $invoice_message->edi_acct()->plugin();
@@ -442,7 +442,7 @@ sub _get_invoiced_price {
 
 sub receipt_items {
     my ( $schema, $inv_line, $ordernumber, $quantity ) = @_;
-    my $logger   = Log::Log4perl->get_logger();
+    my $logger   = Koha::Logger->get({ interface => 'edi' });
 
     # itemnumber is not a foreign key ??? makes this a bit cumbersome
     my @item_links = $schema->resultset('AqordersItem')->search(
@@ -542,7 +542,7 @@ sub transfer_items {
         }
         ++$gocc;
     }
-    my $logger = Log::Log4perl->get_logger();
+    my $logger = Koha::Logger->get({ interface => 'edi' });
     my $o1     = $order_from->ordernumber;
     my $o2     = $order_to->ordernumber;
     $logger->warn("transferring $quantity copies from order $o1 to order $o2");
@@ -586,7 +586,7 @@ sub process_quote {
 
     my $messages       = $edi->message_array();
     my $process_errors = 0;
-    my $logger         = Log::Log4perl->get_logger();
+    my $logger         = Koha::Logger->get({ interface => 'edi' });
     my $schema         = Koha::Database->new()->schema();
     my $message_count  = 0;
     my @added_baskets;    # if auto & multiple baskets need to order all
@@ -671,7 +671,7 @@ sub quote_item {
     my ( $item, $quote, $basketno ) = @_;
 
     my $schema = Koha::Database->new()->schema();
-    my $logger = Log::Log4perl->get_logger();
+    my $logger = Koha::Logger->get({ interface => 'edi' });
 
     # $basketno is the return from AddBasket in the calling routine
     # So this call should not fail unless that has
