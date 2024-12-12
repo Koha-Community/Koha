@@ -203,17 +203,19 @@ sub build_query {
     if ( $options{whole_record} ) {
         push @$fields, 'marc_data_array.*';
     }
-    $res->{query} = {
-        query_string => {
-            query            => $query,
-            fuzziness        => $fuzzy_enabled ? 'auto' : '0',
-            default_operator => 'AND',
-            fields           => $fields,
-            lenient          => JSON::true,
-            analyze_wildcard => JSON::true,
-        }
+    my $query_string = {
+        query            => $query,
+        fuzziness        => $fuzzy_enabled ? 'auto' : '0',
+        default_operator => 'AND',
+        fields           => $fields,
+        lenient          => JSON::true,
+        analyze_wildcard => JSON::true,
     };
-    $res->{query}->{query_string}->{type} = 'cross_fields' if C4::Context->preference('ElasticsearchCrossFields');
+    $query_string->{type} = 'cross_fields' if C4::Context->preference('ElasticsearchCrossFields');
+
+    $res->{query} = { bool => { must => [ { query_string => $query_string } ] } };
+
+    $res->{query}->{bool}->{should} = $options{field_match_boost_query} if $options{field_match_boost_query};
 
     if ( $options{sort} ) {
         foreach my $sort ( @{ $options{sort} } ) {
@@ -288,6 +290,10 @@ sub build_query_compat {
     } else {
         my @sort_params  = $self->_convert_sort_fields(@$sort_by);
         my @index_params = $self->_convert_index_fields(@$indexes);
+        my $field_match_boost_query =
+            C4::Context->preference('ESBoostFieldMatch')
+            ? $self->_build_field_match_boost_query( { operands => $operands, indexes => \@index_params } )
+            : [];
         $limits = $self->_fix_limit_special_cases($orig_limits);
         if ( $params->{suppress} ) { push @$limits, "suppress:false"; }
 
@@ -328,12 +334,13 @@ sub build_query_compat {
         # If there's no query on the left, let's remove the junk left behind
         $query_str =~ s/^ AND //;
         my %options;
-        $options{sort}            = \@sort_params;
-        $options{is_opac}         = $params->{is_opac};
-        $options{weighted_fields} = $params->{weighted_fields};
-        $options{whole_record}    = $params->{whole_record};
-        $options{skip_facets}     = $params->{skip_facets};
-        $query                    = $self->build_query( $query_str, %options );
+        $options{sort}                    = \@sort_params;
+        $options{is_opac}                 = $params->{is_opac};
+        $options{weighted_fields}         = $params->{weighted_fields};
+        $options{whole_record}            = $params->{whole_record};
+        $options{skip_facets}             = $params->{skip_facets};
+        $options{field_match_boost_query} = $field_match_boost_query if @$field_match_boost_query;
+        $query                            = $self->build_query( $query_str, %options );
     }
 
     # We roughly emulate the CGI parameters of the zebra query builder
@@ -367,6 +374,30 @@ sub build_query_compat {
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
     );
+}
+
+=head2 _build_field_match_boost_query
+
+    my ($query, $query_str) = $builder->_build_field_match_boost_query({ operands => \@operands, indexes => \@indexes)
+
+This will build an array of match queries for terms and indexes passed in and return a reference to the array.
+
+=cut
+
+sub _build_field_match_boost_query {
+    my ( $self, $params ) = @_;
+    my $indexes  = $params->{indexes};
+    my $operands = $params->{operands};
+
+    my @boost_query;
+    my $ea = each_array( @$operands, @$indexes );
+    while ( my ( $operand, $index ) = $ea->() ) {
+        next unless $operand;
+        $index = $index->{field} if ref $index eq 'HASH';
+        $index = 'title-cover'   if ( !$index || $index eq 'kw' || $index eq 'ti' || $index eq 'title' );
+        push @boost_query, { match => { $index => { query => $operand } } };
+    }
+    return \@boost_query;
 }
 
 =head2 build_authorities_query
