@@ -130,11 +130,12 @@
 
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
                 [% IF ( count ) %]
-                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% count | html %] item(s) are attached to this record. You must delete all items before deleting this record">
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[%- I18N.tnx("There is an item attached to this record", "There are {count} items attached to this record", count, { count => count }) -%]. You must delete all items before deleting this record">
                         <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>
                     </li>
                 [% ELSIF ( biblio.subscriptions.count ) %]
-                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[% biblio.subscriptions.count | html %] subscription(s) are attached to this record. You must delete all subscriptions before deleting this record">
+                    [%- SET subscriptions_count = biblio.subscriptions.count -%]
+                    <li data-bs-toggle="tooltip" data-bs-placement="left" title="[%- I18N.tnx("There is a subscription attached to this record", "There are {count} subscriptions attached to this record", subscriptions_count, { count => subscriptions_count }) -%]. You must delete all subscriptions before deleting this record">
                         <a class="dropdown-item disabled" aria-disabled="true" id="deletebiblio" href="#">Delete record</a>
                     </li>
                 [% ELSE %]
