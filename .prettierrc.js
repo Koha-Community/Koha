@@ -9,6 +9,13 @@ module.exports = {
             options: {
                 semi: false,
             }
-        }
-    ]
+        },
+        {
+            files: ["*.tt", "*.inc"],
+            options: {
+                parser: "jinja-template",
+                plugins: ["prettier-plugin-jinja-template"],
+            },
+        },
+    ],
 }
