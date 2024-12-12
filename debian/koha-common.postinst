@@ -14,8 +14,7 @@ if [ -r $CONFIG ]; then
 fi
 
 conf=/etc/mysql/koha-common.cnf
-if [ ! -e "$conf" ] && [ ! -L "$conf" ]
-then
+if [ ! -e "$conf" ] && [ ! -L "$conf" ]; then
     ln -s debian.cnf "$conf"
 fi
 
@@ -25,7 +24,7 @@ koha-upgrade-schema $(koha-list)
 
 # Generate a config file if one doesn't exist already
 if [ ! -e $CONFIG ]; then
-    cat <<EOF > $CONFIG
+    cat <<EOF >$CONFIG
 ## Automatic template translation update
 #
 # This variable controls whether template translations should
@@ -48,10 +47,10 @@ else
     UPDATE="yes"
 fi
 # In case they were removed/commented out, we add it in.
-grep -Eq '^ *AUTOMATIC_TRANSLATIONS_UPDATE=' $CONFIG || \
-    echo "AUTOMATIC_TRANSLATIONS_UPDATE=" >> $CONFIG
+grep -Eq '^ *AUTOMATIC_TRANSLATIONS_UPDATE=' $CONFIG ||
+    echo "AUTOMATIC_TRANSLATIONS_UPDATE=" >>$CONFIG
 
-sed -e "s/^ *AUTOMATIC_TRANSLATIONS_UPDATE=.*/AUTOMATIC_TRANSLATIONS_UPDATE=\"$UPDATE\"/" < $CONFIG > $CONFIG.tmp
+sed -e "s/^ *AUTOMATIC_TRANSLATIONS_UPDATE=.*/AUTOMATIC_TRANSLATIONS_UPDATE=\"$UPDATE\"/" <$CONFIG >$CONFIG.tmp
 mv -f $CONFIG.tmp $CONFIG
 
 if [ "$AUTOMATIC_TRANSLATIONS_UPDATE" = "yes" ]; then
@@ -81,10 +80,10 @@ fi
 # Check if we need to rename the Apache vhost files
 RENAME_APACHE_FILES="no"
 for vhost in $(koha-list); do
-    if [ -f "/etc/apache2/sites-available/$vhost" ] && \
-       [ ! -f "/etc/apache2/sites-available/$vhost.conf" ]; then
-       RENAME_APACHE_FILES="yes"
-       break # at least one, trigger renaming
+    if [ -f "/etc/apache2/sites-available/$vhost" ] &&
+        [ ! -f "/etc/apache2/sites-available/$vhost.conf" ]; then
+        RENAME_APACHE_FILES="yes"
+        break # at least one, trigger renaming
     fi
 done
 
@@ -107,21 +106,21 @@ EOF
         # We have to rename the Apache files
         for site in $(koha-list); do
             ENABLE_VHOST="yes"
-            if [ -f "/etc/apache2/sites-available/$site" ] && \
-               [ ! -f "/etc/apache2/sites-available/$site.conf" ]; then
+            if [ -f "/etc/apache2/sites-available/$site" ] &&
+                [ ! -f "/etc/apache2/sites-available/$site.conf" ]; then
                 if [ ! -f "/etc/apache2/sites-enabled/$site" ]; then
                     ENABLE_VHOST="no"
                 fi
-                a2dissite $site > /dev/null 2>&1 || true
+                a2dissite $site >/dev/null 2>&1 || true
                 rm -f "/etc/apache2/sites-enabled/$site"
                 # Rename the vhost definition files
                 mv "/etc/apache2/sites-available/$site" \
-                   "/etc/apache2/sites-available/$site.conf"
+                    "/etc/apache2/sites-available/$site.conf"
 
                 if [ "$ENABLE_VHOST" = "yes" ]; then
                     if ! {
-                        a2ensite "$site" > /dev/null 2>&1 ||
-                        a2ensite "${site}.conf" > /dev/null 2>&1
+                        a2ensite "$site" >/dev/null 2>&1 ||
+                            a2ensite "${site}.conf" >/dev/null 2>&1
                     }; then
                         echo "Warning: problem enabling $site in Apache" >&2
                     fi
@@ -131,8 +130,7 @@ EOF
     fi
 fi
 
-log4perl_component()
-{
+log4perl_component() {
     local config=$1
     local component=$2
 
@@ -147,7 +145,7 @@ log4perl_component()
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "z3950"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.z3950 = WARN, Z3950
 log4perl.appender.Z3950=Log::Log4perl::Appender::File
 log4perl.appender.Z3950.filename=/var/log/koha/$site/z3950-error.log
@@ -160,7 +158,7 @@ EOF
     fi
 
     if ! log4perl_component $log4perl_config "api"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.api = WARN, API
 log4perl.appender.API=Log::Log4perl::Appender::File
 log4perl.appender.API.filename=/var/log/koha/$site/api-error.log
@@ -176,7 +174,7 @@ done
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "sip"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.sip = DEBUG, SIP
 log4perl.appender.SIP=Log::Log4perl::Appender::File
 log4perl.appender.SIP.filename=/var/log/koha/$site/sip.log
@@ -192,7 +190,7 @@ done
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "plack-opac"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.plack-opac = WARN, PLACKOPAC
 log4perl.appender.PLACKOPAC=Log::Log4perl::Appender::File
 log4perl.appender.PLACKOPAC.filename=/var/log/koha/$site/plack-opac-error.log
@@ -208,7 +206,7 @@ done
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "plack-api"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.plack-api = WARN, PLACKAPI
 log4perl.appender.PLACKAPI=Log::Log4perl::Appender::File
 log4perl.appender.PLACKAPI.filename=/var/log/koha/$site/plack-api-error.log
@@ -224,7 +222,7 @@ done
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "plack-intranet"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.plack-intranet = WARN, PLACKINTRANET
 log4perl.appender.PLACKINTRANET=Log::Log4perl::Appender::File
 log4perl.appender.PLACKINTRANET.filename=/var/log/koha/$site/plack-intranet-error.log
@@ -240,7 +238,7 @@ done
 for site in $(koha-list); do
     log4perl_config="/etc/koha/sites/$site/log4perl.conf"
     if ! log4perl_component $log4perl_config "worker"; then
-        cat <<EOF >> $log4perl_config
+        cat <<EOF >>$log4perl_config
 log4perl.logger.worker = WARN, WORKER
 log4perl.appender.WORKER=Log::Log4perl::Appender::Screen
 log4perl.appender.WORKER.stderr=1
@@ -253,8 +251,24 @@ EOF
 done
 
 for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if ! log4perl_component $log4perl_config "edi"; then
+        cat <<EOF >>$log4perl_config
+log4perl.logger.edi = TRACE, EDI
+log4perl.appender.EDI=Log::Log4perl::Appender::File
+log4perl.appender.EDI.filename=/var/log/koha/$site/editrace.log
+log4perl.appender.EDI.mode=append
+log4perl.appender.EDI.layout=PatternLayout
+log4perl.appender.EDI.layout.ConversionPattern=[%d] [%P] [%p] %X{accountid}@%X{peeraddr}: %m %l%n
+log4perl.appender.EDI.utf8=1
+
+EOF
+    fi
+done
+
+for site in $(koha-list); do
     kohaconfig="/etc/koha/sites/$site/koha-conf.xml"
-    logdir="$( xmlstarlet sel -t -v 'yazgfs/config/logdir' $kohaconfig )"
+    logdir="$(xmlstarlet sel -t -v 'yazgfs/config/logdir' $kohaconfig)"
     if [ "$logdir" != "" ] && [ "$logdir" != "0" ]; then
         chown -R $site-koha:$site-koha $logdir
     else
@@ -267,7 +281,7 @@ done
 # that we're fixing them from is there, so we just run it every time. Maybe
 # in many years time we can get rid of this, when no one will be running
 # Koha < 3.20.
-for zfile in $( find /etc/koha/sites -name zebra-authorities-dom.cfg -or -name zebra-biblios-dom.cfg ); do
+for zfile in $(find /etc/koha/sites -name zebra-authorities-dom.cfg -or -name zebra-biblios-dom.cfg); do
     perl -p -i -e 's{^modulePath: /usr/lib/idzebra-2.0/modules$}{modulePath: /usr/lib/idzebra-2.0/modules:/usr/lib/x86_64-linux-gnu/idzebra-2.0/modules:/usr/lib/i386-linux-gnu/idzebra-2.0/modules:/usr/lib/aarch64-linux-gnu/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabi/idzebra-2.0/modules:/usr/lib/arm-linux-gnueabihf/idzebra-2.0/modules:/usr/lib/mips-linux-gnu/idzebra-2.0/modules:/usr/lib/mipsel-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc-linux-gnu/idzebra-2.0/modules:/usr/lib/powerpc64le-linux-gnu/idzebra-2.0/modules:/usr/lib/s390x-linux-gnu/idzebra-2.0/modules}' $zfile
 done
 
