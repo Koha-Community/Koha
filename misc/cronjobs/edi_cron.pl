@@ -31,25 +31,14 @@ use utf8;
 
 use Koha::Script -cron;
 use C4::Context;
-use Log::Log4perl qw(:easy);
 use Koha::Database;
 use Koha::EDI qw( process_quote process_invoice process_ordrsp );
 use Koha::Edifact::Transport;
+use Koha::Logger;
 use Koha::Plugins::Handler;
 use Fcntl qw( LOCK_EX O_CREAT O_RDWR SEEK_SET );
 
 die "Syspref 'EDIFACT' is disabled" unless C4::Context->preference('EDIFACT');
-
-my $logdir = C4::Context->config('logdir');
-
-# logging set to trace as this may be what you
-# want on implementation
-Log::Log4perl->easy_init(
-    {
-        level => $TRACE,
-        file  => ">>$logdir/editrace.log",
-    }
-);
 
 # we dont have a lock dir in context so use the logdir
 my $pidfile = "$logdir/edicron.pid";
@@ -60,7 +49,7 @@ my $schema = Koha::Database->new()->schema();
 
 my @edi_accts = $schema->resultset('VendorEdiAccount')->all();
 
-my $logger = Log::Log4perl->get_logger();
+my $logger = Koha::Logger->get({ interface => 'edi', prefix => 0 });
 
 for my $acct (@edi_accts) {
     if ( $acct->quotes_enabled ) {
