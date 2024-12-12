@@ -25,11 +25,15 @@
 
 [% WRAPPER 'sub-header.inc' %]
     [% WRAPPER breadcrumbs %]
-        [% WRAPPER breadcrumb_item bc_active = (op == 'illlist' ? 1 : 0) %]
-            [% IF op == 'illlist' %]
-                <span>ILL requests</span>
+        [% WRAPPER breadcrumb_item bc_active = (op == 'illlist' || op == 'batch_list' ? 1 : 0) %]
+            [% IF op == 'batch_list' %]
+                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL batch requests</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+                [% IF op == 'illlist' %]
+                    <span>ILL requests</span>
+                [% ELSE %]
+                    <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+                [% END %]
             [% END %]
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
@@ -37,6 +41,22 @@
                 <span>New request</span>
             [% ELSIF op == 'illview' %]
                 <span>Manage request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'confirm' %]
+                <span>Confirm request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'delete_confirm' %]
+                <span>Delete request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'generic_confirm' %]
+                <span>Place request [% request.id_prefix _ request.illrequest_id | html %] with partners</span>
+            [% ELSIF op == 'edititem' %]
+                <span>Edit item metadata for request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'edit_action' %]
+                <span>Edit request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'check_out' %]
+                <span>Check out request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'cud-cancel' %]
+                <span>Cancel request [% request.id_prefix _ request.illrequest_id | html %]</span>
+            [% ELSIF op == 'availability' %]
+                <span>Availability check</span>
             [% ELSIF op == 'typedisclaimer' %]
                 <span>Request type disclaimer</span>
             [% ELSIF op == 'confirmautoill' %]
