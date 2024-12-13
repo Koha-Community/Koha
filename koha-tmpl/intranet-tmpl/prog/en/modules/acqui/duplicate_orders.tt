@@ -79,10 +79,9 @@
 
 [% BLOCK display_order_line %]
     [% IF selected %]
-    <tr class="picked_to_duplicate" data-ordernumber="[% order.ordernumber | html %]">
-    [% ELSE %]
-    <tr data-ordernumber="[% order.ordernumber | html %]">
+        [% SET tr_class="picked_to_duplicate" %]
     [% END %]
+    <tr class="[% tr_class | html %]" data-ordernumber="[% order.ordernumber | html %]">
         <td>
             [% IF can_check %]
                 [% IF selected %]
