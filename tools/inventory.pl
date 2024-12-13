@@ -216,9 +216,9 @@ if ( $op eq 'cud-inventory'
                           err_data   => $err_data );
     }
     my @items = Koha::Items->search( { barcode => { -in => \@barcodes } } )->as_list;
-    my %items = map { $_->barcode => $_ } @items;
+    my %items = map { lc($_->barcode) => $_ } @items;
     foreach my $barcode (@barcodes) {
-        my $item = $items{ $barcode };
+        my $item = $items{ lc($barcode) };
         if ( $item ) {
             if ( $item->withdrawn ) {
                 push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
