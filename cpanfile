@@ -102,7 +102,7 @@ requires 'Sereal::Encoder', '3.0';
 requires 'SQL::Translator', '0.11024';
 requires 'Storable', '2.20';
 requires 'String::Random', '0.22';
-requires 'Template', '>= 2.22, != 3.008';
+requires 'Template', '>= 2.27, != 3.008';
 requires 'Template::Plugin::HtmlToText', '0.03';
 requires 'Template::Plugin::JSON::Escape', '0.02';
 requires 'Term::ANSIColor', '1.1';
