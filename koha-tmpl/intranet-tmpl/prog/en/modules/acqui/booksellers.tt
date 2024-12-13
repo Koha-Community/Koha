@@ -71,16 +71,14 @@
     [% END %]
     <div id="acqui_order_supplierlist">
         [% FOREACH supplier IN loop_suppliers %]
-            [% IF ( supplier.active ) %]
-                <div class="supplier page-section">
-            [% ELSE %]
-                <div class="supplier inactive page-section">
+            [% UNLESS supplier.active %]
+                [% SET div_class="inactive" %]
             [% END %]
+            <div class="supplier [% div_class | html %] page-section">
                 [% IF ( supplier.active ) %]
-                    <h2 class="suppliername">
-                [% ELSE %]
-                    <h2 class="suppliername inactive">
+                    [% SET h2_class="inactive" %]
                 [% END %]
+                <h2 class="suppliername [% h2_class | html %]">
                         <a id="vendor[% supplier.booksellerid | html %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid | uri %]">
                             [% IF (supplier.name) %]
                                 [% supplier.name | html %]
@@ -140,10 +138,9 @@
                             <tbody>
                                 [% FOREACH basket IN supplier.loop_basket %]
                                     [% IF ( basket.uncertainprices ) %]
-                                        <tr class="problem">
-                                    [% ELSE %]
-                                        <tr>
+                                        [% SET tr_class="problem" %]
                                     [% END %]
+                                    <tr class="[% tr_class | html %]">
                                         <td>[% basket.basketno | html %]</td>
                                         <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %]</a></td>
                                         <td data-order="[% basket.total_items | html %]">
