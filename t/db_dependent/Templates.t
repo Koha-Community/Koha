@@ -179,7 +179,7 @@ subtest "Absolute path change in _get_template_file" => sub {
 subtest "Template::Toolkit uses RFC3986" => sub {
     plan tests => 1;
 
-    my $s = q{console.log("alert('boo!')");};
+    my $s = q{"'};
     my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context::temporary_directory );
     print $fh q{URI=[% filter_me | uri %], URL=[% filter_me | url %]};
     close $fh;
