@@ -164,24 +164,24 @@
     [% UNLESS IndependentBranches %]
         <p>
             [% IF Koha.Preference('ForceLibrarySelection') %]
-                [% SET required = 'required="required"' %]
-                [% SET required_class = 'required' %]
-            [% END %]
-
-            <label for="set-library-branch" class="[% required_class | html %]">Library:</label>
-            <select name="branch" id="set-library-branch" class="input" tabindex="3" [% required %]>
-            [% IF Koha.Preference('ForceLibrarySelection') %]
-                <option value=""></option>
+                <label for="set-library-branch" class="required">Library:</label>
+                <select name="branch" id="set-library-branch" class="input" tabindex="3" required="required">
+                    <option value=""></option>
+                    [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
+                        <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
+                    [% END %]
+                    <span class="required">Required</span>
+                </select>
             [% ELSE %]
+                <label for="set-library-branch">Library:</label>
+                <select name="branch" id="set-library-branch" class="input" tabindex="3">
                 <option value="">My library</option>
-            [% END %]
                 [% FOREACH l IN Branches.all( unfiltered => 1 ip_limit => 1 ) %]
                     <option value="[% l.branchcode | html %]">[% l.branchname | html %]</option>
                  [% END %]
-            </select>
-            [% IF Koha.Preference('ForceLibrarySelection') %]
-                <span class="required">Required</span>
+                </select>
             [% END %]
+
             [% IF Koha.Preference('StaffLoginLibraryBasedOnIP')%]
                 <span class="warning">Note: Your selection may be overridden if your current IP matches a specified IP for a branch in Koha</span>
             [% END %]
