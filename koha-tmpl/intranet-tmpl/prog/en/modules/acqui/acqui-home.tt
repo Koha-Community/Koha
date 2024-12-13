@@ -135,11 +135,7 @@
                 </tfoot>
                 <tbody>
                 [% FOREACH loop_budge IN loop_budget %]
-                    [% IF loop_budge.budget_parent_id %]
-                        [% SET data_tt_parent_id="data-tt-parent-id=" _ loop_budge.budget_parent_id %]
-                    [% END %]
-
-                    <tr data-tt-id="[% loop_budge.budget_id | html %]" [% data_tt_parent_id | html %]>
+                    <tr data-tt-id="[% loop_budge.budget_id | html %]" data-tt-parent-id="[% loop_budge.budget_parent_id | html %]">
                         <td>[% loop_budge.budget_period_active | html %]</td>
                         <td>Budget [% loop_budge.budget_period_description | html %] [id=[% loop_budge.budget_period_id | html %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
                         <td>
