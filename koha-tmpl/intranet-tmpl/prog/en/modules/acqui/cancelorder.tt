@@ -64,10 +64,14 @@
       </form>
       [% ELSE %]
         [% IF ( success_cancelorder ) %]
-            <div class="alert alert-info">
-                The order has been successfully cancelled
+            [% SET div_class = "alert alert-info" %]
         [% ELSE %]
-            <div class="alert alert-warning">
+            [% SET div_class = "alert alert-warning" %]
+        [% END %]
+            <div class="[% div_class | html %]">
+            [% IF ( success_cancelorder ) %]
+                The order has been successfully cancelled
+            [% ELSE %]
                 An error has occurred.
                 [% IF error_order_already_cancelled %]
                     <p>The order has been cancelled already.</p>
