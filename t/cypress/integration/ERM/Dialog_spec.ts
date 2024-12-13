@@ -170,7 +170,7 @@ describe("Dialog operations", () => {
             .contains("Delete")
             .click();
         cy.get(".alert-warning.confirmation h1").contains(
-            "remove this package"
+            "remove this local package"
         );
         cy.contains("Yes, delete").click();
         cy.get("main div[class='alert alert-info']")
