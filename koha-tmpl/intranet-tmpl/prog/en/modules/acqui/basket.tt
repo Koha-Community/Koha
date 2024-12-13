@@ -601,10 +601,9 @@
                                             <tbody>
                                                 [% FOREACH books_loo IN books_loop %]
                                                     [% IF ( books_loo.order_received ) %]
-                                                        <tr class="disabled">
-                                                    [% ELSE %]
-                                                        <tr>
+                                                        [% SET tr_class = "disabled" %]
                                                     [% END %]
+                                                    <tr class="[% tr_class | html %]">
                                                         <td>
                                                             [% books_loo.ordernumber | html %]
                                                         </td>
