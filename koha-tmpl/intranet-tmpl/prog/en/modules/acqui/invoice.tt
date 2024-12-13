@@ -353,14 +353,14 @@
                                         </td>
                                         <td>
                                             <p>[% order.branchcode | html %]</p>
-                                            [% IF has_invoice_unitprice %]
-                                                <td>
-                                                    [% IF order.invoice_unitprice %]
-                                                        [% order.invoice_unitprice | $Price %] [% order.invoice_currency | html %]
-                                                    [% END %]
-                                                </td>
-                                            [% END %]
                                         </td>
+                                        [% IF has_invoice_unitprice %]
+                                            <td>
+                                                [% IF order.invoice_unitprice %]
+                                                    [% order.invoice_unitprice | $Price %] [% order.invoice_currency | html %]
+                                                [% END %]
+                                            </td>
+                                        [% END %]
                                         <td class="number tax_excluded">
                                             [% order.unitprice_tax_excluded | $Price %]
                                         </td>
@@ -389,7 +389,7 @@
                                             [% order.tax_value | $Price %]
                                         </td>
                                         <td>
-                                            <span class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</span></br>
+                                            <div class="order_name" data-order_id="[% order.ordernumber | html %]">[% order.budget_name | html %]</div>
                                             <a href="#" class="modify_fund" data-order_id="[% order.ordernumber | html %]" data-budget_id="[% order.budget_id | html %]" data-sort1="[% order.sort1 | html %]" data-sort2="[% order.sort2 | html %]">Modify fund</a>
                                         </td>
                                     </tr>
@@ -404,7 +404,7 @@
                                         [% END %]
                                         <th class="tax_excluded"></th>
                                         <th class="tax_included"></th>
-                                        <th class="replacementprice"/>
+                                        <th class="replacementprice"></th>
                                         <th>[% tf.quantity | html %]</th>
                                         <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
                                         <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
@@ -420,7 +420,7 @@
                                     [% END %]
                                     <th class="tax_excluded"></th>
                                     <th class="tax_included"></th>
-                                    <th class="replacementprice"/>
+                                    <th class="replacementprice"></th>
                                     <th>[% total_quantity | html %]</th>
                                     <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
                                     <th class="tax_included">[% total_tax_included | $Price %]</th>
@@ -435,7 +435,7 @@
                                     [% END %]
                                     <th class="tax_excluded"></th>
                                     <th class="tax_included"></th>
-                                    <th class="replacementprice"/>
+                                    <th class="replacementprice"></th>
                                     <th>[% total_quantity | html %]</th>
                                     <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
                                     <th class="tax_included">[% total_tax_included_shipment + total_adj | $Price %]</th>
@@ -511,11 +511,11 @@
                         </li>
                         <li>
                             <label for="sort1">Statistic 1: </label>
-                            <input type="text" name="sort1" />
+                            <input type="text" id="sort1" name="sort1" />
                         </li>
                         <li>
                             <label for="sort2">Statistic 2: </label>
-                            <input type="text" name="sort2" />
+                            <input type="text" id="sort2" name="sort2" />
                         </li>
                     </ol>
                 </fieldset>
@@ -528,16 +528,18 @@
     </div> <!-- /.modal-dialog -->
 </div> <!-- /#updateFund.modal -->
 
-<span style="display:none;" id="all_fund_dropdown">
-    <option value="">No fund</option>
-    [% FOREACH budget IN budgets %]
-        [% IF ( budget.b_active ) %]
-            <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
-        [% ELSE %]
-            <option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat |html %]">[% budget.b_txt | html %] (inactive)</option>
-        [% END %]
-    [% END # /FOREACH budget %]
-</span> <!-- /#all_fund_dropdown -->
+<div style="display:none;">
+    <select id="all_fund_dropdown">
+        <option value="">No fund</option>
+        [% FOREACH budget IN budgets %]
+            [% IF ( budget.b_active ) %]
+                <option value="[% budget.b_id | html %]" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat | html %]">[% budget.b_txt | html %]</option>
+            [% ELSE %]
+                <option value="[% budget.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget.b_sort1_authcat | html %]" data-sort2-authcat="[% budget.b_sort2_authcat |html %]">[% budget.b_txt | html %] (inactive)</option>
+            [% END %]
+        [% END # /FOREACH budget %]
+    </select>
+</div> <!-- /#all_fund_dropdown -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
