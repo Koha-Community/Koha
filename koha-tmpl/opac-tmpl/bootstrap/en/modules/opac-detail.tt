@@ -755,6 +755,7 @@
                                                     <tr>
                                                         <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
                                                         <th id="serial_publisheddate" data-colname="serial_publisheddate">Publication date</th>
+                                                        <th id="serial_publisheddatetext" data-colname="serial_publisheddatetext">Publication date (text)</th>
                                                         <th id="serial_planneddate" data-colname="serial_planneddate">Received date</th>
                                                         <th id="serial_status" data-colname="serial_status">Status</th>
                                                         <th id="serial_notes" data-colname="serial_notes">Note</th>
@@ -766,6 +767,7 @@
                                                         <tr>
                                                             <td class="serialseq">[% latestserial.serialseq | html %]</td>
                                                             <td class="publisheddate" data-order="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</td>
+                                                            <td class="publisheddatetext" data-order="[% latestserial.publisheddatetext | html %]">[% latestserial.publisheddatetext | html %]</td>
                                                             <td class="planneddate" data-order="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</td>
                                                             <td class="serial_status">
                                                                 [% INCLUDE 'serial-status.inc' serial = latestserial %]
