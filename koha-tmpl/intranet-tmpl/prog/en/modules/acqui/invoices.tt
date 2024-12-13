@@ -235,7 +235,7 @@
                         </div> <!-- /#merge_invoices -->
                     [% ELSE # IF invoices %]
                         <p>Sorry, but there are no results for your search.</p>
-                        <p>Search was:
+                        <div>Search was:
                             <ul>
                                 [% IF ( invoicenumber ) %]
                                     <li>Invoice number: [% invoicenumber | html %]</li>
@@ -298,7 +298,7 @@
                                     <li>Library: [% Branches.GetName( branch ) | html %]</li>
                                 [% END %]
                             </ul>
-                        </p>
+                        </div>
                     [% END # /IF invoices %]
                 [% ELSE %]
                     <p>Use the search form on the left to find invoices.</p>
