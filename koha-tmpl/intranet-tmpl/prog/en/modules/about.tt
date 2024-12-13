@@ -114,10 +114,9 @@
                         <td><span class="text-bg-warning">[% elasticsearch_fatal_config_error | html %]</span></td>
                     [% ELSE %]
                         [% IF elasticsearch_status.running %]
-                            <td class="text-bg-info">
-                        [% ELSE %]
-                            <td>
+                            [% SET td_class="text-bg-info"%]
                         [% END %]
+                        <td class="[% td_class | html %]">
                             <span>Version:</span>
                             <span>[% elasticsearch_status.version | html %]</span>
                             |
@@ -144,10 +143,9 @@
             <tr>
                 <th scope="row">Memcached: </th>
                 [% IF memcached_running AND is_memcached_still_active AND where_is_memcached_config == 'config_only' %]
-                    <td class="text-bg-info">
-                [% ELSE %]
-                    <td>
+                    [% SET td_class="text-bg-info"%]
                 [% END %]
+                <td class="[% td_class | html %]">
                     <span>Servers:</span>
                     [% IF memcached_servers %]
                         <span>[% memcached_servers | html %]</span>
@@ -252,27 +250,26 @@
             [% FOREACH tabl IN table %]
                 <tr>
                     [% FOREACH ro IN tabl.row %]
-                        [% IF ( ro.current ) %]
-                            [% IF ( ro.require ) %]
-                                <th scope="row" style="font-weight:bold;" title="Module current">
-                            [% ELSE %]
-                                <th scope="row" style="font-weight:normal" title="Module current">
-                            [% END %]
-                        [% ELSIF ( ro.upgrade ) %]
-                            [% IF ( ro.require ) %]
-                                <th scope="row" style="background-color:#FFCB2F;font-weight:bold;" title="Module upgrade needed">
-                            [% ELSE %]
-                                <th scope="row" style="background-color:#FFCB2F;font-weight:normal" title="Module upgrade needed">
-                            [% END %]
+                        [% IF ( ro.require ) %]
+                            [% SET th_font_weight = "bold" %]
                         [% ELSE %]
-                            [% IF ( ro.name == '' ) %]
-                                <th>
-                            [% ELSIF ( ro.require ) %]
-                                <th scope="row" style="background-color:#FF8A8A;font-weight:bold;" title="Required module missing">
-                            [% ELSE %]
-                                <th scope="row" style="background-color:#FF8A8A;font-weight:normal" title="Optional module missing">
+                            [% SET th_font_weight = "normal" %]
+                        [% END %]
+                        [% IF ( ro.current ) %]
+                            [% SET th_title = t("Module current") %]
+                        [% ELSIF ( ro.upgrade ) %]
+                            [% SET th_background_color = "#FFCB2F" %]
+                            [% SET th_title = t("Module upgrade needed") %]
+                        [% ELSE %]
+                            [% IF ( ro.require ) %]
+                                [% SET th_background_color = "#FF8A8A" %]
+                                [% SET th_title = t("Required module missing") %]
+                            [% ELSIF ( ro.name != '' ) %]
+                                [% SET th_background_color = "#FF8A8A" %]
+                                [% SET th_title = t("Optional module missing") %]
                             [% END %]
                         [% END # /IF ro.current %]
+                        <th scope="row" style="background-color:[% th_background_color | html %];font-weight:[% th_font_weight | html %];" title="[% th_title | html %]">
                         [% IF ( ro.name ) %]
                             [% ro.name | html %]
                             <span style="font-weight:normal; font-size:smaller">
@@ -283,13 +280,12 @@
                         [% END %]
                         </th>
                         [% IF ( ro.name == '' ) %]
-                            <td>
+                            <td></td>
                         [% ELSIF ( ro.version ) %]
-                            <td>[% ro.version | html %]
+                            <td>[% ro.version | html %]</td>
                         [% ELSE %]
-                            <td style="font-weight:bold">Not Installed
+                            <td style="font-weight:bold">Not Installed</td>
                         [% END %]
-                            </td>
                     [% END # /FOREACH ro %]
                 </tr>
             [% END # /FOREACH tabl %]
@@ -491,7 +487,8 @@
                     [% IF warnPrefOpacHiddenItems %]
                         <tr>
                             <th scope="row"><strong>Warning</strong> </th>
-                            <td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</th></tr>
+                            <td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</td>
+                        </tr>
                     [% END %]
                     [% IF warnPrefPatronSelfRegistrationDefaultCategory %]
                         <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'PatronSelfRegistration' is set, but 'PatronSelfRegistrationDefaultCategory' does not contain a valid patron category code. Patron self-registration is disabled.</td></tr>
