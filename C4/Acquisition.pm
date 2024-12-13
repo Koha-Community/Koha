@@ -672,7 +672,7 @@ sub GetBasketsByBookseller {
     my $baskets = GetBasketsInfosByBookseller($supplierid, $allbaskets);
 
 The optional second parameter allbaskets is a boolean allowing you to
-select all baskets from the supplier; by default only active baskets (open or 
+select all baskets from the supplier; by default only active baskets (open or
 closed but still something to receive) are returned.
 
 Returns in a arrayref of hashref all about booksellers baskets, plus:
@@ -1280,8 +1280,8 @@ sub GetOrder {
   &ModOrder(\%hashref);
 
 Modifies an existing order. Updates the order with order number
-$hashref->{'ordernumber'} and biblionumber $hashref->{'biblionumber'}. All 
-other keys of the hash update the fields with the same name in the aqorders 
+$hashref->{'ordernumber'} and biblionumber $hashref->{'biblionumber'}. All
+other keys of the hash update the fields with the same name in the aqorders
 table of the Koha database.
 
 =cut
@@ -1977,7 +1977,7 @@ sub get_rounded_price {
 
 Retreives some acquisition history information
 
-params:  
+params:
   title
   author
   name
@@ -1986,7 +1986,7 @@ params:
   from_placed_on
   to_placed_on
   basket                  - search both basket name and number
-  booksellerinvoicenumber 
+  booksellerinvoicenumber
   basketgroupname
   budget
   orderstatus (note that orderstatus '' will retrieve orders
