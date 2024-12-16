@@ -69,14 +69,10 @@
                                     [% IF item.rota %]
                                         [% IF !item.rota.active %]
                                             <span class="highlighted-row">
-                                        [% END %]
-                                            [% IF item.rota.active %]
-                                                <span>Active</span>
-                                            [% ELSE %]
                                                 <span>Inactive</span>
-                                            [% END %]
-                                        [% IF !item.rota.active %]
                                             </span>
+                                        [% ELSE %]
+                                            <span>Active</span>
                                         [% END %]
                                     [% END %]
                                 </td>
@@ -89,23 +85,22 @@
                                 </td>
                                 <td>
                                     [% FOREACH this_stage IN item.stages %]
+                                        [% SET span_class = 'stage' %]
                                         [% IF this_stage.stage_id == item.stockrotationitem.stage.stage_id %]
-                                            <span class="stage highlight_stage">
-                                        [% ELSE %]
-                                            <span class="stage">
+                                            [% SET span_class = 'stage highlight_stage' %]
                                         [% END %]
-                                        [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
+
+                                        <span class="[% span_class | html %]">
+                                            [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
                                         </span>
                                         &raquo;
                                     [% END %]
                                     [% IF item.stages.size > 0 %]
-                                        <span class="stage">
-                                            [% IF item.rota.cyclical %]
-                                                START
-                                            [% ELSE %]
-                                                END
-                                            [% END %]
-                                        </span>
+                                        [% IF item.rota.cyclical %]
+                                            <span class="stage">START</span>
+                                        [% ELSE %]
+                                            <span class="stage">END</span>
+                                        [% END %]
                                     [% END %]
                                 </td>
                                 <td class="actions">
@@ -148,11 +143,7 @@
                                         </a>
                                         [% END %]
 
-                                        [% IF !in_transit %]
-                                            <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
-                                        [% ELSE %]
-                                            <a class="btn btn-default btn-xs" disabled>
-                                        [% END %]
+                                        <a class="btn btn-default btn-xs" [% IF in_transit %]disabled[% ELSE %]href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]"[% END %]>
                                             <i class="fa fa-trash-can"></i>
                                             Remove from rota
                                         </a>
