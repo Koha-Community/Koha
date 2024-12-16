@@ -76,12 +76,9 @@
                     <th>Fund name</th>
                     <th>Fund total</th>
                     [% FOREACH authvals_ro IN authvals_row %]
-                        [% IF ( authvals_ro.display ) %]
-                            <th id="col[% authvals_ro.code | html %]" class="[% authvals_ro.colnum | html %]">
-                        [% ELSE %]
-                            <th id="col[% authvals_ro.code | html %]" style="display:none;" class="[% authvals_ro.colnum | html %]">
-                        [% END %]
-                        [% authvals_ro.code | html %]</th>
+                        <th id="col[% authvals_ro.code | html %]" [% UNLESS authvals_ro.display %]style="display:none;"[% END %] class="[% authvals_ro.colnum | html %]">
+                            [% authvals_ro.code | html %]
+                        </th>
                     [% END %]
                     <th class="remaining">Fund remaining</th>
                     <th class="noExport">Actions</th>
@@ -105,11 +102,7 @@
                         <div style="display:none;" id="budget_tot_[% budget_line.budget_id | html %]">[% budget_line.budget_amount | html %]</div></td>
 
                         [% FOREACH line IN budget_line.lines %]
-                            [% IF ( line.display ) %]
-                                <td class="[% line.colnum | html %]">
-                            [% ELSE %]
-                                <td style="display:none;" class="[% line.colnum | html %]">
-                            [% END %]
+                            <td [% UNLESS line.display %]style="display:none;"[% END %] class="[% line.colnum | html %]">
                                 <table class="invis">
                                     <tr>
                                         [% IF show_actual %]
@@ -134,23 +127,21 @@
                                 <tr>
                                     [% IF show_actual %]
                                         [% IF ( budget_line.act_negative ) %]
-                                            <td style="color: red;">
+                                            [% SET td_color = "red" %]
                                         [% ELSIF ( budget_line.act_positive ) %]
-                                            <td style="color: green;">
-                                        [% ELSE %]
-                                            <td>
+                                            [% SET td_color = "green" %]
                                         [% END %]
-                                        [% budget_line.budget_act_remain | html %]
+                                        <td style="color: [% color | html %];">
+                                            [% budget_line.budget_act_remain | html %]
                                         </td>
                                     [% END %]
 
                                     [% IF ( budget_line.est_negative ) %]
-                                        <td style="color: red;" id="budget_est_[% budget_line.budget_id | html %]">
+                                        [% SET td_color = "red" %]
                                     [% ELSIF ( budget_line.est_positive ) %]
-                                        <td style="color: green;" id="budget_est_[% budget_line.budget_id | html %]">
-                                    [% ELSE %]
-                                        <td id="budget_est_[% budget_line.budget_id | html %]">
+                                        [% SET td_color = "green" %]
                                     [% END %]
+                                    <td style="color: [% color | html %];" id="budget_est_[% budget_line.budget_id | html %]">
                                         [% budget_line.budget_est_remain | $Price %]&nbsp;
                                     </td>
                                 </tr>
