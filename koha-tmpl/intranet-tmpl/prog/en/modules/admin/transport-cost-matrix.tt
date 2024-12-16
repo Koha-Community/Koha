@@ -82,10 +82,9 @@
                             &nbsp;
                         [% ELSE %]
                             [% IF bt.disabled %]
-                            <div id="celldiv_[% bt.id | html %]" class="disabled-transfer">
-                            [% ELSE %]
-                            <div id="celldiv_[% bt.id | html %]">
+                                [% SET div_class="disabled-transfer" %]
                             [% END %]
+                            <div id="celldiv_[% bt.id | html %]" class="[% div_class | html %]">
                             <div class="enable_cost_input" data-cost-id="[% bt.id | html %]">[% IF bt.disabled %]&nbsp;[% ELSE %][% bt.value | html %][% END %]</div>
                             <input type="hidden" name="cost_[% bt.id | html %]" value="[% bt.value | html %]" />
                             [% IF bt.disabled %]
