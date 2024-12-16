@@ -106,11 +106,7 @@
            <span class="required">Required</span>
        </li>
 
-        [% IF attribute_type AND attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]
-            <li aria-disabled="true">
-        [% ELSE %]
-            <li>
-        [% END %]
+        <li [% IF attribute_type AND attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]aria-disabled="true"[% END %]>
             <label for="repeatable">Repeatable: </label>
             [% IF attribute_type %]
                 [% IF attribute_type.repeatable AND NOT can_be_set_to_nonrepeatable %]
@@ -127,11 +123,7 @@
             <span class="hint">Check to let a patron record have multiple values of this attribute.</span>
         </li>
 
-        [% IF attribute_type AND not can_be_set_to_unique %]
-            <li aria-disabled="true">
-        [% ELSE %]
-            <li>
-        [% END %]
+        <li [% IF attribute_type AND not can_be_set_to_unique %]aria-disabled="true"[% END %]>
             <label for="unique_id">Unique identifier: </label>
             [% IF attribute_type %]
                 [% IF attribute_type.unique_id %]
