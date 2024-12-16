@@ -163,41 +163,35 @@ MARC order accounts
                                         <label for="encoding">Character encoding: </label>
                                         <select class="select2" name="encoding" id="encoding">
                                             [% IF ( account.encoding == 'UTF-8' ) %]
-                                                <option value="UTF-8" selected="selected">
+                                                <option value="UTF-8" selected="selected">UTF-8 (Default)</option>
                                             [% ELSE %]
-                                                <option value="UTF-8">
+                                                <option value="UTF-8">UTF-8 (Default)</option>
                                             [% END %]
-                                                UTF-8 (Default)</option>
                                             [% IF ( account.encoding == 'MARC-8' ) %]
-                                                <option value="MARC-8" selected="selected">
+                                                <option value="MARC-8" selected="selected">MARC 8</option>
                                             [% ELSE %]
-                                                <option value="MARC-8">
+                                                <option value="MARC-8">MARC 8</option>
                                             [% END %]
-                                                MARC 8</option>
                                             [% IF ( account.encoding == 'ISO_5426' ) %]
-                                                <option value="ISO_5426" selected="selected">
+                                                <option value="ISO_5426" selected="selected">ISO 5426</option>
                                             [% ELSE %]
-                                                <option value="ISO_5426">
+                                                <option value="ISO_5426">ISO 5426</option>
                                             [% END %]
-                                                ISO 5426</option>
                                             [% IF ( account.encoding == 'ISO_6937' ) %]
-                                                <option value="ISO_6937" selected="selected">
+                                                <option value="ISO_6937" selected="selected">ISO 6937</option>
                                             [% ELSE %]
-                                                <option value="ISO_6937">
+                                                <option value="ISO_6937">ISO 6937</option>
                                             [% END %]
-                                                ISO 6937</option>
                                             [% IF ( account.encoding == 'ISO_8859-1' ) %]
-                                                <option value="ISO_8859-1" selected="selected">
+                                                <option value="ISO_8859-1" selected="selected">ISO 8859-1</option>
                                             [% ELSE %]
-                                                <option value="ISO_8859-1">
+                                                <option value="ISO_8859-1">ISO 8859-1</option>
                                             [% END %]
-                                                ISO 8859-1</option>
                                             [% IF ( account.encoding == 'EUC-KR' ) %]
-                                                <option value="EUC-KR" selected="selected">
+                                                <option value="EUC-KR" selected="selected">EUC-KR</option>
                                             [% ELSE %]
-                                                <option value="EUC-KR">
+                                                <option value="EUC-KR">EUC-KR</option>
                                             [% END %]
-                                                EUC-KR</option>
                                         </select>
                                     </li>
                             </ol>
