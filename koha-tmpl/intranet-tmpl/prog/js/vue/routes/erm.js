@@ -1,9 +1,6 @@
 import { markRaw } from "vue";
 
 import Home from "../components/ERM/Home.vue";
-import AgreementsList from "../components/ERM/AgreementsList.vue";
-import AgreementsShow from "../components/ERM/AgreementsShow.vue";
-import AgreementsFormAdd from "../components/ERM/AgreementsFormAdd.vue";
 import EHoldingsLocalPackagesFormAdd from "../components/ERM/EHoldingsLocalPackagesFormAdd.vue";
 import EHoldingsLocalTitlesFormAdd from "../components/ERM/EHoldingsLocalTitlesFormAdd.vue";
 import EHoldingsLocalTitlesFormImport from "../components/ERM/EHoldingsLocalTitlesFormImport.vue";
