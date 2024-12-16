@@ -273,7 +273,7 @@
     <!-- /.row -->
 
     <!-- Modal -->
-    <div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+    <div class="modal printable" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -289,6 +289,7 @@
                         <input type="hidden" name="message_id" value="" />
                         <button type="submit" id="resend_notice_button" class="btn btn-default"><i class="fa-solid fa-rotate" aria-hidden="true"></i> Resend</button>
                     </form>
+                    <button type="button" class="printModal btn btn-primary"><i class="fa fa-print"></i> Print</button>
                     <button type="button" class="btn btn-default deny cancel" data-bs-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
                 </div>
             </div>
@@ -302,6 +303,7 @@
         [% Asset.js("js/tools-menu.js") | $raw %]
         [% INCLUDE 'calendar.inc' %]
         [% INCLUDE 'datatables.inc' %]
+        [% Asset.js("js/modal_printer.js") | $raw %]
         <script>
             $(document).ready(function () {
                 $("#notices").dataTable(
