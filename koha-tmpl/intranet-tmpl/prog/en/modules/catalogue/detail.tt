@@ -839,10 +839,12 @@
                                             [% IF HTML5MediaSet.is_youtube %]
                                                 <iframe id="player" width="640" height="360" src="[% HTML5MediaSet.srcblock | url %]"></iframe>
                                             [% ELSE %]
+                                                <!-- prettier-ignore-start -->
                                                 <[% HTML5MediaParent | html %] controls preload=none>
                                                     <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]"[% HTML5MediaSet.typeblock | html %] />
                                                     [[% HTML5MediaParent | html %] tag not supported by your browser.]
                                                 </[% HTML5MediaParent | html %]>
+                                                <!-- prettier-ignore-end -->
                                             [% END %]
                                         </p>
                                     [% END %]
