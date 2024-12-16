@@ -198,18 +198,15 @@
 <div class="main container-fluid">
     <div class="row">
 
-    [% IF ( enter ) %]
         <div class="col-md-10 order-sm-1 order-md-2">
             <main>
+    [% IF ( enter ) %]
                 [% INCLUDE 'messages.inc' %]
                 [% IF ( booksellerid ) %]
                     <h1>Modify vendor '[% name | html %]'</h1>
                 [% ELSE %]
                     <h1>Add vendor</h1>
                 [% END %]
-    [% ELSE %]
-        <div class="col-md-10 order-sm-1 order-md-2">
-            <main>
     [% END %]
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
