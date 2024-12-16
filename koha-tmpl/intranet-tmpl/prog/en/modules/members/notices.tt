@@ -68,7 +68,13 @@
                     <tbody>
                         [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
                             <tr>
-                                <td><input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" [% IF QUEUED_MESSAGE.status == 'pending' %]disabled="disabled"[% END %] /></td>
+                                <td>
+                                    [% IF QUEUED_MESSAGE.status == 'pending' %]
+                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" />
+                                    [% END %]
+                                </td>
                                 <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
                                 <td>
                                     <a
