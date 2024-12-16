@@ -684,36 +684,28 @@
                                         </option>
 
                                         [% IF holdallowed.rule_value == 'from_any_library' %]
-                                            <option value="from_any_library" selected="selected">
+                                            <option value="from_any_library" selected="selected">From any library</option>
                                         [% ELSE %]
-                                            <option value="from_any_library">
+                                            <option value="from_any_library">From any library</option>
                                         [% END %]
-                                            From any library
-                                        </option>
 
                                         [% IF holdallowed.rule_value == 'from_local_hold_group' %]
-                                        <option value="from_local_hold_group" selected="selected">
+                                            <option value="from_local_hold_group" selected="selected">From local hold group</option>
                                         [% ELSE %]
-                                        <option value="from_local_hold_group">
+                                            <option value="from_local_hold_group">From local hold group</option>
                                         [% END %]
-                                            From local hold group
-                                        </option>
 
                                         [% IF holdallowed.rule_value == 'from_home_library' %]
-                                            <option value="from_home_library" selected="selected">
+                                            <option value="from_home_library" selected="selected">From home library</option>
                                         [% ELSE %]
-                                            <option value="from_home_library">
+                                            <option value="from_home_library">From home library</option>
                                         [% END %]
-                                            From home library
-                                        </option>
 
                                         [% IF holdallowed.rule_value == 'not_allowed' %]
-                                            <option value="not_allowed" selected="selected">
+                                            <option value="not_allowed" selected="selected">No holds allowed</option>
                                         [% ELSE %]
-                                            <option value="not_allowed">
+                                            <option value="not_allowed">No holds allowed</option>
                                         [% END %]
-                                            No holds allowed
-                                        </option>
                                     </select>
                                 </td>
                                 <td>
@@ -789,32 +781,40 @@
 
                                         [% IF returnbranch.rule_value == 'homebranch' %]
                                         <option value="homebranch" selected="selected">
-                                        [% ELSE %]
-                                        <option value="homebranch">
-                                        [% END %]
                                             Item returns home
                                         </option>
+                                        [% ELSE %]
+                                        <option value="homebranch">
+                                            Item returns home
+                                        </option>
+                                        [% END %]
                                         [% IF returnbranch.rule_value == 'holdingbranch' %]
                                         <option value="holdingbranch" selected="selected">
-                                        [% ELSE %]
-                                        <option value="holdingbranch">
-                                        [% END %]
                                             Item returns to issuing library
                                         </option>
+                                        [% ELSE %]
+                                        <option value="holdingbranch">
+                                            Item returns to issuing library
+                                        </option>
+                                        [% END %]
                                         [% IF returnbranch.rule_value == 'noreturn' %]
                                         <option value="noreturn" selected="selected">
-                                        [% ELSE %]
-                                        <option value="noreturn">
-                                        [% END %]
                                             Item floats
                                         </option>
+                                        [% ELSE %]
+                                        <option value="noreturn">
+                                            Item floats
+                                        </option>
+                                        [% END %]
                                         [% IF returnbranch.rule_value == 'returnbylibrarygroup' %]
                                         <option value="returnbylibrarygroup" selected="selected">
-                                        [% ELSE %]
-                                        <option value="returnbylibrarygroup">
-                                        [% END %]
                                             Item floats by library group
                                         </option>
+                                        [% ELSE %]
+                                        <option value="returnbylibrarygroup">
+                                            Item floats by library group
+                                        </option>
+                                        [% END %]
                                     </select>
                                 </td>
                                 <td class="actions">
@@ -1170,11 +1170,7 @@
                                         [% END %]
                                       [% ELSE %]
                                       [%# Branch-specific %]
-                                        [% IF ( not refundLostItemFeeRule ) %]
-                                            <option value="*" selected="selected">
-                                        [% ELSE %]
-                                            <option value="*">
-                                        [% END %]
+                                        <option value="*" [% IF ( not refundLostItemFeeRule ) %]selected="selected"[% END %]>
                                           [% IF defaultRefundRule == 'refund' %]
                                             <span>Use default (Refund lost item charge)</span>
                                           [% ELSIF defaultRefundRule == 'refund_unpaid' %]
@@ -1186,7 +1182,7 @@
                                           [% ELSE %]
                                             <span>Use default (Leave lost item charge)</span>
                                           [% END %]
-                                            </option>
+                                        </option>
                                         [% IF ( not refundLostItemFeeRule ) %]
                                             <option value="refund">Refund lost item charge</option>
                                             <option value="refund_unpaid">Refund lost item charge (only if unpaid)</option>
@@ -1252,11 +1248,7 @@
                                         [% END %]
                                       [% ELSE %]
                                       [%# Branch-specific %]
-                                        [% IF ( not refundProcessingFeeRule ) %]
-                                            <option value="*" selected="selected">
-                                        [% ELSE %]
-                                            <option value="*">
-                                        [% END %]
+                                        <option value="*" [% IF ( not refundProcessingFeeRule ) %]selected="selected"[% END %]>
                                           [% IF defaultProcessingRefundRule == 'refund' %]
                                             <span>Use default (Refund lost item processing charge)</span>
                                           [% ELSIF defaultProcessingRefundRule == 'refund_unpaid' %]
@@ -1264,7 +1256,7 @@
                                           [% ELSE %]
                                             <span>Use default (Leave lost item processing charge)</span>
                                           [% END %]
-                                            </option>
+                                        </option>
                                         [% IF ( not refundProcessingFeeRule ) %]
                                             <option value="refund">Refund lost item processing charge</option>
                                             <option value="refund_unpaid">Refund lost item processing charge (only if unpaid)</option>
