@@ -162,7 +162,6 @@
                             <span class="total_amount" data-parent_id="[% loop_budge.budget_parent_id | html %]" data-self_id="[% loop_budge.budget_id | html %]">[% loop_budge.budget_amount | $Price %]</span>
                         </td>
                         <td class="data">
-                            <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
                             [% IF loop_budge.children.size %]
                                 <a title="Ordered from this fund" href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
                                     (<span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>)
