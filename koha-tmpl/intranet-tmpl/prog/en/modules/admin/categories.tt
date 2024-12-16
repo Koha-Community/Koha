@@ -231,7 +231,7 @@
                             <option value="1">Yes</option>
                             <option value="0" selected>No</option>
                         [% END %]
-                    <select>
+                    </select>
                 </li>
                 <li><label for="branches">Library limitations: </label>
                     <select id="branches" name="branches" multiple size="10">
@@ -614,7 +614,7 @@
     <h1>Patron categories</h1>
     <div class="page-section">
     [% IF searchfield %]
-        You searched for [% searchfield | html %]</span>
+        <span>You searched for [% searchfield | html %]</span>
     [% END %]
     [% IF categories %]
         <table id="patron_categories">
