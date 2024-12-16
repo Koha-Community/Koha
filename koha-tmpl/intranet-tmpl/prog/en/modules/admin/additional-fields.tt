@@ -154,10 +154,10 @@
                         [% WRAPPER table_option value="subscription" %]<span>Subscriptions</span>[% END %]
                     </ul>
                 [% END %]
+        </div><!-- /.page-section -->
             [% ELSE %]
                 Additional permissions are required for editing additional fields
             [% END %]
-        </div><!-- /.page-section -->
     [% ELSIF op == 'list' %]
         <h1>Additional fields for '[% tablename | html %]'</h1>
         [% IF fields %]
