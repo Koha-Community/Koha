@@ -1042,6 +1042,7 @@ $(document).ready(function(){
                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                 <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
 
+                <!-- prettier-ignore-start -->
                 [% WRAPPER tabs id= "addbibliotabs" %]
                     [% WRAPPER tab_panels %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -1259,6 +1260,7 @@ $(document).ready(function(){
                         [% END # /FOREACH BIG_LOOP %]
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs %]
+                <!-- prettier-ignore-end -->
 
                 [%# Fields for fast cataloging %]
                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
