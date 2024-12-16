@@ -442,7 +442,6 @@
                   </tr>
                 [% END %]
               [% END %]
-            </tr>
           [% END %]
         </tbody>
         </table>
@@ -489,7 +488,7 @@
                                     <td data-order="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</td>
                                     <td>
                                         [% IF ( period_active.budget_period_locked ) %]
-                                            <i class="fa fa-lock"></i> Locked</span>
+                                            <span><i class="fa fa-lock"></i> Locked</span>
                                         [% END %]
                                     </td>
                                     <td class="data">[% period_active.budget_period_total | $Price %]</td>
