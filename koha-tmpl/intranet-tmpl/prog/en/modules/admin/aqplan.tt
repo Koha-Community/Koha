@@ -178,8 +178,6 @@
             <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save" /></fieldset>
         [% END %]
 
-    </div> <!-- /.page-section -->
-
 <div id="hide_div">
     [% FOREACH authvals_ro IN authvals_row %]
 
@@ -190,16 +188,14 @@
 
  </div>
 
-
-</form>
-
         [% ELSIF not budget_period_id %]
 <div class="alert alert-warning">That budget does not exist! Please select a budget to continue.</div>
         [% ELSE %]
 <div class="alert alert-info">No funds to display for this search criteria</div>
         [% END %]
 
-
+    </div> <!-- /.page-section -->
+</form>
 
             </main>
         </div> <!-- /.col-md-10.order-md-2 -->
