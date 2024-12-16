@@ -14,7 +14,7 @@ return {
               ALTER TABLE erm_usage_data_providers ADD COLUMN `service_platform` varchar(80) DEFAULT NULL COMMENT 'platform if provider requires it' AFTER `report_types`
           }
             );
-            say_info( $out, "Added column 'service_platformerm_usage_data_providers'" );
+            say_success( $out, "Added column 'service_platformerm_usage_data_providers'" );
         }
     },
 };

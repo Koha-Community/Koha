@@ -71,7 +71,6 @@ return {
             UPDATE `permissions` SET description='Manage Z39.50 and SRU servers, OAI repositories configuration' WHERE code='manage_search_targets';
         }
         );
-        say_success( $out, "Updated manage_search_targets permission description" );
 
         $dbh->do(
             q{
@@ -79,7 +78,7 @@ return {
             ('OAI-PMH:HarvestEmailReport','','','After an OAI-PMH harvest, send a report email to the email address','Free');
         }
         );
-        say_success( $out, "Added OAI-PMH:HarvestEmailReport system preference" );
+        say_success( $out, "Added new system preference 'OAI-PMH:HarvestEmailReport'" );
 
         $dbh->do(
             q{
