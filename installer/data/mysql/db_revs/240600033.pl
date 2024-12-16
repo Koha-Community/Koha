@@ -17,6 +17,6 @@ return {
         }
         );
 
-        say $out "Added new system preference 'JobsNotificationMethod'";
+        say_success( $out, "Added new system preference 'JobsNotificationMethod'" );
     },
 };

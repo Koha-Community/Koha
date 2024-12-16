@@ -28,7 +28,7 @@ return {
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); $count++; }
 
         if ($count) {
-            say_info( $out, "list_borrowers added to $count users with edit_borrowers" );
+            say_info( $out, "Added permission 'list_borrowers' to $count users with 'edit_borrowers' permissions" );
         }
 
         # Check for 'circulate' or 'circulate > manage_bookings' permission
@@ -44,7 +44,7 @@ return {
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); $count++; }
 
         if ($count) {
-            say_info( $out, "list_borrowers added to $count users with manage_bookings" );
+            say_info( $out, "Added permission 'list_borrowers' to $count users with 'manage_bookings' permissions" );
         }
 
         # Check for 'tools' or 'tools > label_creator' permission
@@ -60,7 +60,7 @@ return {
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); $count++; }
 
         if ($count) {
-            say_info( $out, "list_borrowers added to $count users with label_creator" );
+            say_info( $out, "Added permission 'list_borrowers' to $count users with 'label_creator' permissions" );
         }
 
         # Check for 'serials' or 'serials > routing' permission
@@ -76,7 +76,7 @@ return {
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); $count++ }
 
         if ($count) {
-            say_info( $out, "list_borrowers added to $count users with routing" );
+            say_info( $out, "Added permission 'list_borrowers' to $count users with 'routing' permissions" );
         }
 
         # Check for 'acquisitions' or 'acquisitions > order_manage' permission
@@ -92,7 +92,7 @@ return {
         foreach my $row (@rows_to_insert) { $insert_sth->execute( @{$row} ); $count++ }
 
         if ($count) {
-            say_info( $out, "list_borrowers added to $count users with order_manage" );
+            say_info( $out, "Added permission 'list_borrowers' to $count users with 'order_manage' permissions" );
         }
     },
 };
