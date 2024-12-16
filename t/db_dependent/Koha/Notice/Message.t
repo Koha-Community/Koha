@@ -404,10 +404,11 @@ subtest 'patron() tests' => sub {
 };
 
 subtest 'template() tests' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
+    # Valid template and message
     my $template = $builder->build_object( { class => 'Koha::Notice::Templates' } );
     my $message  = $builder->build_object(
         {
@@ -418,6 +419,21 @@ subtest 'template() tests' => sub {
 
     is( ref( $message->template ), 'Koha::Notice::Template', 'Object type is correct' );
     is( $message->template->id,    $template->id,            'Right template linked' );
+
+    # Deleted template
+    $template->delete;
+    $message->discard_changes;
+    is( $message->template, undef, 'Returns undef if template was deleted' );
+
+    # Missing template
+    $message = $builder->build_object(
+        {
+            class => 'Koha::Notice::Messages',
+            value => { letter_id => undef }
+        }
+    );
+
+    is( $message->template, undef, 'Returns undef if no template used for message' );
 
     $schema->storage->txn_rollback;
 };
