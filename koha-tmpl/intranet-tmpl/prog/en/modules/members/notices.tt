@@ -70,7 +70,7 @@
                             <tr>
                                 <td>
                                     [% IF QUEUED_MESSAGE.status == 'pending' %]
-                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" />
+                                        <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" disabled="disabled" title="Cannot resend a pending notice" />
                                     [% ELSE %]
                                         <input type="checkbox" name="message_ids" value="[% QUEUED_MESSAGE.message_id | html %]" />
                                     [% END %]
