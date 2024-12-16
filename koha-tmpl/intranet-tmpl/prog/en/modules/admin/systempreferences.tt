@@ -310,20 +310,15 @@
         <a class="btn btn-default" id="newstopword" href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form"><i class="fa fa-plus"></i> New system preference</a>
     </div>
 
-    [% IF ( tab != 'local_use' ) %]
-        <p>Please click on one of the tabs at the left side of this form.</p>
-        <table>
-    [% ELSE %]
-        <h1>Local use system preferences</h1>
-        <div class="page-section">
-        <table id="sysprefst">
-        <thead><tr>
-        <th>Preference</th>
-        <th>Explanation</th>
-        <th>Value</th>
-        <th class="noExport">Actions</th>
-        </tr></thead>
-    [% END %]
+    <h1>Local use system preferences</h1>
+    <div class="page-section">
+    <table id="sysprefst">
+    <thead><tr>
+    <th>Preference</th>
+    <th>Explanation</th>
+    <th>Value</th>
+    <th class="noExport">Actions</th>
+    </tr></thead>
     <tbody>[% FOREACH loo IN loop %]
         <tr>
 
@@ -442,7 +437,6 @@
     [% END %]
     </tbody>
     </table>
-    [% IF tab == 'local_use' %]</div>[% END %]
     [% END %]
 
             </main>

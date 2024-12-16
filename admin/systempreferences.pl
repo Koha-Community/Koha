@@ -345,7 +345,7 @@ if ( $op eq 'add_form' ) {
 ################## DEFAULT ##################################
 } else {    # DEFAULT
             #Adding tab management for system preferences
-    my $tab = $input->param('tab')||'local_use';
+    my $tab = 'local_use';
     $template->param( $tab => 1 );
     my ( $count, $results ) = StringSearch( $searchfield, $tab );
     my @loop_data = ();
