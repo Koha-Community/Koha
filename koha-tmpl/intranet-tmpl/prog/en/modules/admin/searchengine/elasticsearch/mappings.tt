@@ -176,10 +176,8 @@ a.add, a.delete {
                                     <td data-order="[% search_field.type | html %]">
                                         [% IF search_field.mandatory %]
                                             <input type="hidden" name="search_field_type" value="[% search_field.type | html %]" />
-                                            <select name="search_field_type" disabled>
-                                        [% ELSE %]
-                                            <select name="search_field_type">
                                         [% END %]
+                                        <select name="search_field_type" [% IF search_field.mandatory%]disabled[% END %]>
                                             <option value="">Default</option>
                                             [% IF search_field.type == "string" %]
                                                 <option value="string" selected="selected">String</option>
