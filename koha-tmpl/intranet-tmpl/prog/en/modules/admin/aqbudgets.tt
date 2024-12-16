@@ -184,11 +184,7 @@
     </tfoot>
     <tbody>
     [% FOREACH budget IN budgets %]
-    [% IF budget.budget_parent_id %]
       <tr data-tt-id="[% budget.budget_id | html %]" data-tt-parent-id="[% budget.budget_parent_id | html %]">
-    [% ELSE %]
-      <tr data-tt-id="[% budget.budget_id | html %]">
-    [% END %]
     <td>[% budget.budget_period_active | html %]</td>
     <td>Budget [% budget.budget_period_description | html %] [id=[% budget.budget_period_id | html %]][% UNLESS budget.budget_period_active %] (inactive)[% END %]</td>
     <td>[% budget.budget_code | html %]</td>
@@ -228,13 +224,13 @@
 
     [% BLOCK colorcellvalue %]
         [% IF (value > 0) %]
-            <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: green;">
+            [% SET color = "green" %]
         [% ELSIF (value < 0) %]
-            <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: red;">
-        [% ELSE %]
-            <span class="totalamount">
+            [% SET color = "red" %]
         [% END %]
-        [% value | $Price %]
+
+        <span class="total_amount" data-parent_id="[% budget.budget_parent_id | html %]" data-self_id="[% budget.budget_id | html %]" style="color: [% color | html %];">
+            [% value | $Price %]
         </span>
     [% END %]
     <td class="data">
@@ -394,35 +390,19 @@
     <li>
     <label for="budget_permission">Restrict access to: </label>
     <select name="budget_permission" id="budget_permission">
-        [% IF ( budget_perm_0 ) %]
-            <option value="0" selected="selected">
-        [% ELSE %]
-            <option value="0">
-        [% END %]
+        <option value="0" [% IF budget_perm_0 %]selected="selected"[% END %]>
             None
         </option>
 
-        [% IF ( budget_perm_1 ) %]
-            <option value="1" selected="selected">
-        [% ELSE %]
-            <option value="1">
-        [% END %]
+        <option value="1" [% IF budget_perm_1 %]selected="selected"[% END %]>
             Owner
         </option>
 
-        [% IF ( budget_perm_3) %]
-            <option value="3" selected="selected">
-        [% ELSE %]
-            <option value="3">
-        [% END %]
+        <option value="3" [% IF budget_perm_3 %]selected="selected"[% END %]>
             Owner and users
         </option>
 
-        [% IF ( budget_perm_2 ) %]
-            <option value="2" selected="selected">
-        [% ELSE %]
-            <option value="2">
-        [% END %]
+        <option value="2" [% IF budget_perm_2 %]selected="selected"[% END %]>
             Owner, users and library
         </option>
     </select>
