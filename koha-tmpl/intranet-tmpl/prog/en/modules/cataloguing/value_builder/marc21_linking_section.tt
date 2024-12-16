@@ -8,13 +8,12 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+</head>
 [% IF ( fillinput ) %]
-        </head>
 
     <body id="cat_marc21_linking_section" class="cat value_builder">
     <h1>MARC21 Plugin to build links between records</h1>
 [% ELSE %]
-    </head>
 
     <body id="cat_marc21_linking_section" class="cat value_builder">
     <h1>Plugin to build links between records</h1>
@@ -71,8 +70,11 @@
                 [% FOREACH resul IN result %]
                     [% IF ( resul.title ) %]
                         <tr>
-                            [% IF ( resul.even ) %]<td class="hilighted">
-                            [% ELSE %]<td>[% END %]
+                            [% SET td_class = '' %]
+                            [% IF ( resul.even ) %]
+                                [% td_class = 'hilighted' %]
+                            [% END %]
+                            <td class="[% td_class | html %]">
                             [% IF ( resul.MARC_ON ) %]
                                     <a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title | html %]</a>
                             [% ELSE %]
