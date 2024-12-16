@@ -302,17 +302,20 @@
 <!-- ####################################################################### -->
 
 [% IF ( delete_confirm ) %]
+    [% SET div_class="alert alert-info" %]
+    [% IF !total || !funds_exist %]
+        [% div_class="alert alert-warning" %]
+    [% END %]
+
+    <div class="[% div_class | html %]">
     [% IF ( total ) %]
-        <div class="alert alert-info">
         <h1>Cannot delete budget</h1>
         <p><strong>This record is used [% total | html %] times</strong>.
         Deletion is not possible.</p>
     [% ELSIF ( funds_exist ) %]
-        <div class="alert alert-info">
         <h1>Cannot delete budget</h1>
         <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
     [% ELSE %]
-        <div class="alert alert-warning">
         <h1>[% tx("Confirm deletion of budget '{budget_period_description}'?", { budget_period_description = budget_period_description }) | html %]</h1>
 
     <!-- ############################################################# -->
