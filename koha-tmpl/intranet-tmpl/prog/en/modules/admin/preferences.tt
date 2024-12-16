@@ -58,6 +58,7 @@
     [% FOREACH TAB IN TABS %]
     <div class="prefs-tab">
     <h2>[% TAB.tab_title | html %] preferences</h2>
+    <!-- prettier-ignore-start -->
     <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         [% INCLUDE 'csrf-token.inc' %]
         [% UNLESS ( searchfield ) %]<div id="toolbar" class="sticky"><button class="save-all btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button></div>[% END %]
@@ -238,6 +239,7 @@
         [% END %]
         <fieldset class="action"><button class="save-all submit btn btn-primary" type="submit">Save all [% TAB.tab_title | html %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl" class="force_reload cancel">Cancel</a></fieldset>
     </form>
+    <!-- prettier-ignore-end -->
     </div>
     [% END %]
 
