@@ -368,10 +368,11 @@ subtest 'stylesheets() tests' => sub {
 
 subtest 'patron() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
+    # Valid patron and message
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $message = $builder->build_object(
         {
@@ -379,9 +380,25 @@ subtest 'patron() tests' => sub {
             value => { borrowernumber => $patron->borrowernumber }
         }
     );
+    my $message_id = $message->message_id;
 
     is( ref( $message->patron ),          'Koha::Patron',          'Object type is correct' );
     is( $message->patron->borrowernumber, $patron->borrowernumber, 'Right patron linked' );
+
+    # Deleted patron
+    $patron->delete;
+    $message = Koha::Notice::Messages->find($message_id);
+    is( $message, undef, 'Deleting the patron also deletes the associated message' );
+
+    # Missing patron
+    $message = $builder->build_object(
+        {
+            class => 'Koha::Notice::Messages',
+            value => { borrowernumber => undef }
+        }
+    );
+
+    is( $message->patron, undef, 'Returns undef if borrowernumber is missing' );
 
     $schema->storage->txn_rollback;
 };
