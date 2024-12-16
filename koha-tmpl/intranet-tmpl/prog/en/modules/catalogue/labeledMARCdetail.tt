@@ -39,14 +39,22 @@
 [% END #/ WRAPPER sub-header.inc %]
 
 <div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
 
     [% IF ( unknownbiblionumber ) %]
-        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
+            <main>
+                <div class="row">
+                    <div class="col">
+                        [% INCLUDE 'messages.inc' %]
+                        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </main>
     [% ELSE %]
+    <div class="row">
+        <div class="col-md-10 order-md-2 order-sm-1">
+
+            <main>
+                [% INCLUDE 'messages.inc' %]
                 [% INCLUDE 'cat-toolbar.inc' %]
 
                 <h1>
@@ -94,6 +102,7 @@
      </div> <!-- /.row -->
 </div> <!-- /.main.container-fluid -->
 [% END %]
+</div> <!-- /.main.container-fluid -->
 
 [% IF ( Koha.Preference('CatalogConcerns') ) %]
 [% INCLUDE 'modals/add_catalog_concern.inc' %]
