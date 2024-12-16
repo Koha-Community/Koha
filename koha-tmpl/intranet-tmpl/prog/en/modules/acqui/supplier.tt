@@ -95,8 +95,10 @@
         </div>
     </div>
 
-        [% IF contact.id %]<li><button class="btn btn-default delete-contact"><i class="fa fa-trash-can"></i> Delete contact</li>[% END %]
-    </ol>
+    [% IF contact.id %]
+        <ol><li><button class="btn btn-default delete-contact"><i class="fa fa-trash-can"></i> Delete contact</button></li></ol>
+    [% END %]
+
 [% END %]
 
 [% BLOCK show_contact %]
@@ -446,7 +448,7 @@
                             <li><span class="label">Login: </span>[% i.login | html %]</li>
                         [% END %]
                         [% IF i.password %]
-                            <li><span class="label">Password: </span><span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></span></li>
+                            <li><span class="label">Password: </span><span class="password"><a href="#" class="show_password" data-plain-text-password="[% i.plain_text_password | html %]">Show</a></span></li>
                         [% END %]
                         [% IF i.account_email %]
                             <li><span class="label">Account email: </span>[% i.account_email | html %]</li>
