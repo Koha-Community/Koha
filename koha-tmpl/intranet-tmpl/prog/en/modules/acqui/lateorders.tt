@@ -159,7 +159,7 @@
                     [% IF ( CAN_user_acquisition_group_manage ) %]
                         <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.basket.booksellerid | uri %]&basketgroupid=[% lateorder.basket.basketgroupid | uri %]" title="basketgroup">[% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])</a>
                     [% ELSE %]
-                        [% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])</a>
+                        [% lateorder.basket.basket_group.name | html %] ([% lateorder.basket.basketgroupid | html %])
                     [% END %]
                 [% END %]
             </td>
