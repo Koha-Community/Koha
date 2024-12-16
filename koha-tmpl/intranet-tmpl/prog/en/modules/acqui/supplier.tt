@@ -216,10 +216,11 @@
         <div id="toolbar" class="btn-toolbar sticky">
             <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
             [% IF ( booksellerid ) %]
-                <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
+                [% SET a_href = '/cgi-bin/koha/acqui/supplier.pl?booksellerid=' _ booksellerid %]
             [% ELSE %]
-                <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
-            [% END %] <i class="fa fa-times"></i> Cancel</a>
+                [% SET a_href = '/cgi-bin/koha/acqui/acqui-home.pl' %]
+            [% END %]
+            <a class="btn btn-default cancel" href="[% a_href | url %]"><i class="fa fa-times"></i> Cancel</a>
         </div>
 
         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
