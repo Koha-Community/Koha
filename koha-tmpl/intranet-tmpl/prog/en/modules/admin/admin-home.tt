@@ -33,14 +33,14 @@
                         <h4>The Mana Knowledge Base feature is enabled but not configured.</h4>
                         <p>This feature allows you to retrieve and share data (subscription patterns and reports) with other Koha libraries.</p>
                         <p>
-                            Ask your system administrator to configure this feature, or remove this note by <a href=/cgi-bin/koha/admin/share_content.pl>disabling the 'Mana' system preference</a>.
+                            Ask your system administrator to configure this feature, or remove this note by <a href="/cgi-bin/koha/admin/share_content.pl">disabling the 'Mana' system preference</a>.
                         </p>
                     </div>
                 [% END %]
                 [% IF ( Koha.Preference('Mana') == 2 ) %]
                     <div class="alert alert-info">
                         <h4>Share content with Mana KB?</h4>
-                        <p> You haven't decided if you want to activate Mana Knowledge Base. <a href=/cgi-bin/koha/admin/share_content.pl>Change your Mana KB settings</a>.</p>
+                        <p> You haven't decided if you want to activate Mana Knowledge Base. <a href="/cgi-bin/koha/admin/share_content.pl">Change your Mana KB settings</a>.</p>
                     </div>
                 [% END %]
             [% END %]
@@ -48,7 +48,7 @@
                 [% IF ( Koha.Preference('UsageStats') == 2 ) %]
                     <div class="alert alert-info">
                         <h4>Share anonymous usage statistics with the Koha community?</h4>
-                        <p> You haven't decided if you want to activate usage statistic sharing in Koha yet. <a href=/cgi-bin/koha/admin/usage_statistics.pl>Change your Hea settings</a>.</p>
+                        <p> You haven't decided if you want to activate usage statistic sharing in Koha yet. <a href="/cgi-bin/koha/admin/usage_statistics.pl">Change your Hea settings</a>.</p>
                         <p> This feature gives the Koha developers valuable information regarding how Koha is being used and helps to drive decisions during the development cycle</p>
                     </div>
                 [% END %]
