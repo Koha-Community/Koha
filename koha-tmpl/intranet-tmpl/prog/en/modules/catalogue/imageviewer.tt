@@ -72,11 +72,12 @@
                     <p>
                         [% IF itemnumber %]
                             Upload an image file for this item:
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% itemnumber | uri %]&amp;filetype=image">
+                            [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
                         [% ELSE %]
                             Upload an image file for this bibliographic record:
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image">
+                            [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
                         [% END %]
+                        <a class="btn btn-default btn-xs" href="[% upload_link | url %]">
                         <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
                     </p>
                 [% END %]
@@ -112,10 +113,11 @@
             <p>
                 Upload an image file:
                 [% IF itemnumber %]
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=[% itemnumber | uri %]&amp;filetype=image">
+                    [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
                 [% ELSE %]
-                    <a class="btn btn-default btn-xs" href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image">
+                    [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
                 [% END %]
+                <a class="btn btn-default btn-xs" href="[% upload_link | url %]">
                 <i class="fa fa-upload" aria-hidden="true"></i> Upload</a>
             </p>
         [% END %]
