@@ -88,11 +88,10 @@
                             <div class="btn-group">
                             [% IF ( expanded_options ) %]
                                 <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
-                            </div>
                             [% ELSE %]
                                 <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
-                            </div>
                             [% END %]
+                            </div>
                             <div class="btn-group">
                                 <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash-can"></i> Clear fields</a>
                             </div>
@@ -113,30 +112,36 @@
                     <fieldset id="searchterms">
                     <legend>Search for </legend>
                     [% FOREACH query IN operands %]
-                        [% IF ( expanded_options ) %]
-                        [% IF loop.first %]
-                        <div class="search-term-row" style="text-indent: 4.25em;">
-                        [% ELSE %]
-                        <div class="search-term-row">
-                            [% SET opindex = loop.index - 1 %]
-                            <select name="op">
-                            [% IF operators.$opindex == 'OR' %]
-                                <option value="AND">and</option>
-                                <option value="OR" selected="selected">or</option>
-                                <option value="NOT">not</option>
-                            [% ELSIF operators.$opindex == 'NOT' %]
-                                <option value="AND">and</option>
-                                <option value="OR">or</option>
-                                <option value="NOT" selected="selected">not</option>
-                            [% ELSE %]
-                                <option value="AND" selected="selected">and</option>
-                                <option value="OR">or</option>
-                                <option value="NOT">not</option>
-                            [% END %]
-                            </select>
+                        [% SET div_style = '' %]
+                        [% SET div_class = '' %]
+                        [% IF expanded_options %]
+                            [% div_class='search-term-row' %]
                         [% END %]
-                        [% ELSE %]
-                        <div>
+                        [% IF expanded_options && loop.first %]
+                            [% div_style = 'text-indent: 4.25em;' %]
+                        [% END %]
+
+                        <div class="[% div_class | html %]" style="[% div_style | html %]">
+
+                        [% IF ( expanded_options ) %]
+                            [% IF loop.first %]
+                                [% SET opindex = loop.index - 1 %]
+                                <select name="op">
+                                [% IF operators.$opindex == 'OR' %]
+                                    <option value="AND">and</option>
+                                    <option value="OR" selected="selected">or</option>
+                                    <option value="NOT">not</option>
+                                [% ELSIF operators.$opindex == 'NOT' %]
+                                    <option value="AND">and</option>
+                                    <option value="OR">or</option>
+                                    <option value="NOT" selected="selected">not</option>
+                                [% ELSE %]
+                                    <option value="AND" selected="selected">and</option>
+                                    <option value="OR">or</option>
+                                    <option value="NOT">not</option>
+                                [% END %]
+                                </select>
+                            [% END %]
                         [% END %]
                         [% SET preselect = 'ms_' _ indexes.${loop.index}.replace(',','comma') %]
                         [% INCLUDE 'search_indexes.inc' ${preselect} = 1 index = loop.index %]
@@ -192,6 +197,7 @@
                         [% END # /FOREACH advsearchloo %]
                     [% END # /WRAPPER tabs_nav %]
 
+                    <!-- prettier-ignore-start -->
                     [% WRAPPER tab_panels %]
                         [% FOREACH advsearchloo IN advancedsearchesloop %]
                             [% WRAPPER tab_panel tabname="advsearch-tab-${advsearchloo.advanced_search_type}" %]
@@ -230,6 +236,7 @@
                             [% END # tab_panel/#advsearch-... %]
                         [% END # /FOREACH advsearchloo %]
                     [% END # /WRAPPER tab_panels %]
+                    <!-- prettier-ignore-end -->
                 [% END # /WRAPPER tabs %]
                 <!-- /MC-TYPE LIMIT -->
 
