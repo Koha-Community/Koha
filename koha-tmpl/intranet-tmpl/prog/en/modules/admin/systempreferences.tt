@@ -92,11 +92,7 @@
             [% END %]
         </h1>
 
-        [% IF ( type_upload ) %]
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post" enctype="multipart/form-data">
-        [% ELSE %]
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post">
-        [% END %]
+        <form action="/cgi-bin/koha/admin/systempreferences.pl" name="Aform" method="post" [% IF type_upload %]enctype="multipart/form-data"[% END %]>
         [% INCLUDE 'csrf-token.inc' %]
         <fieldset class="rows">
             <legend class="sr-only">System preference details</legend>
@@ -119,10 +115,11 @@
                     <select name="value" id="value">
                         [% FOREACH option IN options %]
                             [% IF ( option.selected ) %]
-                                <option value="[% option.option | html %]" selected="selected">
+                                <option value="[% option.option | html %]" selected="selected">[% option.option | html %]</option>
                             [% ELSE %]
-                                <option value="[% option.option | html %]">
-                            [% END %][% option.option | html %]</option>
+                                <option value="[% option.option | html %]">[% option.option | html %]</option>
+
+                            [% END %]
                         [% END %]
                     </select>
                 [% END %]
@@ -324,15 +321,10 @@
 
         <td><strong><a href="[% loo.edit | url %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
         [% IF ( loo.oneline ) %]
-        <td class="single-line">
-        [% ELSE %]
-        <td>
+            [% SET td_class = 'single-line' %]
         [% END %]
-        [% IF ( loo.type_upload ) %]
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" enctype="multipart/form-data">
-        [% ELSE %]
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
-        [% END %]
+        <td class="[% td_class | html %]">
+          <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" [% IF loo.type_upload %]enctype="multipart/form-data"[% END %]>
             [% INCLUDE 'csrf-token.inc' %]
                 [% IF ( loo.type_free ) %]
                 <input type="text" name="value" size="[% loo.fieldlength | html %]" value="[% loo.value | html %]" />
@@ -352,10 +344,10 @@
                 <select name="value">
                     [% FOREACH option IN loo.options %]
                         [% IF ( option.selected ) %]
-                            <option value="[% option.option | html %]" selected="selected">
+                            <option value="[% option.option | html %]" selected="selected">[% option.option | html %]</option>
                         [% ELSE %]
-                            <option value="[% option.option | html %]">
-                        [% END %][% option.option | html %]</option>
+                            <option value="[% option.option | html %]">[% option.option | html %]</option>
+                        [% END %]
                     [% END %]
                 </select>
                 [% END %]
