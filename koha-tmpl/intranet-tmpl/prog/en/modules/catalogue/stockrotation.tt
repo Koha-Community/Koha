@@ -186,7 +186,7 @@
     [% ELSIF op == 'confirm_remove_from_rota' %]
         <div class="alert alert-warning">
             <h3>Are you sure you want to remove this item from it's rota?</h3>
-            <p>
+            <div>
                 <form id="remove_item_from_stage_[% item.bib_item.id | html %]" method="post" action="/cgi-bin/koha/catalogue/stockrotation.pl">
                     [% INCLUDE 'csrf-token.inc' %]
                     <input type="hidden" name="op" value="cud-remove_item_from_stage" />
@@ -196,7 +196,7 @@
                     <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i>Yes</button>
                 </form>
                 <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-times"></i>No</a>
-            </p>
+            </div>
         </div>
     [% END %]
 
