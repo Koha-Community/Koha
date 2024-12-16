@@ -354,10 +354,11 @@
                 </td>
                 <td>
                     [% IF ( CAN_user_parameters_manage_auth_values ) %]
-                        <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% item.authorised_value_category | uri %]">[% item.authorised_value_category | html %]</a></td>
+                        <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% item.authorised_value_category | uri %]">[% item.authorised_value_category | html %]</a>
                     [% ELSE %]
                         [% item.authorised_value_category | html %]
                     [% END %]
+                </td>
                 <td>
                     [% IF ( item.mandatory ) -%]
                        <span>Yes</span>
