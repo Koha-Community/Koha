@@ -38,6 +38,7 @@
                 @show="goToResourceShow"
                 @edit="goToResourceEdit"
                 @delete="doResourceDelete"
+                @select="doResourceSelect"
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
@@ -57,7 +58,7 @@ import KohaTable from "./KohaTable.vue";
 import FormElement from "./FormElement.vue";
 
 export default {
-    setup() {
+    setup(props) {
         const table = ref();
 
         return {
@@ -75,6 +76,7 @@ export default {
         goToResourceEdit: Function,
         doResourceDelete: Function,
         goToResourceAdd: Function,
+        doResourceSelect: Function,
         tableFilters: Array,
         getFilters: Function,
         filterTable: Function,

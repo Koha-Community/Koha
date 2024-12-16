@@ -152,6 +152,9 @@ export default {
                 attr => attr.show_in_table
             );
         },
+        doResourceSelect: function (resource, dt, event) {
+            this.$emit("select-resource", resource[this.id_attr]);
+        },
         assignAVs(attrs) {
             attrs.forEach(attr => {
                 if (attr.type === "select" && typeof attr.av_cat === "string") {

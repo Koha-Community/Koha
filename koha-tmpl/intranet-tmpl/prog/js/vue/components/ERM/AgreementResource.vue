@@ -10,11 +10,14 @@
             goToResourceEdit,
             doResourceDelete,
             goToResourceAdd,
+            doResourceSelect,
             tableFilters,
             getFilters,
             filterTable,
             tableUrl,
+            embedded,
         }"
+        @select-resource="$emit('select-resource', $event)"
     />
     <ResourceShow
         v-if="action === 'show'"
@@ -56,6 +59,7 @@ export default {
     extends: BaseResource,
     props: {
         action: String,
+        embedded: { type: Boolean, default: false },
     },
     setup(props) {
         const AVStore = inject("AVStore");
@@ -1025,6 +1029,7 @@ export default {
         this.assignAVs(this.resource_attrs);
         this.getResourceTableColumns();
     },
+    emits: ["select-resource"],
     name: "AgreementResource",
 };
 </script>

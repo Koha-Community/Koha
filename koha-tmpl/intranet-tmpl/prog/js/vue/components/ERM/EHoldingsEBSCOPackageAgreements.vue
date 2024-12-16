@@ -20,9 +20,10 @@
                     ></button>
                 </div>
                 <div class="modal-body position-relative overflow-visible">
-                    <AgreementsList
+                    <AgreementResource
+                        action="list"
                         :embedded="true"
-                        @select-agreement="addAgreement"
+                        @select-resource="addAgreement"
                     />
                 </div>
                 <div class="modal-footer">
@@ -68,7 +69,7 @@
 </template>
 
 <script>
-import AgreementsList from "./AgreementsList.vue";
+import AgreementResource from "./AgreementResource.vue";
 import { APIClient } from "../../fetch/api-client.js";
 import { setWarning, removeMessages } from "../../messages";
 
@@ -157,7 +158,7 @@ export default {
         erm_package: Object,
     },
     components: {
-        AgreementsList,
+        AgreementResource,
     },
     emits: ["refresh-agreements"],
     name: "EHoldingsEBSCOPackageAgreements",
