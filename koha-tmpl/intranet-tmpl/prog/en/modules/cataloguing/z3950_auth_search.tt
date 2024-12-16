@@ -173,7 +173,7 @@
         <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" class="btn btn-primary" value="Go" />
     </form>
 
-    <p>
+    <div>
         <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
             <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
             <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
@@ -190,7 +190,7 @@
             <input type="hidden" name="authid" value="[% authid | html %]" />
             <input type="submit" class="btn btn-primary" value="Try another search" />
         </form>
-    </p>
+    </div>
     [% ELSE %]
         [% IF ( errconn ) %]
             <div class="alert alert-warning">
@@ -203,7 +203,7 @@
             </div>
          [% END %]
    <div class="alert alert-info">Nothing found.</div>
-    <p>
+    <div>
         <form method="get" action="/cgi-bin/koha/cataloguing/z3950_auth_search.pl">
             <input type="hidden" id="nameany"  name="nameany" value="[% nameany | html %]" />
             <input type="hidden" id="authorany"  name="authorany" value="[% authorany | html %]" />
@@ -220,7 +220,7 @@
             <input type="hidden" name="authid" value="[% authid | html %]" />
             <input type="submit" class="btn btn-primary" value="Try another search" />
         </form>
-    </p>
+    </div>
     [% END %]
 
 [% END %]
