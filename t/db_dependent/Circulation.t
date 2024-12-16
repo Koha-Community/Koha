@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 85;
+use Test::More tests => 86;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -2895,6 +2895,49 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
         $error->{USERBLOCKEDNOENDDATE}, '9999-12-31',
         'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments'
     );
+};
+
+subtest 'CanBookBeReturned + UseBranchTransfertLimits' => sub {
+    plan tests => 6;
+
+    my $homebranch  = $builder->build( { source => 'Branch' } );
+    my $otherbranch = $builder->build( { source => 'Branch' } );
+    my $patron =
+        $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $homebranch->{branchcode},
+            holdingbranch => $homebranch->{branchcode},
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    set_userenv($homebranch);
+    my $issue = AddIssue( $patron, $item->barcode );
+    my ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $otherbranch );
+    is( 1,     $allowed, 'with AllowReturnToBranch = anywhere and no limits return to other is allowed' );
+    is( undef, $message, 'without limits provides no message' );
+
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
+    t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
+
+    # set limit
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            toBranch   => $otherbranch->{branchcode},
+            fromBranch => $item->homebranch,
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store();
+
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $otherbranch );
+    is( 0,                         $allowed, 'With transfer limits cannot return to otherbranch' );
+    is( $homebranch->{branchcode}, $message, 'With transfer limits asks return to homebranch' );
+
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $homebranch );
+    is( 1,     $allowed, 'With transfer limits can return to homebranch' );
+    is( undef, $message, 'With transfer limits and homebranch provides no message' );
 };
 
 subtest 'Statistic patrons "X"' => sub {
