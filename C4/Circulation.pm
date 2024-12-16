@@ -1018,7 +1018,7 @@ sub CanBookBeIssued {
 
         my $patron = Koha::Patrons->find( $issue->borrowernumber );
 
-        my ( $can_be_returned, $message ) = CanBookBeReturned( $item_unblessed, C4::Context->userenv->{branch} );
+        my ( $can_be_returned, $message ) = CanBookBeReturned( $item_object, C4::Context->userenv->{branch} );
 
         if ( !$can_be_returned ) {
             $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
@@ -1381,7 +1381,7 @@ Check whether the item can be returned to the provided branch
 
 =over 4
 
-=item C<$item> is a hash of item information as returned Koha::Items->find->unblessed (Temporary, should be a Koha::Item instead)
+=item C<$item> is a Koha::Item object
 
 =item C<$branch> is the branchcode where the return is taking place
 
@@ -1404,22 +1404,31 @@ sub CanBookBeReturned {
     my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
 
     # assume return is allowed to start
-    my $allowed = 1;
+    my $allowed   = 1;
+    my $to_branch = $branch;
     my $message;
 
     # identify all cases where return is forbidden
-    if ( $allowreturntobranch eq 'homebranch' && $branch ne $item->{'homebranch'} ) {
+    if ( $allowreturntobranch eq 'homebranch' && $branch ne $item->homebranch ) {
         $allowed = 0;
-        $message = $item->{'homebranch'};
-    } elsif ( $allowreturntobranch eq 'holdingbranch' && $branch ne $item->{'holdingbranch'} ) {
+        $message = $to_branch = $item->homebranch;
+    } elsif ( $allowreturntobranch eq 'holdingbranch' && $branch ne $item->holdingbranch ) {
         $allowed = 0;
-        $message = $item->{'holdingbranch'};
+        $message = $to_branch = $item->holdingbranch;
     } elsif ( $allowreturntobranch eq 'homeorholdingbranch'
-        && $branch ne $item->{'homebranch'}
-        && $branch ne $item->{'holdingbranch'} )
+        && $branch ne $item->homebranch
+        && $branch ne $item->holdingbranch )
     {
         $allowed = 0;
-        $message = $item->{'homebranch'};    # FIXME: choice of homebranch is arbitrary
+        $message = $to_branch = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
+    }
+
+    # Make sure there are no branch transfer limits between item's current
+    # branch (holdinbranch) and the return branch
+    my $to_library = Koha::Libraries->find($to_branch);
+    if ( !$item->can_be_transferred( { to => $to_library } ) ) {
+        $allowed = 0;
+        $message = $item->homebranch;
     }
 
     return ( $allowed, $message );
@@ -1696,7 +1705,7 @@ sub AddIssue {
 
                 # This book is currently on loan, but not to the person
                 # who wants to borrow it now. mark it returned before issuing to the new borrower
-                my ( $allowed, $message ) = CanBookBeReturned( $item_unblessed, C4::Context->userenv->{branch} );
+                my ( $allowed, $message ) = CanBookBeReturned( $item_object, C4::Context->userenv->{branch} );
                 return unless $allowed;
                 AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
 
@@ -2214,6 +2223,10 @@ This book has was returned to the wrong branch.  The value is a hashref
 so that C<$messages->{Wrongbranch}->{Wrongbranch}> and C<$messages->{Wrongbranch}->{Rightbranch}>
 contain the branchcode of the incorrect and correct return library, respectively.
 
+=item C<Transferlimit>
+
+A transfer limit exists between item's holding branch and the return branch.
+
 =item C<ResFound>
 
 The item was reserved. The value is a reference-to-hash whose keys are
@@ -2368,12 +2381,13 @@ sub AddReturn {
     }
 
     # check if the return is allowed at this branch
-    my ( $returnallowed, $message ) = CanBookBeReturned( $item->unblessed, $branch );
+    my ( $returnallowed, $message ) = CanBookBeReturned( $item, $branch );
+
     unless ($returnallowed) {
         $messages->{'Wrongbranch'} = {
             Wrongbranch => $branch,
             Rightbranch => $message
-        };
+        } if $message;
         $doreturn = 0;
         my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
         $indexer->index_records( $item->biblionumber, "specialUpdate", "biblioserver" );
