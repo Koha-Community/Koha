@@ -115,19 +115,17 @@
             <tbody>
                     [% FOREACH item IN items %]
                         [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
+                        [% SET tr_class = '' %]
                         [% IF item.itemnumber == itemnumber%]
                             [% UNLESS can_be_edited %]
-                            <tr id="row[% item.itemnumber | html %]" class="active">
+                                [% SET tr_class='active' %]
                             [% ELSE %]
-                                <tr id="row[% item.itemnumber | html %]" class="active editable">
+                                [% SET tr_class='active editable' %]
                             [% END %]
-                        [% ELSE %]
-                            [% UNLESS can_be_edited %]
-                            <tr id="row[% item.itemnumber | html %]">
-                            [% ELSE %]
-                                <tr id="row[% item.itemnumber | html %]" class="editable">
-                            [% END %]
+                        [% ELSIF can_be_edited %]
+                            [% SET tr_class='editable' %]
                         [% END %]
+                        <tr id="row[% item.itemnumber | html %]" class="[% tr_class | html %]">
                         [% UNLESS can_be_edited %]
                         <td>&nbsp;</td>
                         [% ELSE %]
