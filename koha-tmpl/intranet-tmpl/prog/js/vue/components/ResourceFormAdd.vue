@@ -13,12 +13,15 @@
         <h2 v-else>{{ $__("New") + " " + i18n.display_name }}</h2>
         <div>
             <form @submit="onSubmit($event, resourceToAddOrEdit)">
-                <fieldset class="rows">
+                <fieldset
+                    class="rows"
+                    v-for="(group, counter) in getFieldGroupings()"
+                    v-bind:key="counter"
+                >
+                    <legend v-if="group.name">{{ group.name }}</legend>
                     <ol>
                         <li
-                            v-for="(attr, index) in resource_attrs.filter(
-                                attr => attr.type !== 'relationship'
-                            )"
+                            v-for="(attr, index) in group.fields"
                             v-bind:key="index"
                         >
                             <FormElement
@@ -87,6 +90,39 @@ export default {
                 },
                 error => {}
             );
+        },
+        getFieldGroupings() {
+            const nonRelationalFields = this.resource_attrs.filter(
+                attr => attr.type !== "relationship"
+            );
+            const groupings = nonRelationalFields.reduce((acc, attr) => {
+                if (
+                    attr.hasOwnProperty("group") &&
+                    attr.group !== null &&
+                    !acc.includes(attr.group)
+                ) {
+                    return [...acc, attr.group];
+                }
+                return acc;
+            }, []);
+            if (groupings.length === 0) {
+                return [
+                    {
+                        name: null,
+                        fields: nonRelationalFields,
+                    },
+                ];
+            }
+            return groupings.reduce((acc, group) => {
+                const groupFields = this.resource_attrs.filter(
+                    ra => ra.group === group
+                );
+                const groupInfo = {
+                    name: group,
+                    fields: groupFields,
+                };
+                return [...acc, groupInfo];
+            }, []);
         },
     },
     computed: {
