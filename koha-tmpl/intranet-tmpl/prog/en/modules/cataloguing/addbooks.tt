@@ -191,11 +191,9 @@
                     </div> <!-- /.page-section -->
                 [% ELSE # IF total %]
                     [% IF ( query ) %]
+                        <h3>No results found</h3>
                         [% IF ( error ) %]
                             <div class="alert alert-warning">
-                        [% END %]
-                            <h3>No results found</h3>
-                        [% IF ( error ) %]
                                 Error: <span class="error">[% error | html %]</span>
                             </div>
                         [% END %]
