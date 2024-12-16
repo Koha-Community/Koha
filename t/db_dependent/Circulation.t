@@ -2898,46 +2898,173 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 };
 
 subtest 'CanBookBeReturned + UseBranchTransfertLimits' => sub {
-    plan tests => 6;
+    plan tests => 31;
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
 
-    my $homebranch  = $builder->build( { source => 'Branch' } );
-    my $otherbranch = $builder->build( { source => 'Branch' } );
-    my $patron =
-        $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $homebranch    = $builder->build( { source => 'Branch' } );
+    my $holdingbranch = $builder->build( { source => 'Branch' } );
+    my $returnbranch  = $builder->build( { source => 'Branch' } );
+    my $patron        = $builder->build_object(
+        { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $item = $builder->build_sample_item(
         {
             homebranch    => $homebranch->{branchcode},
-            holdingbranch => $homebranch->{branchcode},
+            holdingbranch => $holdingbranch->{branchcode},
         }
     );
 
-    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
-    set_userenv($homebranch);
+    # Issue from holdingbranch
+    set_userenv($holdingbranch);
     my $issue = AddIssue( $patron, $item->barcode );
-    my ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $otherbranch );
-    is( 1,     $allowed, 'with AllowReturnToBranch = anywhere and no limits return to other is allowed' );
+
+    # 'Anywhere' + BranchTransferLimits
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+
+    # Attempt return at returnbranch (No limits defined)
+    my ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 1,     $allowed, 'with AllowReturnToBranch = anywhere and no limits return to returnbranch is allowed' );
     is( undef, $message, 'without limits provides no message' );
 
-    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
+    # Set limit (Holding -> Return denied)
     t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
-
-    # set limit
     my $limit = Koha::Item::Transfer::Limit->new(
         {
-            toBranch   => $otherbranch->{branchcode},
-            fromBranch => $item->homebranch,
+            toBranch   => $returnbranch->{branchcode},
+            fromBranch => $holdingbranch->{branchcode},
             itemtype   => $item->effective_itemtype,
         }
     )->store();
 
-    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $otherbranch );
-    is( 0,                         $allowed, 'With transfer limits cannot return to otherbranch' );
-    is( $homebranch->{branchcode}, $message, 'With transfer limits asks return to homebranch' );
+    diag("Attempt return at returnbranch ('Homebranch' + Holding -> Return limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
 
-    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $homebranch );
-    is( 1,     $allowed, 'With transfer limits can return to homebranch' );
-    is( undef, $message, 'With transfer limits and homebranch provides no message' );
+    diag("Attempt return at returnbranch ('Holdingbranch' + Holding -> Return limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                            $allowed, 'Prevent return where returnbranch != holdingbranch' );
+    is( $holdingbranch->{branchcode}, $message, 'Redirect to holdingbranch' );
+
+    diag("Attempt return at returnbranch ('Home Or Holding' + Holding -> Return limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homeorholdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch or holdingbranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Anywhere' + Holding -> Return limit)");
+
+    # NOTE: This prevents receiving an item from a branch that is listed in
+    # the branchtransferlimits as not allowed to send to our returnbranch.
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0, $allowed, 'Prevent return where returnbranch has a branchtransfer limit from holdingbranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    # Set limit ( Return -> Home denied)
+    $limit->set(
+        {
+            toBranch   => $homebranch->{branchcode},
+            fromBranch => $returnbranch->{branchcode}
+        }
+    )->store()->discard_changes;
+
+    diag("Attempt return at returnbranch ('Homebranch' + Return -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Holdingbranch' + Return -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                            $allowed, 'Prevent return where returnbranch != holdingbranch' );
+    is( $holdingbranch->{branchcode}, $message, 'Redirect to holdingbranch' );
+
+    diag("Attempt return at returnbranch ('Home Or Holding' + Return -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homeorholdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch or holdingbranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Anywhere' + Return -> Home limit)");
+
+    # NOTE: Should we prevent return here.. we cannot transfer from 'returnbranch'
+    # to 'homebranch' (But we can transfer back to 'holdingbranch').
+    # NOTE: This is the ONLY change that bug 7376 introduces currently.
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 1, $allowed, 'Allow return where returnbranch can be transfered to from anywhere' );
+
+    # Set limit ( Return -> Holding denied)
+    $limit->set(
+        {
+            toBranch   => $holdingbranch->{branchcode},
+            fromBranch => $returnbranch->{branchcode}
+        }
+    )->store()->discard_changes;
+
+    diag("Attempt return at returnbranch ('Homebranch' + Return -> Holding limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Holdingbranch' + Return -> Holding limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                            $allowed, 'Prevent return where returnbranch != holdingbranch' );
+    is( $holdingbranch->{branchcode}, $message, 'Redirect to holdingbranch' );
+
+    diag("Attempt return at returnbranch ('Home Or Holding' + Return -> Holding limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homeorholdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch or holdingbranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Anywhere' + Return -> Holding limit)");
+
+    # NOTE: Should we prevent return here.. we cannot transfer from 'returnbranch'
+    # to 'holdingbranch' (But we can transfer back to 'homebranch').
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 1, $allowed, 'Allow return where returnbranch can be transfered to from anywhere' );
+
+    # Set limit ( Holding -> Home denied)
+    $limit->set(
+        {
+            toBranch   => $holdingbranch->{branchcode},
+            fromBranch => $returnbranch->{branchcode}
+        }
+    )->store()->discard_changes;
+
+    diag("Attempt return at returnbranch ('Homebranch' + Holding -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Holdingbranch' + Holding -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                            $allowed, 'Prevent return where returnbranch != holdingbranch' );
+    is( $holdingbranch->{branchcode}, $message, 'Redirect to holdingbranch' );
+
+    diag("Attempt return at returnbranch ('Home Or Holding' + Holding -> Home limit)");
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homeorholdingbranch' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 0,                         $allowed, 'Prevent return where returnbranch != homebranch or holdingbranch' );
+    is( $homebranch->{branchcode}, $message, 'Redirect to homebranch' );
+
+    diag("Attempt return at returnbranch ('Anywhere' + Holding -> Home limit)");
+
+    # NOTE: A return here can subsequently be transfered to back to homebranch
+    # or holdingbranch.
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ( $allowed, $message ) = C4::Circulation::CanBookBeReturned( $item, $returnbranch );
+    is( 1, $allowed, 'Allow return where returnbranch can be transfered to from anywhere' );
 };
 
 subtest 'Statistic patrons "X"' => sub {
