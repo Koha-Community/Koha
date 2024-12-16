@@ -464,35 +464,48 @@
                                 <form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <fieldset>
-                                        [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
-                                            <legend>Log in to your account</legend>
-                                            [% PROCESS login_label for="patronlogin" %]
-                                            <input type="text" id="patronlogin" class="focus noEnterSubmit" size="20" name="patronlogin" autocomplete="off"/>
-                                            <label for="patronpw">Password:</label>
-                                            <input type="password" id="patronpw" size="20" name="patronpw" autocomplete="off"/>
-                                            <fieldset class="action">
-                                                <button type="submit" class="btn btn-primary">Log in</button>
-                                            </fieldset>
-                                        [% ELSE %]
-                                            <div class="form-row">
-                                                <div class="col-auto">
-                                                    <label for="patronid">Please enter your card number:</label>
-                                                </div>
-                                                <div class="col-3">
-                                                    <input type="text" id="patronid" class="form-control focus" size="20" name="patronid" autocomplete="off" />
-                                                </div>
-                                                <div class="col-auto">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                </div>
-                                            </div> <!-- /.form-row -->
-                                        [% END %]
-
+                                        <legend>Log in to your account</legend>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                [% IF ( Koha.Preference('SelfCheckoutByLogin') ) %]
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            [% PROCESS login_label for="patronlogin" %]
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type="text" id="patronlogin" class="form-control focus noEnterSubmit" size="20" name="patronlogin" autocomplete="off"/>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <label for="patronpw">Password:</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type="password" id="patronpw" class="form-control" size="20" name="patronpw" autocomplete="off"/>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-primary">Log in</button>
+                                                        </div>
+                                                    </div> <!-- /.row -->
+                                                [% ELSE %]
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label for="patronid">Please enter your card number:</label>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <input type="text" id="patronid" class="form-control focus" size="20" name="patronid" autocomplete="off" />
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div> <!-- /.row -->
+                                                [% END %]
+                                            </div> <!-- /.col-md-6 -->
+                                        </div> <!-- /.row -->
                                         [% FOREACH INPUT IN INPUTS %]
                                             <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]">
                                         [% END %]
                                         <input type="hidden" name="op" value="cud-login" />
                                     </fieldset>
-                                </form>
+                                </form> <!-- /#mainform -->
                             </div> <!-- / .sco_entry -->
                         [% END # / IF validuser %]
                     [% END # / UNLESS ( hide_main %]
