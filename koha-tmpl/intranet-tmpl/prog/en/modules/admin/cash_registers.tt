@@ -181,10 +181,9 @@
                        <tbody>
                        [% FOREACH cash_register IN cash_registers %]
                        [% IF cash_register.branch_default %]
-                       <tr class="default">
-                       [% ELSE %]
-                       <tr>
+                        [% SET tr_class="default" %]
                        [% END %]
+                       <tr class="[% tr_class | html %]">
                            <td>[% cash_register.name | html %]</td>
                            <td>[% cash_register.description | html %]</td>
                            <td>[% cash_register.library.branchname | html %]</td>
