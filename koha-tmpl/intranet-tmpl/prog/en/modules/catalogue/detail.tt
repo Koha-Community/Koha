@@ -77,17 +77,24 @@
     [% END #/ WRAPPER sub-header.inc %]
 
     <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    <div class="row">
-                        <div class="col">
-                            [% INCLUDE 'messages.inc' %]
 
-                            [% IF ( unknownbiblionumber ) %]
-                                <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
-                                    </div> <!-- /.col -->
-                            [% ELSE %]
+        [% IF ( unknownbiblionumber ) %]
+            <main>
+                <div class="row">
+                    <div class="col">
+                        [% INCLUDE 'messages.inc' %]
+                        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </main>
+        [% ELSE %]
+
+            <div class="row">
+                <div class="col-md-10 order-md-2 order-sm-1">
+                    <main>
+                        <div class="row">
+                                <div class="col">
+                                    [% INCLUDE 'messages.inc' %]
                                     [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
                                     [% CoceProviders   = Koha.Preference('CoceProviders') %]
                                     [% CoceHost        = Koha.Preference('CoceHost') %]
