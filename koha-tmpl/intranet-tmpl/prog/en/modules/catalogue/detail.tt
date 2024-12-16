@@ -239,8 +239,9 @@
                             [% END %]
                         </div> [%# .page-section %]
 
+                        </div> <!-- /.col-xs-* -->
+
                         [% IF ( CoverImagePlugins || AmazonCoverImages  || LocalCoverImages || IntranetCoce || ( SyndeticsCovers ) || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-                            </div> <!-- #catalogue_detail_biblio.col-xs-... -->
                             <div class="col-sm-3 bookcoverimg">
                                 <div id="biblio-cover-slider" class="cover-slider" data-isbn="[% normalized_isbn | html %]">
                                     [% IF ( LocalCoverImages ) %]
@@ -303,8 +304,6 @@
                                     [% END %]
                                 </div> <!-- /.cover-slider -->
                             </div> <!-- /.bookcoverimg.col-xs-3 -->
-                        [% ELSE %]
-                            </div> <!-- /.col-xs-* -->
                         [% END # /IF ( AmazonCoverImages, etc ) %]
                     </div>
 
