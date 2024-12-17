@@ -33,7 +33,11 @@
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
 [% FOR slip IN slips %]
-    [% IF slip.style %]<style>[% slip.style.replace('([^\{\}]+?)\s*\{', '#slip_' _ slip.id _ ' $1 {') | $raw %]</style>[% END %]
+    [% IF slip.style %]
+    <!-- prettier-ignore-start -->
+    <style>[% slip.style.replace('([^\{\}]+?)\s*\{', '#slip_' _ slip.id _ ' $1 {') | $raw %]</style>
+    <!-- prettier-ignore-end -->
+    [% END %]
 [% END %]
 
 [% INCLUDE 'slip-print.inc' #printThenClose %]
