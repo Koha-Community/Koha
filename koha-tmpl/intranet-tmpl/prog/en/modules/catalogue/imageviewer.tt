@@ -71,10 +71,10 @@
                     <hr />
                     <p>
                         [% IF itemnumber %]
-                            Upload an image file for this item:
+                            <span>Upload an image file for this item</span>:
                             [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
                         [% ELSE %]
-                            Upload an image file for this bibliographic record:
+                            <span>Upload an image file for this bibliographic record</span>:
                             [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=' _ biblionumber _ '&amp;filetype=image' %]
                         [% END %]
                         <a class="btn btn-default btn-xs" href="[% upload_link | url %]">
@@ -111,7 +111,7 @@
         [% IF ( CAN_user_tools_upload_local_cover_images ) %]
             <hr />
             <p>
-                Upload an image file:
+                <span>Upload an image file</span>:
                 [% IF itemnumber %]
                     [% SET upload_link = '/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=' _ itemnumber _ '&amp;filetype=image' %]
                 [% ELSE %]
