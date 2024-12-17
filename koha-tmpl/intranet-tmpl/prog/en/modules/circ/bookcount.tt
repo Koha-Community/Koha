@@ -76,11 +76,11 @@
             <th>Last seen</th>
         </tr>
         [% FOREACH library IN libraries %]
-        [% IF library.selected %]
-            <tr class="mybranch">
-        [% ELSE %]
-            <tr>
-        [% END %]
+            [% SET tr_class = '' %]
+            [% IF library.selected %]
+                [% tr_class="mybranch" %]
+            [% END %]
+            <tr class="[% tr_class | html %]">
                 <td>[% library.branchname | html %]</td>
                 <td>[% library.issues | html %]</td>
                 <td>[% IF library.seen %]
