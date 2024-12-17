@@ -45,10 +45,11 @@
 <div class="main container-fluid">
     <div class="row">
         [% IF patron %]
-            <div class="col-md-10 order-md-2 order-sm-1">
+            [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
         [% ELSE %]
-            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
         [% END %]
+        <div class="[% div_class | html %]">
             <main>
                 [% INCLUDE 'messages.inc' %]
                 [% IF patron %]
@@ -136,10 +137,44 @@
     <h3>Batch checkout confirmation</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
         [% INCLUDE 'csrf-token.inc' %]
+        [% PROCESS checkouts_table %]
+        <fieldset>
+            <legend>Please confirm checkout</legend>
+      <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+      <input type="hidden" name="issueconfirmed" value="1" />
+      <input type="hidden" name="debt_confirmed" value="1" />
+      <input type="hidden" name="branch" value="[% branch | html %]" />
+      <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+      <input type="hidden" name="batch" value="1" />
+      <input type="hidden" name="op" value="cud-checkout" />
+      <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
+      <input type="submit" id="checkoutrenew" class="btn btn-primary" value="Checkout or renew" />
+        </fieldset>
+    </form>
+
   [% ELSE %]
     <h3>Batch checkout results</h3>
+    [% PROCESS checkouts_table %]
   [% END %]
-    <div class="page-section">
+
+[% ELSE %]
+    <div class="alert alert-info">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
+[% END %]
+
+                  </main>
+                      </div> <!-- /.col-md-10.order-md-2 -->
+                      [% IF patron %]
+                          <div class="col-md-2 order-sm-2 order-md-1">
+                              <aside>
+                                  [% INCLUDE 'circ-menu.inc' %]
+                              </aside>
+                          </div> <!-- /.col-md-2.order-md-1 -->
+                      [% END %]
+                  </div> <!-- /.row -->
+            </div> <!-- /.main.container-fluid -->
+
+[% BLOCK checkouts_table %]
+<div class="page-section">
     <table id="checkout_infos">
       <thead>
         <tr>
@@ -307,7 +342,7 @@
                   [% IF checkout_info.DEBT %]
                       <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price %].</li> <!-- Need debt_confirmed -->
                   [% END %]
-                </p>
+                </ul>
               [% END %]
 
               [% IF checkout_info.issue.date_due %]
@@ -321,38 +356,8 @@
       </tbody>
     </table>
     </div>
-
-    [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-        <fieldset>
-            <legend>Please confirm checkout</legend>
-      <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-      <input type="hidden" name="issueconfirmed" value="1" />
-      <input type="hidden" name="debt_confirmed" value="1" />
-      <input type="hidden" name="branch" value="[% branch | html %]" />
-      <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
-      <input type="hidden" name="batch" value="1" />
-      <input type="hidden" name="op" value="cud-checkout" />
-      <input type="hidden" name="onsite_checkout" value="[% onsite_checkout | html %]" />
-      <input type="submit" id="checkoutrenew" class="btn btn-primary" value="Checkout or renew" />
-        </fieldset>
-    </form>
-    [% END %]
-
-[% ELSE %]
-    <div class="alert alert-info">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
 [% END %]
 
-                  </main>
-                      </div> <!-- /.col-md-10.order-md-2 -->
-                      [% IF patron %]
-                          <div class="col-md-2 order-sm-2 order-md-1">
-                              <aside>
-                                  [% INCLUDE 'circ-menu.inc' %]
-                              </aside>
-                          </div> <!-- /.col-md-2.order-md-1 -->
-                      [% END %]
-                  </div> <!-- /.row -->
-            </div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
