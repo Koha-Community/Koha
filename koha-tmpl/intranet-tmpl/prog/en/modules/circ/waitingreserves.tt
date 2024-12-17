@@ -39,10 +39,11 @@
                 <div class="row">
 
                     [% IF Koha.Preference('CircSidebar') %]
-                        <div class="col-md-10 order-md-2 order-sm-1">
+                        [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                     [% ELSE %]
-                        <div class="col-sm-12">
+                        [% SET div_class='col-sm-12' %]
                     [% END %]
+                    <div class="[% div_class | html %]">
                     [% INCLUDE 'messages.inc' %]
 
                         <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
