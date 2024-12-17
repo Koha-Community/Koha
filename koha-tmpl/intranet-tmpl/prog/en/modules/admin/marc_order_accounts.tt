@@ -36,11 +36,8 @@ MARC order accounts
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
+
                 [% IF display %]
                     <div id="toolbar" class="btn-toolbar">
                     <a class="btn btn-default" id="newmarcorderacct" href="/cgi-bin/koha/admin/marc_order_accounts.pl?op=acct_form">
@@ -279,16 +276,7 @@ MARC order accounts
                         </form>
                     </div>
                 [% END %]
-            </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
-
-        <div class="col-sm-2 col-sm-pull-10">
-            <aside>
-                [% INCLUDE 'admin-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]

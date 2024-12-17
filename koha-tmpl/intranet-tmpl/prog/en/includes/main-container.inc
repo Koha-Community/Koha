@@ -16,6 +16,7 @@
                     [% FOR aside IN asides %]
                         [% SWITCH aside %]
                         [% CASE 'acquisitions-menu' %][% INCLUDE 'acquisitions-menu.inc' %]
+                        [% CASE 'admin-menu' %][% INCLUDE 'admin-menu.inc' %]
                         [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]
                         [% CASE 'subscriptions-search' %][% INCLUDE 'subscriptions-search.inc' %]
                         [% END %]

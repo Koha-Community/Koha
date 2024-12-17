@@ -49,11 +49,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
         <h1>Did you mean?</h1>
         <noscript><div class="alert alert-warning"><strong>Please enable Javascript:</strong>
@@ -79,16 +75,7 @@
             </fieldset>
         </form>
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'admin-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]

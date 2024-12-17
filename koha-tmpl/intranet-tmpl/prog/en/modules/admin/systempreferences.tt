@@ -77,11 +77,7 @@
 
 [% INCLUDE 'blocking_errors.inc' %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
 [% IF ( add_form ) %]
         <h1>
@@ -431,16 +427,7 @@
     </table>
     [% END %]
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'prefs-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [%# Add WYSIWYG editor for htmlarea system preferences %]

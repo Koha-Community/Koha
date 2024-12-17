@@ -28,11 +28,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='admin-menu' %]
 
         [% IF filters_count %]
             <div id="search_filters_list">
@@ -58,16 +54,7 @@
             </div>
         [% END %]
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'admin-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
     <div id="edit_search_filter_modal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="edit_search_filter_modal_label">
         <div class="modal-dialog modal-lg">
