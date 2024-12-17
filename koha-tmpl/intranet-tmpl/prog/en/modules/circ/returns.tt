@@ -62,10 +62,11 @@
                     <div class="row">
 
                         [% IF Koha.Preference('CircSidebar') %]
-                            <div class="col-md-10 order-md-2 order-sm-1">
+                            [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                         [% ELSE %]
-                            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                            [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                         [% END %]
+                        <div class="[% div_class | html %]">
                         [% INCLUDE 'messages.inc' %]
 
                         [% BLOCK all_checkin_messages %]
@@ -390,10 +391,11 @@
 
                             [% IF ( checkinmsg ) %]
                                 [% IF ( checkinmsgtype == 'alert' ) %]
-                                    <div class="alert alert-warning">
+                                    [% SET div_class='warning' %]
                                 [% ELSE %]
-                                    <div class="alert alert-info">
+                                    [% SET div_class='info' %]
                                 [% END %]
+                                    <div class="alert alert-[% div_class | html %]">
                                         <p class="ret_checkinmsg">[% checkinmsg | html_line_break %]</p>
                                     </div>
                             [% END # /IF checkinmsg %]
@@ -576,10 +578,11 @@
                         [% UNLESS ( hold_auto_filled && diffbranch ) %]
                             [% IF WrongTransfer && !transfertodo %]
                                 [% IF Koha.Preference('TransfersBlockCirc') %]
-                                    <div id="wrong-transfer-modal" class="modal modal-lg block audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false" >
+                                    [% SET div_class='block' %]
                                 [% ELSE %]
-                                    <div id="wrong-transfer-modal" class="modal modal-lg noblock audio-alert-action">
+                                    [% SET div_class='noblock' %]
                                 [% END %]
+                                <div id="wrong-transfer-modal" class="modal modal-lg audio-alert-action [% div_class | html %]" [% IF Koha.Preference('TransfersBlockCirc') %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="wrongtransferform" id="wrongtransferform">
@@ -741,10 +744,11 @@
 
                             [% IF (transfer || needstransfer) && !(reserved and !recalled and !waitingrecall) %]
                                 [% IF Koha.Preference('TransfersBlockCirc') %]
-                                    <div id="item-transfer-modal" class="modal modal-lg block audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false">
+                                    [% SET div_class='block' %]
                                 [% ELSE %]
-                                    <div id="item-transfer-modal" class="modal modal-lg noblock audio-alert-action">
+                                    [% SET div_class='noblock' %]
                                 [% END %]
+                                <div id="item-transfer-modal" class="modal modal-lg block audio-alert-action" [% IF Koha.Preference('TransfersBlockCirc') %]data-bs-backdrop="static" data-bs-keyboard="false"[% END %]>
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="mainform" id="mainform">
@@ -1170,34 +1174,19 @@
                                             </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        [% IF ( exemptfine ) %]
-                                            <div id="exemptfines" class="checkin-active-setting">
-                                        [% ELSE %]
-                                            <div id="exemptfines" class="checkin-active-setting" style="display:none;">
-                                        [% END %]
+                                        <div id="exemptfines" class="checkin-active-setting" [% UNLESS exemptfine %]style="display:none;"[% END %]>
                                             <p><i class="fa fa-check"></i> Fines for returned items are forgiven.</p>
                                         </div>
 
-                                        [% IF ( forgivemanualholdsexpire ) %]
-                                            <div id="forgivemanualholdsexpire-alert" class="checkin-active-setting">
-                                        [% ELSE %]
-                                            <div id="forgivemanualholdsexpire-alert" class="checkin-active-setting" style="display:none;">
-                                        [% END %]
-                                                <p><i class="fa fa-check"></i> Fines are not charged for manually cancelled holds.</p>
-                                            </div>
+                                        <div id="forgivemanualholdsexpire-alert" class="checkin-active-setting" [% UNLESS forgivemanualholdsexpire %]style="display:none;"[% END %]>
+                                            <p><i class="fa fa-check"></i> Fines are not charged for manually cancelled holds.</p>
+                                        </div>
 
-                                        [% IF ( dropboxmode ) %]
-                                            <div id="dropboxmode" class="checkin-active-setting">
-                                        [% ELSE %]
-                                            <div id="dropboxmode" class="checkin-active-setting" style="display:none;">
-                                        [% END %]
+                                        <div id="dropboxmode" class="checkin-active-setting" [% UNLESS dropboxmode %]style="display:none;"[% END %]>
                                             <p><i class="fa fa-check"></i> Book drop mode. <span class="single-line">( Effective checkin date is [% dropboxdate | $KohaDates with_hours => 1 %] )</span></p>
                                         </div>
-                                        [% IF ( return_date_override_remember ) %]
-                                            <div id="return_date_remember" class="checkin-active-setting">
-                                        [% ELSE %]
-                                            <div id="return_date_remember" class="checkin-active-setting" style="display:none;">
-                                        [% END %]
+
+                                        <div id="return_date_remember" class="checkin-active-setting" [% UNLESS return_date_override_remember %]style="display:none;"[% END %]>
                                             <p><i class="fa fa-check"></i> Saved check-in date: <span id="saved_return_date" class="single-line">[% return_date_override | html %]</span></p>
                                         </div>
                                     </div>
@@ -1305,9 +1294,11 @@
                                             <td class="ci-title">
                                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
                                                     [% riloo.itemtitle | html %]
+                                                    <!-- prettier-ignore-start -->
                                                     [% FOREACH subtitle IN riloo.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
                                                     [% FOREACH part_number IN riloo.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
                                                     [% FOREACH part_name IN riloo.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
+                                                    <!-- prettier-ignore-end -->
                                                 </a>
                                                 [% IF ( riloo.enumchron ) %]
                                                     <br/>
@@ -1393,18 +1384,15 @@
                             </div><!-- /.page-section -->
                         [% END # /IF riloop %]
 
+                    </div>
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-md-10.order-md-2 -->
                             <div class="col-md-2 order-sm-2 order-md-1">
                                 <aside>
                                     [% INCLUDE 'circ-nav.inc' %]
                                 </aside>
                             </div> <!-- /.col-md-2.order-md-1 -->
-                        </div> <!-- /.row -->
-                    [% ELSE %]
-                            </div> <!-- /.col-md-10.offset-md-1.col-lg-8.offset-lg-2 -->
-                        </div> <!-- /.row -->
                     [% END %]
+                    </div> <!-- /.row -->
 
                 </main>
             </div> <!-- /.col-sm-12 -->
