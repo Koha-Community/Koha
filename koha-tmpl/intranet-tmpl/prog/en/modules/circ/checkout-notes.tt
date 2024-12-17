@@ -38,10 +38,11 @@
                 <div class="row">
 
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-md-10 order-md-2 order-sm-1">
+                    [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                 [% ELSE %]
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                    [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                 [% END %]
+                <div class="[% div_class | html %]">
                 [% INCLUDE 'messages.inc' %]
 
             <h1>Checkout notes</h1>
@@ -121,15 +122,13 @@
                 <div class="alert alert-info">There are currently no checkout notes.</div>
             [% END %] <!-- notes -->
 
+                    </div>
                     [% IF Koha.Preference('CircSidebar') %]
-                        </div> <!-- /.col-md-10.order-md-2 -->
                         <div class="col-md-2 order-sm-2 order-md-1">
                             <aside>
                                 [% INCLUDE 'circ-nav.inc' %]
                             </aside>
                         </div> <!-- /.col-md-2.order-md-1 -->
-                    [% ELSE %]
-                        </div> <!-- .col-md-10... -->
                     [% END %]
 
                 </div> <!-- /.row -->
