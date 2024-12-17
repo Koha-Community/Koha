@@ -170,6 +170,9 @@
                         <th>System</th>
                         <th>Code</th>
                         <th>Description</th>
+                        [% IF additional_fields.size %]
+                            <th>Additional fields</th>
+                        [% END %]
                         <th>Default amount</th>
                         <th>Available for</th>
                         <th>Library limitations</th>
@@ -183,6 +186,17 @@
                                 <td>[% debit_type.is_system | html %]</td>
                                 <td>[% debit_type.code | html %]</td>
                                 <td>[%- PROCESS debit_type_description debit_type = debit_type -%]</td>
+                                [% IF additional_fields.size %]
+                                    <td>
+                                        [% IF debit_type.additional_field_values.count > 0 %]
+                                            [% FOREACH additional_field IN debit_type.additional_field_values %]
+                                                <div><span class="label">[% additional_field.field.name | html %]</span>: [% additional_field.value | html %]</div>
+                                            [% END %]
+                                        [% ELSE %]
+                                            <span>No additional fields</span>
+                                        [% END %]
+                                    </td>
+                                [% END %]
                                 <td>[% debit_type.default_amount | $Price %]</td>
                                 <td
                                     >[% IF debit_type.can_be_invoiced && debit_type.can_be_sold %]

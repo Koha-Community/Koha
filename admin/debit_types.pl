@@ -43,6 +43,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'account_debit_types' } )->as_list;
+$template->param( additional_fields => \@additional_fields, );
+
 my $debit_type;
 if ($code) {
     $debit_type = Koha::Account::DebitTypes->find($code);
@@ -67,13 +70,11 @@ if ( $op eq 'add_form' ) {
             };
     }
 
-    my @additional_fields       = Koha::AdditionalFields->search( { tablename => 'account_debit_types' } )->as_list;
     my @additional_field_values = $debit_type ? $debit_type->get_additional_field_values_for_template : ();
 
     $template->param(
         debit_type              => $debit_type,
         branches_loop           => \@branches_loop,
-        additional_fields       => \@additional_fields,
         additional_field_values => @additional_field_values,
     );
 } elsif ( $op eq 'cud-add_validate' ) {
