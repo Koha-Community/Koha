@@ -745,11 +745,11 @@
                                         [% INCLUDE 'csrf-token.inc' %]
                                         <input type="hidden" name="op" value="cud-checkout" />
                                         <input type="hidden" name="restoreduedatespec" />
+
                                         [% IF ( issue ) %]
-                                            <fieldset id="circ_circulation_issue" class="lastchecked">
-                                        [% ELSE %]
-                                            <fieldset id="circ_circulation_issue">
+                                            [% SET fieldset_class='lastchecked' %]
                                         [% END %]
+                                        <fieldset id="circ_circulation_issue" class="[% fieldset_class | html %]">
 
                                         [% IF Koha.Preference('DisplayClearScreenButton') == 'issueslip' %]
                                             <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
@@ -896,36 +896,43 @@
 
                             [% END #/IF !noissues %]
 
+                            [% SET div_class = '' %]
                             [% IF ( noissues ) %]
                                 [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
-                                    <div class="col-sm-6">
-                                [% ELSE %]
-                                    <div>
+                                    [% div_class = 'col-sm-6' %]
                                 [% END %]
                             [% ELSE %]
-                                <div class="col-sm-6">
+                                [% div_class = 'col-sm-6' %]
                             [% END %]
+                            <div class="[% div_class | html %]">
 
+                            [% SET div_id = '' %]
+                            [% div_class = '' %]
                             [% IF ( noissues ) %]
                                 [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
-                                    <div id="circmessages" class="circmessage attention">
+                                    [% div_class = 'circmessage attention' %]
+                                    [% div_id = 'circmessages' %]
                                 [% ELSE %]
                                     <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
-                                    <div id="circmessages" class="circmessage warning">
+                                    [% div_class = 'circmessage warning' %]
+                                    [% div_id = 'circmessages' %]
                                 [% END %]
-                                <h3>
-                                    Cannot check out!
-                                    [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
-                                        <span class="circ-hlt">Only on-site checkouts are allowed</span>
-                                    [% END %]
-                                </h3>
                             [% ELSE %]
-                                <div id="circmessages" class="circmessage attention">
+                                [% div_class = 'circmessage attention' %]
+                                [% div_id = 'circmessages' %]
                             [% END %]
 
-                            [% INCLUDE 'patron_messages.inc' %]
-
-                        </div> <!-- /#circmessages -->
+                            <div id="[% circmessages | html %]" class="[% div_class | html %]">
+                                [% IF noissues %]
+                                    <h3>
+                                        Cannot check out!
+                                        [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
+                                            <span class="circ-hlt">Only on-site checkouts are allowed</span>
+                                        [% END %]
+                                    </h3>
+                                [% END %]
+                                [% INCLUDE 'patron_messages.inc' %]
+                            </div> <!-- /#circmessages -->
                     </div> <!-- /div or div.col-sm-6 -->
                 </div> <!-- /.row -->
 
