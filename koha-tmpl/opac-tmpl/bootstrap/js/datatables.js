@@ -295,9 +295,7 @@ function _dt_visibility(table_settings, table_dt) {
      *                                                available from the columns_settings template toolkit include
      * @return {Object}                               The dataTables instance
      */
-    $.fn.kohaTable = function (options, table_settings) {
-        var settings = null;
-
+    $.fn.kohaTable = function (options = {}, table_settings = undefined) {
         // Early return if the node does not exist
         if (!this.length) return;
 
@@ -310,23 +308,23 @@ function _dt_visibility(table_settings, table_dt) {
                     dataTablesDefaults.initComplete(settings, json);
                 };
             }
-
-            settings = $.extend(
-                true,
-                {},
-                dataTablesDefaults,
-                {
-                    paging: true,
-                    searching: true,
-                    language: {
-                        emptyTable: options.emptyTable
-                            ? options.emptyTable
-                            : __("No data available in table"),
-                    },
-                },
-                options
-            );
         }
+
+        var settings = $.extend(
+            true,
+            {},
+            dataTablesDefaults,
+            {
+                paging: true,
+                searching: true,
+                language: {
+                    emptyTable: options.emptyTable
+                        ? options.emptyTable
+                        : __("No data available in table"),
+                },
+            },
+            options
+        );
 
         settings["buttons"] = _dt_buttons({ settings, table_settings });
 

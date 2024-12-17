@@ -1300,7 +1300,7 @@ function update_search_description(
      * @return {Object}                               The dataTables instance
      */
     $.fn.kohaTable = function (
-        options,
+        options = {},
         table_settings,
         add_filters,
         default_filters,
@@ -1309,8 +1309,6 @@ function update_search_description(
         show_search_descriptions,
         additional_search_descriptions
     ) {
-        var settings = null;
-
         // Early return if the node does not exist
         if (!this.length) return;
 
@@ -1334,23 +1332,23 @@ function update_search_description(
                 options.processing = true;
                 options.pagingType = "full_numbers";
             }
-
-            settings = $.extend(
-                true,
-                {},
-                dataTablesDefaults,
-                {
-                    paging: true,
-                    searching: true,
-                    language: {
-                        emptyTable: options.emptyTable
-                            ? options.emptyTable
-                            : __("No data available in table"),
-                    },
-                },
-                options
-            );
         }
+
+        var settings = $.extend(
+            true,
+            {},
+            dataTablesDefaults,
+            {
+                paging: true,
+                searching: true,
+                language: {
+                    emptyTable: options.emptyTable
+                        ? options.emptyTable
+                        : __("No data available in table"),
+                },
+            },
+            options
+        );
 
         settings["buttons"] = _dt_buttons({ settings, table_settings });
 
