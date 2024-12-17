@@ -251,7 +251,7 @@ sub _create_basket_for_file {
 
     $file->_stage_file($params)
 
-    Stages a file directly using parameters from a marc ordering account
+    Stages a file directly using parameters from a MARC ordering account
 
 =cut
 
@@ -267,7 +267,7 @@ sub _stage_file {
 
     my $syspref_info = _get_syspref_mappings( $marcrecord, $syspref_name );
 
-    Fetches data from a marc record based on the mappings in the syspref MarcFieldsToOrder or MarcItemFieldsToOrder using the fields selected in $fields (array).
+    Fetches data from a MARC record based on the mappings in the syspref MarcFieldsToOrder or MarcItemFieldsToOrder using the fields selected in $fields (array).
 
 =cut
 
@@ -363,8 +363,8 @@ sub _verify_number_of_fields {
     });
 
     Takes a set of import records and adds biblio records based on the file content.
-    Params matcher_id and overlay_action are taken from the marc ordering account.
-    Returns the new or matched biblionumber and the marc record for each import record.
+    Params matcher_id and overlay_action are taken from the MARC ordering account.
+    Returns the new or matched biblionumber and the MARC record for each import record.
 
 =cut
 
@@ -388,7 +388,7 @@ sub add_biblio_from_import_record {
         } if not grep { $_ eq $import_record->import_record_id } @{$import_record_id_selected};
     }
 
-    my $marcrecord   = $import_record->get_marc_record || die "Couldn't translate marc information";
+    my $marcrecord   = $import_record->get_marc_record || die "Couldn't translate MARC information";
     my $matches      = $import_record->get_import_record_matches( { chosen => 1 } );
     my $match        = $matches->count ? $matches->next             : undef;
     my $biblionumber = $match          ? $match->candidate_match_id : 0;
@@ -695,7 +695,7 @@ sub import_biblios_list {
             : '',
             match_score => $match ? $match->score : 0,
         );
-        my $marcrecord = $import_record->get_marc_record || die "couldn't translate marc information";
+        my $marcrecord = $import_record->get_marc_record || die "couldn't translate MARC information";
 
         my $infos = _get_syspref_mappings( $marcrecord, 'MarcFieldsToOrder' );
 
