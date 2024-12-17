@@ -43,10 +43,11 @@
             <main>
                 <div class="row">
                     [% IF Koha.Preference('CircSidebar') %]
-                        <div class="col-md-10 order-md-2 order-sm-1">
+                        [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                     [% ELSE %]
-                        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                        [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                     [% END %]
+                    <div class="[% div_class | html %]">
                     [% INCLUDE 'messages.inc' %]
                     <h1>Set library</h1>
                     <form method="post" action="/cgi-bin/koha/circ/set-library.pl" id="set-library-form">
