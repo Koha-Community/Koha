@@ -37,10 +37,11 @@
                 <div class="row">
 
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-md-10 order-md-2 order-sm-1">
+                    [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                 [% ELSE %]
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                    [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                 [% END %]
+                <div class="[% div_class | html %]">
                 [% INCLUDE 'messages.inc' %]
 
         <h1>Transfers made to your library as of [% show_date | $KohaDates %]</h1>
@@ -62,11 +63,11 @@
                 <th>&nbsp;</th>
             </tr></thead>
             <tbody>[% FOREACH reser IN branchesloo.reserv %]
+                [% SET tr_class = '' %]
                 [% IF ( reser.messcompa ) %]
-                <tr class="problem">
-                [% ELSE %]
-                <tr>
+                    [% tr_class = 'problem' %]
                 [% END %]
+                <tr class="[% tr_class | html %]">
                     <td data-order="[% reser.datetransfer | html %]"><p>[% reser.datetransfer | $KohaDates %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
                     <td>
                         [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
@@ -105,15 +106,15 @@
         <p>No transfers to receive</p>
     [% END %]
 
+                </div> <!-- /.col-md-10.order-md-2 -->
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-md-10.order-md-2 -->
                             <div class="col-md-2 order-sm-2 order-md-1">
                                 <aside>
                                     [% INCLUDE 'circ-nav.inc' %]
                                 </aside>
                             </div> <!-- /.col-md-2.order-md-1 -->
-                        </div> <!-- /.row -->
                     [% END %]
+                </div> <!-- /.row -->
 
             </main>
         </div> <!-- /.col-sm-12 -->
