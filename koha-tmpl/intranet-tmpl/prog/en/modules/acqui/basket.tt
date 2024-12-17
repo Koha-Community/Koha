@@ -67,11 +67,9 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% SET asides = ['acquisitions-menu'] %]
+[% IF booksellerid %][% asides.unshift('vendor-menu') %][% END %]
+[% WRAPPER 'main-container.inc' asides=asides %]
 
                 [% IF (cannot_manage_basket) %]
                     <div class="alert alert-warning">You are not authorised to manage this basket.</div>
@@ -955,18 +953,7 @@
                         </div> <!-- /#closebasket_needsconfirmation -->
                     [% END # /IF edi_confirm %]
                 [% END # /IF (cannot_manage_basket) %]
-            </main>
-        </div> <!-- /.col-md-10 order-md-2 order-sm-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'vendor-menu.inc' %]
-                [% INCLUDE 'acquisitions-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2 order-sm-2 order-md-1 -->
-    </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
-
+[% END %]
 
     <!-- Modal for editing vendor and internal notes -->
     <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">

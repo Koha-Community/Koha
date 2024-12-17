@@ -32,10 +32,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-            [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
 
       <h1>Change estimated delivery date</h1>
       <form action="/cgi-bin/koha/acqui/moddeliverydate.pl" method="post">
@@ -53,8 +50,8 @@
           <a class="cancel" href="[% referrer | url %]">Cancel</a>
         </fieldset>
       </form>
-  </div>
-</div>
+
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

@@ -45,11 +45,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
 
                 <h1>Invoice: [% invoicenumber | html %]</h1>
 
@@ -483,15 +479,8 @@
                         </table> <!-- /#invoice_files_table -->
                     </div>
                 [% END # /IF AcqEnableFiles %]
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'acquisitions-menu.inc' %]
-            </aside>
-        </div>
-    </div> <!-- /.row -->
+[% END %]
 
 <div id="updateFund" class="modal" tabindex="-1" role="dialog" aria-labelledby="updateReceivedFund" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -539,8 +528,6 @@
         [% END # /FOREACH budget %]
     </select>
 </div> <!-- /#all_fund_dropdown -->
-
-</div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]

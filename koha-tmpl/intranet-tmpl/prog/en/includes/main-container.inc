@@ -1,0 +1,34 @@
+[% USE raw %]
+<div class="main container-fluid">
+    <div class="row">
+        [% IF aside && !asides %]
+            [% SET asides = [aside] %]
+        [% END %]
+        [% IF asides %]
+            <div class="col-md-10 order-sm-1 order-md-2">
+                <main>
+                    [% INCLUDE 'messages.inc' %]
+                    [% content | $raw %]
+                </main>
+            </div>
+            <div class="col-md-2 order-sm-2 order-md-1">
+                <aside>
+                    [% FOR aside IN asides %]
+                        [% SWITCH aside %]
+                        [% CASE 'acquisitions-menu' %][% INCLUDE 'acquisitions-menu.inc' %]
+                        [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]
+                        [% CASE 'subscriptions-search' %][% INCLUDE 'subscriptions-search.inc' %]
+                        [% END %]
+                    [% END %]
+                </aside>
+            </div>
+        [% ELSE %]
+            <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                <main>
+                    [% INCLUDE 'messages.inc' %]
+                    [% content | $raw %]
+                </main>
+            </div>
+        [% END %]
+    </div>
+</div>

@@ -36,11 +36,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
 
       <h1>Files for invoice: [% invoicenumber | html %]</h1>
       <p><strong>Vendor: </strong><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
@@ -115,16 +111,8 @@
                 <fieldset class="action"><input name="upload" type="submit" id="upload" class="btn btn-primary" value="Upload file" /></fieldset>
           </form>
       [% END %]
-    </main>
-  </div> <!-- /.col-md-10.order-md-2 -->
 
-<div class="col-md-2 order-sm-2 order-md-1">
-    <aside>
-        [% INCLUDE 'acquisitions-menu.inc' %]
-    </aside>
-</div> <!-- /.col-md-2.order-md-1 -->
-</div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]

@@ -259,11 +259,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-2">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='acquisitions-menu' %]
 
 <h1>
     [% IF ( ordernumber ) %]
@@ -787,16 +783,7 @@
     </div>
 </div>
 
-</main>
-</div> <!-- /.col-md-10.order-md-2 -->
-
-<div class="col-md-2 order-sm-2 order-md-1">
-    <aside>
-        [% INCLUDE 'acquisitions-menu.inc' %]
-    </aside>
-</div> <!-- /.col-md-2.order-md-1 -->
-</div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% PROCESS patron_search_modal columns => columns, modal_title => t("Add user") %]
 [% SET columns = ['cardnumber','name','category','branch','action'] %]
