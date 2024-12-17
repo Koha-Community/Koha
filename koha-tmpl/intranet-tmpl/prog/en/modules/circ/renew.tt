@@ -38,10 +38,11 @@
                 <div class="row">
 
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-md-10 order-md-2 order-sm-1">
+                    [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                 [% ELSE %]
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                    [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                 [% END %]
+                <div class="[% div_class | html %]">
                 [% INCLUDE 'messages.inc' %]
 
                 [% IF error %]
@@ -245,15 +246,15 @@
                 </form>
             [% END %]
 
+                </div> <!-- /.col-md-10.order-md-2 -->
                     [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-md-10.order-md-2 -->
                             <div class="col-md-2 order-sm-2 order-md-1">
                                 <aside>
                                     [% INCLUDE 'circ-nav.inc' %]
                                 </aside>
                             </div> <!-- /.col-md-2.order-md-1 -->
-                        </div> <!-- /.row -->
                     [% END %]
+                        </div> <!-- /.row -->
 
             </main>
         </div> <!-- /.col-sm-12 -->
