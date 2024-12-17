@@ -51,10 +51,11 @@
                 <div class="row">
 
                 [% IF ( total || Koha.Preference('CircSidebar') ) %]
-                    <div class="col-md-10 order-md-2 order-sm-1">
+                    [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
                 [% ELSE %]
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                    [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                 [% END %]
+                <div class="[% div_class | html %]">
                 [% INCLUDE 'messages.inc' %]
 
 <h1>Holds queue</h1>
@@ -279,10 +280,11 @@
 [% BLOCK filter_form %]
     <form method="get" name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl">
         [% IF ( total ) %]
-            <fieldset class="brief">
+            [% SET fieldset_class='brief' %]
         [% ELSE -%]
-            <fieldset class="rows">
+            [% SET fieldset_class='rows' %]
         [% END %]
+        <fieldset class="[% fieldset_class | html %]">
             <ol>
                 <li>
                     <label for="branchlimit">Library: </label>
