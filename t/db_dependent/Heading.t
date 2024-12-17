@@ -19,10 +19,17 @@ use strict;
 use warnings;
 
 use Test::NoWarnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
+
+use open qw/ :std :utf8 /;
 
 use t::lib::Mocks;
 use Test::MockModule;
+
+use MARC::Record;
+use MARC::Field;
+use utf8;
+use C4::AuthoritiesMarc qw/ AddAuthority /;
 
 BEGIN {
     use_ok( 'C4::Heading', qw( field valid_heading_subfield ) );
@@ -218,5 +225,75 @@ subtest "_search tests" => sub {
         $terms, $expected_terms,
         "When thesaurus in subfield 2, and nothing is found, we don't search again if LinkerConsiderThesaurusDisabled"
     );
+
+};
+
+subtest "authorities exact match tests" => sub {
+
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $authrec1 = MARC::Record->new;
+    $authrec1->leader('     nz  a22     o  4500');
+    $authrec1->insert_fields_ordered( MARC::Field->new( '100', '1', ' ', a => 'Rakowski, Albin', x => 'poetry' ) );
+    my $authid1 = AddAuthority( $authrec1, undef, 'PERSO_NAME', { skip_record_index => 1 } );
+
+    my $authrec2 = MARC::Record->new;
+    $authrec2->leader('     nz  a22     o  4500');
+    $authrec2->insert_fields_ordered( MARC::Field->new( '100', '1', ' ', a => 'Rąkowski, Albin', x => 'poetry' ) );
+    my $authid2 = AddAuthority( $authrec2, undef, 'PERSO_NAME', { skip_record_index => 1 } );
+
+    my $heading = Test::MockModule->new('C4::Heading');
+    $heading->mock(
+        '_search',
+        sub {
+            my $self = shift;
+            return ( [ { authid => $authid1 }, { authid => $authid2 } ], 2 );
+        }
+    );
+
+    my $biblio_field   = MARC::Field->new( '600', '1', '1', a => 'Rakowski, Albin', x => 'poetry' );
+    my $biblio_heading = C4::Heading->new_from_field($biblio_field);
+
+    t::lib::Mocks::mock_preference( 'LinkerConsiderDiacritics', '0' );
+
+    my $authorities = $biblio_heading->authorities(1);
+    is_deeply(
+        $authorities, [ { authid => $authid1 }, { authid => $authid2 } ],
+        "Authorities diacritics filter off - two authids returned for authority search 'Rakowski' from biblio 600 field 'Rakowski'"
+    );
+
+    t::lib::Mocks::mock_preference( 'LinkerConsiderDiacritics', '1' );
+
+    $authorities = $biblio_heading->authorities(1);
+    is_deeply(
+        $authorities, [ { authid => $authid1 } ],
+        "Authorities filter OK - remained authority 'Rakowski' for biblio 'Rakowski'"
+    );
+
+    my $authrec3 = MARC::Record->new;
+    $authrec3->leader('     nz  a22     o  4500');
+    $authrec3->insert_fields_ordered( MARC::Field->new( '100', '1', ' ', a => 'Bruckner, Karl' ) );
+    my $authid3 = AddAuthority( $authrec3, undef, 'PERSO_NAME', { skip_record_index => 1 } );
+
+    $heading->mock(
+        '_search',
+        sub {
+            my $self = shift;
+            return ( [ { authid => $authid3 } ], 1 );
+        }
+    );
+
+    $biblio_field   = MARC::Field->new( '700', '1', ' ', a => 'Brückner, Karl' );
+    $biblio_heading = C4::Heading->new_from_field($biblio_field);
+
+    $authorities = $biblio_heading->authorities(1);
+    is_deeply( $authorities, [], "Authorities filter OK - 'Brückner' not matched with 'Bruckner'" );
+
+    $schema->storage->txn_rollback;
 
 };
