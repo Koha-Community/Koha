@@ -47,8 +47,7 @@ export const routes = [
                 title: $__("Agreements"),
                 icon: "fa fa-check-circle",
                 is_end_node: true,
-                resource: "agreement",
-                module: "ERM",
+                resource: "ERM/AgreementResource.vue",
                 children: [
                     {
                         path: "",

@@ -12,13 +12,7 @@ export default {
     methods: {
         getComponent() {
             const routeResource = this.$route.meta.self.parent.resource;
-            const resourceModule = this.$route.meta.self.parent.module;
-            const componentName =
-                routeResource.charAt(0).toUpperCase() + routeResource.slice(1);
-            const importPath = `./${
-                resourceModule ? `${resourceModule}/` : ""
-            }${componentName}Resource.vue`;
-            return defineAsyncComponent(() => import(`${importPath}`));
+            return defineAsyncComponent(() => import(`./${routeResource}`));
         },
     },
     computed: {
