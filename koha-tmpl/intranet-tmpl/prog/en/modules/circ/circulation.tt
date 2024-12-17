@@ -361,8 +361,8 @@
 
                                     [% IF ( BOOKED_TO_ANOTHER ) %]
                                         <p>
-                                            <label for="reduceddue">Reducing due date to: <label>
-                                            <input type="text" size="20" id="reduceddue" name="reduceddue" value="[% reduceddue | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-maxdate="[% reduceddue | html %]" required="required">
+                                            <label for="reduceddue">Reducing due date to: </label>
+                                            <input type="text" size="20" id="reduceddue" name="reduceddue" value="[% reduceddue | html %]" class="flatpickr" data-flatpickr-futuredate="true" data-flatpickr-maxdate="[% reduceddue | html %]" required="required" />
                                         </p>
                                     [% END %]
 
@@ -667,10 +667,10 @@
                                                             <td>
                                                                 [% item.barcode | html %]
                                                             </td>
-                                                            <td>[% item.itemcallnumber | html %]</th>
-                                                            <td>[% item.copynumber | html %]</th>
-                                                            <td>[% item.stocknumber| html %]</th>
-                                                            <td>[% item.enumchron| html %]</th>
+                                                            <td>[% item.itemcallnumber | html %]</td>
+                                                            <td>[% item.copynumber | html %]</td>
+                                                            <td>[% item.stocknumber| html %]</td>
+                                                            <td>[% item.enumchron| html %]</td>
                                                             <td>
                                                                 [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]
                                                             </td>
