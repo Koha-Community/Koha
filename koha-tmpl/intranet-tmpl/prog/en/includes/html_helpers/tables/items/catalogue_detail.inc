@@ -178,6 +178,7 @@
 
     });
 
+    let filters_shown = false;
     $(document).ready(function() {
         $(".show_filters").on("click",function(e){
             e.preventDefault();
@@ -185,6 +186,7 @@
             let tab = $("#" + tab_id + "_panel" );
             tab.find(".show_filters").hide();
             tab.find(".hide_filters").show();
+            filters_show = true;
             $("#"+tab_id+"_table thead tr:eq(1)").remove();
             build_items_table(tab_id, true, { destroy: true }, build_items_table_drawncallback );
             itemSelectionBuildActionLinks(tab_id);
@@ -196,6 +198,7 @@
             let tab = $("#" + tab_id + "_panel" );
             tab.find(".hide_filters").hide();
             tab.find(".show_filters").show();
+            filters_show = false;
             $("#"+tab_id+"_table thead tr:eq(1)").remove();
             build_items_table(tab_id, false, { destroy: true }, build_items_table_drawncallback );
             itemSelectionBuildActionLinks(tab_id);
@@ -876,7 +879,9 @@
         table_dt.on("column-visibility.dt", function(e, settings, column, state, recalc ){
             if (recalc === false) return;
 
-            _dt_add_filters(this, table_dt, filters_options);
+            if ( filters_shown ) {
+                _dt_add_filters(this, table_dt, filters_options);
+            }
 
             user_colvis[tab_id][column] = state;
 
