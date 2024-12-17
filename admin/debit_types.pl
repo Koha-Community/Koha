@@ -27,6 +27,7 @@ use C4::Output qw( output_html_with_http_headers );
 
 use Koha::Account::DebitType;
 use Koha::Account::DebitTypes;
+use Koha::AdditionalFields;
 
 my $input = CGI->new;
 my $code  = $input->param('code');
@@ -66,9 +67,14 @@ if ( $op eq 'add_form' ) {
             };
     }
 
+    my @additional_fields       = Koha::AdditionalFields->search( { tablename => 'account_debit_types' } )->as_list;
+    my @additional_field_values = $debit_type ? $debit_type->get_additional_field_values_for_template : ();
+
     $template->param(
-        debit_type    => $debit_type,
-        branches_loop => \@branches_loop
+        debit_type              => $debit_type,
+        branches_loop           => \@branches_loop,
+        additional_fields       => \@additional_fields,
+        additional_field_values => @additional_field_values,
     );
 } elsif ( $op eq 'cud-add_validate' ) {
     my $description         = $input->param('description');
@@ -90,6 +96,10 @@ if ( $op eq 'add_form' ) {
     try {
         $debit_type->store;
         $debit_type->replace_library_limits( \@branches );
+
+        my @additional_fields = $debit_type->prepare_cgi_additional_field_values( $input, 'account_debit_types' );
+        $debit_type->set_additional_fields( \@additional_fields );
+
         push @messages, { type => 'message', code => 'success_on_saving' };
     } catch {
         push @messages, { type => 'error', code => 'error_on_saving' };

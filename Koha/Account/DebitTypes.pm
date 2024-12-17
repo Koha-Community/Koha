@@ -22,7 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::Account::DebitType;
 
-use base qw(Koha::Objects Koha::Objects::Limit::Library);
+use base qw(Koha::Objects::Mixin::AdditionalFields Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 

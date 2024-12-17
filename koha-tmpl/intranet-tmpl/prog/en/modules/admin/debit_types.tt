@@ -146,7 +146,9 @@
                     </li>
                 </ol>
             </fieldset>
-
+            [% IF additional_fields.size %]
+                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
+            [% END %]
             <fieldset class="action">
                 <button id="save_debit_type" class="btn btn-primary">Save</button>
                 <a class="cancel" href="/cgi-bin/koha/admin/debit_types.pl">Cancel</a>
@@ -252,6 +254,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/additional-fields-entry.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function () {
