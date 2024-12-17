@@ -926,6 +926,7 @@
                     history.pushState( {}, null, window.location.href.split("?" )[0]);
                 [% END %]
                 $("#[% table_id | html %]_search_results").hide();
+                parent_block.find(".search_description").hide();
             }
 
             // User has clicked on a letter
