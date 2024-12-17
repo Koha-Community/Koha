@@ -158,10 +158,12 @@
 
                 [% INCLUDE 'messages.inc' %]
                 [% IF Koha.Preference('CircSidebar') %]
-                    <div class="col-md-10 order-md-2 order-sm-1">
+                    [% SET div_class = 'col-md-10 order-md-2 order-sm-1' %]
                 [% ELSE %]
-                    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                    [% SET div_class = 'col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
                 [% END %]
+
+                <div class="[% div_class | html %]">
 
                 <h1>Article requests</h1>
                 [% PROCESS urls_modal %]
