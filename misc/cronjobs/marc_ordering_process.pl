@@ -83,7 +83,7 @@ cronlogaction( { info => $command_line_options } );
 $verbose = 1            unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;
 
-print "Fetching marc ordering accounts\n" if $verbose;
+print "Fetching MARC ordering accounts\n" if $verbose;
 my @accounts = Koha::MarcOrderAccounts->search(
     {},
     { join => [ 'vendor', 'budget' ] }
@@ -95,7 +95,7 @@ if ( scalar(@accounts) == 0 ) {
 
 foreach my $acct (@accounts) {
     if ($verbose) {
-        say sprintf "Starting marc ordering process for %s", $acct->vendor->name;
+        say sprintf "Starting MARC ordering process for %s", $acct->vendor->name;
         say sprintf "Looking for new files in %s",           $acct->download_directory;
     }
 
