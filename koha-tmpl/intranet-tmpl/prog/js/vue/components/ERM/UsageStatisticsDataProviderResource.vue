@@ -7,18 +7,18 @@ export default {
     setup(props) {
         return {
             ...BaseResource.setup({
-                resource_name: "usage_data_provider",
-                name_attr: "name",
-                id_attr: "erm_usage_data_provider_id",
-                show_component: "UsageStatisticsDataProvidersShow",
-                list_component: "UsageStatisticsDataProvidersList",
-                add_component: "UsageStatisticsDataProvidersFormAdd",
-                edit_component: "UsageStatisticsDataProvidersFormAddEdit",
-                api_client: APIClient.erm.usage_data_providers,
-                resource_table_url:
+                resourceName: "usage_data_provider",
+                nameAttr: "name",
+                idAttr: "erm_usage_data_provider_id",
+                showComponent: "UsageStatisticsDataProvidersShow",
+                listComponent: "UsageStatisticsDataProvidersList",
+                addComponent: "UsageStatisticsDataProvidersFormAdd",
+                editComponent: "UsageStatisticsDataProvidersFormAddEdit",
+                apiClient: APIClient.erm.usage_data_providers,
+                resourceTableUrl:
                     APIClient.erm._baseURL + "usage_data_providers",
                 i18n: {
-                    display_name: __("Data provider"),
+                    displayName: __("Data provider"),
                 },
             }),
             //UsageStatisticsDataProviderResource specific setup here

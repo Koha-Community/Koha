@@ -7,17 +7,17 @@ export default {
     setup(props) {
         return {
             ...BaseResource.setup({
-                resource_name: "train",
-                name_attr: "name",
-                id_attr: "train_id",
-                show_component: "TrainsShow",
-                list_component: "TrainsList",
-                add_component: "TrainsFormAdd",
-                edit_component: "TrainsFormAddEdit",
-                api_client: APIClient.preservation.trains,
-                resource_table_url: APIClient.preservation._baseURL + "trains",
+                resourceName: "train",
+                nameAttr: "name",
+                idAttr: "train_id",
+                showComponent: "TrainsShow",
+                listComponent: "TrainsList",
+                addComponent: "TrainsFormAdd",
+                editComponent: "TrainsFormAddEdit",
+                apiClient: APIClient.preservation.trains,
+                resourceTableUrl: APIClient.preservation._baseURL + "trains",
                 i18n: {
-                    display_name: __("Train"),
+                    displayName: __("Train"),
                 },
             }),
             //TrainResource specific setup here

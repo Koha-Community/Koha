@@ -13,13 +13,13 @@
         </Toolbar>
 
         <h2>
-            {{ i18n.display_name + " #" + resource[id_attr] }}
+            {{ i18n.displayName + " #" + resource[idAttr] }}
         </h2>
         <div>
             <fieldset class="rows">
                 <ol>
                     <li
-                        v-for="(attr, index) in resource_attrs.filter(
+                        v-for="(attr, index) in resourceAttrs.filter(
                             attr => attr.showElement?.type !== 'relationship'
                         )"
                         v-bind:key="index"
@@ -33,7 +33,7 @@
                 </ol>
             </fieldset>
             <template
-                v-for="(attr, index) in resource_attrs.filter(
+                v-for="(attr, index) in resourceAttrs.filter(
                     attr => attr.showElement?.type === 'relationship'
                 )"
                 v-bind:key="'rel-' + index"
@@ -42,7 +42,7 @@
             </template>
             <fieldset class="action">
                 <router-link
-                    :to="{ name: list_component }"
+                    :to="{ name: listComponent }"
                     role="button"
                     class="cancel"
                     >{{ $__("Close") }}</router-link
@@ -64,23 +64,23 @@ export default {
         };
     },
     props: {
-        id_attr: String,
-        api_client: Object,
+        idAttr: String,
+        apiClient: Object,
         i18n: Object,
-        resource_attrs: Array,
-        list_component: String,
+        resourceAttrs: Array,
+        listComponent: String,
         goToResourceEdit: Function,
         doResourceDelete: Function,
     },
     created() {
-        this.getResource(this.$route.params[this.id_attr]);
+        this.getResource(this.$route.params[this.idAttr]);
     },
     beforeRouteUpdate(to, from) {
-        this.resource = this.getResource(to.params[this.id_attr]);
+        this.resource = this.getResource(to.params[this.idAttr]);
     },
     methods: {
-        async getResource(resource_id) {
-            this.api_client.get(resource_id).then(
+        async getResource(resourceId) {
+            this.apiClient.get(resourceId).then(
                 resource => {
                     this.resource = resource;
                     this.initialized = true;

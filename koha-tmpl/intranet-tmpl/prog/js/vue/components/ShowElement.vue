@@ -3,7 +3,7 @@
         v-if="
             attribute.type == 'text' ||
             attribute.type == 'textarea' ||
-            (attribute.type == 'select' && !attribute.av_cat) ||
+            (attribute.type == 'select' && !attribute.avCat) ||
             attribute?.type == 'text'
         "
     >
@@ -22,13 +22,13 @@
     <div
         v-else-if="
             attribute.type == 'av' ||
-            (attribute.type == 'select' && attribute.av_cat)
+            (attribute.type == 'select' && attribute.avCat)
         "
     >
         <label>{{ attribute.label }}:</label>
         <LinkWrapper :linkData="attribute?.link" :resource="resource">
             <span>{{
-                get_lib_from_av(attribute.av_cat, resource[attribute.name])
+                get_lib_from_av(attribute.avCat, resource[attribute.name])
             }}</span>
         </LinkWrapper>
     </div>

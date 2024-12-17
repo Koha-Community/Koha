@@ -7,18 +7,18 @@ export default {
     setup(props) {
         return {
             ...BaseResource.setup({
-                resource_name: "title",
-                name_attr: "publication_title",
-                id_attr: "title_id",
-                show_component: "EHoldingsLocalTitlesShow",
-                list_component: "EHoldingsLocalTitlesList",
-                add_component: "EHoldingsLocalTitlesFormAdd",
-                edit_component: "EHoldingsLocalTitlesFormAddEdit",
-                api_client: APIClient.erm.localTitles,
-                resource_table_url:
+                resourceName: "title",
+                nameAttr: "publication_title",
+                idAttr: "title_id",
+                showComponent: "EHoldingsLocalTitlesShow",
+                listComponent: "EHoldingsLocalTitlesList",
+                addComponent: "EHoldingsLocalTitlesFormAdd",
+                editComponent: "EHoldingsLocalTitlesFormAddEdit",
+                apiClient: APIClient.erm.localTitles,
+                resourceTableUrl:
                     APIClient.erm._baseURL + "eholdings/local/titles",
                 i18n: {
-                    display_name: __("Local title"),
+                    displayName: __("Local title"),
                 },
             }),
             //EHoldingsLocalTitleResource specific setup here

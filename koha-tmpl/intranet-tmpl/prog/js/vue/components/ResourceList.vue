@@ -5,11 +5,11 @@
             <ToolbarButton
                 action="add"
                 @go-to-add-resource="goToResourceAdd"
-                :title="$__('New %s').format(i18n.display_name_lc)"
+                :title="$__('New %s').format(i18n.displayNameLc)"
             />
         </Toolbar>
         <fieldset
-            v-if="tableFilters?.length > 0 && resource_count > 0"
+            v-if="tableFilters?.length > 0 && resourceCount > 0"
             class="filters"
         >
             <template
@@ -29,7 +29,7 @@
                 :value="$__('Filter')"
             />
         </fieldset>
-        <div v-if="resource_count > 0" class="page-section">
+        <div v-if="resourceCount > 0" class="page-section">
             <KohaTable
                 ref="table"
                 v-bind="tableOptions"
@@ -42,9 +42,7 @@
             ></KohaTable>
         </div>
         <div v-else class="alert alert-info">
-            {{
-                $__("There are no %s defined").format(i18n.display_name_plural)
-            }}
+            {{ $__("There are no %s defined").format(i18n.displayNamePl) }}
         </div>
     </div>
 </template>
@@ -63,15 +61,14 @@ export default {
 
         return {
             table,
-            license_table_settings,
         };
     },
     props: {
         embedded: { type: Boolean, default: false },
-        api_client: Object,
+        apiClient: Object,
         i18n: Object,
         tableOptions: Object,
-        resource_name: String,
+        resourceName: String,
         goToResourceShow: Function,
         goToResourceEdit: Function,
         doResourceDelete: Function,
@@ -84,7 +81,7 @@ export default {
     },
     data: function () {
         return {
-            resource_count: 0,
+            resourceCount: 0,
             initialized: false,
             searchable_additional_fields: [],
             searchable_av_options: [],
@@ -107,16 +104,16 @@ export default {
     },
     methods: {
         async getResourceCount() {
-            await this.api_client.count().then(
+            await this.apiClient.count().then(
                 count => {
-                    this.resource_count = count;
+                    this.resourceCount = count;
                 },
                 error => {}
             );
         },
         async getSearchableAdditionalFields() {
             const client = APIClient.additional_fields;
-            await client.additional_fields.getAll(this.resource_name).then(
+            await client.additional_fields.getAll(this.resourceName).then(
                 searchable_additional_fields => {
                     this.searchable_additional_fields =
                         searchable_additional_fields.filter(

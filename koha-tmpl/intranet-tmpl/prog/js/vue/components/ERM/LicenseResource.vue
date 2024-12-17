@@ -7,17 +7,17 @@ export default {
     setup(props) {
         return {
             ...BaseResource.setup({
-                resource_name: "license",
-                name_attr: "name",
-                id_attr: "license_id",
-                show_component: "LicensesShow",
-                list_component: "LicensesList",
-                add_component: "LicensesFormAdd",
-                edit_component: "LicensesFormAddEdit",
-                api_client: APIClient.erm.licenses,
-                resource_table_url: APIClient.erm._baseURL + "licenses",
+                resourceName: "license",
+                nameAttr: "name",
+                idAttr: "license_id",
+                showComponent: "LicensesShow",
+                listComponent: "LicensesList",
+                addComponent: "LicensesFormAdd",
+                editComponent: "LicensesFormAddEdit",
+                apiClient: APIClient.erm.licenses,
+                resourceTableUrl: APIClient.erm._baseURL + "licenses",
                 i18n: {
-                    display_name: __("License"),
+                    displayName: __("License"),
                 },
             }),
             //LicenseResource specific setup here

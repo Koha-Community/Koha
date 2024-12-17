@@ -2,10 +2,10 @@
     <ResourceList
         v-if="action === 'list'"
         v-bind="{
-            api_client,
+            apiClient,
             i18n,
             tableOptions,
-            resource_name,
+            resourceName,
             goToResourceShow,
             goToResourceEdit,
             doResourceDelete,
@@ -22,11 +22,11 @@
     <ResourceShow
         v-if="action === 'show'"
         v-bind="{
-            id_attr,
-            api_client,
+            idAttr,
+            apiClient,
             i18n,
-            resource_attrs,
-            list_component,
+            resourceAttrs,
+            listComponent,
             goToResourceEdit,
             doResourceDelete,
         }"
@@ -34,11 +34,11 @@
     <ResourceFormAdd
         v-if="['add', 'edit'].includes(action)"
         v-bind="{
-            id_attr,
-            api_client,
+            idAttr,
+            apiClient,
             i18n,
-            resource_attrs,
-            list_component,
+            resourceAttrs,
+            listComponent,
             resource: newResource,
             onSubmit,
         }"
@@ -78,19 +78,19 @@ export default {
 
         return {
             ...BaseResource.setup({
-                resource_name: "agreement",
-                name_attr: "name",
-                id_attr: "agreement_id",
-                show_component: "AgreementsShow",
-                list_component: "AgreementsList",
-                add_component: "AgreementsFormAdd",
-                edit_component: "AgreementsFormAddEdit",
-                api_client: APIClient.erm.agreements,
-                resource_table_url: APIClient.erm._baseURL + "agreements",
+                resourceName: "agreement",
+                nameAttr: "name",
+                idAttr: "agreement_id",
+                showComponent: "AgreementsShow",
+                listComponent: "AgreementsList",
+                addComponent: "AgreementsFormAdd",
+                editComponent: "AgreementsFormAddEdit",
+                apiClient: APIClient.erm.agreements,
+                resourceTableUrl: APIClient.erm._baseURL + "agreements",
                 i18n: {
-                    display_name: __("Agreement"),
-                    display_name_lc: __("agreement"),
-                    display_name_plural: __("agreements"),
+                    displayName: __("Agreement"),
+                    displayNameLc: __("agreement"),
+                    displayNamePl: __("agreements"),
                 },
                 av_agreement_statuses,
                 av_agreement_closure_reasons,
@@ -109,13 +109,13 @@ export default {
         const defaults = this.getFilters(this.$route.query, tableFilters);
 
         return {
-            resource_attrs: [
+            resourceAttrs: [
                 {
                     name: "name",
                     required: true,
                     type: "text",
                     label: __("Agreement name"),
-                    show_in_table: true,
+                    showInTable: true,
                 },
                 {
                     name: "vendor_id",
@@ -135,7 +135,7 @@ export default {
                     props: {
                         id: {
                             type: "string",
-                            value: "license_id_",
+                            value: "agreement_id_",
                             indexRequired: true,
                         },
                     },
@@ -143,18 +143,18 @@ export default {
                 {
                     name: "description",
                     type: "textarea",
-                    text_area_rows: 10,
-                    text_area_cols: 50,
+                    textAreaRows: 10,
+                    textAreaCols: 50,
                     label: __("Description"),
-                    show_in_table: true,
+                    showInTable: true,
                 },
                 {
                     name: "status",
                     required: true,
                     type: "select",
                     label: __("Status"),
-                    av_cat: "av_agreement_statuses",
-                    show_in_table: true,
+                    avCat: "av_agreement_statuses",
+                    showInTable: true,
                     onSelected: resource => {
                         if (resource.status !== "closed") {
                             resource.closure_reason = null;
@@ -166,28 +166,28 @@ export default {
                     name: "closure_reason",
                     type: "select",
                     label: __("Closure reason"),
-                    av_cat: "av_agreement_closure_reasons",
-                    show_in_table: true,
+                    avCat: "av_agreement_closure_reasons",
+                    showInTable: true,
                     disabled: agreement => agreement.status !== "closed",
                 },
                 {
                     name: "is_perpetual",
                     type: "boolean",
                     label: __("Is perpetual"),
-                    show_in_table: true,
+                    showInTable: true,
                 },
                 {
                     name: "renewal_priority",
                     type: "select",
                     label: __("Renewal priority"),
-                    av_cat: "av_agreement_renewal_priorities",
-                    show_in_table: true,
+                    avCat: "av_agreement_renewal_priorities",
+                    showInTable: true,
                 },
                 {
                     name: "license_info",
                     type: "textarea",
-                    text_area_rows: 2,
-                    text_area_cols: 50,
+                    textAreaRows: 2,
+                    textAreaCols: 50,
                     label: __("License info"),
                 },
                 {
@@ -401,7 +401,7 @@ export default {
                             name: "role",
                             type: "select",
                             label: __("Role"),
-                            av_cat: "av_user_roles",
+                            avCat: "av_user_roles",
                             required: true,
                         },
                     ],
@@ -500,13 +500,13 @@ export default {
                             name: "status",
                             type: "select",
                             label: __("Status"),
-                            av_cat: "av_agreement_license_statuses",
+                            avCat: "av_agreement_license_statuses",
                         },
                         {
                             name: "physical_location",
                             type: "select",
                             label: __("Physical location"),
-                            av_cat: "av_agreement_license_location",
+                            avCat: "av_agreement_license_location",
                         },
                         {
                             name: "notes",
@@ -565,7 +565,7 @@ export default {
                             name: "relationship",
                             type: "select",
                             label: __("Relationship"),
-                            av_cat: "av_agreement_relationships",
+                            avCat: "av_agreement_relationships",
                         },
                         {
                             name: "notes",
@@ -832,7 +832,7 @@ export default {
             delete agreement.agreement_packages;
 
             if (agreement_id) {
-                this.api_client.update(agreement, agreement_id).then(
+                this.apiClient.update(agreement, agreement_id).then(
                     success => {
                         this.setMessage(this.$__("Agreement updated"));
                         this.$router.push({ name: "AgreementsList" });
@@ -840,7 +840,7 @@ export default {
                     error => {}
                 );
             } else {
-                this.api_client.create(agreement).then(
+                this.apiClient.create(agreement).then(
                     success => {
                         this.setMessage(this.$__("Agreement created"));
                         this.$router.push({ name: "AgreementsList" });
@@ -1021,12 +1021,12 @@ export default {
     },
     computed: {
         newResource() {
-            return this[this.resource_name];
+            return this[this.resourceName];
         },
     },
     created() {
         //IMPROVEME: We need this for now to assign the correct av array from setup to the attr options in data
-        this.assignAVs(this.resource_attrs);
+        this.assignAVs(this.resourceAttrs);
         this.getResourceTableColumns();
     },
     emits: ["select-resource"],

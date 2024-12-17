@@ -1,16 +1,16 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="resources_add">
-        <h2 v-if="resourceToAddOrEdit.resource_id">
+        <h2 v-if="resourceToAddOrEdit[idAttr]">
             {{
                 $__("Edit") +
                 " " +
-                i18n.display_name +
+                i18n.displayName +
                 " #" +
-                resourceToAddOrEdit.resource_id
+                resourceToAddOrEdit[idAttr]
             }}
         </h2>
-        <h2 v-else>{{ $__("New") + " " + i18n.display_name }}</h2>
+        <h2 v-else>{{ $__("New") + " " + i18n.displayName }}</h2>
         <div>
             <form @submit="onSubmit($event, resourceToAddOrEdit)">
                 <fieldset
@@ -33,7 +33,7 @@
                     </ol>
                 </fieldset>
                 <template
-                    v-for="(attr, index) in resource_attrs.filter(
+                    v-for="(attr, index) in resourceAttrs.filter(
                         attr => attr.type === 'relationship'
                     )"
                     v-bind:key="'rel-' + index"
@@ -43,7 +43,7 @@
                 <fieldset class="action">
                     <ButtonSubmit />
                     <router-link
-                        :to="{ name: list_component }"
+                        :to="{ name: listComponent }"
                         role="button"
                         class="cancel"
                         >{{ $__("Cancel") }}</router-link
@@ -66,24 +66,24 @@ export default {
         };
     },
     props: {
-        id_attr: String,
-        api_client: Object,
+        idAttr: String,
+        apiClient: Object,
         i18n: Object,
-        resource_attrs: Array,
-        list_component: String,
+        resourceAttrs: Array,
+        listComponent: String,
         resource: Object,
         onSubmit: Function,
     },
     created() {
-        if (this.$route.params[this.id_attr]) {
-            this.getResource(this.$route.params[this.id_attr]);
+        if (this.$route.params[this.idAttr]) {
+            this.getResource(this.$route.params[this.idAttr]);
         } else {
             this.initialized = true;
         }
     },
     methods: {
-        async getResource(resource_id) {
-            this.api_client.get(resource_id).then(
+        async getResource(resourceId) {
+            this.apiClient.get(resourceId).then(
                 resource => {
                     this.resourceToEdit = resource;
                     this.initialized = true;
@@ -92,7 +92,7 @@ export default {
             );
         },
         getFieldGroupings() {
-            const nonRelationalFields = this.resource_attrs.filter(
+            const nonRelationalFields = this.resourceAttrs.filter(
                 attr => attr.type !== "relationship"
             );
             const groupings = nonRelationalFields.reduce((acc, attr) => {
@@ -114,7 +114,7 @@ export default {
                 ];
             }
             return groupings.reduce((acc, group) => {
-                const groupFields = this.resource_attrs.filter(
+                const groupFields = this.resourceAttrs.filter(
                     ra => ra.group === group
                 );
                 const groupInfo = {

@@ -38,8 +38,8 @@ export default {
          */
         goToResourceShow: function (resource) {
             this.$router.push({
-                name: this.show_component,
-                params: { [this.id_attr]: resource[this.id_attr] },
+                name: this.showComponent,
+                params: { [this.idAttr]: resource[this.idAttr] },
             });
         },
 
@@ -51,11 +51,11 @@ export default {
          */
         goToResourceEdit: function (resource) {
             this.$router.push({
-                name: this.edit_component,
+                name: this.editComponent,
                 params: {
-                    [this.id_attr]: resource
-                        ? resource[this.id_attr]
-                        : this[this.resource_name][this.id_attr],
+                    [this.idAttr]: resource
+                        ? resource[this.idAttr]
+                        : this[this.resourceName][this.idAttr],
                 },
             });
         },
@@ -66,7 +66,7 @@ export default {
          */
         goToResourceAdd: function () {
             this.$router.push({
-                name: this.add_component,
+                name: this.addComponent,
             });
         },
         /**
@@ -76,7 +76,7 @@ export default {
          */
         goToResourceList: function () {
             this.$router.push({
-                name: this.list_component,
+                name: this.listComponent,
             });
         },
         /**
@@ -91,44 +91,40 @@ export default {
          * @return {void}
          */
         doResourceDelete: function (resource, callback) {
-            let resource_id = resource
-                ? resource[this.id_attr]
-                : this[this.resource_name][this.id_attr];
-            let resource_name = resource
-                ? resource[this.name_attr]
-                : this[this.resource_name][this.name_attr];
+            let resourceId = resource
+                ? resource[this.idAttr]
+                : this[this.resourceName][this.idAttr];
+            let resourceName = resource
+                ? resource[this.nameAttr]
+                : this[this.resourceName][this.nameAttr];
 
             this.setConfirmationDialog(
                 {
                     title: this.$__(
                         "Are you sure you want to remove this %s?"
-                    ).format(this.i18n.display_name.toLowerCase()),
-                    message: resource_name,
+                    ).format(this.i18n.displayName.toLowerCase()),
+                    message: resourceName,
                     accept_label: this.$__("Yes, delete"),
                     cancel_label: this.$__("No, do not delete"),
                 },
                 () => {
-                    this.api_client.delete(resource_id).then(
+                    this.apiClient.delete(resourceId).then(
                         success => {
                             this.setMessage(
                                 this.$__("%s %s deleted").format(
-                                    this.i18n.display_name,
-                                    resource_name
+                                    this.i18n.displayName,
+                                    resourceName
                                 ),
                                 true
                             );
                             if (typeof callback === "function") {
                                 callback();
                             } else {
-                                if (
-                                    this.$options.name === this.list_component
-                                ) {
+                                if (this.$options.name === this.listComponent) {
                                     this.$refs.table.redraw(
                                         this.getResourceTableUrl()
                                     );
-                                } else if (
-                                    this.$options.name === this.show_component
-                                ) {
+                                } else {
                                     this.goToResourceList();
                                 }
                             }
@@ -144,22 +140,22 @@ export default {
          * @return {string}
          */
         getResourceTableUrl: function () {
-            return this.resource_table_url;
+            return this.resourceTableUrl;
         },
         getResourceTableColumns: function () {
             //This is where I left off
-            let table_attrs = this.resource_attrs.filter(
-                attr => attr.show_in_table
+            let tableAttrs = this.resourceAttrs.filter(
+                attr => attr.showInTable
             );
         },
         doResourceSelect: function (resource, dt, event) {
-            this.$emit("select-resource", resource[this.id_attr]);
+            this.$emit("select-resource", resource[this.idAttr]);
         },
         assignAVs(attrs) {
             attrs.forEach(attr => {
-                if (attr.type === "select" && typeof attr.av_cat === "string") {
-                    const av_key = attr.av_cat;
-                    attr.options = this[av_key];
+                if (attr.type === "select" && typeof attr.avCat === "string") {
+                    const avKey = attr.avCat;
+                    attr.options = this[avKey];
                     attr.requiredKey = "value";
                     attr.selectLabel = "description";
                 }
@@ -201,11 +197,11 @@ export default {
     },
     name: "BaseResource",
     props: {
-        resource_name: String,
-        id_attr: String,
-        show_component: String,
-        add_component: String,
-        edit_component: String,
+        resourceName: String,
+        idAttr: String,
+        showComponent: String,
+        addComponent: String,
+        editComponent: String,
     },
 };
 </script>

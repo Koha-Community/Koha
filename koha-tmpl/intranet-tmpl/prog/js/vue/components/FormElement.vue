@@ -22,8 +22,8 @@
         <textarea
             :id="`${attr.name}${index}`"
             v-model="resource[attr.name]"
-            :rows="attr.text_area_rows"
-            :cols="attr.text_area_col"
+            :rows="attr.textAreaRows"
+            :cols="attr.textAreaCol"
             :placeholder="attr.label"
             :required="attr.required ? true : false"
         />
