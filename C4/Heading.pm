@@ -148,7 +148,11 @@ sub authorities {
     my $self         = shift;
     my $skipmetadata = shift;
     my ( $results, $total ) = _search( $self, 'match-heading', $skipmetadata );
-    return $results;
+    if ( C4::Context->preference('LinkerConsiderDiacritics') ) {
+        return $self->_filter_diacritics($results);
+    } else {
+        return $results;
+    }
 }
 
 =head2 valid_heading_subfield
@@ -247,6 +251,29 @@ sub _search {
     }
     return ( $matched_auths, $total );
 
+}
+
+=head2 _filter_diacritics
+
+=cut
+
+sub _filter_diacritics {
+    my $self                = shift;
+    my $results             = shift;
+    my $exact_matched_auths = [];
+    for my $matched_auth (@$results) {
+        my $auth = Koha::Authorities->find( $matched_auth->{authid} );
+        next unless $auth;
+        my $authrec            = $auth->record;
+        my $auth_tag_to_report = Koha::Authority::Types->find( $self->{auth_type} )->auth_tag_to_report;
+        my $auth_heading_field = $authrec->field($auth_tag_to_report);
+        $auth_heading_field->set_tag( $self->field->tag );
+        my $auth_heading = C4::Heading->new_from_field($auth_heading_field);
+        if ( $auth_heading->search_form eq $self->search_form ) {
+            push @$exact_matched_auths, $matched_auth;
+        }
+    }
+    return $exact_matched_auths;
 }
 
 =head1 INTERNAL FUNCTIONS
