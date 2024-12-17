@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaSpan %]
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
@@ -403,8 +404,9 @@
                         [% END %]
                         </optgroup>
                     </select>
+                    [%- SET pref_BlockExpiredPatronOpacActions_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BlockExpiredPatronOpacActions&ok=Search">BlockExpiredPatronOpacActions</a>' -%]
                     <div class="hint">
-                        Choose which OPAC actions, if any, are blocked for expired patrons of this category. Alternatively, the system preference <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=BlockExpiredPatronOpacActions">BlockExpiredPatronOpacActions</a> can be used instead.
+                        Choose which OPAC actions, if any, should be blocked for expired patrons in this category. Alternatively, you can use the system preference [%- pref_BlockExpiredPatronOpacActions_link | $raw | $KohaSpan -%] instead.
                 </li>
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' )  %]
                   <li><label for="checkprevcheckout">Check for previous checkouts: </label>
@@ -478,22 +480,25 @@
                         <option value="0" selected>No</option>
                     [% END %]
                     </select>
-                    <div class="hint">If <i>Yes</i>, holds placed by patrons of this category will not be given priority</div>
+                    <div class="hint">If <i>Yes</i>, holds placed by patrons of this category will not be given priority.</div>
                 </li>
                 <li>
                     <label for="noissuescharge">Checkout charge limit: </label>
                     <input type="text" pattern="^\d+(\.\d{2})?$" name="noissuescharge" id="noissuescharge" value="[% category.noissuescharge | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
-                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">noissuescharge</a> preference</div>
+                    [%- SET pref_noissuescharge_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">noissuescharge</a>' -%]
+                    <div class="hint">If set, this will override the global value set in the [%- pref_noissuescharge_link | $raw | $KohaSpan -%] preference.</div>
                 </li>
                 <li>
                     <label for="noissueschargeguarantees">Guarantees checkout charge limit: </label>
                     <input type="text" pattern="^\d+(\.\d{2})?$" name="noissueschargeguarantees" id="noissueschargeguarantees" value="[% category.noissueschargeguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
-                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantees</a> preference</div>
+                    [%- SET pref_NoIssuesChargeGuarantees_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=NoIssuesChargeGuarantees&ok=Search">NoIssuesChargeGuarantees</a>' -%]
+                    <div class="hint">If set, this will override the global value set in the [%- pref_NoIssuesChargeGuarantees_link | $raw | $KohaSpan -%] preference.</div>
                 </li>
                 <li>
                     <label for="noissueschargeguarantorswithguarantees">Guarantors with guarantees checkout charge limit: </label>
                     <input type="text" pattern="^\d+(\.\d{2})?$" name="noissueschargeguarantorswithguarantees" id="noissueschargeguarantorswithguarantees" value="[% category.noissueschargeguarantorswithguarantees | $Price on_editing => 1 %]" class="decimal" size="3" maxlength="4" />
-                    <div class="hint">If set, this will override the global value set in the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=noissuescharge&ok=Search">NoIssuesChargeGuarantorsWithGuarantees</a> preference</div>
+                    [%- SET pref_NoIssuesChargeGuarantorsWithGuarantees_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=NoIssuesChargeGuarantees&ok=Search">NoIssuesChargeGuarantees</a>' -%]
+                    <div class="hint">If set, this will override the global value set in the [%- pref_NoIssuesChargeGuarantorsWithGuarantees_link | $raw | $KohaSpan -%] preference.</div>
                 </li>
             </ol>
         </fieldset>
