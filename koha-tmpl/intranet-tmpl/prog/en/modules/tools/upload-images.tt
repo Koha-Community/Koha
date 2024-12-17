@@ -179,10 +179,11 @@
 
                 <div class="row">
                     [% IF ( cover_images ) %]
-                        <div class="col-sm-9">
+                        [% SET column_class = "col-sm-9" %]
                     [% ELSE %]
-                        <div class="col-sm-12">
+                        [% SET column_class = "col-sm-12" %]
                     [% END %]
+                    <div class="[% column_class | html %]">
 
                         <form method="get" action="/cgi-bin/koha/tools/upload-cover-image.pl" id="uploadfile" enctype="multipart/form-data">
                             <fieldset class="rows" >
@@ -248,13 +249,14 @@
                                     [% END %]
                                     <li class="radio">
                                         <label for="replace">
-                                        [% IF AllowMultipleCovers == 0 %]
-                                            <input type="checkbox" id="replace" name="replace" value="" disabled="disabled" checked="checked" />
-                                            Existing covers will be replaced
-                                        [% ELSE %]
-                                            <input type="checkbox" id="replace" name="replace" value="1" />
-                                            Replace existing covers
-                                        [% END %]
+                                            [% IF AllowMultipleCovers == 0 %]
+                                                <input type="checkbox" id="replace" name="replace" value="" disabled="disabled" checked="checked" />
+                                                Existing covers will be replaced
+                                            [% ELSE %]
+                                                <input type="checkbox" id="replace" name="replace" value="1" />
+                                                Replace existing covers
+                                            [% END %]
+                                        </label>
                                     </li>
                                 </ol>
                             </fieldset>
@@ -311,8 +313,6 @@
         var biblionumber = "[% biblionumber | html %]";
     </script>
     [% Asset.js("js/upload-images.js") | $raw %]
-
-    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

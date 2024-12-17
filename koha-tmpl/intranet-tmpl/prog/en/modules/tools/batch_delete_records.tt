@@ -58,28 +58,30 @@
 
   <h1>Batch record deletion</h1>
   [% FOREACH message IN messages %]
+    [% SET message_class = "alert-info" %]
     [% IF message.type == 'success' %]
-      <div class="alert alert-info">
+        [% message_class = "alert-info" %]
     [% ELSIF message.type == 'warning' %]
-      <div class="alert alert-warning">
+        [% message_class = "alert-warning" %]
     [% ELSIF message.type == 'error' %]
-      <div class="alert alert-warning" style="margin:auto;">
+        [% message_class = "alert-warning" %]
     [% END %]
-    [% IF message.code == 'biblio_not_exists' %]
-      <span>The biblionumber [% message.biblionumber | html %] does not exist in the database.</span>
-    [% ELSIF message.code == 'authority_not_exists' %]
-      <span>The authority ID [% message.authid | html %] does not exist in the database.</span>
-    [% ELSIF message.code == 'cannot_enqueue_job' %]
-        <span>Cannot enqueue this job.</span>
-    [% ELSIF message.code == 'biblio_not_exists' %]
-        <span>Bibliographic record [% message.biblionumber | html %] does not exist in the database.</span>
-    [% ELSIF message.code == 'authority_not_exists' %]
-        <span>Authority record [% message.authid | html %] does not exist in the database.</span>
-    [% END %]
+    <div class="alert [% message_class | html %]">
+        [% IF message.code == 'biblio_not_exists' %]
+            <span>The biblionumber [% message.biblionumber | html %] does not exist in the database.</span>
+        [% ELSIF message.code == 'authority_not_exists' %]
+            <span>The authority ID [% message.authid | html %] does not exist in the database.</span>
+        [% ELSIF message.code == 'cannot_enqueue_job' %]
+            <span>Cannot enqueue this job.</span>
+        [% ELSIF message.code == 'biblio_not_exists' %]
+            <span>Bibliographic record [% message.biblionumber | html %] does not exist in the database.</span>
+        [% ELSIF message.code == 'authority_not_exists' %]
+            <span>Authority record [% message.authid | html %] does not exist in the database.</span>
+        [% END %]
 
-    [% IF message.error %]
-      <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
-    [% END %]
+        [% IF message.error %]
+        <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
+        [% END %]
     </div>
   [% END %]
   [% IF op == 'form' %]
@@ -157,6 +159,11 @@
     </form>
   [% ELSIF op == 'list' %]
     [% IF records %]
+        [% SET form_id = "selectauths" %]
+        [% IF recordtype == 'biblio' %]
+            [% SET form_id = "selectrecords" %]
+        [% END %]
+        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="[% form_id | html %]">
       [% IF recordtype == 'biblio' %]
         <div class="btn-toolbar selections-toolbar">
           <a id="selectall" href="#"><i class="fa fa-check"></i> Select all</a>
@@ -167,7 +174,6 @@
         </div>
 
         <div class="page-section">
-        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectrecords">
           <table id="biblios" class="records">
             <thead>
               <tr>
@@ -201,7 +207,6 @@
           | <a id="clearall" href="#"><i class="fa fa-times"></i> Clear all</a>
           | <a id="clearlinkedtobiblio" href="#">Clear used authorities</a>
         </div>
-        <form action="/cgi-bin/koha/tools/batch_delete_records.pl" method="post" id="selectauths">
             [% INCLUDE 'csrf-token.inc' %]
           <table id="authorities" class="records">
             <thead>
@@ -233,7 +238,6 @@
           <a class="cancel" href="/cgi-bin/koha/tools/batch_delete_records.pl">Cancel</a>
         </fieldset>
       </form>
-      </div>
     [% ELSE %]
       There are no record IDs defined.
     [% END %]

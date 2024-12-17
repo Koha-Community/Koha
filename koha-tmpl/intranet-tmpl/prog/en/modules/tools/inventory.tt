@@ -17,6 +17,14 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% FILTER collapse %]
+    <style>
+        .branchgridrow {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+[% END %]
 </head>
 
 <body id="tools_inventory" class="tools">
@@ -108,9 +116,9 @@
                         <legend>Item location filters</legend>
                         <ol>
                             <li>
-                                <label for="branch">Location: </label>
-                                <input type="radio" name="branch" value="homebranch"> Home library</input>
-                                <input type="radio" name="branch" value="holdingbranch"> Current library</input>
+                                <span class="label">Location: </span>
+                                <label><input type="radio" name="branch" value="homebranch" /> Home library</label>
+                                <label><input type="radio" name="branch" value="holdingbranch" /> Current library</label>
                             </li>
 
                             <li>
@@ -161,18 +169,18 @@
                             <li>
                                 <label for="maxlocation">...and: </label>
                                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
-                                <li>
-                                    <label for="class_source">Call number classification scheme</label>
-                                    <select name="class_source" id="class_source">
-                                        [% FOREACH class_source IN class_sources %]
-                                            [% IF class_source.cn_source == pref_class %]
-                                                <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %] (default)</option>
-                                            [% ELSE %]
-                                                <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
-                                            [% END %]
+                            </li>
+                            <li>
+                                <label for="class_source">Call number classification scheme</label>
+                                <select name="class_source" id="class_source">
+                                    [% FOREACH class_source IN class_sources %]
+                                        [% IF class_source.cn_source == pref_class %]
+                                            <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %] (default)</option>
+                                        [% ELSE %]
+                                            <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
                                         [% END %]
-                                    </select>
-                                </li>
+                                    [% END %]
+                                </select>
                             </li>
                         </ol>
                     </fieldset>
@@ -228,21 +236,23 @@
                             </li>
                             <li>
                                 <label>Item types: </label>
-                                <div class="branchselector">
-                                    <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-times"></i> Clear all</a></p>
-                                    <div class="branchgridrow">
-                                        [% FOREACH itemtype IN itemtypes %]
-                                            <div class="branchgriditem">
-                                                <input id="itemtype-[% itemtype.itemtype | html %]" class="branch_select" type="checkbox" name="itemtype-[% itemtype.itemtype | html %]" value="[% itemtype.itemtype | html %]" />
-                                                <label for="itemtype-[% itemtype.itemtype | html %]">[% itemtype.description | html %]</label>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <div class="branchselector">
+                                            <p><a href="#" id="checkallitemtypes"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknoneitemtypes"> <i class="fa fa-times"></i> Clear all</a></p>
+                                            <div class="branchgridrow">
+                                                <!-- prettier-ignore-start -->
+                                                [% FOREACH itemtype IN itemtypes %]
+                                                    <div class="branchgriditem">
+                                                        <input id="itemtype-[% itemtype.itemtype | html %]" class="branch_select" type="checkbox" name="itemtype-[% itemtype.itemtype | html %]" value="[% itemtype.itemtype | html %]" />
+                                                        <label for="itemtype-[% itemtype.itemtype | html %]">[% itemtype.description | html %]</label>
+                                                    </div>
+                                                [% END %]
+                                                <!-- prettier-ignore-end -->
                                             </div>
-                                            [% IF loop.count() % 4 == 0 && !loop.last() %]
-                                                </div>
-                                                <div class="branchgridrow">
-                                            [% END %]
-                                        [% END %]
-                                    </div>
-                                </div>
+                                        </div>
+                                    </div> <!-- /.col-md-9 -->
+                                </div> <!-- /.row -->
                             </li>
                         </ol>
                     </fieldset>

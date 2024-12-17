@@ -83,13 +83,15 @@
         [% END %]
 
         [% FOREACH message IN messages %]
-          [% IF message.type == 'success' %]
-            <div class="alert alert-info">
-          [% ELSIF message.type == 'warning' %]
-            <div class="alert alert-warning">
-          [% ELSIF message.type == 'error' %]
-            <div class="alert alert-warning" style="margin:auto;">
-          [% END %]
+            [% SET message_class = "alert-info" %]
+            [% IF message.type == 'success' %]
+                [% message_class = "alert-info" %]
+            [% ELSIF message.type == 'warning' %]
+                [% message_class = "alert-warning" %]
+            [% ELSIF message.type == 'error' %]
+                [% message_class = "alert-warning" %]
+            [% END %]
+            <div class="alert [% message_class | html %]">
           [% IF message.code == 'cannot_enqueue_job' %]
               <span>Cannot enqueue this job.</span>
           [% END %]
@@ -120,7 +122,7 @@
                     </thead>
                     <tbody>
                         [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-                            <tr><td>[% notfoundbarcode |html %]</td></td>
+                            <tr><td>[% notfoundbarcode |html %]</td></tr>
                         [% END %]
                     </tbody>
                 </table>
@@ -143,7 +145,7 @@
                     </thead>
                     <tbody>
                         [% FOREACH notfounditemnumber IN notfounditemnumbers %]
-                            <tr><td>[% notfounditemnumber |html %]</td></td>
+                            <tr><td>[% notfounditemnumber |html %]</td></tr>
                         [% END %]
                     </tbody>
                 </table>
@@ -224,7 +226,7 @@
                             <legend>Options</legend>
                             <ol>
                                 <li>
-                                    <div class="hint">This option checks in items to remove them from patron accounts.</br>Items are not marked found, nor do damaged/withdrawn statuses prevent this return, nor are item locations updated. This feature is intended to allow removal of checkouts from patron accounts without affecting fines or other statuses.</div></br>
+                                    <div class="hint">This option checks in items to remove them from patron accounts.<br />Items are not marked found, nor do damaged/withdrawn statuses prevent this return, nor are item locations updated. This feature is intended to allow removal of checkouts from patron accounts without affecting fines or other statuses.</div><br />
                                     <div class="subfield_line">
                                         <label for="mark_items_returned">Check in items:</label>
                                         <select id="mark_items_returned" name="mark_items_returned" class="input_marceditor select2" style="width: 50px">

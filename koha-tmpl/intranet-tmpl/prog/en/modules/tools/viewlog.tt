@@ -294,7 +294,11 @@
                                             [% ELSIF loopro.module == "SYSTEMPREFERENCE" || loopro.module == "REPORTS" || loopro.module == "NEWS" %]
                                                 <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>
                                                 <div class="compare_info" id="compare_info[% loopro.action_id | html %]">
-                                                    <label><input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN loopro.info.split(' \| ') %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
+                                                    <!-- prettier-ignore-start -->
+                                                    <label>
+                                                        [% SET split_info = loopro.info.split(' \| ') %]
+                                                        <input type="checkbox" name="diff" id="action_id[% loopro.action_id | html %]" data-actionid="[% loopro.action_id | html %]" data-filter="[% FOREACH info IN split_info %][% IF loop.first %][% info | html %][% END %][% END %]" class="compare" /> Compare</label>
+                                                    <!-- prettier-ignore-end -->
                                                 </div>
                                             [% ELSIF loopro.module == "NOTICES" %]
                                                 <div class="loginfo" id="loginfo[% loopro.action_id | html %]">[% loopro.info | trim | html %]</div>

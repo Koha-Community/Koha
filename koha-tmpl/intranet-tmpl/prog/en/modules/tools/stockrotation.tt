@@ -389,7 +389,7 @@
                                 <p> [% sritemstotal | html %] items are still attached to this rota, those items will remain at their current stage libraries.</p>
                             [% END %]
                         [% END %]
-                        <p>
+                        <div>
                             <form id="delete_rota_[% rota_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_rota" />
@@ -397,7 +397,7 @@
                                 <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
                             </form>
                             <a class="btn btn-default btn-xs deny" href="/cgi-bin/koha/tools/stockrotation.pl"><i class="fa fa-fw fa-times"></i> No</a>
-                        </p>
+                        </div>
                     </div>
                 [% ELSIF (op == 'confirm_delete_stage') %]
 
@@ -411,7 +411,7 @@
                                 [% END %]
                             </ul>
                         [% END %]
-                        <p>
+                        <div>
                             <form id="delete_stage_[% stage.stage_id | html %]" method="post" action="/cgi-bin/koha/tools/stockrotation.pl">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="op" value="cud-delete_stage" />
@@ -419,7 +419,7 @@
                                 <button class="btn btn-default btn-xs approve" type="submit"><i class="fa fa-fw fa-check"></i> Yes</button>
                             </form>
                             <a class="btn btn-default btn-xs deny" href="?op=manage_stages&amp;rota_id=[% stage.rota.rota_id | uri %]"><i class="fa fa-fw fa-times"></i> No</a>
-                        </p>
+                        </div>
                     </div>
                 [% ELSIF (op == 'manage_items') %]
 
@@ -514,12 +514,12 @@
                                             </td>
                                             <td>
                                                 [%- FOREACH this_stage IN stages -%]
+                                                    [% SET stage_class = "stage" %]
                                                     [%- IF this_stage.stage_id == sritem.stage.stage_id -%]
-                                                        <span class="stage highlight_stage">
-                                                    [%- ELSE -%]
-                                                        <span class="stage">
+                                                        [% stage_class = stage_class _ " highlight_stage" %]
                                                     [%- END -%]
-                                                    [%- Branches.GetName(this_stage.branchcode_id) | html -%] ([%- this_stage.duration | html -%])
+                                                    <span class="[% stage_class | html %]">
+                                                        [%- Branches.GetName(this_stage.branchcode_id) | html -%] ([%- this_stage.duration | html -%])
                                                     </span>&raquo;
                                                 [%- END -%]
                                                 [%- IF stages.size > 0 -%]
@@ -530,30 +530,30 @@
                                                 [%- IF stages.size < 2 -%]
                                                     <a class="btn btn-default btn-xs" title="Rota has a single stage, advancing will have no effect" disabled>
                                                 [%- ELSE -%]
-                                                    [%- IF !transfer -%]
-                                                        <a id="move_to_next_stage_[% sritem.id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" href="#" data-item_id="[% sritem.id | html %]" data-rota_id="[% rota.id | html %]" date-stage_id="[% sritem.stage.stage_id | html %]" data-action="/cgi-bin/koha/tools/stockrotation.pl" data-method="post" data-op="cud-move_to_next_stage">
-                                                    [%- ELSE -%]
-                                                        <a id="move_to_next_stage_[% sritem.id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" href="#" data-item_id="[% sritem.id | html %]" data-rota_id="[% rota.id | html %]" date-stage_id="[% sritem.stage.stage_id | html %]" data-action="/cgi-bin/koha/tools/stockrotation.pl" data-method="post" data-op="cud-move_to_next_stage" title="Item is in transit, it will be directed to new stage when checked in">
-                                                    [%- END -%]
-                                                        <i class="fa fa-arrow-right"></i> Move to next stage</a>
+                                                    [% SET button_title = "" %]
+                                                    [% IF transfer %]
+                                                        [% button_title = "Item is in transit, it will be directed to new stage when checked in" %]
+                                                    [% END %]
+                                                    <a id="move_to_next_stage_[% sritem.id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" href="#" data-item_id="[% sritem.id | html %]" data-rota_id="[% rota.id | html %]" date-stage_id="[% sritem.stage.stage_id | html %]" data-action="/cgi-bin/koha/tools/stockrotation.pl" data-method="post" data-op="cud-move_to_next_stage" title="[% button_title | html %]">
+                                                    <i class="fa fa-arrow-right"></i> Move to next stage</a>
                                                 [%- END -%]
 
                                                 [%- IF !transfer -%]
-                                                        <a id="toggle_in_demand_[% sritem.id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" href="#" data-item_id="[% sritem.id | html %]" data-rota_id="[% rota.id | html %]" date-stage_id="[% sritem.stage.stage_id | html %]" data-action="/cgi-bin/koha/tools/stockrotation.pl" data-method="post" data-op="cud-toggle_in_demand" title="Item is in transit, it will be directed to new stage when checked in">
+                                                    <a id="toggle_in_demand_[% sritem.id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" href="#" data-item_id="[% sritem.id | html %]" data-rota_id="[% rota.id | html %]" date-stage_id="[% sritem.stage.stage_id | html %]" data-action="/cgi-bin/koha/tools/stockrotation.pl" data-method="post" data-op="cud-toggle_in_demand" title="Item is in transit, it will be directed to new stage when checked in">
                                                         [%- IF sritem.indemand -%]
-                                                            <i class="fa fa-fire"></i> Remove &quot;In demand&quot;</button>
+                                                            <i class="fa fa-fire"></i> Remove &quot;In demand&quot;
                                                         [%- ELSE -%]
-                                                            <i class="fa fa-fire"></i> Add &quot;In demand&quot;</button>
+                                                            <i class="fa fa-fire"></i> Add &quot;In demand&quot;
                                                         [%- END -%]
                                                     </a>
                                                 [%- END -%]
 
                                                 [%- IF !transfer -%]
                                                     <a id="remove_item_from_stage_[% item_id | html %]_[% rota.id | html %]" class="btn btn-default btn-xs submit-form-link" action="/cgi-bin/koha/tools/stockrotation.pl" data-op="cud-remove_item_from_stage" data-item_id="[% sritem.id | html %]" data-stage_id="[% sritem.stage.stage_id | html %]" data-rota_id="[% rota.id | html %]" data-method="post" data-confirmation-msg="[% t('Are you sure you wish to remove this item from its rota?') | html %]">
+                                                    <i class="fa fa-trash-can"></i> Remove from rota</a>
                                                 [%- ELSE -%]
-                                                    <a class="btn btn-default btn-xs" disabled="disabled">
+                                                    <a class="btn btn-default btn-xs" disabled="disabled"><i class="fa fa-trash-can"></i> Remove from rota</a>
                                                 [%- END -%]
-                                                    <i class="fa fa-trash-can"></i>Remove from rota</a>
                                             </td>
                                         </tr>
                                     [% END %]
@@ -640,19 +640,19 @@
                 [% IF ( op == 'manage_stages' || op == 'manage_items' ) %]
                     <div id="menu">
                         <ul>
+                            [% SET item_class = "" %]
                             [% IF op == 'manage_stages' %]
-                                <li class="active">
-                            [% ELSE %]
-                                <li>
+                                [% item_class = "active" %]
                             [% END %]
-                                    <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
-                                </li>
+                            <li class="[% item_class | html %]">
+                                <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
+                            </li>
+                            [% SET item_class = "" %]
                             [% IF op == 'manage_items' %]
-                                <li class="active">
-                            [% ELSE %]
-                                <li>
+                                [% item_class = "active" %]
                             [% END %]
-                                    <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_items&amp;rota_id=[% rota_id | uri %]">Manage items</a>
+                            <li class="[% item_class | html %]">
+                                <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_items&amp;rota_id=[% rota_id | uri %]">Manage items</a>
                             </li>
                         </ul>
                     </div>

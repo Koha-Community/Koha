@@ -290,11 +290,11 @@
                     <fieldset class="rows">
                         <legend> Choose a file </legend>
                         [% IF ( dbfiles && (dbfiles.size > 0) ) %]
-                            <ul>
+                            <ol>
                                 [% FOREACH dbfile IN dbfiles %]
-                                    <li><input type="radio" name="filename" value="[% dbfile | html %]" />[% dbfile | html %]</li>
+                                    <li class="radio"><label><input type="radio" name="filename" value="[% dbfile | html %]" />[% dbfile | html %]</label></li>
                                 [% END %]
-                            </ul>
+                            </ol>
                         [% ELSE %]
                             <p style="clear:both">Unfortunately, no backups are available.</p>
                         [% END %]
@@ -317,11 +317,11 @@
                     <fieldset class="rows">
                         <legend> Choose a file </legend>
                         [% IF ( conffiles && (conffiles.size > 0) ) %]
-                            <ul>
+                            <ol>
                                 [% FOREACH conffile IN conffiles %]
-                                    <li><input type="radio" name="filename" value="[% conffile | html %]">[% conffile | html %]</input></li>
+                                    <li class="radio"><label><input type="radio" name="filename" value="[% conffile | html %]" />[% conffile | html %]</label></li>
                                 [% END %]
-                                </ul>
+                            </ol>
                         [% ELSE %]
                             <p style="clear:both">Unfortunately, no backups are available.</p>
                         [% END %]

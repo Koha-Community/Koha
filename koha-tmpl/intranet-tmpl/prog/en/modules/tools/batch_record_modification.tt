@@ -60,12 +60,13 @@
                         <div class="alert alert-info">
 
                             [% FOREACH message IN messages %]
+                                <div>
                                 [% IF message.type == 'success' %]
-                                    <div><i class="fa fa-check success"></i>
+                                    <i class="fa fa-check success"></i>
                                 [% ELSIF message.type == 'warning' %]
-                                    <div><i class="fa-solid fa-triangle-exclamation warn"></i>
+                                    <i class="fa-solid fa-triangle-exclamation warn"></i>
                                 [% ELSIF message.type == 'error' %]
-                                    <div><i class="fa fa-exclamation error"></i>
+                                    <i class="fa fa-exclamation error"></i>
                                 [% END %]
                                 [% IF message.code == 'no_action_defined_for_the_template' %]
                                     <span>The selected template (id=[% message.mmtid | html %]) does not exist or no action is defined.</span>

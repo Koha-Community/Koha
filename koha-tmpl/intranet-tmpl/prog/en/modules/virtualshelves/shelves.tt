@@ -287,33 +287,37 @@
                                         [% UNLESS ( item_level_itypes ) %]
                                             <th>Item type</th>
                                         [% END %]
+                                        [% SET sort_class = 'dt-orderable-asc dt-orderable-desc' %]
                                         [% IF sortfield == 'title' %]
-                                            <th class="sorting_[% direction | html %]">
-                                        [% ELSE %]
-                                            <th class="sorting">
+                                            [% sort_class = sort_class _ " dt-ordering-" _ direction %]
                                         [% END %]
+                                        <th class="[% sort_class | html %]">
                                             <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
+                                            <span class="dt-column-order"></span>
                                         </th>
+                                        [% SET sort_class = 'dt-orderable-asc dt-orderable-desc' %]
                                         [% IF sortfield == 'author' %]
-                                            <th class="sorting_[% direction | html %]">
-                                        [% ELSE %]
-                                            <th class="sorting">
+                                            [% sort_class = sort_class _ " dt-ordering-" _ direction %]
                                         [% END %]
+                                        <th class="[% sort_class | html %]">
                                             <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
+                                            <span class="dt-column-order"></span>
                                         </th>
+                                        [% SET sort_class = 'dt-orderable-asc dt-orderable-desc' %]
                                         [% IF sortfield == 'dateadded' %]
-                                            <th class="sorting_[% direction | html %]">
-                                        [% ELSE %]
-                                            <th class="sorting">
+                                            [% sort_class = sort_class _ " dt-ordering-" _ direction %]
                                         [% END %]
+                                        <th class="[% sort_class | html %]">
                                             <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
+                                            <span class="dt-column-order"></span>
                                         </th>
+                                        [% SET sort_class = 'dt-orderable-asc dt-orderable-desc' %]
                                         [% IF sortfield == 'itemcallnumber' %]
-                                            <th class="sorting_[% direction | html %]">
-                                        [% ELSE %]
-                                            <th class="sorting">
+                                            [% sort_class = sort_class _ " dt-ordering-" _ direction %]
                                         [% END %]
+                                        <th class="[% sort_class | html %]">
                                             <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
+                                            <span class="dt-column-order"></span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -337,7 +341,6 @@
                                                 [% itemsloo.XSLTBloc | $raw %]
                                             [% ELSE %]
                                                 [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
-                                                </a>
                                             [% END %]
                                             <p class="hold">
                                                 [% IF ( itemsloo.notforloan ) %]

@@ -60,20 +60,22 @@
     <h1>Batch item deletion</h1>
 
     [% FOREACH message IN messages %]
-      [% IF message.type == 'success' %]
-        <div class="alert alert-info">
-      [% ELSIF message.type == 'warning' %]
-        <div class="alert alert-warning">
-      [% ELSIF message.type == 'error' %]
-        <div class="alert alert-warning" style="margin:auto;">
-      [% END %]
-      [% IF message.code == 'cannot_enqueue_job' %]
-          <span>Cannot enqueue this job.</span>
-      [% END %]
-      [% IF message.error %]
-        <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
-      [% END %]
-      </div>
+        [% SET message_type = "alert-info" %]
+        [% IF message.type == 'success' %]
+            [% message_type = "alert-info" %]
+        [% ELSIF message.type == 'warning' %]
+            [% message_type = "alert-warning" %]
+        [% ELSIF message.type == 'error' %]
+            [% message_type = "alert-warning" %]
+        [% END %]
+        <div class="alert [% message_type | html %]">
+            [% IF message.code == 'cannot_enqueue_job' %]
+                <span>Cannot enqueue this job.</span>
+            [% END %]
+            [% IF message.error %]
+                <span>(The error was: [% message.error | html %], see the Koha log file for more information).</span>
+            [% END %]
+        </div>
     [% END %]
 
 
@@ -89,7 +91,7 @@
             </thead>
             <tbody>
                 [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-                    <tr><td>[% notfoundbarcode |html %]</td></td>
+                    <tr><td>[% notfoundbarcode |html %]</td></tr>
                 [% END %]
             </tbody>
         </table>
@@ -104,7 +106,7 @@
             </thead>
             <tbody>
                 [% FOREACH notfounditemnumber IN notfounditemnumbers %]
-                    <tr><td>[% notfounditemnumber |html %]</td></td>
+                    <tr><td>[% notfounditemnumber |html %]</td></tr>
                 [% END %]
             </tbody>
         </table>
@@ -120,7 +122,7 @@
             </thead>
             <tbody>
                 [% FOREACH barcode IN cannot_be_deleted %]
-                    <tr><td>[% barcode | html %]</td></td>
+                    <tr><td>[% barcode | html %]</td></tr>
                 [% END %]
             </tbody>
         </table>
@@ -214,6 +216,7 @@
     [% END %]
 
     </div>
+
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]

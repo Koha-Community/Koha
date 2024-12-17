@@ -161,8 +161,10 @@
                     <fieldset class="action"><input type="submit" class="btn btn-primary" value="Save changes" /></fieldset>
                 </form>
             [% ELSE %]
-                <div class="warning">You don't have patron categories defined, or the patron categories are not set to receive overdue notices.</div>
-                <div class="warning">If this is not what you were expecting, go to <a href="../admin/categories.pl">patron categories</p></div>
+                <div class="alert alert-warning">
+                    <p>You don't have patron categories defined, or the patron categories are not set to receive overdue notices.</p>
+                    <p>If this is not what you were expecting, go to <a href="/cgi-bin/koha/admin/categories.pl">patron categories</a></p>
+                </div>
             [% END %]
 
             </main>

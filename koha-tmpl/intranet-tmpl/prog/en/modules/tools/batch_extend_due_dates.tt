@@ -66,12 +66,13 @@
                         <div class="alert alert-info">
 
                             [% FOREACH message IN messages %]
+                                <div>
                                 [% IF message.type == 'success' %]
-                                    <div><i class="fa fa-check success"></i>
+                                    <i class="fa fa-check success"></i>
                                 [% ELSIF message.type == 'warning' %]
-                                    <div><i class="fa-solid fa-triangle-exclamation warn"></i>
+                                    <i class="fa-solid fa-triangle-exclamation warn"></i>
                                 [% ELSIF message.type == 'error' %]
-                                    <div><i class="fa fa-exclamation error"></i>
+                                    <i class="fa fa-exclamation error"></i>
                                 [% END %]
                                 [% IF message.error %]
                                     <span>(The error was: [% message.error | html %]. See the Koha logfile for more information).</span>

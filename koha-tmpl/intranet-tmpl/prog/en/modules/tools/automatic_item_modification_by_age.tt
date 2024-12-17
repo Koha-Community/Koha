@@ -48,8 +48,6 @@
                 [% INCLUDE 'messages.inc' %]
 
         [% IF ( op == 'edit_form' ) %]
-          <form method="post" id="rules_form" action="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">
-              [% INCLUDE 'csrf-token.inc' %]
             <h1>Rules for automatic item modifications by age</h1>
             <div id="toolbar" class="btn-toolbar sticky">
                 <div class="btn-group">
@@ -76,16 +74,20 @@
         [% END %]
 
         [% FOR message IN messages %]
-          [% IF message.type == "error" %]
-            <div class="alert alert-warning">
-          [% END %]
-          [% IF message.code == "unable_to_load_configuration" %]
-            An error occurs: Unable to load the configuration.
-          [% END %]
-          </div>
+            [% SET message_class = "alert-info" %]
+            [% IF message.type == "error" %]
+                [% message_class = "alert-warning" %]
+            [% END %]
+            <div class="alert [% message_class | html %]">
+                [% IF message.code == "unable_to_load_configuration" %]
+                    An error occurs: Unable to load the configuration.
+                [% END %]
+            </div>
         [% END %]
 
         [% IF op == 'edit_form' %]
+          <form method="post" id="rules_form" action="/cgi-bin/koha/tools/automatic_item_modification_by_age.pl">
+              [% INCLUDE 'csrf-token.inc' %]
             <div id="edit_rules">
                 <div id="rules">
                 [% FOR rule IN rules %]

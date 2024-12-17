@@ -140,11 +140,10 @@
                                 <label for="image">
                                 [% IF ( filetype == 'image' ) %]<input type="radio" id="image" name="filetype" value="image" checked="checked" />[% ELSE %]<input type="radio" id="image" name="filetype" value="image" />[% END %] Image file</label>
                             </li>
-                            [% IF ( filetype == 'image' ) %]
-                                <li id="cardnum">
-                            [% ELSE %]
-                                <li id="cardnum" style="display: none">
+                            [% IF ( filetype != 'image' ) %]
+                                [% SET card_class = "d-none" %]
                             [% END %]
+                            <li id="cardnum" class="[% card_class | html %]">
                                 <label for="cardnumber">Enter patron card number: </label>
                                 <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" size="15" />
                                 <span class="required">Required</span>

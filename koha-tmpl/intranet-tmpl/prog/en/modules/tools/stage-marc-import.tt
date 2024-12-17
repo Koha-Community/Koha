@@ -53,13 +53,15 @@
                 [% INCLUDE 'messages.inc' %]
 
         [% FOREACH message IN messages %]
-          [% IF message.type == 'success' %]
-            <div class="alert alert-info">
-          [% ELSIF message.type == 'warning' %]
-            <div class="alert alert-warning">
-          [% ELSIF message.type == 'error' %]
-            <div class="alert alert-warning" style="margin:auto;">
-          [% END %]
+            [% SET message_class = "alert-info" %]
+            [% IF message.type == 'success' %]
+                [% message_class = "alert-info" %]
+            [% ELSIF message.type == 'warning' %]
+                [% message_class = "alert-warning" %]
+            [% ELSIF message.type == 'error' %]
+                [% message_class = "alert-warning" %]
+            [% END %]
+            <div class="alert [% message_class | html %]">
           [% IF message.code == 'cannot_enqueue_job' %]
               <span>Cannot enqueue this job.</span>
           [% END %]

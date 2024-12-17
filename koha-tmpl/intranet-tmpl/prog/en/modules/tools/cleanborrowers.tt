@@ -195,21 +195,21 @@
                     <p>
                         <input id="delete" type="radio" name="radio" value="delete" />
                         <label for="delete">Permanently delete these patrons</label>
-                        <div class="hint">
+                        <span class="hint">
                             Delete patrons directly from the database. Patron data will not be recoverable.
-                        </div>
+                        </span>
                     </p>
                     <p>
                         <input id="trash" type="radio" name="radio" value="trash" />
                         <label for="trash">Move these patrons to the trash</label>
-                        <div class="hint">
+                        <span class="hint">
                             Move patrons to the deleted patrons table. They can be deleted permanently by the <code>cleanup_database</code> script.
-                        </div>
+                        </span>
                     </p>
                     <p>
                         <input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
                         <label for="testrun">Test run: Do not remove any patrons.</label>
-                        <input type="hidden" name="do_delete" value="[% patrons_to_delete.size | html %]" /></fieldset>
+                        <input type="hidden" name="do_delete" value="[% patrons_to_delete.size | html %]" />
                     </p>
                 </fieldset>
             [% END %]
