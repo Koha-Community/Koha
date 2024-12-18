@@ -783,7 +783,7 @@
                                                         <input type="hidden" name="op" value="cud-transfer" />
                                                         <input type="hidden" name="transit" value="[% transfer | uri %]"/>
                                                         <button type="submit" data-bs-dismiss="modal" class="btn btn-default" accesskey="y"><i class="fa fa-check"></i> OK (Y)</button>
-                                                        <button type="button" data-bs-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
+                                                        <button type="button" data-bs-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% returnbranch | uri %]&amp;op=slip" accesskey="p"><i class="fa fa-print"></i> Print slip (P)</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
