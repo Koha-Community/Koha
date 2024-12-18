@@ -1,9 +1,11 @@
 [%- USE To -%]
 [%- IF link && ! biblio %][% link = 0 %][% END %]
 [%- IF ( link ) -%]
-    <a href="[%- PROCESS biblio_a_href biblionumber => biblio.biblionumber -%]" class="title">
+    <a href="[%- PROCESS biblio_a_href biblionumber => biblio.biblionumber -%]" class="title">[% PROCESS 'show-biblio-title' %]</a>
+[%- ELSE -%]
+    [%- PROCESS 'show-biblio-title' -%]
 [%- END -%]
-
+[%- BLOCK 'show-biblio-title' -%]
 [%- IF !biblio -%]
     <span class="biblio-no-record">No bibliographic record</span>
 [%- ELSIF !biblio.title -%]
@@ -14,7 +16,8 @@
 [%- IF ( biblio.medium ) -%]
     <span class="biblio-medium">[%- biblio.medium | html | $To -%]</span>
 [%- END -%]
-[%- FOREACH subtitle IN biblio.subtitle.split(' \\| ') -%][%- IF Koha.Preference('marcflavour')=='UNIMARC' -%],[%- END -%]
+[%- SET subtitles = biblio.subtitle.split(' \\| ') -%]
+[%- FOREACH subtitle IN subtitles -%][%- IF Koha.Preference('marcflavour')=='UNIMARC' -%],[%- END -%]
     <span class="subtitle">[%- subtitle | html | $To -%]</span>
 [%- END -%]
 [%- part_numbers = biblio.part_number.split(' \\| ') -%]
@@ -29,7 +32,4 @@
     [%- END -%]
     [%- i = i + 1 -%]
 [%- END -%]
-
-[%- IF ( link ) -%]
-    </a>
 [%- END -%]
