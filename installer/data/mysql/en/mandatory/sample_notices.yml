@@ -2094,7 +2094,7 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
+            - "A hold has been placed on the following item: [% biblio.title %] ([% biblio.biblionumber %]) by the user [% INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_html => 1 %]."
 
         - module: reserves
           code: HOLD_CHANGED
@@ -2105,12 +2105,12 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "The patron picking up <<biblio.title>> (<<items.barcode>>) has changed to <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
+            - "The patron picking up [% biblio.title %] ([% item.barcode %]) has changed to [% INCLUDE 'patron-title.inc' patron => borrower, no_title => 1, no_html => 1 %]."
             - "Please update the hold information for this item."
-            - "Title: <<biblio.title>>"
-            - "Author: <<biblio.author>>"
-            - "Item: <<items.itemcallnumber>>"
-            - "Pickup location: <<branches.branchname>>"
+            - "Title: [% biblio.title %]"
+            - "Author: [% biblio.author %]"
+            - "Call number: [% item.itemcallnumber %]"
+            - "Pickup location: [% branch.branchname %]"
 
         - module: reserves
           code: HOLD_REMINDER
