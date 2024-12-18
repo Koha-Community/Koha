@@ -2649,6 +2649,7 @@ sub _koha_modify_biblio {
                copyrightdate = ?,
                abstract = ?,
                timestamp = current_timestamp()
+               opac_suppressed = ?
         WHERE  biblionumber = ?
         "
         ;
@@ -2659,7 +2660,7 @@ sub _koha_modify_biblio {
         $biblio->{'medium'}, $biblio->{'part_number'}, $biblio->{'part_name'}, $biblio->{'unititle'},
         $biblio->{'notes'},  $biblio->{'serial'},      $biblio->{'seriestitle'},
         $biblio->{'copyrightdate'} ? int( $biblio->{'copyrightdate'} ) : undef,
-        $biblio->{'abstract'}, $biblio->{'biblionumber'}
+        $biblio->{'abstract'}, $biblio->{'opac_suppressed'}, $biblio->{'biblionumber'}
     ) if $biblio->{'biblionumber'};
 
     my $cache = Koha::Cache::Memory::Lite->get_instance();
