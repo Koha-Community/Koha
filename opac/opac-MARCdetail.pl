@@ -99,6 +99,33 @@ if ( ! $record ) {
     exit;
 }
 
+# If record should be suppressed, handle it early
+if ( C4::Context->preference('OpacSuppression') ) {
+
+    # redirect to opac-blocked info page or 404?
+    my $redirect_url;
+    if ( C4::Context->preference("OpacSuppressionRedirect") ) {
+        $redirect_url = "/cgi-bin/koha/opac-blocked.pl";
+    } else {
+        $redirect_url = "/cgi-bin/koha/errors/404.pl";
+    }
+    if ( $biblio->opac_suppressed() ) {
+
+        # if OPAC suppression by IP address
+        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
+            my $IPAddress = $ENV{'REMOTE_ADDR'};
+            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
+            if ( $IPAddress !~ /^$IPRange/ ) {
+                print $query->redirect($redirect_url);
+                exit;
+            }
+        } else {
+            print $query->redirect($redirect_url);
+            exit;
+        }
+    }
+}
+
 unless ( $patron and $patron->category->override_hidden_items ) {
     # only skip this check if there's a logged in user
     # and its category overrides OpacHiddenItems
