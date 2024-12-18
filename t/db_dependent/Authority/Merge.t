@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Getopt::Long;
 use MARC::Record;
@@ -147,7 +147,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     $MARC1->append_fields( MARC::Field->new( '609', '', '', 'a' => 'Bruce Lee', 'b' => 'Should be cleared too', '9' => $authid1 ));
     $MARC1->append_fields( MARC::Field->new( '609', '', '', 'a' => 'Bruce Lee', 'c' => 'This is a duplicate to be removed in strict mode', '9' => $authid1 ));
     my $MARC2 = MARC::Record->new;
-    $MARC2->append_fields( MARC::Field->new( '109', '', '', 'a' => 'Batman', '9' => $authid1 ));
+    $MARC2->append_fields( MARC::Field->new( '109', '', '', 'a' => 'BATMAN', '9' => $authid1 ));
     $MARC2->append_fields( MARC::Field->new( '245', '', '', 'a' => 'All the way to heaven' ));
     my ( $biblionumber1 ) = AddBiblio( $MARC1, '');
     my ( $biblionumber2 ) = AddBiblio( $MARC2, '');
@@ -569,6 +569,92 @@ subtest "Test bibs not auto linked when merging" => sub {
         );
     }
     ["Auto link disabled"], "Auto link disabled when merging authorities";
+
+};
+
+
+subtest 'ModBiblio calls from merge' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour',                   'MARC21' );
+    t::lib::Mocks::mock_preference( 'AuthorityControlledIndicators', '' );
+    t::lib::Mocks::mock_preference( 'IncludeSeeFromInSearches',      '1' );
+
+    my $auth_record = MARC::Record->new();
+    $auth_record->insert_fields_ordered( MARC::Field->new( '109', '1', ' ', a => 'Brown,', 'c' => 'Father' ) );
+    my $authid = AddAuthority( $auth_record, undef, $authtype1, { skip_record_index => 1 } );
+
+    my $auth_record_modified = $auth_record->clone;
+    $auth_record_modified->field('109')->update( c => 'Father (Fictitious character)' );
+
+    my $biblio_record = MARC::Record->new();
+    $biblio_record->insert_fields_ordered(
+        MARC::Field->new( '609', '1', '1', a => 'Brown,', 'c' => 'Father', 9 => $authid ) );
+    my $biblionumber = AddBiblio( $biblio_record, '', { skip_record_index => 1 } );
+
+    my $biblio_module = Test::MockModule->new('C4::AuthoritiesMarc');
+    $biblio_module->mock(
+        'ModBiblio',
+        sub { warn 'ModBiblio called'; }
+    );
+
+    warnings_are {
+        merge(
+            {
+                mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record_modified,
+                biblionumbers => [$biblionumber],
+            }
+        );
+    }
+    ["ModBiblio called"], "real modification of bibliographic record, ModBiblio called";
+
+    t::lib::Mocks::mock_preference( 'SearchEngine', 'Elasticsearch' );
+    my $mock_index = Test::MockModule->new('Koha::SearchEngine::Elasticsearch::Indexer');
+    $mock_index->mock( 'index_records', sub { warn 'index_records called'; } );
+
+    warnings_are {
+        merge(
+            {
+                mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record,
+                biblionumbers => [$biblionumber],
+            }
+        );
+    }
+    ["index_records called"], "no real modification of bibliographic record, index_records called";
+
+    t::lib::Mocks::mock_preference( 'IncludeSeeFromInSearches',     '0' );
+    t::lib::Mocks::mock_preference( 'IncludeSeeAlsoFromInSearches', '0' );
+    warnings_are {
+        merge(
+            {
+                mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid, MARCto => $auth_record,
+                biblionumbers => [$biblionumber],
+            }
+        );
+    }
+    [], "no real modification of bibliographic record, index_records not called";
+
+    my $auth_record2 = MARC::Record->new();
+    $auth_record2->insert_fields_ordered( MARC::Field->new( '109', '1', ' ', a => 'Chesterton, G.K.' ) );
+    my $authid2 = AddAuthority( $auth_record2, undef, $authtype1, { skip_record_index => 1 } );
+
+    my $biblio_record2 = MARC::Record->new();
+    $biblio_record2->insert_fields_ordered(
+        MARC::Field->new( '109', '1', ' ', a => 'Chesterton, G.K.', 9 => $authid2 ) );
+    my $biblionumber2 = AddBiblio( $biblio_record2, '', { skip_record_index => 1 } );
+
+    my $num_biblio_edited = merge(
+        {
+            mergefrom     => $authid, MARCfrom => $auth_record, mergeto => $authid2, MARCto => $auth_record2,
+            biblionumbers => [ $biblionumber, $biblionumber2 ],
+        }
+    );
+    is( $num_biblio_edited, 1, 'Only one bibliographic record updated while merging two authorities' );
+
+    $schema->storage->txn_rollback;
 
 };
 
