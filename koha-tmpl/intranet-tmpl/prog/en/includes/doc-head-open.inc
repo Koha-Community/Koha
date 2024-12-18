@@ -12,6 +12,7 @@
 [% END %]
 
 [% IF Koha.Preference('DumpTemplateVarsIntranet') %]
+    <!-- prettier-ignore-start -->
     [% TRY %]
         [% USE Stash %]
         <!--
@@ -27,6 +28,7 @@
             Template::Plugin::Stash is not installed.
         -->
     [% END %]
+    <!-- prettier-ignore-end -->
 [% END %]
 
 [% IF ( bidi ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]">[% ELSE %]<html lang="[% lang | html %]">[% END %]
