@@ -74,7 +74,7 @@ if ( C4::Context->preference('AcqEnableFiles') ) {
 if ( $op && $op eq 'cud-close' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
-    my @invoiceid = $input->multi_param('invoiceid');
+    my @invoiceid = split( ',', $input->param('invoiceid') );
     foreach my $invoiceid ( @invoiceid ) {
         CloseInvoice($invoiceid);
     }
