@@ -1681,6 +1681,20 @@ sub normalized_upc {
     return $self->metadata_extractor->get_normalized_upc;
 }
 
+=head3 opac_suppressed
+
+    my $opac_suppressed = $biblio->opac_suppressed();
+
+Returns whether the record is flagged as suppressed in the OPAC.
+FIXME: Revisit after 38330 discussion
+
+=cut
+
+sub opac_suppressed {
+    my ($self) = @_;
+    return $self->metadata_extractor->get_opac_suppression();
+}
+
 =head3 normalized_oclc
 
     my $normalized_oclc = $biblio->normalized_oclc
