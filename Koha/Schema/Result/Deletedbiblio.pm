@@ -139,6 +139,14 @@ the date this record was added to Koha
 
 summary from the MARC record (520$a in MARC21)
 
+=head2 opac_suppressed
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
+whether the record should be suppressed in the OPAC
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -179,6 +187,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "abstract",
   { data_type => "longtext", is_nullable => 1 },
+  "opac_suppressed",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -229,6 +239,7 @@ __PACKAGE__->has_one(
 );
 
 __PACKAGE__->add_columns(
+    "+opac_suppressed" => { is_boolean => 1 },
     '+serial' => { is_boolean => 1 },
 );
 
