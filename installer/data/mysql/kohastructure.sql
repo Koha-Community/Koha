@@ -1110,6 +1110,7 @@ CREATE TABLE `biblio` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time this record was last touched',
   `datecreated` date NOT NULL COMMENT 'the date this record was added to Koha',
   `abstract` longtext DEFAULT NULL COMMENT 'summary from the MARC record (520$a in MARC21)',
+  `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC',
   PRIMARY KEY (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2598,6 +2599,7 @@ CREATE TABLE `deletedbiblio` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'date and time this record was last touched',
   `datecreated` date NOT NULL COMMENT 'the date this record was added to Koha',
   `abstract` longtext DEFAULT NULL COMMENT 'summary from the MARC record (520$a in MARC21)',
+  `opac_suppressed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'whether the record should be suppressed in the OPAC',
   PRIMARY KEY (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
