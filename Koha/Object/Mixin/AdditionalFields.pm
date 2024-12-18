@@ -77,7 +77,7 @@ sub set_additional_fields {
             }
         }
 
-        if (defined $value) {
+        if (defined $value && $value ne '') {
             my $field_value = Koha::AdditionalFieldValue->new({
                 field_id => $additional_field->{id},
                 record_id => $self->id,
@@ -113,7 +113,7 @@ sub prepare_cgi_additional_field_values {
             push @additional_fields, {
                 id    => $field->id,
                 value => $value,
-            } if defined $value && $value ne '';
+            } if defined $value;
         }
     }
 
