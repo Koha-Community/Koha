@@ -29,16 +29,18 @@
                 <li id="availability_facet">
                     Availability
                     <ul>
-                        <li>
                             [% IF ( available ) %]
+                                <li>
                                 <strong>Showing only records with available items</strong>
                                 </li>
                                 <li>
                                     <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]">Show all records</a>
+                                </li>
                             [% ELSE %]
+                                <li>
                                 <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %]&amp;limit=available">Limit to records with available items</a>
+                                </li>
                             [% END # /IF available %]
-                        </li>
                     </ul>
                     [% IF ( related ) %]
                         <li>
@@ -91,11 +93,13 @@
                                     [% IF facets_loo.label == 'Languages' %]
                                         [% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %]
                                     [% END %]
+                                    [% SET li_class = '' %]
+                                    [% SET li_style = '' %]
                                     [% IF loop.count > 5 && !facet.active %]
-                                        <li class="collapsible-facet" style="display:none">
-                                    [% ELSE %]
-                                        <li>
+                                        [% li_class = 'collapsible-facet' %]
+                                        [% li_style = 'display: none;' %]
                                     [% END %]
+                                    <li class="[% li_class | html %]" style="[% li_style | html %]">
                                         [% SET facet_is_current_library = ( facets_loo.label == 'Home libraries' || facets_loo.label == 'Holding libraries' ) && !singleBranchMode && facet.facet_title_value == Branches.GetLoggedInBranchcode %]
                                         [% SET facet_label_class = facet_is_current_library ? 'facet-label currentlibrary' : 'facet-label' %]
                                         [% IF facet.active %]
