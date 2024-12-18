@@ -111,6 +111,33 @@ unless ( $biblio && $record ) {
     exit;
 }
 
+# If record should be suppressed, handle it early
+if ( C4::Context->preference('OpacSuppression') ) {
+
+    # redirect to opac-blocked info page or 404?
+    my $redirect_url;
+    if ( C4::Context->preference("OpacSuppressionRedirect") ) {
+        $redirect_url = "/cgi-bin/koha/opac-blocked.pl";
+    } else {
+        $redirect_url = "/cgi-bin/koha/errors/404.pl";
+    }
+    if ( $biblio->opac_suppressed() ) {
+
+        # if OPAC suppression by IP address
+        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
+            my $IPAddress = $ENV{'REMOTE_ADDR'};
+            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
+            if ( $IPAddress !~ /^$IPRange/ ) {
+                print $query->redirect($redirect_url);
+                exit;
+            }
+        } else {
+            print $query->redirect($redirect_url);
+            exit;
+        }
+    }
+}
+
 my $metadata_extractor = $biblio->metadata_extractor;
 
 my $items = $biblio->items->search_ordered;
@@ -143,40 +170,6 @@ my $record_processor = Koha::RecordProcessor->new(
     }
 );
 $record_processor->process($record);
-
-# redirect if opacsuppression is enabled and biblio is suppressed
-if ( C4::Context->preference('OpacSuppression') ) {
-
-    # FIXME hardcoded; the suppression flag ought to be materialized
-    # as a column on biblio or the like
-    my $opacsuppressionfield      = '942';
-    my $opacsuppressionfieldvalue = $record->field($opacsuppressionfield);
-
-    # redirect to opac-blocked info page or 404?
-    my $opacsuppressionredirect;
-    if ( C4::Context->preference("OpacSuppressionRedirect") ) {
-        $opacsuppressionredirect = "/cgi-bin/koha/opac-blocked.pl";
-    } else {
-        $opacsuppressionredirect = "/cgi-bin/koha/errors/404.pl";
-    }
-    if (   $opacsuppressionfieldvalue
-        && $opacsuppressionfieldvalue->subfield("n")
-        && $opacsuppressionfieldvalue->subfield("n") == 1 )
-    {
-        # if OPAC suppression by IP address
-        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
-            my $IPAddress = $ENV{'REMOTE_ADDR'};
-            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
-            if ( $IPAddress !~ /^$IPRange/ ) {
-                print $query->redirect($opacsuppressionredirect);
-                exit;
-            }
-        } else {
-            print $query->redirect($opacsuppressionredirect);
-            exit;
-        }
-    }
-}
 
 $template->param( biblio => $biblio );
 
