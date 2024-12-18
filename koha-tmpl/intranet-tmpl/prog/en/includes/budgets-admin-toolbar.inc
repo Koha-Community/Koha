@@ -43,7 +43,7 @@
                     </li>
                     <li>
                         [% IF ( CAN_user_acquisition_planning_manage ) %]
-                            <a class="dropdown-item" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id | uri %]&amp;authcat=ITEMTYPES">Plan by item types</a></li>
+                            <a class="dropdown-item" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id | uri %]&amp;authcat=ITEMTYPES">Plan by item types</a>
                         [% ELSE %]
                             <a class="dropdown-item disabled" aria-disabled="true" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id | uri %]&amp;authcat=ITEMTYPES">Plan by item types</a>
                         [% END %]
