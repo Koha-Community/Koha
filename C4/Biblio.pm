@@ -229,20 +229,21 @@ sub AddBiblio {
 
                 my $biblio = Koha::Biblio->new(
                     {
-                        frameworkcode => $frameworkcode,
-                        author        => $olddata->{author},
-                        title         => $olddata->{title},
-                        subtitle      => $olddata->{subtitle},
-                        medium        => $olddata->{medium},
-                        part_number   => $olddata->{part_number},
-                        part_name     => $olddata->{part_name},
-                        unititle      => $olddata->{unititle},
-                        notes         => $olddata->{notes},
-                        serial        => $olddata->{serial},
-                        seriestitle   => $olddata->{seriestitle},
-                        copyrightdate => $olddata->{copyrightdate},
-                        datecreated   => \'NOW()',
-                        abstract      => $olddata->{abstract},
+                        frameworkcode   => $frameworkcode,
+                        author          => $olddata->{author},
+                        title           => $olddata->{title},
+                        subtitle        => $olddata->{subtitle},
+                        medium          => $olddata->{medium},
+                        part_number     => $olddata->{part_number},
+                        part_name       => $olddata->{part_name},
+                        unititle        => $olddata->{unititle},
+                        notes           => $olddata->{notes},
+                        serial          => $olddata->{serial},
+                        seriestitle     => $olddata->{seriestitle},
+                        copyrightdate   => $olddata->{copyrightdate},
+                        datecreated     => \'NOW()',
+                        abstract        => $olddata->{abstract},
+                        opac_suppressed => $olddata->{opac_suppressed},
                     }
                 )->store;
                 $biblionumber = $biblio->biblionumber;
@@ -2416,6 +2417,10 @@ sub TransformMarcToKoha {
             # Additional polishing for individual kohafields
             if ( $kohafield =~ /copyrightdate|publicationyear/ ) {
                 $value = _adjust_pubyear($value);
+            } elsif ( $kohafield eq 'biblio.opac_suppressed' ) {
+
+                # this should always be a boolean
+                $value = $value ? 1 : 0;
             }
         }
 
@@ -2654,6 +2659,9 @@ sub _koha_modify_biblio {
         "
         ;
     my $sth = $dbh->prepare($query);
+
+    # it always needs to be defined
+    $biblio->{opac_suppressed} //= 0;
 
     $sth->execute(
         $frameworkcode,      $biblio->{'author'},      $biblio->{'title'},     $biblio->{'subtitle'},
