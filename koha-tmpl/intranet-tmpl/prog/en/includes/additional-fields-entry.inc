@@ -76,7 +76,9 @@
                             [% END %]
                         [% END %]
                     [% END %]
-                </select>
+                [% IF field.marcfield || !field.repeatable %]
+                    </select>
+                [% END %]
                 [% IF !search_form %]
                     <span>(Authorised values for [% authorised_value_category | html %])</span>
                     [% IF field.marcfield && field.marcfield_mode == 'get' %]
