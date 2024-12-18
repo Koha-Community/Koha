@@ -87,7 +87,7 @@ if ( $op && $op eq 'cud-close' ) {
 elsif ( $op && $op eq 'cud-reopen' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
-    my @invoiceid = $input->multi_param('invoiceid');
+    my @invoiceid = split( ',', $input->param('invoiceid') );
     foreach my $invoiceid ( @invoiceid ) {
         ReopenInvoice($invoiceid);
     }
