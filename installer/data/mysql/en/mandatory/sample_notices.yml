@@ -1042,16 +1042,16 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "<h5>Date: <<today>></h5>"
+            - "<h5>Date: [% today | $KohaDates %]</h5>"
             - "<br>"
-            - "<h3>Transfer to <<branches.branchname>></h3>"
+            - "<h3>Transfer to [% branch.branchname %]</h3>"
             - "<br>"
             - "<h3>ITEM</h3>"
-            - "<h4><<biblio.title>></h4>"
-            - "<h5><<biblio.author>></h5>"
+            - "<h4>[% biblio.title %]</h4>"
+            - "<h5>[% biblio.author %]</h5>"
             - "<ul>"
-            - "   <li><<items.barcode>></li>"
-            - "   <li><<items.itemcallnumber>></li>"
+            - "   <li>[% item.barcode %]</li>"
+            - "   [% IF item.itemcallnumber %]<li>[% item.itemcallnumber %]</li>[% END %]"
             - "</ul>"
 
         - module: claimacquisition
