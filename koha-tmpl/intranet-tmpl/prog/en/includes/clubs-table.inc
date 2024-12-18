@@ -1,8 +1,7 @@
 [% IF destination == 'holds' %]
-    <table id="clubs-table" class="selections-table">
-[% ELSE %]
-    <table id="clubs-table">
+    [% SET table_class = 'selections-table' %]
 [% END %]
+<table id="clubs-table" class="[% table_class | html %]">
     <thead>
         <tr>
             <th>Name</th>
@@ -31,12 +30,19 @@
                 [% IF multi_hold %]
                     [% SET data_url = data_url _ "&amp;multi_hold=1" %]
                 [% END %]
-                <tr class="clickable" data-url="[% data_url | html %]">
-                    <td><a href="[% data_url | url %]">[% c.name | html %]</a></td>
+                [% SET tr_class = "clickable" %]
             [% ELSE %]
-                <tr>
-                    <td>[% c.name | html %]</td>
+                [% SET data_url = "" %]
+                [% SET tr_class = "" %]
             [% END %]
+            <tr class="[% tr_class | html %]" data-url="[% data_url | html %]">
+                <td>
+                    [% IF destination == 'holds' %]
+                        <a href="[% data_url | url %]">[% c.name | html %]</a>
+                    [% ELSE %]
+                        [% c.name | html %]
+                    [% END %]
+                </td>
                 <td>[% c.club_template.name | html %]</td>
                 <td>[% c.description | html %]</td>
                 [% UNLESS destination == 'holds' %]
