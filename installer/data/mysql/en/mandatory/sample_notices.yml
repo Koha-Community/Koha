@@ -917,10 +917,20 @@ tables:
           message_transport_type: print
           lang: default
           content:
-            - "The following item(s) is/are currently overdue:"
+            - "[%- USE Price -%]"
+            - "The following [% IF overdues > 1 %]items are[% ELSE %]item is[% END %] currently overdue:"
             - ""
-            - "<item>\"<<biblio.title>>\" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>"
-            - ""
+            - "[% FOREACH odue IN overdues %]"
+            - "[% odue.item.biblio.title %]"
+            - "by [% odue.item.biblio.author %]"
+            - "[%- IF odue.item.itemcallnumber %]"
+            - "[% odue.item.itemcallnumber %]"
+            - "[%- END %]"
+            - "Barcode: [% odue.item.barcode %]"
+            - "[%- IF odue.overdue_fines.total_outstanding > 0 %]"
+            - "Fine: [% odue.overdue_fines.total_outstanding | $Price %]"
+            - "[%- END %]"
+            - "[% END %]"
 
         - module: circulation
           code: PREDUE
