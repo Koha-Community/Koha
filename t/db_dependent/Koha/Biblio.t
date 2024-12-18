@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 37;
+use Test::More tests => 38;
 use Test::Exception;
 use Test::Warn;
 
@@ -1615,6 +1615,44 @@ subtest 'normalized_oclc' => sub {
         $biblio->normalized_oclc, C4::Koha::GetNormalizedOCLCNumber( $biblio->metadata->record ),
         'normalized_oclc is a wrapper around C4::Koha::GetNormalizedOCLCNumber'
     );
+};
+
+subtest 'opac_suppressed() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $record = MARC::Record->new;
+    $record->append_fields(
+        MARC::Field->new( '245', '', '', a => 'Some title 1' ),
+        MARC::Field->new( '942', '', '', n => '1' ),
+    );
+
+    my ($biblio_id) = AddBiblio( $record, qw{} );
+    my $biblio = Koha::Biblios->find($biblio_id);
+
+    ok( $biblio->opac_suppressed(), 'Record is suppressed' );
+
+    $record->field('942')->replace_with( MARC::Field->new( '942', '', '', n => '0' ) );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    ok( !$biblio->opac_suppressed(), 'Record is not suppressed' );
+
+    $record->field('942')->replace_with( MARC::Field->new( '942', '', '', n => '' ) );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    ok( !$biblio->opac_suppressed(), 'Record is not suppressed' );
+
+    $record->delete_field( $record->field('942') );
+    ($biblio_id) = AddBiblio( $record, qw{} );
+    $biblio = Koha::Biblios->find($biblio_id);
+
+    ok( !$biblio->opac_suppressed(), 'Record is not suppressed' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'ratings' => sub {
