@@ -1478,17 +1478,15 @@ tables:
           message_transport_type: email
           lang: default
           content:
-            - "Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,"
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
             - ""
             - "Your library card will expire soon, on:"
             - ""
-            - "<<borrowers.dateexpiry>>"
+            - "[% borrower.dateexpiry %]"
             - ""
             - "Thank you,"
             - ""
-            - "Librarian"
-            - ""
-            - "<<branches.branchname>>"
+            - "[% branch.branchname %]"
 
         - module: members
           code: MEMBERSHIP_RENEWED
