@@ -1595,6 +1595,7 @@ sub merge {
     while ( my $biblio = $biblios->next ) {
         my $marcrecord = $biblio->metadata->record;
         my $update = 0;
+        my $reindex_if_needed = 0;
         foreach my $tagfield (@$tags_using_authtype) {
             my $countfrom = 0;    # used in strict mode to remove duplicates
             foreach my $field ( $marcrecord->field($tagfield) ) {
@@ -1656,14 +1657,34 @@ sub merge {
                 $field_to->delete_subfield( code => '9' );
                 $field_to->add_subfields( 9 => $mergeto );
 
-                if ($tags_new && @$tags_new) {
+                if ( $tags_new && @$tags_new ) {
                     $marcrecord->delete_field($field);
                     append_fields_ordered( $marcrecord, $field_to );
+                    $update = 1;
                 } else {
-                    $field->replace_with($field_to);
+
+                    # If there was no real change of the linked bibliographic
+                    # field, there is also no need to make ModBiblio.
+                    # Only a refresh of index could be helpful in case of
+                    # a change in the tracing fields
+                    if ( $field->as_formatted ne $field_to->as_formatted ) {
+                        $field->replace_with($field_to);
+                        $update = 1;
+                    } else {
+                        $reindex_if_needed = 1;
+                    }
                 }
-                $update = 1;
             }
+        }
+        if (
+              !$update
+            && $reindex_if_needed
+            && (   C4::Context->preference('IncludeSeeFromInSearches')
+                || C4::Context->preference('IncludeSeeAlsoFromInSearches') )
+            )
+        {
+            my $indexer = Koha::SearchEngine::Indexer->new( { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
+            $indexer->index_records( $biblio->biblionumber, "specialUpdate", "biblioserver" );
         }
         next if !$update;
         ModBiblio( $marcrecord, $biblio->biblionumber, $biblio->frameworkcode, { disable_autolink => 1 } );
