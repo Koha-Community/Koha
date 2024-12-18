@@ -1697,8 +1697,11 @@ subtest 'item_groups() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'normalized_isbn' => sub {
+subtest 'normalized_isbn() tests' => sub {
+
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     # We will move the tests from GetNormalizedISBN here when it will get replaced
     my $biblio = $builder->build_sample_biblio();
@@ -1707,10 +1710,15 @@ subtest 'normalized_isbn' => sub {
         $biblio->normalized_isbn, C4::Koha::GetNormalizedISBN( $biblio->biblioitem->isbn ),
         'normalized_isbn is a wrapper around C4::Koha::GetNormalizedISBN'
     );
+
+    $schema->storage->txn_rollback;
 };
 
-subtest 'normalized_upc' => sub {
+subtest 'normalized_upc() tests' => sub {
+
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     # We will move the tests from GetNormalizedUPC here when it will get replaced
     # Note that only a single test exist and it's not really meaningful...
@@ -1719,10 +1727,15 @@ subtest 'normalized_upc' => sub {
         $biblio->normalized_upc, C4::Koha::GetNormalizedUPC( $biblio->metadata->record ),
         'normalized_upc is a wrapper around C4::Koha::GetNormalizedUPC'
     );
+
+    $schema->storage->txn_rollback;
 };
 
-subtest 'normalized_oclc' => sub {
+subtest 'normalized_oclc() tests' => sub {
+
     plan tests => 1;
+
+    $schema->storage->txn_begin;
 
     # We will move the tests from GetNormalizedOCLC here when it will get replaced
     # Note that only a single test exist and it's not really meaningful...
@@ -1731,6 +1744,8 @@ subtest 'normalized_oclc' => sub {
         $biblio->normalized_oclc, C4::Koha::GetNormalizedOCLCNumber( $biblio->metadata->record ),
         'normalized_oclc is a wrapper around C4::Koha::GetNormalizedOCLCNumber'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'ratings' => sub {
@@ -1742,6 +1757,8 @@ subtest 'ratings' => sub {
 subtest 'opac_summary_html' => sub {
 
     plan tests => 2;
+
+    $schema->storage->txn_begin;
 
     my $author = 'my author';
     my $title  = 'my title';
@@ -1761,6 +1778,8 @@ subtest 'opac_summary_html' => sub {
         sprintf( 'Replace %s, %s, %s AND %s please', $author, $title, $biblio->normalized_isbn, $biblio->biblionumber ),
         'opac_summary_html replaces the different patterns'
     );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'can_be_edited() tests' => sub {
