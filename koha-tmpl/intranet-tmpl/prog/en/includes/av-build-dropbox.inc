@@ -12,11 +12,7 @@
 [% DEFAULT class = '' size = 20 %]
 
 [% IF avs.count %]
-  [% IF no_id %]
-    <select name="[% name | html %]" class="[% class | html %]" >
-  [% ELSE %]
-    <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" >
-  [% END %]
+  <select [% UNLESS no_id %]id="[% name | html %]"[% END %] name="[% name | html %]" class="[% class | html %]" >
   [% IF all %]<option value="">All</option>[% END %]
   [% IF empty %]<option value=""></option>[% END %]
   [% FOR av IN avs %]
