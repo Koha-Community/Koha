@@ -1,6 +1,4 @@
 [% USE Koha %]
-[% PROCESS 'form-blocks.inc' %]
-
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group"><a href="#" id="clear" class="btn btn-default btn-sm"><i class="fa fa-trash-can"></i> Clear field</a></div>
     <div class="btn-group"><a href="#" id="createnew" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> Create new authority</a></div>
@@ -144,36 +142,36 @@
                 <label for="special_relationship">Special relationship: </label>
                 <select name="relationship" id="special_relationship">
                     [% selected=relationship | html %]
-                    [% PROCESS selectoptionopen value='' %]None specified</option>
+                    <option>None specified</option>
                     [% IF Koha.Preference('marcflavour') == 'MARC21' %]
-                      [% PROCESS selectoptionopen value='a' %]a - Earlier heading</option>
-                      [% PROCESS selectoptionopen value='b' %]b - Later heading</option>
-                      [% PROCESS selectoptionopen value='d' %]d - Acronym</option>
-                      [% PROCESS selectoptionopen value='f' %]f - Musical composition</option>
-                      [% PROCESS selectoptionopen value='g' %]g - Broader term</option>
-                      [% PROCESS selectoptionopen value='h' %]h - Narrower term</option>
-                      [% PROCESS selectoptionopen value='i' %]i - Reference instruction phrase in subfield $i</option>
-                      [% PROCESS selectoptionopen value='n' %]n - Not applicable</option>
-                      [% PROCESS selectoptionopen value='r' %]r - Relationship designation in $i or $4</option>
-                      [% PROCESS selectoptionopen value='t' %]t - Immediate parent body</option>
+                      <option [% IF selected == 'a' %]selected="selected"[% END %]>a - Earlier heading</option>
+                      <option [% IF selected == 'b' %]selected="selected"[% END %]>b - Later heading</option>
+                      <option [% IF selected == 'd' %]selected="selected"[% END %]>d - Acronym</option>
+                      <option [% IF selected == 'f' %]selected="selected"[% END %]>f - Musical composition</option>
+                      <option [% IF selected == 'g' %]selected="selected"[% END %]>g - Broader term</option>
+                      <option [% IF selected == 'h' %]selected="selected"[% END %]>h - Narrower term</option>
+                      <option [% IF selected == 'i' %]selected="selected"[% END %]>i - Reference instruction phrase in subfield $i</option>
+                      <option [% IF selected == 'n' %]selected="selected"[% END %]>n - Not applicable</option>
+                      <option [% IF selected == 'r' %]selected="selected"[% END %]>r - Relationship designation in $i or $4</option>
+                      <option [% IF selected == 't' %]selected="selected"[% END %]>t - Immediate parent body</option>
                     [% ELSIF Koha.Preference('marcflavour') == 'UNIMARC' %]
-                      [% PROCESS selectoptionopen value='a' %]a = earlier name</option>
-                      [% PROCESS selectoptionopen value='b' %]b = later name</option>
-                      [% PROCESS selectoptionopen value='c' %]c = official name</option>
-                      [% PROCESS selectoptionopen value='d' %]d = acronym / initial / abbreviation</option>
-                      [% PROCESS selectoptionopen value='e' %]e = pseudonym</option>
-                      [% PROCESS selectoptionopen value='f' %]f = real name</option>
-                      [% PROCESS selectoptionopen value='g' %]g = broader term or name</option>
-                      [% PROCESS selectoptionopen value='h' %]h = narrower term or name</option>
-                      [% PROCESS selectoptionopen value='i' %]i = name in religion</option>
-                      [% PROCESS selectoptionopen value='j' %]j = married name</option>
-                      [% PROCESS selectoptionopen value='k' %]k = name before marriage</option>
-                      [% PROCESS selectoptionopen value='l' %]l = shared pseudonym</option>
-                      [% PROCESS selectoptionopen value='m' %]m = secular name</option>
-                      [% PROCESS selectoptionopen value='n' %]n = different rule form of a name</option>
-                      [% PROCESS selectoptionopen value='o' %]o = attributed name / conventional title of a work</option>
-                      [% PROCESS selectoptionopen value='x' %]x = not applicable</option>
-                      [% PROCESS selectoptionopen value='z' %]z = other</option>
+                      <option [% IF selected == 'a' %]selected="selected"[% END %]>a = earlier name</option>
+                      <option [% IF selected == 'b' %]selected="selected"[% END %]>b = later name</option>
+                      <option [% IF selected == 'c' %]selected="selected"[% END %]>c = official name</option>
+                      <option [% IF selected == 'd' %]selected="selected"[% END %]>d = acronym / initial / abbreviation</option>
+                      <option [% IF selected == 'e' %]selected="selected"[% END %]>e = pseudonym</option>
+                      <option [% IF selected == 'f' %]selected="selected"[% END %]>f = real name</option>
+                      <option [% IF selected == 'g' %]selected="selected"[% END %]>g = broader term or name</option>
+                      <option [% IF selected == 'h' %]selected="selected"[% END %]>h = narrower term or name</option>
+                      <option [% IF selected == 'i' %]selected="selected"[% END %]>i = name in religion</option>
+                      <option [% IF selected == 'j' %]selected="selected"[% END %]>j = married name</option>
+                      <option [% IF selected == 'k' %]selected="selected"[% END %]>k = name before marriage</option>
+                      <option [% IF selected == 'l' %]selected="selected"[% END %]>l = shared pseudonym</option>
+                      <option [% IF selected == 'm' %]selected="selected"[% END %]>m = secular name</option>
+                      <option [% IF selected == 'n' %]selected="selected"[% END %]>n = different rule form of a name</option>
+                      <option [% IF selected == 'o' %]selected="selected"[% END %]>o = attributed name / conventional title of a work</option>
+                      <option [% IF selected == 'x' %]selected="selected"[% END %]>x = not applicable</option>
+                      <option [% IF selected == 'z' %]selected="selected"[% END %]>z = other</option>
                     [% END %]
                 </select>
             </li>
