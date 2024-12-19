@@ -26,7 +26,8 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>[% FILTER collapse %]
+[% FILTER collapse %]
+<style>
 fieldset legend {
     border: 1px solid #FFF;
     margin-left: -.5em;
@@ -51,7 +52,8 @@ fieldset legend.collapsed {
 legend.collapsed i.fa.fa-caret-down::before {
     content: "\f0da";
 }
-[% END %]</style>
+</style>
+[% END %]
 </head>
 
 <body id="pat_memberentrygen" class="pat">
