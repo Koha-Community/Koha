@@ -132,8 +132,13 @@
       </td>
       <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
-      [% IF account.amount <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
-      [% IF account.amountoutstanding <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
+      [% IF account.amount <= 0 %]
+        [% SET td_class="credit" %]
+      [% ELSE %]
+        [% SET td_class="debig" %]
+      [% END %]
+      <td class="[% td_class | html %]" style="text-align: right;">[% account.amount | $Price %]</td>
+      <td class="[% td_class | html %]" style="text-align: right;">[% account.amountoutstanding | $Price %]</td>
       <td class="actions">
         [% IF ( account.is_credit ) %]
           [% IF Koha.Preference('UseEmailReceipts') %]
