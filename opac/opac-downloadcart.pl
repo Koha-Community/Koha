@@ -102,7 +102,7 @@ if ($bib_list && $format) {
                 $output .= marc2ris($record);
             }
             elsif ($format eq 'bibtex') {
-                $output .= marc2bibtex($record, $biblio);
+                $output .= marc2bibtex($record, $biblio->biblionumber);
             }
             elsif ( $format eq 'isbd' ) {
                 my $framework = GetFrameworkCode( $biblio );
