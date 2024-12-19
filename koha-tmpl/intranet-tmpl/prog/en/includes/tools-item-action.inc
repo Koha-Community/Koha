@@ -2,40 +2,16 @@
     No items were found during staging
     <input type ="hidden" name="item_action" value="ignore">
 [% ELSE %]
-    [% IF ( class_name ) %]
-        <select name="item_action" id="item_action" class="[% class_name | html %]">
-    [% ELSE %]
-        <select name="item_action" id="item_action">
-    [% END %]
-        [% IF ( account.item_action == 'always_add' ) %]
-            <option value="always_add" selected="selected">
-        [% ELSE %]
-            <option value="always_add">
-        [% END %]
+    <select name="item_action" id="item_action" class="[% class_name | html %]">
+        <option value="always_add" [% IF account.item_action == 'always_add' %]selected="selected"[% END %]>
             Always add items</option>
-        [% IF ( account.item_action == 'add_only_for_matches' ) %]
-            <option value="add_only_for_matches" selected="selected">
-        [% ELSE %]
-            <option value="add_only_for_matches">
-        [% END %]
+        <option value="add_only_for_matches" [% IF account.item_action == 'add_only_for_matches' %]selected="selected"[% END %]>
             Add items only if matching bib was found</option>
-        [% IF ( account.item_action == 'add_only_for_new' ) %]
-            <option value="add_only_for_new" selected="selected">
-        [% ELSE %]
-            <option value="add_only_for_new">
-        [% END %]
+        <option value="add_only_for_new" [% IF account.item_action == 'add_only_for_new' %]selected="selected"[% END %]>
             Add items only if no matching bib was found</option>
-        [% IF ( account.item_action == 'replace' ) %]
-            <option value="replace" selected="selected">
-        [% ELSE %]
-            <option value="replace">
-        [% END %]
+        <option value="replace" [% IF account.item_action == 'replace' %]selected="selected"[% END %]>
             Replace items if matching bib was found (only for existing items)</option>
-        [% IF ( account.item_action == 'ignore' ) %]
-            <option value="ignore" selected="selected">
-        [% ELSE %]
-            <option value="ignore">
-        [% END %]
+        <option value="ignore" [% IF account.item_action == 'ignore' %]selected="selected"[% END %]>
         Ignore items</option>
     </select>
 [% END %]
