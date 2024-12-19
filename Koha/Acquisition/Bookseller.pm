@@ -219,6 +219,34 @@ sub to_api_mapping {
     };
 }
 
+=head3 to_api
+
+    my $json = $av->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Acquisition::Bookseller object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $params ) = @_;
+
+    my $response  = $self->SUPER::to_api($params);
+    my $overrides = {};
+
+    if ( $self->interfaces ) {
+        my $interfaces = $self->interfaces->as_list;
+        my @updated_interfaces;
+        foreach my $interface ( @{$interfaces} ) {
+            $interface->password( $interface->plain_text_password );
+            push @updated_interfaces, $interface->unblessed;
+        }
+        $overrides->{interfaces} = ( \@updated_interfaces );
+    }
+
+    return { %$response, %$overrides };
+}
+
 =head2 Internal methods
 
 =head3 _type
