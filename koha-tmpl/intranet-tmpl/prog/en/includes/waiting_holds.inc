@@ -30,15 +30,11 @@
                 <td data-order="[% reserveloo.reservedate | html %]"><span>[% reserveloo.reservedate | $KohaDates %]</span></td>
               [% IF table_name == 'holdscr' %]
                 [% IF reserveloo.cancellation_requests.count %]
-                  [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
-                    [% IF loop.first %]
-                      <td data-order="[% cancellation_request.creation_date | html %]">
+                  <td data-order="[% cancellation_request.0.creation_date | html %]">
+                    [% FOREACH cancellation_request IN reserveloo.cancellation_requests %]
+                      <span>[% cancellation_request.creation_date | $KohaDates %]</span>
                     [% END %]
-                        <span>[% cancellation_request.creation_date | $KohaDates %]</span>
-                    [% IF loop.last %]
-                      </td>
-                    [% END %]
-                  [% END %]
+                  </td>
                 [% ELSE %]
                   <td></td>
                 [% END %]
