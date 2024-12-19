@@ -222,9 +222,9 @@
     <script>
         $(document).ready(function(){
             [%- IF ( active ) -%]
-                $("#panel-" + [% active | html %] + "_panel").collapse("show");
+                $("#pending_updates_group a[href='#panel-" + [% active | html %] + "_panel']").click();
             [%- ELSE -%]
-                $(".panel-collapse:eq(0)").collapse("show");
+                $("#pending_updates_group a.collapsed:eq(0)").click();
             [%- END -%]
         });
     </script>
