@@ -131,7 +131,7 @@
                             <h3>MARC frameworks: [% marcflavour | html %]</h3>
                             [% IF ( en_marc_frameworks ) %]
                                 <h4><span class="error">No MARC frameworks are available for your language.
-                                Defaulting to the frameworks supplied for English (en)<span></h4>
+                                Defaulting to the frameworks supplied for English (en)</span></h4>
                             [% END %]
                             [% FOREACH frameworksloo IN frameworksloop %]
                                 [%- SWITCH frameworksloo.label -%]
@@ -170,7 +170,7 @@
 
                         [% IF ( en_sample_data ) %]
                             <h4><span class="error">No sample data and settings are available for your language.
-                            Defaulting to the samples supplied for English (en)<span></h4>
+                            Defaulting to the samples supplied for English (en)</span></h4>
                         [% END %]
 
                         [% FOREACH levelloo IN levelloop %]
@@ -455,14 +455,14 @@
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
                     [% ELSE %]
-                        <p>
+                        <div>
                             <form action="/cgi-bin/koha/installer/install.pl" method="post">
                                 [% INCLUDE 'csrf-token.inc' %]
                                 <input type="hidden" name="step" value="3" />
                                 <input type="hidden" name="op" value="cud-updatestructure" />
                                 <p><input value="Try again" class="btn btn-primary" type="submit" /></p>
                             </form>
-                        </p>
+                        </div>
                     [% END %]
                [% END # / IF updatestructure %]
             </div> <!-- / #installer-step3 -->
