@@ -9,6 +9,7 @@
 [% BLOCK build_table %]
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
+            <tr>
             <th id="[% tab | html %]_checkbox" data-colname="checkbox" class="NoSort"></th>
             [% IF Koha.Preference('LocalCoverImages') %]
                 <th id="[% tab | html %]_cover_image" data-colname="cover_image">Cover image</th>
@@ -63,7 +64,7 @@
                   <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
                   <input name='op' type='hidden' value='cud-show' />
                   <input name='del' type='hidden' value='1' />
-                  <button type="submit" class="itemselection_action_delete btn btn-link" /><i class="fa fa-trash-can"></i> Delete selected items</button>
+                  <button type="submit" class="itemselection_action_delete btn btn-link"><i class="fa fa-trash-can"></i> Delete selected items</button>
               </form>
           [% END %]
           [% IF CAN_user_tools_items_batchmod %]
@@ -72,7 +73,7 @@
                   <input name='src' type='hidden' value='CATALOGUING' />
                   <input name='biblionumber' type='hidden' value="[% biblionumber | html %]" />
                   <input name='op' type='hidden' value='cud-show' />
-                  <button type="submit" class="itemselection_action_modify btn btn-link" /><i class="fa-solid fa-pencil"></i> Modify selected items</button>
+                  <button type="submit" class="itemselection_action_modify btn btn-link"><i class="fa-solid fa-pencil"></i> Modify selected items</button>
               </form>
           [% END %]
           [% IF CAN_user_editcatalogue_manage_item_groups && biblio.item_groups.count %]
