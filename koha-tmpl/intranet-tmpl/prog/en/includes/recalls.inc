@@ -18,7 +18,8 @@
 
         <tbody>
             [% FOREACH recall IN recalls %]
-                [% IF recall.completed %]<tr class="old">[% ELSE %]<tr>[% END %]
+                [% SET tr_class = recall.completed ? 'old' : '' %]
+                <tr class="[% tr_class | html %]">
 
                     [% IF checkboxes %]
                         <td class="recall-checkbox">
