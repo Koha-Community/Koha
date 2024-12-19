@@ -26,15 +26,19 @@
             <tbody>
                 [% FOREACH subscription IN subscriptions %]
                     [% UNLESS subscription.cannotdisplay %]
+                        [% SET tr_class = '' %]
+                        [% SET tr_warning = '' %]
                         [% IF subscription.nbofcomment > highWarned  %]
-                            <tr id="row[% subscription.id | html %]" class="high-warned-row" title="This resource has been reported more than [% highWarned | html %] times, take care!">
+                            [% SET tr_class = 'high-warned-row' %]
+                            [% SET tr_warning = highWarned %]
                         [% ELSIF subscription.nbofcomment > warned  %]
-                            <tr id="row[% subscription.id | html %]" class="warned-row" title="This resource has been reported more than [% warned | html %] times, take care!">
+                            [% SET tr_class = 'warned-row' %]
+                            [% SET tr_warning = warned %]
                         [% ELSIF subscription.nbofcomment > lowWarned  %]
-                            <tr id="row[% subscription.id | html %]" class="highlighted-row" title="This resource has been reported more than [% lowWarned | html %] times, take care!">
-                        [% ELSE %]
-                            <tr id="row[% subscription.id | html %]">
+                            [% SET tr_class = 'highlighted-row' %]
+                            [% SET tr_warning = lowWarned %]
                         [% END %]
+                        <tr id="row[% subscription.id | html %]" [% IF tr_class %]class="[% tr_class | html %]"[% END %] [% IF tr_warning %]title="This resource has been reported more than [% tr_warning | html %] times, take care!"[% END %]>
                         <input type="hidden" hidden class="rowid" value="[% subscription.id | html %]" />
                             <td>[% IF ( subscription.issn ) %][% subscription.issn | html %][% END %]</td>
                             <td>[% subscription.title | html %]</td>
