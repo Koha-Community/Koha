@@ -332,11 +332,11 @@
         <ul>
             [% FOREACH patron_message IN patron_messages %]
                 <li>
+                    [% SET span_class = '' %]
                     [% IF(patron_message.message_type == "L") %]
-                        <span class="circ-hlt">
-                    [% ELSE %]
-                        <span>
+                        [% span_class = 'circ-hlt' %]
                     [% END %]
+                    <span class="[% span_class | html %]">
                         [% patron_message.message_date | $KohaDates %]
                         [% Branches.GetName( patron_message.branchcode ) | html %]
                         [% IF patron_message.manager_id %]
