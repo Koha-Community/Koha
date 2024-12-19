@@ -158,11 +158,8 @@
         <div class="error alert alert-warning" style="display: none; margin: 1em 0"></div>
 
         <input type="hidden" class="firstletter_filter" value="" />
-        [% IF open_on_row_click %]
-        <table id="[% table_id | html %]" class="selections-table">
-        [% ELSE %]
-        <table id="[% table_id | html %]">
-        [% END %]
+        [% SET table_class = open_on_row_click ? 'selections-table' : '' %]
+        <table id="[% table_id | html %]" class="[% table_class | html %]">
             <thead>
                 <tr>
                     [% FOR column IN columns %]
