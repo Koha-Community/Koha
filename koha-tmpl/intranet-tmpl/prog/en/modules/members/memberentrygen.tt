@@ -102,10 +102,11 @@ legend.collapsed i.fa.fa-caret-down::before {
                 [% END %]
             [% END %]
             [% IF ( op == 'add_form' ) %]
-                <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                [% SET div_class = 'col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
             [% ELSE %]
-                <div class="col-md-10 order-md-2 order-sm-1">
+                [% SET div_class = 'col-md-10 order-md-2 order-sm-1' %]
             [% END %]
+            <div class="[% div_class | html %]">
                 <main class="clearfix">
                     [% INCLUDE 'messages.inc' %]
 
@@ -258,11 +259,13 @@ legend.collapsed i.fa.fa-caret-down::before {
                                 <button class="btn btn-primary toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
                                 [% IF op == 'add_form' %]
                                     <a class="btn btn-link toggler save_entryform" href="/cgi-bin/koha/members/member.pl">
+                                        <i class="fa fa-times"></i> Cancel
+                                    </a>
                                 [% ELSE %]
                                     <a class="btn btn-link" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
+                                        <i class="fa fa-times"></i> Cancel
+                                    </a>
                                 [% END %]
-                                    <i class="fa fa-times"></i> Cancel
-                                </a>
                             </div>
                         [% END %]
 
@@ -311,11 +314,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% UNLESS notitle %]
                                                     [% IF Koha.Preference('BorrowersTitles') %]
                                                         <li>
-                                                            [% IF ( mandatorytitle ) %]
-                                                                <label for="btitle" class="required">
-                                                            [% ELSE %]
-                                                                <label for="btitle">
-                                                            [% END %]
+                                                            <label for="btitle" [% IF mandatorytitle %]class="required"[% END %]>
                                                             Salutation: </label>
                                                             <select id="btitle" name="title">
                                                                 <option value=""></option>
@@ -342,11 +341,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                             Name:
                                                         </label>
                                                     [% ELSE %]
-                                                        [% IF ( mandatorysurname ) %]
-                                                            <label for="surname" class="required">
-                                                        [% ELSE %]
-                                                            <label for="surname">
-                                                        [% END %]
+                                                        <label for="surname" [% IF mandatorysurname %]class="required"[% END %]>
                                                         Surname: </label>
                                                     [% END %]
 
@@ -364,13 +359,8 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             [% UNLESS ( patron_category.category_type == 'I' ) %]
                                                 [% UNLESS nofirstname %]
                                                     <li>
-                                                        [% IF ( mandatoryfirstname ) %]
-                                                            <label for="firstname" class="required">
-                                                        [% ELSE %]
-                                                            <label for="firstname">
-                                                        [% END %]
-                                                            First name:
-                                                        </label>
+                                                        <label for="firstname" [% IF mandatoryfirstname %]class="required"[% END %]>
+                                                        First name: </label>
                                                         <input type="text" id="firstname" name="firstname" size="20"  value="[% borrower_data.firstname | html UNLESS op == 'duplicate' %]" />
                                                         [% IF ( mandatoryfirstname ) %]
                                                             <span class="required">Required</span>
@@ -379,11 +369,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% END #/UNLESS nofirstname %]
                                                 [% UNLESS nopreferred_name %]
                                                     <li>
-                                                        [% IF ( mandatorypreferred_name ) %]
-                                                            <label for="preferred_name" class="required">
-                                                        [% ELSE %]
-                                                            <label for="preferred_name">
-                                                        [% END %]
+                                                        <label for="preferred_name" [% IF mandatorypreferred_name %]class="required"[% END %]>
                                                             Preferred name:
                                                         </label>
                                                         <input type="text" id="preferred_name" name="preferred_name" size="20"  value="[% borrower_data.preferred_name | html UNLESS opduplicate %]" />
@@ -394,11 +380,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% END #/UNLESS nopreferred_name %]
                                                 [% UNLESS nomiddle_name %]
                                                     <li>
-                                                        [% IF ( mandatorymiddle_name ) %]
-                                                            <label for="middle_name" class="required">
-                                                        [% ELSE %]
-                                                            <label for="middle_name">
-                                                        [% END %]
+                                                        <label for="middle_name" [% IF mandatorymiddle_name %]class="required"[% END %]>
                                                             Middle name:
                                                         </label>
                                                         <input type="text" id="middle_name" name="middle_name" size="20"  value="[% borrower_data.middle_name | html UNLESS op == 'duplicate' %]" />
@@ -409,11 +391,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% END #/UNLESS nomiddle_name %]
                                                 [% UNLESS nodateofbirth %]
                                                     <li>
-                                                        [% IF ( mandatorydateofbirth ) %]
-                                                            <label for="dateofbirth" class="required">
-                                                        [% ELSE %]
-                                                            <label for="dateofbirth">
-                                                        [% END %]
+                                                        <label for="dateofbirth" [% IF mandatorydateofbirth %]class="required"[% END %]>
                                                         Date of birth:
                                                         </label>
                                                         <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% borrower_data.dateofbirth | html UNLESS op == 'duplicate' %]" class="flatpickr" data-flatpickr-pastinclusive="true" />
@@ -428,11 +406,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% END # /UNLESS nodateofbirth %]
                                                 [% UNLESS noinitials %]
                                                     <li>
-                                                        [% IF ( mandatoryinitials ) %]
-                                                            <label for="initials" class="required">
-                                                        [% ELSE %]
-                                                            <label for="initials">
-                                                        [% END %]
+                                                        <label for="initials" [% IF mandatoryinitials %]class="required"[% END %]>
                                                             Initials:
                                                         </label>
                                                         <input type="text" id="initials" name="initials" size="20"  value="[% borrower_data.initials | html UNLESS op == 'duplicate' %]" />
@@ -443,11 +417,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 [% END # /UNLESS noinitials %]
                                                 [% UNLESS nopronouns %]
                                                     <li>
-                                                        [% IF ( mandatorypronouns ) %]
-                                                            <label for="pronouns" class="required">
-                                                        [% ELSE %]
-                                                            <label for="pronouns">
-                                                        [% END %]
+                                                        <label for="pronouns" [% IF mandatorypronouns %]class="required"[% END %]>
                                                             Pronouns:
                                                         </label>
                                                         <input type="text" id="pronouns" name="pronouns" size="20"  value="[% borrower_data.pronouns | html UNLESS op == 'duplicate' %]" />
@@ -459,11 +429,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             [% END #/UNLESS ( I ) %]
                                             [% UNLESS noothernames %]
                                                 <li>
-                                                    [% IF ( mandatoryothernames ) %]
-                                                        <label for="othernames" class="required">
-                                                    [% ELSE %]
-                                                        <label for="othernames">
-                                                    [% END %]
+                                                    <label for="othernames" [% IF mandatoryothernames %]class="required"[% END %]>
                                                         Other name:
                                                     </label>
                                                     <input type="text" id="othernames" name="othernames" size="20"  value="[% borrower_data.othernames | html UNLESS op == 'duplicate' %]" />
@@ -564,13 +530,8 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                                             [% UNLESS norelationship %]
                                                                 <li>
-                                                                    [% IF mandatoryrelationship %]
-                                                                        <label for="guarantor_relationship" class="required">Relationship: </label>
-                                                                        <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
-                                                                    [% ELSE %]
-                                                                        <label for="guarantor_relationship">Relationship: </label>
-                                                                        <select class="new_guarantor_relationship" name="new_guarantor_relationship">
-                                                                    [% END %]
+                                                                    <label for="guarantor_relationship" [% IF mandatoryrelationship %]class="required"[% END %]>Relationship: </label>
+                                                                    <select class="new_guarantor_relationship" name="new_guarantor_relationship" [% IF mandatoryrelationship %]required="required"[% END %]>
                                                                         <option value=""></option>
                                                                         [% FOREACH pr IN possible_relationships.split('\|') %]
                                                                             [% IF pr != "" %]
@@ -608,13 +569,8 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                                     [% UNLESS norelationship %]
                                                         <li>
-                                                            [% IF mandatoryrelationship %]
-                                                                <label for="guarantor_relationship" class="required">Relationship: </label>
-                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship" required="required">
-                                                            [% ELSE %]
-                                                                <label for="guarantor_relationship">Relationship: </label>
-                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship">
-                                                            [% END %]
+                                                            <label for="guarantor_relationship" [% IF mandatoryrelationship %]class="required"[% END %]>Relationship: </label>
+                                                            <select class="new_guarantor_relationship" name="new_guarantor_relationship" [% IF mandatoryrelationship %]required="required"[% END %]>
                                                                 <option value="" selected></option>
                                                                 [% FOREACH pr IN possible_relationships.split('\|') %]
                                                                     [% IF pr != "" %]
@@ -689,11 +645,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             <ol>
                                                 [% UNLESS nocontactname %]
                                                     <li>
-                                                        [% IF ( mandatorycontactname ) %]
-                                                            <label for="contactname" class="required">
-                                                        [% ELSE %]
-                                                            <label for="contactname">
-                                                        [% END %]
+                                                        <label for="contactname" [% IF mandatorycontactname %]class="required"[% END %]>
                                                             Guarantor surname:
                                                         </label>
                                                         <input type="text" id="contactname" name="contactname" value="[% patron.contactname | html %]" />
@@ -706,11 +658,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                                 [% UNLESS nocontactfirstname %]
                                                     <li>
-                                                        [% IF ( mandatorycontactfirstname ) %]
-                                                            <label for="contactfirstname" class="required">
-                                                        [% ELSE %]
-                                                            <label for="contactfirstname">
-                                                        [% END %]
+                                                        <label for="contactfirstname" [% IF mandatorycontactfirstname %]class="required"[% END %]>
                                                             Guarantor first name:
                                                         </label>
                                                         <input type="text" id="contactfirstname" name="contactfirstname" value="[% patron.contactfirstname | html %]" />
@@ -723,13 +671,8 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                                 [% UNLESS norelationship %]
                                                     <li>
-                                                        [% IF mandatoryrelationship %]
-                                                            <label for="relationship" class="required">Relationship: </label>
-                                                            <select class="relationship" name="relationship" id="relationship" required="required">
-                                                        [% ELSE %]
-                                                            <label for="relationship">Relationship: </label>
-                                                            <select class="relationship" name="relationship" id="relationship">
-                                                        [% END %]
+                                                        <label for="relationship" [% IF mandatoryrelationship %]class="required"[% END %]>Relationship: </label>
+                                                        <select class="relationship" name="relationship" id="relationship" [% IF mandatoryrelationship %]required="required"[% END %]>
                                                             <option value=""></option>
                                                             [% FOREACH pr IN possible_relationships.split('\|') %]
                                                                 [% IF pr == borrower_data.relationship %]
@@ -762,11 +705,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <ol>
                                             [% UNLESS nophone %]
                                                 <li>
-                                                    [% IF ( mandatoryphone ) %]
-                                                        <label for="phone" class="required">
-                                                    [% ELSE %]
-                                                        <label for="phone">
-                                                    [% END %]
+                                                    <label for="phone" [% IF mandatoryphone %]class="required"[% END %]>
                                                         Primary phone:
                                                     </label>
                                                     <input type="text" id="phone" name="phone" value="[% patron.phone | html %]" />
@@ -779,11 +718,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS nophonepro %]
                                                 <li>
-                                                    [% IF ( mandatoryphonepro ) %]
-                                                        <label for="phonepro" class="required">
-                                                    [% ELSE %]
-                                                        <label for="phonepro">
-                                                    [% END %]
+                                                        <label for="phonepro" [% IF mandatoryphonepro %]class="required"[% END %]>
                                                         Secondary phone:
                                                     </label>
                                                     <input type="text" id="phonepro" name="phonepro" value="[% patron.phonepro | html %]" />
@@ -795,11 +730,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS nomobile %]
                                                 <li>
-                                                    [% IF ( mandatorymobile ) %]
-                                                        <label for="mobile" class="required">
-                                                    [% ELSE %]
-                                                        <label for="mobile">
-                                                    [% END %]
+                                                    <label for="mobile" [% IF mandatorymobile %]class="required"[% END %]>
                                                         Other phone:
                                                     </label>
                                                     <input type="text" id="mobile" name="mobile" value="[% patron.mobile | html %]" />
@@ -811,11 +742,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS noemail %]
                                                 <li>
-                                                    [% IF ( mandatoryemail ) %]
-                                                        <label for="email" class="required">
-                                                    [% ELSE %]
-                                                        <label for="email">
-                                                    [% END %]
+                                                    <label for="email" [% IF mandatoryemail %]class="required"[% END %]>
                                                         Primary email:
                                                     </label>
                                                     [% IF ( NoUpdateEmail ) %]
@@ -832,11 +759,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS noemailpro %]
                                                 <li>
-                                                    [% IF ( mandatoryemailpro ) %]
-                                                        <label for="emailpro" class="required">
-                                                    [% ELSE %]
-                                                        <label for="emailpro">
-                                                    [% END %]
+                                                    <label for="emailpro" [% IF mandatoryemailpro %]class="required"[% END %]>
                                                         Secondary email:
                                                     </label>
                                                     [% IF ( NoUpdateEmail ) %]
@@ -852,11 +775,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS nofax %]
                                                 <li>
-                                                    [% IF ( mandatoryfax ) %]
-                                                        <label for="fax" class="required">
-                                                    [% ELSE %]
-                                                        <label for="fax">
-                                                    [% END %]
+                                                    <label for="fax" [% IF mandatoryfax %]class="required"[% END %]>
                                                         Fax:
                                                     </label>
                                                     <input type="text" id="fax" name="fax" value="[% patron.fax | html %]" />
@@ -868,11 +787,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS noprimary_contact_method %]
                                                 <li>
-                                                    [% IF mandatoryprimary_contact_method %]
-                                                        <label for="primary_contact_method" class="required">
-                                                    [% ELSE %]
-                                                        <label for="primary_contact_method">
-                                                    [% END %]
+                                                    <label for="primary_contact_method" [% IF mandatoryprimary_contact_method %]class="required"[% END %]>
                                                     Main contact method: </label>
 
                                                     <select id="primary_contact_method" name="primary_contact_method">
@@ -954,51 +869,45 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     <ol>
                                         [% UNLESS nocardnumber %]
                                             <li>
-                                                [% IF mandatorycardnumber %]
-                                                    <label for="cardnumber" class="required">
-                                                [% ELSE %]
-                                                    <label for="cardnumber" class="validated">
-                                                [% END %]
+                                                <label for="cardnumber" class="[% mandatorycardnumber ? 'required' : 'validated' | html %]">
                                                     Card number:
                                                 </label>
 
-                                                <!-- NOTE: div.hint closing tag isn't on the same line -->
                                                 [% IF minlength_cardnumber == maxlength_cardnumber %]
                                                     <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% borrower_data.cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                                     [% IF mandatorycardnumber %]
                                                         <span class="required">Required</span>
                                                     [% END %]
                                                     <span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
-                                                    <div class="hint">Card number must be exactly [% minlength_cardnumber | html %] characters.
+                                                    <div class="hint">Card number must be exactly [% minlength_cardnumber | html %] characters.</div>
                                                 [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
                                                     <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% borrower_data.cardnumber | html %]" minlength="[% minlength_cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                                     [% IF mandatorycardnumber %]
                                                         <span class="required">Required</span>
                                                     [% END %]
                                                     <span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
-                                                    <div class="hint">Card number must be between [% minlength_cardnumber | html %] and [% maxlength_cardnumber | html %] characters.
+                                                    <div class="hint">Card number must be between [% minlength_cardnumber | html %] and [% maxlength_cardnumber | html %] characters.</div>
                                                 [% ELSIF maxlength_cardnumber %]
                                                     <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% borrower_data.cardnumber | html %]" maxlength="[% maxlength_cardnumber | html %]" />
                                                     [% IF mandatorycardnumber %]
                                                         <span class="required">Required</span>
                                                     [% END %]
                                                     <span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber | html %] characters.</span>
-                                                    <div class="hint">Card number can be up to [% maxlength_cardnumber | html %] characters.
+                                                    <div class="hint">Card number can be up to [% maxlength_cardnumber | html %] characters.</div>
                                                 [% ELSE %]
                                                     <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% borrower_data.cardnumber | html %]" />
                                                     [% IF mandatorycardnumber %]
                                                         <span class="required">Required</span>
                                                     [% END %]
-                                                    <div class="hint">There is no minimum or maximum character length.
+                                                    <div class="hint">There is no minimum or maximum character length.</div>
                                                 [% END %]
                                                 [% IF autoMemberNum %]
                                                     [% IF mandatorycardnumber %]
-                                                        <br/><span class="error">autoMemberNum is set to enabled, but card number is marked as mandatory in BorrowerMandatoryField: auto calc has been disabled.</span>
+                                                        <div class="hint"><span class="error">autoMemberNum is set to enabled, but card number is marked as mandatory in BorrowerMandatoryField: auto calc has been disabled.</span></div>
                                                     [% ELSE %]
-                                                        <br/>Leave blank for auto calc during registration
+                                                        <div class="hint">Leave blank for auto calc during registration</div>
                                                     [% END %]
                                                 [% END %]
-                                                </div><!--/div.hint -->
                                             </li>
                                         [% END # /UNLESS nocardnumber %]
 
@@ -1016,22 +925,22 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             <label for="categorycode_entry" class="required">Category: </label>
                                             <select id="categorycode_entry" name="categorycode">
                                                 [% FOREACH category_type IN patron_categories.keys.sort %]
+                                                    [% SET optgroup_label = t("Unknown") %]
                                                     [% SWITCH category_type %]
                                                     [% CASE 'C' %]
-                                                        <optgroup label="Child">
+                                                        [% optgroup_label = t("Child") %]
                                                     [% CASE 'A' %]
-                                                        <optgroup label="Adult">
+                                                        [% optgroup_label = t("Adult") %]
                                                     [% CASE 'S' %]
-                                                        <optgroup label="Staff">
+                                                        [% optgroup_label = t("Staff") %]
                                                     [% CASE 'I' %]
-                                                        <optgroup label="Organization">
+                                                        [% optgroup_label = t("Organization") %]
                                                     [% CASE 'P' %]
-                                                        <optgroup label="Professional">
+                                                        [% optgroup_label = t("Professional") %]
                                                     [% CASE 'X' %]
-                                                        <optgroup label="Statistical">
-                                                    [% CASE %]
-                                                        <optgroup label="Unknown">
+                                                        [% optgroup_label = t("Statistical") %]
                                                     [% END %]
+                                                    <optgroup label="[% optgroup_label | html %]">
                                                     [% FOREACH category IN patron_categories.$category_type %]
                                                         [% IF category.categorycode == patron_category.categorycode %]
                                                             <option value="[% category.categorycode | html %]" selected="selected" data-pwd-length="[% category.effective_min_password_length | html %]" data-pwd-strong="[% category.effective_require_strong_password | html %]" data-typename="[% category_type | html %]">[% category.description | html %]</option>
@@ -1050,11 +959,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                         [% UNLESS nosort1 %]
                                             <li>
-                                                [% IF ( mandatorysort1 ) %]
-                                                    <label for="sort1" class="required">
-                                                [% ELSE %]
-                                                    <label for="sort1">
-                                                [% END %]
+                                                <label for="sort1" [% IF mandatorysort1 %]class="required"[% END %]>
                                                     Sort 1:
                                                 </label>
                                                 [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=borrower_data.sort1, empty=1, size = 20 %]
@@ -1066,11 +971,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                         [% UNLESS nosort2 %]
                                             <li>
-                                                [% IF ( mandatorysort2 ) %]
-                                                    <label for="sort2" class="required">
-                                                [% ELSE %]
-                                                    <label for="sort2">
-                                                [% END %]
+                                                <label for="sort2" [% IF mandatorysort2 %]class="required"[% END %]>
                                                     Sort 2:
                                                 </label>
                                                 [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=borrower_data.sort2, empty=1, size = 20 %]
@@ -1190,11 +1091,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <ol>
                                         [% UNLESS nodateenrolled %]
                                             <li>
-                                                [% IF ( mandatorydateenrolled ) %]
-                                                    <label for="from" class="required">
-                                                [% ELSE %]
-                                                    <label for="from">
-                                                [% END %]
+                                                <label for="from" [% IF mandatorydateenrolled %]class="required"[% END %]>
                                                     Registration date:
                                                 </label>
                                                 <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% borrower_data.dateenrolled | html %]" class="flatpickr" data-date_to="to" />
@@ -1208,16 +1105,8 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             </li>
                                         [% END # /UNLESS nodateenrolled %]
 
-                                        [% UNLESS nodateexpiry %]
-                                            <li>
-                                        [% ELSE %]
-                                            <li style="display:none">
-                                        [% END %]
-                                            [% IF ( mandatorydateexpiry ) %]
-                                                <label for="to" class="required">
-                                            [% ELSE %]
-                                                <label for="to">
-                                            [% END %]
+                                        <li [% IF nodateexpiry %]style="display:none"[% END %]>
+                                            <label for="to" [% IF mandatorydateexpiry %]class="required"[% END %]>
                                                     Expiry date (leave blank for auto calc):
                                                 </label>
                                                 [% UNLESS ( op == 'add_form' ) %]
@@ -1236,11 +1125,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS noopacnote %]
                                                 <li>
-                                                    [% IF ( mandatoryopacnote ) %]
-                                                        <label for="opacnote" class="required">
-                                                    [% ELSE %]
-                                                        <label for="opacnote">
-                                                    [% END %]
+                                                    <label for="opacnote" [% IF mandatoryopacnote %]class="required"[% END %]>
                                                         OPAC note:
                                                     </label>
                                                     <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% borrower_data.opacnote | html UNLESS op == 'duplicate' %]</textarea>
@@ -1253,11 +1138,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS noborrowernotes %]
                                                 <li>
-                                                    [% IF ( mandatoryborrowernotes ) %]
-                                                        <label for="borrowernotes" class="required">
-                                                    [% ELSE %]
-                                                        <label for="borrowernotes">
-                                                    [% END %]
+                                                    <label for="borrowernotes" [% IF mandatoryborrowernotes %]class="required"[% END %]>
                                                         Circulation note:
                                                     </label>
                                                     <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrower_data.borrowernotes | $raw UNLESS op == 'duplicate' %]</textarea>
@@ -1280,11 +1161,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <ol>
                                             [% UNLESS nouserid %]
                                                 <li>
-                                                    [% IF ( mandatoryuserid ) %]
-                                                        <label for="userid" class="required">
-                                                    [% ELSE %]
-                                                        <label for="userid">
-                                                    [% END %]
+                                                    <label for="userid" [% IF mandatoryuserid %]class="required"[% END %]>
                                                         Username:
                                                     </label>
 
@@ -1313,11 +1190,7 @@ legend.collapsed i.fa.fa-caret-down::before {
 
                                             [% UNLESS nopassword %]
                                                 <li>
-                                                    [% IF ( mandatorypassword ) %]
-                                                        <label for="password" class="required">
-                                                    [% ELSE %]
-                                                        <label for="password">
-                                                    [% END %]
+                                                    <label for="password" [% IF mandatorypassword %]class="required"[% END %]>
                                                         Password:
                                                     </label>
                                                     [% IF ( op == 'add_form' ) %]
@@ -1370,11 +1243,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                 </li>
 
                                                 <li>
-                                                    [% IF ( mandatorypassword ) %]
-                                                        <label for="password2" class="required">
-                                                    [% ELSE %]
-                                                        <label for="password2">
-                                                    [% END %]
+                                                    <label for="password2" [% IF mandatorypassword %]class="required"[% END %]>
                                                         Confirm password:
                                                     </label>
                                                     [% IF ( op == 'add_form' ) %]
@@ -1440,11 +1309,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <ol class="radio">
                                             [% UNLESS nogonenoaddress %]
                                                 <li>
-                                                    [% IF mandatorygonenoaddress %]
-                                                        <label class="radio required" for="yesgonenoaddress">
-                                                    [% ELSE %]
-                                                        <label class="radio" for="yesgonenoaddress">
-                                                    [% END %]
+                                                    <label class="radio [% IF mandatorygonenoaddress %]required[% END %]" for="yesgonenoaddress">
                                                         Gone no address:
                                                     </label>
                                                     [% IF CAN_user_circulate_manage_restrictions %]
@@ -1475,11 +1340,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             [% END # /UNLESS nogonenoaddress %]
                                             [% UNLESS nolost %]
                                                 <li>
-                                                    [% IF mandatorylost %]
-                                                        <label class="radio required" for="yeslost">
-                                                    [% ELSE %]
-                                                        <label class="radio" for="yeslost">
-                                                    [% END %]
+                                                    <label class="radio [% IF mandatorylost %]required[% END %]" for="yeslost">
                                                         Lost card:
                                                     </label>
                                                     [% IF CAN_user_circulate_manage_restrictions %]
@@ -1654,8 +1515,8 @@ legend.collapsed i.fa.fa-caret-down::before {
                                             <input type="hidden" name="setting_extended_patron_attributes" value="1" />
                                             [% FOREACH pa_loo IN patron_attributes %]
                                                 <ol class="attributes_table">
+                                                    <div id="aai_[% pa_loo.class | html %]">
                                                     [% IF pa_loo.class %]
-                                                        <div id="aai_[% pa_loo.class | html %]">
                                                         <h3 id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</h3>
                                                     [% END %]
                                                     [% FOREACH patron_attribute IN pa_loo.items %]
@@ -1666,11 +1527,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                                 <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
                                                             [% END %]
                                                             [% IF ( patron_attribute.use_dropdown ) %]
-                                                                [% IF patron_attribute.mandatory %]
-                                                                    <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">
-                                                                [% ELSE %]
-                                                                    <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">
-                                                                [% END %]
+                                                                <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" [% IF patron_attribute.mandatory %]required="required"[% END %]>
                                                                     <option value=""></option>
                                                                     [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
                                                                         [% IF auth_val_loo.authorised_value == patron_attribute.value %]
@@ -1709,7 +1566,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                             [% IF patron_attribute.mandatory %]<span class="required">Required</span>[% END %]
                                                         </li>
                                                     [% END # /FOREACH patron_attribute %]
-                                                    [% IF pa_loo.class %]</div>[% END %]
+                                                    </div>
                                                 </ol>
                                             [% END # /FOREACH pa_loo %]
                                         </fieldset> <!-- /#memberentry_patron_attributes -->
