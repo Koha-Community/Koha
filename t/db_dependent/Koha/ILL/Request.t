@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 
 use Koha::ILL::Requests;
@@ -64,6 +64,55 @@ subtest 'patron() tests' => sub {
     # patron is expired, is not allowed
     $patron_module->mock( 'is_expired', sub { return 1; } );
     is( $request->can_patron_place_ill_in_opac($patron), 0 );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'extended_attributes() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $request = $builder->build_object( { class => 'Koha::ILL::Requests' } );
+
+    is(
+        $request->extended_attributes->count, 0,
+        'extended_attributes() returns empty if no extended attributes are set'
+    );
+
+    my $attribute = $builder->build_object(
+        {
+            class => 'Koha::ILL::Request::Attributes',
+            value => {
+                illrequest_id => $request->illrequest_id,
+                type          => 'custom_attribute',
+                value         => 'custom_value'
+            }
+        }
+    );
+
+    is_deeply(
+        $request->extended_attributes->next, $attribute,
+        'extended_attributes() returns empty if no extended attributes are set'
+    );
+
+    $request->extended_attributes(
+        [
+            { type => 'type',  value => 'type_value' },
+            { type => 'type2', value => 'type2_value' },
+        ]
+    );
+
+    is(
+        $request->extended_attributes->count, 3,
+        'extended_attributes() returns the correct amount of attributes'
+    );
+
+    is(
+        $request->extended_attributes->find( { type => 'type' } )->value, 'type_value',
+        'extended_attributes() contains the correct attribute'
+    );
 
     $schema->storage->txn_rollback;
 };
