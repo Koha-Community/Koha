@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use base qw(Koha::Object);
 
+use Koha::Edifact::File::Errors;
+
 =encoding utf8
 
 =head1 Name
@@ -55,6 +57,20 @@ sub basket {
     my $basket_rs = $self->_result->basketno;
     return unless $basket_rs;
     return Koha::Acquisition::Basket->_new_from_dbic($basket_rs);
+}
+
+=head3 errors
+
+  my $errors = $edifile->errors;
+
+Returns any I<Koha::Edifact::File::Errors> associated with this EDIFACT file
+
+=cut
+
+sub errors {
+    my ($self) = @_;
+    my $errors_rs = $self->_result->edifact_errors;
+    return Koha::Edifact::File::Errors->_new_from_dbic($errors_rs);
 }
 
 =head3 to_api_mapping
