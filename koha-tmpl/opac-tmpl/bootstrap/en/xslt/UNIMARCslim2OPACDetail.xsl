@@ -518,7 +518,7 @@
   <xsl:variable name="OPACPlayMusicalInscripts" select="marc:sysprefs/marc:syspref[@name='OPACPlayMusicalInscripts']" />
 
   <xsl:if test="$OPACShowMusicalInscripts and marc:datafield[@tag=036]">
-      <xsl:for-each select="marc:datafield[@tag=031]">
+      <xsl:for-each select="marc:datafield[@tag=036]">
 
         <span class="results_summary musical_inscripts">
             <xsl:if test="marc:subfield[@code='u']">
