@@ -163,11 +163,10 @@
                             <input type="submit" id="merge-patrons" class="btn btn-primary" value="Merge patrons" />
                             [% PROCESS 'members-patron-selections.inc' id="patron-merge-form" %]
                         </fieldset>
-
-                    [% ELSE %]
-                        <div class="alert alert-warning">Error: Two or more patrons need to be selected for merging</div>
-                    [% END %]
-                </form>
+                    </form>
+                [% ELSE %]
+                    <div class="alert alert-warning">Error: Two or more patrons need to be selected for merging</div>
+                [% END %]
             [% ELSIF op == 'cud-merge' %]
                 <h4>Results</h4>
                 [% IF error %]
