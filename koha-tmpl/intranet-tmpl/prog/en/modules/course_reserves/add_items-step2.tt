@@ -91,12 +91,7 @@
                             <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
                         [% END %]
 
-                        [% IF course_item.itype_enabled %]
-                            <select id="itype" name="itype">
-                        [% ELSE %]
-                            <select id="itype" name="itype" disabled="disabled">
-                        [% END %]
-
+                        <select id="itype" name="itype" [% UNLESS course_item.itype_enabled %]disabled="disabled"[% END %]>
                             <option value=""></option>
                             [% FOREACH it IN itypes %]
                                 [% IF it.itemtype == course_item.itype %]
@@ -118,12 +113,7 @@
                             <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" />
                         [% END %]
 
-                        [% IF course_item.ccode_enabled %]
-                            <select id="ccode" name="ccode">
-                        [% ELSE %]
-                            <select id="ccode" name="ccode" disabled="disabled">
-                        [% END %]
-
+                        <select id="ccode" name="ccode" [% UNLESS course_item.ccode_enabled %]disabled="disabled"[% END %]>
                             <option value=""></option>
                             [% FOREACH c IN ccodes %]
                                 [% IF c.authorised_value == course_item.ccode %]
@@ -144,12 +134,7 @@
                             <input type="checkbox" class="field-toggle" data-pulldown="location"  value="1" name="location_enabled" id="location_enabled" />
                         [% END %]
 
-                        [% IF course_item.location_enabled %]
-                            <select id="location" name="location">
-                        [% ELSE %]
-                            <select id="location" name="location" disabled="disabled">
-                        [% END %]
-
+                        <select id="location" name="location" [% UNLESS course_item.location_enabled %]disabled="disabled"[% END %]>
                             <option value=""></option>
                             [% FOREACH s IN locations %]
                                 [% IF s.authorised_value == course_item.location %]
@@ -170,12 +155,7 @@
                             <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" />
                         [% END %]
 
-                        [% IF course_item.homebranch_enabled %]
-                            <select id="homebranch" name="homebranch">
-                        [% ELSE %]
-                            <select id="homebranch" name="homebranch" disabled="disabled">
-                        [% END %]
-
+                        <select id="homebranch" name="homebranch" [% UNLESS course_item.homebranch_enabled %]disabled="disabled"[% END %]>
                             <option value=""></option>
                             [% FOREACH b IN Branches.all() %]
                                 [% IF course_item.homebranch.defined && ( ( course.enabled == 'yes' && b.branchcode == item.homebranch ) || ( course.enabled == 'no' && b.branchcode == course_item.homebranch ) ) %]
@@ -196,12 +176,7 @@
                             <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
                         [% END %]
 
-                        [% IF course_item.holdingbranch_enabled %]
-                            <select id="holdingbranch" name="holdingbranch">
-                        [% ELSE %]
-                            <select id="holdingbranch" name="holdingbranch" disabled="disabled">
-                        [% END %]
-
+                        <select id="holdingbranch" name="holdingbranch" [% UNLESS course_item.holdingbranch_enabled %]disabled="disabled"[% END %]>
                             <option value=""></option>
                             [% FOREACH b IN Branches.all() %]
                                 [% IF b.branchcode == course_item.holdingbranch %]
