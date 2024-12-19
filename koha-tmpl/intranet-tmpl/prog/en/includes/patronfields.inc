@@ -81,12 +81,18 @@
 [%- END -%]
 [%- BLOCK patron_fields_dropdown -%]
     [% IF search_box %]
-        <label for="searchfieldstype" class="control-label">Search field:</label>
-        <select name="searchfieldstype" id="searchfieldstype" class="form-select">
+        [% SET label_class = 'control-label' %]
+        [% SET label_for = 'searchfieldstype' %]
+        [% SET select_id = 'searchfieldstype' %]
+        [% SET select_class = 'form-select' %]
     [% ELSE %]
-        <label for="searchfieldstype_filter">Search field:</label>
-        <select name="searchfieldstype" class="searchfieldstype_filter">
+        [% SET label_class = '' %]
+        [% SET label_for = 'searchfieldstype_filter' %]
+        [% SET select_id = '' %]
+        [% SET select_class = 'searchfieldstype_filter' %]
     [% END %]
+    <label for="[% label_for | html %]">Search field:</label>
+    <select name="searchfieldstype" class="[% select_class | html %]" [% IF select_id %]id="[% select_id | html %]"[% END %]>
         [% SET standard = Koha.Preference('DefaultPatronSearchFields') || 'firstname|preferred_name|middle_name|surname|othernames|cardnumber|userid' %]
         [%# Above is needed for adding fields from the DefaultPatronSearchFields preference to the dropdowns %]
         [% default_fields = [ 'standard', 'surname', 'cardnumber', 'all_emails', 'borrowernumber', 'userid', 'all_phones', 'full_address', 'dateofbirth', 'sort1', 'sort2' ] %]
