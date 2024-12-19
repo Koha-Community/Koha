@@ -451,7 +451,7 @@
                         </ul>
                     [% END %]
 
-                    [% UNLESS error OR atomic_updates.error OR has_update_errors %]
+                    [% UNLESS error OR atomic_updates.error.size OR has_update_errors %]
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
                     [% ELSE %]
