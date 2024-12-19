@@ -19,7 +19,7 @@
         </thead>
         <tbody>
             [% FOREACH restriction IN patron.restrictions %]
-                [% IF restriction.is_expired %]<tr class="expired">[% ELSE %]<tr>[% END %]
+                <tr [% IF restriction.is_expired %]class="expired"[% END %]>
                     <td>
                         [% PROCESS restriction_type_description restriction_type=restriction.type %]
                     </td>
