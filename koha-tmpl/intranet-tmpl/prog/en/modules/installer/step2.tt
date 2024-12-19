@@ -44,12 +44,14 @@
                         [% IF ( checkdatabaseaccess ) %]
                             <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
                             [% IF ( checkdatabasecreated ) %]
-                                <ul>
-                                    <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
                                 [% IF ( checkgrantaccess ) %]
-                                    <li>User [% user | $HtmlTags tag=>'code' %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
+                                    <ul>
+                                        <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
+                                        <li>User [% user | $HtmlTags tag=>'code' %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
                                     </ul>
                                 [% ELSE %]
+                                    <ul>
+                                        <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
                                     </ul>
                                     <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
                                     <p class="hint">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
