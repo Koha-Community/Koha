@@ -1385,6 +1385,8 @@ Check whether the item can be returned to the provided branch
 
 =item C<$branch> is the branchcode where the return is taking place
 
+=item C<$transferbranch> the branch where the book should be transferred after return, if the transfer is impossible, the book will be prevented from returning.
+
 =back
 
 Returns:
@@ -1403,11 +1405,10 @@ sub CanBookBeReturned {
     my ( $item, $returnbranch, $transferbranch ) = @_;
     my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
 
-    # assume return is allowed to start
     my $allowed = 1;
     my $message;
 
-    # identify all cases where return is forbidden
+    # Refuse check-in if it does not respect AllowReturnToBranch rules
     if ( $allowreturntobranch eq 'homebranch' && $returnbranch ne $item->homebranch ) {
         $allowed = 0;
         $message = $item->homebranch;
@@ -1422,7 +1423,7 @@ sub CanBookBeReturned {
         $message = $item->homebranch;    # FIXME: choice of homebranch is arbitrary
     }
 
-    # identify cases where transfer rules prohibit return
+    # Refuse check-in if book cannot be transferred to $transferbranch due to transfer limits
     if ( defined($transferbranch) && $allowed ) {
         my $from_library = Koha::Libraries->find($returnbranch);
         my $to_library   = Koha::Libraries->find($transferbranch);

@@ -19,7 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::NoWarnings;
-use Test::More tests => 86;
+use Test::More tests => 87;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -3012,6 +3012,119 @@ subtest 'CanBookBeReturned + UseBranchTransfertLimits + CirculationRules' => sub
     is( $holdingbranch->{branchcode}, $message, 'Redirect to holdingbranch' );
 };
 
+subtest 'AddReturn + TransferLimits' => sub {
+    plan tests => 3;
+
+    ########################################################################
+    #
+    # Prepare test
+    #
+    ########################################################################
+
+    my $patron        = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $homebranch    = $builder->build( { source => 'Branch' } );
+    my $holdingbranch = $builder->build( { source => 'Branch' } );
+    my $returnbranch  = $builder->build( { source => 'Branch' } );
+    my $item          = $builder->build_sample_item(
+        {
+            homebranch    => $homebranch->{branchcode},
+            holdingbranch => $holdingbranch->{branchcode},
+        }
+    );
+
+    # Default circulation rules
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $item->itype,
+            rules        => {
+                maxissueqty     => 1,
+                reservesallowed => 25,
+                issuelength     => 7,
+                lengthunit      => 'days',
+                renewalsallowed => 5,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv( { branchcode => $holdingbranch->{branchcode} } );
+
+    # Each transfer from returnbranch is forbidden
+    my $limit = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $returnbranch->{branchcode},
+            toBranch   => $holdingbranch->{branchcode},
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store();
+    my $limit2 = Koha::Item::Transfer::Limit->new(
+        {
+            fromBranch => $returnbranch->{branchcode},
+            toBranch   => $homebranch->{branchcode},
+            itemtype   => $item->effective_itemtype,
+        }
+    )->store();
+
+    ########################################################################
+    #
+    # Begin test
+    #
+    # Each transfer is forbidden by transfer limits
+    # Checkin must be forbidden except if there is no transfer to perform
+    #
+    ########################################################################
+
+    # Case 1: There is a transfer to to do homebranch
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            rules      => {
+                returnbranch => 'homebranch',
+            },
+        }
+    );
+    my $issue = AddIssue( $patron, $item->barcode );
+    my ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item->barcode, $returnbranch->{branchcode} );
+    is( $doreturn, 0, "Item cannot be returned if there is a transfer to do" );
+
+    # Case 2: There is a transfer to do to holdingbranch
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            rules      => {
+                returnbranch => 'holdingbranch',
+            },
+        }
+    );
+    $issue->delete;
+    $item->holdingbranch( $holdingbranch->{branchcode} )->store();
+    $issue = AddIssue( $patron, $item->barcode );
+    ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item->barcode, $returnbranch->{branchcode} );
+    is( $doreturn, 0, "Item cannot be returned if there is a transfer to do (item is floating)" );
+
+    # Case 3: There is no transfer to do
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            rules      => {
+                returnbranch => 'noreturn',
+            },
+        }
+    );
+    $issue->delete;
+    $issue = AddIssue( $patron, $item->barcode );
+    ( $doreturn, $messages, $iteminfo, $borrowerinfo ) = AddReturn( $item->barcode, $returnbranch->{branchcode} );
+    is( $doreturn, 1, "Item cannot be returned if there is a transfer to do" );
+};
+
 subtest 'Statistic patrons "X"' => sub {
     plan tests => 15;
 
@@ -3099,8 +3212,6 @@ subtest 'Statistic patrons "X"' => sub {
         Koha::Statistics->search( { itemnumber => $item_4->itemnumber } )->count, 3,
         'Issue, return, and localuse should be recorded in statistics table for item 4.'
     );
-
-    # TODO There are other tests to provide here
 };
 
 subtest "Bug 27753 - Add AutoClaimReturnStatusOnCheckin" => sub {
