@@ -370,7 +370,9 @@
                     </li>
                 </ol>
             </fieldset>
-            [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
+            [% IF additional_fields.size %]
+                [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values wrap_fieldset=1 %]
+            [% END %]
             <fieldset class="action">
                 <input type="submit" class="btn btn-primary" value="Submit" />
                 <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a>
