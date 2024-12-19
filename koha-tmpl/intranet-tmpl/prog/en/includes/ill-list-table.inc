@@ -1,10 +1,10 @@
+[% SET table_id = 'ill-requests' %]
 [% IF patron.borrowernumber %]
-<table id="ill-requests-patron-[% patron.borrowernumber | html %]">
+    [% table_id = 'ill-requests-patron-' _ patron.borrowernumber %]
 [% ELSIF batch.id %]
-<table id="ill-requests-batch-[% batch.id | html %]">
-[% ELSE %]
-<table id="ill-requests">
+    [% table_id = 'ill-requests-patron-' _ batch.id %]
 [% END %]
+<table id="[% table_id | html %]">
     <thead>
         <tr id="ill_requests_header">
             <th scope="col">Request ID</th>
