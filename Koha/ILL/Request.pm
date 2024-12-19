@@ -277,12 +277,42 @@ sub library {
 
     my $extended_attributes = $request->extended_attributes;
 
-Returns the linked I<Koha::ILL::Request::Attributes> resultset object.
+    my $extended_attributes = $request->extended_attributes([
+        {
+            type => 'type',
+            value => 'type_value',
+        },
+        {
+            type => 'type2',
+            value => 'type2_value',
+        },
+    ]);
+
+Getter or setter for extended attributes
+
+Getter: Returns the linked I <Koha::ILL::Request::Attributes> resultset object.
+
+Setter: Adds the supplied extended attributes to the request
 
 =cut
 
 sub extended_attributes {
-    my ( $self ) = @_;
+    my ( $self, $attributes ) = @_;
+
+    if ($attributes) {
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                for my $attribute (@$attributes) {
+                    $attribute->{backend} = $self->backend;
+                    eval { $self->_result->add_to_illrequestattributes($attribute); };
+                    if ($@) {
+                        warn "Error adding attribute $attribute->{type}: $@";
+                    }
+                }
+            }
+        );
+    }
 
     my $rs = $self->_result->extended_attributes;
     # We call search to use the filters in Koha::ILL::Request::Attributes->search
