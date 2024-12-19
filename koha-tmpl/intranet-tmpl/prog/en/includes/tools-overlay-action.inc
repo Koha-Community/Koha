@@ -1,24 +1,8 @@
-[% IF ( class_name ) %]
-    <select name="overlay_action" id="overlay_action" class="[% class_name | html %]">
-[% ELSE %]
-    <select name="overlay_action" id="overlay_action">
-[% END %]
-    [% IF ( account.overlay_action == 'replace' ) %]
-        <option value="replace"  selected="selected">
-    [% ELSE %]
-        <option value="replace">
-    [% END %]
+<select name="overlay_action" id="overlay_action" class="[% class_name | html %]">
+    <option value="replace"  [% IF account.overlay_action == 'replace' %]selected="selected"[% END %]>
         Replace existing record with incoming record</option>
-    [% IF ( account.overlay_action == 'create_new' ) %]
-        <option value="create_new" selected="selected">
-    [% ELSE %]
-        <option value="create_new">
-    [% END %]
+    <option value="create_new" [% IF account.overlay_action == 'create_new' %]selected="selected"[% END %]>
         Add incoming record</option>
-    [% IF ( account.overlay_action == 'ignore' ) %]
-        <option value="ignore" selected="selected">
-    [% ELSE %]
-        <option value="ignore">
-    [% END %]
+    <option value="ignore" [% IF account.overlay_action == 'ignore' %]selected="selected"[% END %]>
         Ignore incoming record (its items may still be processed)</option>
 </select>
