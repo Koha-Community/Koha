@@ -79,7 +79,6 @@
         [% IF Koha.Preference('canreservefromotherbranches') %]
             <span class="item-status holdfor">Hold for: [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]</span>
         [% END %]
-    </span>
 [% END %]
 
 [% IF ( itemavailable ) %]
