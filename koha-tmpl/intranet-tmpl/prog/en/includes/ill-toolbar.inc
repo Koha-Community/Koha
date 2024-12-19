@@ -44,8 +44,8 @@
                     [% END %]
                 </ul>
             </div>
-            <a class="btn btn-default" type="button" href="/cgi-bin/koha/ill/ill-requests.pl?method=batch_list" %]">
-                <i class="fa fa-tasks"></i> Batch requests</span>
+            <a class="btn btn-default" type="button" href="/cgi-bin/koha/ill/ill-requests.pl?method=batch_list">
+                <i class="fa fa-tasks"></i> Batch requests
             </a>
         </div>
         [% END %]
