@@ -47,11 +47,8 @@
         [%- ELSE -%]
             [%- this_priority = loop.count() - found_holds -%]
         [%- END -%]
-            [% IF hold.suspend %]
-                <tr class="suspend">
-            [% ELSE %]
-                <tr>
-            [% END %]
+            [% SET tr_class = hold.suspend ? 'suspend' : '' %]
+            <tr class="[% tr_class | html %]">
                 <td><input type="checkbox" class="select_hold" data-id="[% hold.reserve_id | html %]"/></td>
                 <td>
                     <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
@@ -223,14 +220,15 @@
                 [%- IF ( CAN_user_reserveforothers_modify_holds_priority ) -%]
                 [%- UNLESS hold.found -%]
                         <td>
-                                [% IF ( hold.lowestPriority ) %]
-                                    <a class="hold-arrow" title="Remove lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
-                                        <i class="fa fa-lg fa-rotate-90 icon-unset-lowest" aria-hidden="true"></i>
-                                [% ELSE %]
-                                    <a class="hold-arrow" title="Set lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
-                                        <i class="fa fa-lg fa-rotate-90 icon-set-lowest" aria-hidden="true"></i>
-                                [% END %]
-                            </a>
+                            [% IF ( hold.lowestPriority ) %]
+                                <a class="hold-arrow" title="Remove lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                                    <i class="fa fa-lg fa-rotate-90 icon-unset-lowest" aria-hidden="true"></i>
+                                </a>
+                            [% ELSE %]
+                                <a class="hold-arrow" title="Set lowest priority" data-op="cud-setLowestPriority" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-reserve_id="[% hold.reserve_id | html %]" data-date="[% hold.date | html %]">
+                                    <i class="fa fa-lg fa-rotate-90 icon-set-lowest" aria-hidden="true"></i>
+                                </a>
+                            [% END %]
                         </td>
             [%- ELSE -%]
                 <td></td>
