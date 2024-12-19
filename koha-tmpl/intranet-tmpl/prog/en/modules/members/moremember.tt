@@ -331,10 +331,11 @@
                                             </div>
                                             [% FOREACH attribute IN attributes_loop %]
                                                 [% IF attribute.class %]
-                                                    <div id="aai_[% attribute.class | html %]" class="rows">
+                                                    [% SET div_id = 'aai_' _ attribute.class %]
                                                 [% ELSE %]
-                                                    <div id="aai" class="rows">
+                                                    [% SET div_id = 'aai' %]
                                                 [% END %]
+                                                <div id="[% div_id | html %]" class="rows">
                                                     <h4>[% attribute.lib | html %]</h4>
                                                     <ol>
                                                         [% FOREACH item IN attribute.items %]
