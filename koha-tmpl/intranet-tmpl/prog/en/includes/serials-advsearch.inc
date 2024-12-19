@@ -2,11 +2,8 @@
 [% PROCESS 'html_helpers.inc' %]
 <div id="advsearch" style="padding-bottom:3em;">
     <form action="/cgi-bin/koha/serials/serials-search.pl" method="get">
-        [% IF brief %]
-            <fieldset class="brief">
-        [% ELSE %]
-            <fieldset class="rows">
-        [% END%]
+        [% SET fieldset_class = brief ? 'brief' : 'rows' %]
+        <fieldset class="[% fieldset_class | html %]">
             <legend>Search subscriptions</legend>
             <ol>
                 <li>
