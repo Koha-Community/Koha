@@ -991,19 +991,13 @@ sub add_request {
         if column_exists( 'illrequests', 'batch_id' );
     $request->store;
 
-    while ( my ( $type, $value ) = each %{$request_details} ) {
-        if ( $value && length $value > 0 ) {
-            Koha::ILL::Request::Attribute->new(
-                {
-                    illrequest_id => $request->illrequest_id,
-                    column_exists( 'illrequestattributes', 'backend' ) ? ( backend => "Standard" ) : (),
-                    type     => $type,
-                    value    => $value,
-                    readonly => 0
-                }
-            )->store;
+    my @request_details_array = map {
+        {
+            'type'     => $_,
+            'value'    => $request_details->{$_},
         }
-    }
+    } keys %{$request_details};
+    $request->extended_attributes( \@request_details_array );
 
     return $request;
 }
