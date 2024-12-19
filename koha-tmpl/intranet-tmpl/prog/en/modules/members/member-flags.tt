@@ -77,11 +77,7 @@
         </div>
         <div class="permissions page-section">
             [% FOREACH loo IN loop %]
-                [% IF ( loo.expand ) %]
-                    <div id="parent-flag-[% loo.flag | html %]" class="open parent">
-                [% ELSE %]
-                    <div id="parent-flag-[% loo.flag | html %]" class="parent">
-                [% END %]
+                <div id="parent-flag-[% loo.flag | html %]" class="[% IF loo.expand %]open[% END %] parent">
                 [% IF ( loo.checked ) %]
                     [% IF disable_superlibrarian_privs && loo.bit == 0 %]
                         <input type="checkbox" disabled="disabled" data-bit="0" id="flag-0" class="parent flag superlib" name="flag" value="[% loo.flag | html %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
