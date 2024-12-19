@@ -18,7 +18,9 @@
 [% IF ( Koha.Preference('SlipCSS') ) %]
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
+<!-- prettier-ignore-start -->
 [% IF style %]<style>[% style | $raw %]</style>[% END %]
+<!-- prettier-ignore-end -->
 </head>
 
 <body id="members_printslip" class="member">
