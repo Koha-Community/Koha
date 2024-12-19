@@ -1,18 +1,6 @@
-[% IF ( class_name ) %]
-    <select name="nomatch_action" id="nomatch_action" class="[% class_name | html %]">
-[% ELSE %]
-    <select name="nomatch_action" id="nomatch_action">
-[% END %]
-    [% IF ( account.nomatch_action == 'create_new' ) %]
-        <option value="create_new" selected="selected">
-    [% ELSE %]
-        <option value="create_new">
-    [% END %]
+<select name="nomatch_action" id="nomatch_action" class="[% class_name | html %]">
+    <option value="create_new" [% IF account.nomatch_action == 'create_new' %]selected="selected"[% END %]>
         Add incoming record</option>
-    [% IF ( account.nomatch_action == 'ignore' ) %]
-        <option value="ignore" selected="selected">
-    [% ELSE %]
-        <option value="ignore">
-    [% END %]
+    <option value="ignore" [% IF account.nomatch_action == 'ignore' %]selected="selected"[% END %]>
         Ignore incoming record</option>
-    </select>
+</select>
