@@ -551,7 +551,7 @@ sub html_table {
         $field_count++;
         $col_index++;
     }
-    $$table[$row_index] = {header_fields => $fields};
+    $$table[0] = {header_fields => $fields};
     $cols = $col_index;
     $field_count *= scalar(@$data);     # total fields to be displayed in the table
     $col_index = 0;
