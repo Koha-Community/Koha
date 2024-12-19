@@ -288,8 +288,14 @@ sub process_invoice {
                 )->single;
             }
             if ( !$vendor_acct ) {
-                carp "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in "
-                    . $invoice_message->filename;
+                $invoice_message->add_to_edifact_errors(
+                    {
+                        section => '',
+                        details => "Skipped invoice $invoicenumber with unmatched vendor san: $vendor_ean"
+                    }
+                );
+                $logger->error( "Cannot find vendor with ean $vendor_ean for invoice $invoicenumber in "
+                        . $invoice_message->filename );
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
@@ -312,6 +318,12 @@ sub process_invoice {
             foreach my $line ( @{$lines} ) {
                 my $ordernumber = $line->ordernumber;
                 if ( !$ordernumber ) {
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => $line->line_item_number,
+                            details => "Message missing ordernumber"
+                        }
+                    );
                     $logger->error("Skipping invoice line, no associated ordernumber");
                     next;
                 }
@@ -319,12 +331,24 @@ sub process_invoice {
                 # ModReceiveOrder does not validate that $ordernumber exists validate here
                 my $order = $schema->resultset('Aqorder')->find($ordernumber);
                 if ( !$order ) {
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => $line->line_item_number,
+                            details => "Koha order $ordernumber missing"
+                        }
+                    );
                     $logger->error("Skipping invoice line, no order found for $ordernumber, invoice:$invoicenumber");
                     next;
                 }
 
                 my $bib = $order->biblionumber;
                 if ( !$bib ) {
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => $line->line_item_number,
+                            details => "Koha biblio missing"
+                        }
+                    );
                     $logger->error(
                         "Skipping invoice line, no bibliographic record found for $ordernumber, invoice:$invoicenumber"
                     );
@@ -383,13 +407,10 @@ sub process_invoice {
                             tax_value_on_receiving => $quantity * $price_excl_tax * $tax_rate->{rate},
                         }
                     );
-                    transfer_items(
-                        $schema,         $line, $order,
-                        $received_order, $quantity
-                    );
+                    transfer_items( $schema, $line, $order, $received_order, $quantity );
                     receipt_items(
-                        $schema,                      $line,
-                        $received_order->ordernumber, $quantity
+                        $schema, $line,
+                        $received_order->ordernumber, $quantity, $invoice_message
                     );
                 } else {    # simple receipt all copies on order
                     $order->quantityreceived($quantity);
@@ -402,7 +423,7 @@ sub process_invoice {
                     $order->tax_value_on_receiving( $quantity * $price_excl_tax * $tax_rate->{rate} );
                     $order->orderstatus('complete');
                     $order->update;
-                    receipt_items( $schema, $line, $ordernumber, $quantity );
+                    receipt_items( $schema, $line, $ordernumber, $quantity, $invoice_message );
                 }
             }
         }
@@ -439,7 +460,7 @@ sub _get_invoiced_price {
 }
 
 sub receipt_items {
-    my ( $schema, $inv_line, $ordernumber, $quantity ) = @_;
+    my ( $schema, $inv_line, $ordernumber, $quantity, $invoice_message ) = @_;
     my $logger = Koha::Logger->get( { interface => 'edi' } );
 
     # itemnumber is not a foreign key ??? makes this a bit cumbersome
@@ -453,6 +474,12 @@ sub receipt_items {
         my $item = $schema->resultset('Item')->find( $ilink->itemnumber );
         if ( !$item ) {
             my $i = $ilink->itemnumber;
+            $invoice_message->add_to_edifact_errors(
+                {
+                    section => $inv_line->line_item_number,
+                    details => "Cannot fine aqorder item"
+                }
+            );
             $logger->warn("Cannot find aqorder item for $i :Order:$ordernumber");
             next;
         }
@@ -491,6 +518,12 @@ sub receipt_items {
                     }
                 );
                 if ( $rs->count > 0 ) {
+                    $invoice_message->add_to_edifact_errors(
+                        {
+                            section => $inv_line->line_item_number . " : " . $gir_occurrence,
+                            details => "Duplicate barcode found $barcode"
+                        }
+                    );
                     $logger->warn("Barcode $barcode is a duplicate");
                 } else {
 
@@ -513,12 +546,17 @@ sub receipt_items {
 
             $item->update;
         } else {
+            $invoice_message->add_to_edifact_errors(
+                {
+                    section => $inv_line->line_item_number,
+                    details => "Unmatched item at branch $branch"
+                }
+            );
             $logger->warn("Unmatched item at branch:$branch");
         }
         ++$gir_occurrence;
     }
     return;
-
 }
 
 sub transfer_items {
@@ -1264,7 +1302,7 @@ Koha::EDI
 
 =head2 receipt_items
 
-    receipt_items( schema_obj, invoice_line, ordernumber, $quantity)
+    receipt_items( schema_obj, invoice_line, ordernumber, $quantity, $invoice_message)
 
     receipts the items recorded on this invoice line
 
