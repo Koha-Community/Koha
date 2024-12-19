@@ -66,18 +66,10 @@
                             <td data-order="[% issue.date_due | html %]">[% issue.date_due | $KohaDates as_due_date => 1 %]</td>
                             <td>[% issue.barcode | html %]</td>
                             <td>[% issue.stocknumber | html %]</td>
-                            [% IF ( issue.charge <= 0 ) %]
-                                <td class="credit">
-                            [% ELSE %]
-                                <td class="debit">
-                            [% END %]
+                            <td class="[% issue.charge <= 0 ? 'credit' : 'debit' | html %]">
                                 [% issue.charge | $Price %]
                             </td>
-                            [% IF ( issue.replacementprice <= 0 ) %]
-                                <td class="credit">
-                            [% ELSE %]
-                                <td class="debit">
-                            [% END %]
+                            <td class="[% issue.replacementprice <= 0 ? 'credit' : 'debit' | html %]">
                                 [% issue.replacementprice | $Price %]
                             </td>
                             <td>[% IF ( issue.overdue ) %]Overdue![% ELSE %]&nbsp;[% END %]</td>
@@ -93,18 +85,10 @@
                         <td></td>
                         <td></td>
                         <td style="text-align: right; font-weight:bold;">Totals:</td>
-                        [% IF ( totaldue <= 0 ) %]
-                            <td class="credit">
-                        [% ELSE %]
-                            <td class="debit">
-                        [% END %]
+                        <td class="[% totaldue <= 0 ? 'credit' : 'debit' | html %]">
                             [% totaldue | $Price %]
                         </td>
-                        [% IF ( totalprice <= 0 ) %]
-                            <td class="credit">
-                        [% ELSE %]
-                            <td class="debit">
-                        [% END %]
+                        <td class="[% totalprice <= 0 ? 'credit' : 'debit' | html %]">
                             [% totalprice | $Price %]
                         </td>
                         <td></td>
@@ -172,18 +156,10 @@
                         <td>
                             [% account.note | html_line_break %]
                         </td>
-                        [% IF ( account.amount <= 0 ) %]
-                            <td class="credit">
-                        [% ELSE %]
-                            <td class="debit">
-                        [% END %]
+                        <td class="[% account.amount <= 0 ? 'credit' : 'debit' | html %]">
                             [% account.amount | $Price %]
                         </td>
-                        [% IF ( account.amountoutstanding <= 0 ) %]
-                            <td class="credit">
-                        [% ELSE %]
-                            <td class="debit">
-                        [% END %]
+                        <td class="[% account.amountoutstanding <= 0 ? 'credit' : 'debit' | html %]">
                             [% account.amountoutstanding | $Price %]
                         </td>
                     </tr>
@@ -194,18 +170,10 @@
                     <td></td>
                     <td></td>
                     <td ></td>
-                    [% IF ( totaldue < 0 ) %]
-                        <td class="credit">
-                    [% ELSE %]
-                        <td class="debit">
-                    [% END %]
+                    <td class="[% totaldue < 0 ? 'credit' : 'debit' | html %]">
                         Total due:
                     </td>
-                    [% IF ( totaldue < 0 ) %]
-                        <td class="credit">
-                    [% ELSE %]
-                        <td class="debit">
-                    [% END %]
+                    <td class="[% totaldue < 0 ? 'credit' : 'debit' | html %]">
                         [% totaldue | $Price %]
                     </td>
                 </tr>
