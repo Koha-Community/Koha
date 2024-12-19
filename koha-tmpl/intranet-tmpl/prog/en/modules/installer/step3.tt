@@ -379,11 +379,15 @@
                     [% IF success.size %]
                         <ul>
                             [% FOR s IN success %]
-                                [% FOR o IN s.output %]
-                                    <li>[% o | $raw %]</li>
-                                    [% IF s.output.size > 1 %]
-                                        [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
-                                    [% END %]
+                                [% NEXT IF s.output.size < 1 %]
+                                <li>[% s.output.0 | $raw %]</li>
+                                [% IF s.output.size > 2 %]
+                                    <ul>
+                                        [% FOR o IN s.output %]
+                                            [% NEXT IF loop.first %]
+                                            <li>[% o | $raw %]</li>
+                                        [% END %]
+                                    </ul>
                                 [% END %]
                             [% END %]
                         </ul>
@@ -393,11 +397,15 @@
                         <p>Atomic updates:</p>
                         <ul>
                             [% FOR s IN atomic_updates.success %]
-                                [% FOR o IN s.output %]
-                                    <li>[% o | $raw %]</li>
-                                    [% IF s.output.size > 1 %]
-                                        [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
-                                    [% END %]
+                                [% NEXT IF s.output.size < 1 %]
+                                <li>[% s.output.0 | $raw %]</li>
+                                [% IF s.output.size > 2 %]
+                                    <ul>
+                                        [% FOR o IN s.output %]
+                                            [% NEXT IF loop.first %]
+                                            <li>[% o | $raw %]</li>
+                                        [% END %]
+                                    </ul>
                                 [% END %]
                             [% END %]
                         </ul>
@@ -418,12 +426,15 @@
                         [% IF error.size %]
                             <ul>
                                 [% FOR e IN error %]
-                                    [% FOR o IN e.output %]
-                                        [% o | $raw %]
-                                        <br/>
-                                        [% IF e.output.size > 1 %]
-                                            [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                    [% NEXT IF e.output.size < 1 %]
+                                    [% e.output.0 | $raw %]<br />
+                                    [% IF e.output.size > 2 %]
+                                        <ul>
+                                        [% FOR o IN e.output %]
+                                            [% NEXT IF loop.first %]
+                                            [% o | $raw %]<br />
                                         [% END %]
+                                        </ul>
                                     [% END %]
                                     <li class="update_error">
                                         ERROR: [% e.error | $raw %]
@@ -437,12 +448,15 @@
                         <p>Atomic update error :</p>
                         <ul>
                             [% FOR e IN atomic_updates.error %]
-                                [% FOR o IN e.output %]
-                                    [% o | $raw %]
-                                    <br/>
-                                    [% IF e.output.size > 1 %]
-                                        [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                [% NEXT IF e.output.size < 1 %]
+                                [% e.output.0 | $raw %]<br />
+                                [% IF e.output.size > 2 %]
+                                    <ul>
+                                    [% FOR o IN e.output %]
+                                        [% NEXT IF loop.first %]
+                                        [% o | $raw %]<br />
                                     [% END %]
+                                    </ul>
                                 [% END %]
                                 <li class="update_error">
                                     ERROR: [% e.error | $raw %]
