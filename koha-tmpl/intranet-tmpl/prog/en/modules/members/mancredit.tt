@@ -88,19 +88,11 @@
                                     [% INCLUDE 'transaction_types.inc' type="credit" %]
                                     [% IF Koha.Preference('UseCashRegisters') %]
                                     <li>
-                                        [% IF Koha.Preference('RequireCashRegister') %]
-                                            <label for="cash_register" class="required">
-                                        [% ELSE %]
-                                            <label for="cash_register">
-                                        [% END %]
+                                        <label for="cash_register" [% IF Koha.Preference('RequireCashRegister') %]class="required"[% END %]>
                                             Cash register:
                                         </label>
 
-                                        [% IF Koha.Preference('RequireCashRegister') %]
-                                            <select name="cash_register" id="cash_register" required="required">
-                                        [% ELSE %]
-                                            <select name="cash_register" id="cash_register">
-                                        [% END %]
+                                        <select name="cash_register" id="cash_register" [% IF Koha.Preference('RequireCashRegister') %]required="required"[% END %]>
                                             <option id="noregister" disabled selected="selected" value="">-- Select an option--</option>
                                             [% PROCESS options_for_registers %]
                                         </select>
