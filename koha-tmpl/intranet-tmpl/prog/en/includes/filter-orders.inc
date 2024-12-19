@@ -3,9 +3,25 @@
 [% PROCESS 'html_helpers.inc' %]
 [% IF context == "main" %]
     <div class="row">
-    <div class="col-sm-6">
+        <div class="col-sm-6">
+            <ol>
+                [% PROCESS 'search-orders-1' %]
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <ol>
+                [% PROCESS 'search-orders-2' %]
+            </ol>
+        </div>
+    </div>
+[% ELSE %]
+    <ol>
+        [% PROCESS 'search-orders-1' %]
+        [% PROCESS 'search-orders-2' %]
+    <ol>
 [% END %]
-<ol>
+
+[% BLOCK 'search-orders-1' %]
     <li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% filters.title | html %]" /></li>
     <li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% filters.author | html %]" /></li>
     <li><label for="isbn">ISBN: </label> <input type="text" name="isbn" id="isbn" value="[% filters.isbn | html %]" /></li>
@@ -30,12 +46,8 @@
             [% PROCESS options_for_libraries libraries => Branches.all(selected => '') %]
         </select>
     </li>
-[% IF context == "main" %]
-        </ol>
-    </div>
-    <div class="col-sm-6">
-        <ol>
 [% END %]
+[% BLOCK 'search-orders-2' %]
     <li><label for="booksellerinvoicenumber ">Vendor invoice number: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% filters.booksellerinvoicenumber | html %]" /></li>
     <li>
         <label for="basketgroupname">Basket group:</label>
@@ -114,11 +126,7 @@
             [% FOREACH bp_loo IN bp_loop %]
                 <optgroup label="[% bp_loo.budget_period_description | html %]">
                 [% FOREACH h_loo IN bp_loo.hierarchy %]
-                  [% IF h_loo.budget_id == filters.budget %]
-                    <option type="text" value="[% h_loo.budget_id | html %]" branchcode="[% h_loo.budget_branchcode | html %]" selected="selected">
-                  [% ELSE %]
-                    <option type="text" value="[% h_loo.budget_id | html %]" branchcode="[% h_loo.budget_branchcode | html %]">
-                  [% END %]
+                    <option type="text" value="[% h_loo.budget_id | html %]" branchcode="[% h_loo.budget_branchcode | html %]" [% IF h_loo.budget_id == filters.budget %]selected="selected"[% END %]>
                         [% h_loo.budget_display_name | html %]
                     </option>
                 [% END %]
@@ -135,8 +143,4 @@
         <input type="text" size="10" id="to" name="to" value="[% filters.to_placed_on | html %]" class="flatpickr" />
         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
     </li>
-</ol>
-[% IF context == "main" %]
-    </div>
-    </div>
 [% END %]
