@@ -44,11 +44,7 @@
       </td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
-          [% IF ( messaging_form_inactive ) %]
-            <select name="[% messaging_preference.message_attribute_id | html %]-DAYS" disabled="disabled">
-          [% ELSE %]
-            <select name="[% messaging_preference.message_attribute_id | html %]-DAYS">
-          [% END %]
+          <select name="[% messaging_preference.message_attribute_id | html %]-DAYS" [% IF messaging_form_inactive %]disabled="disabled"[% END %]>
           [% FOREACH select_day IN messaging_preference.select_days %]
           [% IF ( select_day.selected ) %]<option value="[% select_day.day | html %]" selected="selected">[% select_day.day | html %]</option>[% ELSE %]
           <option value="[% select_day.day | html %]">[% select_day.day | html %]</option>
