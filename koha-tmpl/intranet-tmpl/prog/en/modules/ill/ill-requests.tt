@@ -116,15 +116,16 @@
                     </form> <!-- /#illfilter_form -->
                 </aside>
             </div> <!-- /.col-sm-2 -->
-            <div class="col-sm-10">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
-        [% ELSE %]
-            <div class="col-sm-10 offset-sm-2">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
         [% END %]
-            <div id="interlibraryloans">
+        [% IF op == 'illlist' %]
+            [% SET div_class = 'col-sm-10' %]
+        [% ELSE %]
+            [% SET div_class = 'col-sm-10 offset-sm-2' %]
+        [% END %]
+        <div class="[% div_class | html %]">
+            <main>
+                [% INCLUDE 'messages.inc' %]
+                    <div id="interlibraryloans">
         [% IF !backends_available || !has_branch || ill_deprecated_backend_freeform_is_installed %]
             <div class="alert alert-info">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl?tab=sysinfo">about page</a></div>
         [% ELSE %]
@@ -227,11 +228,7 @@
                                             [% IF items.size != 1 %]
                                                 <select id="ill_checkout_item_type_select" name="item_type" required>
                                                     [% FOREACH type IN whole.value.itemtypes %]
-                                                        [% IF type.itemtype == params.item_type %]
-                                                        <option value="[% type.itemtype | html %]" selected>
-                                                        [% ELSE %]
-                                                        <option value="[% type.itemtype | html %]">
-                                                        [% END %]
+                                                        <option value="[% type.itemtype | html %]" [% IF type.itemtype == params.item_type %]selected[% END %]>
                                                             [% type.description | html %]
                                                         </option>
                                                     [% END %]
@@ -439,19 +436,11 @@
                                     [% stat = request.status %]
                                     [% current_alias = request.status_alias %]
                                     <select id="status_alias" name="status_alias">
-                                        [% IF !current_alias %]
-                                        <option value="" selected>
-                                        [% ELSE %]
-                                        <option value="">
-                                        [% END %]
+                                        <option value="" [% UNLESS current_alias %]selected[% END %]>
                                             [% request.capabilities.$stat.name | html %]
                                         </option>
                                         [% FOREACH alias IN AuthorisedValues.Get('ILL_STATUS_ALIAS') %]
-                                            [% IF alias.authorised_value == current_alias %]
-                                            <option value="[% alias.authorised_value | html %]" selected>
-                                            [% ELSE %]
-                                            <option value="[% alias.authorised_value | html %]">
-                                            [% END %]
+                                            <option value="[% alias.authorised_value | html %]" [% IF alias.authorised_value == current_alias %]selected[% END %]>
                                                 [% alias.lib | html %]
                                             </option>
                                         [% END %]
@@ -463,11 +452,7 @@
                                     <select id="batch_id" name="batch_id">
                                         <option value="">
                                         [% FOREACH batch IN batches %]
-                                            [% IF batch.id == request.batch_id %]
-                                            <option value="[% batch.id | html %]" selected>
-                                            [% ELSE %]
-                                            <option value="[% batch.id | html %]">
-                                            [% END %]
+                                            <option value="[% batch.id | html %]" [% IF batch.id == request.batch_id %]selected[% END %]>
                                                 [% batch.name | html %]
                                             </option>
                                         [% END %]
