@@ -74,11 +74,13 @@
                         </td>
                         <td class="credit">[% outstanding_credit.amount * -1 | $Price %]</td>
                         <td class="credit">[% outstanding_credit.amountoutstanding * -1 | $Price %]</td>
+                        <td></td>
                     </tr>
                 [% END %]
                 <tr>
                     <th class="sum" colspan="[% COLSPAN | html %]">Total due if credit(s) applied:</th>
                     <td class="sum">[% total + outstanding_credits.total_outstanding | $Price %]</td>
+                    <td></td>
                 </tr>
                 [% END %]
             </tfoot>
