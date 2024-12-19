@@ -54,14 +54,15 @@
                                 [% FOREACH report IN reports %]
                                     [% UNLESS report.cannotdisplay %]
                                         [% IF report.nbofcomment > highWarned %]
-                                            <tr id="row[% report.id | html %]" class="high-warned-row">
+                                            [% SET tr_class = 'high-warned-row' %]
                                         [% ELSIF report.nbofcomment > warned %]
-                                            <tr id="row[% report.id | html %]" class="warned-row">
+                                            [% SET tr_class = 'warned-row' %]
                                         [% ELSIF report.nbofcomment > lowWarned %]
-                                            <tr id="row[% report.id | html %]" class="highlighted-row">
+                                            [% SET tr_class = 'highlighted-row' %]
                                         [% ELSE %]
-                                            <tr id="row[% report.id | html %]">
+                                            [% SET tr_class = '' %]
                                         [% END %]
+                                        <tr id="[% report.id | html %]" class="[% tr_class | html %]">
                                         <td>
                                             <input type="hidden" class="rowid" value="[% report.id | $raw %]" />
                                             [% IF ( report.report_name ) %]
