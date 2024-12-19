@@ -76,12 +76,7 @@
                                  <label for="units">Units:</label>
                                  <select id="units" name="units">
                                  [% FOREACH unit IN units %]
-                                     [% IF ( unit.selected ) %]
-                                     <option value="[% unit.type | html %]" selected="selected">
-                                     [% ELSE %]
-                                     <option value="[% unit.type | html %]">
-                                     [% END %]
-
+                                     <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
                                      [% SWITCH unit.type %]
                                      [%   CASE 'POINT' %]
                                      <span>PostScript points</span>
@@ -158,11 +153,7 @@
                                         [% IF ( profile_list ) %]
                                         <select id="profile_id" name="profile_id">
                                         [% FOREACH profile_lis IN profile_list %]
-[% IF ( profile_lis.selected ) %]
-<option value="[% profile_lis.profile_id | html %]" selected="selected">
-[% ELSE %]
-<option value="[% profile_lis.profile_id | html %]">
-[% END %]
+<option value="[% profile_lis.profile_id | html %]" [% IF profile_lis.selected %]selected="selected"[% END %]>
                                         [% profile_lis.printer_name | html %]/[% profile_lis.paper_bin | html %]
                                         </option>
                                         [% END %]
