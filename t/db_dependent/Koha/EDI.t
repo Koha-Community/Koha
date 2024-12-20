@@ -294,7 +294,7 @@ subtest '_handle_008_field' => sub {
 };
 
 subtest 'process_invoice' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -363,14 +363,22 @@ subtest 'process_invoice' => sub {
     $invoice_message->update( { raw_msg => $raw_msg } );
 
     # Process the test invoice file
-    warnings_exist { process_invoice($invoice_message) }
-    [
-        { carped => qr/Cannot find vendor with ean.*/i },
-    ],
-        'Invoice processed, with warnings, without dieing';
+    my $error;
+    eval {
+        process_invoice($invoice_message);
+        1;
+    } or do {
+        $error = $@;
+    };
+    ok( !$error, 'process_invoice completed without dying' );
 
-    $logger->trace_like( qr/Adding invoice:.*/, "Trace recorded adding invoice" )
-        ->trace_like( qr/Added as invoiceno.*/, "Trace recorded invoice added" )->error_is(
+    $logger->trace_like(
+        qr/Adding invoice:.*/,
+        "Trace recorded adding invoice"
+    )->trace_like(
+        qr/Added as invoiceno.*/,
+        "Trace recorded invoice added"
+    )->error_is(
         'Skipping invoice line, no associated ordernumber',
         "Received expected log line for missing ordernumber line"
     )->error_like(
@@ -385,6 +393,9 @@ subtest 'process_invoice' => sub {
     )->trace_like(
         qr/Updating bib:.*/,
         'Trace recorded bib updated'
+    )->error_like(
+        qr/Cannot find vendor with ean.*/,
+        'Received expected log line for missing ean'
     )->clear();
 
     my $invoice3 = Koha::Acquisition::Invoices->search( { invoicenumber => 'INV00003' }, { rows => 1 } )->single;
