@@ -133,7 +133,7 @@ foreach my $index ( ('biblios','authorities') ) {
     # Fetch values for providing record links
     my $es_params = $searcher->get_elasticsearch_params;
     my $es_base   = "$es_params->{nodes}[0]/".$searcher->index_name;
-    my $opac_base = C4::Context->preference('OPACBaseURL');
+    my $staff_base = C4::Context->preference('staffClientBaseURL');
 
     print "\nComparing arrays, this may take a while\n";
 
@@ -148,10 +148,11 @@ foreach my $index ( ('biblios','authorities') ) {
         for my $problem ( @koha_problems ){
             if ( $index eq 'biblios' ) {
                 print "  #$problem";
-                print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-detail.pl?biblionumber=$problem\n";
+                print
+                    "  Visit here to see record: $staff_base/cgi-bin/koha/catalogue/detail.pl?biblionumber=$problem\n";
             } elsif ( $index eq 'authorities' ) {
                 print "#$problem";
-                print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-authoritiesdetail.pl?authid=$problem\n";
+                print "  Visit here to see record: $staff_base/cgi-bin/koha/authorities/detail.pl?authid=$problem\n";
             }
         }
     }
