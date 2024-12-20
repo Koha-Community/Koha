@@ -74,7 +74,7 @@ if ( C4::Context->preference('AcqEnableFiles') ) {
 if ( $op && $op eq 'cud-close' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
-    my @invoiceid = split( ',', $input->param('invoiceid') );
+    my @invoiceid = split( ',', scalar $input->param('invoiceid') );
     foreach my $invoiceid ( @invoiceid ) {
         CloseInvoice($invoiceid);
     }
@@ -87,7 +87,7 @@ if ( $op && $op eq 'cud-close' ) {
 elsif ( $op && $op eq 'cud-reopen' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
-    my @invoiceid = split( ',', $input->param('invoiceid') );
+    my @invoiceid = split( ',', scalar $input->param('invoiceid') );
     foreach my $invoiceid ( @invoiceid ) {
         ReopenInvoice($invoiceid);
     }
