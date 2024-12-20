@@ -106,21 +106,17 @@ sub backend_dir {
 
     my @backend_names = $config->get_backend_plugin_names();
 
-Returns a list of names for all the installed ILL backend plugins.
+Returns a list of names for all the installed (and enabled) ILL backend plugins.
 
 =cut
 
 sub get_backend_plugin_names {
     my ($self) = @_;
 
-    my $koha_plugins    = Koha::Plugins->new();
-    my @backend_plugins = $koha_plugins
-        ? $koha_plugins->GetPlugins(
-        {
-            method => 'ill_backend',
-            all    => 1
-        }
-        )
+    my $koha_plugins = Koha::Plugins->new();
+    my @backend_plugins =
+          $koha_plugins
+        ? $koha_plugins->GetPlugins( { method => 'ill_backend' } )
         : ();
 
     return map { $_->{metadata}->{name} } @backend_plugins;
