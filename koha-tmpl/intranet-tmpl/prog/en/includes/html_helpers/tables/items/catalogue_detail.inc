@@ -17,6 +17,7 @@
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="itype">Item type</th>[% END %]
                 <th id="[% tab | html %]_holdingbranch" data-colname="holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="homebranch">Home library</th>
+                <th id="[% tab | html %]_loction" data-colname="location">Shelving location</th>
                 <th id="[% tab | html %]_ccode" data-colname="ccode">Collection</th>
                 [% IF Koha.Preference('EnableItemGroups') %]
                     <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
@@ -401,8 +402,15 @@
                     searchable: true,
                     orderable: true,
                     render: function (data, type, row, meta) {
-                        let nodes = '<span class="homebranchdesc">%s</span>'.format(escape_str(row._strings.home_library_id ? row._strings.home_library_id.str : row.home_library_id));
-                        nodes += '<span class="shelvingloc">'
+                        return escape_str(row._strings.home_library_id ? row._strings.home_library_id.str : row.home_library_id);
+                    }
+                },
+                {
+                    data: "me.location",
+                    searchable: true,
+                    orderable: true,
+                    render: function (data, type, row, meta) {
+                        let nodes = '<span class="shelvingloc">';
                         [%# If permanent location is defined, show description or code and             %]
                         [%# display current location in parentheses. If not, display current location. %]
                         [%# Note that permanent location is a code, and location may be an authval.    %]
