@@ -6,6 +6,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
+[% INCLUDE 'js-date-format.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("Invoices") | html %] &rsaquo;
@@ -71,7 +72,7 @@
                                 </thead>
                                 <tbody>
                                     [% FOREACH invoice IN invoices %]
-                                        <tr data-invoiceid="[% invoice.invoiceid | html %]" data-booksellerid="[% invoice.booksellerid | html %]" data-shipmentdate="[% invoice.shipmentdate | $KohaDates %]" data-billingdate="[% invoice.billingdate | $KohaDates %]" data-shipmentcost="[% invoice.shipmentcost | html %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid | html %]" data-closedate="[% invoice.closedate | $KohaDates %]">
+                                        <tr data-invoiceid="[% invoice.invoiceid | html %]" data-booksellerid="[% invoice.booksellerid | html %]" data-shipmentdate="[% invoice.shipmentdate | html %]" data-billingdate="[% invoice.billingdate | html %]" data-shipmentcost="[% invoice.shipmentcost | html %]" data-shipment_budgetid="[% invoice.shipmentcost_budgetid | html %]" data-closedate="[% invoice.closedate | html %]">
                                             [% IF CAN_user_acquisition_merge_invoices %]
                                                 <td>[% invoice.is_linked_to_subscriptions | html %]</td>
                                             [% END %]
@@ -502,7 +503,7 @@
                 } else {
                     $('#merge_table tbody').empty();
                     $.each(invoices, function (idx, invoice) {
-                        var row = $('<tr data-invoiceid="' + invoice.invoiceid + '"><td>' + invoice.invoicenumber + '</td><td>' + invoice.shipmentdate + '</td><td>' + invoice.billingdate + '</td><td>' + invoice.shipmentcost + '</td></tr>');
+                        var row = $('<tr data-invoiceid="' + invoice.invoiceid + '"><td>' + invoice.invoicenumber + '</td><td>' + $date(invoice.shipmentdate) + '</td><td>' + $date(invoice.billingdate) + '</td><td>' + invoice.shipmentcost + '</td></tr>');
                         $(row).appendTo('#merge_table tbody');
                         $(row).click(function () {
                             $('#merge_table tbody tr').removeClass('active');
