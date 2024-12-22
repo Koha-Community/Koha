@@ -1,6 +1,6 @@
 [% BLOCK translate_log_module %]
 [%    SWITCH module %]
-[%        CASE 'AUTH'         %]<span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthScuccessLog') %] <i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="AuthFailureLog"></i>[% END %]
+[%        CASE 'AUTH'         %]<span>Authentication</span>[% UNLESS Koha.Preference('AuthFailureLog') || Koha.Preference('AuthSuccessLog') %] <i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="AuthFailureLog"></i>[% END %]
 [%        CASE 'CATALOGUING'  %]<span>Cataloging</span>[% UNLESS Koha.Preference('CataloguingLog') %] <i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="CataloguingLog"></i>[% END %]
 
 [%        CASE 'AUTHORITIES'  %]<span>Authorities</span>[% UNLESS Koha.Preference('AuthoritiesLog') %] <i class="log-disabled fa-solid fa-triangle-exclamation" title="Log not enabled" data-log="AuthoritiesLog"></i>[% END %]
