@@ -96,15 +96,15 @@ subtest 'list() and delete() tests | authorized user' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" =>
         { 'x-koha-embed' => 'aliases' } )
       ->status_is(200)
-      ->json_has('/0/aliases', 'aliases are embeded')
-      ->json_is('/0/aliases/0/alias' => 'alias 1', 'alias 1 is embeded')
-      ->json_is('/0/aliases/1/alias' => 'alias 2', 'alias 2 is embeded');
+      ->json_has('/0/aliases', 'aliases are embedded')
+      ->json_is('/0/aliases/0/alias' => 'alias 1', 'alias 1 is embedded')
+      ->json_is('/0/aliases/1/alias' => 'alias 2', 'alias 2 is embedded');
 
     for ( 0 .. 1 ) {
         $builder->build_object( { class => 'Koha::Subscriptions', value => { aqbooksellerid => $vendor->id } } );
     }
     $t->get_ok( "//$userid:$password@/api/v1/acquisitions/vendors" => { 'x-koha-embed' => 'subscriptions+count' } )
-        ->status_is(200)->json_has( '/0/subscriptions_count', 'subscriptions_count is embeded' )
+        ->status_is(200)->json_has( '/0/subscriptions_count', 'subscriptions_count is embedded' )
         ->json_is( '/0/subscriptions_count' => '2', 'subscription count is 2' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/acquisitions/vendors/" . $vendor->id )

@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
     $t->get_ok("//$userid:$password@/api/v1/erm/counter_logs")->status_is(200)
         ->json_is( [ $counter_log->to_api, $another_counter_log->to_api, ] );
 
-    # Return 2 counter logs with patron embeded
+    # Return 2 counter logs with patron embedded
     $t->get_ok( "//$userid:$password@/api/v1/erm/counter_logs/" => { 'x-koha-embed' => 'patron' } )->status_is(200)
         ->json_is(
         [
