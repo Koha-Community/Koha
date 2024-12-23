@@ -37,7 +37,7 @@ Koha::ERM::Document - Koha ERM Document Object class
 
 sub to_api_mapping {
     return {
-        # Do not expose file_content to prevent the content to be fetch from the DB and sent over the network when embeded
+        # Do not expose file_content to prevent the content to be fetch from the DB and sent over the network when embedded
         file_content => undef,
     };
 }
