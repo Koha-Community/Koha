@@ -1776,8 +1776,9 @@ sub _koha_notify_reserve {
             message_name => 'Hold_Filled'
     } );
 
-    my $library = Koha::Libraries->find( $hold->branchcode );
-    my $from_email_address = $library->from_email_address;
+    my $library             = Koha::Libraries->find( $hold->branchcode );
+    my $from_email_address  = $library->from_email_address;
+    my $reply_email_address = $library->inbound_email_address;
 
     my %letter_params = (
         module => 'reserves',
@@ -1812,6 +1813,7 @@ sub _koha_notify_reserve {
                     letter                 => $letter,
                     borrowernumber         => $borrowernumber,
                     from_address           => $from_email_address,
+                    reply_address          => $reply_email_address,
                     message_transport_type => $mtt,
                 }
             );
