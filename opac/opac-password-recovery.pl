@@ -151,7 +151,7 @@ elsif ( $query->param('passwordReset') ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
 
     my $error;
-    my $min_password_length = C4::Context->preference('minPasswordPreference');
+    my $min_password_length = C4::Context->preference('minPasswordLength');
     my $require_strong_password = C4::Context->preference('RequireStrongPassword');
     if ( not $borrower_number ) {
         $error = 'errLinkNotValid';
