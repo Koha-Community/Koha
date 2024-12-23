@@ -180,12 +180,10 @@
             <input type="hidden" name="op" value="cud-void" />
             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
             <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]">
-            [% IF CAN_user_updatecharges_void_payment %]
-                <button type="submit" class="btn btn-default btn-xs void-action">
-                    <i class="fa fa-ban"></i>
-                    Void payment
-                </button>
-            [% END %]
+            <button type="submit" class="btn btn-default btn-xs void-action">
+                <i class="fa fa-ban"></i>
+                Void payment
+            </button>
           </form>
         [% END %]
         [% IF account.is_debit && account.amount == account.amountoutstanding && account.status != 'CANCELLED' && !(account.debit_type_code == 'PAYOUT') %]

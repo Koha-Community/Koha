@@ -427,11 +427,6 @@
             Write off fines and fees
         </span>
         <span class="permissioncode">([% name | html %])</span>
-    [%- CASE 'void_payment' -%]
-        <span class="sub_permission void_payment_subpermission">
-            Voiding Payments
-        </span>
-        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manual_invoice' -%]
         <span class="sub_permission manual_invoice_subpermission">
             Add manual invoices to a patron account
