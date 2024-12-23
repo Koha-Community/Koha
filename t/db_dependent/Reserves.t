@@ -715,7 +715,7 @@ $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 subtest '_koha_notify_reserve() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     my $branch = $builder->build_object({
         class => 'Koha::Libraries',
@@ -797,9 +797,14 @@ subtest '_koha_notify_reserve() tests' => sub {
             borrowernumber => $hold_borrower,
         })->next();
     my $email_to_address = $email->to_address();
-    is($email_to_address, undef ,"We should not populate the hold message with the email address, sending will do so");
+    is(
+        $email_to_address, undef,
+        "We should not populate the hold message with the email address, sending will do so"
+    );
     my $email_from_address = $email->from_address();
-    is($email_from_address,'branch@e.mail',"Library's from address is used for sending");
+    is( $email_from_address, 'branch@e.mail', "Library's from address is used for sending" );
+    my $email_reply_address = $email->reply_address();
+    is( $email_reply_address, 'branch@reply.to', "Library's reply address is used for reply" );
 
 };
 
