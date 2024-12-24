@@ -929,7 +929,7 @@ sub message_broker_check {
 if ( $tab eq 'database' ) {
     use Koha::Database::Auditor;
     my $db_auditor = Koha::Database::Auditor->new();
-    my $audit_diff = $db_auditor->run;
-    $template->param( audit_diff => $audit_diff );
+    my $db_audit = $db_auditor->run;
+    $template->param( db_audit => $db_audit );
 }
 output_html_with_http_headers $query, $cookie, $template->output;

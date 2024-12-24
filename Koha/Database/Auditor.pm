@@ -51,7 +51,10 @@ sub new {
 
 =head3 run
 
-Run the database audit with the given arguments, including the filename.
+Compares the current database schema with the expected schema from the
+`kohastructure.sql` file. Generates SQL commands to update the database schema
+if differences are found. Returns a hash reference containing the differences,
+a flag indicating if differences were found, a message, and a title.
 
 =cut
 
@@ -74,7 +77,24 @@ sub run {
             }
         )->compute_differences->produce_diff_sql;
 
-        return $diff;
+        my $diff_found = 1;
+        my $message = __(
+            "These commands are only suggestions. They are not a replacement for the database update scripts run during installations and updates.\nReview the database, the atomic update files and the table definitions in kohastructure.sql before running any of the commands below:"
+        );
+        my $title = __("Warning!");
+
+        if ( $diff =~ /No differences found/ ) {
+            $diff_found = 0;
+            $message = __("The installed database schema is correct.");
+            $title   = __("All is well");
+        }
+
+        return {
+            diff       => $diff,
+            diff_found => $diff_found,
+            message    => $message,
+            title      => $title,
+        };
     }
 }
 
