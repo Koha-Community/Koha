@@ -798,19 +798,22 @@
 [% BLOCK database_panel %]
     [% WRAPPER tab_panel tabname= "database" bt_active = 1 %]
         <h2>Database audit</h2>
+        [% IF db_audit.diff_found %]
         <div class="alert alert-warning">
-            <h3>WARNING!!!</h3>
-            <p>
-               These commands are only suggestions! They are not a replacement for updatedatabase.pl!<br />
-               Review the database, updatedatabase.pl, and kohastructure.sql before making any changes!<br />
-            </p>
+        [% ELSE %]
+        <div class="alert alert-success">
+        [% END %]
+            <h3><strong>[% db_audit.title | html %]</strong></h3>
+            <p><pre>[% db_audit.message | html %]</pre><p>
         </div>
-        <div>
-        <p>Run the following SQL to fix the database:</p>
-        <pre>
-            <code>[% audit_diff | $raw %]</code>
-        </pre>
-        </div>
+        [% IF db_audit.diff_found %]
+            <div>
+                <p>Run the following SQL to fix the database:</p>
+                <pre>
+                    <code>[% db_audit.diff | $raw %]</code>
+                </pre>
+            </div>
+        [% END %]
     [% END # tab=database %]
 [% END %]
 

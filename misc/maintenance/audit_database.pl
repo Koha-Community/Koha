@@ -11,12 +11,6 @@ GetOptions(
     "filename=s" => \$filename,
 ) or die("Error in command line arguments\n");
 
-my $auditor = Koha::Database::Auditor->new( { filename => $filename } );
-my $diff    = $auditor->run;
-
-my $warning = "\n"
-    . "WARNING!!!\n"
-    . "These commands are only suggestions! They are not a replacement for updatedatabase.pl!\n"
-    . "Review the database, updatedatabase.pl, and kohastructure.sql before making any changes!\n" . "\n";
-
-print $diff . $warning;
+my $auditor  = Koha::Database::Auditor->new( { filename => $filename } );
+my $db_audit = $auditor->run;
+print $db_audit->{title} . "\n" . $db_audit->{message} . "\n" . ( $db_audit->{diff_found} ? $db_audit->{diff} : '' );
