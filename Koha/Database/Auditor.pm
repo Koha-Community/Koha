@@ -22,6 +22,8 @@ use SQL::Translator::Diff;
 
 use C4::Context;
 
+use Koha::I18N qw(__);
+
 =head1 NAME
 
 Koha::Database::Auditor
@@ -86,7 +88,7 @@ sub _get_db {
     my ($self) = @_;
 
     my $database_name = C4::Context->config("database");
-    print "Parsing schema for database '$database_name'\n" if $self->{is_cli};
+    print sprintf( __("Parsing schema for database %s\n"), $database_name ) if $self->{is_cli};
     my $dbh    = C4::Context->dbh;
     my $parser = SQL::Translator->new(
         parser      => 'DBI',
@@ -126,7 +128,7 @@ Retrieves and returns the schema using SQL::Translator for the given file
 sub _get_kohastructure {
     my ($self) = @_;
 
-    print "Parsing schema for file $self->{filename} \n" if $self->{is_cli};
+    print sprintf( __("Parsing schema for file %s\n"), $self->{filename} ) if $self->{is_cli};
     my $translator = SQL::Translator->new();
     $translator->parser("MySQL");
     my $schema = $translator->translate( $self->{filename} );
