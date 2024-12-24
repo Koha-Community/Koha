@@ -92,7 +92,7 @@ sub process {
                     usage_data_provider_id => $ud_provider->erm_usage_data_provider_id,
                     file_content           => $args->{file_content},
                     date_uploaded          => POSIX::strftime( "%Y%m%d%H%M%S", localtime ),
-                    filename               => $ud_provider->name . "_" . $ud_provider->{report_type},
+                    filename               => $ud_provider->name,
                 }
             ]
         );
