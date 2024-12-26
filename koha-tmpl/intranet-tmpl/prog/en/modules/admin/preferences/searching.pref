@@ -15,14 +15,14 @@ Searching:
               choices:
                   1: Try
                   0: "Don't try"
-            - to match similarly spelled words in a search (for example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.).
+            - to match similarly spelled words in a search. (For example, a search for <cite>flang</cite> would also match <cite>flange</cite> and <cite>fang</cite>; Currently only affects Zebra searches. Any Elasticsearch term can be made fuzzy by adding a ~ directly after the term.)
         -
             - pref: QueryStemming
               type: boolean
               choices:
                   1: Try
                   0: "Don't try"
-            - to match words of the same base in a search (for example, a search for <cite>enabling</cite> would also match <cite>enable</cite> and <cite>enabled</cite>; REQUIRES ZEBRA).
+            - to match words of the same base in a search. (For example, a search for <cite>enabling</cite> would also match <cite>enable</cite> and <cite>enabled</cite>; REQUIRES ZEBRA.)
         -
             - pref: QueryWeightFields
               type: boolean
@@ -94,7 +94,7 @@ Searching:
                   1: Enable
                   0: Disable
             - "the cross_fields option for Elasticsearch searches, supported in Elasticsearch 6.X and above."
-            - "See documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields"
+            - See the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#type-cross-fields">Elasticsearch cross_fields documentation</a>.
         -
             - pref: SavedSearchFilters
               default: 0
@@ -199,10 +199,11 @@ Searching:
             - ','
             - pref: defaultSortOrder
               choices:
-                  asc: ascending.
-                  dsc: descending.
-                  az: from A to Z.
-                  za: from Z to A.
+                  asc: ascending
+                  dsc: descending
+                  az: from A to Z
+                  za: from Z to A
+            - .
         -
             - By default, sort search results from author links in MARC21 detail pages and result lists by
             - pref: AuthorLinkSortBy
@@ -225,9 +226,10 @@ Searching:
             - When limiting search results with a library or library group, limit by the item's
             - pref: SearchLimitLibrary
               choices:
-                  homebranch: "home library."
-                  holdingbranch: "holding library."
-                  both: "home library and holding library."
+                  homebranch: "home library"
+                  holdingbranch: "holding library"
+                  both: "home library and holding library"
+            - .
         -
             - pref: displayFacetCount
               type: boolean
@@ -263,11 +265,11 @@ Searching:
             - ","
             - pref: OPACdefaultSortOrder
               choices:
-                  asc: ascending.
-                  dsc: descending.
-                  az: from A to Z.
-                  za: from Z to A.
-            -
+                  asc: ascending
+                  dsc: descending
+                  az: from A to Z
+                  za: from Z to A
+            - .
         -
             - Show up to
             - pref: maxItemsInSearchResults
@@ -373,9 +375,9 @@ Searching:
     Did you mean/spell checking:
         -
             - "Swedish service for spellchecking.<br/>"
-            - LIBRIS Spellchecking API key
+            - LIBRIS spellchecking API key
             - pref: LibrisKey
-            - "Can be obtained at http://api.libris.kb.se/bibspell."
+            - . Can be obtained <a href="http://api.libris.kb.se/bibspell" target="_blank">from LIBRIS</a>.
         -
             - LIBRIS base URL
             - pref: LibrisURL

@@ -140,7 +140,7 @@ Circulation:
             - Include the stylesheet at
             - pref: NoticeCSS
               class: url
-            - on notices. (This should be a complete URL, starting with <code>http://</code>)
+            - on notices (this should be a complete URL, starting with <code>http://</code>).
         -
             - pref: UpdateTotalIssuesOnCirc
               choices:
@@ -291,33 +291,37 @@ Circulation:
             - pref: CircControl
               type: choice
               choices:
-                  PickupLibrary: the library you are logged in at.
-                  PatronLibrary: the library the patron is from.
-                  ItemHomeLibrary: the library the item is from.
+                  PickupLibrary: the library you are logged in at
+                  PatronLibrary: the library the patron is from
+                  ItemHomeLibrary: the library the item is from
+            - .
         -
             - To determine whether an item is transferred or remains in the library after checkin, use the circulation rules of
             - pref: CircControlReturnsBranch
               type: choice
               choices:
-                  ItemHoldingLibrary: the library the item is currently held by.
-                  CheckInLibrary: the library the item is checked in at.
-                  ItemHomeLibrary: the library the item is owned by.
+                  ItemHoldingLibrary: the library the item is currently held by
+                  CheckInLibrary: the library the item is checked in at
+                  ItemHomeLibrary: the library the item is owned by
+            - .
         -
             - Use the circulation and fine rules of
             - pref: HomeOrHoldingBranch
               type: choice
               choices:
-                  homebranch: the item's home library (homebranch).
-                  holdingbranch: the item's holding library (holdingbranch).
+                  homebranch: the item's home library (homebranch)
+                  holdingbranch: the item's holding library (holdingbranch)
+            - .
         -
             - Allow items to be checked in
             - pref: AllowReturnToBranch
               type: choice
               choices:
-                  anywhere: at any library.
-                  homebranch: only at the library the item is from.
-                  holdingbranch: only at the library the item was checked out from.
-                  homeorholdingbranch: either at the library the item is from or the library it was checked out from.
+                  anywhere: at any library
+                  homebranch: only at the library the item is from
+                  holdingbranch: only at the library the item was checked out from
+                  homeorholdingbranch: either at the library the item is from or the library it was checked out from
+            - .
         -
             - For search results in the staff interface, display
             - pref: StaffSearchResultsDisplayBranch
@@ -337,15 +341,16 @@ Circulation:
             - Calculate "No renewal before" based on
             - pref: NoRenewalBeforePrecision
               choices:
-                  date: date.
-                  exact_time: exact time.
-            - Only relevant for loans calculated in days, hourly loans are not affected.
+                  date: date
+                  exact_time: exact time
+            - . Only relevant for loans calculated in days, hourly loans are not affected.
         -
             - When renewing checkouts, base the new due date on
             - pref: RenewalPeriodBase
               choices:
-                  date_due: the old due date of the checkout.
-                  now: the current date.
+                  date_due: the old due date of the checkout
+                  now: the current date
+            - .
         -
             - pref: RenewalSendNotice
               choices:
@@ -467,7 +472,7 @@ Circulation:
               choices:
                   1: Enable
                   0: Disable
-            - the on-site checkout for all cases (even if a patron is debarred, etc.).
+            - the on-site checkout for all cases (even if a patron is debarred or under similar restrictions).
         -
             - pref: ConsiderOnSiteCheckoutsAsNormalCheckouts
               choices:
@@ -600,7 +605,7 @@ Circulation:
         -
             - When using the automatic item loss process, skip items with <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> values matching any of
             - pref: DefaultLongOverdueSkipLostStatuses
-            - "."
+            - .
             - <br>Leave this field empty if you don't want to skip any <a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=LOST">LOST</a> statuses.
             - <br>Set to a list of comma separated values, e.g. <em>5,6,7</em>.
         -
@@ -757,7 +762,7 @@ Circulation:
             - Default the holds ratio report to
             - pref: HoldRatioDefault
               class: integer
-            - "."
+            - .
         -
             - In the staff interface, split the holds queue into separate tables by
             - pref: HoldsSplitQueue
@@ -766,7 +771,7 @@ Circulation:
                   branch: "pickup library"
                   itemtype: "hold item type"
                   branch_itemtype: "pickup library and item type"
-            - "."
+            - .
         -
             - pref: EnableItemGroupHolds
               choices:
@@ -779,7 +784,7 @@ Circulation:
               choices:
                   actual: "the actual priority, which may be out of order"
                   virtual: "'virtual' priorities, where each group is numbered separately"
-            - "."
+            - .
         -
             - pref: RealTimeHoldsQueue
               choices:
@@ -869,7 +874,7 @@ Circulation:
             - If using <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExpireReservesMaxPickUpDelay">ExpireReservesMaxPickUpDelay</a>, charge a patron who allows their waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
               class: currency
-            - "."
+            - .
         -
             - The holds queue should prioritize filling a hold by matching the patron's home library with an item having a matching
             - pref: HoldsQueuePrioritizeBranch
@@ -1081,7 +1086,7 @@ Circulation:
                   loggedinlibrary: "logged in library"
                   homebranch: "item's home library"
                   holdingbranch: "item's holding library"
-            - "."
+            - .
         -
             - pref: AutomaticCheckinAutoFill
               choices:
@@ -1352,7 +1357,7 @@ Circulation:
               choices:
                   1: Enable
                   0: Disable
-            - " redirection from child to host based on MARC21 773$w when the child has no items when requesting articles on the Opac."
+            - " redirection from child to host based on MARC21 773$w when the child has no items when requesting articles on the OPAC."
         -
             - pref: ArticleRequestsLinkControl
               choices:
@@ -1398,7 +1403,7 @@ Circulation:
         -
             - "The following article request formats are supported:"
             - pref: ArticleRequestsSupportedFormats
-            - "(Valid choices are currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical bar. The first listed format is selected by default when you request via the OPAC.)"
+            - ". Valid choices are currently: PHOTOCOPY and SCAN. Separate the supported formats by a vertical bar. The first listed format is selected by default when you request via the OPAC."
 
 
     Item bundles:

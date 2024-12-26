@@ -80,9 +80,10 @@ OPAC:
             - By default, show bibliographic records
             - pref: BiblioDefaultView
               choices:
-                  normal: in simple form.
-                  marc: in their MARC form.
-                  isbd: as specified in the ISBD template.
+                  normal: in simple form
+                  marc: in their MARC form
+                  isbd: as specified in the ISBD template
+            - .
         -
             - When patrons click on a link to another website from your OPAC (like Amazon or OCLC),
             - pref: OPACURLOpenInNewWindow
@@ -115,12 +116,12 @@ OPAC:
             - 'Display authority results in the OPAC using the XSLT stylesheet at: '
             - pref: AuthorityXSLTOpacResultsDisplay
               class: file
-            - '<br />Options:<ul><li>Empty. No XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></ul>If you have multiple stylesheets for: <ul><li>different languages: use the placeholder {langcode} - this will be replaced with the current interface language</li><li>authority types: use the placeholder {authtypecode} - this will be replaced with the authority type code'
+            - '<br />Options:<ul><li>Empty. No XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></ul>If you have multiple stylesheets for: <ul><li>different languages: use the placeholder {langcode} - this will be replaced with the current interface language</li><li>authority types: use the placeholder {authtypecode} - this will be replaced with the authority type code.'
         -
             - 'Display authority details in the OPAC using the XSLT stylesheet at: '
             - pref: AuthorityXSLTOpacDetailsDisplay
               class: file
-            - '<br />Options:<ul><li>Empty. No XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></ul>If you have multiple stylesheets for: <ul><li>different languages: use the placeholder {langcode} - this will be replaced with the current interface language</li><li>authority types: use the placeholder {authtypecode} - this will be replaced with the authority type code'
+            - '<br />Options:<ul><li>Empty. No XSLT will be applied (<strong>default</strong>)</li><li>Enter a path to a custom XSLT file.</li><li>Enter a URL for an external stylesheet.</li></ul>If you have multiple stylesheets for: <ul><li>different languages: use the placeholder {langcode} - this will be replaced with the current interface language</li><li>authority types: use the placeholder {authtypecode} - this will be replaced with the authority type code.'
         -
             - pref: OpacNoItemTypeImages
               default: 0
@@ -141,7 +142,7 @@ OPAC:
                   0: "Don't include"
             - "COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
             - "<br/>If you want to display a link to an OpenURL resolver, look at the following system preferences:"
-            - '<br/><a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLResolverURL">OpenURLResolverURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACShowOpenURL">OPACShowOpenURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACOpenURLItemTypes">OPACOpenURLItemTypes</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLText">OpenURLText</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation">OpenURLImageLocation</a>'
+            - '<br/><a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLResolverURL">OpenURLResolverURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACShowOpenURL">OPACShowOpenURL</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACOpenURLItemTypes">OPACOpenURLItemTypes</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLText">OpenURLText</a>, <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OpenURLImageLocation">OpenURLImageLocation</a>.'
         -
             - pref: OPACShowUnusedAuthorities
               choices:
@@ -231,7 +232,7 @@ OPAC:
             - Use the image at
             - pref: OpacFavicon
               class: url
-            - for the OPAC's favicon. (This should be a complete URL, starting with <code>http://</code>.)
+            - for the OPAC's favicon. (This should be a complete URL, starting with <code>https://</code>.)
         -
             - "Include the following JavaScript on all pages in the OPAC:"
             - pref: OPACUserJS
@@ -335,7 +336,7 @@ OPAC:
                   both: "both top and footer"
                   top: "top"
                   footer: "only footer"
-            - "."
+            - .
         -
             - "List the following <a href='/cgi-bin/koha/admin/authorised_values.pl?searchfield=NOT_LOAN'>not for loan</a> statuses as available for reference in OPAC search results:"
             - pref: Reference_NFL_Statuses
@@ -353,7 +354,7 @@ OPAC:
                   branch: "library and substatus"
                   substatus: "substatus only"
                   branchonly: "library only"
-            - ". (NOTE: For large consortia we recommend to group unavailable items by 'substatus only', listing item counts per substatus. Similarly the option 'library only' results in unavailable item counts per library.)"
+            - "(NOTE: For large consortia we recommend to group unavailable items by 'substatus only', listing item counts per substatus. Similarly the option 'library only' results in unavailable item counts per library.)"
 
     Features:
         -
@@ -955,7 +956,7 @@ OPAC:
               type: modalselect
               source: suggestions
               exclusions: title
-            - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields '
+            - '<br />Note: Do not make <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=OPACSuggestionMandatoryFields">OPACSuggestionMandatoryFields</a> unwanted fields.'
         -
             - pref: suggestion
               choices:
@@ -984,6 +985,7 @@ OPAC:
                 subtype: Subtypes
                 sorting: Sorting
                 location: Location and availability
+            - .
         -
             - "Show search options for the expanded view:"
             - pref: OpacAdvSearchMoreOptions
@@ -994,6 +996,7 @@ OPAC:
                 subtype: Subtypes
                 sorting: Sorting
                 location: Location and availability
+            - .
         -
             - Show tabs in the OPAC advanced search for limiting searches on the
             - pref: OpacAdvancedSearchTypes
