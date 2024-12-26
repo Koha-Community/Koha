@@ -9,7 +9,6 @@ use Modern::Perl;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use MARC::Batch;
-use MARC::Lint;
 use Encode;
 
 use Koha::Script;
@@ -77,7 +76,6 @@ my $localcust;
 my $marc_mod_template    = '';
 my $marc_mod_template_id = -1;
 my $skip_indexing        = 0;
-my $strict_mode;
 $| = 1;
 
 GetOptions(
@@ -115,7 +113,6 @@ GetOptions(
     'custom:s'          => \$localcust,
     'marcmodtemplate:s' => \$marc_mod_template,
     'si|skip_indexing'  => \$skip_indexing,
-    'st|strict'         => \$strict_mode,
 );
 
 $biblios ||= !$authorities;
@@ -323,7 +320,6 @@ my $record_number = 0;
 my $logger        = Koha::Logger->get;
 my $schema        = Koha::Database->schema;
 my $marc_records  = [];
-my $lint          = MARC::Lint->new;
 RECORD: while () {
     my $record;
     $record_number++;
@@ -343,19 +339,6 @@ RECORD: while () {
     }
     if ($record) {
 
-        if ($strict_mode) {
-            my $xml = $record->as_xml_record();
-            eval { MARC::Record::new_from_xml( $xml, 'UTF-8', "MARC21" ); };
-            if ($@) {
-                print "Record $record_number generated invalid xml:\n";
-                $lint->check_record($record);
-                foreach my $warning ( $lint->warnings ) {
-                    print "    " . $warning . "\n";
-                }
-                print "    Record skipped!";
-                next;
-            }
-        }
         # transcode the record to UTF8 if needed & applicable.
         if ( $record->encoding() eq 'MARC-8' and not $skip_marc8_conversion ) {
             my ( $guessed_charset, $charset_errors );
