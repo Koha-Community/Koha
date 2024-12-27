@@ -45,7 +45,7 @@
             <a href="lists.pl">Patron lists</a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
-            Add patrons to [% list.name | html %]
+            [% tx("Add patrons to '{patron_list_name}'", { patron_list_name = list.name }) | html %]
         [% END %]
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
