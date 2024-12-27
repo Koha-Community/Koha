@@ -57,29 +57,29 @@
                         <div class="listgroup">
                             <div class="rows">
                                 <ol class="bibliodetails">
-                                    <li><span class="label">Biblionumber:</span> [% biblionumber | html %]&nbsp;</li>
+                                    <li class="biblionumber"><span class="label">Biblionumber:</span> [% biblionumber | html %]&nbsp;</li>
                                     [% UNLESS ( item_level_itypes ) %]
-                                        <li><span class="label">Item type:</span> [% itemtypename | html %]&nbsp;</li>
+                                        <li class="itemtype"><span class="label">Item type:</span> [% itemtypename | html %]&nbsp;</li>
                                     [% END %]
                                     [% IF ( rentalcharge ) %]
-                                        <li><span class="label">Rental charge:</span>[% rentalcharge | $Price %]&nbsp;</li>
+                                        <li class="rentalcharge"><span class="label">Rental charge:</span>[% rentalcharge | $Price %]&nbsp;</li>
                                     [% END %]
                                     [% IF ( rentalcharge_daily ) %]
-                                        <li><span class="label">Daily rental charge:</span>[% rentalcharge_daily | $Price %]&nbsp;</li>
+                                        <li class="rentalcharge_daily"><span class="label">Daily rental charge:</span>[% rentalcharge_daily | $Price %]&nbsp;</li>
                                     [% END %]
                                     [% IF ( rentalcharge_hourly ) %]
-                                        <li><span class="label">Hourly rental charge:</span>[% rentalcharge_hourly | $Price %]&nbsp;</li>
+                                        <li class="rentalcharge_hourly"><span class="label">Hourly rental charge:</span>[% rentalcharge_hourly | $Price %]&nbsp;</li>
                                     [% END %]
-                                    <li><span class="label">ISBN:</span> [% isbn | html %]&nbsp;</li>
-                                    <li><span class="label">Publication details:</span>[% place | html %] [% publishercode | html %] [% publicationyear | html %]&nbsp;</li>
+                                    <li class="isbn"><span class="label">ISBN:</span> [% isbn | html %]&nbsp;</li>
+                                    <li class="publication_details"><span class="label">Publication details:</span>[% place | html %] [% publishercode | html %] [% publicationyear | html %]&nbsp;</li>
                                     [% IF ( volumeddesc ) %]
-                                        <li><span class="label">Volume:</span> [% volumeddesc | html %]</li>
+                                        <li class="volume"><span class="label">Volume:</span> [% volumeddesc | html %]</li>
                                     [% END %]
-                                    <li><span class="label">Physical details:</span> [% pages | html %] [% illus | html %] [% size | html %]&nbsp;</li>
+                                    <li class="physical_details"><span class="label">Physical details:</span> [% pages | html %] [% illus | html %] [% size | html %]&nbsp;</li>
                                     [% IF ( bnotes ) %]
-                                        <li><span class="label">Notes:</span> [% bnotes | html %]</li>
+                                        <li class="biblio_note"><span class="label">Notes:</span> [% bnotes | html %]</li>
                                     [% END %]
-                                    <li>
+                                    <li class="item_count">
                                         <span class="label">No. of items:</span>
                                         [% count | html %]
                                         [% IF ( hiddencount ) %]
@@ -129,28 +129,28 @@
 
                                 <div class="rows">
                                     <ol class="bibliodetails">
-                                        <li><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
+                                        <li class="homebranch"><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
                                         [% IF ( item_level_itypes ) %]
-                                            <li><span class="label">Item type:</span> [% ITEM_DAT.itype | html %]&nbsp;</li>
+                                            <li class="itype"><span class="label">Item type:</span> [% ITEM_DAT.itype | html %]&nbsp;</li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.ccode) %]
-                                            <li><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li>
+                                            <li class="ccode"><span class="label">Collection:</span> [% ITEM_DAT.ccode | html %]</li>
                                         [% END %]
-                                        <li><span class="label">Item call number:</span> [% ITEM_DAT.itemcallnumber | html %]</li>
+                                        <li class="itemcallnumber"><span class="label">Item call number:</span> [% ITEM_DAT.itemcallnumber | html %]</li>
                                         [% IF ( ITEM_DAT.displaycopy ) %]
-                                            <li><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li>
+                                            <li class="copynumber"><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.location ) %]
-                                            <li>
+                                            <li class="location">
                                                 <span class="label">Shelving location:</span>
                                                 [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_DAT.location ) | html %]
                                             </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.replacementprice ) %]
-                                            <li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li>
+                                            <li class="replacementprice"><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li>
                                         [% END %]
                                         [% IF ITEM_DAT.materials %]
-                                            <li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %]</li>
+                                            <li class="materials"><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %]</li>
                                         [% END %]
                                     </ol> <!-- /.bibliodetails -->
                                     </div> <!-- /.rows -->
@@ -176,8 +176,8 @@
 
                                 <div class="rows">
                                     <ol class="bibliodetails">
-                                        <li><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
-                                        <li>
+                                        <li class="holdingbranch"><span class="label">Current library:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
+                                        <li class="checkout_status">
                                             <span class="label">Checkout status:</span>
                                             [% SET checkout = ITEM_DAT.object.checkout %]
                                             [% IF ( checkout ) %]
@@ -193,14 +193,14 @@
                                             [% END %]
                                         </li>
                                         [% IF ITEM_DAT.object.checkout.renewals_count %]
-                                            <li>
+                                            <li class="renewals_count">
                                                 <span class="label">Current renewals:</span>
                                                 [% ITEM_DAT.object.checkout.renewals_count | html %]
                                                     [ <a class="checkout_renewals_view" data-renewals="[% ITEM_DAT.object.checkout.renewals_count | html | html %]" data-issueid="[% ITEM_DAT.object.checkout.id | html %]" href="#">View</a> ]
                                             </li>
                                         [% END %]
                                         [% IF itemlostloop %]
-                                            <li>
+                                            <li class="lost">
                                                 <span class="label">Lost status:</span>
                                                 [% IF ( CAN_user_circulate ) %]
                                                     [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
@@ -245,7 +245,7 @@
                                         [% END %]
 
                                         [% IF itemdamagedloop %]
-                                            <li>
+                                            <li class="damaged">
                                                 <span class="label">Damaged status:</span>
                                                 [% IF ( CAN_user_circulate ) %]
                                                     <form action="updateitem.pl" method="post">
@@ -280,7 +280,7 @@
                                         [% END %]
 
                                         [% IF itemwithdrawnloop %]
-                                            <li>
+                                            <li class="withdrawn">
                                                 <span class="label">Withdrawn status:</span>
                                                 [% IF ( CAN_user_circulate ) %]
                                                     <form action="updateitem.pl" method="post">
@@ -322,7 +322,7 @@
                                 <h4>Priority</h4>
                                 <div class="rows">
                                     <ol class="bibliodetails">
-                                        <li>
+                                        <li class="local_holds_priority">
                                             <span class="label">Exclude from local holds priority:</span>
                                             <form action="updateitem.pl" method="post">
                                                 [% INCLUDE 'csrf-token.inc' %]
@@ -342,7 +342,7 @@
                                                 <input type="submit" name="submit" class="btn btn-primary btn-xs" value="Update" />
                                             </form>
                                         </li>
-                                        <li>
+                                        <li class="bookable">
                                             <span class="label">
                                                 Bookable:
                                             </span>
@@ -386,7 +386,7 @@
                                     <ol class="bibliodetails">
 
                                         [% IF ITEM_DAT.basketno %]
-                                            <li>
+                                            <li class="order_info">
                                                 <span class="label">Order date:</span>
                                                 [% IF ( CAN_user_acquisition_order_manage ) %]
                                                     <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ITEM_DAT.basketno | uri %]">[% ITEM_DAT.orderdate | $KohaDates %]</a>
@@ -401,7 +401,7 @@
                                         [% END %]
 
                                         [% IF ITEM_DAT.dateaccessioned %]
-                                            <li>
+                                            <li class="dateaccessioned">
                                                 <span class="label">Accession date:</span>
                                                 [% IF ( CAN_user_acquisition_order_receive && ITEM_DAT.invoiceid ) %]
                                                     <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% ITEM_DAT.invoiceid | uri %]">[% ITEM_DAT.dateaccessioned | $KohaDates %]</a>
@@ -412,13 +412,13 @@
                                         [% END %]
 
                                         [% IF ( ITEM_DAT.invoicenumber ) %]
-                                            <li>
+                                            <li class="invoice">
                                                 <span class="label">Invoice number:</span>
                                                 [% ITEM_DAT.invoicenumber | html %]
                                             </li>
                                         [% END %]
 
-                                        <li>
+                                        <li class="issues">
                                             <span class="label">Total checkouts:</span>
                                             [% IF ( ITEM_DAT.issues ) %]
                                                 [% ITEM_DAT.issues | html %]
@@ -428,13 +428,13 @@
                                             (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itm=[% ITEM_DAT.itemnumber | uri %]">View item's checkout history</a>)
                                         </li>
 
-                                        <li>
+                                        <li class="datelastseen">
                                             <span class="label">Last seen:</span>
                                             [% IF ( ITEM_DAT.datelastseen ) %]
                                                 [% ITEM_DAT.datelastseen | $KohaDates with_hours => 1 %]
                                             [%END %]
                                         </li>
-                                        <li>
+                                        <li class="datelastborrowed">
                                             <span class="label">Last borrowed:</span>
                                             [% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]
                                         </li>
@@ -446,7 +446,7 @@
                                         [% END %]
                                         [% FOR i IN ITEM_DAT.old_issues %]
                                             [% SET b = i.patron %]
-                                            <li>
+                                            <li class="previous_borrowers">
                                                 [% IF loop.first %]
                                                     <span class="label">Last borrower:</span>
                                                 [% ELSE %]
@@ -456,20 +456,20 @@
                                             </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.paidfor ) %]
-                                            <li>
+                                            <li class="paidfor">
                                                 <span class="label">Paid for?:</span>
                                                 [% INCLUDE 'patron-title.inc' patron=ITEM_DAT.paidfor.patron hide_patron_infos_if_needed=1 %] on [% ITEM_DAT.paidfor.created_on | $KohaDates %]
                                             </li>
                                         [% END %]
 
                                         [% IF ( ITEM_DAT.enumchron ) %]
-                                            <li>
+                                            <li class="enumchron">
                                                 <span class="label">Serial enumeration:</span>
                                                 [% ITEM_DAT.enumchron | html %]&nbsp;
                                             </li>
                                         [% END %]
 
-                                        <li>
+                                        <li class="itemnotes">
                                             <span class="label">Public note:</span>
                                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                                 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
@@ -483,7 +483,7 @@
                                             [% END %]
                                         </li>
 
-                                        <li>
+                                        <li class="itemnotes_nonpublic">
                                             <span class="label">Non-public note:</span>
                                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                                 <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
