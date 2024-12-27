@@ -67,13 +67,14 @@ sub new {
     my $debarred  = $patron->is_debarred;
     siplog( "LOG_DEBUG", "Debarred = %s : ", ( $debarred || 'undef' ) );    # Do we need more debug info here?
     my $expired = 0;
-    if ( $kp->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
+    if ( $kp->{'dateexpiry'} ) {
         my ( $today_year,   $today_month,   $today_day )   = Today();
         my ( $warning_year, $warning_month, $warning_day ) = split /-/, $kp->{'dateexpiry'};
         my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) -
             Date_to_Days( $today_year, $today_month, $today_day );
         my $dt         = dt_from_string( $kp->{'dateexpiry'}, 'iso' );
         my $dateexpiry = output_pref( { dt => $dt, dateonly => 1 } );
+        my $notifyBorrowerDeparture = C4::Context->preference('NotifyBorrowerDeparture') // 0;
         if ( $days_to_expiry < 0 ) {
 
             #borrower card has expired, warn the borrower
@@ -82,7 +83,7 @@ sub new {
             }
             $kp->{opacnote} .= "Your account has expired as of $dateexpiry";
             $expired = 1;
-        } elsif ( $days_to_expiry < C4::Context->preference('NotifyBorrowerDeparture') ) {
+        } elsif ( $days_to_expiry < $notifyBorrowerDeparture ) {
 
             # borrower card soon to expire, warn the borrower
             if ( $kp->{opacnote} ) {
@@ -790,4 +791,3 @@ __END__
     {itemlist}    ref-to-array: list of available items
 
 =cut
-
