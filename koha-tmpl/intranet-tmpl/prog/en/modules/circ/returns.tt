@@ -575,9 +575,9 @@
                         [% UNLESS ( hold_auto_filled && diffbranch ) %]
                             [% IF WrongTransfer && !transfertodo %]
                                 [% IF Koha.Preference('TransfersBlockCirc') %]
-                                    <div id="wrong-transfer-modal" class="modal modal-lg audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false" >
+                                    <div id="wrong-transfer-modal" class="modal modal-lg block audio-alert-action" data-bs-backdrop="static" data-bs-keyboard="false" >
                                 [% ELSE %]
-                                    <div id="wrong-transfer-modal" class="modal modal-lg audio-alert-action noblock">
+                                    <div id="wrong-transfer-modal" class="modal modal-lg noblock audio-alert-action">
                                 [% END %]
                                     <div class="modal-dialog">
                                         <div class="modal-content">
