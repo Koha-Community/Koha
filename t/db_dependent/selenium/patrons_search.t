@@ -568,7 +568,7 @@ subtest 'Search patrons' => sub {
 };
 
 subtest 'Search patrons in modal' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     setup();
 
@@ -836,6 +836,8 @@ subtest 'Search patrons in modal' => sub {
     };
 
     subtest 'no clause for extended_attributes when none are default searchable' => sub {
+        plan tests => 2;
+
         $attribute_type_searchable_1->update( { searched_by_default => 0 } );
         $attribute_type_searchable_2->update( { searched_by_default => 0 } );
 
@@ -843,7 +845,7 @@ subtest 'Search patrons in modal' => sub {
 
         $driver->execute_script( <<'EOF', 'capture_ajax_data' );
 jQuery( document ).on( "ajaxSend", function( event, request, settings ) {
-  jQuery('#patron_search_form').after('<div id="capture_ajax_data_was_executed"></div>');
+  jQuery('.patron_search_form').after('<div id="capture_ajax_data_was_executed"></div>');
   var url = new URL(window.location.origin + settings.url);
   var parts = url.search.substring(1).split('&');
   var q;
@@ -860,7 +862,7 @@ jQuery( document ).on( "ajaxSend", function( event, request, settings ) {
     for (var j = 0; q0 && j < q0.length; j++) {
        for (var k = 0; k < q0[j].length; k++) {
            if (q0[j][k].hasOwnProperty('extended_attributes.code')) {
-               jQuery('#patron_search_form').after('<div id="had_extended_attributes_clause"></div>');
+               jQuery('.patron_search_form').after('<div id="had_extended_attributes_clause"></div>');
            }
        }
     }
