@@ -238,9 +238,16 @@ Cataloging:
             - pref: MarcFieldDocURL
               class: url
             - as the URL for MARC field documentation.
-            - Possible substitutions are <tt>{MARC}</tt> (marc flavour, eg. "MARC21" or "UNIMARC"), <tt>{FIELD}</tt> (field number, eg. "000" or "048"), <tt>{LANG}</tt> (user language, eg. "en" or "fi-FI").
-            - If left empty, the format documentation on http://loc.gov (MARC21) or http://archive.ifla.org (UNIMARC) is used.
-            - For example <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&language={LANG}</tt>
+            - "<br><br>"
+            - "If left empty, the default URLs are:"
+            - "<ul><li>MARC21: field-level pages at https://www.loc.gov/marc/bibliographic/</li>"
+            - "<li>UNIMARC: https://www.ifla.org/g/unimarc-rg/unimarc-updates/</a></li></ul>"
+            - "Placeholders available for use in the URL:"
+            - "<ul><li><code>{MARC}</code>: MARC flavor, \"MARC21\" or \"UNIMARC\"</li>"
+            - "<li><code>{FIELD}</code>: field number, for example, \"000\" or \"048\"</li>"
+            - "<li><code>{LANG}</code>: language, for example, \"en\" or \"fi-FI\"</li></ul>"
+            - "Examples:<ul><li>https://www.example.com/marcdocs?marc={MARC}&field={FIELD}&language={LANG}</li>"
+            - "<li>https://www.marc21.ca/MaJ/BIB/B{FIELD}.pdf</li></ul>"
         -
             - pref: hide_marc
               choices:

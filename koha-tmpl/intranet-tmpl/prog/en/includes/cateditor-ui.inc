@@ -200,38 +200,27 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     }
 
     function getFieldHelpURL( tag ) {
-        [% IF Koha.Preference('marcfielddocurl') %]
-            var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
+        [% IF Koha.Preference('MarcFieldDocURL') %]
+            var docurl = "[% Koha.Preference('MarcFieldDocURL').replace('"','&quot;') | html %]";
             docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
             docurl = docurl.replace("{FIELD}", ""+tag);
             docurl = docurl.replace("{LANG}", "[% lang | html %]");
             return docurl;
         [% ELSIF ( marcflavour == 'MARC21' ) %]
             if ( tag == '000' ) {
-                return "http://www.loc.gov/marc/bibliographic/bdleader.html";
+                return "https://www.loc.gov/marc/bibliographic/bdleader.html";
             } else if ( tag >= '090' && tag < '100' ) {
-                return "http://www.loc.gov/marc/bibliographic/bd09x.html";
+                return "https://www.loc.gov/marc/bibliographic/bd09x.html";
             } else if ( tag < '900' ) {
-                return "http://www.loc.gov/marc/bibliographic/bd" + tag + ".html";
+                return "https://www.loc.gov/marc/bibliographic/bd" + tag + ".html";
             } else {
-                return "http://www.loc.gov/marc/bibliographic/bd9xx.html";
+                return "https://www.loc.gov/marc/bibliographic/bd9xx.html";
             }
         [% ELSIF ( marcflavour == 'UNIMARC' ) %]
-            /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
-               seems to be the only version available that can be linked to per tag.  More recent
-               versions of the UNIMARC standard are available on the IFLA website only as
-               PDFs!
+            /* IFLA no longer provides field-level pages for the UNIMARC format
+               (as at December 2024).
             */
-            if ( tag == '000' ) {
-               return  "http://archive.ifla.org/VI/3/p1996-1/uni.htm";
-            } else {
-                var first = tag[0];
-                var url = "http://archive.ifla.org/VI/3/p1996-1/uni" + first + ".htm#";
-                if ( first == '0' ) url += "b";
-                if ( first != '9' ) url += tag;
-
-                return url;
-            }
+            return "https://www.ifla.org/g/unimarc-rg/unimarc-updates/";
         [% END %]
     }
 
