@@ -425,8 +425,8 @@
 
     function PopupMARCFieldDoc() {
         let field = this.dataset.tag;
-        [% IF Koha.Preference('marcfielddocurl') %]
-            var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
+        [% IF Koha.Preference('MarcFieldDocURL') %]
+            var docurl = "[% Koha.Preference('MarcFieldDocURL').replace('"','&quot;') | html %]";
             docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
             docurl = docurl.replace("{FIELD}", ""+field);
             docurl = docurl.replace("{LANG}", "[% lang | html %]");
@@ -466,38 +466,25 @@
 
         function _MARC21FieldDoc(field) {
             if(field == 0) {
-                window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
+                window.open("https://www.loc.gov/marc/bibliographic/bdleader.html");
             } else if (field >= 90 && field <= 99 ){
-                window.open("http://www.loc.gov/marc/bibliographic/bd09x.html");
+                window.open("https://www.loc.gov/marc/bibliographic/bd09x.html");
             } else if (field >= 590 && field <= 599 ){
-                window.open("http://www.loc.gov/marc/bibliographic/bd59x.html");
+                window.open("https://www.loc.gov/marc/bibliographic/bd59x.html");
             } else if (field >= 690 && field <= 699 ){
-                window.open("http://www.loc.gov/marc/bibliographic/bd69x.html");
+                window.open("https://www.loc.gov/marc/bibliographic/bd69x.html");
             } else if (field < 900) {
-                window.open("http://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
+                window.open("https://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
             } else {
-                window.open("http://www.loc.gov/marc/bibliographic/bd9xx.html");
+                window.open("https://www.loc.gov/marc/bibliographic/bd9xx.html");
             }
         }
 
         function _UNIMARCFieldDoc(field) {
-            /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
-               seems to be the only version available that can be linked to per tag.  More recent
-               versions of the UNIMARC standard are available on the IFLA website only as
-               PDFs!
+            /* IFLA no longer provides field-level pages for the UNIMARC format
+               (as at December 2024).
             */
-            var url;
-            if (field == 0) {
-                url = "http://archive.ifla.org/VI/3/p1996-1/uni.htm";
-            } else {
-                var first = field.substring(0,1);
-                url = "http://archive.ifla.org/VI/3/p1996-1/uni" + first + ".htm#";
-                if (first == 0) url = url + "b";
-                url = first == 9
-                      ? "http://archive.ifla.org/VI/3/p1996-1/uni9.htm"
-                      : url + field;
-            }
-            window.open(url);
+            window.open("https://www.ifla.org/g/unimarc-rg/unimarc-updates/");
         }
 
         /*
@@ -1068,7 +1055,7 @@
                                                     <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to expand this tag" data-field_id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">[% innerloo.tag | html %]</a>
                                                 [% ELSE %]
                                                     <span class="tagnum" title="[% innerloo.tag_lib | html %]">[% innerloo.tag | html %]</span>
-                                                    <a href="#" class="marcdocs" data-tag="[% innerloo.tag | html %]">&nbsp;?</a>
+                                                    &nbsp;<a href="#" class="marcdocs" data-tag="[% innerloo.tag | html %]" title="Show help for this tag">[?]</a> &nbsp;
                                                 [% END %]
 
                                                 [% IF ( innerloo.fixedfield ) %]
@@ -1103,10 +1090,10 @@
                                                         size="1"
                                                         maxlength="1"
                                                         value="[% innerloo.indicator2 | html %]" />
-                                                [% END # /IF innerloo.fixedfield %] -
+                                                [% END # /IF innerloo.fixedfield %]
 
                                                 [% UNLESS advancedMARCEditor %]
-                                                    <a href="#" tabindex="1" class="expandfield" data-field_id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="Click to expand this tag">[% innerloo.tag_lib | html %]</a>
+                                                    &nbsp; <a href="#" tabindex="1" class="expandfield" data-field_id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="Click to expand this tag">[% innerloo.tag_lib | html %]</a>
                                                 [% END %]
 
                                                 <span class="field_controls">
