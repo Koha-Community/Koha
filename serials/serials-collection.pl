@@ -202,8 +202,11 @@ foreach my $subscription (@$subscriptiondescs) {
     $subscription->{'hasRouting'} = check_routing( $subscription->{'subscriptionid'} );
 }
 
+my $subscription = $subscriptionid ? Koha::Subscriptions->find($subscriptionid) : "";
+
 chop $subscriptionidlist;
 $template->param(
+    subscription                                 => $subscription,
     subscriptionidlist                           => $subscriptionidlist,
     biblionumber                                 => $biblionumber,
     subscriptions                                => $subscriptiondescs,
