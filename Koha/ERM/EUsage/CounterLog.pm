@@ -31,6 +31,18 @@ Koha::ERM::EUsage::CounterLog - Koha ErmCounterLog Object class
 
 =cut
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::ERM::EUsage::CounterLog
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        borrowernumber => 'patron_id',
+    };
+}
 
 =head3 patron
 
