@@ -43,7 +43,14 @@ my $subscriptionid = $query->param('subscriptionid');
 
 # Permission needed if it is a deletion (del) : delete_subscription
 # Permission needed otherwise : *
-my $permission = ($op eq "cud-del") ? "delete_subscription" : "*";
+
+my %permissions = (
+    "cud-del"   => "delete_subscription",
+    "cud-close" => "edit_subscription",
+    "reopen"    => "edit_subscription",
+);
+
+my $permission = $permissions{$op} // "*";
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tt",

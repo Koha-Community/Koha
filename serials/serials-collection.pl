@@ -206,6 +206,7 @@ $template->param(
           routing => C4::Context->preference("RoutingSerials"),
           subscr=>scalar $query->param('subscriptionid'),
           subscriptioncount => $subscriptioncount,
+    cannotedit                                   => ( not C4::Serials::can_edit_subscription($subscriptionid) ),
           location => $location,
           callnumber	       => $callnumber,
           uc(C4::Context->preference("marcflavour")) => 1,
