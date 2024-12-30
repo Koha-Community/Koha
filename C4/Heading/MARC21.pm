@@ -113,6 +113,14 @@ my $bib_heading_fields = {
         auth_type => 'GENRE/FORM',
         subfields => 'vxyz68'
     },
+    '240' => {
+        auth_type  => 'UNIF_TITLE',
+        subfields  => 'adfghklmnoprst',
+    },
+    '380' => { auth_type => 'GENRE/FORM', subfields => 'a',  subject => 1 },
+    '385' => { auth_type => 'TOPIC_TERM', subfields => 'a',  subject => 1 },
+    '386' => { auth_type => 'GENRE/FORM', subfields => 'a',  subject => 1 },
+    '388' => { auth_type => 'CHRON_TERM', subfields => 'a',  subject => 1 },
     '440' => { auth_type => 'UNIF_TITLE', subfields => 'anp', series => 1 },
     '600' => {
         auth_type => 'PERSO_NAME',
@@ -138,6 +146,7 @@ my $bib_heading_fields = {
     '650' => { auth_type => 'TOPIC_TERM', subfields => 'abvxyz', subject => 1 },
     '651' => { auth_type => 'GEOGR_NAME', subfields => 'agvxyz', subject => 1 },
     '655' => { auth_type => 'GENRE/FORM', subfields => 'avxyz',  subject => 1 },
+    '658' => { auth_type => 'TOPIC_TERM', subfields => 'a',  subject => 1 },
     '690' => { auth_type => 'TOPIC_TERM', subfields => 'abvxyz', subject => 1 },
     '691' => { auth_type => 'GEOGR_NAME', subfields => 'avxyz',  subject => 1 },
     '696' => { auth_type => 'PERSO_NAME', subfields => 'abcdfghjklmnopqrst' },
