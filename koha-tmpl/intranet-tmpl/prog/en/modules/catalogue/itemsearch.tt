@@ -328,8 +328,7 @@
                   <option value="=">[% tp('On specific date', 'On') | html %]</option>
                 [% END %]
               </select>
-              <input type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]"/>
-              <span class="hint">ISO Format (YYYY-MM-DD)</span>
+              <input class="flatpickr flatpickr-input" type="text" name="datelastborrowed" value="[% query.param('datelastborrowed') | html %]"/>
             </div>
           </fieldset>
           <fieldset>
@@ -360,6 +359,7 @@
         </form>
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'select2.inc' %]
