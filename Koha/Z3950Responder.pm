@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Koha qw( GetAuthorisedValues );
+use C4::Auth qw( checkpw_internal );
 
 use Koha::Caches;
 
@@ -148,6 +149,19 @@ Callback that is called when a new connection is initialized
 sub init_handler {
     # Called when the client first connects.
     my ( $self, $args ) = @_;
+
+    unless ( $args->{USER} && $args->{PASS} ) {
+        $args->{ERR_CODE} = 1011;
+        $args->{ERR_STR}  = "No username and/or password provided";
+        return;
+    }
+    my ( $authenticated, undef, undef, undef ) =
+      checkpw_internal( $args->{USER}, $args->{PASS}, 1 );
+    unless ($authenticated) {
+        $args->{ERR_CODE} = 1011;
+        $args->{ERR_STR}  = "Bad username and/or password provided";
+        return;
+    }
 
     # This holds all of the per-connection state.
     my $session;
