@@ -86,23 +86,29 @@ $(document).ready(function () {
 
     function _addSuccessMessage(auto_backend_name, data) {
         _removeVerifyingMessage(auto_backend_name);
-        $(auto_ill_el + " > #backend-" + auto_backend_name).append(
-            '<span class="text-success"><i class="fa-solid fa-check"></i> ' +
-                __("Available.").format(auto_backend_name) +
-                " " +
+        $(
+            auto_ill_el + " > #backend-" + auto_backend_name + " #backendcol"
+        ).append(
+            '<div class="text-success mb-2"><i class="fa-solid fa-check"></i> ' +
+                "<strong>" +
+                __("Available.") +
+                "</strong><br>" +
                 data.success +
-                "</span>"
+                "</div>"
         );
     }
 
     function _addErrorMessage(auto_backend_name, message) {
         _removeVerifyingMessage(auto_backend_name);
-        $(auto_ill_el + " > #backend-" + auto_backend_name).append(
-            '<span class="text-danger"> <i class="fa-solid fa-xmark"></i> ' +
-                __("Not readily available:").format(auto_backend_name) +
-                " " +
+        $(
+            auto_ill_el + " > #backend-" + auto_backend_name + " #backendcol"
+        ).append(
+            '<div class="text-danger mb-2"> <i class="fa-solid fa-xmark"></i> ' +
+                "<strong>" +
+                __("Not readily available:") +
+                "</strong><br>" +
                 message +
-                "</span>"
+                "</div>"
         );
         $(
             auto_ill_el +
@@ -114,24 +120,28 @@ $(document).ready(function () {
 
     function _addBackendOption(auto_backend_name) {
         $(auto_ill_el + " > #backend-" + auto_backend_name).append(
-            ' <input type="radio" id="' +
-                auto_backend_name +
-                '" name="backend" value="' +
-                auto_backend_name +
-                '">' +
-                ' <label for="' +
-                auto_backend_name +
-                '" class="radio">' +
-                auto_backend_name +
-                "</label> "
+            `<label style="text-align:left; width:100%;font-weight:normal;" for="${auto_backend_name}">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <input id="${auto_backend_name}" type="radio" name="backend" value="${auto_backend_name}" aria-label="${auto_backend_name}">
+                        </div>
+                        <div id="backendcol" class="col">
+                            <div class="mb-2 fs-3"><strong>${auto_backend_name}</strong></div>
+                        </div>
+                    </div>
+                </li>
+            </label>`
         );
     }
 
     function _addVerifyingMessage(auto_backend_name) {
-        $(auto_ill_el + " > #backend-" + auto_backend_name).append(
-            '<span id="verifying-availabilty" class="text-info"><i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i> ' +
-                __("Verifying availability...").format(auto_backend_name) +
-                "</span>"
+        $(
+            auto_ill_el + " > #backend-" + auto_backend_name + " #backendcol"
+        ).append(
+            '<div id="verifying-availabilty" class="text-info mb-2"><i id="issues-table-load-delay-spinner" class="fa fa-spinner fa-pulse fa-fw"></i> ' +
+                __("Verifying availability...") +
+                "</div>"
         );
     }
     function _removeVerifyingMessage(auto_backend_name) {
@@ -148,7 +158,9 @@ $(document).ready(function () {
             '#confirmautoill-form #autoillbackends input[id="' +
                 auto_backend_name +
                 '"]'
-        ).prop("checked", true);
+        )
+            .prop("checked", true)
+            .trigger("change");
         $(auto_ill_message_el).html(
             __(
                 "The recommended backend for your request is <strong>%s</strong>."
@@ -168,4 +180,22 @@ $(document).ready(function () {
         );
         $(auto_ill_message_el).html(__("Fetching backends availability..."));
     }
+
+    $("#confirmautoill-form").on(
+        "change",
+        'input[name="backend"]',
+        function () {
+            $('input[name="backend"]')
+                .closest(".list-group-item")
+                .removeClass("bg-success")
+                .css({
+                    "background-color": "",
+                    border: "",
+                });
+            $(this).closest(".list-group-item").css({
+                "background-color": "rgba(0, 128, 0, 0.1)",
+                border: "1px solid rgba(0, 128, 0, 0.7)",
+            });
+        }
+    );
 });
