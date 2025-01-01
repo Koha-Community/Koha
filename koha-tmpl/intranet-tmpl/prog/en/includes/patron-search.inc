@@ -862,6 +862,9 @@
             function filter() {
                 let parent_block = $("#[% search_results_block_id | html %]");
                 let patron_search_form = get_patron_search_form();
+                // Empty header filters. Do not need to deal with selects.
+                let table_node = $("#[% table_id | html %]");
+                table_node.find('thead tr:eq(1) th input').val("");
                 [% IF redirect_if_attribute_equal %]
                     let filter = patron_search_form.find(".search_patron_filter").val();
                     if ( filter ) {
