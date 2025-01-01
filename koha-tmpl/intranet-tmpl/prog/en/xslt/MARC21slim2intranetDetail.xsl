@@ -1562,6 +1562,24 @@
         </span>
         </xsl:if>
 
+    <span class="results_summary control_numer">
+    <span class="label">Nr kontr. NUKAT: </span>
+    <span property="control_number">
+        <xsl:value-of select="marc:controlfield[@tag=001]"/>
+    </span>
+    </span>
+
+    <xsl:if test="marc:datafield[@tag=035]">
+    <span class="results_summary other_control_numers">
+    <span class="label">Inne nry kontrolne: </span>
+    <span property="other_control_numbers">
+        <xsl:for-each select="marc:datafield[@tag=035]">
+            <xsl:value-of select="."/>
+        </xsl:for-each>
+    </span>
+    </span>
+    </xsl:if>
+
         <!-- Indicate if record is suppressed in OPAC -->
         <xsl:choose>
             <xsl:when test="$OpacSuppression = 1 and marc:datafield[@tag=942][marc:subfield[@code='n'] = '1']">
