@@ -80,13 +80,13 @@ if ($do_it) {
             my $x = $line->{loopcell};
             print $line->{rowtitle}.$sep;
             print '"'.$line->{patron}.'"'.$sep;
-			print join($sep, map {$_->{count}} @$x);
+            print join($sep, map {$_->{count}} @$x);
             print "\n";
         }
 # footer
         print "TOTAL";
         $cols = @$results[0]->{loopfooter};
-		print join($sep, map {$_->{total}} @$cols);
+        print join($sep, map {$_->{total}} @$cols);
         print $sep.@$results[0]->{total};
     }
     exit;
@@ -247,7 +247,7 @@ sub calculate {
 		'old_issues.returndate >',
 		'old_issues.returndate <',
 		'old_issues.branchcode  like',
-		'items.itype            like',
+        'items.itype            like',
 		'borrowers.categorycode like',
 	);
     foreach ((@$filters)[0..9]) {

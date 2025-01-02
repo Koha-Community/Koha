@@ -86,12 +86,12 @@
 		
 		<table>
 			<tr>
-				<th rowspan="2">Rank</th>
-				<th rowspan="2">Patron</th>
-				<th rowspan="2">Total</th>
-				[% FOREACH loopco IN mainloo.loopcol %]
-					<th>[% loopco.coltitle | html %]</th>
-				[% END %]
+                <th rowspan="2">Rank</th>
+                <th rowspan="2">Patron</th>
+                <th rowspan="2">Total</th>
+                [% FOREACH loopco IN mainloo.loopcol %]
+                    <th>[% loopco.coltitle | html %]</th>
+                [% END %]
 			</tr>
 			<tr>
 				[% FOREACH loopco IN mainloo.loopcol %]
@@ -102,11 +102,11 @@
 				<tr>
 					[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
 					[% loopro.rowtitle | html %]</td>
-					[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-						[% IF ( loopro.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.reference | uri %]">[% END %]
-						[% IF ( loopro.patron ) %][% loopro.patron | html %][% END %]
-						[% IF ( loopro.reference ) %]</a>[% END %]
-					</td>
+                    [% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+                        [% IF ( loopro.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.reference | uri %]">[% END %]
+                        [% IF ( loopro.patron ) %][% loopro.patron | html %][% END %]
+                        [% IF ( loopro.reference ) %]</a>[% END %]
+                    </td>
 					[% FOREACH loopcel IN loopro.loopcell %]
 						[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
 						[% IF ( loopcel.count ) %][% loopcel.count | html %][% END %]
