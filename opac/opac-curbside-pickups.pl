@@ -134,18 +134,15 @@ $template->param(
     ),
     patron_curbside_pickups => Koha::CurbsidePickups->search(
         {
-            borrowernumber            => $logged_in_patron->borrowernumber,
+            borrowernumber => $logged_in_patron->borrowernumber,
         },
-        {
-            order_by => { -asc => 'scheduled_pickup_datetime' }
-        }
+        { order_by => { -asc => 'scheduled_pickup_datetime' } }
     )->filter_by_scheduled_today,
     curbside_pickups => Koha::CurbsidePickups->search(
         {},
-        {
-            order_by => { -asc => 'scheduled_pickup_datetime' }
-        }
+        { order_by => { -asc => 'scheduled_pickup_datetime' } }
     )->filter_by_scheduled_today,
+    curbside_pickups_view => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output, undef,
