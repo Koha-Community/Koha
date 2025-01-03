@@ -72,14 +72,41 @@ sub new {
         $mocked_logger->mock(
             $level,
             sub {
-                my $message = $_[1];
-                push @{ $self->{$level} }, $message;
+                my $message     = $_[1];
+                my @caller_info = caller(2);
+                push @{ $self->{$level} }, { message => $message, caller => \@caller_info };
                 return $message;
             }
         );
     }
 
     return $self;
+}
+
+=head3 diag
+
+    $logger->diag();
+
+Method to output all received logs.
+
+=cut
+
+sub diag {
+    my ($self) = @_;
+    my $tb = $CLASS->builder;
+
+    foreach my $level ( levels() ) {
+        $tb->diag("$level:");
+        if ( @{ $self->{$level} } ) {
+            foreach my $log_entry ( @{ $self->{$level} } ) {
+                my ( $package, $filename, $line ) = @{ $log_entry->{caller} };
+                $tb->diag( "    \"" . $log_entry->{message} . "\" at $filename line $line" );
+            }
+        } else {
+            $tb->diag("   (No $level messages)");
+        }
+    }
+    return;
 }
 
 =head3 debug_is
@@ -311,9 +338,9 @@ sub generic_is {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    my $string = shift @{ $self->{$level} };
-    $string //= '';
-    my $tb = $CLASS->builder;
+    my $log    = shift @{ $self->{$level} };
+    my $string = defined($log) ? $log->{message} : '';
+    my $tb     = $CLASS->builder;
     return $tb->is_eq( $string, $expect, $name );
 }
 
@@ -328,9 +355,9 @@ sub generic_like {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    my $string = shift @{ $self->{$level} };
-    $string //= '';
-    my $tb = $CLASS->builder;
+    my $log    = shift @{ $self->{$level} };
+    my $string = defined($log) ? $log->{message} : '';
+    my $tb     = $CLASS->builder;
     return $tb->like( $string, $expect, $name );
 }
 
