@@ -698,19 +698,19 @@ sub migrate {
         my $original_attributes =
             $original_request->extended_attributes->search( { type => { '-in' => \@default_attributes } } );
 
-        my $request_details =
-            { map { $_->type => $_->value } ( $original_attributes->as_list ) };
-        $request_details->{migrated_from} = $original_request->illrequest_id;
-        while ( my ( $type, $value ) = each %{$request_details} ) {
-            Koha::ILL::Request::Attribute->new(
-                {
-                    illrequest_id => $new_request->illrequest_id,
-                    column_exists( 'illrequestattributes', 'backend' ) ? ( backend => "Standard" ) : (),
-                    type  => $type,
-                    value => $value,
-                }
-            )->store;
-        }
+        my @request_details_array = map {
+            {
+                'type'  => $_->type,
+                'value' => $_->value,
+            }
+        } $original_attributes->as_list;
+
+        push @request_details_array, {
+            'type'  => 'migrated_from',
+            'value' => $original_request->illrequest_id,
+        };
+
+        $new_request->extended_attributes( \@request_details_array );
 
         return {
             error   => 0,
@@ -993,8 +993,8 @@ sub add_request {
 
     my @request_details_array = map {
         {
-            'type'     => $_,
-            'value'    => $request_details->{$_},
+            'type'  => $_,
+            'value' => $request_details->{$_},
         }
     } keys %{$request_details};
     $request->extended_attributes( \@request_details_array );
