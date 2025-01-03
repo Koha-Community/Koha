@@ -312,7 +312,7 @@ sub process_invoice {
                 }
             );
             my $invoiceid = $new_invoice->invoiceid;
-            $logger->trace("Added as invoiceno :$invoiceid");
+            $logger->trace("Added as invoiceno: $invoiceid");
             my $lines = $msg->lineitems();
 
             foreach my $line ( @{$lines} ) {
@@ -480,7 +480,7 @@ sub receipt_items {
                     details => "Cannot fine aqorder item"
                 }
             );
-            $logger->warn("Cannot find aqorder item for $i :Order:$ordernumber");
+            $logger->warn("Cannot find aqorder item for $i: Order: $ordernumber");
             next;
         }
         my $b = $item->get_column('homebranch');
@@ -649,7 +649,7 @@ sub process_quote {
             } else {
                 $quote_message->basketno($basketno);
             }
-            $logger->trace("Created basket :$basketno");
+            $logger->trace("Created basket: $basketno");
             my $items  = $msg->lineitems();
             my $refnum = $msg->message_refno;
 
@@ -855,7 +855,7 @@ sub quote_item {
         $order_hash->{budget_id} = $budget->budget_id;
         my $first_order = $schema->resultset('Aqorder')->create($order_hash);
         my $o           = $first_order->ordernumber();
-        $logger->trace("Order created :$o");
+        $logger->trace("Order created: $o");
 
         # should be done by database settings
         $first_order->parent_ordernumber( $first_order->ordernumber() );
@@ -941,7 +941,7 @@ sub quote_item {
 
                 my $new_order = $schema->resultset('Aqorder')->create($order_hash);
                 my $o         = $new_order->ordernumber();
-                $logger->trace("Order created :$o");
+                $logger->trace("Order created: $o");
 
                 # should be done by database settings
                 $new_order->parent_ordernumber( $new_order->ordernumber() );

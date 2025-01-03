@@ -36,7 +36,7 @@ my $builder = t::lib::TestBuilder->new;
 my $logger  = t::lib::Mocks::Logger->new();
 
 subtest 'process_quote' => sub {
-    plan tests => 7;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -93,11 +93,45 @@ subtest 'process_quote' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'CataloguingLog', 0 );
+
     # Process the test quote file
-    process_quote($quote);
+    my $error;
+    eval {
+        process_quote($quote);
+        1;
+    } or do {
+        $error = $@;
+    };
+    ok( !$error, 'process_quote completed without dying' );
 
     # Test for expected warnings for the passed quote file
-    #
+    is( $logger->count, 8, "8 log lines recorded for passed quote file" );
+
+    #$logger->diag();
+    $logger->trace_like(
+        qr/Created basket:.*/,
+        "Trace recorded adding basket"
+    )->trace_like(
+        qr/Checking db for matches.*/,
+        "Trace recorded checking db for matches"
+    )->trace_like(
+        qr/New biblio added.*/,
+        "Trace recoded adding new biblio"
+    )->trace_like(
+        qr/Order created:.*/,
+        "Trace recorded adding order"
+    )->trace_like(
+        qr/Added item:.*/,
+        "Trace recorded adding new item"
+    )->trace_like(
+        qr/Item added to rota.*/,
+        "Trace recrded adding item to rota"
+    )->debug_like(
+        qr/.*specialUpdate biblioserver$/,
+        "Trace recorded biblioserver index"
+    )->clear();
+
     # Test for quote status change
     $quote->get_from_storage;
     is( $quote->status, 'received', 'Quote status was set to received' );
@@ -294,7 +328,7 @@ subtest '_handle_008_field' => sub {
 };
 
 subtest 'process_invoice' => sub {
-    plan tests => 12;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -372,6 +406,9 @@ subtest 'process_invoice' => sub {
     };
     ok( !$error, 'process_invoice completed without dying' );
 
+    is( $logger->count, 14, "14 log lines recorded for passed invoice file" );
+
+    #$logger->diag();
     $logger->trace_like(
         qr/Adding invoice:.*/,
         "Trace recorded adding invoice"
@@ -380,22 +417,40 @@ subtest 'process_invoice' => sub {
         "Trace recorded invoice added"
     )->error_is(
         'Skipping invoice line, no associated ordernumber',
-        "Received expected log line for missing ordernumber line"
+        "Error recorded for missing ordernumber line"
     )->error_like(
         qr/Skipping invoice line, no order found for.*/,
-        'Received expected log line for unmatched ordernumber line'
+        'Error recorded for unmatched ordernumber line'
     )->error_like(
         qr/Skipping invoice line, no bibliographic.*/,
-        'Received expected log line for unmatched biblionumber line'
+        'Error recorded for unmatched biblionumber line'
     )->trace_like(
         qr/Receipting order:.*/,
         'Trace recorded invoice receipted'
     )->trace_like(
         qr/Updating bib:.*/,
         'Trace recorded bib updated'
+    )->trace_like(
+        qr/Receipting order:.*/,
+        'Trace recorded invoice receipted - Check why this happens a second time'
+    )->trace_like(
+        qr/Updating bib:.*/,
+        'Trace recorded bib updated - same bib, different id'
     )->error_like(
         qr/Cannot find vendor with ean.*/,
-        'Received expected log line for missing ean'
+        'Error recorded for missing ean'
+    )->warn_like(
+        qr/transferring.*/,
+        'Warn recorded for transferring items'
+    )->warn_like(
+        qr/Unmatched item at branch:.*/,
+        'Warn recorded for unmatched item'
+    )->warn_like(
+        qr/transferring.*/,
+        'Warn recorded for transferring items'
+    )->warn_like(
+        qr/Unmatched item at branch:.*/,
+        'Warn recorded for unmatched item'
     )->clear();
 
     my $invoice3 = Koha::Acquisition::Invoices->search( { invoicenumber => 'INV00003' }, { rows => 1 } )->single;
