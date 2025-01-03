@@ -75,6 +75,7 @@ $(document).ready(function () {
                 "disabled",
                 false
             );
+            $("#confirm-auto-migrate").removeClass("disabled");
         });
         _addBackendPlaceholderEl("Standard");
         _addBackendOption("Standard");
@@ -194,4 +195,11 @@ $(document).ready(function () {
             });
         }
     );
+
+    $("#confirm-auto-migrate").on("click", function () {
+        let backend = $('input[name="backend"]:checked').val();
+        let requestId = $(this).data("illrequest_id");
+        let url = `/cgi-bin/koha/ill/ill-requests.pl?op=migrate&illrequest_id=${encodeURIComponent(requestId)}&backend=${encodeURIComponent(backend)}`;
+        window.location.href = url;
+    });
 });

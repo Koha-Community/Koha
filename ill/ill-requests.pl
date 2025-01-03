@@ -170,6 +170,25 @@ if ($backends_available) {
     } elsif ( $op eq 'migrate' ) {
 
         # We're in the process of migrating a request
+        if ( $params->{auto_migrate} ) {
+
+            my $confirm_auto = Koha::ILL::Request::Workflow::ConfirmAuto->new( $params, 'staff' );
+            my $illrequest   = Koha::ILL::Requests->find( $params->{illrequest_id} );
+            my $extended_attributes_hash =
+                { map { $_->type => $_->value } $illrequest->extended_attributes->search->as_list };
+            my $new_params = { %{ $illrequest->unblessed }, %$extended_attributes_hash };
+
+            $template->param( $confirm_auto->confirm_auto_template_params($new_params) );
+            $template->param(
+                op           => 'confirmautoill',
+                auto_migrate => 1,
+                request      => $illrequest,
+            );
+
+            output_html_with_http_headers( $cgi, $cookie, $template->output );
+            exit;
+        }
+
         my $request = Koha::ILL::Requests->find( $params->{illrequest_id} );
         my $backend_result;
         if ( $params->{backend} ) {
