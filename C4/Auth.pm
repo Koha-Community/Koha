@@ -1594,7 +1594,7 @@ sub check_api_auth {
             -secure => ( C4::Context->https_enabled() ? 1 : 0 ),
             -sameSite => 'Lax'
         );
-        return ( $return, $cookie, $session ); # return == 'ok' here
+        return ( $return, $cookie, $session->id ); # return == 'ok' here
 
     } else {
 
