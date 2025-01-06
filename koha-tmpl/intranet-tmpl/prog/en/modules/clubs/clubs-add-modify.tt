@@ -43,10 +43,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
 
             <form method="post" class="validated">
                 [% INCLUDE 'csrf-token.inc' %]
@@ -146,9 +143,7 @@
                     <a href="clubs.pl" class="cancel">Cancel</a>
                 </fieldset>
             </form>
-        </div>
-    </div>
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
