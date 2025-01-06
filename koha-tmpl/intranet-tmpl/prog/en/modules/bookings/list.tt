@@ -41,12 +41,8 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
+[% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
                 <div class="row">
-                    [% INCLUDE 'messages.inc' %]
                     [% INCLUDE 'cat-toolbar.inc' %]
                     <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
                     <div class="page-section" id="bookings-timeline"></div>
@@ -59,17 +55,7 @@
                         <table id="bookings_table"></table>
                     </div>
                 </div>
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'biblio-view-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-    </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
-
+[% END %]
     [% INCLUDE modals/cancel_booking.inc %]
 
     [% MACRO jsinclude BLOCK %]
