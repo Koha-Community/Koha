@@ -235,34 +235,18 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        function filterDataTable(table, column, term) {
-            if (column) {
-                table.column(column).search(term).draw();
-            } else {
-                table.search(term).draw();
-            }
-            clearFilter(term);
-        }
-
-        function clearFilter(term) {
-            if (term == "") {
-                $(".dt_button_clear_filter").addClass("disabled");
-            } else {
-                $(".dt_button_clear_filter").removeClass("disabled");
-            }
-        }
-
         $(document).ready(function () {
             var crtable = $("#table_cash_registers").kohaTable({
                 columnDefs: [{ targets: [-1, -2], orderable: false, searchable: false }],
                 order: [[1, "asc"]],
                 paginationType: "full",
             });
+            var crtable_dt = crtable.DataTable();
 
             $("#branch_filter").on("change", function () {
                 // Table must be filtered by the <option>'s text, not its value
                 var opt = $(this).find("option:selected").text();
-                filterDataTable(crtable, 2, opt);
+                crtable_dt.column(2).search(opt).draw();
             });
         });
     </script>
