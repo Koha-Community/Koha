@@ -894,7 +894,8 @@ function _dt_add_delay_filters(table_dt, table_node) {
         var i = table_dt.column.index('fromVisible', visible_i);
         $(this).find("input")
             .unbind()
-            .bind("keyup change", function(){
+            .bind("keyup change", function(e){
+                if (e.keyCode === undefined) return;
                 col_input_search(i, this.value)
             });
 
