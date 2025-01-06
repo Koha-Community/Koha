@@ -89,11 +89,7 @@
                                                 <label for="units">Units: </label>
                                                 <select id="units" name="units">
                                                     [% FOREACH unit IN units %]
-                                                    [% IF ( unit.selected ) %]
-                                                    <option value="[% unit.type | html %]" selected="selected">
-                                                    [% ELSE %]
-                                                    <option value="[% unit.type | html %]">
-                                                    [% END %]
+                                                    <option value="[% unit.type | html %]" [% IF unit.selected %]selected="selected"[% END %]>
                                                     [% unit.desc | html %]
                                                     </option>
                                                     [% END %]
