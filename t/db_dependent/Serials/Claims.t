@@ -1,5 +1,7 @@
+#!/usr/bin/perl
+
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 use C4::Acquisition;
 use C4::Budgets qw( AddBudgetPeriod AddBudget );
@@ -162,3 +164,12 @@ is( $serial_claimed->{claims_count}, 1, 'The serial should have been claimed' );
 my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 # FIXME: This test should pass. The GetLateOrMissingIssues should not deal with date format!
 #is( $serial_claimed->{claimdate}, $today, 'The serial should have been claimed today' );
+
+subtest 'prevent SQL injections' => sub {
+    plan tests => 1;
+    my $time1 = time;
+    my $hack  = q|1 OR (SELECT 1 FROM (SELECT(SLEEP(10)))x)-- -|;
+    GetLateOrMissingIssues($hack);
+    my $time2 = time;
+    ok( $time2 < $time1 + 10, 'The sleep should not be executed' );
+};
