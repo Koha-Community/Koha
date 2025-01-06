@@ -125,7 +125,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            columns_settings = [% TablesSettings.GetColumns( 'opac', 'course_items', 'course-items-table', 'json' ) | $raw %];
+            table_settings = [% TablesSettings.GetTableSettings( 'opac', 'course_items', 'course-items-table', 'json' ) | $raw %];
             KohaTable("#course-items-table", {
                 "dom": '<"top"<"table_controls"f>>t',
                 "sorting": [[ 1, "asc" ]],
@@ -139,7 +139,7 @@
                 "columnDefs": [
                     { "className": 'dtr-control', "orderable": false, "targets": -1 },
                 ],
-            }, columns_settings );
+            }, table_settings );
         });
     </script>
 [% END %]

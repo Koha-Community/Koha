@@ -67,4 +67,14 @@ sub tz {
     return C4::Context->tz->name;
 }
 
+sub strftime {    # used as TT virtual method for scalars, wrapper around DateTime counterpart
+    my ( $self, $value, $format, $locale ) = @_;
+    my $dt = eval { dt_from_string($value) };
+    if ($dt) {
+        $dt->set_locale($locale) if $locale;
+        return $dt->strftime($format);
+    }
+    return $value;
+}
+
 1;

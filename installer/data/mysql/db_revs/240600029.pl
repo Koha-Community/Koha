@@ -8,14 +8,7 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @{$args}{qw(dbh out)};
 
-        my $columns_exist_query = <<~'SQL';
-            SELECT column_name
-            FROM information_schema.COLUMNS
-            WHERE table_name = 'bookings'
-                AND column_name IN ('creation_date', 'modification_date')
-        SQL
-        my $existing_columns = $dbh->selectcol_arrayref($columns_exist_query);
-        if ( @{$existing_columns} == 2 ) {
+        if ( column_exists( 'bookings', 'creation_date' ) && column_exists( 'bookings', 'modification_date' ) ) {
             say_info(
                 $out,
                 q{Columns 'creation_date' and 'modification_date' already exist in 'bookings' table. Skipping...}
@@ -30,7 +23,7 @@ return {
         my $modification_date_statement = <<~'SQL';
             ALTER TABLE bookings ADD COLUMN modification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT 'the timestamp for when a booking has been updated'
         SQL
-        if ( @{$existing_columns} == 0 ) {
+        unless ( column_exists( 'bookings', 'creation_date' ) && column_exists( 'bookings', 'modification_date' )) {
             $dbh->do("$creation_date_statement AFTER `end_date`");
             say_success( $out, q{Added column 'bookings.creation_date'} );
 
@@ -40,7 +33,7 @@ return {
             return;
         }
 
-        if ( @{$existing_columns} == 1 ) {
+        if ( column_exists( 'bookings', 'creation_date' ) || column_exists( 'bookings', 'modification_date' ) ) {
             foreach my $column ( 'creation_date', 'modification_date' ) {
                 if ( column_exists( 'bookings', $column ) ) {
                     next;

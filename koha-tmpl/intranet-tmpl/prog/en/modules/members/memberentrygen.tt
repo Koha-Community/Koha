@@ -721,10 +721,10 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                     <li>
                                                         [% IF mandatoryrelationship %]
                                                             <label for="relationship" class="required">Relationship: </label>
-                                                            <select class="relationship" name="relationship" required="required">
+                                                            <select class="relationship" name="relationship" id="relationship" required="required">
                                                         [% ELSE %]
                                                             <label for="relationship">Relationship: </label>
-                                                            <select class="relationship" name="relationship">
+                                                            <select class="relationship" name="relationship" id="relationship">
                                                         [% END %]
                                                             <option value=""></option>
                                                             [% FOREACH pr IN possible_relationships.split('\|') %]

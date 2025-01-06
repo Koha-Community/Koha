@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Basename qw(dirname);
-use Test::More tests => 103;
+use Test::More tests => 104;
 
 use Test::MockModule;
 use Test::Warn;
@@ -1582,3 +1582,59 @@ subtest 'Quote user params in GetPreparedLetter' => sub {
         $exec_time
         );
 };
+
+subtest 'Virtual method ->strftime in notices' => sub {
+    plan tests => 2;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $patron->update( { lastseen => dt_from_string('2024-12-19 12:00:00'), surname => 'Lener' } )->store;
+    my $hold = $builder->build_object( { class => 'Koha::Holds' } );
+    $hold->waitingdate('2024-12-18')->store;
+
+    # In the following tests we use waitingdate as date field and lastseen as datetime.
+    my $notice_content =
+        q|1=[% borrower.lastseen.strftime('%a') %],2=[% borrower.lastseen.strftime('test') %],3=[% borrower.lastseen.strftime('') %],4=[% borrower.surname.strftime('%a') %],5=[% borrower.lastseen.strftime('%A %B') %],6=[% borrower.lastseen.strftime('%A %B','nl_NL') %],7=[% blessed_hold.waitingdate.strftime('%d-%m') %],8=[% unblessed_hold.waitingdate.strftime('%d-%m') %],9=[% iso_date.strftime('%d-%m') %],10=[% metric_date.strftime('%m') %],11=[% us_date.strftime('%m') %],12=[% unrecognized.strftime('%d-%m') %]|;
+
+    my $notice = Koha::Notice::Template->new(
+        {
+            module                 => 'circulation',
+            code                   => 'TEST_strftime',
+            branchcode             => '',
+            message_transport_type => 'email',
+            content                => $notice_content,
+        }
+    )->store;
+
+    # Trying metric first. Note that the us date then contains month 17, so will not be recognized and passed as-is.
+    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );    # d/m/y
+    my $expected_output =
+        q|1=Thu,2=test,3=,4=Lener,5=Thursday December,6=donderdag december,7=18-12,8=18-12,9=17-12,10=12,11=12/17/2024,12=20241217|;
+    my $get_letter = sub {
+        return C4::Letters::GetPreparedLetter(
+            module      => 'circulation',
+            letter_code => 'TEST_strftime',
+            tables      => {
+                borrowers => $patron->borrowernumber,
+            },
+            message_transport_type => 'email',
+            substitute             => {
+                blessed_hold   => $hold,
+                unblessed_hold => $hold->unblessed,
+                iso_date       => '2024-12-17',
+                metric_date    => '17/12/2024',
+                us_date        => '12/17/2024',
+                unrecognized   => '20241217',
+            },
+        );
+    };
+    is( $get_letter->()->{content}, $expected_output, 'Check generated content for metric dateformat' );
+
+    # Switch dateformat pref, only expect different results for 10=metric_date and 11=us_date.
+    # When using 'us', the metric date with month 17 will not be recognized and passed as-is.
+    t::lib::Mocks::mock_preference( 'dateformat', 'us' );    # m/d/y
+    $expected_output =~ s/10=12/10=17\/12\/2024/;
+    $expected_output =~ s/11=.{10}/11=12/;
+    is( $get_letter->()->{content}, $expected_output, 'Check generated content for us dateformat' );
+};
+
+$schema->storage->txn_rollback;

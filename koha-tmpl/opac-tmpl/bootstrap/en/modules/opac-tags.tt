@@ -208,7 +208,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
-[% Asset.js("lib/hc-sticky/hc-sticky.js") | $raw %]
 <script>
     const loggedinusername = [% ( loggedinusername ) ? 1 : 0 | html %];
     const opacbookbag = [% ( opacbookbag ) ? 1 : 0 | html %];

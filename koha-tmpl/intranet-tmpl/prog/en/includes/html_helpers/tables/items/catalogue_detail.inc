@@ -245,9 +245,7 @@
     [% IF Koha.Preference('UseRecalls') %]
         embed.push('recall', 'recall+strings', 'recall.patron')
     [% END %]
-    [% IF bundlesEnabled %]
-        embed.push('in_bundle', 'bundle_host', 'bundle_items_lost+count', 'bundle_items_not_lost+count');
-    [% END %]
+    embed.push('in_bundle', 'bundle_host', 'bundle_host.biblio', 'bundle_items_lost+count', 'bundle_items_not_lost+count');
     [% IF Koha.Preference('UseCourseReserves') %]
         embed.push('course_item.course_reserves.course');
     [% END %]
@@ -568,11 +566,9 @@
                         nodes += '<span class="restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
                     }
 
-                    [% IF bundlesEnabled %]
-                        if ( row.in_bundle ) {
-                            nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
-                        }
-                    [% END %]
+                    if ( row.in_bundle ) {
+                        nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
+                    }
                     return nodes;
                 }
             },

@@ -74,7 +74,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            columns_settings = [% TablesSettings.GetColumns( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
+            table_settings = [% TablesSettings.GetTableSettings( 'opac', 'course_list', 'course_reserves_table', 'json' ) | $raw %]
             KohaTable("#course_reserves_table", {
                 "dom": '<"top"<"table_controls"f>>rt<"clear">',
                 "sorting": [[ 1, "asc" ]],
@@ -91,7 +91,7 @@
                 "cColumnDefs": [
                     { "className": 'dtr-control', "orderable": false, "targets": -1 },
                 ],
-            }, columns_settings );
+            }, table_settings );
         });
     </script>
 [% END %]

@@ -185,7 +185,6 @@
         $('#sort').change(function() {
             $('#sortform').submit();
         });
-        var columns_settings = []; // Empty because there are no columns we want to be configurable
         var table = KohaTable("#table_holdshistory", {
             "dom": '<"top"<"table_entries"i><"table_controls"fB>>t',
             "autoWidth": false,
@@ -197,7 +196,7 @@
                 "search": "_INPUT_",
                 "searchPlaceholder": _("Search")
             }
-        }, columns_settings);
+        });
     });
 </script>
 [% END %]

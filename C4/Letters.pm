@@ -40,6 +40,7 @@ use Koha::Patrons;
 use Koha::SMS::Providers;
 use Koha::SMTP::Servers;
 use Koha::Subscriptions;
+use Koha::Template::Plugin::KohaDates;
 
 use constant SERIALIZED_EMAIL_CONTENT_TYPE => 'message/rfc822';
 
@@ -637,6 +638,10 @@ sub GetPreparedLetter {
         my @languages = split /,/, C4::Context->preference('OPACLanguages');
         $lang = shift @languages;
     }
+
+    $Template::Stash::SCALAR_OPS->{strftime} = sub {
+        return Koha::Template::Plugin::KohaDates->strftime(@_);
+    };
 
     $letter->{content} = _process_tt(
         {
