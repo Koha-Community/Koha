@@ -436,8 +436,6 @@ my $offset = $params->{'offset'} || 0;
 my $whole_record = $params->{'whole_record'} || 0;
 my $weight_search = $params->{'advsearch'} ? $params->{'weight_search'} || 0 : 1;
 $offset = 0 if $offset < 0;
-my $page = $cgi->param('page') || 1;
-#my $offset = ($page-1)*$results_per_page;
 
 # Define some global variables
 my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
@@ -564,7 +562,6 @@ if ($@ || $error) {
                 $hits = $quoted_hits;
             }
         }
-        my $page = $cgi->param('page') || 0;
         my @newresults = searchResults({ 'interface' => 'intranet' }, $query_desc, $hits, $results_per_page, $offset, $scan,
                                        $results_hashref->{$server}->{"RECORDS"});
         $total = $total + $hits;
