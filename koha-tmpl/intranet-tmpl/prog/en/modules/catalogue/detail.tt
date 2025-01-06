@@ -76,25 +76,9 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-
-        [% IF ( unknownbiblionumber ) %]
-            <main>
-                <div class="row">
-                    <div class="col">
-                        [% INCLUDE 'messages.inc' %]
-                        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
-                    </div> <!-- /.col -->
-                </div> <!-- /.row -->
-            </main>
-        [% ELSE %]
-
-            <div class="row">
-                <div class="col-md-10 order-md-2 order-sm-1">
-                    <main>
+    [% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
                         <div class="row">
                                 <div class="col">
-                                    [% INCLUDE 'messages.inc' %]
                                     [% IntranetCoce    = Koha.Preference('IntranetCoce') %]
                                     [% CoceProviders   = Koha.Preference('CoceProviders') %]
                                     [% CoceHost        = Koha.Preference('CoceHost') %]
@@ -1002,15 +986,6 @@
                             </div>
                         </div>
                     </div> <!-- /#elasticPreview.modal -->
-                </main>
-            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'biblio-view-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-        </div> <!-- /.row -->
     [% END %]
 
     <div class="modal" id="modal-item-group-create" tabindex="-1" role="dialog" aria-labelledby="modal-item-group-create-label">
@@ -1214,7 +1189,6 @@
     [% IF ( ( Koha.Preference('CatalogConcerns') || Koha.Preference('OpacCatalogConcerns') ) && CAN_user_editcatalogue_edit_catalogue ) %]
         [% INCLUDE 'modals/display_ticket.inc' %]
     [% END %]
-</div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

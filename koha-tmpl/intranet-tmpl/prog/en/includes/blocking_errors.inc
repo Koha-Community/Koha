@@ -5,6 +5,8 @@
     [% CASE 'cannot_see_patron_infos' %]This account cannot view requested patron information.
     [% CASE 'unknown_biblio' %]
         <div class="alert alert-info">Bibliographic record not found.</div>
+    [% CASE 'unknown_biblionumber' %]
+        <div class="alert alert-info">The record you requested does not exist ([% biblionumber | html %]).</div>
     [% CASE 'unknown_item' %]
         <div class="alert alert-info">Item not found.</div>
     [% CASE 'unknown_subscription' %]

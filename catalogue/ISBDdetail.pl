@@ -68,24 +68,29 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $biblio = Koha::Biblios->find( $biblionumber );
 unless ( $biblionumber && $biblio ) {
-   # biblionumber invalid -> report and exit
-   $template->param( unknownbiblionumber => 1,
-                            biblionumber => $biblionumber
-   );
-   output_html_with_http_headers $query, $cookie, $template->output;
-   exit;
+
+    # biblionumber invalid -> report and exit
+    $template->param(
+        blocking_error => 'unknown_biblionumber',
+        biblionumber   => $biblionumber
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
 }
 
 my $record =
   $biblio->metadata_record( { embed_items => 1, interface => 'intranet' } );
 if ( not defined $record ) {
-       # biblionumber invalid -> report and exit
-       $template->param( unknownbiblionumber => 1,
-                                biblionumber => $biblionumber
-       );
-       output_html_with_http_headers $query, $cookie, $template->output;
-       exit;
+
+    # biblionumber invalid -> report and exit
+    $template->param(
+        blocking_error => 'unknown_biblionumber',
+        biblionumber   => $biblionumber
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
 }
+
 
 my $framework = $biblio->frameworkcode;
 my $res = GetISBDView({

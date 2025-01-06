@@ -18,6 +18,7 @@
                         [% CASE 'acquisitions-menu' %][% INCLUDE 'acquisitions-menu.inc' %]
                         [% CASE 'admin-menu' %][% INCLUDE 'admin-menu.inc' %]
                         [% CASE 'biblio-view-menu' %][% INCLUDE 'biblio-view-menu.inc' %]
+                        [% CASE 'facets' %][% INCLUDE 'facets.inc' %]
                         [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]
                         [% CASE 'subscriptions-search' %][% INCLUDE 'subscriptions-search.inc' %]
                         [% END %]

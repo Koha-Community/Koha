@@ -93,13 +93,16 @@ my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace
 my $record = $biblio_object ? $biblio_object->metadata_record( { embed_items => 1 } ) : undef;
 
 if ( !$record ) {
+
     # biblionumber invalid -> report and exit
-    $template->param( unknownbiblionumber => 1,
-                biblionumber => $biblionumber
+    $template->param(
+        blocking_error => 'unknown_biblionumber',
+        biblionumber   => $biblionumber
     );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
+
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $biblio = GetBiblioData($biblionumber);

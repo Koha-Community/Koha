@@ -36,11 +36,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='biblio-view-menu' %]
                 [% INCLUDE 'cat-toolbar.inc' %]
 
                 <h1>Item details for [% INCLUDE 'biblio-title-head.inc' %]</h1>
@@ -504,16 +500,7 @@
                         </div> <!-- /.page-section -->
                     [% END # /FOREACH ITEM_DAT %]
                 </div> <!-- /#catalogue_detail_biblio -->
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'biblio-view-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% IF ( Koha.Preference('CatalogConcerns') ) %]
 [% INCLUDE 'modals/add_catalog_concern.inc' %]

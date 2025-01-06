@@ -57,9 +57,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
 unless ($biblio_object) {
+
     # biblionumber invalid -> report and exit
-    $template->param( unknownbiblionumber => 1,
-                biblionumber => $biblionumber
+    $template->param(
+        blocking_error => 'unknown_biblionumber',
+        biblionumber   => $biblionumber
     );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;

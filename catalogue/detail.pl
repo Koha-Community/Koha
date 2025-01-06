@@ -98,7 +98,7 @@ $template->param(
 
 unless ( $biblio ) {
     # biblionumber invalid -> report and exit
-    $template->param( unknownbiblionumber => 1,
+    $template->param( blocking_error => 'unknown_biblionumber',
                       biblionumber => $biblionumber );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
