@@ -1,7 +1,5 @@
 use Modern::Perl;
 
-use Koha::Patrons;
-
 return {
     bug_number  => "30300",
     description => "Add Patron expiry to messaging preference",
@@ -48,20 +46,34 @@ return {
             say $out "MEMBERSHIP_EXPIRY added to message_transports";
 
             my $days_notice = C4::Context->preference('MembershipExpiryDaysNotice');
-            if($days_notice) {
-                my $patrons = Koha::Patrons->search();
-                while ( my $patron = $patrons->next ) {
-                    C4::Members::Messaging::SetMessagingPreference(
-                        {
-                            borrowernumber          => $patron->borrowernumber,
-                            message_attribute_id    => $message_attribute_id,
-                            message_transport_types => ['email'],
-                        }
-                    );
-                }
+            if ($days_notice) {
+
+                $dbh->do(
+                    q{
+                    INSERT IGNORE INTO borrower_message_preferences
+                        (`borrower_message_preference_id`, `borrowernumber`, `categorycode`, `message_attribute_id`, `days_in_advance`, `wants_digest`)
+                    SELECT
+                        NULL, borrowernumber, NULL, ?, NULL, NULL
+                    FROM
+                        borrowers
+                }, {}, $message_attribute_id
+                );
+
+                $dbh->do(
+                    q{
+                    INSERT IGNORE INTO borrower_message_transport_preferences
+                        (`borrower_message_preference_id`, `message_transport_type`)
+                    SELECT
+                        borrower_message_preference_id, 'email'
+                    FROM
+                        borrower_message_preferences
+                    WHERE
+                        message_attribute_id = ?
+                }, {}, $message_attribute_id
+                );
             }
         } else {
             say $out "Patron_Expiry message attribute exists, skipping update";
         }
     },
-    }
+};
