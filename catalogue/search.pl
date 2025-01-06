@@ -315,13 +315,6 @@ if ( $template_type eq 'advsearch' ) {
 
     $expanded = 1 if scalar @operators || scalar @limits;
 
-    # load the servers (used for searching -- to do federated searching, etc.)
-    my $primary_servers_loop;# = displayPrimaryServers();
-    $template->param(outer_servers_loop =>  $primary_servers_loop,);
-    
-    my $secondary_servers_loop;
-    $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
-
     # set the default sorting
     if ($default_sort_by) {
         $template->param( sort_by => $default_sort_by );

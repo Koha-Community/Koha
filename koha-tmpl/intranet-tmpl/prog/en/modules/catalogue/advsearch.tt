@@ -109,42 +109,6 @@
                         <!-- /SEARCH BUTTONS -->
                     [% END %]
 
-                    [% IF ( outer_servers_loop ) %]
-                        <!-- DATABASES -->
-                        <fieldset>
-                            <legend>Select local databases</legend>
-                            [% FOREACH local_servers_loo IN local_servers_loop %]
-                                [% IF ( local_servers_loo.checked ) %]
-                                    <input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" checked="checked" value="[% local_servers_loo.value | html %]" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="[% local_servers_loo.id | html %]" name="[% local_servers_loo.name | html %]" value="[% local_servers_loo.value | html %]" />
-                                [% END %]
-                                <label for="[% local_servers_loo.id | html %]">
-                                    <img width="16" height="16" alt="[% local_servers_loo.id | html %]" src="[% themelang | html %]/img/[% local_servers_loo.icon | html %]" /> [% local_servers_loo.label | html %]
-                                </label>
-                            [% END # /FOREACH local_servers_loo %]
-                        </fieldset>
-                        <!-- /DATABASES -->
-                    [% END # /IF ( outer_servers_loop ) %]
-
-                    [% IF ( outer_servers_loop ) %]
-                        <!-- REMOTE DATABASES -->
-                        <fieldset id="databases">
-                            <legend>Select remote databases</legend>
-                            [% FOREACH outer_servers_loo IN outer_servers_loop %]
-                                [% IF ( outer_servers_loo.checked ) %]
-                                    <input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" checked="checked" value="[% outer_servers_loo.value | html %]" />
-                                [% ELSE %]
-                                    <input type="checkbox" id="[% outer_servers_loo.id | html %]" name="[% outer_servers_loo.name | html %]" value="[% outer_servers_loo.value | html %]" />
-                                [% END %]
-                                <label for="[% outer_servers_loo.id | html %]">
-                                    <img alt="[% outer_servers_loo.id | html %]" src="[% themelang | html %]/images/[% outer_servers_loo.icon | html %]" />[% outer_servers_loo.label | html %]
-                                </label>
-                            [% END # /FOREACH outer_servers_loo %]
-                        </fieldset> <!-- /#databases -->
-                        <!-- /REMOTE DATABASES -->
-                    [% END %]
-
                 <!-- BOOLEAN SEARCH OPTIONS -->
                     <fieldset id="searchterms">
                     <legend>Search for </legend>
