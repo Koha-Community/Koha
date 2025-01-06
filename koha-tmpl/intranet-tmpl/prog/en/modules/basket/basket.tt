@@ -38,10 +38,7 @@
 
 <body id="cart_basket" class="cart">
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' wide_centered => 1 %]
 
                 <div class="container">
 
@@ -351,9 +348,6 @@
                     </form>
 
                 </div> [%# /.container %]
-            </div> [%# /.col-md-12 %]
-        </div> [%# /.row %]
-    </div> [%# /.main.container-fluid %]
 
     [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
     [% INCLUDE 'datatables.inc' %]
