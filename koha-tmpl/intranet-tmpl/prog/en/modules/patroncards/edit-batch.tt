@@ -101,11 +101,10 @@
                                 <h2>Patrons in batch number [% batch_id | html %]</h2>
                                 <div class="page-section">
                                     <table id="batcht">
-                                        [% FOREACH table_loo IN table_loop %]
-                                            [% IF ( table_loo.header_fields ) %]
-                                                <thead>
-                                                    <tr>
-                                                        [% FOREACH header_field IN table_loo.header_fields %]
+                                        [% IF ( table_loop.0.header_fields ) %]
+                                            <thead>
+                                                <tr>
+                                                    [% FOREACH header_field IN table_loop.0.header_fields %]
                                                             [% SWITCH header_field.field_label -%]
                                                                 [% CASE "Summary" -%]
                                                                     <th>Patron name</th>
@@ -121,8 +120,10 @@
                                                         [% END %]
                                                     </tr>
                                                 </thead>
+                                            [% END %]
                                                 <tbody>
-                                            [% ELSE %]
+                                                    [% FOREACH table_loo IN table_loop %]
+                                                        [% NEXT IF loop.first %]
                                                 <tr>
                                                     [% FOREACH text_field IN table_loo.text_fields %]
                                                         [% IF ( text_field.select_field ) %]
@@ -137,7 +138,6 @@
                                                     [% END %]
                                                 </tr>
                                             [% END %]
-                                        [% END %]
                                         </tbody>
                                     </table>
                                 </div>
