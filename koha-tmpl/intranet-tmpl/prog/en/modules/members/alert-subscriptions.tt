@@ -29,10 +29,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
+[% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
                 [% INCLUDE 'members-toolbar.inc' %]
                 <h1>Alert subscriptions</h1>
@@ -88,17 +85,7 @@
                         <p>This patron has not subscribed to email alerts for any subscriptions.</p>
                     </div>
                 [% END %]
-
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'circ-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]

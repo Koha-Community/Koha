@@ -23,11 +23,7 @@
         <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
         Recalls history for [% INCLUDE 'patron-title.inc' %]
     </div>
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
+    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
                     [% INCLUDE 'members-toolbar.inc' %]
                     <h1>Recalls history</h1>
                     [% IF Koha.Preference('UseRecalls') %]
@@ -37,16 +33,7 @@
                     [% ELSE %]
                          <div class="alert alert-info">Recalls have not been enabled. Enable the <a href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">UseRecalls</a> system preference to use recalls.</div>
                     [% END %]
-                </main>
-            </div>
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'circ-menu.inc' %]
-            </aside>
-        </div>
-    </div>
-</div> <!-- /.main.container-fluid -->
-
+    [% END %]
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]

@@ -39,11 +39,7 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
+    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
                     [% INCLUDE 'members-toolbar.inc' %]
                     <h1>Sent notices for [% INCLUDE 'patron-title.inc' %]</h1>
@@ -131,17 +127,7 @@
                         <div class="alert alert-info">There is no record of any messages that have been sent to this patron.</div>
                     [% END %]
 
-                </main>
-            </div> <!-- /.col-md-10.order-md-2 -->
-
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'circ-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-md-2.order-md-1 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
-
+    [% END %]
         <!-- Modal -->
         <div class="modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
             <div class="modal-dialog">

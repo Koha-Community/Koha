@@ -46,12 +46,7 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
-
+    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
 
                     [% INCLUDE 'members-toolbar.inc' %]
 
@@ -722,17 +717,7 @@
                     </div> <!-- /div.row -->
 
                     [% INCLUDE 'patron-detail-tabs.inc' patronpage = "borrower" %]
-                </main>
-            </div> <!-- /.col-sm-10 order-sm-1 order-md-2 -->
-
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'circ-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-sm-2 order-sm-2 order-md-1 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
-
+    [% END %]
         [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
             [% INCLUDE 'modals/resolve_return_claim.inc' %]
         [% END %]

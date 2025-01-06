@@ -70,12 +70,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-
+    [% WRAPPER 'main-container.inc' aside='circ-menu' %]
             <h1>
                 [% IF ( pay_individual ) %]
                     <span>Pay an individual charge</span>
@@ -393,16 +388,7 @@
     </div> <!-- /.tab-content -->
 </div> <!-- /.toptabs -->
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'circ-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 <!-- Modal -->
 <div id="confirm_change_form" class="modal" tabindex="-1" role="dialog" aria-hidden="true">

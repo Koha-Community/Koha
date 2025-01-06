@@ -19,6 +19,7 @@
                         [% CASE 'admin-menu' %][% INCLUDE 'admin-menu.inc' %]
                         [% CASE 'biblio-view-menu' %][% INCLUDE 'biblio-view-menu.inc' %]
                         [% CASE 'cat-menu' %][% INCLUDE 'cat-menu.inc' %]
+                        [% CASE 'circ-menu' %][% INCLUDE 'circ-menu.inc' %]
                         [% CASE 'circ-nav' %][% INCLUDE 'circ-nav.inc' %]
                         [% CASE 'facets' %][% INCLUDE 'facets.inc' %]
                         [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]

@@ -41,12 +41,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
-
+[% WRAPPER 'main-container.inc' aside='circ-menu' %]
             [% IF receipt_sent == '1' %]
             <div id="receipt_sent_dialog" class="alert alert-info">
               Receipt sent.
@@ -236,17 +231,7 @@
 </div> <!-- /.tab-content -->
 </div> <!-- /.toptabs -->
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'circ-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
-
+[% END %]
     <!-- Issue payout modal -->
     <div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
         <form id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="post" enctype="multipart/form-data" class="validated">
