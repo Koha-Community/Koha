@@ -24,10 +24,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
 
     <h1>An error has occurred!</h1>
     <h2><em>[% tx("Error {error_number}", {error_number = errno }) | html %]</em></h2>
@@ -47,9 +44,6 @@
             <li>Use top menu bar to navigate to another part of Koha.</li>
             <li>To report a broken link or any other issue, please contact the Koha administrator. <a href="mailto:[% admin | uri %]">Send email</a></li>
         </ul>
-
-            </div> <!-- /.col-md-8 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
