@@ -57,7 +57,7 @@
 [% END %]
 
 <body id="auth_searchresultlist_auth" class="auth">
-    <div class="main container-fluid">
+    [% WRAPPER 'main-container.inc' %]
 
         <h1>Authority search results</h1>
         [% INCLUDE 'auth-finder-search.inc' %]
@@ -124,7 +124,7 @@
         [% PROCESS 'result_page_numbers' %]
         [% END %]
 
-    </div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% INCLUDE 'authority-detail-modal.inc' %]
 

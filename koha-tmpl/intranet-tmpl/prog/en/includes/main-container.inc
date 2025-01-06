@@ -23,6 +23,20 @@
                     [% END %]
                 </aside>
             </div>
+        [% ELSIF wide_centered %]
+            <div class="col-md-10 offset-md-1">
+                <main>
+                    [% INCLUDE 'messages.inc' %]
+                    [% content | $raw %]
+                </main>
+            </div>
+        [% ELSIF wide_full %]
+            <div class="col-lg-8 offset-lg-2 col-xl-12 offset-xl-0">
+                <main>
+                    [% INCLUDE 'messages.inc' %]
+                    [% content | $raw %]
+                </main>
+            </div>
         [% ELSE %]
             <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 <main>

@@ -10,17 +10,11 @@
 </head>
 
 <body id="auth_blinddetail-biblio-search" class="auth">
-
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
 
         <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
 
-            </div>
-        </div>
-    </div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
