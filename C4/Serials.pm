@@ -1852,6 +1852,8 @@ sub GetLateOrMissingIssues {
     my ( $supplierid, $serialid, $order ) = @_;
 
     return unless ( $supplierid or $serialid );
+    return if defined $supplierid && !looks_like_number($supplierid);
+    return if defined $serialid   && !looks_like_number($serialid);
 
     my $dbh = C4::Context->dbh;
 
