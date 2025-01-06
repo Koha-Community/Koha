@@ -80,11 +80,7 @@ div#result { margin-top: 1em; }
           <li><label for="frameworkcode">Using framework:</label>
                       <select name="frameworkcode" id="frameworkcode">
                                       [% FOREACH frameworkcodeloo IN frameworkselect %]
-                                          [% IF frameworkcodeloo.authtypecode == frameworkcode1 %]
-                                              <option value="[% frameworkcodeloo.authtypecode | html %]" selected="selected">
-                                          [% ELSE %]
-                                              <option value="[% frameworkcodeloo.authtypecode | html %]">
-                                          [% END %]
+                                          <option value="[% frameworkcodeloo.authtypecode | html %]" [% IF frameworkcodeloo.authtypecode == frameworkcode1%]selected="selected"[% END %]>
                                            [% frameworkcodeloo.authtypetext | html %]
                                            </option>
                                       [% END %]
