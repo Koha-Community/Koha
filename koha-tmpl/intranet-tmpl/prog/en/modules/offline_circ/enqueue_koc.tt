@@ -25,10 +25,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-2">
-            [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' %]
 
             <h1>Koha offline circulation</h1>
             <div class="page-section">
@@ -46,8 +43,5 @@
 
                 <p><a href="list.pl">View pending offline circulation actions</a></p>
             </div> <!-- /.page-section -->
-        </div>
-    </div>
-</div> <!-- /.main.container-fluid -->
-
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
