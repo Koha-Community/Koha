@@ -27,7 +27,11 @@ var dataTablesDefaults = {
             "copySuccess": {
                 _: __('Copied %d rows to clipboard'),
                 1: __('Copied one row to clipboard'),
-            }
+            },
+            "print": __("Print"),
+            "copy": __("Copy"),
+            "csv": __("CSV"),
+            "excel": __("Excel")
         }
     },
     "dom": '<"dt-info"i><"top pager"<"table_entries"lp><"table_controls"fB>>tr<"bottom pager"ip>',
@@ -55,12 +59,6 @@ var dataTablesDefaults = {
         var tableId = settings.nTable.id
         var state =  settings.oLoadedState;
         state && toggledClearFilter(state.search.search, tableId);
-        // When the DataTables search function is triggered,
-        // enable or disable the "Clear filter" button based on
-        // the presence of a search string
-        $(this).on( 'search.dt', function ( e, settings ) {
-            toggledClearFilter(settings.oPreviousSearch.sSearch, tableId);
-        });
 
         if (settings.ajax) {
             let table_node = $("#" + tableId);
@@ -705,7 +703,6 @@ function _dt_buttons(params){
     var export_buttons = [
         {
             extend: 'excelHtml5',
-            text: __("Excel"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format_spreadsheet
@@ -713,7 +710,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'csvHtml5',
-            text: __("CSV"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format_spreadsheet
@@ -721,7 +717,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'copyHtml5',
-            text: __("Copy"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
@@ -729,7 +724,6 @@ function _dt_buttons(params){
         },
         {
             extend: 'print',
-            text: __("Print"),
             exportOptions: {
                 columns: exportColumns,
                 format:  export_format
@@ -781,14 +775,17 @@ function _dt_buttons(params){
     );
 
     if ( table_settings && CAN_user_parameters_manage_column_config ) {
+        let href = '/cgi-bin/koha/admin/columns_settings.pl?module=%s&page=%s&table=%s'.format(table_settings.module, table_settings.page, table_settings.table);
         buttons.push(
             {
+                tag: "a",
+                attr: { href },
                 className: "dt_button_configure_table",
                 fade: 100,
                 titleAttr: __("Configure table"),
                 text: '<i class="fa fa-lg fa-wrench"></i> <span class="dt-button-text">' + __("Configure") + '</span>',
                 action: function() {
-                    window.location = '/cgi-bin/koha/admin/columns_settings.pl?module=' + table_settings['module'] + '&page=' + table_settings['page'] + '&table=' + table_settings['table'];
+                    window.location = href;
                 },
             }
         );
@@ -797,16 +794,24 @@ function _dt_buttons(params){
     return buttons;
 }
 
-function _dt_visibility(node, table_settings, settings){
+function _dt_visibility(table_settings, settings, node){
     var counter = 0;
     let hidden_ids = [];
     let included_ids = [];
     if ( table_settings ) {
         var columns_settings = table_settings['columns'];
         $(columns_settings).each( function() {
-            let selector = '#' + node.attr('id');
-            var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
-            var used_id = settings.bKohaColumnsUseNames ? named_id : counter;
+            let used_id = counter;
+            if ( settings.bKohaColumnsUseNames ) {
+                if (!node){
+                    console.err("settings.bKohaColumnsUseNames is set but node not passed");
+                    return;
+                }
+                let selector = '#' + node.attr('id');
+                var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
+                used_id = named_id;
+            }
+
             if ( used_id == -1 ) return;
 
             if ( this['is_hidden'] == "1" ) {
@@ -992,7 +997,7 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
         }
 
         let hidden_ids, included_ids;
-        [hidden_ids, included_ids] = _dt_visibility(this, table_settings, settings)
+        [hidden_ids, included_ids] = _dt_visibility(table_settings, settings, this)
 
         settings["buttons"] = _dt_buttons({included_ids, settings, table_settings});
 
@@ -1018,8 +1023,15 @@ function _dt_add_delay(table_dt, table_node, delay_ms) {
             _dt_add_filters(this, table_dt, filters_options);
         }
 
-        table.DataTable().on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
+        table_dt.on("column-visibility.dt", function(){_dt_on_visibility(add_filters, table, table_dt);})
             .columns( hidden_ids ).visible( false );
+
+        table_dt.on( 'search.dt', function ( e, settings ) {
+            // When the DataTables search function is triggered,
+            // enable or disable the "Clear filter" button based on
+            // the presence of a search string
+            toggledClearFilter(settings.oPreviousSearch.sSearch, settings.nTable.id);
+        });
 
         return table;
     };

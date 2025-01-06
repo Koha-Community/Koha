@@ -44,7 +44,6 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Plugins;
 use Koha::Policy::Holds;
@@ -485,10 +484,6 @@ sub CanItemBeReserved {
         }
     }
 
-    # we retrieve borrowers and items informations #
-    # item->{itype} will come for biblioitems if necessery
-    my $borrower = $patron->unblessed;
-
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
     return _cache { status =>'damaged' }
       if ( $item->damaged
@@ -497,9 +492,8 @@ sub CanItemBeReserved {
     if( GetMarcFromKohaField('biblioitems.agerestriction') ){
         my $biblio = $item->biblio;
         # Check for the age restriction
-        my ( $ageRestriction, $daysToAgeRestriction ) =
-          C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
-        return _cache { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+        my $ageRestriction = C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction );
+        return _cache { status => 'ageRestricted' } if $ageRestriction && $patron->dateofbirth && $ageRestriction > $patron->get_age();
     }
 
     # Check that the patron doesn't have an item level hold on this item already
@@ -527,14 +521,14 @@ sub CanItemBeReserved {
     }
     elsif ( $controlbranch eq "PatronLibrary" ) {
         $branchfield = "borrowers.branchcode";
-        $reserves_control_branch  = $borrower->{branchcode};
+        $reserves_control_branch  = $patron->branchcode;
     }
 
     # we retrieve rights
     if (
         my $reservesallowed = Koha::CirculationRules->get_effective_rule({
                 itemtype     => $item->effective_itemtype,
-                categorycode => $borrower->{categorycode},
+                categorycode => $patron->categorycode,
                 branchcode   => $reserves_control_branch,
                 rule_name    => 'reservesallowed',
         })
@@ -547,7 +541,7 @@ sub CanItemBeReserved {
     }
 
     my $rights = Koha::CirculationRules->get_effective_rules({
-        categorycode => $borrower->{'categorycode'},
+        categorycode => $patron->categorycode,
         itemtype     => $item->effective_itemtype,
         branchcode   => $reserves_control_branch,
         rules        => ['holds_per_record','holds_per_day']
@@ -656,7 +650,7 @@ sub CanItemBeReserved {
     }
 
     if (   $branchitemrule->{holdallowed} eq 'from_home_library'
-        && $borrower->{branchcode} ne $item->homebranch )
+        && $patron->branchcode ne $item->homebranch )
     {
         return _cache { status => 'cannotReserveFromOtherBranches' };
     }
@@ -685,7 +679,7 @@ sub CanItemBeReserved {
         if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup' && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
             return _cache { status => 'pickupNotInHoldGroup' };
         }
-        if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
+        if ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup' && !Koha::Libraries->find({branchcode => $patron->branchcode})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
             return _cache { status => 'pickupNotInHoldGroup' };
         }
     }
@@ -1602,6 +1596,7 @@ sub _FixPriority {
         $hold = Koha::Holds->find( $reserve_id );
         if (!defined $hold){
             # may have already been checked out and hold fulfilled
+            require Koha::Old::Holds;
             $hold = Koha::Old::Holds->find( $reserve_id );
         }
         return unless $hold;

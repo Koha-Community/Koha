@@ -180,8 +180,11 @@ sub harvest_sushi {
     $ua->agent( 'Koha/' . Koha::version() );
     my $response = $ua->simple_request($request);
 
+    my $result = decode_json( $response->decoded_content );
+
     if ( $response->code >= 400 ) {
-        my $result = decode_json( $response->decoded_content );
+
+        return if $self->_sushi_errors($result);
 
         my $message;
         if ( ref($result) eq 'ARRAY' ) {
@@ -199,7 +202,6 @@ sub harvest_sushi {
             }
         }
 
-        #TODO: May want to add a job error message here?
         warn sprintf "ERROR - SUSHI service %s returned %s - %s\n", $url,
             $response->code, $message;
         if ( $response->code == 404 ) {
@@ -208,7 +210,6 @@ sub harvest_sushi {
             Koha::Exceptions::Authorization::Unauthorized->throw($message);
         } else {
 
-            #TODO: May want to add a job error message here?
             die sprintf "ERROR requesting SUSHI service\n%s\ncode %s: %s\n",
                 $url, $response->code,
                 $message;
@@ -217,12 +218,10 @@ sub harvest_sushi {
         return;
     }
 
-    my $decoded_response = decode_json( $response->decoded_content );
-
-    return if $self->_sushi_errors($decoded_response);
+    return if $self->_sushi_errors($result);
 
     # Parse the SUSHI response
-    my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $decoded_response } );
+    my $sushi_counter = Koha::ERM::EUsage::SushiCounter->new( { response => $result } );
     my $counter_file  = $sushi_counter->get_COUNTER_from_SUSHI;
 
     return if $self->_counter_file_size_too_large($counter_file);
@@ -399,6 +398,7 @@ sub _build_url_query {
     $url .= '&api_key=' . $self->api_key           if $self->api_key;
     $url .= '&begin_date=' . substr $self->{begin_date}, 0, 7 if $self->{begin_date};
     $url .= '&end_date=' . substr $self->{end_date},     0, 7 if $self->{end_date};
+    $url .= '&platform=' . $self->service_platform if $self->service_platform;
 
     return $url;
 }
@@ -459,19 +459,24 @@ Additionally, adds background job report message(s) if that is the case
 sub _sushi_errors {
     my ( $self, $decoded_response ) = @_;
 
-    if ( $decoded_response->{Severity} ) {
+    my $severity = $decoded_response->{Severity} // $decoded_response->{severity};
+    my $message  = $decoded_response->{Message}  // $decoded_response->{message};
+    my $code     = $decoded_response->{Code}     // $decoded_response->{code};
+
+    if ($severity) {
         $self->{job_callbacks}->{add_message_callback}->(
             {
                 type    => 'error',
-                code    => $decoded_response->{Code},
-                message => $decoded_response->{Severity} . ' - ' . $decoded_response->{Message},
+                code    => $code,
+                message => $severity . ' - ' . $message,
             }
         ) if $self->{job_callbacks};
         return 1;
     }
 
-    if ( $decoded_response->{Report_Header}->{Exceptions} ) {
-        foreach my $exception ( @{ $decoded_response->{Report_Header}->{Exceptions} } ) {
+    my $exceptions = $decoded_response->{Report_Header}->{Exceptions} // $decoded_response->{Exceptions};
+    if ($exceptions) {
+        foreach my $exception ( @{$exceptions} ) {
             $self->{job_callbacks}->{add_message_callback}->(
                 {
                     type    => 'error',
@@ -483,7 +488,7 @@ sub _sushi_errors {
         return 1;
     }
 
-    if ( scalar @{ $decoded_response->{Report_Items} } == 0 ) {
+    if ( $decoded_response->{Report_Items} && scalar @{ $decoded_response->{Report_Items} } == 0 ) {
         $self->{job_callbacks}->{add_message_callback}->(
             {
                 type => 'error',

@@ -320,9 +320,9 @@ sub buildKohaItemsNamespace {
             $status = 'other';
             $substatus = 'In transit';
         }
-        elsif ($item->damaged) {
-            $status = 'other';
-            $substatus = "Damaged";
+        elsif ( $item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') ) {
+            $status    = 'other';
+            $substatus = 'Damaged';
         }
         elsif ($item->itemlost) {
             $status = 'other';

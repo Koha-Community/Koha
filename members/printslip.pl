@@ -120,6 +120,7 @@ $template->param(
     stylesheet     => C4::Context->preference("SlipCSS"),
     error          => $error,
     style          => $letter->{style},
+    id             => $print,
 );
 
 $template->param( IntranetSlipPrinterJS => C4::Context->preference('IntranetSlipPrinterJS' ) );

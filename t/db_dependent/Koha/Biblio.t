@@ -1230,7 +1230,7 @@ subtest 'get_marc_notes() UNIMARC tests' => sub {
 };
 
 subtest 'host_items() tests' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -1261,21 +1261,53 @@ subtest 'host_items() tests' => sub {
     is_deeply( [ $host_items->get_column('itemnumber') ],
         [ $host_item_1->itemnumber, $host_item_2->itemnumber ] );
 
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber => $host_item_1->itemnumber,
+                frombranch => $host_item_1->holdingbranch,
+            }
+        }
+    );
+    ok(
+        $host_items->search(
+            {},
+            {
+                join     => 'branchtransfers',
+                order_by => 'branchtransfers.daterequested'
+            }
+        )->as_list,
+        "host_items can be used with a join query on itemnumber"
+    );
+    $transfer->delete;
+
     t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
     $host_items = $biblio->host_items;
     is( ref($host_items),   'Koha::Items' );
     is( $host_items->count, 0 );
 
     subtest 'test host_items param in items()' => sub {
-        plan tests => 4;
+        plan tests => 5;
+
+        t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 1 );
 
         my $items = $biblio->items;
         is( $items->count, 1, "Without host_items param we only get the items on the biblio");
+
         $items = $biblio->items({ host_items => 1 });
         is( $items->count, 3, "With param host_items we get the biblio items plus analytics");
         is( ref($items), 'Koha::Items', "We correctly get an Items object");
         is_deeply( [ $items->get_column('itemnumber') ],
             [ $item_1->itemnumber, $host_item_1->itemnumber, $host_item_2->itemnumber ] );
+
+        t::lib::Mocks::mock_preference( 'EasyAnalyticalRecords', 0 );
+
+        $items = $biblio->items( { host_items => 1 } );
+        is(
+            $items->count, 1,
+            "With host_items param but EasyAnalyticalRecords disabled we only get the items on the biblio"
+        );
     };
 
     $schema->storage->txn_rollback;

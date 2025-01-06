@@ -52,6 +52,7 @@ use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Checkouts;
+use Koha::Old::Holds;
 use Koha::Ratings;
 use Koha::Recalls;
 use Koha::RecordProcessor;
@@ -462,14 +463,13 @@ the I<OpacHiddenItems> system preference.
 sub hidden_in_opac {
     my ( $self, $params ) = @_;
 
+    return 0 unless C4::Context->preference('OpacHiddenItemsHidesRecord');
+
     my $rules = $params->{rules} // {};
 
     my @items = $self->items->as_list;
 
     return 0 unless @items; # Do not hide if there is no item
-
-    # Ok, there are items, don't even try the rules unless OpacHiddenItemsHidesRecord
-    return 0 unless C4::Context->preference('OpacHiddenItemsHidesRecord');
 
     return !(any { !$_->hidden_in_opac({ rules => $rules }) } @items);
 }
@@ -613,7 +613,8 @@ sub items {
 
     my $items_rs = $self->_result->items;
 
-    return Koha::Items->_new_from_dbic( $items_rs ) unless $params->{host_items};
+    return Koha::Items->_new_from_dbic($items_rs)
+        unless $params->{host_items} && C4::Context->preference('EasyAnalyticalRecords');
 
     my @itemnumbers = $items_rs->get_column('itemnumber')->all;
     my $host_itemnumbers = $self->_host_itemnumbers();
@@ -650,7 +651,7 @@ sub host_items {
 
     my $host_itemnumbers = $self->_host_itemnumbers;
 
-    return Koha::Items->search( { itemnumber => { -in => $host_itemnumbers } } );
+    return Koha::Items->search( { "me.itemnumber" => { -in => $host_itemnumbers } } );
 }
 
 =head3 _host_itemnumbers
@@ -705,6 +706,21 @@ sub holds {
     $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
+}
+
+=head3 old_holds
+
+my $old_holds = $biblio->old_holds();
+
+return the historic holds placed on this record
+
+=cut
+
+sub old_holds {
+    my ( $self, $params, $attributes ) = @_;
+    $attributes->{order_by} = 'priority' unless exists $attributes->{order_by};
+    my $old_hold_rs = $self->_result->old_reserves->search( $params, $attributes );
+    return Koha::Old::Holds->_new_from_dbic($old_hold_rs);
 }
 
 =head3 current_holds

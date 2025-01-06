@@ -33,7 +33,46 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
+
+    subtest 'Update an attribute should update the patron "updated_on" field' => sub {
+
+        plan tests => 1;
+
+        $schema->storage->txn_begin;
+
+        my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $updated_on = $patron->updated_on;
+
+        sleep 1;    # Timestamps are in one second increments, so we need to wait one second
+
+        my $type = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => {
+                    mandatory     => 0,
+                    repeatable    => 0,
+                    unique_id     => 0,
+                    category_code => undef
+                }
+            }
+        );
+
+        my $attr = $patron->add_extended_attribute(
+            {
+                code      => $type->code,
+                attribute => 'TEST'
+            }
+        );
+
+        $attr->set( { attribute => 'TEST' } )->store();
+
+        $patron->discard_changes;
+
+        isnt( $updated_on, $patron->updated_on, "Updated on was updated by attribute storage" );
+
+        $schema->storage->txn_rollback;
+    };
 
     subtest 'repeatable attributes tests' => sub {
 

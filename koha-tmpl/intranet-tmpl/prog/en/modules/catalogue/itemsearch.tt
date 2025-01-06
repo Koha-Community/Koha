@@ -279,8 +279,10 @@
         </div>
       </div>
 
-        <form method="GET" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
-            <input type="hidden" name="op" value="show" />
+        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_operations">
+            <!-- dummy values which will be replaced by JavaScript -->
+            [% INCLUDE 'csrf-token.inc' %]
+            <input type="hidden" name="op" value="cud-show" />
             <input type="hidden" id="batch_mod_del" name="del" value="0" />
         </form>
 
@@ -526,7 +528,7 @@
                 fixedHeader: false // There is a bug on this view
             })).columnFilter({
                 'sPlaceHolder': 'head:after',
-                "columns": [
+                "aoColumns": [
                     null,
                     { 'type': 'text' },
                     { 'type': 'text' },
@@ -694,7 +696,12 @@
                 batch_mod_form.append(
                     $("<input>").attr("type","hidden")
                     .attr("name", "op")
-                    .val("show")
+                    .val("cud-show")
+                );
+                batch_mod_form.append(
+                    $("<input>").attr("type","hidden")
+                    .attr("name", "csrf_token")
+                    .val($('meta[name="csrf-token"]').attr('content'))
                 );
                 batch_mod_form.append(
                     $("<input>").attr("type","hidden")

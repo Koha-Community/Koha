@@ -390,7 +390,7 @@ $(document).ready(function() {
             },
             {
                 "data": "comments_count",
-                "orderable": true,
+                "orderable": false,
                 "searchable": false,
                 "render": function(data, type, row, meta) {
                     return escape_str(data);

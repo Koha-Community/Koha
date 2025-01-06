@@ -120,7 +120,7 @@ sub add_prefs {
         for my $element (@$pref) {
             if ( ref($element) eq 'HASH' ) {
                 while ( my ( $key, $value ) = each(%$element) ) {
-                    next unless $key eq 'choices' or $key eq 'multiple';
+                    next unless $key eq 'choices' or $key eq 'multiple' or $key eq 'multiple_sortable';
                     next unless ref($value) eq 'HASH';
                     for my $ckey ( keys %$value ) {
                         my $msgid = sprintf('%s#%s# %s', basename($file), $pref_name, $value->{$ckey});

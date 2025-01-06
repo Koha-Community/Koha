@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::Exception;
 use Test::Warn;
 use Time::Fake;
@@ -406,6 +406,55 @@ subtest 'add_guarantor() tests' => sub {
             'Exception is thrown for duplicated relationship';
         close STDERR;
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'guarantor checks on patron creation / update tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'guarantor' );
+    my $category = $builder->build_object(
+        { class => 'Koha::Patron::Categories', value => { can_be_guarantee => 1, category_type => 'A' } } );
+
+    my $guarantor =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+    my $guarantee =
+        $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+
+    subtest 'patron update tests' => sub {
+        plan tests => 7;
+        ok(
+            $guarantee->add_guarantor( { guarantor_id => $guarantor->borrowernumber, relationship => 'guarantor' } ),
+            "Relationship is added, no problem"
+        );
+        is( $guarantor->is_guarantor, 1, 'Is a guarantor' );
+        is( $guarantor->is_guarantee, 0, 'Is no guarantee' );
+        is( $guarantee->is_guarantor, 0, 'Is no guarantor' );
+        is( $guarantee->is_guarantee, 1, 'Is a guarantee' );
+
+        ok( $guarantor->surname("Duck")->store(), "Updating guarantor is okay" );
+        ok( $guarantee->surname("Duck")->store(), "Updating guarantee is okay" );
+    };
+
+    subtest 'patron creation tests' => sub {
+        plan tests => 1;
+
+        my $new_guarantee = $builder->build_object(
+            { class => 'Koha::Patrons', value => { categorycode => $category->categorycode } } );
+        my $new_guarantee_hash = $new_guarantee->unblessed;
+        $new_guarantee->delete();
+
+        delete $new_guarantee_hash->{borrowernumber};
+
+        ok(
+            Koha::Patron->new($new_guarantee_hash)->store( { guarantors => [$guarantor] } ),
+            "We can add the new patron and indicate guarantor"
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
@@ -1024,12 +1073,14 @@ subtest 'extended_attributes' => sub {
 
     subtest 'globally mandatory attributes tests' => sub {
 
-        plan tests => 5;
+        plan tests => 8;
 
         $schema->storage->txn_begin;
         Koha::Patron::Attribute::Types->search->delete;
 
-        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $context = Test::MockModule->new('C4::Context');
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
         my $attribute_type_1 = $builder->build_object(
             {
@@ -1045,17 +1096,33 @@ subtest 'extended_attributes' => sub {
             }
         );
 
+        my $attribute_type_3 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 1, class => 'a', category_code => undef, opac_editable => 1 }
+            }
+        );
+
+        my $attribute_type_4 = $builder->build_object(
+            {
+                class => 'Koha::Patron::Attribute::Types',
+                value => { mandatory => 0, class => 'a', category_code => undef, opac_editable => 1 }
+            }
+        );
+
+        #Staff interface tests
+        $context->mock( 'interface', sub { return "intranet" } );
         is( $patron->extended_attributes->count, 0, 'Patron has no extended attributes' );
 
-        throws_ok
-            {
-                $patron->extended_attributes(
-                    [
-                        { code => $attribute_type_2->code, attribute => 'b' }
-                    ]
-                );
-            }
-            'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+        throws_ok {
+            $patron->extended_attributes(
+                [
+                    { code => $attribute_type_2->code, attribute => 'b' },
+                    { code => $attribute_type_3->code, attribute => 'b' },
+                ]
+            );
+        }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
             'Exception thrown on missing mandatory attribute type';
 
         is( $@->type, $attribute_type_1->code, 'Exception parameters are correct' );
@@ -1064,11 +1131,30 @@ subtest 'extended_attributes' => sub {
 
         $patron->extended_attributes(
             [
-                { code => $attribute_type_1->code, attribute => 'b' }
+                { code => $attribute_type_1->code, attribute => 'b' },
+                { code => $attribute_type_3->code, attribute => 'b' },
             ]
         );
 
-        is( $patron->extended_attributes->count, 1, 'Extended attributes succeeded' );
+        is( $patron->extended_attributes->count, 2, 'Extended attributes succeeded' );
+
+        # OPAC interface tests
+        $context->mock( 'interface', sub { return "opac" } );
+
+        is( $patron->extended_attributes->count, 2, 'Patron still has 2 extended attributes in OPAC' );
+
+        throws_ok {
+            $patron->extended_attributes(
+                [
+                    { code => $attribute_type_1->code, attribute => 'b' },
+                    { code => $attribute_type_2->code, attribute => 'b' },
+                ]
+            );
+        }
+        'Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute',
+            'Exception thrown on missing mandatory OPAC-editable attribute';
+
+        is( $@->type, $attribute_type_3->code, 'Exception parameters are correct for OPAC-editable attribute' );
 
         $schema->storage->txn_rollback;
 
@@ -1789,17 +1875,19 @@ subtest 'notify_library_of_registration()' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'notice_email_address' => sub {
-    plan tests => 3;
+subtest 'notice_email_address() tests' => sub {
+
+    plan tests => 5;
+
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
-    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    'OFF' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    undef );
     is(
         $patron->notice_email_address, $patron->email,
-        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is off"
+        "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is not defined"
     );
 
     t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'emailpro' );
@@ -1815,7 +1903,21 @@ subtest 'notice_email_address' => sub {
         "Koha::Patron->notice_email_address returns correct value when EmailFieldPrimary is 'MULTI' and EmailFieldSelection is 'email,emailpro'"
     );
 
-    $patron->delete;
+    my $invalid = 'potato';
+
+    t::lib::Mocks::mock_preference( 'EmailFieldPrecedence', 'email|emailpro' );
+    t::lib::Mocks::mock_preference( 'EmailFieldPrimary',    $invalid );
+
+    my $email;
+    warning_is { $email = $patron->notice_email_address(); }
+    qq{Invalid value for EmailFieldPrimary ($invalid)},
+        'Warning correctly generated on invalid system preference';
+
+    is(
+        $email, $patron->email,
+        "Koha::Patron->notice_email_address falls back to correct value when EmailFieldPrimary is invalid"
+    );
+
     $schema->storage->txn_rollback;
 };
 

@@ -229,7 +229,7 @@ sub read_file {
     my $delimiter    = $file->{filename} =~ /\.tsv$/    ? "\t"                                   : ",";
     my $quote_char   = $file->{filename} =~ /\.tsv$/    ? "\""                                   : "\"";
 
-    open my $fh, "<", \$file_content or die;
+    open my $fh, "<", \$file_content or die "Could not open file $file->{filename}: $!";
     my $csv = Text::CSV_XS->new(
         {
             sep_char           => $delimiter,
@@ -241,14 +241,16 @@ sub read_file {
     my $headers_to_check = $csv->getline($fh);
     my $column_headers   = rescue_EBSCO_files($headers_to_check);
     my $lines            = $csv->getline_all( $fh, 0 );
-
-    my ( $cde, $str, $pos ) = $csv->error_diag();
-    my $error = $cde ? "$cde, $str, $pos" : "";
-    warn $error if $error;
-
     close($fh);
 
-    return ( $column_headers, $lines, $error );
+    unless($csv->eof()) {
+        my ( $cde, $str, $pos ) = $csv->error_diag();
+        my $error = $cde ? "$cde, $str, $pos" : "";
+        warn $error if $error;
+        return ( $column_headers, $lines, $error );
+    }
+
+    return ( $column_headers, $lines );
 }
 
 =head3 create_title_hash_from_line_data

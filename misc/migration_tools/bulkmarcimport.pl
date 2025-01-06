@@ -75,6 +75,7 @@ my $framework = '';
 my $localcust;
 my $marc_mod_template    = '';
 my $marc_mod_template_id = -1;
+my $skip_indexing        = 0;
 $| = 1;
 
 GetOptions(
@@ -111,6 +112,7 @@ GetOptions(
     'framework=s'       => \$framework,
     'custom:s'          => \$localcust,
     'marcmodtemplate:s' => \$marc_mod_template,
+    'si|skip_indexing'  => \$skip_indexing,
 );
 
 $biblios ||= !$authorities;
@@ -128,13 +130,15 @@ if ($all) {
 my $using_elastic_search = ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' );
 my $mod_biblio_options   = {
     disable_autolink  => $using_elastic_search,
-    skip_record_index => $using_elastic_search,
+    skip_record_index => $using_elastic_search || $skip_indexing,
     overlay_context   => { source => 'bulkmarcimport' }
 };
 my $add_biblio_options = {
     disable_autolink  => $using_elastic_search,
-    skip_record_index => $using_elastic_search
+    skip_record_index => $using_elastic_search || $skip_indexing
 };
+my $mod_authority_options = { skip_record_index => $using_elastic_search || $skip_indexing };
+my $add_authority_options = { skip_record_index => $using_elastic_search || $skip_indexing };
 
 my @search_engine_record_ids;
 my @search_engine_records;
@@ -255,7 +259,9 @@ my $searcher = Koha::SearchEngine::Search->new(
 print "Characteristic MARC flavour: $marc_flavour\n" if $verbose;
 my $starttime = gettimeofday;
 
-my $fh = IO::File->new($input_marc_file);    # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+# don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+my $fh = IO::File->new($input_marc_file) or die "Could not open $input_marc_file: $!";
+
 if ( defined $format && $format =~ /XML/i ) {
 
     # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
@@ -422,6 +428,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             }
         } elsif ( @{$results} > 1 ) {
             $logger->debug("More than one match for: $query");
+            next;
         } else {
             $logger->debug("No match for: $query");
         }
@@ -465,10 +472,16 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             if ($matched_record_id) {
                 if ($update) {
                     ## Authority has an id and is in database: update
-                    eval { ($authid) = ModAuthority( $matched_record_id, $record, $authtypecode ) };
+                    eval {
+                        ($authid) = ModAuthority(
+                            $matched_record_id, $record, $authtypecode,
+                            $mod_authority_options,
+                        );
+                    };
                     if ($@) {
                         warn "ERROR: Update authority $matched_record_id failed: $@\n";
                         printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                        next RECORD;
                     } else {
                         printlog( { id => $authid, op => "update", status => "ok" } ) if ($logfile);
                     }
@@ -485,10 +498,11 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 }
             } elsif ($insert) {
                 ## An authid is defined but no authority in database: insert
-                eval { ($authid) = AddAuthority( $record, undef, $authtypecode ) };
+                eval { ($authid) = AddAuthority( $record, undef, $authtypecode, $add_authority_options ); };
                 if ($@) {
                     warn "ERROR: Insert authority $originalid failed: $@\n";
                     printlog( { id => $originalid, op => "insert", status => "ERROR" } ) if ($logfile);
+                    next RECORD;
                 } else {
                     printlog( { id => $authid, op => "insert", status => "ok" } ) if ($logfile);
                 }
@@ -497,7 +511,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                 printlog(
                     {
                         id     => $originalid, op => "insert",
-                        status => "warning : biblio not in database and option -insert not enabled, skipping..."
+                        status => "warning : authority not in database and option -insert not enabled, skipping..."
                     }
                 ) if ($logfile);
             }
@@ -509,6 +523,8 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                     1    #@FIXME: Really always updated?
                 );
             }
+            push @search_engine_record_ids, $authid;
+            push @search_engine_records,    $record;
         } else {
             my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id );
 
@@ -597,7 +613,6 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                         AddItemBatchFromMarc( $record, $record_id, $biblioitemnumber, $framework );
                 };
                 my $error_adding = $@;
-                $record_has_added_items = @{$itemnumbers_ref};
 
                 if ($error_adding) {
                     warn "ERROR: Adding items to bib $record_id failed: $error_adding";
@@ -607,6 +622,9 @@ RECORD: foreach my $record ( @{$marc_records} ) {
                     # the MARC columns in biblioitems were not set.
                     next RECORD;
                 }
+
+                $record_has_added_items = @{$itemnumbers_ref};
+
                 if ( $dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' }
                     @$errors_ref )
                 {
@@ -680,7 +698,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             $schema->txn_commit;
             $schema->txn_begin;
             if ($indexer) {
-                $indexer->update_index( \@search_engine_record_ids, \@search_engine_records );
+                $indexer->update_index( \@search_engine_record_ids, \@search_engine_records ) unless $skip_indexing;
                 if ( C4::Context->preference('AutoLinkBiblios') ) {
                     foreach my $record (@search_engine_records) {
                         BiblioAutoLink( $record, $framework );
@@ -1004,6 +1022,12 @@ This parameter allows you to specify the name of an existing MARC
 modification template to apply as the MARC records are imported (these
 templates are created in the "MARC modification templates" tool in Koha).
 If not specified, no MARC modification templates are used (default).
+
+=item B<-si, --skip_indexing>
+
+If set, do not index the imported records with Zebra or Elasticsearch.
+Use this when you plan to do a complete reindex of your data after running
+bulkmarciport. This can increase performance and avoid unnecessary load.
 
 =back
 

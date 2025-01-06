@@ -12,7 +12,7 @@ export class CataloguingAPIClient extends HttpClient {
         return {
             create: bib_info =>
                 this.post({
-                    endpoint: "new_bib/frameworkcode=%s".format(
+                    endpoint: "new_bib/?frameworkcode=%s".format(
                         bib_info.frameworkcode
                     ),
                     body: bib_info.record.toXML(),

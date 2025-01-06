@@ -291,8 +291,7 @@
                             </ol>
                         </div>
 
-                        <form action="/cgi-bin/koha/installer/install.pl" method="post">
-                            [% INCLUDE 'csrf-token.inc' %]
+                        <form action="/cgi-bin/koha/installer/install.pl" method="get">
                             <input type="hidden" name="step" value="3" />
                             <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                         </form>
@@ -420,16 +419,15 @@
                             <ul>
                                 [% FOR e IN error %]
                                     [% FOR o IN e.output %]
-                                        <li class="update_error">
-                                            [% o | html %]
-                                            <br/>
-                                            ERROR: [% e.error | $raw %]
-
-                                            [% IF e.output.size > 1 %]
-                                                [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
-                                            [% END %]
-                                        </li>
+                                        [% o | $raw %]
+                                        <br/>
+                                        [% IF e.output.size > 1 %]
+                                            [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                        [% END %]
                                     [% END %]
+                                    <li class="update_error">
+                                        ERROR: [% e.error | $raw %]
+                                    </li>
                                 [% END %]
                             </ul>
                         [% END %]
@@ -440,21 +438,20 @@
                         <ul>
                             [% FOR e IN atomic_updates.error %]
                                 [% FOR o IN e.output %]
-                                    <li class="update_error">
-                                        [% o | html %]
-                                        <br/>
-                                        ERROR: [% e.error | $raw %]
-
-                                        [% IF e.output.size > 1 %]
-                                            [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
-                                        [% END %]
-                                    </li>
+                                    [% o | $raw %]
+                                    <br/>
+                                    [% IF e.output.size > 1 %]
+                                        [% IF loop.first %]<ul>[% ELSIF loop.last %]</ul>[% END %]
+                                    [% END %]
                                 [% END %]
+                                <li class="update_error">
+                                    ERROR: [% e.error | $raw %]
+                                </li>
                             [% END %]
                         </ul>
                     [% END %]
 
-                    [% UNLESS error OR has_update_errors %]
+                    [% UNLESS error OR atomic_updates.error OR has_update_errors %]
                         <p>Everything went okay. Update done.</p>
                         <p><a href="install.pl?step=3&amp;op=finished" class="btn btn-primary">Continue to log in to Koha</a></p>
                     [% ELSE %]

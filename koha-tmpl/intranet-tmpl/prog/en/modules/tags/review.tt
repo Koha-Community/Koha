@@ -134,9 +134,9 @@
                                                     <th>Status</th>
                                                     <th>Term</th>
                                                     <th>Weight</th>
-                                                    <th class="NoSort noExport">Actions</th>
-                                                    [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
                                                     <th>Date</th>
+                                                    [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
+                                                    <th class="NoSort noExport">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -172,7 +172,15 @@
                                                         <td>
                                                             [% tagloo.weight_total | html %]
                                                         </td>
+                                                        <td data-order="[% tagloo.date_approved | html %]">
+                                                            [% tagloo.date_approved | $KohaDates %]
+                                                        </td>
                                                         [% IF ( tagloo.approved ) %]
+                                                            <td>
+                                                                [% IF ( tagloo.approved_by_name ) %]
+                                                                    <a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | uri %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>
+                                                                [% END %]
+                                                            </td>
                                                             <td class="actions">
                                                                 <span class="ajax_buttons" style="visibility:hidden">
                                                                     [% IF ( tagloo.approved == -1 ) %]
@@ -184,11 +192,7 @@
                                                                     [% END %]
                                                                 </span>
                                                             </td>
-                                                            <td>
-                                                                [% IF ( tagloo.approved_by_name ) %]
-                                                                    <a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | uri %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>
-                                                                [% END %]
-                                                            </td>
+
                                                         [% ELSE %]
                                                             <td class="actions">
                                                                 <span class="ajax_buttons" style="visibility:hidden">
@@ -200,9 +204,6 @@
                                                                 <td>&nbsp;</td>
                                                             [% END %]
                                                         [% END # /IF ( tagloo.approved ) %]
-                                                        <td data-order="[% tagloo.date_approved | html %]">
-                                                            [% tagloo.date_approved | $KohaDates %]
-                                                        </td>
                                                     </tr>
                                                 [% END # /FOREACH tagloo %]
                                             </tbody>

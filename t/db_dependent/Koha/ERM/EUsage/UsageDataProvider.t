@@ -29,7 +29,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest '_build_url_query' => sub {
 
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -44,7 +44,7 @@ subtest '_build_url_query' => sub {
             class => 'Koha::ERM::EUsage::UsageDataProviders',
             value => {
                 service_url => $service_url, api_key => $api_key, requestor_id => $requestor_id,
-                customer_id => $customer_id, name    => $name
+                customer_id => $customer_id, name    => $name, service_platform => undef
             }
         }
     );
@@ -68,6 +68,41 @@ subtest '_build_url_query' => sub {
             . substr( $usage_data_provider->{begin_date}, 0, 7 )
             . '&end_date='
             . substr( $usage_data_provider->{end_date}, 0, 7 )
+    );
+
+    my $test_platform = 'www.whatever.com';
+
+    my $usage_data_provider_with_platform = $builder->build_object(
+        {
+            class => 'Koha::ERM::EUsage::UsageDataProviders',
+            value => {
+                service_url => $service_url, api_key => $api_key, requestor_id => $requestor_id,
+                customer_id => $customer_id, name    => $name, service_platform => $test_platform
+            }
+        }
+    );
+
+    $usage_data_provider_with_platform->{report_type} = 'TR_J1';
+    $usage_data_provider_with_platform->{begin_date}  = '2023-08-01';
+    $usage_data_provider_with_platform->{end_date}    = '2023-09-30';
+
+    is(
+        $usage_data_provider_with_platform->_build_url_query,
+        $service_url
+            . '/reports/'
+            . lc( $usage_data_provider->{report_type} )
+            . '?customer_id='
+            . $customer_id
+            . '&requestor_id='
+            . $requestor_id
+            . '&api_key='
+            . $api_key
+            . '&begin_date='
+            . substr( $usage_data_provider->{begin_date}, 0, 7 )
+            . '&end_date='
+            . substr( $usage_data_provider->{end_date}, 0, 7 )
+            . '&platform='
+            . $test_platform
     );
 
     $schema->storage->txn_rollback;

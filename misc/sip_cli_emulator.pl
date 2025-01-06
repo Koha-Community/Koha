@@ -55,6 +55,8 @@ my $transaction_id;
 my $pickup_location;
 my $hold_mode;
 my $no_block = 'N';
+my $start_item;
+my $end_item;
 
 my $terminator = q{};
 
@@ -85,6 +87,8 @@ GetOptions(
     "pickup-location=s" => \$pickup_location,
     "hold-mode=s"       => \$hold_mode,
     "n|no-block=s"      => \$no_block,
+    "start-item=s"      => \$start_item,
+    "end-item=s"        => \$end_item,
 
     "t|terminator=s" => \$terminator,
 
@@ -158,8 +162,10 @@ my $handlers = {
             terminal_password => $terminal_password,
             patron_password   => $patron_password,
             summary           => $summary,
+            start_item        => $start_item,
+            end_item          => $end_item,
         },
-        optional => [ 'patron_password', 'summary' ],
+        optional => [ 'patron_password', 'summary', 'start_item', 'end_item' ],
     },
     item_information => {
         name       => 'Item Information',
@@ -404,9 +410,13 @@ sub build_patron_information_command_message {
     my $patron_identifier = $params->{patron_identifier};
     my $terminal_password = $params->{terminal_password};
     my $patron_password   = $params->{patron_password};
+    my $start_item        = $params->{start_item};
+    my $end_item          = $params->{end_item};
     my $summary           = $params->{summary};
 
     $summary //= "          ";
+    $start_item //= "";
+    $end_item //= "";
 
     return
         PATRON_INFO
@@ -416,7 +426,9 @@ sub build_patron_information_command_message {
       . build_field( FID_INST_ID,      $institution_id )
       . build_field( FID_PATRON_ID,    $patron_identifier )
       . build_field( FID_TERMINAL_PWD, $terminal_password )
-      . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } );
+      . build_field( FID_PATRON_PWD,   $patron_password, { optional => 1 } )
+      . build_field( FID_START_ITEM,   $start_item, { optional => 1 } )
+      . build_field( FID_END_ITEM,     $end_item, { optional => 1 } );
 }
 
 sub build_item_information_command_message {

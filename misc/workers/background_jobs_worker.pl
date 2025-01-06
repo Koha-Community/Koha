@@ -47,7 +47,6 @@ The different values available are:
 
     default
     long_tasks
-    elastic_index
 
 =back
 
@@ -202,8 +201,10 @@ $pm->wait_all_children;
 sub process_job {
     my ( $job, $args ) = @_;
     try {
-        $job->process( $args );
+        $job->process($args);
     } catch {
+        Koha::Logger->get( { interface => 'worker' } )
+            ->warn( sprintf "Uncaught exception processing job id=%s: %s", $job->id, $_ );
         $job->status('failed')->store;
     };
 }

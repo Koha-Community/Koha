@@ -82,14 +82,9 @@ BEGIN {
         get_template_and_user haspermission create_basic_session
     );
 
-    $ldap      = C4::Context->config('useldapserver') || 0;
     $cas       = C4::Context->preference('casAuthentication');
     $caslogout = C4::Context->preference('casLogout');
 
-    if ($ldap) {
-        require C4::Auth_with_ldap;
-        import C4::Auth_with_ldap qw(checkpw_ldap);
-    }
     if ($cas) {
         require C4::Auth_with_cas;    # no import
         import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required multipleAuth getMultipleAuth);
@@ -554,9 +549,9 @@ sub get_template_and_user {
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
         my $opac_name           = '';
         if (
-            ( $opac_limit_override && $opac_search_limit && $opac_search_limit =~ /branch:([\w-]+)/ ) ||
-            ( $in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /branch:([\w-]+)/ ) ||
-            ( $in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /multibranchlimit:(\w+)/ )
+            ( $opac_limit_override && $opac_search_limit && $opac_search_limit =~ /^branch:([\w-]+)/ ) ||
+            ( $in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /^branch:([\w-]+)/ ) ||
+            ( $in->{'query'}->param('limit') && $in->{'query'}->param('limit') =~ /^multibranchlimit:(\w+)/ )
           ) {
             $opac_name = $1;    # opac_search_limit is a branch, so we use it.
         } elsif ( $in->{'query'}->param('multibranchlimit') ) {
@@ -1418,6 +1413,11 @@ sub checkauth {
     my $auth_error = $query->param('auth_error');
     my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
+
+    my $borrowernumber      = $patron and $patron->borrowernumber;
+    my $anonymous_patron    = C4::Context->preference('AnonymousPatron');
+    my $is_anonymous_patron = $patron && ( $patron->borrowernumber eq $anonymous_patron );
+
     $template->param(
         login                                 => 1,
         INPUTS                                => \@inputs,
@@ -1452,6 +1452,7 @@ sub checkauth {
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
         too_many_login_attempts               => ( $patron and $patron->account_locked ),
         password_has_expired                  => ( $patron and $patron->password_expired ),
+        is_anonymous_patron                   => ( $is_anonymous_patron ),
         auth_error                            => $auth_error,
     );
 
@@ -1981,20 +1982,24 @@ sub checkpw {
     my $shib       = C4::Context->config('useshibboleth') && shib_ok();
     my $shib_login = $shib ? get_login_shib() : undef;
 
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron');
+
     my @return;
     my $check_internal_as_fallback = 0;
     my $passwd_ok                  = 0;
     my $patron;
 
-
     # Note: checkpw_* routines returns:
     # 1 if auth is ok
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
-
+    $ldap = C4::Context->config('useldapserver') || 0;
     if ( $ldap && defined($password) ) {
         my ( $retval, $retcard, $retuserid );
-        ( $retval, $retcard, $retuserid, $patron ) = checkpw_ldap(@_);    # EXTERNAL AUTH
+        require C4::Auth_with_ldap;
+        import C4::Auth_with_ldap qw(checkpw_ldap);
+
+        ( $retval, $retcard, $retuserid, $patron ) = C4::Auth_with_ldap::checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
             @return    = ( $retval, $retcard, $retuserid, $patron );
             $passwd_ok = 1;
@@ -2058,7 +2063,9 @@ sub checkpw {
             @return = ();
         } elsif ($passwd_ok) {
             $patron->update( { login_attempts => 0 } );
-            if ( $patron->password_expired ) {
+            if ( defined($anonymous_patron) && ($patron->borrowernumber eq $anonymous_patron) ) {
+                @return = ( -3, $patron );
+            } elsif ( $patron->password_expired ) {
                 @return = ( -2, $patron );
             }
         } else {

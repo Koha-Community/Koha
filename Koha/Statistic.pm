@@ -150,7 +150,14 @@ sub pseudonymize {
     my ($self) = @_;
 
     return unless ( $self->borrowernumber && grep { $_ eq $self->type } qw(renew issue return onsite_checkout) );
-    Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $self->unblessed } );
+
+    # FIXME When getting the object from svc/renewal we get a DateTime object
+    # normally we just fetch from DB to clear this, but statistics has no primary key
+    # so we just force it to string context
+    my $unblessed = $self->unblessed;
+    $unblessed->{datetime} = $unblessed->{datetime} . "";
+
+    Koha::BackgroundJob::PseudonymizeStatistic->new->enqueue( { statistic => $unblessed } );
 
 }
 

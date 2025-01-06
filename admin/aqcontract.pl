@@ -92,7 +92,6 @@ if ( $op eq 'add_form' ) {
 #ADD_VALIDATE: called by add_form, used to insert/modify data in DB
 elsif ( $op eq 'cud-add_validate' ) {
 ## Please see file perltidy.ERR
-    $template->param( add_validate => 1 );
 
     my $is_a_modif = $input->param("is_a_modif");
 

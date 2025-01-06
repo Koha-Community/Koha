@@ -4,9 +4,15 @@
 [% USE Branches %]
 [% USE HtmlTags %]
 [% USE KohaDates %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Serial collection information for [% bibliotitle | html %] &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Serial collection information") | html %] &rsaquo;
+    [% bibliotitle | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -149,8 +155,7 @@
                 [% END # /IF subscriptions %]
 
                 [% IF ( years ) %]
-                    <form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="post">
-                        [% INCLUDE 'csrf-token.inc' %]
+                    <form name="edition" action="/cgi-bin/koha/serials/serials-edit.pl" method="get">
                         [% WRAPPER tabs id= "subscription_years" %]
                             [% WRAPPER tabs_nav %]
                                 [% FOREACH year IN years %]

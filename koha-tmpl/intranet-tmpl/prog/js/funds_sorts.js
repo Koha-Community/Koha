@@ -2,9 +2,9 @@
 $(document).ready(function() {
     // keep copy of the inactive budgets
     disabledAllBudgetsCopy = $("select[name='all_budget_id']").html();
-    disabledBudgetsCopy = $("select[name='budget_id']").first().html();
+    disabledBudgetsCopy = $("select[name^='budget_id_']").first().html();
     $("select[name='all_budget_id'] .b_inactive").remove();
-    $("select[name='budget_id'] .b_inactive").remove();
+    $("select[name^='budget_id_'] .b_inactive").remove();
 
     $(".budget_code_item").each(function(){
         let active_only = $(this).clone();
@@ -21,12 +21,12 @@ $(document).ready(function() {
 
     $("#showallbudgets").click(function() {
         if ($(this).is(":checked")) {
-            $("select[name='budget_id']").html(disabledBudgetsCopy)
+            $("select[name^='budget_id_']").html(disabledBudgetsCopy)
             $(".bci_active").prop('disabled',true).prop('hidden',true);
             $(".bci_all").prop('disabled',false).prop('hidden',false);
         }
         else {
-            $("select[name='budget_id'] .b_inactive").remove();
+            $("select[name^='budget_id_'] .b_inactive").remove();
             $(".bci_active").prop('disabled',false).prop('hidden',false);
             $(".bci_all").prop('disabled',true).prop('hidden',true);
         }
@@ -41,7 +41,7 @@ $(document).ready(function() {
         }
     });
 
-    $("select[name='budget_id']").change(function(){
+    $("select[name^='budget_id_']").change(function(){
         var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
         var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
         var destination_sort1 = $(this).parents('fieldset').find('li.sort1').find('input[name="sort1"]');
@@ -59,7 +59,7 @@ $(document).ready(function() {
         getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
     } );
 
-    $("select[name='budget_id']").change();
+    $("select[name^='budget_id_']").change();
 
     $("select[name='all_budget_id']").change(function(){
         var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');

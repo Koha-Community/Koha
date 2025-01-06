@@ -34,7 +34,6 @@ use Koha::Biblios;
 use Koha::Hold::CancellationRequests;
 use Koha::Items;
 use Koha::Libraries;
-use Koha::Old::Holds;
 use Koha::Calendar;
 use Koha::Plugins;
 
@@ -1014,6 +1013,7 @@ Move a hold to the old_reserve table following the same pattern as Koha::Patron-
 sub _move_to_old {
     my ($self) = @_;
     my $hold_infos = $self->unblessed;
+    require Koha::Old::Hold;
     return Koha::Old::Hold->new( $hold_infos )->store;
 }
 
@@ -1026,25 +1026,26 @@ on the API.
 
 sub to_api_mapping {
     return {
-        reserve_id       => 'hold_id',
-        borrowernumber   => 'patron_id',
-        reservedate      => 'hold_date',
-        biblionumber     => 'biblio_id',
-        branchcode       => 'pickup_library_id',
-        notificationdate => undef,
-        reminderdate     => undef,
-        cancellationdate => 'cancellation_date',
-        reservenotes     => 'notes',
-        found            => 'status',
-        itemnumber       => 'item_id',
-        waitingdate      => 'waiting_date',
-        expirationdate   => 'expiration_date',
+        reserve_id             => 'hold_id',
+        borrowernumber         => 'patron_id',
+        reservedate            => 'hold_date',
+        biblionumber           => 'biblio_id',
+        deleted_biblionumber   => 'deleted_biblio_id',
+        branchcode             => 'pickup_library_id',
+        notificationdate       => undef,
+        reminderdate           => undef,
+        cancellationdate       => 'cancellation_date',
+        reservenotes           => 'notes',
+        found                  => 'status',
+        itemnumber             => 'item_id',
+        waitingdate            => 'waiting_date',
+        expirationdate         => 'expiration_date',
         patron_expiration_date => undef,
-        lowestPriority   => 'lowest_priority',
-        suspend          => 'suspended',
-        suspend_until    => 'suspended_until',
-        itemtype         => 'item_type',
-        item_level_hold  => 'item_level',
+        lowestPriority         => 'lowest_priority',
+        suspend                => 'suspended',
+        suspend_until          => 'suspended_until',
+        itemtype               => 'item_type',
+        item_level_hold        => 'item_level',
     };
 }
 

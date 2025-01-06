@@ -135,6 +135,8 @@ sub _autocreate {
     }
 
     my $patron = Koha::Patron->new( \%borrower )->store;
+    $patron->discard_changes;
+
     C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
         {
             borrowernumber => $patron->borrowernumber,

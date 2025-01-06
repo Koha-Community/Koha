@@ -29,6 +29,7 @@ use C4::Context;
 use Koha::Authority::Types;
 use Koha::Cities;
 use Koha::Biblios;
+use Koha::Items;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -1285,13 +1286,13 @@ subtest 'empty() tests' => sub {
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
     # Make sure no cities
     warnings_are { Koha::Cities->delete }[],
-      "No warnings, no Koha::City->delete called as it doesn't exist";
+        "No warnings, no Koha::City->delete called as it doesn't exist";
 
     # Mock Koha::City
     my $mocked_city = Test::MockModule->new('Koha::City');
@@ -1310,7 +1311,26 @@ subtest 'delete() tests' => sub {
     my $cities = Koha::Cities->search;
     $cities->next;
     warnings_are { $cities->delete }
-        [ "delete called!", "delete called!" ],
+    [ "delete called!", "delete called!" ],
+        "No warnings, no Koha::City->delete called as it doesn't exist";
+
+    my $item_id_1 = $builder->build_sample_item()->id;
+    my $item_id_2 = $builder->build_sample_item()->id;
+
+    # Mock Koha::City
+    my $mocked_item = Test::MockModule->new('Koha::Item');
+    $mocked_item->mock(
+        'delete',
+        sub {
+            my ( $self, $params ) = @_;
+            warn ref($self);
+            warn $params->{skip_record_index};
+        }
+    );
+    my $items = Koha::Items->search( { itemnumber => [ $item_id_1, $item_id_2 ] } );
+
+    warning_is { $items->delete( { skip_record_index => 1 } ) }
+    [ "Koha::Item", "1", "Koha::Item", "1" ],
         "No warnings, no Koha::City->delete called as it doesn't exist";
 
     $schema->storage->txn_rollback;

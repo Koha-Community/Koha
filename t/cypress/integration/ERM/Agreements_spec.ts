@@ -135,6 +135,7 @@ describe("Agreement CRUD operations", () => {
     it("Add agreement", () => {
         let agreement = cy.get_agreement();
         let vendors = cy.get_vendors_to_relate();
+        let av_cat_values = cy.get_ERM_av_cats_values();
         // No agreement, no license yet
         cy.intercept("GET", "/api/v1/erm/agreements*", {
             statusCode: 200,
@@ -149,6 +150,11 @@ describe("Agreement CRUD operations", () => {
             statusCode: 200,
             body: vendors,
         });
+
+        cy.intercept("GET", "/api/v1/authorised_value_categories*", {
+            statusCode: 200,
+            body: av_cat_values,
+        }).as("get-ERM-av-cats-values");
 
         // Click the button in the toolbar
         cy.visit("/cgi-bin/koha/erm/agreements");
@@ -169,6 +175,20 @@ describe("Agreement CRUD operations", () => {
             "have.length",
             1
         ); // name, description, status
+
+        cy.get("#agreement_status .vs__search").type("closed" + "{enter}", {
+            force: true,
+        });
+
+        cy.get("#agreement_closure_reason .vs__search").click();
+        let closure_reasons = av_cat_values.find(
+            av_cat => av_cat.category_name === "ERM_AGREEMENT_CLOSURE_REASON"
+        );
+        cy.get("#agreement_closure_reason #vs3__option-0").contains(
+            closure_reasons.authorised_values[0].description
+        );
+        cy.get("#agreement_closure_reason #vs3__option-1").should("be.empty");
+
         cy.get("#agreement_status .vs__search").type(
             agreement.status + "{enter}",
             { force: true }

@@ -139,6 +139,14 @@ $(document).ready(function () {
         number: true,
     });
 
+    jQuery.validator.addMethod("decimal_rate", function(value, element) {
+        return this.optional( element ) || /^[\-]?\d{0,2}(\.\d{0,3})*$/.test( value );
+    }, __('Please enter a decimal number in the format: 0.0') );
+
+    jQuery.validator.addClassRules("rate", {
+        decimal_rate: true
+    });
+
     $("#logout").on("click", function () {
         logOut();
     });

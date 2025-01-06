@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 5;
 use Test::Mojo;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -189,7 +190,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -264,8 +265,11 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to create with existing id
     $booking->{booking_id} = $booking_id;
-    $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(409)
-        ->json_is( "/error" => "Duplicate booking_id" );
+    warnings_like {
+        $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is(409)
+            ->json_is( "/error" => "Duplicate booking_id" );
+    }
+    qr/DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(.*\.?)PRIMARY'/;
 
     # TODO: Test bookings clashes
     # TODO: Test item auto-assignment

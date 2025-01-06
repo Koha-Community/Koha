@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 7;
 use Test::MockModule;
+use Test::Warn;
 
 use Koha::Database;
 use Koha::BackgroundJobs;
@@ -76,7 +77,7 @@ subtest 'format_title' => sub {
 
 subtest 'read_file' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     my $file = {
         filename     => 'Test_file.csv',
@@ -112,6 +113,18 @@ Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bb
         'Line correctly identified'
     );
 
+    my $file2 = {
+        filename     => 'Test_file2.csv',
+        file_content => encode_base64(
+            "publication_title,print_identifier,online_identifier,date_first_issue_online,num_first_vol_online,num_first_issue_online,date_last_issue_online,num_last_vol_online,num_last_issue_online,title_url,first_author,title_id,embargo_info,coverage_depth,coverage_notes,publisher_name,publication_type,date_monograph_published_print,date_monograph_published_online,monograph_volume,monograph_edition,first_editor,parent_publication_title_id,preceding_publication_title_id,access_type
+Nature Plants,,2055-0278,2015-01,1,1,,,,https://www.nature.com/nplants,,4aaa7,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P,\"foo\"bar
+Nature Astronomy,,2397-3366,2017-01,1,1,,,,https://www.nature.com/natastron,,4bbb0,,fulltext,Hybrid (Open Choice),Nature Publishing Group UK,serial,,,,,,,,P"
+        )
+    };
+    warning_is {
+        Koha::BackgroundJob::ImportKBARTFile::read_file($file2);
+    }
+    '2023, EIQ - QUO character not allowed, 157', 'Error message correctly reported';
 };
 
 subtest 'create_title_hash_from_line_data' => sub {

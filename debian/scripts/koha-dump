@@ -47,7 +47,7 @@ $scriptname [--quiet|-q] [--exclude-indexes] instancename1 [instancename2...]
 $scriptname -h|--help
 
     --schema-only         Dump only the database schema
-    --exclude-indexes     Include Zebra indexes on the backup
+    --exclude-indexes     Exclude Zebra indexes from the backup
     --exclude-logs        Exclude /var/log/koha/name from the backup
     --uploaded_files      Include uploaded files.
     --uploaded_temp_files Include temporary uploaded files.
@@ -124,30 +124,37 @@ dump_instance()
         output="$output to $metadump"
         [ "$quiet" = "no" ] && echo "$output"
 
+        # tar has exit status 1 if any file has changed while being read,
+        # which is likely to happen as the logfiles are included.
+        set +e
+
         if [ "$exclude_logs" = "yes" ]; then
-        tar -czf "$metadump" -C / $excludes \
-            "etc/koha/sites/$name" \
-            "etc/apache2/sites-available/$instancefile" \
-            "etc/apache2/sites-enabled/$instancefile" \
-            "var/lib/koha/$name" \
-            $uploaded_files_dir \
-            $uploaded_temp_files_dir
-
-        chown "root:$name-koha" "$metadump"
-        chmod g+r "$metadump"
+            tar -czf "$metadump" -C / $excludes \
+                "etc/koha/sites/$name" \
+                "etc/apache2/sites-available/$instancefile" \
+                "etc/apache2/sites-enabled/$instancefile" \
+                "var/lib/koha/$name" \
+                $uploaded_files_dir \
+                $uploaded_temp_files_dir
         else
-        tar -czf "$metadump" -C / $excludes \
-            "etc/koha/sites/$name" \
-            "etc/apache2/sites-available/$instancefile" \
-            "etc/apache2/sites-enabled/$instancefile" \
-            "var/lib/koha/$name" \
-            "var/log/koha/$name" \
-            $uploaded_files_dir \
-            $uploaded_temp_files_dir
+            tar -czf "$metadump" -C / $excludes \
+                "etc/koha/sites/$name" \
+                "etc/apache2/sites-available/$instancefile" \
+                "etc/apache2/sites-enabled/$instancefile" \
+                "var/lib/koha/$name" \
+                "var/log/koha/$name" \
+                $uploaded_files_dir \
+                $uploaded_temp_files_dir
+        fi
+
+        if [ "$?" != "1" -a "$?" != "0" ]; then
+            exit $?
+        fi
+
+        set -e
 
         chown "root:$name-koha" "$metadump"
         chmod g+r "$metadump"
-      fi
 
         [ "$quiet" = "no" ] && echo "Done."
     fi

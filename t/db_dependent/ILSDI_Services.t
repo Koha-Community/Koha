@@ -760,7 +760,7 @@ subtest 'Holds test with start_date and end_date' => sub {
 
 subtest 'GetRecords' => sub {
 
-    plan tests => 8;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -824,6 +824,30 @@ subtest 'GetRecords' => sub {
     my $reply_reserve = $reply->{record}->[0]->{reserves}->{reserve}->[0];
     is($reply_reserve->{biblionumber}, $item->biblionumber, 'GetRecords has a reserve tag');
     is($reply_reserve->{borrowernumber}, undef, 'GetRecords does not expose borrowernumber in reserve tag');
+
+    # Check for hidelostitems sys pref
+    t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
+    $item->itemlost(1)->store;
+    $cgi->param( service => 'GetRecords' );
+    $cgi->param( id      => $item->biblionumber );
+    my $itemlost_reply = C4::ILSDI::Services::GetRecords($cgi);
+    is(
+        $itemlost_reply->{record}->[0]->{items}->{item}->[0], undef,
+        'GetRecords does not show lost items if hidelostitems = 1'
+    );
+    $item->itemlost(0)->store;
+
+    # Check for OpacHiddenItems sys pref
+    t::lib::Mocks::mock_preference( 'OpacHiddenItems', 'withdrawn: [1]' );
+    $item->withdrawn(1)->store;
+    $cgi->param( service => 'GetRecords' );
+    $cgi->param( id      => $item->biblionumber );
+    my $itemwithdrawn_reply = C4::ILSDI::Services::GetRecords($cgi);
+    is(
+        $itemwithdrawn_reply->{record}->[0]->{items}->{item}->[0],
+        undef,
+        'GetRecords does not show withdrawn items if OpacHiddenItems contains \'withdrawn: [1]\''
+    );
 
     $schema->storage->txn_rollback;
 };

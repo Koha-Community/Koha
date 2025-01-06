@@ -50,12 +50,14 @@ my $builder = sub {
         function Click$params->{id}(ev) {
                 ev.preventDefault();
                 var code = document.getElementById(ev.data.id);
+                const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 \$.ajax({
                     url: '/cgi-bin/koha/cataloguing/plugin_launcher.pl',
                     type: 'POST',
                     data: {
                         'plugin_name': 'stocknumberAV.pl',
                         'code'    : code.value,
+                        'csrf_token': csrf_token
                     },
                     success: function(data){
                         var field = document.getElementById(ev.data.id);

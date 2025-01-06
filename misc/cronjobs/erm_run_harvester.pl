@@ -18,32 +18,108 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use Getopt::Long qw( GetOptions );
-use Koha::DateUtils qw( dt_from_string );
+use Pod::Usage   qw( pod2usage );
 use POSIX;
 
-use Koha::Script;
+use C4::Log         qw( cronlogaction );
+use Koha::DateUtils qw( dt_from_string );
 use Koha::ERM::EUsage::UsageDataProviders;
+use Koha::Script -cron;
+
+=head1 NAME
+
+erm_run_harvester.pl This script will run the SUSHI harvesting for usage data providers
+
+=cut
+
+=head1 SYNOPSIS
+
+erm_run_harvester.pl
+  --begin-date <YYYY-MM-DD>
+  [ --dry-run ][ --debug ][ --end-date <YYYY-MM-DD> ]
+
+ Options:
+   --help                         brief help message
+   --man                          detailed help message
+   --debug                        print additional debug messages during run
+   --dry-run                      test run only, do not harvest data
+   --begin-date <YYYY-MM-DD>      date to harvest from
+   --end-date <YYYY-MM-DD>        date to harvest until, defaults to today if not set
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-help>
+
+Print a brief help message and exits.
+
+=item B<-man>
+
+Print a detailed help message and exits.
+
+=item B<--debug>
+
+Add debug statements to run
+
+=item B<--begin-date>
+
+Date from which to harvest, previously harvested data will be ignored
+
+=item B<--end-date>
+
+Date to harvest until, defaults to today if not set
+
+=item B<--dry-run>
+
+Test run only, do not harvest
+
+=back
+
+=head1 DESCRIPTION
+
+This script fetches usage data from ERM data providers defined in the interface.
+
+=head2 Configuration
+
+This script harvests from the given date to the specified end date, or until today
+
+=head1 USAGE EXAMPLES
+
+C<erm_run_harvester.pl> - With no arguments help is printed
+
+
+C<erm_run_harvester.pl --begin-date 2000-01-01> - Harvest from the given date until today
+
+C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01> - Harvest from the given date until the end date
+
+C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --dry-run> - Dry run, with debuig information
+
+=cut
+
+my $command_line_options = join( " ", @ARGV );
 
 # Command line option values
-my $get_help   = 0;
+my $help       = 0;
+my $man        = 0;
 my $begin_date = 0;
 my $end_date   = 0;
 my $dry_run    = 0;
 my $debug      = 0;
 
 my $options = GetOptions(
-    'h|help'       => \$get_help,
+    'h|help'       => \$help,
+    'm|man'        => \$man,
     'begin-date=s' => \$begin_date,
     'end-date=s'   => \$end_date,
     'dry-run'      => \$dry_run,
     'debug'        => \$debug
 );
 
-if ($get_help) {
-    get_help();
-    exit 1;
-}
+pod2usage(1) if $help;
+pod2usage( -verbose => 2 ) if $man;
 
 my $udproviders = Koha::ERM::EUsage::UsageDataProviders->search( { active => 1 } );
 unless ( scalar @{ $udproviders->as_list() } ) {
@@ -51,8 +127,11 @@ unless ( scalar @{ $udproviders->as_list() } ) {
 }
 
 unless ($begin_date) {
-    die "ERROR: Please specify a begin-date";
+    print "ERROR: You must specify a begin-date\n\n";
+    pod2usage(1);
 }
+
+cronlogaction( { info => $command_line_options } );
 
 debug_msg("Dry run: Harvests will not be enqueued") if $dry_run;
 while ( my $udprovider = $udproviders->next ) {
@@ -94,6 +173,8 @@ while ( my $udprovider = $udproviders->next ) {
 
 }
 
+cronlogaction( { action => 'End', info => "COMPLETED" } );
+
 sub debug_msg {
     my ($msg) = @_;
 
@@ -106,23 +187,4 @@ sub debug_msg {
         $msg = Dumper $msg;
     }
     print STDERR "$msg\n";
-}
-
-sub get_help {
-    print <<"HELP";
-$0: Run a SUSHI harvesting for a ERM usage data provider
-
-This script will run the SUSHI harvesting for usage data providers
-
-Parameters:
-    --help or -h                         get help
-    --begin-date                         begin date for the harvest in yyyy-mm-dd format (e.g.: '2023-08-21')
-    --end-date                           end date for the harvest in yyyy-mm-dd format (e.g.: '2023-08-21')
-    --dry-run                            only produce a run report, without actually doing anything permanent
-    --debug                              print additional debugging info during run
-
-Usage example:
-./misc/cronjobs/erm_run_harvester.pl --begin-date 2023-06-21 --debug
-
-HELP
 }

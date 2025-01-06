@@ -599,6 +599,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     [% IF print %]
         <script>
             $( document ).ready(function() {
@@ -937,9 +938,6 @@
                 $("#sendlist").click(function(){
                     sendList();
                     return false;
-                });
-                $(".delete-list").click(function(e){
-                    return confirm(_("Are you sure you want to delete this list?"));
                 });
              });
 

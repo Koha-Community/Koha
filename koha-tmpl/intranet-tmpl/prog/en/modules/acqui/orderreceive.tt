@@ -71,6 +71,10 @@
             content: none;
         }
 
+        #top_itemfieldset {
+            padding: 0px;
+        }
+
     </style>
 </head>
 
@@ -204,18 +208,60 @@
                                     </table>
                                 </div>
                             </div>
-                            <div id="items-panel" class="page-section">
-                                <div id="acq-create-receiving">
-                                    <div id="items_list" style="display: none">
-                                        <h4>Items list</h4>
-                                        <div style="width:100%;overflow:auto;">
+                            <fieldset class="rows" id="top_itemfieldset">
+                                <div id="items-panel" class="page-section">
+                                    <div id="acq-create-receiving">
+                                        <div id="items_list" style="display: none">
+                                            <h4>Items list</h4>
+                                            <div style="width:100%;overflow:auto;">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Actions</th>
+                                                            <th>Barcode</th>
+                                                            <th>Home library</th>
+                                                            <th>Holding library</th>
+                                                            <th>Not for loan</th>
+                                                            <th>Restricted</th>
+                                                            <th>Location</th>
+                                                            <th>Call number</th>
+                                                            <th>Copy number</th>
+                                                            <th>Inventory number</th>
+                                                            <th>Collection</th>
+                                                            <th>Item type</th>
+                                                            <th>Materials</th>
+                                                            <th>Notes</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div id="itemfieldset">
+                                            <h4>Item</h4>
+                                            [% IF ( NoACQframework ) %]
+                                                <p class="required">
+                                                    No ACQ framework, using default. You should create a
+                                                    framework with code ACQ, the items framework would be
+                                                    used
+                                                </p>
+                                            [% END %]
+                                            <div id="outeritemblock"></div>
+                                        </div>
+                                    </div>
+                                    <div id="acq-create-ordering">
+                                        <h4>Items</h4>
+                                        <div style="width:100%;overflow:auto">
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th>Actions</th>
+                                                        <th>Receive?</th>
+                                                        <th>&nbsp;</th>
                                                         <th>Barcode</th>
                                                         <th>Home library</th>
-                                                        <th>Holding library</th>
+                                                        <th>Current library</th>
                                                         <th>Not for loan</th>
                                                         <th>Restricted</th>
                                                         <th>Location</th>
@@ -233,48 +279,8 @@
                                             </table>
                                         </div>
                                     </div>
-
-                                    <div id="itemfieldset">
-                                        <h4>Item</h4>
-                                        [% IF ( NoACQframework ) %]
-                                            <p class="required">
-                                                No ACQ framework, using default. You should create a
-                                                framework with code ACQ, the items framework would be
-                                                used
-                                            </p>
-                                        [% END %]
-                                        <div id="outeritemblock"></div>
-                                    </div>
                                 </div>
-                                <div id="acq-create-ordering">
-                                    <h4>Items</h4>
-                                    <div style="width:100%;overflow:auto">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Receive?</th>
-                                                    <th>&nbsp;</th>
-                                                    <th>Barcode</th>
-                                                    <th>Home library</th>
-                                                    <th>Current library</th>
-                                                    <th>Not for loan</th>
-                                                    <th>Restricted</th>
-                                                    <th>Location</th>
-                                                    <th>Call number</th>
-                                                    <th>Copy number</th>
-                                                    <th>Inventory number</th>
-                                                    <th>Collection</th>
-                                                    <th>Item type</th>
-                                                    <th>Materials</th>
-                                                    <th>Notes</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            </fieldset>
                         </div>
                         <div class="col-md-12 col-lg-6">
                             <div id="accounting-panel" class="page-section">
@@ -647,7 +653,7 @@
                 ],
                 [% IF only_one_order %]
                     "drawCallback": function( settings ) {
-                        $(this).find("tbody tr td:last-child a.order_edit_toggle").click();
+                        $("#order_edit").modal("show");
                     },
                 [% END %]
             };

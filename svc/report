@@ -20,10 +20,10 @@
 
 use Modern::Perl;
 
-use C4::Auth qw( get_template_and_user );
+use C4::Auth qw( check_api_auth );
 use C4::Reports::Guided qw( execute_query );
 use Koha::Reports;
-use JSON qw( encode_json decode_json );
+use JSON qw( encode_json decode_json to_json );
 use CGI qw ( -utf8 );
 
 use Koha::Caches;
@@ -44,14 +44,12 @@ $report_id = $report_rec->id;
 my @sql_params  = $query->multi_param('sql_params');
 my @param_names  = $query->multi_param('param_names');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "intranet-main.tt",
-        query           => $query,
-        type            => "intranet",
-        flagsrequired   => { catalogue => 1, },
-    }
-);
+my ($status, $cookie, $sessionID) = check_api_auth($query, { catalogue => '1'} );
+unless ($status eq "ok") {
+    print $query->header(-type => 'application/json', -status => '401 Unauthorized');
+    print to_json({ auth_status => $status });
+    exit 0;
+}
 
 my $cache = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;

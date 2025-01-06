@@ -316,9 +316,8 @@
 
             // Build the aLengthMenu
             let aLengthMenu = [
-                [% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1
+                ...new Set([[% Koha.Preference('PatronsPerPage') | html %], 10, 20, 50, 100, -1])
             ];
-            jQuery.unique(aLengthMenu);
             aLengthMenu.sort(function( a, b ){
                 // Put "All" at the end
                 if ( a == -1 ) {
@@ -381,7 +380,7 @@
                 [% default_sort_column = "name" %]
             [% END %]
             [% SET order_column_index = 0 %]
-            [% SET embed = ['extended_attributes'] %]
+            [% SET embed = ['extended_attributes','library'] %]
             patrons_table = $("#[% table_id | html %]").kohaTable({
                 "ajax": {
                     "url": patron_search_url,
@@ -532,15 +531,14 @@
                             }
                             [% CASE 'branch' %]
                             {
-                                "data": "library_id",
+                                "data": "library.name:me.library_id",
                                 "searchable": true,
                                 "orderable": true,
                                 "render": function( data, type, row, meta ) {
-                                    let library_name = libraries_map[data].branchname
-                                    if( !singleBranchMode && data == logged_in_library_id ) {
-                                        return "<span class=\"currentlibrary\">" + escape_str(library_name) + "</span>";
+                                    if( !singleBranchMode && row.library.library_id == logged_in_library_id ) {
+                                        return "<span class=\"currentlibrary\">" + escape_str(row.library.name) + "</span>";
                                     } else {
-                                        return escape_str(library_name);
+                                        return escape_str(row.library.name);
                                     }
                                 }
                             }
@@ -712,7 +710,7 @@
             patron_search_form.find(".clear_search").on("click",function(e){
                 e.preventDefault();
                 clearFilters();
-                patron_search_form.find(".searchpattern").parent().hide();
+                parent_block.find(".searchpattern").parent().hide();
             });
 
             if ( !defer_loading ) {
@@ -786,8 +784,7 @@
                     searched += paron_search_form.find("select[name='sort2_filter']").val();
                 }
             }
-            patron_search_form.find(".searchpattern").text(searched);
-            patron_search_form.find(".searchpattern").parent().show();
+            parent_block.find(".searchpattern").text(searched).parent().show();
         }
 
         function filter() {

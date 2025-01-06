@@ -326,9 +326,6 @@
                                         [% IF ( errmsgloo.badbarcode ) %]
                                             <p class="problem ret_badbarcode">No item with barcode: [% errmsgloo.msg | html %]</p>
                                         [% END %]
-                                        [% IF ( errmsgloo.ispermanent ) %]
-                                            <p class="problem ret_ispermenant">Please return item to: [% Branches.GetName( errmsgloo.msg ) | html %]</p>
-                                        [% END %]
                                         [% IF ( errmsgloo.notissued ) %]
                                             <p class="problem ret_notissued">Not checked out.</p>
                                         [% END %]
@@ -739,7 +736,7 @@
                                 </div> <!-- /#hold-found1 -->
                             [% END # /IF waiting %]
 
-                            [% IF transfer || needstransfer %]
+                            [% IF (transfer || needstransfer) && !(reserved and !recalled and !waitingrecall) %]
                                 [% IF Koha.Preference('TransfersBlockCirc') %]
                                     <div id="item-transfer-modal" class="modal fade audio-alert-action block">
                                 [% ELSE %]
@@ -856,7 +853,22 @@
                                                         [% UNLESS ( transfertodo) %]
                                                             [% INCLUDE display_bormessagepref %]
                                                             [% IF patron.primary_contact_method %]
-                                                                <li id="main_contact_method">Main contact method: <span>[% patron.primary_contact_method | html %]</span></li>
+                                                                <li id="main_contact_method">Main contact method:
+                                                                    [% SWITCH patron.primary_contact_method %]
+                                                                        [% CASE 'phone' %]
+                                                                            <span>Primary phone</span>
+                                                                        [% CASE 'phonepro' %]
+                                                                            <span>Secondary phone</span>
+                                                                        [% CASE 'mobile' %]
+                                                                            <span>Other phone</span>
+                                                                        [% CASE 'email' %]
+                                                                            <span>Primary email</span>
+                                                                        [% CASE 'emailpro' %]
+                                                                            <span>Secondary email</span>
+                                                                        [% CASE 'fax' %]
+                                                                            <span>Fax</span>
+                                                                    [% END %]
+                                                                </li>
                                                             [% END %]
                                                         [% END %]
 
@@ -1266,8 +1278,8 @@
                                     [% FOREACH riloo IN riloop %]
                                         <tr>
                                             <td class="ci-duedate">
-                                                [% IF ( riloo.not_returned ) %]
-                                                    <span class="problem">Item was not checked in</span>
+                                                [% IF ( riloo.not_returned AND riloo.duedate ) %]
+                                                    <span class="problem not_returned">Item was not checked in</span>
                                                 [% END %]
                                                 [% IF ( riloo.duedate ) %]
                                                     [% IF ( riloo.return_overdue ) %]

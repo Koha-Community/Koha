@@ -43,4 +43,6 @@ my $status = '403 Forbidden';
 if ( C4::Context->is_internal_PSGI_request() ) {
     $status = '200 OK';
 }
+#NOTE: We're not setting/updating the cookie here
+$cookie = '';
 output_with_http_headers $query, $cookie, $template->output, 'html', $status;

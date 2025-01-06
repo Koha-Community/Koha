@@ -148,7 +148,7 @@ if ( $op eq 'cud-sendEmail' || $op eq 'cud-resendEmail' ) {
         );
     }
 }
-elsif ( $query->param('passwordReset') ) {
+elsif ( $op eq 'cud-reset_password' ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
 
     my $error;

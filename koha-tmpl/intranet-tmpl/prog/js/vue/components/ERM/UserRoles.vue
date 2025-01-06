@@ -21,13 +21,14 @@
                     <span class="user">
                         {{ user_role.patron_str }}
                     </span>
-                    (<a
+                    &nbsp;
+                    <a
                         href="#patron_search_modal"
                         @click="selectUser(counter)"
                         class="btn btn-default"
                         data-toggle="modal"
                         ><i class="fa fa-plus"></i> {{ $__("Select user") }}</a
-                    >)
+                    >
                     <span class="required">{{ $__("Required") }}</span>
                 </li>
                 <li>

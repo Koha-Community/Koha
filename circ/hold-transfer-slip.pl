@@ -54,6 +54,7 @@ $template->param( slip   => $slip ) if ($slip);
 $template->param( caller => 'hold-transfer' );
 $template->param( plain  => !$is_html );
 $template->param( style  => $style );
+$template->param( id     => 'reserve_slip' );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

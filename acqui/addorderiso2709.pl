@@ -532,10 +532,9 @@ sub import_biblios_list {
                 my $quantity = delete $iteminfos->{quantity} || 1;
 
                 # Handle incorrectly named original parameters for MarcItemFieldsToOrder
-                $iteminfos->{location}   = delete $iteminfos->{loc}    if $iteminfos->{loc};
-                $iteminfos->{copynumber} = delete $iteminfos->{copyno} if $iteminfos->{copyno};
+                $iteminfos->{location}  = delete $iteminfos->{loc}   if $iteminfos->{loc};
                 # Price is handled as "itemprice" in the UI form to distinguish from MarcFieldsToOrder
-                $iteminfos->{itemprice}  = delete $iteminfos->{price}  if $iteminfos->{itemprice};
+                $iteminfos->{itemprice} = delete $iteminfos->{price} if $iteminfos->{itemprice};
 
                 # Convert budge code to a budget id
                 my $item_budget_code = delete $iteminfos->{budget_code};

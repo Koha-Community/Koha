@@ -504,12 +504,12 @@ sub handle_patron_status {
 
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_patron_status" );
     $patron = $ils->find_patron( $fields->{ (FID_PATRON_ID) } );
-    if ( C4::Context->preference('TrackLastPatronActivityTriggers') ) {
+    if ( C4::Context->preference('TrackLastPatronActivityTriggers') && $patron ) {
         my $koha_patron = Koha::Patrons->find($patron->{borrowernumber});
         $koha_patron->update_lastseen('connection');
     }
     $resp = build_patron_status( $patron, $lang, $fields, $server );
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
     return (PATRON_STATUS_REQ);
 }
 
@@ -649,7 +649,7 @@ sub handle_checkout {
         }
     }
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
     return (CHECKOUT);
 }
 
@@ -748,7 +748,7 @@ sub handle_checkin {
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (CHECKIN);
 }
@@ -795,7 +795,7 @@ sub handle_block_patron {
     }
 
     $resp = build_patron_status( $patron, $patron->language, $fields, $server );
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
     return (BLOCK_PATRON);
 }
 
@@ -836,7 +836,7 @@ sub handle_request_acs_resend {
 
         # We haven't sent anything yet, so respond with a
         # REQUEST_SC_RESEND msg (p. 16)
-        $self->write_msg( REQUEST_SC_RESEND, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+        $self->write_msg( REQUEST_SC_RESEND, $server );
     } elsif ( ( length($last_response) < 9 )
         || substr( $last_response, -9, 2 ) ne 'AY' ) {
 
@@ -850,7 +850,7 @@ sub handle_request_acs_resend {
         # Cut out the sequence number and checksum, since the old
         # checksum is wrong for the resent message.
         my $rebuilt = substr( $last_response, 0, -9 );
-        $self->write_msg( $rebuilt, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+        $self->write_msg( $rebuilt, $server );
     }
 
     return REQUEST_ACS_RESEND;
@@ -932,7 +932,7 @@ sub handle_login {
         $status = login_core( $server, $uid, $pwd );
     }
 
-    $self->write_msg( LOGIN_RESP . $status, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( LOGIN_RESP . $status, $server );
     return $status ? LOGIN : '';
 }
 
@@ -971,7 +971,7 @@ sub summary_info {
     my $fid      = $summary_map[$summary_type]->{fid};
     my $itemlist = &$func( $patron, $start, $end, $server );
 
-    siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map{ $_->{barcode} } @{$itemlist} ) );
+    siplog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map { $_->{barcode} } @{$itemlist} ) );
     foreach my $i ( @{$itemlist} ) {
         $resp .= add_field( $fid, $i->{barcode}, $server );
     }
@@ -1101,7 +1101,7 @@ sub handle_patron_info {
         $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
     }
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
     return (PATRON_INFO);
 }
 
@@ -1128,7 +1128,7 @@ sub handle_end_patron_session {
     $resp .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (END_PATRON_SESSION);
 }
@@ -1210,7 +1210,7 @@ sub handle_fee_paid {
     $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE,     $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (FEE_PAID);
 }
@@ -1303,7 +1303,7 @@ sub handle_item_information {
         $resp .= $item->build_custom_field_string( $server );
     }
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (ITEM_INFORMATION);
 }
@@ -1353,7 +1353,7 @@ sub handle_item_status_update {
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (ITEM_STATUS_UPDATE);
 }
@@ -1407,7 +1407,7 @@ sub handle_patron_enable {
 
     $resp .= add_field( FID_INST_ID, $ils->institution, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (PATRON_ENABLE);
 }
@@ -1472,7 +1472,7 @@ sub handle_hold {
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (HOLD);
 }
@@ -1559,7 +1559,7 @@ sub handle_renew {
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (RENEW);
 }
@@ -1612,7 +1612,7 @@ sub handle_renew_all {
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
-    $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $resp, $server );
 
     return (RENEW_ALL);
 }
@@ -1718,7 +1718,7 @@ sub send_acs_status {
 
     # Do we want to tell the terminal its location?
 
-    $self->write_msg( $msg, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
+    $self->write_msg( $msg, $server );
     return 1;
 }
 

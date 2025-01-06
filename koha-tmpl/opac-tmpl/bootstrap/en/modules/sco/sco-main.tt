@@ -135,7 +135,7 @@
                                 <p>This item is already checked out to you: <b>[% c.confirm | html %]</b> <i>([% c.barcode | html %])</i></p>
                             [% END %]
 
-                            [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
+                            [% IF ( c.renew && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <legend class="sr-only">Return</legend>
@@ -575,7 +575,7 @@
                 var thIndex = $(this).find("th.psort").index();
                 $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sorting" : [[ thIndex, 'asc' ]],
-                    "dom": '<"top"<"table_entries"><"table_controls"fB>>t',
+                    "dom": '<"top"<"table_entries"><"table_controls"f>>t<"clear">',
                     "columnDefs": [
                         { "targets": [ "nosort" ],"sortable": false,"searchable": false },
                         { "targets": [ "noshow" ], "visible": false, "searchable": false },

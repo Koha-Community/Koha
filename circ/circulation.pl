@@ -112,7 +112,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     }
 );
 
-my $op                      = $query->param('op');
+my $op                      = $query->param('op') // '';
 my $override_high_holds     = $query->param('override_high_holds');
 my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
@@ -364,19 +364,16 @@ if (@$barcodes && $op eq 'cud-checkout') {
     }
 
     if ( $issuingimpossible->{'STATS'} ) {
-        $template->param( STATS => 1 );
+        my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
+            AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
 
-        if ( $item->onloan ) {
-            my ( $stats_return, $stats_messages, $stats_iteminformation, $stats_borrower ) =
-                AddReturn( $item->barcode, C4::Context->userenv->{'branch'}, undef, undef, 1 );
-
-            $template->param(
-                CHECKEDIN => $stats_return,
-                MESSAGES  => $stats_messages,
-                ITEM      => $stats_iteminformation,
-                BORROWER  => $stats_borrower,
-            );
-        }
+        $template->param(
+            STATS     => 1,
+            CHECKEDIN => $stats_return,
+            MESSAGES  => $stats_messages,
+            ITEM      => $stats_iteminformation,
+            BORROWER  => $stats_borrower,
+        );
 
         #increment items.localuse
         my $localuse_count = $item->localuse;

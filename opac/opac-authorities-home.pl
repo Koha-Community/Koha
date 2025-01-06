@@ -129,8 +129,6 @@ if ( $op eq "do_search" ) {
         }
     }
 
-    $template->param( result => $results ) if $results;
-
     $template->param(
         pagination_bar => pagination_bar(
             $base_url,  int( $total / $resultsperpage ) + 1,
@@ -142,10 +140,12 @@ if ( $op eq "do_search" ) {
     );
 
     unless (C4::Context->preference('OPACShowUnusedAuthorities')) {
-#        TODO implement usage counts
-#        my @usedauths = grep { $_->{used} > 0 } @$results;
-#        $results = \@usedauths;
+#       TODO implement usage counts in the indexes to filter during searching
+        my @usedauths = grep { $_->{used} > 0 } @$results;
+        $results = \@usedauths;
     }
+
+    $template->param( result => $results ) if $results;
 
     # Opac search history
     if (C4::Context->preference('EnableOpacSearchHistory')) {

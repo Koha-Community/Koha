@@ -110,17 +110,11 @@
     .actions {
         display: block;
 
-        &:first-child {
-            .btn-link {
-                padding: .375rem .75rem;
-            }
+        .btn-link {
+            padding-left: 0;
         }
 
         a {
-            @include border-radius-all( 4px );
-
-            background-color: #F2F2EF;
-            border: 1px solid #DDD;
             display: block;
             font-size: 120%;
             font-weight: bold;
@@ -210,9 +204,9 @@
     .cart-actions {
         display: flex;
 
-        .btn {
-            flex-grow: 1;
-            padding: .375rem .75rem;
+        .btn + .btn {
+            line-height: 2;
+            margin-left: .5em;
         }
     }
 

@@ -51,8 +51,9 @@
     [% Asset.js("js/vue/dist/erm.js") | $raw %]
     [% INCLUDE 'select2.inc' %]
     [% SET columns = ['cardnumber','name','category','branch','action'] %]
+    [% SET filter = "erm_users" %]
     [% PROCESS patron_search_modal columns => columns, modal_title => t("Select user") %]
-    [% PROCESS patron_search_js columns => columns, filter => erm_users, actions => ["select"], preview_on_name_click => 1 %]
+    [% PROCESS patron_search_js columns => columns, actions => ["select"], preview_on_name_click => 1 %]
 
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

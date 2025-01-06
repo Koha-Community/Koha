@@ -123,7 +123,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
+            columns_settings = [% TablesSettings.GetColumns( 'opac', 'course_items', 'course-items-table', 'json' ) | $raw %];
             KohaTable("#course-items-table", {
                 "dom": '<"top"<"table_controls"f>>t',
                 "sorting": [[ 1, "asc" ]],

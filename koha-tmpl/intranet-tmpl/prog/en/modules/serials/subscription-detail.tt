@@ -6,10 +6,17 @@
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE TablesSettings %]
+[% USE HtmlTags %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [%- PROCESS 'html_helpers.inc' -%]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Details for subscription #[% subscriptionid | html %] &rsaquo; Serials &rsaquo; Koha</title>
+<title>[% FILTER collapse %]
+    [% t("Subscription details") | html %] &rsaquo;
+    [% bibliotitle | html %] &rsaquo;
+    [% t("Serials") | html %] &rsaquo;
+    [% t("Koha") | html %]
+[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 </head>
@@ -44,7 +51,7 @@
                 [% INCLUDE 'serials-toolbar.inc' %]
                 [% INCLUDE 'mana/mana-comment-status.inc' %]
 
-                <h1>Subscription for [% INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 0 %] [% IF subscription.closed %](closed)[% END %]</h1>
+                <h1>Subscription for [% INCLUDE 'biblio-title.inc' biblio=subscription.biblio link = 0 | $HtmlTags tag="em" %] [% IF subscription.closed %](closed)[% END %]</h1>
 
                 [% IF ( abouttoexpire ) %]
                     [% UNLESS subscription.closed %]

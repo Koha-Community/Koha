@@ -55,12 +55,8 @@ sub get {
 
     return try {
         my $source = $c->objects->find( Koha::RecordSources->new, $c->param('record_source_id') );
-        unless ($source) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Object not found" }
-            );
-        }
+        return $c->render_resource_not_found("Record source")
+            unless $source;
 
         return $c->render( status => 200, openapi => $source );
     } catch {
@@ -97,12 +93,8 @@ sub update {
 
     my $source = $c->objects->find_rs( Koha::RecordSources->new, $c->param('record_source_id') );
 
-    unless ($source) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Record source")
+        unless $source;
 
     return try {
         $source->set_from_api( $c->req->json )->store;
@@ -122,19 +114,12 @@ sub delete {
 
     my $source = $c->objects->find_rs( Koha::RecordSources->new, $c->param('record_source_id') );
 
-    unless ($source) {
-        return $c->render(
-            status  => 404,
-            openapi => { error => "Object not found" }
-        );
-    }
+    return $c->render_resource_not_found("Record source")
+        unless $source;
 
     return try {
         $source->delete;
-        return $c->render(
-            status  => 204,
-            openapi => q{}
-        );
+        return $c->render_resource_deleted;
     } catch {
         $c->unhandled_exception($_);
     };

@@ -143,7 +143,10 @@ legend.collapsed i.fa.fa-caret-down::before {
                         [% IF ( check_member ) %]
                             <div class="dialog alert">
                                 <h3>Duplicate patron record?</h3>
-                                <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
+                                <p>[%- INCLUDE 'patron-title.inc' patron => check_patron hide_patron_infos_if_needed => 1 -%]</p>
+                                [% IF logged_in_user.can_see_patron_infos( check_patron ) %]
+                                    <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa-solid fa-window-restore"></i> View existing record</a></p>
+                                [% END %]
                                 <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&borrowernumber=[% check_member | uri %]" class="btn btn-default" id="duplicate"> <i class="fa-solid fa-pencil" aria-hidden="true"></i> It is a duplicate. Edit existing record </a>
                                 <button type="submit" id="not-duplicate" class="new"> <i class="fa fa-plus"></i> Not a duplicate. Save as new record </button>
                             </div>
@@ -213,6 +216,9 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     [% END %]
                                     [% IF ( ERROR_cannot_delete_guarantor ) %]
                                         <li id="ERROR_cannot_delete_guarantor">Cannot delete guarantor(s). A child patron needs a guarantor.</li>
+                                    [% END %]
+                                    [% IF ( ERROR_invalid_relationship ) %]
+                                        <li id="ERROR_invalid_relationship">Guarantor relationship cannot be left blank according to configuration.</li>
                                     [% END %]
                                 </ul>
                             </div>
@@ -551,7 +557,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                                                             [% END %]
                                                                         [% END %]
                                                                     </select>
-                                                                    [% UNLESS mandatoryrelationship %]
+                                                                    [% IF mandatoryrelationship %]
                                                                         <span class="required">Required</span>
                                                                     [% END %]
                                                                 </li>
@@ -988,7 +994,7 @@ legend.collapsed i.fa.fa-caret-down::before {
                                         <li>
                                             <label for="categorycode_entry" class="required">Category: </label>
                                             <select id="categorycode_entry" name="categorycode">
-                                                [% FOREACH category_type IN patron_categories.keys %]
+                                                [% FOREACH category_type IN patron_categories.keys.sort %]
                                                     [% SWITCH category_type %]
                                                     [% CASE 'C' %]
                                                         <optgroup label="Child">
@@ -1849,10 +1855,10 @@ legend.collapsed i.fa.fa-caret-down::before {
         function togglePanel( node ){
             var panel = node.nextAll();
             if(panel.is(":visible")){
-                node.addClass("collapsed").removeClass("expanded").attr("title", __("Click to expand this section") );
+                node.addClass("collapsed").removeClass("expanded").attr("title", _("Click to expand this section") );
                 panel.hide();
             } else {
-                node.addClass("expanded").removeClass("collapsed").attr("title", __("Click to collapse this section") );
+                node.addClass("expanded").removeClass("collapsed").attr("title", _("Click to collapse this section") );
                 panel.show();
                 panel.find("input, select, textarea").eq(0).focus();
             }

@@ -81,6 +81,7 @@ $template->param(
     caller => 'article-request',
     plain  => 0,
     style  => $style,
+    id     => 'ar_slip',
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

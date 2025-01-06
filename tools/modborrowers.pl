@@ -408,9 +408,9 @@ if ( $op eq 'cud-do' ) {
         my @attr_values = $input->multi_param('patron_attributes_value');
         my $attributes;
         my $i = 0;
-        for my $code ( @attributes ) {
-            push @{ $attributes->{$code}->{values} }, shift @attr_values; # Handling repeatables
-            $attributes->{$code}->{disabled} = grep { $_ eq sprintf("attr%s_value", ++$i) } @disabled;
+        for my $code (@attributes) {
+            push @{ $attributes->{$code}->{values} }, shift @attr_values;    # Handling repeatables
+            $attributes->{$code}->{disabled} = grep { $_ eq sprintf( "attr%s_value", $i++ ) } @disabled;
         }
 
         for my $code ( keys %$attributes ) {

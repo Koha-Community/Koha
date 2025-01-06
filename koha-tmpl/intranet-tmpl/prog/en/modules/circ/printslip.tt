@@ -3,6 +3,9 @@
 [% USE Koha %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% UNLESS slips && slips.size %]
+    [% SET slips = [{content => slip, is_html => !plain, style => style, id => id }] %]
+[% END %]
 <title>[% FILTER collapse %]
 [% IF ( caller == 'hold-transfer' ) %]
     [% t("Hold transfer print receipt") | html %] &rsaquo;
@@ -29,27 +32,27 @@
 [% IF ( Koha.Preference('SlipCSS') ) %]
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') | $raw %]" />
 [% END %]
+[% FOR slip IN slips %]
+    [% IF slip.style %]<style>[% slip.style.replace('([^\{\}]+?)\s*\{', '#slip_' _ slip.id _ ' $1 {') | $raw %]</style>[% END %]
+[% END %]
 
 [% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
 <body id="circ_printslip" class="circ">
-<div id="receipt">
-
-[% UNLESS slips && slips.size %]
-    [% SET slips = [{content => slip, is_html => !plain, style => style }] %]
-[% END %]
-[% FOR slip IN slips %]
-[% IF slip.style %]<style>[% slip.style.replace('[^{]+{', '#slip_' _ slip.id _ ' {') | $raw %]</style>[% END %]
-<div id="slip_[% slip.id | html %]">
-[% UNLESS slip.is_html %]
-<pre>
-[% IF ( slip.content ) %][% slip.content | html %][% ELSE %]No slip template found[% END %]
-</pre>
-[% ELSE %]
-[% IF ( slip.content ) %][% slip.content | $raw %][% ELSE %]No slip template found[% END %]
-[% END %]
-</div>
-[% IF slips.size > 1 && !loop.last%]<div class="pagebreak"></div>[% END %]
-[% END %]
+    <div id="receipt">
+    [% FOR slip IN slips %]
+        <div id="slip_[% slip.id | html %]">
+        [% UNLESS slip.is_html %]
+            <pre>
+                [% IF ( slip.content ) %][% slip.content | html %][% ELSE %]No slip template found[% END %]
+            </pre>
+        [% ELSE %]
+            [% IF ( slip.content ) %][% slip.content | $raw %][% ELSE %]No slip template found[% END %]
+        [% END %]
+        </div>
+        [% IF slips.size > 1 && !loop.last%]
+        <div class="pagebreak"></div>
+        [% END %]
+    [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

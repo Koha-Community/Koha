@@ -148,7 +148,6 @@ use C4::Languages qw( getlanguage getLanguages );
 use C4::Koha qw( getitemtypeimagelocation GetAuthorisedValues );
 use URI::Escape;
 use POSIX qw(ceil floor);
-use C4::Search qw( searchResults enabled_staff_search_views z3950_search_args new_record_from_zebra );
 
 use Koha::ItemTypes;
 use Koha::Library::Groups;
@@ -243,7 +242,7 @@ my @search_groups =
 
 my $branch_limit = '';
 my $limit_param = $cgi->param('limit');
-if ( $limit_param and $limit_param =~ /branch:([\w-]+)/ ) {
+if ( $limit_param and $limit_param =~ /^branch:([\w-]+)/ ) {
     $branch_limit = $1;
 }
 
@@ -425,9 +424,9 @@ if ($params->{'limit-yr'}) {
 # $ %z3950p will be a hash ref if the indexes are present (advacned search), otherwise undef
 my $z3950par;
 my $indexes2z3950 = {
-    kw=>'title', au=>'author', 'au,phr'=>'author', nb=>'isbn', ns=>'issn',
-    'lcn,phr'=>'dewey', su=>'subject', 'su,phr'=>'subject',
-    ti=>'title', 'ti,phr'=>'title', se=>'title'
+    kw      => 'title', au       => 'author',  'au,phr' => 'author', nb => 'isbn', ns => 'issn',
+    callnum => 'dewey', su       => 'subject', 'su,phr' => 'subject',
+    ti      => 'title', 'ti,phr' => 'title',   se       => 'title'
 };
 for (my $ii = 0; $ii < @operands; ++$ii)
 {

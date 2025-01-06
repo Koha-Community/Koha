@@ -31,7 +31,7 @@
             [% IF CAN_user_acquisition_order_receive && basketcount && active %]
                 <div class="btn-group"><a class="btn btn-default" id="receive" href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | html %]"><i class="fa fa-inbox"></i> Receive shipments</a></div>
             [% END %]
-        [% ELSE %]
+        [% ELSIF ( CAN_user_acquisition_vendors_manage ) %]
             <div class="btn-group"><a class="btn btn-default" href="/cgi-bin/koha/acqui/supplier.pl?op=enter"><i class="fa fa-plus"></i> New vendor</a></div>
         [% END %]
 </div>

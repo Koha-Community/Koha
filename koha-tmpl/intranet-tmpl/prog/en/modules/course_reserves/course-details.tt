@@ -342,7 +342,7 @@
                 "autoWidth": false,
             }, table_settings );
 
-            $(".delete_item").on( 'click', function(e){
+            $("#course_reserves_table").on( 'click', " .delete_item", function(e){
                 e.preventDefault();
                 if (confirmDelete(_("Are you sure you want to remove this item from the course?") )) {
                     cr_id = $(this).data('cr-id');

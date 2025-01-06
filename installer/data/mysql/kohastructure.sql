@@ -2750,7 +2750,7 @@ CREATE TABLE `deleteditems` (
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from biblio table used to link this item to the right bib record',
   `biblioitemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the biblioitems table to link to item to additional information',
   `barcode` varchar(20) DEFAULT NULL COMMENT 'item barcode (MARC21 952$p)',
-  `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this item is available for bookings or not',
+  `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not',
   `dateaccessioned` date DEFAULT NULL COMMENT 'date the item was acquired or added to Koha (MARC21 952$d)',
   `booksellerid` longtext DEFAULT NULL COMMENT 'where the item was purchased (MARC21 952$e)',
   `homebranch` varchar(10) DEFAULT NULL COMMENT 'foreign key from the branches table for the library that owns this item (MARC21 952$a)',
@@ -2966,7 +2966,7 @@ CREATE TABLE `erm_agreements` (
   `closure_reason` varchar(80) DEFAULT NULL COMMENT 'reason of the closure',
   `is_perpetual` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'is the agreement perpetual',
   `renewal_priority` varchar(80) DEFAULT NULL COMMENT 'priority of the renewal',
-  `license_info` varchar(80) DEFAULT NULL COMMENT 'info about the license',
+  `license_info` mediumtext DEFAULT NULL COMMENT 'info about the license',
   PRIMARY KEY (`agreement_id`),
   KEY `erm_agreements_ibfk_1` (`vendor_id`),
   CONSTRAINT `erm_agreements_ibfk_1` FOREIGN KEY (`vendor_id`) REFERENCES `aqbooksellers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -3211,6 +3211,7 @@ CREATE TABLE `erm_usage_data_providers` (
   `requestor_name` varchar(80) DEFAULT NULL COMMENT 'requestor name',
   `requestor_email` varchar(80) DEFAULT NULL COMMENT 'requestor email',
   `report_types` varchar(255) DEFAULT NULL COMMENT 'report types provided by the harvester',
+  `service_platform` varchar(80) DEFAULT NULL COMMENT 'platform if provider requires it',
   PRIMARY KEY (`erm_usage_data_provider_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -4008,7 +4009,7 @@ CREATE TABLE `items` (
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from biblio table used to link this item to the right bib record',
   `biblioitemnumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the biblioitems table to link to item to additional information',
   `barcode` varchar(20) DEFAULT NULL COMMENT 'item barcode (MARC21 952$p)',
-  `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this item is available for bookings or not',
+  `bookable` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'boolean value defining whether this this item is available for bookings or not',
   `dateaccessioned` date DEFAULT NULL COMMENT 'date the item was acquired or added to Koha (MARC21 952$d)',
   `booksellerid` longtext DEFAULT NULL COMMENT 'where the item was purchased (MARC21 952$e)',
   `homebranch` varchar(10) DEFAULT NULL COMMENT 'foreign key from the branches table for the library that owns this item (MARC21 952$a)',
@@ -4862,7 +4863,8 @@ CREATE TABLE `oauth_access_tokens` (
   `access_token` varchar(191) NOT NULL COMMENT 'generarated access token',
   `client_id` varchar(191) NOT NULL COMMENT 'the client id the access token belongs to',
   `expires` int(11) NOT NULL COMMENT 'expiration time in seconds',
-  PRIMARY KEY (`access_token`)
+  PRIMARY KEY (`access_token`),
+  KEY `expires` (`expires`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4916,6 +4918,7 @@ CREATE TABLE `old_reserves` (
   `borrowernumber` int(11) DEFAULT NULL COMMENT 'foreign key from the borrowers table defining which patron this hold is for',
   `reservedate` date DEFAULT NULL COMMENT 'the date the hold was places',
   `biblionumber` int(11) DEFAULT NULL COMMENT 'foreign key from the biblio table defining which bib record this hold is on',
+  `deleted_biblionumber` int(11) DEFAULT NULL COMMENT 'links the hold to the deleted bibliographic record (deletedbiblio.biblionumber)',
   `item_group_id` int(11) DEFAULT NULL COMMENT 'foreign key from the item_groups table defining if this is an item group level hold',
   `branchcode` varchar(10) DEFAULT NULL COMMENT 'foreign key from the branches table defining which branch the patron wishes to pick this hold up at',
   `desk_id` int(11) DEFAULT NULL COMMENT 'foreign key from the desks table defining which desk the patron should pick this hold up at',
@@ -5485,6 +5488,7 @@ CREATE TABLE `reserves` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the borrowers table defining which patron this hold is for',
   `reservedate` date DEFAULT NULL COMMENT 'the date the hold was placed',
   `biblionumber` int(11) NOT NULL DEFAULT 0 COMMENT 'foreign key from the biblio table defining which bib record this hold is on',
+  `deleted_biblionumber` int(11) DEFAULT NULL COMMENT 'links the hold to the deleted bibliographic record (deletedbiblio.biblionumber)',
   `item_group_id` int(11) DEFAULT NULL COMMENT 'foreign key from the item_groups table defining if this is an item group level hold',
   `branchcode` varchar(10) NOT NULL COMMENT 'foreign key from the branches table defining which branch the patron wishes to pick this hold up at',
   `desk_id` int(11) DEFAULT NULL COMMENT 'foreign key from the desks table defining which desk the patron should pick this hold up at',

@@ -257,6 +257,9 @@ if ( $patron && $op eq "cud-returnbook" && $allowselfcheckreturns ) {
                 $failed_checkout->{DEBT} = $needconfirm->{DEBT};
             }
             push @failed_checkouts, $failed_checkout;
+            $template->param(
+                hide_main => 1,
+            );
         } else {
             if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
                 my ( $hold_existed, $item );

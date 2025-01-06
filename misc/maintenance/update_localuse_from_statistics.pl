@@ -29,40 +29,47 @@ use Pod::Usage   qw( pod2usage );
 
 my ($params);
 GetOptions(
-    'confirm' => \$params->{confirm}, 'help' => \$params->{help}, 'age:i' => \$params->{age},
+    'c|confirm' => \$params->{confirm},
+    'v|verbose' => \$params->{verbose},
+    'help'      => \$params->{help},
 );
 if ( $params->{help} ) {
     pod2usage( -verbose => 2 );
     exit;
 }
 
+my $updated;
+
+if ( $params->{confirm} ) {
+    $updated = update_localuse( { verbose => $params->{verbose} } );
+}
+
+print "Updated $updated items.\n";
+
 sub update_localuse {
+    my $params  = shift;
+    my $verbose = $params->{verbose};
 
     my $dbh = C4::Context->dbh;
 
-    my $items = Koha::Items->search();
+    my $items   = Koha::Items->search();
+    my $updated = 0;
 
     # Loop through each item and update it with statistics info
     while ( my $item = $items->next ) {
         my $itemnumber = $item->itemnumber;
 
         my $localuse_count = Koha::Statistics->search( { itemnumber => $itemnumber, type => 'localuse' } )->count;
+        my $item_localuse  = $item->localuse // 0;
+        next if $item_localuse == $localuse_count;
         $item->localuse($localuse_count);
-        $item->store;
+        $item->store( { skip_record_index => 1, skip_holds_queue => 1 } );
+        $updated++;
 
-        print "Updated item $itemnumber with localuse statistics info.\n";
+        print "Updated item $itemnumber with localuse statistics info. Was $item_localuse, now $localuse_count\n"
+            if $verbose;
     }
-}
-
-my ($help);
-my $result = GetOptions(
-    'help|h' => \$help,
-);
-
-usage() if $help;
-
-if ( $params->{confirm} ) {
-    update_localuse();
+    return $updated;
 }
 
 =head1 NAME
@@ -74,10 +81,12 @@ update_local_use_from_statistics.pl
   update_localuse_from_statistics.pl
   update_localuse_from_statistics.pl --help
   update_localuse_from_statistics.pl --confirm
+  update_localuse_from_statistics.pl --verbose
 
 =head1 DESCRIPTION
 
 This script updates the items.localuse column with data from the statistics table to make sure the two tables are congruent.
+NOTE: If you have mapped the items.localuse field in your search engine you must reindex your records after running this script.
 
 =head1 OPTIONS
 
@@ -90,6 +99,10 @@ Prints this help message
 =item B<-c|--confirm>
 
     Confirm to run the script.
+
+=item B<-v|--verbose>
+
+    Add verbosity to output.
 
 =back
 

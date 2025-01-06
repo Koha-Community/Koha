@@ -49,6 +49,8 @@ use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::Patron::Modification;
 
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', '' );
+
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 

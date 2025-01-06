@@ -82,7 +82,7 @@
         [% END %]
 
         [% IF news_id %]
-            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, news_id => news_id ) %]
+            [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, id => news_id ) %]
         [% ELSE %]
             [% SET koha_news = AdditionalContents.get( category => 'news', location => ['opac_only', 'staff_and_opac'], lang => lang, library => branchcode ) %]
         [% END %]
@@ -95,7 +95,7 @@
                             [% IF ( news_item ) %]
                                 [% koha_new.title | html %]
                             [% ELSE %]
-                                <a id="newsitem[% koha_new.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.id | uri %]">[% koha_new.title | html %]</a>
+                                <a id="newsitem[% koha_new.additional_content.id | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.additional_content.id | uri %]">[% koha_new.title | html %]</a>
                             [% END %]
                         </h4>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>

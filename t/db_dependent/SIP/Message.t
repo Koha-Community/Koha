@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::More tests => 22;
 use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
@@ -249,6 +249,90 @@ subtest 'Lastseen response patron info' => sub {
 
 };
 
+subtest 'Fine items, currency, start and end item response in patron info' => sub {
+
+    plan tests => 6;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks             = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $patron_with_fines = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                password   => hash_password(PATRON_PW),
+                branchcode => $branchcode,
+            },
+        }
+    );
+
+    # SIP2 currency field is limited to 3 chars
+    my $currency = substr Koha::Acquisition::Currencies->get_active->currency,
+        0, 3;
+
+    my $account = Koha::Account->new( { patron_id => $patron_with_fines->{borrowernumber} } );
+
+    my $amount1 = '1.00';
+    my $amount2 = '2.00';
+    my $amount3 = '3.00';
+
+    my $debt1 = $account->add_debit( { type => 'ACCOUNT', amount => $amount1, interface => 'commandline' } );
+    my $debt2 = $account->add_debit( { type => 'ACCOUNT', amount => $amount2, interface => 'commandline' } );
+    my $debt3 = $account->add_debit( { type => 'ACCOUNT', amount => $amount3, interface => 'commandline' } );
+
+    my $cardnum    = $patron_with_fines->{cardnumber};
+    my $sip_patron = C4::SIP::ILS::Patron->new($cardnum);
+    $findpatron = $sip_patron;
+
+    my $siprequest =
+          PATRON_INFO
+        . 'engYYYYMMDDZZZZHHMMSS'
+        . '   Y      '
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $cardnum . '|'
+        . FID_PATRON_PWD
+        . PATRON_PW . '|'
+        . FID_START_ITEM . '2|'
+        . FID_END_ITEM . '3|';
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    my $server = { ils => $mocks->{ils} };
+    undef $response;
+    $msg->handle_patron_info($server);
+
+    isnt( $response, undef, 'At least we got a response.' );
+    my $respcode = substr( $response, 0, 2 );
+    is( $respcode, PATRON_INFO_RESP, 'Response code fine' );
+
+    check_field(
+        $respcode, $response, FID_CURRENCY, $currency,
+        'Verified active currency'
+    );
+
+    # the following checks apply to fields which can occur several times
+    isnt(
+        $response =~ /\|${\FID_FINE_ITEMS} $amount1/,
+        1, 'Verified fine item 1 is not in response'
+    );
+    is(
+        $response =~ /\|${\FID_FINE_ITEMS}\s$amount2/,
+        1, 'Verified fine item 2'
+    );
+    is(
+        $response =~ /\|${\FID_FINE_ITEMS}\s$amount3/,
+        1, 'Verified fine item 3'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+
 subtest "Test patron_status_string" => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -404,6 +488,43 @@ subtest 'Lastseen response patron status' => sub {
         output_pref( { str => $seen_patron->lastseen(), dateonly => 1 } ),
         output_pref( { dt  => dt_from_string(), dateonly => 1 } ), 'Last seen updated if tracking patrons'
     );
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'Invalid cardnumber test response patron status' => sub {
+
+    plan tests => 1;
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $builder    = t::lib::TestBuilder->new();
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my ( $response, $findpatron );
+    my $mocks      = create_mocks( \$response, \$findpatron, \$branchcode );
+    my $cardnum    = 'nonexistentcardnumber';
+    my $sip_patron = C4::SIP::ILS::Patron->new($cardnum);
+    $findpatron = $sip_patron;
+
+    my $siprequest =
+          PATRON_STATUS_REQ
+        . 'engYYYYMMDDZZZZHHMMSS'
+        . FID_INST_ID
+        . $branchcode . '|'
+        . FID_PATRON_ID
+        . $cardnum . '|'
+        . FID_PATRON_PWD
+        . PATRON_PW . '|';
+    my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+
+    my $server = { ils => $mocks->{ils} };
+    undef $response;
+
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivityTriggers', 'login' );
+    $msg->handle_patron_status($server);
+    isnt( $response, undef, 'At least we got a response.' );
+
     $schema->storage->txn_rollback;
 
 };
@@ -1552,6 +1673,28 @@ sub test_renew_desensitize {
     is( $respcode, 'N', "Desensitize flag was not set for itemtype in inhouse_item_types" );
 
 }
+
+subtest 'Test  convert_nonprinting_characters' => sub {
+
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 1;
+    my $msg =
+        qq{64YYYY          eng20241030    115433000000000000000000000000AOtDJZ8mxoq|AAF6LO825MxxosppnEpaUQ6a|AEnzsktrzn seoGzB|BLY|CQY|BHUSD|BV0|CC807485965|BDlbbGF5qo AawLbgu5W cD3r4q KVHWEkp KMAEKo en6QWEa5 Ho12sDL5hf|PB20241030|PCTQvaTv45|PIN|AFComment 1\nComment 2\nComment 3|BEZ2f_HGLMji|BFbbV3yXQ};
+    my $server = { account => { convert_nonprinting_characters => ' -- ' } };
+
+    my $output;
+    {
+        local *STDOUT;
+        open STDOUT, '>', \$output;
+        C4::SIP::Sip::write_msg( undef, $msg, $server )
+    }
+
+    like( $output, qr/Comment 1 -- Comment 2 -- Comment 3/, "Response contains converted restriction comment" );
+
+    $schema->storage->txn_rollback;
+};
 
 # Helper routines
 

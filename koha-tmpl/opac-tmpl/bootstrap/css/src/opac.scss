@@ -280,12 +280,6 @@ th {
 
 .actions {
     white-space: nowrap;
-
-    &:first-child {
-        .btn-link {
-            padding-left: 0;
-        }
-    }
 }
 
 .advsearch_limit {
@@ -617,6 +611,10 @@ th {
     padding: 3px 20px;
     padding-left: 10px;
     white-space: nowrap;
+}
+
+.dropdown-menu > .dropdown-header:first-child {
+    border-top: 0;
 }
 
 .btn-group.open {
@@ -1127,7 +1125,6 @@ fieldset {
 
 .toolbar {
     background-color: #EEEEEE;
-    border: 1px solid #E8E8E8;
     font-size: .9rem;
     padding: 3px 3px 5px 5px;
     vertical-align: middle;
@@ -1197,12 +1194,11 @@ fieldset {
 
 .selections-toolbar {
     background: linear-gradient( #B2B2B2 0%, #E0E0E0 14%, #E8E8E8 100% );
-    border-bottom: none;
     display: flex;
+    flex-wrap: wrap;
     margin: 0;
     padding-left: 10px;
     padding-top: .5em;
-    flex-wrap: wrap;
 
     > div:first-child::before {
         content: "";

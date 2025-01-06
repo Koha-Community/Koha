@@ -50,7 +50,7 @@ my $letter = C4::Letters::GetPreparedLetter(
 );
 
 
-t::lib::Mocks::mock_preference( 'EmailFieldPrimary', 'OFF' );
+t::lib::Mocks::mock_preference( 'EmailFieldPrimary', '' );
 C4::Message->enqueue($letter, $patron, 'email');
 my $message = C4::Message->find_last_message($patron->unblessed, 'TEST_MESSAGE', 'email');
 like( $message->{metadata}, qr{heÄllo} );

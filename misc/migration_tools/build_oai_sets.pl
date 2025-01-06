@@ -88,6 +88,7 @@ my $query = qq{
     FROM deletedbiblio_metadata
     WHERE format='marcxml'
     AND  `schema` = ?
+    ORDER BY biblionumber ASC
 };
 if($length) {
     $query .= "LIMIT $length";

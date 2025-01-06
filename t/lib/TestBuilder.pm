@@ -628,8 +628,14 @@ sub _gen_default_values {
             opacusercss     => q{},
         },
         Reserve => {
-            non_priority  => 0,
-            item_group_id => undef,
+            non_priority         => 0,
+            item_group_id        => undef,
+            deleted_biblionumber => undef,
+        },
+        OldReserve => {
+            non_priority         => 0,
+            item_group_id        => undef,
+            deleted_biblionumber => undef,
         },
         Itemtype => {
             rentalcharge => 0,

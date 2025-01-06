@@ -20,7 +20,7 @@ package Koha::Patron;
 
 use Modern::Perl;
 
-use List::MoreUtils qw( any uniq );
+use List::MoreUtils qw( any none uniq );
 use JSON qw( to_json );
 use Unicode::Normalize qw( NFKD );
 use Try::Tiny;
@@ -315,7 +315,7 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                    if ( $guarantor->is_child ) {
                         Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
@@ -372,7 +372,7 @@ sub store {
                 }
 
                 foreach my $guarantor (@$guarantors) {
-                    if ( $guarantor->is_child or $guarantor->category->can_be_guarantee ) {
+                    if ( $guarantor->is_child ) {
                         Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( invalid_guarantor => 1 );
                     }
                 }
@@ -443,7 +443,7 @@ sub delete {
     Koha::Exceptions::Patron::FailedDeleteAnonymousPatron->throw() if $anonymous_patron && $self->id eq $anonymous_patron;
 
     # Check if patron is protected
-    Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if $self->protected == 1;
+    Koha::Exceptions::Patron::FailedDeleteProtectedPatron->throw() if defined $self->protected && $self->protected == 1;
 
     $self->_result->result_source->schema->txn_do(
         sub {
@@ -499,7 +499,7 @@ Returns a Koha::Library object representing the patron's home library.
 
 sub library {
     my ( $self ) = @_;
-    return Koha::Library->_new_from_dbic($self->_result->branchcode);
+    return Koha::Library->_new_from_dbic($self->_result->library);
 }
 
 =head3 sms_provider
@@ -533,6 +533,18 @@ sub guarantor_relationships {
     return Koha::Patron::Relationships->search( { guarantee_id => $self->id } );
 }
 
+=head3 is_guarantee
+
+Returns true if the patron has a guarantor.
+
+=cut
+
+sub is_guarantee {
+    my ($self) = @_;
+    return $self->guarantor_relationships()->count();
+}
+
+
 =head3 guarantee_relationships
 
 Returns Koha::Patron::Relationships object for this patron's guarantors
@@ -556,6 +568,18 @@ sub guarantee_relationships {
         }
     );
 }
+
+=head3 is_guarantor
+
+Returns true if the patron is a guarantor.
+
+=cut
+
+sub is_guarantor {
+    my ($self) = @_;
+    return $self->guarantee_relationships()->count();
+}
+
 
 =head3 relationships_debt
 
@@ -1527,6 +1551,7 @@ sub get_age {
     my $date_of_birth = dt_from_string( $self->dateofbirth, undef, 'floating' );
     my $today         = dt_from_string(undef, undef, 'floating')->truncate( to => 'day' );
 
+    return 0 unless $date_of_birth;
     return $today->subtract_datetime( $date_of_birth )->years;
 }
 
@@ -1584,6 +1609,7 @@ Return all the historical holds for this patron
 sub old_holds {
     my ($self) = @_;
     my $old_holds_rs = $self->_result->old_reserves->search( {}, { order_by => 'reservedate' } );
+    require Koha::Old::Holds;
     return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
 }
 
@@ -1629,22 +1655,26 @@ sub return_claims {
 
 =head3 notice_email_address
 
-  my $email = $patron->notice_email_address;
+    my $email = $patron->notice_email_address;
 
 Return the email address of patron used for notices.
 Returns the empty string if no email address.
 
 =cut
 
-sub notice_email_address{
-    my ( $self ) = @_;
+sub notice_email_address {
+    my ($self) = @_;
 
     my $which_address = C4::Context->preference("EmailFieldPrimary");
 
-    # if syspref is set to 'first valid' (value == OFF), look up email address
-    if ( $which_address eq 'OFF' ) {
-        return $self->first_valid_email_address;
+    if ( $which_address && ( none { $_ eq $which_address } qw{email emailpro B_email cardnumber MULTI} ) ) {
+        warn "Invalid value for EmailFieldPrimary ($which_address)";
+        $which_address = undef;
     }
+
+    # if syspref is set to 'first valid', look up email address
+    return $self->first_valid_email_address
+        unless $which_address;
 
     # if syspref is set to 'selected addresses' (value == MULTI), look up email addresses
     if ( $which_address eq 'MULTI' ) {
@@ -1654,11 +1684,10 @@ sub notice_email_address{
             my $email_address = $self->$email_field;
             push @addresses, $email_address if $email_address;
         }
-        return join(",",@addresses);
+        return join( ",", @addresses );
     }
 
     return $self->$which_address || '';
-
 }
 
 =head3 first_valid_email_address
@@ -2179,17 +2208,22 @@ sub extended_attributes {
                 }
 
                 # Check globally mandatory types
-                my @required_attribute_types =
-                    Koha::Patron::Attribute::Types->search(
-                        {
-                            mandatory => 1,
-                            category_code => [ undef, $self->categorycode ],
-                            'borrower_attribute_types_branches.b_branchcode' =>
-                              undef,
-                        },
-                        { join => 'borrower_attribute_types_branches' }
-                    )->get_column('code');
-                for my $type ( @required_attribute_types ) {
+                my $interface = C4::Context->interface;
+                my $params = {
+                    mandatory                                        => 1,
+                    category_code                                    => [ undef, $self->categorycode ],
+                    'borrower_attribute_types_branches.b_branchcode' => undef,
+                };
+
+                if ( $interface eq 'opac' ) {
+                    $params->{opac_editable} = 1;
+                }
+
+                my @required_attribute_types = Koha::Patron::Attribute::Types->search(
+                    $params,
+                    { join => 'borrower_attribute_types_branches' }
+                )->get_column('code');
+                for my $type (@required_attribute_types) {
                     Koha::Exceptions::Patron::MissingMandatoryExtendedAttribute->throw(
                         type => $type,
                     ) if !$new_types->{$type};

@@ -26,7 +26,7 @@ Patrons:
            choices:
                1: "Allow"
                0: "Don't allow"
-         - "staff to access a patron's checkout (checkout history is still stored, regardless of staff being allowed access or not)."
+         - "staff to access a patron's checkout history (checkout history is still stored, regardless of staff being allowed access or not)."
      -
          - pref: IntranetReadingHistoryHolds
            choices:
@@ -193,13 +193,13 @@ Patrons:
      -
          - "Use the patron's"
          - pref: EmailFieldPrimary
-           default: "OFF"
+           default: ""
            choices:
                email: primary email
                emailpro: secondary email
                B_email: alternate email
                cardnumber: card number
-               "OFF": first valid email address
+               "": first valid email address
                "MULTI": selected addresses
          - 'for sending out email notices.'
          - '<br><strong>NOTE:</strong> If set to "first valid", the order in which the email addresses are checked is set in <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=EmailFieldPrecedence">EmailFieldPrecedence</a>.'
@@ -338,7 +338,7 @@ Patrons:
          - "Guarantors can be the following of those they guarantee:"
          - pref: borrowerRelationship
            class: multi
-         - (input multiple choices separated by |).
+         - (input multiple choices separated by |, leave a | at the end to allow for librarians to leave it blank).
      -
          - "When adding a guarantee to a guarantor, whether it's from the guarantor's form or the guarantee's form, fill the following fields in the guarantee's member entry form from the guarantors record:"
          - pref: PrefillGuaranteeField

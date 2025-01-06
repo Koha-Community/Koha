@@ -82,6 +82,7 @@ my $check_member = $input->param('check_member');
 my $nodouble     = $input->param('nodouble');
 my $duplicate    = $input->param('duplicate');
 my $quickadd     = $input->param('quickadd');
+my $check_patron;
 
 $nodouble = 1 if ($op eq 'edit_form' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
                                      # modifying an existing patron, it ipso facto
@@ -247,10 +248,11 @@ if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
         $conditions->{$f} = $newdata{$f} if $newdata{$f};
     }
     $nodouble = 1;
-    my $patrons = Koha::Patrons->search($conditions); # FIXME Should be search_limited?
+    my $patrons = Koha::Patrons->search($conditions);
     if ( $patrons->count > 0) {
-        $nodouble = 0;
-        $check_member = $patrons->next->borrowernumber;
+        $nodouble     = 0;
+        $check_patron = $patrons->next;
+        $check_member = $check_patron->borrowernumber;
     }
 }
 
@@ -280,8 +282,26 @@ if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
 }
 
 foreach my $guarantor (@guarantors) {
-    if ( ( $op eq 'cud-save' || $op eq 'cud-insert' ) && $guarantor->is_child || $guarantor->category->can_be_guarantee ) {
+    if (   ( $op eq 'cud-save' || $op eq 'cud-insert' )
+        && ( $guarantor->is_child || $guarantor->is_guarantee || ( $patron && $patron->is_guarantor ) ) )
+    {
         push @errors, 'ERROR_guarantor_is_guarantee';
+    }
+}
+
+my @valid_relationships = split( /\|/, C4::Context->preference('borrowerRelationship'), -1 );
+if (@valid_relationships) {
+    my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
+    my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
+
+    for ( my $i = 0 ; $i < scalar @new_guarantor_id ; $i++ ) {
+        my $guarantor_id = $new_guarantor_id[$i];
+        my $relationship = $new_guarantor_relationship[$i];
+
+        next unless $guarantor_id;
+        unless ( grep { $_ eq $relationship } @valid_relationships ) {
+            push @errors, 'ERROR_invalid_relationship';
+        }
     }
 }
 
@@ -567,23 +587,67 @@ if ((!$nok) and $nodouble and ($op eq 'cud-insert' or $op eq 'cud-save')){
         }
     }
 
-    if ( $success ) {
-        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            $patron->extended_attributes->filter_by_branch_limitations->delete;
-            $patron->extended_attributes($extended_patron_attributes);
+    if ($success) {
+        if ( C4::Context->preference('ExtendedPatronAttributes')
+            and $input->param('setting_extended_patron_attributes') )
+        {
+            my $existing_attributes = $patron->extended_attributes->filter_by_branch_limitations->unblessed;
+
+            my $needs_update = 1;
+
+            # If there are an unqueunal number of new and old patron attributes they definitely need updated
+            if ( scalar @{$existing_attributes} == scalar @{$extended_patron_attributes} ) {
+                my $seen = 0;
+                for ( my $i = 0 ; $i <= scalar @{$extended_patron_attributes} ; $i++ ) {
+                    my $new_attr = $extended_patron_attributes->[$i];
+                    next unless $new_attr;
+                    for ( my $j = 0 ; $j <= scalar @{$existing_attributes} ; $j++ ) {
+                        my $existing_attr = $existing_attributes->[$j];
+                        next unless $existing_attr;
+
+                        if (   $new_attr->{attribute} eq $existing_attr->{attribute}
+                            && $new_attr->{borrowernumber} eq $existing_attr->{borrowernumber}
+                            && $new_attr->{code} eq $existing_attr->{code} )
+                        {
+                            $seen++;
+
+                            # Remove the match from the "old" attribute
+                            splice( @{$existing_attributes}, $j, 1 );
+
+                            # Move on to look at the next "new" attribute
+                            last;
+                        }
+                    }
+                }
+
+                # If we found a match for each existing attribute and the number of see attributes matches the number seen
+                # we don't need to update the attributes
+                if ( scalar @{$existing_attributes} == 0 && $seen == @{$extended_patron_attributes} ) {
+                    $needs_update = 0;
+                }
+            }
+
+            if ($needs_update) {
+                $patron->extended_attributes->filter_by_branch_limitations->delete;
+                $patron->extended_attributes($extended_patron_attributes);
+            }
         }
 
-        if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
+        if (
+            $destination eq 'circ'
+            and not C4::Auth::haspermission(
+                C4::Context->userenv->{id},
+                { circulate => 'circulate_remaining_permissions' }
+            )
+            )
+        {
             # If we want to redirect to circulation.pl and need to check if the logged in user has the necessary permission
             $destination = 'not_circ';
         }
         print scalar( $destination eq "circ" )
-          ? $input->redirect(
-            "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber")
-          : $input->redirect(
-            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
-          );
-        exit; # You can only send 1 redirect!  After that, content or other headers don't matter.
+            ? $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber")
+            : $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+        exit;    # You can only send 1 redirect!  After that, content or other headers don't matter.
     }
 }
 
@@ -789,6 +853,7 @@ $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   destination   => $destination,#to know where u come from and where u must go in redirect
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
+  check_patron    => $check_patron
 );
 
 $template->param(

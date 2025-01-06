@@ -16,8 +16,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 <style>
-    .required {
-        background-color: #C00;
+    #tag-error {
+        display: block;
+        margin-top: 5px;
     }
 </style>
 
@@ -70,7 +71,7 @@
                 <div class="page-section">
                 <form action="/cgi-bin/koha/admin/marc-overlay-rules.pl" method="POST" id="marc-overlay-rules-form">
                     [% INCLUDE 'csrf-token.inc' %]
-                    <input type="hidden" name="op">
+                    <input type="hidden" name="op" value="cud-add">
                     <table id="marc-overlay-rules">
                         <thead><tr>
                             <th>Rule</th>
@@ -97,7 +98,7 @@
                                     </select>
                                 </th>
                                 <th id="filter-container"></th>
-                                <th><input type="text" size="5" name="tag"/></th>
+                                <th><input type="text" size="5" name="tag" class="required" required="required"/></th>
                                 <th>
                                     <select name="preset">
                                         <option value="" selected>Custom</option>
@@ -132,8 +133,8 @@
                                         <option value="1">Delete</option>
                                     </select>
                                 </th>
-                                <th><button type="submit" class="btn btn-default btn-xs" title="Add" id="add" name="op" value="cud-add"><i class="fa fa-plus"></i> Add rule</button></th>
-                                <th><button type="submit" id="btn_batchremove" disabled="disabled" class="btn btn-default btn-xs" name="op" value="cud-remove" title="Batch remove"><i class="fa fa-trash-can"></i> Delete selected</button></th>
+                                <th><button type="submit" class="btn btn-default btn-xs" title="Add" id="add"><i class="fa fa-plus"></i> Add rule</button></th>
+                                <th><button type="button" class="btn btn-default btn-xs" id="btn_batchremove" disabled="disabled" title="Batch remove"><i class="fa fa-trash-can"></i> Delete selected</button></th>
                             </tr>
                         </tfoot>
                         [% END %]
@@ -162,8 +163,8 @@
                                         </select>
                                     </td>
                                     <td id="filter-container" data-filter="[% rule.filter | html %]"></td>
-                                    <td><input type="text" size="3" name="tag" value="[% rule.tag | html %]"/></td>
-                                    <th>
+                                    <td><input type="text" size="3" name="tag" value="[% rule.tag | html %]" class="required" required="required" /></td>
+                                    <td>
                                         <select name="preset">
                                             <option value="" selected>Custom</option>
                                             <option value="protect">Protect</option>
@@ -172,7 +173,7 @@
                                             <option value="addappend">Add and append</option>
                                             <option value="protectfromdeletion">Protect from deletion</option>
                                         </select>
-                                    </th>
+                                    </td>
                                     <td class="rule-operation-action-edit">
                                         <select name="add">
                                             [% IF rule.add %]
@@ -218,7 +219,7 @@
                                         </select>
                                     </td>
                                     <td class="actions">
-                                        <button class="btn btn-default btn-xs" title="Save" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
+                                        <button class="btn btn-default btn-xs" title="Save" type="submit" id="doedit" value="[% rule.id | html %]"><i class="fa fa-check"></i> Save</button>
                                         <a href="/cgi-bin/koha/admin/marc-overlay-rules.pl" class="btn btn-default btn-xs" title="Cancel"><i class="fa fa-times"></i> Cancel</a>
                                     </td>
                                     <td></td>
@@ -260,11 +261,13 @@
                                     <td class="rule-operation-action" data-operation="remove" data-value="[% rule.remove | html %]">[% IF rule.remove %]Remove[% ELSE %]Skip[% END %]</td>
                                     <td class="rule-operation-action" data-operation="delete" data-value="[% rule.delete | html %]">[% IF rule.delete %]Delete[% ELSE %]Skip[% END %]</td>
                                     <td class="actions">
-                                        <a title="Delete" class="btn btn-default btn-xs btn_remove"><i class="fa fa-trash-can"></i> Delete</a>
+                                        <button type="button" title="Delete" class="btn btn-default btn-xs btn_remove" name="batchremove" value="[% rule.id | html %]"><i class="fa fa-trash-can"></i> Delete</button>
                                         <a href="?op=edit&id=[% rule.id | uri %]" title="Edit" class="btn btn-default btn-xs"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
                                     </td>
                                     <td>
+                                        [% UNLESS edit %]
                                         <input type="checkbox" name="batchremove" value="[% rule.id | html %]"/>
+                                        [% END %]
                                     </td>
                                 [% END %]
                                 </tr>
@@ -291,7 +294,13 @@
 
     <script>
     $(document).ready(function(){
-        function doSubmit(op, id) {
+
+        var validator = $( "#marc-overlay-rules-form" ).validate({
+            ignore: ".ignore"
+        });
+
+        function prepareSubmit(op, id) {
+
             $('#marc-overlay-rules-form > input[name="op"]').val(op);
 
             if(id) {
@@ -301,55 +310,36 @@
                 .appendTo('#marc-overlay-rules-form');
             }
 
-            var valid = true;
             if (op == 'cud-add' || op == 'cud-edit') {
-                var validate = [
-                    $('#marc-overlay-rules-form select[name="filter"]'),
-                    $('#marc-overlay-rules-form input[name="tag"]')
-                ];
-                for(var i = 0; i < validate.length; i++) {
-                    if (validate[i].length) {
-                        if(validate[i].val().length == 0) {
-                            validate[i].addClass('required');
-                            validate[i].focus();
-                            valid = false;
-                        } else {
-                            validate[i].removeClass('required');
-                        }
-                    }
-                }
+                $('#marc-overlay-rules-form input[name="tag"]').removeClass('ignore');
+            } else {
+                $('#marc-overlay-rules-form input[name="tag"]').addClass('ignore');
             }
 
-            if (valid) {
-                return $('#marc-overlay-rules-form').submit();
-            }
-
-            return valid;
         }
 
         $('#doedit').on('click', function(){
-            doSubmit('cud-edit', $("#doedit").attr('value'));
-            return false;
+            prepareSubmit('cud-edit', $("#doedit").attr('value'));
         });
         $('#add').on('click', function(){
-            doSubmit('cud-add');
-            return false;
+            prepareSubmit('cud-add');
         });
         $('.btn_remove').on('click', function(el){
-            // mark delete checkbox in row
-            $(el.target).closest('tr').find('[name="batchremove"]').prop( "checked", true );
-            $('#btn_batchremove').removeAttr('disabled');
-            confirm_remove();
-            return false;
+            // remove all earlier selections
+            $('#marc-overlay-rules-form input[name="batchremove"]').each(function() {
+                $(this).prop( "checked", false );
+            });
+
+            confirm_remove(el.currentTarget.value);
         });
         $('#btn_batchremove').on('click', function(){
             confirm_remove();
-            return false;
         });
 
-        function confirm_remove(){
+        function confirm_remove(id){
             if (confirm(_("Are you sure you want to remove the selected rule(s)?"))){
-                doSubmit('cud-remove');
+                prepareSubmit('cud-remove', id);
+                $('#marc-overlay-rules-form').submit()
             }
         }
 

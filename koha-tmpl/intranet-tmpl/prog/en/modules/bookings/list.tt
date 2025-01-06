@@ -43,6 +43,10 @@
                     <h1>Bookings for [% INCLUDE 'biblio-title-head.inc' %]</h1>
                     <div class="page-section" id="bookings-timeline"></div>
                     <div class="page-section">
+                        <fieldset class="action filters" style="cursor:pointer;">
+                            <a id="expired_filter" class="filtered"><i class="fa fa-bars"></i> Show expired</a>
+                        </fieldset>
+
                         <table id="bookings_table"></table>
                     </div>
                 </div>
@@ -198,6 +202,18 @@
             }
         );
 
+        let filter_expired = true;
+        let additional_filters = {
+            end_date: function(){
+                if ( filter_expired ) {
+                    let today = new Date();
+                    return { ">=": today.toISOString() }
+                } else {
+                    return;
+                }
+            }
+        };
+
         var bookings_table_url = "/api/v1/biblios/[% biblionumber | uri %]/bookings";
         bookings_table = $('#bookings_table').kohaTable({
             "ajax": {
@@ -281,7 +297,22 @@
                     return result;
                 }
             }]
-        }, [], 0);
+        }, [], 0, additional_filters);
+
+        var txtActivefilter = _("Show expired");
+        var txtInactivefilter = _("Hide expired");
+        $("#expired_filter").on("click", function() {
+            if ($(this).hasClass('filtered')){
+                filter_expired = false;
+                $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+            } else {
+                filter_expired = true;
+                $(this).html('<i class="fa fa-bars"></i> '+txtActivefilter);
+            }
+            bookings_table.DataTable().draw();
+            $(this).toggleClass('filtered');
+        });
+
     });
 </script>
     [% END %]

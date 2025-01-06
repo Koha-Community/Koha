@@ -366,11 +366,11 @@
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
-                                                <input type="text" name="[% field.name | html %]" value="" />
+                                                <input type="text" id="[%field.name | html %]" name="[% field.name | html %]" value="" />
                                             [% END %]
                                             [% IF ( field.type == 'select' ) %]
                                                 [% IF field.option.size %]
-                                                    <select name="[% field.name | html %]" >
+                                                    <select id="[%field.name | html %]" name="[% field.name | html %]" >
                                                         [% FOREACH opt IN field.option %]
                                                             <option value="[% opt.value | html %]">[% opt.lib | html %]</option>
                                                         [% END %]
@@ -393,10 +393,10 @@
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
                                             <li class="attributes">
-                                                <label style="width:auto;">
+                                                <label for="patron_attributes" style="width:auto;">
                                                     <span>Patron attribute:</span>
                                                 </label>
-                                                <select name="patron_attributes">
+                                                <select id="patron_attributes" name="patron_attributes">
                                                     <option value=""></option>
                                                     [% FOREACH pac IN patron_attributes_codes %]
                                                         <option value="[% pac.attribute_code | html %]" data-type="[% pac.type | html %]" data-category="[% pac.category_lib | html %]">[% pac.attribute_lib | html %]</option>
@@ -461,7 +461,8 @@
             [% IF borrowers %]
                 let patron_table = KohaTable("borrowerst", {
                     "order": [[ 1, "asc" ]],
-                    "autoWidth": false,
+                    "autoWidth": true,
+                    "scrollX": true,
                 }, table_settings);
 
                 $("#selectallbutton").click(function() {
@@ -571,12 +572,16 @@
         }
 
         function add_attributes() {
+            var count = $("li.attributes").length;
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.del_attributes").length == 0 ) {
                 var add_attributes = $(li_clone).find("a.add_attributes")
                 $(add_attributes).after('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash-can"></i> ' + _("Delete") + '</a>');
             }
+            li_node.find("label").attr("for", li_node.find("label").attr("for") + "_" + count );
+            li_node.find("input, select").attr("id", li_node.find("select").attr("id") + "_" + count );
+
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
             } );

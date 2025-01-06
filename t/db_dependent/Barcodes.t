@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 75;
+use Test::More tests => 76;
 use Test::Warn;
 use Test::MockModule;
 use t::lib::TestBuilder;
@@ -132,6 +132,24 @@ subtest 'Test generation of hbyymmincr barcodes from DB values' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'Test generation of incremental barcodes from DB values' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    $builder->schema->resultset('Issue')->delete_all;
+    $builder->schema->resultset('Item')->delete_all;
+    my $barcodeobj;
+
+    my $item_1 = $builder->build_sample_item( { barcode => '1000000000000000' } );
+
+    $barcodeobj = C4::Barcodes->new('incremental');
+
+    is( $barcodeobj->db_max(), '1000000000000000', "(hbyymmincr) First barcode saved to db is equal to db_max" );
+    is( $barcodeobj->value(),  '1000000000000001', 'incremental barcode' );
+
+    $schema->storage->txn_rollback;
+};
 
 $schema->storage->txn_begin;
 

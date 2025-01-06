@@ -1059,7 +1059,6 @@
                                             [% FOREACH biblioloo IN biblioloop %]
                                                 <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblioloo.biblionumber | html %]"/>
                                                 [% UNLESS biblioloo.none_avail %]
-                                                    <input type="hidden" name="holdable_bibs" id="holdable_bibs" value="[% biblioloo.biblionumber | html %]"/>
                                                     <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
                                                     <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
                                                 [% END %]
@@ -1122,7 +1121,7 @@
                                             [% END %]
                                                 <td>
                                                     [% UNLESS ( biblioloo.warn ) %]
-                                                        <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
+                                                        <input id="holdable_bibs" name="holdable_bibs" class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]" value="[% biblioloo.biblionumber | html %]"/>
                                                     [% END %]
                                                 </td>
                                                 <td>
@@ -1726,11 +1725,11 @@
 
                     if ( selected_items.closest('tr').find(".pickup_locations").val() == '' ) {
 
-                        msg = _("- Please select a pickup location for the item" + "\n")
+                        msg = _("- Please select a pickup location for the item") + "\n"
                     }
                 }
                 else {
-                    msg = (_("- Please select an item to place a hold") + "\n");
+                    msg = _("- Please select an item to place a hold") + "\n";
                 }
             } else if ( $("#requestgrp").is(":checked") ) {
                 var selected_group = $('#requestgroup input[type="radio"]:checked');
@@ -1744,7 +1743,7 @@
             } else {
                 // Requesting next available
                 if( $("#pickup-next-avail").length < 1 || $("#pickup-next-avail").val() == "" || $('#pickup-next-avail').val() === null ){
-                    msg = _("- Please select a pickup location for this hold" + "\n");
+                    msg = _("- Please select a pickup location for this hold") + "\n";
                 }
             }
 

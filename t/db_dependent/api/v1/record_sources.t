@@ -129,14 +129,14 @@ subtest 'get() tests' => sub {
     $source->delete;
 
     $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is(404)
-        ->json_is( '/error' => 'Object not found' );
+        ->json_is( '/error' => 'Record source not found' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -168,7 +168,15 @@ subtest 'delete() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 204, 'SWAGGER3.2.2' );
+    $source->delete();
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 404, 'REST4.3' )
+        ->json_is( { error => q{Record source not found}, error_code => q{not_found} } );
+
+    $source = $builder->build_object( { class => 'Koha::RecordSources' } );
+    $id     = $source->id;
+
+    $t->delete_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( q{}, 'REST3.3.4' );
 
     my $deleted_source = Koha::RecordSources->search( { record_source_id => $id } );
 

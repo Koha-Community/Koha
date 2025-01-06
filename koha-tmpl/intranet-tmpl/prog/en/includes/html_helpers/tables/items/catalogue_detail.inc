@@ -120,6 +120,24 @@
             }
         }
 
+        function update_columns_visibility(settings){
+            let table = settings.oInstance.api();
+            table.columns().visible(true);
+            table.columns().every(function(i){
+                let is_empty = true;
+                let nodes = this.nodes();
+                nodes.each((td, ii) => {
+                    if ( $(td).html() !== '' ) {
+                        is_empty = false;
+                        return;
+                    }
+                });
+                if ( is_empty ) {
+                    table.columns(i).visible(false);
+                }
+            });
+        }
+
         $(document).ready(function() {
 
             $(".SelectAll").on("click",function(e){
@@ -210,7 +228,7 @@
     [%# In case or SeparateHoldings we may need to display the number of biblios in each tab %]
     [%# Do we need separate/new endpoints or do we hack the somewhere client-side? %]
     let item_table_url = "/api/v1/biblios/[% biblio.biblionumber | uri %]/items?";
-    let embed = ["+strings,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
+    let embed = ["+strings,home_library,holding_library,checkout,checkout.patron,transfer,transfer+strings,first_hold,first_hold+strings,first_hold.patron,first_hold.desk"];
     [% IF Koha.Preference('LocalCoverImages') %]
         embed.push('cover_image_ids');
     [% END %]
@@ -223,9 +241,7 @@
     [% IF Koha.Preference('UseRecalls') %]
         embed.push('recall', 'recall+strings', 'recall.patron')
     [% END %]
-    [% IF bundlesEnabled %]
-        embed.push('in_bundle', 'bundle_host', 'bundle_items_lost+count', 'bundle_items_not_lost+count');
-    [% END %]
+    embed.push('in_bundle', 'bundle_host', 'bundle_host.biblio', 'bundle_items_lost+count', 'bundle_items_not_lost+count');
     [% IF Koha.Preference('UseCourseReserves') %]
         embed.push('course_item.course_reserves.course');
     [% END %]
@@ -358,7 +374,7 @@
             },
             [% END %]
             {
-                data: "me.holding_library_id",
+                data: "holding_library.name:me.holding_library_id",
                 className: "location",
                 searchable: true,
                 orderable: true,
@@ -367,7 +383,7 @@
                 }
             },
             {
-                data: "me.home_library_id",
+                data: "home_library.name:me.home_library_id",
                 className: "homebranch",
                 searchable: true,
                 orderable: true,
@@ -493,7 +509,7 @@
                         nodes += '<span class="dmg">%s</span>'.format(escape_str(damaged_lib));
                     }
 
-                    if ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] ) {
+                    if ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) ) {
                         let not_for_loan_lib = av_not_for_loan.get(row.not_for_loan_status.toString());
                         nodes += '<span class="notforloan">%s'.format(_("Not for loan")) + ( not_for_loan_lib ? '<span class="reason"> (%s)</span>'.format(escape_str(not_for_loan_lib)) : '' ) + '</span>';
                     }
@@ -533,7 +549,7 @@
                         }
                     [% END %]
 
-                    if ( ! ( row.not_for_loan_status || item_types_notforloan[row.item_type_id] || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
+                    if ( ! ( row.not_for_loan_status || item_types_notforloan.get(row.item_type_id) || row.checked_out_date || row.lost_status || row.withdrawn || row.damaged_status || row.transfer || row.first_hold || row.recall ) ) {
                         nodes += ' <span>%s</span>'.format(_("Available"))
                     }
 
@@ -541,11 +557,9 @@
                         nodes += '<span class="restricted">(%s)</span>'.format(escape_str(av_restricted.get(row.restricted_status.toString())));
                     }
 
-                    [% IF bundlesEnabled %]
-                        if ( row.in_bundle ) {
-                            nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
-                        }
-                    [% END %]
+                    if ( row.in_bundle ) {
+                        nodes += '<span class="bundled">%s</span>'.format(_("In bundle: %s").format($biblio_to_html(row.bundle_host.biblio, { link: true })));
+                    }
                     return nodes;
                 }
             },
@@ -556,7 +570,7 @@
                 searchable: true,
                 orderable: true,
                 render: function (data, type, row, meta) {
-                    return $date(row.last_seen_date);
+                    return $datetime(row.last_seen_date);
                 }
             },
             {
@@ -759,7 +773,7 @@
                             nodes += '<div class="btn-group">';
                             nodes += ' <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=%s&itemnumber=%s#edititem"><i class="fa-solid fa-pencil"></i> %s</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>'.format(row.biblio_id, row.item_id, _("Edit"));
                             nodes += ' <ul class="dropdown-menu pull-right">';
-                            nodes += '  <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(row.item_id, _("Upload image"));
+                            nodes += '  <li><a class="dropdown-item" href="/cgi-bin/koha/tools/upload-cover-image.pl?itemnumber=%s&amp;filetype=image"><i class="fa fa-upload"></i> %s</a></li>'.format(row.item_id, _("Upload image"));
                             nodes += ' </ul>';
                             nodes += '</div>';
                         [% ELSE %]
@@ -779,20 +793,6 @@
             [% END %]
             ],
             initComplete: function( settings, json ){
-                let table = settings.oInstance.api();
-                table.columns().every(function(i){
-                    let is_empty = true;
-                    let nodes = this.nodes();
-                    nodes.each((td, ii) => {
-                        if ( $(td).html() !== '' ) {
-                            is_empty = false;
-                            return;
-                        }
-                    });
-                    if ( is_empty ) {
-                        table.columns(i).visible(false);
-                    }
-                });
                 [% IF StaffDetailItemSelection %]
                 itemSelectionBuildActionLinks(tab_id);
                 [% END %]
@@ -834,6 +834,10 @@
                         openWindow(link,"Print spine label",400,400);
                     });
                 [% END %]
+
+                if ( api.data().length ) {
+                    update_columns_visibility(settings);
+                }
 
                 if ( drawcallback ) { drawcallback(this); }
             },

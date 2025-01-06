@@ -404,6 +404,7 @@ my $target_map = {
     'cypress.config.ts' => 'NONE',
     'tsconfig.json'     => 'NONE',
     'webpack.config.js' => 'NONE',
+    'rspack.config.js'  => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
@@ -673,9 +674,7 @@ $file_map->{'koha-tmpl/intranet-tmpl/prog/css/installer.css'} = 'blib/INTRANET_T
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/mainpage.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/mainpage.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/css/staff-global.css'} = 'blib/INTRANET_TMPL_DIR/prog/css/staff-global.css';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/erm.js'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/erm.js';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/erm.js.LICENSE.txt'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/erm.js.LICENSE.txt';
 $file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/preservation.js'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/preservation.js';
-$file_map->{'koha-tmpl/intranet-tmpl/prog/js/vue/dist/preservation.js.LICENSE.txt'} = 'blib/INTRANET_TMPL_DIR/prog/js/vue/dist/preservation.js.LICENSE.txt';
 #OPAC_TMPL_DIR
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/opac.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/opac.css';
 $file_map->{'koha-tmpl/opac-tmpl/bootstrap/css/opac-rtl.css'} = 'blib/OPAC_TMPL_DIR/bootstrap/css/opac-rtl.css';

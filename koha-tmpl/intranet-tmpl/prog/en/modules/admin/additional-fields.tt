@@ -1,5 +1,6 @@
 [% USE AuthorisedValues %]
 [% USE raw %]
+[% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -112,7 +113,7 @@
     [% END %]
 
     [% IF op == 'list_tables' %]
-        [% IF CAN_user_acquisitions_order_manage || CAN_user_serials_edit_subscription || CAN_user_updatecharges_remaining_permissions %]
+        [% IF CAN_user_acquisition_order_manage || CAN_user_serials_edit_subscription || CAN_user_updatecharges_remaining_permissions %]
         <h1>Additional fields</h1>
 
         <div class="page-section">
@@ -180,7 +181,7 @@
                                 [% END %]
                                 <td class="actions">
                                     <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit</a>
-                                    <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id | uri %]&amp;tablename=[% tablename | uri %]"><i class="fa fa-trash-can"></i> Delete</a>
+                                    <a class="submit-form-link btn btn-default btn-xs" href="#" data-action="additional-fields.pl" data-method="post" data-op="cud-delete" data-field_id="[% field.id | html %]" data-tablename="[% tablename | html %]" data-confirmation-msg="[% t('Are you sure you want to delete this field?') | html %]"><i class="fa fa-trash-can"></i> Delete</a>
                                 </td>
                             </tr>
                         [% END %]
@@ -272,6 +273,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE "datatables.inc" %]
+    [% Asset.js("js/form-submit.js") | $raw %]
     <script>
         $(document).ready(function(){
             $('#selecttable').find(":submit").hide();
@@ -287,10 +289,6 @@
                 "pageLength": 20,
                 "order": [[ 0, "asc" ]],
             }));
-
-            $(".confirmdelete").click(function(){
-                return confirm(_("Are you sure you want to delete this field?"));
-            });
 
             $("#add_field").on('submit', function() {
                 if ( $("#marcfield").length && $("select[name='authorised_value_category']").length ) {

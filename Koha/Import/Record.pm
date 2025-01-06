@@ -56,7 +56,7 @@ sub get_marc_record {
         $format = 'UNIMARCAUTH';
     }
 
-    my $record = MARC::Record->new_from_xml($self->marcxml, $self->encoding, $format);
+    my $record = MARC::Record->new_from_xml( $self->marcxml, 'UTF-8', $format );
 
     return $record;
 }
