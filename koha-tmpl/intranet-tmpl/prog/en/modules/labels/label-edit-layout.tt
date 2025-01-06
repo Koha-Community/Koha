@@ -59,12 +59,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
-
+    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
                     [% INCLUDE 'labels-toolbar.inc' %]
 
                     [% IF ( layout_id ) %]
@@ -221,16 +216,9 @@
                             <a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Cancel</a>
                         </fieldset>
                     </form>
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
 
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'cat-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     <script>
