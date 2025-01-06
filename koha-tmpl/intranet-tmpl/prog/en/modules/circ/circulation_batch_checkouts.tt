@@ -42,16 +42,8 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        [% IF patron %]
-            [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
-        [% ELSE %]
-            [% SET div_class='col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
-        [% END %]
-        <div class="[% div_class | html %]">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+[% WRAPPER 'main-container.inc' aside=aside %]
                 [% IF patron %]
                     [% INCLUDE 'members-toolbar.inc' %]
                 [% END %]
@@ -161,17 +153,7 @@
     <div class="alert alert-info">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
 [% END %]
 
-                  </main>
-                      </div> <!-- /.col-md-10.order-md-2 -->
-                      [% IF patron %]
-                          <div class="col-md-2 order-sm-2 order-md-1">
-                              <aside>
-                                  [% INCLUDE 'circ-menu.inc' %]
-                              </aside>
-                          </div> <!-- /.col-md-2.order-md-1 -->
-                      [% END %]
-                  </div> <!-- /.row -->
-            </div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% BLOCK checkouts_table %]
 <div class="page-section">

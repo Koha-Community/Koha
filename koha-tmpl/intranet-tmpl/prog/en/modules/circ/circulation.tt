@@ -50,11 +50,10 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <main>
-            <div class="row">
-                <div class="col-md-10 order-md-2 order-sm-1">
-                    [% INCLUDE 'messages.inc' %]
+    [% SET asides = [] %]
+    [% IF Koha.Preference('CircSidebar') && !( borrowernumber && patron ) %][% asides.push('circ-nav') %][% END %]
+    [% IF borrowernumber && patron %][% asides.push('circ-menu') %][% END %]
+    [% WRAPPER 'main-container.inc' asides=asides %]
 
                     [% IF patron %]
                         [% INCLUDE 'members-toolbar.inc' %]
@@ -941,31 +940,7 @@
                 [% ELSIF borrowernumber # IF patron %]
                     <div class="alert alert-info">Patron not found. <a href="/cgi-bin/koha/members/members-home.pl">Return to search</a></div>
                 [% END # /IF patron %]
-
-                </div> <!-- /.col-md-10.order-md-2 -->
-
-                [% IF Koha.Preference('CircSidebar') %]
-                    [% IF not( borrowernumber and patron ) %]
-                        <div class="col-md-2 order-sm-2 order-md-1">
-                            <aside>
-                                [% INCLUDE 'circ-nav.inc' %]
-                            </aside>
-                        </div> <!-- /.col-md-2.order-md-1 -->
-                    [% END %]
-                [% END %]
-
-                [% IF borrowernumber and patron %]
-                    <div class="col-md-2 order-sm-2 order-md-1">
-                        <aside>
-                            [% INCLUDE 'circ-menu.inc' %]
-                        </aside>
-                    </div> <!-- /.col-md-2.order-md-1 -->
-                [% END %]
-
-            </div> <!-- /.row -->
-        </main>
-    </div> <!-- /.main.container-fluid -->
-
+    [% END %]
         [% IF Koha.Preference('ClaimReturnedLostValue') || Koha.Preference('BundleLostValue') %]
             [% INCLUDE 'modals/resolve_return_claim.inc' %]
         [% END %]

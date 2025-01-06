@@ -14,7 +14,7 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style>p { margin-top: 0; } [id^="article-menu-"] { display: none; } [id^="article-menu-"]:before { content: "|"; } .starthidden { display:none; }</style>
+<style>p { margin-top: 0; } [id^="article-menu-"] { display: none; } [id^="article-menu-"]:before { content: "|"; }</style>
 </head>
 
 [% BLOCK actions %]
@@ -153,17 +153,8 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid starthidden">
-        <div class="row">
-
-                [% INCLUDE 'messages.inc' %]
-                [% IF Koha.Preference('CircSidebar') %]
-                    [% SET div_class = 'col-md-10 order-md-2 order-sm-1' %]
-                [% ELSE %]
-                    [% SET div_class = 'col-md-10 offset-md-1 col-lg-8 offset-lg-2' %]
-                [% END %]
-
-                <div class="[% div_class | html %]">
+    [% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+    [% WRAPPER 'main-container.inc' aside=aside %]
 
                 <h1>Article requests</h1>
                 [% PROCESS urls_modal %]
@@ -517,17 +508,8 @@
                         [% END # /tab_panel#article-requests-processing %]
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs %]
-            </div>
 
-            [% IF Koha.Preference('CircSidebar') %]
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'circ-nav.inc' %]
-                </aside>
-            </div>
-            [% END %]
-        </div>
-    </div> <!-- /.main.container-fluid -->
+[% END %]
     [% PROCESS cancel_modal %]
 
 [% MACRO jsinclude BLOCK %]
@@ -602,7 +584,6 @@
             }));
             active_datatable = requested_datatable;
             activateBatchActions( active_tab );
-            $(".starthidden").show();
         });
 
         function activateBatchActions( active_tab ){

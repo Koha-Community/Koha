@@ -32,19 +32,8 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <main>
-                <div class="row">
-
-                    [% IF Koha.Preference('CircSidebar') %]
-                        [% SET div_class='col-md-10 order-md-2 order-sm-1' %]
-                    [% ELSE %]
-                        [% SET div_class='col-sm-12' %]
-                    [% END %]
-                    <div class="[% div_class | html %]">
-                    [% INCLUDE 'messages.inc' %]
+[% SET aside = Koha.Preference('CircSidebar') ? 'circ-nav' : '' %]
+[% WRAPPER 'main-container.inc' aside=aside %]
 
                         <h1>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]</h1>
                         <h2>
@@ -161,22 +150,7 @@
                             [% END # /WRAPPER tabs %]
 
                         [% END # /IF ( cancel_result ) %]
-                    </div> <!-- /.col-md-10.order-md-2 -->
-
-                    [% IF Koha.Preference('CircSidebar') %]
-                        <div class="col-md-2 order-sm-2 order-md-1">
-                            <aside>
-                                [% INCLUDE 'circ-nav.inc' %]
-                            </aside>
-                        </div> <!-- /.col-md-2.order-md-1 -->
-                    [% END %]
-                </div> <!-- /.row -->
-
-            </main>
-        </div> <!-- /.col-sm-12 -->
-    </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
-
+    [% END %]
     <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
