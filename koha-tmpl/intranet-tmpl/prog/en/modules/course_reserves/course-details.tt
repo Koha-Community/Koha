@@ -48,11 +48,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 offset-md-1">
-                [% INCLUDE 'messages.inc' %]
-
+[% WRAPPER 'main-container.inc' %]
             <h1>Reserves</h1>
 
             [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
@@ -318,9 +314,7 @@
                     </table>
                 </div> <!-- /.page-section -->
             [% END %]
-        </div>
-    </div>
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
