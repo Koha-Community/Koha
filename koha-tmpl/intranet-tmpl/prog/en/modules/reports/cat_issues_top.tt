@@ -76,10 +76,8 @@
 							<td>
 
 [% IF ( loopcel.reference ) %]
-    <a href="[% PROCESS biblio_a_href biblionumber => loopcel.reference %]">
- [% END %]                                        
-								[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
-								[% IF ( loopcel.reference ) %]</a>[% END %]
+    <a href="[% PROCESS biblio_a_href biblionumber => loopcel.reference %]">[% loopcel.value | html %]</a>
+ [% END %]
 							</td>
 							<td>
 								[% IF ( loopcel.count ) %][% loopcel.count | html %][% END %]
