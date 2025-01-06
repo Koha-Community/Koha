@@ -797,10 +797,11 @@
     [% WRAPPER tab_panel tabname= "database" bt_active = 1 %]
         <h2>Database audit</h2>
         [% IF db_audit.diff_found %]
-        <div class="alert alert-warning">
+            [% SET div_class='alert-warning' %]
         [% ELSE %]
-        <div class="alert alert-success">
+            [% SET div_class = 'alert-success' %]
         [% END %]
+        <div class="alert [% div_class | html %]">
             <h3><strong>[% db_audit.title | html %]</strong></h3>
             <p><pre>[% db_audit.message | html %]</pre><p>
         </div>
