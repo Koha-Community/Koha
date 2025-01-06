@@ -361,13 +361,6 @@ foreach my $sort (@sort_by) {
 }
 $template->param('sort_by' => $sort_by[0]);
 
-# Use the servers defined, or just search our local catalog(default)
-my @servers = $cgi->multi_param('server');
-unless (@servers) {
-    #FIXME: this should be handled using Context.pm
-    @servers = ("biblioserver");
-    # @servers = C4::Context->config("biblioserver");
-}
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
 my @operators = map uri_unescape($_), $cgi->multi_param('op');
@@ -526,10 +519,11 @@ my $total = 0; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my $results_hashref;
 
+my $server = 'biblioserver';
 eval {
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     ( $error, $results_hashref, $facets ) = $searcher->search_compat(
-        $query,            $simple_query, \@sort_by,       \@servers,
+        $query,            $simple_query, \@sort_by,       [$server],
         $results_per_page, $offset,       undef,           $itemtypes,
         $query_type,       $scan
     );
@@ -544,12 +538,6 @@ if ($@ || $error) {
     exit;
 }
 
-# At this point, each server has given us a result set
-# now we build that set for template display
-my @sup_results_array;
-for (my $i=0;$i<@servers;$i++) {
-    my $server = $servers[$i];
-    if ($server =~/biblioserver/) { # this is the local bibliographic server
         my $hits = $results_hashref->{$server}->{"hits"} // 0;
         if ( $hits == 0 && $basic_search ){
             $operands[0] = '"'.$operands[0].'"'; #quote it
@@ -565,14 +553,14 @@ for (my $i=0;$i<@servers;$i++) {
             eval {
                 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
                 ( $error, $quoted_results_hashref, $facets ) = $searcher->search_compat(
-                    $query,            $simple_query, \@sort_by,       ['biblioserver'],
+                    $query,            $simple_query, \@sort_by,       [$server],
                     $results_per_page, $offset,       undef,           $itemtypes,
                     $query_type,       $scan
                 );
             };
             my $quoted_hits = $quoted_results_hashref->{$server}->{"hits"} // 0;
             if ( $quoted_hits ){
-                $results_hashref->{'biblioserver'} = $quoted_results_hashref->{'biblioserver'};
+                $results_hashref->{$server} = $quoted_results_hashref->{$server};
                 $hits = $quoted_hits;
             }
         }
@@ -691,30 +679,6 @@ for (my $i=0;$i<@servers;$i++) {
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
         }
-
-    } # end of the if local
-
-    # asynchronously search the authority server
-    elsif ($server =~/authorityserver/) { # this is the local authority server
-        my @inner_sup_results_array;
-        for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
-            my $marc_record_object = C4::Search::new_record_from_zebra(
-                'authorityserver',
-                $sup_record
-            );
-            # warn "Authority Found: ".$marc_record_object->as_formatted();
-            push @inner_sup_results_array, {
-                'title' => $marc_record_object->field(100)->subfield('a'),
-                'link' => "&amp;idx=an&amp;q=".$marc_record_object->field('001')->as_string(),
-            };
-        }
-        push @sup_results_array, {  servername => $server, 
-                                    inner_sup_results_loop => \@inner_sup_results_array} if @inner_sup_results_array;
-    }
-    # FIXME: can add support for other targets as needed here
-    $template->param(           outer_sup_results_loop => \@sup_results_array);
-} #/end of the for loop
-#$template->param(FEDERATED_RESULTS => \@results_array);
 
 my $gotonumber = $cgi->param('gotoNumber');
 if ( $gotonumber && ( $gotonumber eq 'last' || $gotonumber eq 'first' ) ) {
