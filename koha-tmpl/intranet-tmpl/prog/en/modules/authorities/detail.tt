@@ -92,8 +92,8 @@
                             [% FOREACH BIG_LOO IN BIG_LOOP %]
                                 [% WRAPPER tab_panel tabname="tab${ BIG_LOO.number }XX" %]
                                     [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                                        [% IF ( innerloo.tag_number ) %]
-                                            <div class="tag">
+                                        <div class="tag">
+                                            [% IF ( innerloo.tag_number ) %]
                                                 <div class="tag_title">
                                                     <span class="tag_num marc_field">[% innerloo.tag_number | html %]</span>
                                                     [% IF (innerloo.defined("ind1") ) %]
@@ -103,9 +103,7 @@
                                                         <span class="dashwrapper"> -</span> <span class="tag_desc marc_field">[% innerloo.tag_desc | html %]</span>
                                                     [% END %]
                                                 </div> <!-- /.tag_title -->
-                                        [% ELSE %]
-                                            <div class="tag">
-                                        [% END # /IF ( innerloo.tag_number ) %]
+                                            [% END # /IF ( innerloo.tag_number ) %]
 
                                             [% FOREACH subfiel IN innerloo.subfield %]
                                                 <div class="auth_subfield">
