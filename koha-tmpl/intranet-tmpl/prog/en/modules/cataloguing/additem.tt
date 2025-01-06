@@ -75,10 +75,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-12">
-            <main>
+[% WRAPPER 'main-container.inc' wide_full => 1 %]
                 [% INCLUDE 'messages.inc' %]
                 [% IF item_doesnt_exist %]
                     <div class="alert alert-warning">
@@ -399,10 +396,7 @@
                         </div> <!-- /.col-sm-10 -->
                     </div> <!-- /.row -->
                 </div> <!-- /#cataloguing_additem_itemlist -->
-            </main>
-        </div> <!-- /.col-sm-12 -->
-    </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
 [% END %]
