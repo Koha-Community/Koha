@@ -605,12 +605,10 @@
                                                         <div class="results_available_count">
                                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
                                                                 <span class="blocker inaccurate-item-statuses" title="Item statuses may be inaccurate. Please view the record details for accurate item statuses">
-                                                            [% END %]
-
-                                                            [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] <span>available:</span>[% ELSE %], <span>None available</span>[% END %]
-
-                                                            [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]
+                                                                    [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] <span>available:</span>[% ELSE %], <span>None available</span>[% END %]
                                                                 </span>
+                                                            [% ELSE %]
+                                                                [% tnx('{count} item', '{count} items', SEARCH_RESULT.items_count, {count = SEARCH_RESULT.items_count}) | html %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount | html %] <span>available:</span>[% ELSE %], <span>None available</span>[% END %]
                                                             [% END %]
                                                         </div> <!-- /.results_available_count -->
 
@@ -628,11 +626,12 @@
                                                                 <ul class="[% items_loop | html %]_items">
                                                                     [% FOREACH items_loo IN SEARCH_RESULT.${items_loop} %]
                                                                         [% IF item_level_itypes && !noItemTypeImages && items_loo.imageurl %]
-                                                                            <li class="result_itype_image [% items_loo.branchcode | html %]">
-                                                                                <img class="itemtype-image" src="[% items_loo.imageurl | html %]" title="[% items_loo.description | html %]" alt="[% items_loo.description | html %]" />
-                                                                        [% ELSE %]
-                                                                            <li class="[% items_loo.branchcode | html %]">
+                                                                            [% SET li_class='result_itype_image'%]
                                                                         [% END %]
+                                                                        <li class="[% items_loo.branchcode | html %] [% li_class | html %]">
+                                                                            [% IF item_level_itypes && !noItemTypeImages && items_loo.imageurl %]
+                                                                                <img class="itemtype-image" src="[% items_loo.imageurl | html %]" title="[% items_loo.description | html %]" alt="[% items_loo.description | html %]" />
+                                                                            [% END %]
                                                                         [% IF ( items_loo.branchname ) %]
                                                                             [% items_loo.branchname | html %]
                                                                         [% END %]
