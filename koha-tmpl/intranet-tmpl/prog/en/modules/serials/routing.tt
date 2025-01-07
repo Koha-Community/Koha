@@ -55,7 +55,7 @@
 
 <fieldset class="rows">
 	<ol>
-		<li><label for="date_selected">Issue: </label>
+		<li><label for="date_selected_top">Issue: </label>
 <select name="date_selected_top" id="date_selected_top" class="date_selected_top">
     [% FOREACH date IN dates %]
         [% IF ( date.selected ) %]
@@ -118,19 +118,21 @@
     </form>
 </li>
 
-    <form method="post" action="routing.pl">
+<li>
+    <form method="post" action="routing.pl" id="save_note_form">
         [% INCLUDE 'csrf-token.inc' %]
         <input type="hidden" name="op" value="cud-save" />
         <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
         <input type="hidden" id="date_selected" name="date_selected" value="" />
 
-        <li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea></li>
-        </ol>
+        <label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50">[% routingnotes | html %]</textarea>
+    </form>
+</li>
+</ol>
 
 
 </fieldset>
-<fieldset class="action"><input type="submit" name="submit" class="btn btn-primary" value="Save" /></fieldset>
-</form>
+<fieldset class="action"><input type="submit" id="submit_save_note_form" name="submit" class="btn btn-primary" value="Save" /></fieldset>
 
             </main>
         </div> <!-- /.col-md-10.order-md-2 -->
@@ -153,6 +155,11 @@
             $("#date_selected").val( $("#date_selected_top").find("option:selected").val() );
             $(".date_selected_top").on("change",function(){
                 $("#date_selected").val( $(this).val() );
+            });
+
+            $("#submit_save_note_form").on("click", function(e){
+                e.preventDefault();
+                return $("#save_note_form").submit();
             });
         });
         function reorder_item(sid,rid,rank){
