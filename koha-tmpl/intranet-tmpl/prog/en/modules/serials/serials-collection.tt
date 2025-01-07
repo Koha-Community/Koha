@@ -187,7 +187,7 @@
                                     [% END %]
                                     [% WRAPPER tab_panel tabname="subscription-year-${year.year}" bt_active= bt_active %]
                                         [% IF ( CAN_user_serials_receive_serials ) %]
-                                            <p>
+                                            <p></p>
                                                 <div class="btn-group"><input type="submit" value="Edit serials" class="btn btn-primary btn-sm" /></div>
                                                 [% UNLESS subscription.closed %]
                                                     <div class="btn-group">
@@ -201,7 +201,7 @@
                                                     [% END %]
                                                 [% END %]
                                                 <input type="button" value="Delete selected issues" class="delete-issues btn btn-default btn-sm" data-subscriptionids="[% subscriptionidlist | html %]" />
-                                            </p>
+                                            <p></p>
                                         [% END # /IF CAN_user_serials_receive_serials %]
 
                                         <span class="checkall">
