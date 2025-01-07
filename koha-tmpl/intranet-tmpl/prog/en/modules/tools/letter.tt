@@ -154,16 +154,16 @@
     </div> <!-- /.modal -->
 
     [% IF add_form or copy_form %]
-        <div class="main container-fluid">
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
+        [% SET div_class="col-md-8 offset-md-2" %]
     [% ELSE %]
-        <div class="main container-fluid">
-            <div class="row">
-                <div class="col-md-10 order-md-2 order-sm-1">
-                    <main>
-                        [% INCLUDE 'messages.inc' %]
+        [% SET div_class="col-md-10 order-md-2 order-sm-1" %]
     [% END %]
+
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="[% div_class | html %]">
+                <main>
+                    [% INCLUDE 'messages.inc' %]
 
                 [% IF ( no_op_set ) %]
                     <h1>Notices and slips</h1>
@@ -355,9 +355,9 @@
                             <input type="hidden" name="oldbranchcode" value="[% oldbranchcode | html %]" />
                             [% IF independant_branch %]
                                 <input type="hidden" name="branchcode" value="[% independant_branch | html %]" />
-                                <ol>
-                            [% ELSE %]
-                                <ol>
+                            [% END %]
+                            <ol>
+                            [% UNLESS independant_branch %]
                                     <li>
                                         [% IF adding %]
                                             <label for="branch">Library:</label>
@@ -375,15 +375,11 @@
                                             [% END %]
                                         [% END %]
                                     </li>
-                            [% END # /IF independant_branch %]
+                            [% END # /UNLESS independant_branch %]
                                 <li>
                                     <label for="newmodule">Koha module:</label>
                                     <input type="hidden" name="oldmodule" value="[% module | html %]" />
-                                    [% IF adding  %]
-                                        <select name="module" id="newmodule">
-                                    [% ELSE %]
-                                        <select name="module" id="module">
-                                    [% END %]
+                                    <select name="module" id="[% adding ? 'newmodule' : 'module' | html %]">
                                         [% IF ( module == "acquisition" ) %]
                                             <option value="acquisition" selected="selected">Acquisition</option>
                                         [% ELSE %]
@@ -590,19 +586,16 @@
                     </div>
                 [% END # /IF delete_confirm %]
 
-    [% IF add_form or copy_form %]
-            </div> <!-- /.col-md-8 -->
-        </div> <!-- /.row -->
-    [% ELSE %]
                 </main>
-            </div> <!-- /.col-md-10.order-md-2 -->
-
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'tools-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-md-2.order-md-1 -->
+            </div> <!-- /.col-md-8 OR /.col-md10-->
         </div> <!-- /.row -->
+
+    [% UNLESS add_form or copy_form %]
+        <div class="col-md-2 order-sm-2 order-md-1">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-md-2.order-md-1 -->
     [% END %]
 </div> <!-- /.main.container-fluid -->
 
@@ -685,11 +678,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            [% IF sms_readonly %]
-                                                <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9" disabled="disabled" >
-                                            [% ELSE%]
-                                                <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9">
-                                            [% END %]
+                                            <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type | html %]_[% lang | html %]" multiple="multiple" size="9" [% IF sms_readonly %]disabled="disabled"[% END %]>
                                                 [% FOREACH SQLfieldname IN SQLfieldnames %]
                                                     <option value="[% SQLfieldname.value | html %]">[% SQLfieldname.text | html %]</option>
                                                 [% END %]
