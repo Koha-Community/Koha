@@ -28,7 +28,7 @@
             <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a>
         [% END %]
         [% WRAPPER breadcrumb_item %]
-            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]">[% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %]</em></a>
+            <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]"><em>[% tx("Collection '{collection_title}'", { collection_title = colTitle }) | html %]</em></a>
         [% END %]
         [% WRAPPER breadcrumb_item bc_active= 1 %]
             <span>Transfer collection</span>
