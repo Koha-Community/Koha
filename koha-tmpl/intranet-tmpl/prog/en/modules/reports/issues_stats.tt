@@ -56,12 +56,15 @@
             <p>Filtered on:</p>
             <ul>
             [% FOREACH loopfilte IN mainloo.loopfilter %]
+                [% SET li_class = '' %]
                 [% IF ( loopfilte.err ) %]
-                    <li class="error">Error:
+                    [% li_class = 'error' %]
                 [% ELSIF ( loopfilte.sql ) %]
-                    <li class="sql">
-                [% ELSE %]
-                    <li>
+                    [% li_class = 'sql' %]
+                [% END %]
+                <li class="[% li_class | html %]">
+                [% IF loopfilte.err %]
+                    <span>Error:</span>
                 [% END %]
                 [% SWITCH loopfilte.crit %]
                     [% CASE 0 %]<span>Period from [% loopfilte.filter | html %]</span>
