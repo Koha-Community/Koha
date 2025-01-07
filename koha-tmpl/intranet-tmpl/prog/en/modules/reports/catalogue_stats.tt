@@ -69,16 +69,16 @@
             <tbody>
 				[% FOREACH loopro IN mainloo.looprow %]
 					<tr>
-						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
+                        <td>
 						[% loopro.rowtitle | html %]</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
-							[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+                            <td>
 								[% IF ( loopcel.value ) %][% loopcel.value | html %]
 								[% ELSE %]&nbsp;
 								[% END %]
 							</td>
 						[% END %]
-						[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+                        <td>
 							[% loopro.totalrow | html %]
 						</td>
 					</tr>
