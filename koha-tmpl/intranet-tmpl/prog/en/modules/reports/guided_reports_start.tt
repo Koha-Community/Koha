@@ -297,7 +297,7 @@
                                             </thead>
                                             <tbody>
                                                 [% FOREACH savedreport IN savedreports %]
-                                                    [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
+                                                    <tr>
                                                         <td class="report_checkbox">
                                                             [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
                                                                 <input type="checkbox" name="id" id="id_[% savedreport.id | html %]" value="[% savedreport.id | html %]" />
@@ -605,7 +605,6 @@
                                                 <input type="text" size="10" id="[% criteri.name | html %]_value" name="[% criteri.name | html %]_value" value="" class="flatpickr" />
                                                 <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                                             </td>
-                                        </tr>
                                         [% ELSE %]
                                             [% IF ( criteri.textrange ) %]
                                                 <td>
@@ -613,7 +612,6 @@
                                                     <input type="text" size="10" id="[% criteri.from | html %]_value" name="[% criteri.from | html %]_value" value="" /> to
                                                     <input type="text" size="10" id="[% criteri.to | html %]_value" name="[% criteri.to | html %]_value" value="" />
                                                 </td>
-                                            </tr>
                                             [% ELSE %]
                                                 [% IF ( criteri.daterange ) %]
                                                     <td>
@@ -623,7 +621,6 @@
                                                         <input type="text" size="10" id="to_[% criteri.name.remove('\.') | html %]_value" name="to_[% criteri.name | html %]_value" value="" class="flatpickr" />
                                                         <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
                                                     </td>
-                                                </tr>
                                                 [% ELSE %]
                                                     <td>
                                                         <select name="[% criteri.name | html %]_value">
@@ -638,10 +635,10 @@
                                                             [% END %]
                                                         </select>
                                                     </td>
-                                                </tr>
                                                 [% END %]
                                             [% END %]
                                         [% END %]
+                                    </tr>
                                 [% END %]
                             </table>
                         </fieldset>
@@ -875,12 +872,10 @@
                                         [% ELSE %]
                                             <li>
                                                 <label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>
-                                                [% IF (sql_param.select_multiple) %]
-                                                    <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]" multiple>
+                                                <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]" [% IF sql_param.select_multiple %]multiple[% END %]>
+                                                    [% IF (sql_param.select_multiple) %]
                                                         <option value="%" hidden></option>
-                                                [% ELSE %]
-                                                    <select name="[%- sql_param.input.name | html -%]" tabindex="1"  id="[%- sql_param.input.id | html -%]">
-                                                [% END %]
+                                                    [% END %]
                                                     [% IF (sql_param.include_all) %]
                                                         <option value="%">All</option>
                                                     [% END %]
@@ -2500,11 +2495,7 @@
         <select name="group" id="group_select">
             <option value="">(None)</option>
             [% FOREACH group IN groups_with_subgroups %]
-                [% IF (group.selected) %]
-                    <option value="[% group.id | html %]" selected="selected">
-                [% ELSE %]
-                    <option value="[% group.id | html %]">
-                [% END %]
+                <option value="[% group.id | html %]" [% IF group.selected %]selected="selected"[% END %]>
                     [% group.name | html %]
                 </option>
             [% END %]
@@ -2524,11 +2515,7 @@
             [% FOREACH group IN groups_with_subgroups %]
                 [% IF (group.selected) %]
                     [% FOREACH subgroup IN group.subgroups %]
-                        [% IF (subgroup.selected) %]
-                            <option value="[% subgroup.id | html %]" selected="selected">
-                        [% ELSE %]
-                            <option value="[% subgroup.id | html %]">
-                        [% END %]
+                        <option value="[% subgroup.id | html %]" [% IF subgroup.selected %]selected="selected"[% END %]>
                             [% subgroup.name | html %]
                         </option>
                     [% END %]
