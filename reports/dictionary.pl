@@ -67,11 +67,10 @@ elsif ( $op eq 'cud-add_form_2' ) {
 elsif ( $op eq 'cud-add_form_3' ) {
 
     # Choosing the columns
-    my $columns                = get_columns( $area, $input );
     $template->param(
         'step_3'                 => 1,
         'area'                   => $area,
-        'columns'                => $columns,
+        'columns'                => get_columns($area),
         'definition_name'        => $definition_name,
         'definition_description' => $definition_description,
     );

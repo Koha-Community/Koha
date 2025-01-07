@@ -313,7 +313,7 @@ elsif ( $op eq 'cud-choose_type' ) {
         'build3' => 1,
         'area'   => $area,
         'type'   => $type,
-        columns  => get_columns($area,$input),
+        columns  => get_columns($area),
         'cache_expiry' => scalar $input->param('cache_expiry'),
         'public' => scalar $input->param('public'),
     );

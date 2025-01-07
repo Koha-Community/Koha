@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 
 use t::lib::TestBuilder;
@@ -531,6 +531,24 @@ subtest 'Returning passwords tests' => sub {
     ( $sth, $errors ) = execute_query( { sql => $query } );
 
     is( defined($errors), 1, 'Error raised for returning password' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_columns' => sub {
+    plan tests => 7;
+    $schema->storage->txn_begin;
+    my $area    = 'foo';
+    my $success = eval { C4::Reports::Guided::get_columns($area) };
+    ok !$success && $@ =~ m{^Unsupported report area "$area"}, 'Call with wrong report area explodes';
+
+    my $columns = C4::Reports::Guided::get_columns('CAT');
+    ok exists $columns->{biblio};
+    ok exists $columns->{biblioitems};
+    ok exists $columns->{items};
+    ok scalar grep  { $_->{name} eq 'biblio.biblionumber' } @{ $columns->{biblio} };
+    ok scalar grep  { $_->{description} =~ m{Biblio number} } @{ $columns->{biblio} };
+    ok !scalar grep { $_->{name} eq 'not_a_column' } @{ $columns->{biblio} };
 
     $schema->storage->txn_rollback;
 };
