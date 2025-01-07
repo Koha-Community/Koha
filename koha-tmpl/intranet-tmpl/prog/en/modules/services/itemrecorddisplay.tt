@@ -1,11 +1,7 @@
 [% USE raw %]
 <ol>
   [% FOREACH iteminfo IN iteminformation %]
-    [% IF ( iteminfo.hidden ) %]
-       <li style="[% iteminfo.hidden | html %];">
-    [% ELSE %]
-        <li>
-    [% END %]
+    <li style="[% iteminfo.hidden | html %];">
       <div class="subfield_line" id="subfield[% iteminfo.serialid | html %][% iteminfo.countitems | html %][% iteminfo.subfield | html %][% iteminfo.random | html %]">
         [% IF (iteminfo.mandatory) %]
             <label class="required">[% iteminfo.subfield | html %] - [% iteminfo.marc_lib | $raw %]</label>
