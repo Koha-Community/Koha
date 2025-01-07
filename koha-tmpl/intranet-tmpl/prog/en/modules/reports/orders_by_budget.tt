@@ -76,9 +76,7 @@
                 </thead>
                 <tbody>
                 [% FOREACH ordersloo IN ordersloop %]
-                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
-                    [% ELSE %] <tr>
-                    [% END %]
+                    <tr>
                     <td>[% ordersloo.budget_name | html %]</td>
                     <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
                     <td>[% ordersloo.basketname | html %]</td>
@@ -111,13 +109,12 @@
             <option value="">All funds</option>
             <option value="activebudgets">All active funds</option>
         [% FOREACH budgetsloo IN budgetsloop %]
-            [% IF ( budgetsloo.selected ) %]
-                <option value="[% budgetsloo.value | html %]" selected="selected">
-            [% ELSE %]
-                [% bdgclass=budgetsloo.active? "": "b_inactive" | html %]
-                    <option class="[% bdgclass | html %]" value="[% budgetsloo.value | html %]">
+            [% SET option_class = '' %]
+            [% UNLESS budgetsloo.selected %]
+                [% option_class = budgetsloo.active ? "": "b_inactive" %]
             [% END %]
-            [% budgetsloo.description | html %] [% IF !budgetsloo.active %]<span>(inactive)</span>[% END %]
+            <option value="[% budgetsloo.value | html %]" class="[% option_class | html %]" [% IF budgetsloo.selected %]selected="selected"[% END %]>
+                [% budgetsloo.description | html %] [% IF !budgetsloo.active %]<span>(inactive)</span>[% END %]
             </option>
         [% END %]
         </select>
