@@ -172,16 +172,7 @@ $(document).ready(function() {
             <input type="text" name="planneddate" value="[% serialslis.planneddate | html %]" size="10" maxlength="15" class="flatpickr" />
         </td>
         <td>
-            [% IF ( serialslis.editdisable ) %]
-              <input type="hidden" name="status" id="status[% serialslis.serialid | html %]" value="[% serialslis.serstatus | html %]">
-              <select name="status" disabled="disabled">
-            [% ELSE %]
-              [% IF ( serialslis.serialsadditems ) %]
-              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid | html %][% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','[% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else { HideItems('items'+[% serialslis.subscriptionid | html %]+[% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
-               [% ELSE %]
-              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else {changeDate(this, '[% serialslis.planneddate | html %]')}" >
-               [% END %] 
-            [% END %]
+            [% BLOCK option_list %]
             [% IF ( serialslis.status1 ) %]
               <option value="1" selected="selected">Expected</option>
             [% ELSE %]
@@ -261,7 +252,23 @@ $(document).ready(function() {
             [% IF serialslis.status8 %]
               <option value="8" selected="selected">Stopped</option>
             [% END %]
-            </select>
+            [% END %]
+            [% IF ( serialslis.editdisable ) %]
+              <input type="hidden" name="status" id="status[% serialslis.serialid | html %]" value="[% serialslis.serstatus | html %]">
+              <select name="status" disabled="disabled">
+                [% PROCESS option_list %]
+              </select>
+            [% ELSE %]
+              [% IF ( serialslis.serialsadditems ) %]
+              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid | html %][% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]','[% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.arriveddate | html %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else { HideItems('items'+[% serialslis.subscriptionid | html %]+[% serialslis.serialid | html %],'label[% serialslis.subscriptionid | html %][% serialslis.serialid | html %]'); changeDate(this, '[% serialslis.planneddate | html %]')}" >
+                  [% PROCESS option_list %]
+              </select>
+               [% ELSE %]
+              <select name="status" id="status[% serialslis.serialid | html %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate | html %]')} else {changeDate(this, '[% serialslis.planneddate | html %]')}" >
+                  [% PROCESS option_list %]
+              </select>
+               [% END %]
+            [% END %]
 
         </td>
         <td>
