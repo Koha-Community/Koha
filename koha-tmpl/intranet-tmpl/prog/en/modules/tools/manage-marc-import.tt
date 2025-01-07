@@ -65,13 +65,17 @@
                         <h2>Batch [% import_batch_id | html %]</h2>
                     [% END %]
                     [% FOREACH message IN messages %]
+                        [% SET div_class = '' %]
+                        [% SET div_style = '' %]
                       [% IF message.type == 'success' %]
-                        <div class="alert alert-info">
+                        [% SET div_class="alert alert-info" %]
                       [% ELSIF message.type == 'warning' %]
-                        <div class="alert alert-warning">
+                        [% SET div_class="alert alert-warning" %]
                       [% ELSIF message.type == 'error' %]
-                        <div class="alert alert-warning" style="margin:auto;">
+                        [% SET div_class="alert alert-warning" %]
+                        [% SET div_style="margin:auto;" %]
                       [% END %]
+                      <div class="[% div_class | html %]" style="[% div_style | html %]">
                       [% IF message.code == 'cannot_enqueue_job' %]
                           <span>Cannot enqueue this job.</span>
                       [% END %]
@@ -90,10 +94,11 @@
 
                     [% ELSIF ( label_batch_msg ) %]
                         [% IF ( alert ) %]
-                            <div class="alert">
+                            [% SET div_class="alert" %]
                         [% ELSE %]
-                            <div class="alert alert-info">
+                            [% SET div_class="alert alert-info" %]
                         [% END %]
+                        <div class="[% div_class | html %]">
                             <p><strong>
                                 [% IF ( label_batch_msg == "error" ) %]
                                     <span>Error attempting to create label batch. Please ask your system administrator to check the log for more details.</span>
@@ -120,14 +125,6 @@
                     [% END %]
 
                     [% IF ( batch_info ) %]
-                        [% IF ( can_commit ) %]
-                            <form method="post">
-                                [% INCLUDE 'csrf-token.inc' %]
-                                <input type="hidden" name="op" value="cud-redo-matching" />
-                                <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
-                                <input type="hidden" name="current_matcher_id" value="[% current_matcher_id | html %]" />
-                        [% END %]
-
                         [% IF ( rematch_attempted ) %]
                             [% IF ( rematch_failed ) %]
                                 <div class="alert alert-warning">Failed to apply different matching rule</div>
@@ -176,11 +173,16 @@
                                     [% END %]
                                 </li>
                             </ol>
-                        </fieldset>
-                        <fieldset class="rows">
-                            <ol>
-                                <li>
-                                    [% IF ( can_commit ) %]
+                        </fieldset> <!-- /#staged-record-matching-rules -->
+                        [% IF ( can_commit ) %]
+                            <form method="post">
+                                [% INCLUDE 'csrf-token.inc' %]
+                                <input type="hidden" name="op" value="cud-redo-matching" />
+                                <input type="hidden" name="import_batch_id" value="[% import_batch_id | html %]" />
+                                <input type="hidden" name="current_matcher_id" value="[% current_matcher_id | html %]" />
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
                                         <label for="new_matcher_id">Matching rule applied:</label>
                                         <select name="new_matcher_id" id="new_matcher_id">
                                             <option value="">Do not look for matching records</option>
@@ -197,79 +199,28 @@
                                             [% END %]
                                         </select>
                                         <span class="change-status">Changed. <a href="#" class="reset" id="reset_new_matcher_id">Reset</a></span>
-                                    [% ELSE %]
-                                        <span class="label">Matching rule applied:</span>
-                                        [% IF ( current_matcher_id ) %]
-                                            [% current_matcher_code | html %] ([% current_matcher_description | html %])
-                                        [% ELSE %]
-                                            <span>No matching rule in effect</span>
-                                        [% END %]
-                                    [% END %]
-                                </li>
-                                <li>
-                                    [% IF ( can_commit ) %]
+                                    </li>
+                                    <li>
                                         <label for="overlay_action">Action if matching record found:</label>
                                         [% INCLUDE 'tools-overlay-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_overlay_action">Reset</a></span>
-                                    [% ELSE %]
-                                        <span class="label">Action if matching record found:</span>
-                                        [% IF ( overlay_action == 'replace' ) %]
-                                            <span>Replace existing record with incoming record</span>
-                                        [% ELSIF ( overlay_action == 'create_new' ) %]
-                                            <span>Add incoming record</span>
-                                        [% ELSIF ( overlay_action == 'ignore' ) %]
-                                            <span>Ignore incoming record (its items may still be processed)</span>
-                                        [% ELSE %]
-                                            <span>[% overlay_action | html %]</span>
-                                        [% END %]
-                                    [% END %]
-                                </li>
-                                <li>
-                                    [% IF ( can_commit ) %]
+                                    </li>
+                                    <li>
                                         <label for="nomatch_action">Action if no match found:</label>
                                         [% INCLUDE 'tools-nomatch-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_nomatch_action">Reset</a></span>
-                                    [% ELSE %]
-                                        <span class="label">Action if no match found:</span>
-                                        [% IF ( nomatch_action == 'create_new' ) %]
-                                            Add incoming record
-                                        [% ELSIF ( nomatch_action == 'ignore' ) %]
-                                            Ignore incoming record (its items may still be processed)
-                                        [% ELSE %]
-                                            [% nomatch_action | html %]
-                                        [% END %]
-                                    [% END %]
-                                </li>
-                                [% IF ( record_type == 'biblio' ) %]
-                                    <li>
-                                        [% IF ( can_commit ) %]
+                                    </li>
+                                    [% IF ( record_type == 'biblio' ) %]
+                                        <li>
                                             <label for="item_action">Item processing:</label>
                                             [% INCLUDE 'tools-item-action.inc' %] <span class="change-status">Changed. <a href="#" class="reset" id="reset_item_action">Reset</a></span>
-                                        [% ELSE %]
-                                            <span class="label">Item processing:</span>
-                                            [% IF ( item_action == 'always_add' ) %]
-                                                <span>Always add items</span>
-                                            [% ELSIF ( item_action == 'add_only_for_matches' ) %]
-                                                <span>Add items only if matching bib was found</span>
-                                            [% ELSIF ( item_action == 'add_only_for_new' ) %]
-                                                <span>Add items only if no matching bib was found</span>
-                                            [% ELSIF ( item_action == 'ignore' ) %]
-                                                <span>Ignore items</span>
-                                            [% ELSE %]
-                                                <span>[% item_action | html %]</span>
-                                            [% END %]
-                                        [% END %]
-                                    </li>
-                                [% ELSE %]
-                                    <input type ="hidden" name="item_action" value="ignore">
-                                [% END %]
-                            </ol>
-                            [% IF ( can_commit ) %]
-                                    <fieldset class="action"><input type="submit" class="btn btn-primary" value="Apply different matching rules" /></fieldset>
-                                </form>
-                            [% END %]
-                        </fieldset> <!-- /#staged-record-matching-rules -->
-
-                        <div>
-                            [% IF ( can_commit ) %]
+                                        </li>
+                                    [% ELSE %]
+                                        <input type ="hidden" name="item_action" value="ignore">
+                                    [% END %]
+                                </ol>
+                                <fieldset class="action"><input type="submit" class="btn btn-primary" value="Apply different matching rules" /></fieldset>
+                            </fieldset>
+                            </form>
+                            <div>
                                 <form method="post" id="import_batch_form">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-commit-batch" />
@@ -305,7 +256,61 @@
                                         <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
                                     </fieldset>
                                 </form> <!-- /#import_batch_form -->
-                            [% END # /IF can_commit %]
+                            </div>
+                        [% END %]
+
+                        [% UNLESS can_commit %]
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <span class="label">Matching rule applied:</span>
+                                        [% IF ( current_matcher_id ) %]
+                                            [% current_matcher_code | html %] ([% current_matcher_description | html %])
+                                        [% ELSE %]
+                                            <span>No matching rule in effect</span>
+                                        [% END %]
+                                    </li>
+                                    <li>
+                                        <span class="label">xAction if matching record found:</span>
+                                        [% IF ( overlay_action == 'replace' ) %]
+                                            <span>Replace existing record with incoming record</span>
+                                        [% ELSIF ( overlay_action == 'create_new' ) %]
+                                            <span>Add incoming record</span>
+                                        [% ELSIF ( overlay_action == 'ignore' ) %]
+                                            <span>Ignore incoming record (its items may still be processed)</span>
+                                        [% ELSE %]
+                                            <span>[% overlay_action | html %]</span>
+                                        [% END %]
+                                    </li>
+                                    <li>
+                                        <span class="label">Action if no match found:</span>
+                                        [% IF ( nomatch_action == 'create_new' ) %]
+                                            Add incoming record
+                                        [% ELSIF ( nomatch_action == 'ignore' ) %]
+                                            Ignore incoming record (its items may still be processed)
+                                        [% ELSE %]
+                                            [% nomatch_action | html %]
+                                        [% END %]
+                                    </li>
+                                    [% IF ( record_type == 'biblio' ) %]
+                                        <li>
+                                            <span class="label">Item processing:</span>
+                                            [% IF ( item_action == 'always_add' ) %]
+                                                <span>Always add items</span>
+                                            [% ELSIF ( item_action == 'add_only_for_matches' ) %]
+                                                <span>Add items only if matching bib was found</span>
+                                            [% ELSIF ( item_action == 'add_only_for_new' ) %]
+                                                <span>Add items only if no matching bib was found</span>
+                                            [% ELSIF ( item_action == 'ignore' ) %]
+                                                <span>Ignore items</span>
+                                            [% ELSE %]
+                                                <span>[% item_action | html %]</span>
+                                            [% END %]
+                                        </li>
+                                    [% END %]
+                                </ol>
+                            </fieldset>
+
                             [% IF ( can_revert ) %]
                                 <form method="post" id="revert_batch_form">
                                     [% INCLUDE 'csrf-token.inc' %]
@@ -314,8 +319,9 @@
                                     <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalog" /></fieldset>
                                 </form>
                             [% END # /IF can_revert %]
-                        </div>
-                        [% END %]
+
+                        [% END #/UNLESS can_commit %]
+                        [% END #/UNLESS job_enqueue %]
 
                     [% END # /IF batch_info %]
 
