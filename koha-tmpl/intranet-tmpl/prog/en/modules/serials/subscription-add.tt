@@ -194,11 +194,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                         [% END %]
                                     </select>
                                 </li>
-                                [% IF serialsadditems %]
-                                <li class="use_items">
-                                [% ELSE %]
-                                <li class="use_items" style="display:none">
-                                [% END %]
+                                <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
                                     <label for="ccode">Collection:</label>
                                     <select name="ccode" id="ccode">
                                         <option value="">None</option>
@@ -211,11 +207,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                         [% END %]
                                     </select>
                                 </li>
-                                [% IF serialsadditems %]
-                                <li class="use_items">
-                                [% ELSE %]
-                                <li class="use_items" style="display:none">
-                                [% END %]
+                                <li class="use_items" [% UNLESS serialsadditems %]style="display:none"[% END %]>
                                     <label for="itemtype">Item type:</label>
                                     <select name="itemtype" id="itemtype">
                                         <option value=""></option>
@@ -315,11 +307,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                         <select name="frequency" id="frequency" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH frequency IN frequencies %]
-                                                [% IF (frequency.selected) %]
-                                                    <option value="[% frequency.id | html %]" selected="selected">
-                                                [% ELSE %]
-                                                    <option value="[% frequency.id | html %]">
-                                                [% END %]
+                                                <option value="[% frequency.id | html %]" [% IF frequency.selected %]selected="selected"[% END %]>
                                                     [% frequency.label | html %]
                                                 </option>
                                             [% END %]
@@ -332,28 +320,24 @@ fieldset.rows table { clear: none; margin: 0; }
                                                 [% SWITCH st %]
                                                     [% CASE 'numberlength' %]
                                                         [% IF st == subtype %]
-                                                            <option value="issues" selected="selected">
+                                                            <option value="issues" selected="selected">issues</option>
                                                         [% ELSE %]
-                                                            <option value="issues">
+                                                            <option value="issues">issues</option>
                                                         [% END %]
-                                                        issues
                                                     [% CASE 'weeklength' %]
                                                         [% IF st == subtype %]
-                                                            <option value="weeks" selected="selected">
+                                                            <option value="weeks" selected="selected">weeks</option>
                                                         [% ELSE %]
-                                                            <option value="weeks">
+                                                            <option value="weeks">weeks</option>
                                                         [% END %]
-                                                        weeks
                                                     [% CASE 'monthlength' %]
                                                         [% IF st == subtype %]
-                                                            <option value="months" selected="selected">
+                                                            <option value="months" selected="selected">months</option>
                                                         [% ELSE %]
-                                                            <option value="months">
+                                                            <option value="months">months</option>
                                                         [% END %]
-                                                        months
                                                     [% CASE %][% st | html %]
                                                 [% END %]
-                                                </option>
                                             [% END %]
                                         </select>
                                         <input type="text" name="sublength" id="sublength" value="[% sublength | html %]" size="3" /> (enter amount in numerals)
@@ -372,11 +356,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                         <select name="numbering_pattern" id="numberpattern" class="required" required="required">
                                             <option value="">-- please choose --</option>
                                             [% FOREACH numberpattern IN numberpatterns %]
-                                                [% IF (numberpattern.selected) %]
-                                                    <option value="[% numberpattern.id | html %]" selected="selected">
-                                                [% ELSE %]
-                                                    <option value="[% numberpattern.id | html %]">
-                                                [% END %]
+                                                <option value="[% numberpattern.id | html %]" [% IF numberpattern.selected %]selected="selected"[% END %]>
                                                     [% numberpattern.label | html %]
                                                 </option>
                                             [% END %]
