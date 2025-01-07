@@ -191,42 +191,37 @@ This will return a list of all columns for a report area
 =cut
 
 sub get_columns {
-
-    # this calls the internal function _get_columns
-    my ( $area, $cgi ) = @_;
+    my ($area)      = @_;
     my %table_areas = get_table_areas;
-    my $tables = $table_areas{$area}
-      or die qq{Unsuported report area "$area"};
+    my $tables      = $table_areas{$area}
+        or die qq{Unsupported report area "$area"};
 
-    my @allcolumns;
-    my $first = 1;
-    foreach my $table (@$tables) {
-        my @columns = _get_columns($table,$cgi, $first);
-        $first = 0;
-        push @allcolumns, @columns;
+    my $columns;
+    for my $table (@$tables) {
+        $columns->{$table} = _get_columns($table);
     }
-    return ( \@allcolumns );
+    return $columns;
 }
 
 sub _get_columns {
-    my ($tablename,$cgi, $first) = @_;
-    my $dbh         = C4::Context->dbh();
-    my $sth         = $dbh->prepare("show columns from $tablename");
-    $sth->execute();
-    my @columns;
-    my $columns = Koha::Database::Columns->columns;
-	my %tablehash;
-	$tablehash{'table'}=$tablename;
-    $tablehash{'__first__'} = $first;
-	push @columns, \%tablehash;
-    while ( my $data = $sth->fetchrow_arrayref() ) {
-        my %temphash;
-        $temphash{'name'}        = "$tablename.$data->[0]";
-        $temphash{'description'} = $columns->{$tablename}->{$data->[0]};
-        push @columns, \%temphash;
-    }
-    $sth->finish();
-    return (@columns);
+    my ($table_name) = @_;
+    my $dbh          = C4::Context->dbh();
+    my $all_columns  = Koha::Database::Columns->columns;
+
+    # Sanitize input, just in case
+    die sprintf( 'Invalid table name %s', $table_name ) unless exists $all_columns->{$table_name};
+
+    my $columns = $dbh->selectall_arrayref( sprintf( q{SHOW COLUMNS FROM %s}, $table_name ), { Slice => {} } );
+    return [
+        map {
+            my $column_name = $_->{Field};
+            {
+                name        => sprintf( "%s.%s", $table_name, $column_name ),
+                description => $all_columns->{$table_name}->{$column_name},
+            };
+
+        } @$columns
+    ];
 }
 
 =head2 build_query($columns,$criteria,$orderby,$area)
