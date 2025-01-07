@@ -200,7 +200,7 @@ sub getLanguages {
     }
 
     my $language_list = $isFiltered ? C4::Context->preference("AdvancedSearchLanguages") : undef;
-    my $language_list_cond = $language_list ? 'HAVING FIND_IN_SET(language_rfc4646_to_iso639.iso639_2_code, ?)' : '';
+    my $language_list_cond = $language_list ? 'AND FIND_IN_SET(language_rfc4646_to_iso639.iso639_2_code, ?)' : '';
 
     my $sth = $dbh->prepare("
     SELECT
