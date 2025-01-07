@@ -221,14 +221,7 @@
                         [% END %]
                     [% END %]
 
-                    [% IF ( op == 'show' ) %]
-                    <form name="f" action="modborrowers.pl" method="post" id="batchmod-borrowers-form">
-                        [% INCLUDE 'csrf-token.inc' %]
-                        <input type="hidden" name="op" value="cud-do" />
-                        [% IF ( borrowers ) %]
-                            <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a></div>
-                        [% END %]
-                    [% END %]
+                    [% BLOCK show_patron_list %]
                         [% IF borrowers %]
                             <div id="cataloguing_additem_itemlist" class="page-section">
                                 <table id="borrowerst">
@@ -276,11 +269,7 @@
                                     <tbody>
                                         [% FOREACH borrower IN borrowers %]
                                             <tr>
-                                                [% IF ( op == 'show' ) %]
-                                                    <td>
-                                                [% ELSE %]
-                                                    <td class="NoVisible">
-                                                [% END %]
+                                                <td [% IF op != 'show' %]class="NoVisible"[% END %]>
                                                     <input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" />
                                                 </td>
                                                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
@@ -348,121 +337,124 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            [% IF ( op == 'show' ) %]
-                            <div id="cataloguing_additem_newitem">
-                                <h2>Edit patrons</h2>
-                                <div class="hint">Checking the box right next to the label will disable the entry and delete the values of that field on all selected patrons</div>
-                                <fieldset class="rows" id="fields_list">
-                                    <ol>
-                                        [% FOREACH field IN fields %]
-                                        <li>
-                                            [% IF ( field.mandatory ) %]
-                                            <label for="[% field.name | html %]" class="required">
-                                            [% ELSE %]
-                                            <label for="[% field.name | html %]">
-                                            [% END %]
-                                            [% SWITCH ( field.name ) %]
-                                                [% CASE 'surname' %]<span>Surname:</span>
-                                                [% CASE 'firstname' %]<span>First name:</span>
-                                                [% CASE 'branchcode' %]<span>Library:</span>
-                                                [% CASE 'categorycode' %]<span>Patron category:</span>
-                                                [% CASE 'streetnumber' %]<span>Street number:</span>
-                                                [% CASE 'address' %]<span>Address:</span>
-                                                [% CASE 'address2' %]<span>Address 2:</span>
-                                                [% CASE 'city' %]<span>City:</span>
-                                                [% CASE 'state' %]<span>State:</span>
-                                                [% CASE 'zipcode' %]<span>ZIP/Postal code:</span>
-                                                [% CASE 'country' %]<span>Country:</span>
-                                                [% CASE 'email' %]<span>Primary email:</span>
-                                                [% CASE 'phone' %]<span>Primary phone:</span>
-                                                [% CASE 'mobile' %]<span>Other phone:</span>
-                                                [% CASE 'fax' %]<span>Fax:</span>
-                                                [% CASE 'sort1' %]<span>Sort 1:</span>
-                                                [% CASE 'sort2' %]<span>Sort 2:</span>
-                                                [% CASE 'dateenrolled' %]<span>Registration date:</span>
-                                                [% CASE 'dateexpiry' %]<span>Expiry date:</span>
-                                                [% CASE 'borrowernotes' %]<span>Circulation note:</span>
-                                                [% CASE 'opacnote' %]<span>OPAC note:</span>
-                                                [% CASE "message" %]<span>Message:</span>
-                                                [% CASE 'debarred' %]<span>Restriction expiration:</span>
-                                                [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
-                                                [% CASE 'password_expiration_date' %]<span>Password expiration date:</span>
-                                                [% CASE 'protected' %]<span>Protected:</span>
-                                            [% END %]
-                                            </label>
-                                            [% IF ( field.type == 'text' ) %]
-                                                <input type="text" id="[%field.name | html %]" name="[% field.name | html %]" value="" />
-                                            [% END %]
-                                            [% IF ( field.type == 'message_type' ) %]
-                                                <input type="text" name="[% field.name | html %]" value="" />
-                                                <select name="add_message_type" id="message_type">
-                                                    <option value="L">Staff - Internal note</option>
-                                                    <option value="B">OPAC</option>
-                                                </select>
-                                            [% END %]
-                                            [% IF ( field.type == 'select' ) %]
-                                                [% IF field.option.size %]
-                                                    <select id="[%field.name | html %]" name="[% field.name | html %]" >
-                                                        [% FOREACH opt IN field.option %]
-                                                            <option value="[% opt.value | html %]">[% opt.lib | html %]</option>
-                                                        [% END %]
-                                                    </select>
-                                                [% ELSE %]
-                                                    There is no value defined for [% field.name | html %]
-                                                [% END %]
-                                            [% END %]
-                                            [% IF ( field.type == 'bool' ) %]
-                                                <select name="[% field.name | html %]" >
-                                                    <option value=""></option>
-                                                    <option value="1">Yes</option>
-                                                    <option value="0">No</option>
-                                                </select>
-                                            [% END %]
-                                            [% IF ( field.type == 'date' ) %]
-                                                <input type="text" name="[% field.name | html %]" id="[% field.name | html %]" value="" size="10" maxlength="10" class="flatpickr" />
-                                                <a href="#"  class="clear-date" id="clear-date-[% field.name | html %]" ><i class="fa fa-fw fa-trash-can"></i> Clear</a>
-                                            [% END %]
-                                            [% IF field.mandatory %]
-                                                <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name | html %]" disabled="disabled" readonly="readonly" />
-                                                <span class="required">Required fields cannot be cleared</span>
-                                            [% ELSE %]
-                                                <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name | html %]" />
-                                                [% IF ( field.type == 'message_type' ) %]
-                                                    <span class="hint">NOTE: Checking this box will remove ALL messages</span>
-                                                [% END %]
-                                            [% END %]
-                                        </li>
+                        [% END %]
+                    [% END %]
+                    [% IF ( op == 'show' ) %]
+                    <form name="f" action="modborrowers.pl" method="post" id="batchmod-borrowers-form">
+                        [% INCLUDE 'csrf-token.inc' %]
+                        <input type="hidden" name="op" value="cud-do" />
+                        [% IF ( borrowers ) %]
+                            <div class="btn-toolbar selections-toolbar"><a id="selectallbutton" href="#"><i class="fa fa-check"></i> Select all</a> | <a id="clearallbutton" href="#"><i class="fa fa-times"></i> Clear all</a></div>
+                        [% PROCESS show_patron_list %]
+                        <div id="cataloguing_additem_newitem">
+                            <h2>Edit patrons</h2>
+                            <div class="hint">Checking the box right next to the label will disable the entry and delete the values of that field on all selected patrons</div>
+                            <fieldset class="rows" id="fields_list">
+                                <ol>
+                                    [% FOREACH field IN fields %]
+                                    <li>
+                                        <label for="[% field.name | html %]" [% IF field.mandatory %]class="required"[% END %]>
+                                        [% SWITCH ( field.name ) %]
+                                            [% CASE 'surname' %]<span>Surname:</span>
+                                            [% CASE 'firstname' %]<span>First name:</span>
+                                            [% CASE 'branchcode' %]<span>Library:</span>
+                                            [% CASE 'categorycode' %]<span>Patron category:</span>
+                                            [% CASE 'streetnumber' %]<span>Street number:</span>
+                                            [% CASE 'address' %]<span>Address:</span>
+                                            [% CASE 'address2' %]<span>Address 2:</span>
+                                            [% CASE 'city' %]<span>City:</span>
+                                            [% CASE 'state' %]<span>State:</span>
+                                            [% CASE 'zipcode' %]<span>ZIP/Postal code:</span>
+                                            [% CASE 'country' %]<span>Country:</span>
+                                            [% CASE 'email' %]<span>Primary email:</span>
+                                            [% CASE 'phone' %]<span>Primary phone:</span>
+                                            [% CASE 'mobile' %]<span>Other phone:</span>
+                                            [% CASE 'fax' %]<span>Fax:</span>
+                                            [% CASE 'sort1' %]<span>Sort 1:</span>
+                                            [% CASE 'sort2' %]<span>Sort 2:</span>
+                                            [% CASE 'dateenrolled' %]<span>Registration date:</span>
+                                            [% CASE 'dateexpiry' %]<span>Expiry date:</span>
+                                            [% CASE 'borrowernotes' %]<span>Circulation note:</span>
+                                            [% CASE 'opacnote' %]<span>OPAC note:</span>
+                                            [% CASE "message" %]<span>Message:</span>
+                                            [% CASE 'debarred' %]<span>Restriction expiration:</span>
+                                            [% CASE 'debarredcomment' %]<span>Restriction comment:</span>
+                                            [% CASE 'password_expiration_date' %]<span>Password expiration date:</span>
+                                            [% CASE 'protected' %]<span>Protected:</span>
                                         [% END %]
-                                        [% IF ( patron_attributes_codes ) %]
-                                            <li class="attributes">
-                                                <label for="patron_attributes" style="width:auto;">
-                                                    <span>Patron attribute:</span>
-                                                </label>
-                                                <select id="patron_attributes" name="patron_attributes">
-                                                    <option value=""></option>
-                                                    [% FOREACH pac IN patron_attributes_codes %]
-                                                        <option value="[% pac.attribute_code | html %]" data-type="[% pac.type | html %]" data-category="[% pac.category_lib | html %]">[% pac.attribute_lib | html %]</option>
+                                        </label>
+                                        [% IF ( field.type == 'text' ) %]
+                                            <input type="text" id="[%field.name | html %]" name="[% field.name | html %]" value="" />
+                                        [% END %]
+                                        [% IF ( field.type == 'message_type' ) %]
+                                            <input type="text" name="[% field.name | html %]" value="" />
+                                            <select name="add_message_type" id="message_type">
+                                                <option value="L">Staff - Internal note</option>
+                                                <option value="B">OPAC</option>
+                                            </select>
+                                        [% END %]
+                                        [% IF ( field.type == 'select' ) %]
+                                            [% IF field.option.size %]
+                                                <select id="[%field.name | html %]" name="[% field.name | html %]" >
+                                                    [% FOREACH opt IN field.option %]
+                                                        <option value="[% opt.value | html %]">[% opt.lib | html %]</option>
                                                     [% END %]
                                                 </select>
-
-                                                <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
-                                                <span class="patron_attributes_value"><input type="hidden" name="patron_attributes_value" /></span>
-                                                <a href="#" class="add_attributes" title="Add an attribute"><i class="fa fa-fw fa-plus"></i> New</a>
-                                                <span class="information_category hint" style="width:25%;float:right;"></span>
-                                            </li>
-                                            <div class="hint">NOTE: Attributes set here will replace all attributes of the same type in the patron record.</div>
+                                            [% ELSE %]
+                                                There is no value defined for [% field.name | html %]
+                                            [% END %]
                                         [% END %]
-                                    </ol>
-                                </fieldset>
-                                <fieldset class="action">
-                                    <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Save" />
-                                    <a href="/cgi-bin/koha/tools/modborrowers.pl" class="cancel">Cancel</a>
-                                    [% PROCESS 'members-patron-selections.inc' id="batchmod-borrowers-form" %]
-                                </fieldset>
-                            </div>
-                        </form>
+                                        [% IF ( field.type == 'bool' ) %]
+                                            <select name="[% field.name | html %]" >
+                                                <option value=""></option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        [% END %]
+                                        [% IF ( field.type == 'date' ) %]
+                                            <input type="text" name="[% field.name | html %]" id="[% field.name | html %]" value="" size="10" maxlength="10" class="flatpickr" />
+                                            <a href="#"  class="clear-date" id="clear-date-[% field.name | html %]" ><i class="fa fa-fw fa-trash-can"></i> Clear</a>
+                                        [% END %]
+                                        [% IF field.mandatory %]
+                                            <input type="checkbox" title="This field is mandatory" name="disable_input" value="[% field.name | html %]" disabled="disabled" readonly="readonly" />
+                                            <span class="required">Required fields cannot be cleared</span>
+                                        [% ELSE %]
+                                            <input type="checkbox" title="Check to delete this field" name="disable_input" value="[% field.name | html %]" />
+                                            [% IF ( field.type == 'message_type' ) %]
+                                                <span class="hint">NOTE: Checking this box will remove ALL messages</span>
+                                            [% END %]
+                                        [% END %]
+                                    </li>
+                                    [% END %]
+                                    [% IF ( patron_attributes_codes ) %]
+                                        <li class="attributes">
+                                            <label for="patron_attributes" style="width:auto;">
+                                                <span>Patron attribute:</span>
+                                            </label>
+                                            <select id="patron_attributes" name="patron_attributes">
+                                                <option value=""></option>
+                                                [% FOREACH pac IN patron_attributes_codes %]
+                                                    <option value="[% pac.attribute_code | html %]" data-type="[% pac.type | html %]" data-category="[% pac.category_lib | html %]">[% pac.attribute_lib | html %]</option>
+                                                [% END %]
+                                            </select>
+
+                                            <input type="checkbox" title="check to delete this field" name="disable_input" value="attr0_value" />
+                                            <span class="patron_attributes_value"><input type="hidden" name="patron_attributes_value" /></span>
+                                            <a href="#" class="add_attributes" title="Add an attribute"><i class="fa fa-fw fa-plus"></i> New</a>
+                                            <span class="information_category hint" style="width:25%;float:right;"></span>
+                                        </li>
+                                        <div class="hint">NOTE: Attributes set here will replace all attributes of the same type in the patron record.</div>
+                                    [% END %]
+                                </ol>
+                            </fieldset>
+                            <fieldset class="action">
+                                <input type="submit" name="mainformsubmit" class="btn btn-primary" value="Save" />
+                                <a href="/cgi-bin/koha/tools/modborrowers.pl" class="cancel">Cancel</a>
+                                [% PROCESS 'members-patron-selections.inc' id="batchmod-borrowers-form" %]
+                            </fieldset>
+                        </div>
                         [% END %]
+                    </form>
                     [% END %]
                 [% END %]
                 [% IF ( op == 'show_results' ) %]
