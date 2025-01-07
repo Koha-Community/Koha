@@ -244,7 +244,7 @@
                                                     <input type="checkbox" id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]" name="limit" value="mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %]"/>
                                                 [% END # /IF limits.$limit_key.defined %]
                                                 <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
-                                                    [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
+                                                    [% UNLESS ( Koha.Preference('noItemTypeImages') ) %]
                                                         [% IF ( itemtypeloo.imageurl ) %]
                                                             <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
                                                         [% END %]
