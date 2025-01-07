@@ -123,11 +123,11 @@
                                         <br /> Subscription closed
                                     [% END %]
                                 </td>
+                                [% SET td_class = 'actions' %]
                                 [% IF ( subscription.abouttoexpire ) || ( subscription.subscriptionexpired ) %]
-                                    <td class="problem actions">
-                                [% ELSE %]
-                                    <td class="actions">
+                                    [% SET td_class = 'problem actions' %]
                                 [% END %]
+                                <td class="[% td_class | html %]">
                                 [% UNLESS subscription.closed %]
                                     [% IF ( routing && CAN_user_serials_routing ) %]
                                         [% IF ( subscription.hasRouting ) %]
