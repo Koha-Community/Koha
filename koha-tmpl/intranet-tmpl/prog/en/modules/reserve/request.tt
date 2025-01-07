@@ -147,10 +147,11 @@
 <div class="main container-fluid">
     <div class="row">
         [% IF ( multi_hold || nobiblio ) # No sidebar menu when placing multiple holds or biblio not found %]
-            <div class="col-md-10 offset-md-1">
+            [% SET div_class = "col-md-10 offset-md-1" %]
         [% ELSE %]
-            <div class="col-md-10 order-md-2 order-sm-1">
+            [% SET div_class="col-md-10 order-md-2 order-sm-1" %]
         [% END %]
+        <div class="[% div_class | html %]">
 
         <main>
             [% INCLUDE 'messages.inc' %]
@@ -395,11 +396,7 @@
                                     <th>Information</th>
                                 </tr>
                                 [% FOREACH biblioloo IN biblioloop %]
-                                    [% IF ( biblioloo.warn ) %]
-                                        <tr class="onissue">
-                                    [% ELSE %]
-                                        <tr>
-                                    [% END %]
+                                    <tr [% IF biblioloo.warn %]class="onissue"[% END %]>
                                         <td>
                                             [% UNLESS ( biblioloo.warn ) %]
                                                     <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
@@ -433,27 +430,13 @@
                                             [% END %]
                                             [% IF ( biblioloo.alreadyres ) %]
                                                 <ul>
-                                            [% ELSE %]
-                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                    <ul>
-                                                [% END %]
-                                            [% END %]
-
-                                            [% IF ( biblioloo.alreadyres ) %]
-                                                <li>
-                                                    [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] <strong>already has a hold</strong> on this item
-                                                </li>
+                                                    <li>
+                                                        [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] <strong>already has a hold</strong> on this item
+                                                    </li>
+                                                </ul>
                                             [% END %]
                                             [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                <li> <strong>No items are available</strong> to be placed on hold</li>
-                                            [% END %]
-
-                                            [% IF ( biblioloo.alreadyres ) %]
-                                                </ul>
-                                            [% ELSE %]
-                                                [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                    </ul>
-                                                [% END %]
+                                                <ul><li> <strong>No items are available</strong> to be placed on hold</li></ul>
                                             [% END %]
                                         </td>
                                     </tr>
@@ -963,16 +946,15 @@
                                                             [% itemloo.enumchron | html %]
                                                         </td>
                                                     [% END %]
-                                                    [% IF ( itemloo.onloan ) %]
-                                                        <td data-order="[% itemloo.date_due | html %]">
+                                                    <td [% IF itemloo.onloan %]data-order="[% itemloo.date_due | html %]"[% END %]>
+                                                        [% IF ( itemloo.onloan ) %]
                                                             <span class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 %]</span>
-                                                    [% ELSE %]
-                                                        <td>
+                                                        [% ELSE %]
                                                             [% IF ( itemloo.transfertwhen ) %]
                                                                 <span>In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
                                                                 to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | $KohaDates %]</span>
                                                             [% END %]
-                                                    [% END %]
+                                                        [% END %]
 
                                                         [% IF ( itemloo.reservedate ) %]
                                                             [% IF ( itemloo.nocancel ) %]
@@ -1120,11 +1102,7 @@
                                             <th>Information</th>
                                         </tr>
                                         [% FOREACH biblioloo IN biblioloop %]
-                                            [% IF ( biblioloo.warn ) %]
-                                                <tr class="onissue">
-                                            [% ELSE %]
-                                                <tr>
-                                            [% END %]
+                                            <tr [% IF biblioloo.warn %]class="onissue"[% END %]>
                                                 <td>
                                                     [% UNLESS ( biblioloo.warn ) %]
                                                         <input id="holdable_bibs" name="holdable_bibs" class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]" value="[% biblioloo.biblionumber | html %]"/>
@@ -1171,28 +1149,14 @@
                                                         <span>Patron has previously checked out this title</span><br/>
                                                     [% END %]
                                                     [% IF ( biblioloo.alreadyres ) %]
-                                                        <ul>
-                                                    [% ELSE %]
-                                                        [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                            <ul>
-                                                        [% END %]
-                                                    [% END %]
-
-                                                    [% IF ( biblioloo.alreadyres ) %]
-                                                    <li>
-                                                        [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] <strong>already has a hold</strong> on this item
-                                                    </li>
+                                                    <ul>
+                                                        <li>
+                                                            [% INCLUDE 'patron-title.inc' patron => patron no_title => 1 no_cardnumber => 1 hide_patron_infos_if_needed => 1 %] <strong>already has a hold</strong> on this item
+                                                        </li>
+                                                    </ul>
                                                     [% END %]
                                                     [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                        <li> <strong>No items are available</strong> to be placed on hold</li>
-                                                    [% END %]
-
-                                                    [% IF ( biblioloo.alreadyres ) %]
-                                                        </ul>
-                                                    [% ELSE %]
-                                                        [% IF ( biblioloo.none_avail || biblioloo.noitems ) %]
-                                                            </ul>
-                                                        [% END %]
+                                                        <ul><li> <strong>No items are available</strong> to be placed on hold</li></ul>
                                                     [% END %]
                                                 </td>
                                             </tr>
@@ -1423,10 +1387,8 @@
 
         </main>
 
-        [% IF ( multi_hold || nobiblio ) # No sidebar menu when placing multiple holds or biblio not found %]
-            </div> <!-- /.col-md-10.offset-md-1 -->
-        [% ELSE %]
-            </div> <!-- /.col-md-10.order-md-2 -->
+        </div> <!-- /.col-md-10.offset-md-1 OR /.col-md-10.order-md-2 -->
+        [% UNLESS ( multi_hold || nobiblio ) %]
                 <div class="col-md-2 order-sm-2 order-md-1">
                     <aside>
                         [% INCLUDE 'biblio-view-menu.inc' %]
