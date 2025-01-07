@@ -23,6 +23,7 @@
                         [% CASE 'circ-nav' %][% INCLUDE 'circ-nav.inc' %]
                         [% CASE 'facets' %][% INCLUDE 'facets.inc' %]
                         [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]
+                        [% CASE 'pos-menu' %][% INCLUDE 'pos-menu.inc' %]
                         [% CASE 'subscriptions-search' %][% INCLUDE 'subscriptions-search.inc' %]
                         [% CASE 'tools-menu' %][% INCLUDE 'tools-menu.inc' %]
                         [% END %]
