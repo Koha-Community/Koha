@@ -271,9 +271,11 @@ if ( ( $op eq 'cud-insert' ) and !$nodouble ) {
 #Attempt to delete guarantors
 my @delete_guarantor = $input->multi_param('delete_guarantor');
 if (@delete_guarantor) {
-    if ( C4::Context->preference('ChildNeedsGuarantor')
-        && scalar @guarantors - scalar @delete_guarantor == 0 )
-    {
+    my $will_remove_last =
+           ( scalar @guarantors - scalar @delete_guarantor == 0 )
+        && $newdata{'contactname'} eq q{}
+        && $newdata{'contactfirstname'} eq q{};
+    if ( C4::Context->preference('ChildNeedsGuarantor') && $will_remove_last ) {
         push @errors, 'ERROR_cannot_delete_guarantor';
     } else {
         foreach my $id (@delete_guarantor) {
