@@ -70,10 +70,17 @@
             <p>Filtered on:</p>
             <ul>
             [% FOREACH loopfilte IN loopfilter %]
-                [% IF ( loopfilte.err ) %]<li class="error">Error:
-				[% ELSIF ( loopfilte.sql ) %]<li class="sql">
-				[% ELSE %]<li>
-				[% END %]
+                [% SET li_class = '' %]
+                [% IF ( loopfilte.err ) %]
+                    [% li_class = 'error' %]
+                [% ELSIF ( loopfilte.sql ) %]
+                    [% li_class = 'sql' %]
+                [% END %]
+                <li class="[% li_class | html %]">
+                [% IF loopfilte.err %]
+                    <span>Error:</span>
+                [% END %]
+
 					[% loopfilte.crit | html %] [% loopfilte.filter | html %]
 				</li>
             [% END %]
