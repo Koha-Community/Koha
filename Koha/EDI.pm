@@ -110,6 +110,11 @@ sub create_edi_order {
         )->single;
     }
 
+    unless ($ean_obj) {
+        carp "No matching EAN found for $ean";
+        return;
+    }
+
     my $dbh     = C4::Context->dbh;
     my $arr_ref = $dbh->selectcol_arrayref(
         'select id from edifact_messages where basketno = ? and message_type = \'QUOTE\'',
@@ -290,7 +295,7 @@ sub process_invoice {
             if ( !$vendor_acct ) {
                 $invoice_message->add_to_edifact_errors(
                     {
-                        section => '',
+                        section => "NAD+SU+" . $msg->supplier_ean,
                         details => "Skipped invoice $invoicenumber with unmatched vendor san: $vendor_ean"
                     }
                 );
@@ -299,7 +304,7 @@ sub process_invoice {
                 next;
             }
             $invoice_message->edi_acct( $vendor_acct->id );
-            $logger->trace("Adding invoice:$invoicenumber");
+            $logger->trace("Adding invoice: $invoicenumber");
             my $new_invoice = $schema->resultset('Aqinvoice')->create(
                 {
                     invoicenumber         => $invoicenumber,
@@ -320,8 +325,8 @@ sub process_invoice {
                 if ( !$ordernumber ) {
                     $invoice_message->add_to_edifact_errors(
                         {
-                            section => $line->line_item_number,
-                            details => "Message missing ordernumber"
+                            section => join( "\n", map { $_->as_string } @{ $line->{segs} } ),
+                            details => "Skipped invoice line " . $line->line_item_number . ", missing ordernumber"
                         }
                     );
                     $logger->error("Skipping invoice line, no associated ordernumber");
@@ -333,8 +338,11 @@ sub process_invoice {
                 if ( !$order ) {
                     $invoice_message->add_to_edifact_errors(
                         {
-                            section => $line->line_item_number,
-                            details => "Koha order $ordernumber missing"
+                            section => join( "\n", map { $_->as_string } @{ $line->{segs} } ),
+                            details => "Skipped invoice line "
+                                . $line->line_item_number
+                                . ", cannot find order with ordernumber "
+                                . $ordernumber
                         }
                     );
                     $logger->error("Skipping invoice line, no order found for $ordernumber, invoice:$invoicenumber");
@@ -345,8 +353,11 @@ sub process_invoice {
                 if ( !$bib ) {
                     $invoice_message->add_to_edifact_errors(
                         {
-                            section => $line->line_item_number,
-                            details => "Koha biblio missing"
+                            section => join( "\n", map { $_->as_string } @{ $line->{segs} } ),
+                            details => "Skipped invoice line "
+                                . $line->line_item_number
+                                . ", cannot find biblio for ordernumber "
+                                . $ordernumber
                         }
                     );
                     $logger->error(
@@ -476,8 +487,12 @@ sub receipt_items {
             my $i = $ilink->itemnumber;
             $invoice_message->add_to_edifact_errors(
                 {
-                    section => $inv_line->line_item_number,
-                    details => "Cannot fine aqorder item"
+                    section => join( "\n", map { $_->as_string } @{ $inv_line->{segs} } ),
+                    details => "Skipped invoice line "
+                        . $inv_line->line_item_number
+                        . ", Koha item with itemnumber "
+                        . $i
+                        . "is missing"
                 }
             );
             $logger->warn("Cannot find aqorder item for $i: Order: $ordernumber");
@@ -520,8 +535,12 @@ sub receipt_items {
                 if ( $rs->count > 0 ) {
                     $invoice_message->add_to_edifact_errors(
                         {
-                            section => $inv_line->line_item_number . " : " . $gir_occurrence,
-                            details => "Duplicate barcode found $barcode"
+                            section => join( "\n", map { $_->as_string } @{ $inv_line->{segs} } ),
+                            details => "Failed to assign barcode "
+                                . $barcode
+                                . "for invoice line "
+                                . $inv_line->line_item_number
+                                . ", duplicate found"
                         }
                     );
                     $logger->warn("Barcode $barcode is a duplicate");
@@ -548,8 +567,11 @@ sub receipt_items {
         } else {
             $invoice_message->add_to_edifact_errors(
                 {
-                    section => $inv_line->line_item_number,
-                    details => "Unmatched item at branch $branch"
+                    section => join( "\n", map { $_->as_string } @{ $inv_line->{segs} } ),
+                    details => "No matching item found for invoice line "
+                        . $inv_line->line_item_number . ":"
+                        . $gir_occurrence
+                        . " at branch $branch"
                 }
             );
             $logger->warn("Unmatched item at branch:$branch");
@@ -716,10 +738,10 @@ sub quote_item {
                 details => "Failed to create basket"
             }
         );
-        $logger->error('Skipping order creation no valid basketno');
+        $logger->error('Skipped order creation no valid basketno');
         return;
     }
-    $logger->trace( 'Checking db for matches with ', $item->item_number_id() );
+    $logger->trace( 'Checking db for matches with ' . $item->item_number_id() );
     my $bib = _check_for_existing_bib( $item->item_number_id() );
     if ( !defined $bib ) {
         $bib = {};
@@ -730,9 +752,9 @@ sub quote_item {
 
         ( $bib->{biblionumber}, $bib->{biblioitemnumber} ) =
             AddBiblio( $bib_record, q{} );
-        $logger->trace("New biblio added $bib->{biblionumber}");
+        $logger->trace( "Added biblio: " . $bib->{biblionumber} );
     } else {
-        $logger->trace("Match found: $bib->{biblionumber}");
+        $logger->trace( "Match found: " . $bib->{biblionumber} );
     }
 
     # Create an orderline
@@ -745,7 +767,7 @@ sub quote_item {
         if ( $gir_count != $order_quantity ) {
             $quote_message->add_to_edifact_errors(
                 {
-                    section => "GIR",
+                    section => join( '\n', @{ $item->{GIR} } ),
                     details => "Order for $order_quantity items, $gir_count segments present"
                 }
             );
@@ -829,20 +851,20 @@ sub quote_item {
         if ( $item->quantity > 1 ) {
             $quote_message->add_to_edifact_errors(
                 {
-                    section => "GIR",
+                    section => join( '\n', @{ $item->{GIR} } ),
                     details => "Skipped GIR line with invalid budget: " . $item->girfield('fund_allocation')
                 }
             );
-            $logger->trace('girfield skipped for invalid budget');
+            $logger->trace( 'Skipping item with invalid budget: ' . $item->girfield('fund_allocation') );
             $skip++;
         } else {
             $quote_message->add_to_edifact_errors(
                 {
-                    section => "GIR",
+                    section => join( "\n", map { $_->as_string } @{ $item->{segs} } ),
                     details => "Skipped orderline line with invalid budget: " . $item->girfield('fund_allocation')
                 }
             );
-            $logger->trace('orderline skipped for invalid budget');
+            $logger->trace( 'Skipping orderline with invalid budget: ' . $item->girfield('fund_allocation') );
             return;
         }
     }
@@ -876,7 +898,7 @@ sub quote_item {
                 $item_hash->{biblioitemnumber} = $bib->{biblioitemnumber};
                 my $kitem      = Koha::Item->new($item_hash)->store;
                 my $itemnumber = $kitem->itemnumber;
-                $logger->trace("Added item:$itemnumber");
+                $logger->trace( "Added item: " . $itemnumber );
                 $schema->resultset('AqordersItem')->create(
                     {
                         ordernumber => $first_order->ordernumber,
@@ -893,12 +915,12 @@ sub quote_item {
                     );
                     if ($rota) {
                         $rota->add_item($itemnumber);
-                        $logger->trace("Item added to rota $rota->id");
+                        $logger->trace( "Item added to rota " . $rota->title );
                     } else {
                         $quote_message->add_to_edifact_errors(
                             {
-                                section => "LRP",
-                                details => "No rota found for passed $lrp in orderline"
+                                section => "$item->{GIR}->[0]",
+                                details => "No rota found for passed LRP:$lrp in orderline"
                             }
                         );
                         $logger->error("No rota found matching $lrp in orderline");
@@ -922,11 +944,11 @@ sub quote_item {
                 my $bad_budget = $item->girfield( 'fund_allocation', $occurrence );
                 $quote_message->add_to_edifact_errors(
                     {
-                        section => "GIR",
-                        details => "Skipped GIR line with invalid budget: $bad_budget"
+                        section => "$item->{GIR}->[$occurrence]",
+                        details => "Invalid budget $bad_budget found"
                     }
                 );
-                $logger->trace("girfield skipped for invalid budget:$bad_budget");
+                $logger->trace( "Skipping item with invalid budget: " . $bad_budget );
                 ++$occurrence;    ## lets look at the next one not this one again
                 next;
             }
@@ -1009,8 +1031,8 @@ sub quote_item {
                         } else {
                             $quote_message->add_to_edifact_errors(
                                 {
-                                    section => "LRP",
-                                    details => "No rota found for passed $lrp in orderline"
+                                    section => "$item->{GIR}->[$occurrence]",
+                                    details => "No rota found for passed LRP:$lrp in orderline"
                                 }
                             );
                             $logger->error("No rota found matching $lrp in orderline");
@@ -1076,8 +1098,8 @@ sub quote_item {
                         } else {
                             $quote_message->add_to_edifact_errors(
                                 {
-                                    section => "LRP",
-                                    details => "No rota found for passed $lrp in orderline"
+                                    section => "$item->{GIR}->[$occurrence]",
+                                    details => "No rota found for passed LRP:$lrp in orderline"
                                 }
                             );
                             $logger->error("No rota found matching $lrp in orderline");

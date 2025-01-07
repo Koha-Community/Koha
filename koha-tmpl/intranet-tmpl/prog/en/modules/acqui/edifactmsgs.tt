@@ -116,7 +116,12 @@
                                 let errorsList = '<ul>';
                                 row.errors.forEach(error => {
                                     if (error.details) {
-                                        errorsList += '<li>' + error.details + '</li>';
+                                        errorsList += '<li>'
+                                        errorsList += error.details
+                                        if (error.section) {
+                                            errorsList += '</br><pre>' + error.section + '</pre>';
+                                        }
+                                        errorsList += '</li>';
                                     }
                                 });
                                 errorsList += '</ul>';
