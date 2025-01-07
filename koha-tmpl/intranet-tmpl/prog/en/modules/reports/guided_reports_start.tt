@@ -187,20 +187,20 @@
                     <h3>Build and run reports</h3>
 
                     [% IF ( CAN_user_reports_create_reports ) %]
-                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" class="btn btn-primary"/>Build new</a>
+                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form" class="btn btn-primary">Build new</a>
                     [% END %]
 
                     [% IF ( CAN_user_reports_execute_reports ) %]
-                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary"/>Use saved</a>
+                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=list" class="btn btn-primary">Use saved</a>
                     [% END %]
 
                     [% IF ( CAN_user_reports_create_reports ) %]
-                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="btn btn-primary"/>Create report from SQL</a>
+                        <a href="/cgi-bin/koha/reports/guided_reports.pl?op=add_form_sql" class="btn btn-primary">Create report from SQL</a>
                     [% END %]
 
                     <h3>Reports Dictionary</h3>
                     <p>Use the reports dictionary to define custom criteria to use in your reports</p>
-                    <a href="/cgi-bin/koha/reports/dictionary.pl?op=list" class="btn btn-primary"/>View dictionary</a>
+                    <a href="/cgi-bin/koha/reports/dictionary.pl?op=list" class="btn btn-primary">View dictionary</a>
                 [% END # /IF (start) %]
 
                 [% IF report_converted %]
@@ -484,7 +484,7 @@
                                 [% IF (usecache) %]
                                     <li>
                                         <label for="cache_expiry">Cache expiry:</label>
-                                        <input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]"></input>
+                                        <input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]" />
                                         <select id="cache_expiry_units" name="cache_expiry_units">
                                             <option value="seconds">Seconds (default)</option>
                                             <option value="minutes">Minutes</option>
@@ -497,7 +497,7 @@
                         </fieldset> <!-- /.rows -->
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-report" />
-                            <button type="submit" class="btn btn-primary" />Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
                         </fieldset>
                     </form>
                 [% END # /build1 %]
@@ -526,7 +526,7 @@
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_type" />
                             <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary" />Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
                         </fieldset>
                     </form>
                 [% END # /IF (build2 ) %]
@@ -582,7 +582,7 @@
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_columns" />
                             <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary" />Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
                         </fieldset>
                     </form> <!-- /#column_submit -->
                 [% END # /IF ( build3 ) %]
@@ -670,7 +670,7 @@
                         <fieldset class="action">
                             <input type="hidden" name="op" value="cud-choose_criteria" />
                             <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary" />Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
                         </fieldset>
                     </form>
                 [% END # /IF ( build4 ) %]
@@ -709,7 +709,7 @@
 
                         <fieldset class="action"><input type="hidden" name="op" value="cud-choose_operations" />
                             <button type="submit" class="btn btn-default goback" name="back">&lt;&lt; Back</button>
-                            <button type="submit" class="btn btn-primary" />Next &gt;&gt;</button>
+                            <button type="submit" class="btn btn-primary">Next &gt;&gt;</button>
                         </fieldset>
                     </form>
                 [% END # /IF ( build5 ) %]
@@ -1282,7 +1282,7 @@
                                 [% IF (usecache) %]
                                     <li>
                                         <label for="cache_expiry">Cache expiry:</label>
-                                        <input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]"></input>
+                                        <input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry | html %]" />
                                         <select id="cache_expiry_units" name="cache_expiry_units">
                                             <option value="seconds" selected="selected">Seconds (default)</option>
                                             <option value="minutes">Minutes</option>
@@ -1354,7 +1354,7 @@
 
                 [% IF ( save_successful ) %]
                     [% UNLESS ( errors ) %]
-                        </br>
+                        <br/>
                         <div id="report_updated">
                             <div class="alert alert-info">
                                 <p>Your report "[% reportname | html %]" has been saved</p>
