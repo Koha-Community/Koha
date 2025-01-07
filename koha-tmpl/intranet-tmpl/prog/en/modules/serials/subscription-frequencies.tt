@@ -89,11 +89,7 @@
                 <select id="unit" name="unit">
                   <option value="">None</option>
                   [% FOREACH unit IN units_loop %]
-                    [% IF (unit.selected) %]
-                      <option selected="selected" value="[% unit.val | html %]">
-                    [% ELSE %]
-                      <option value="[% unit.val | html %]">
-                    [% END %]
+                    <option value="[% unit.val | html %]" [% IF unit.selected %]selected="selected"[% END %]>
                       [% PROCESS translate_frequnit frequnit=unit.val %]
                     </option>
                   [% END %]
