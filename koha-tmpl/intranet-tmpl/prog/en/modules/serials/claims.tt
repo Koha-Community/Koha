@@ -91,11 +91,7 @@
                         <label for="supplierid">Vendor: </label>
                         <select id="supplierid" name="supplierid">
                             [% FOREACH suploo IN suploop %]
-                                [% IF ( suploo.selected ) %]
-                                    <option value="[% suploo.id | html %]" selected="selected" >
-                                [% ELSE %]
-                                    <option value="[% suploo.id | html %]">
-                                [% END %]
+                                <option value="[% suploo.id | html %]" [% IF suploo.selected %]selected="selected"[% END %]>
                                     [% suploo.name | html %]
                                     ([% suploo.count | html %])
                                 </option>
