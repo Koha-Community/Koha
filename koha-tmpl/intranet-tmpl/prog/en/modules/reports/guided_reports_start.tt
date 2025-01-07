@@ -28,6 +28,7 @@
     [% ELSIF ( create ) %]
         [% t("Create from SQL") | html %] &rsaquo;
     [% ELSIF ( showsql ) %]
+        [% tx("Show report {reportname} ({id})", { reportname = reportname, id = id }) | html %] &rsaquo;
         [% t("SQL view") | html %] &rsaquo;
         [% t("Saved reports") | html %] &rsaquo;
     [% ELSIF ( execute ) %]
