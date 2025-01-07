@@ -74,11 +74,7 @@
         [% FOREACH st IN [['numberlength', 'issues'], ['weeklength', 'weeks'], ['monthlength', 'months']] %]
             [% SET subtype = st.0 %]
             [% SET value = st.1 %]
-            [% IF subscription.$subtype %]
-                <option value="[% value | html %]" selected="selected">
-            [% ELSE %]
-                <option value="[% value | html %]">
-            [% END %]
+            <option value="[% value | html %]" [% IF subscription.$subtype %]selected="selected"[% END %]>
             [% SWITCH subtype %]
                 [% CASE 'numberlength' %]<span>issues</span>
                 [% CASE 'weeklength'   %]<span>weeks</span>
