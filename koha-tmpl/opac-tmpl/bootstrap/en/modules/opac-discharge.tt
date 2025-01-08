@@ -40,7 +40,7 @@
                     [% IF success %]
                         <p>Your discharge request has been sent. Your discharge will be available on this page within a few days.</p>
                     [% ELSIF available %]
-                        <a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a></li>
+                        <p><a href="/cgi-bin/koha/opac-discharge.pl?op=get">Get your discharge</a></p>
                     [% ELSIF pending %]
                         <p>Your discharge will be available on this page within a few days.</p>
                     [% ELSIF has_issues %]
