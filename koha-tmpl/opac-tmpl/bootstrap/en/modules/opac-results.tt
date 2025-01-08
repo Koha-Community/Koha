@@ -121,11 +121,11 @@
                     </div>
                 [% END %]
 
+                [% SET column_class = "col maincontent" %]
                 [% IF ( opacfacets ) %]
-                    <div class="col-lg-10 maincontent">
-                [% ELSE %]
-                    <div class="col maincontent">
+                    [% column_class = "col-lg-10 maincontent" %]
                 [% END %]
+                <div class="[% column_class | html %]">
 
                 [% IF ( searchdesc ) %]
                     [% IF ( total ) %]
