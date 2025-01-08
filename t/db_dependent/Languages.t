@@ -1,11 +1,14 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
+# This Koha test module is a stub!
 # Add more tests here!!!
-
+use utf8;
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Encode;
+use Test::More tests => 22;
+use Test::Deep;
+use Test::Exception;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
@@ -110,3 +113,112 @@ foreach my $pair (@$DistinctLangRfc4646){
     $i++ if $pair->{rfc4646_subtag} eq C4::Languages::get_rfc4646_from_iso639( $pair->{iso639_2_code} );
 }
 is($i,scalar(@$DistinctLangRfc4646),"get_rfc4646_from_iso639 returns correct rfc for all iso values.");
+
+$schema->storage->txn_rollback;
+subtest 'getLanguages()' => sub {
+
+    $schema->storage->txn_begin;
+
+    # Setup: Ensure test environment is clean
+    $dbh->do("DELETE FROM language_descriptions");
+    $dbh->do("DELETE FROM language_subtag_registry");
+    $dbh->do("DELETE FROM language_rfc4646_to_iso639");
+
+    # Insert test data
+    $dbh->do(
+        "INSERT INTO language_subtag_registry (subtag, type, description) VALUES
+    ('en', 'language', 'English'),
+    ('fr', 'language', 'French'),
+    ('es', 'language', 'Spanish')"
+    );
+
+    $dbh->do(
+        "INSERT INTO language_descriptions (lang, subtag, type, description) VALUES
+    ('en', 'en', 'language', 'English'),
+    ('en', 'fr', 'language', 'French'),
+    ('en', 'es', 'language', 'Spanish'),
+    ('es', 'es', 'language', 'Español'),
+    ('fr', 'fr', 'language', 'Français'),
+    ('fr', 'es', 'language', 'Espagnol'),
+    ('fr', 'en', 'language', 'Anglais')"
+    );
+
+    $dbh->do(
+        "INSERT INTO language_rfc4646_to_iso639 (rfc4646_subtag, iso639_2_code) VALUES
+    ('en', 'eng'),
+    ('fr', 'fra'),
+    ('es', 'spa')"
+    );
+
+    my $expected = [
+        {
+            'id'                   => ignore(),
+            'added'                => ignore(),
+            'subtag'               => 'en',
+            'iso639_2_code'        => 'eng',
+            'description'          => 'English',
+            'language_description' => 'English (English)',
+            'type'                 => 'language'
+        },
+        {
+            'id'                   => ignore(),
+            'added'                => ignore(),
+            'subtag'               => 'fr',
+            'iso639_2_code'        => 'fra',
+            'description'          => 'French',
+            'language_description' => "French (Français)",
+            'type'                 => 'language'
+        },
+        {
+            'id'                   => ignore(),
+            'added'                => ignore(),
+            'subtag'               => 'es',
+            'iso639_2_code'        => 'spa',
+            'description'          => 'Spanish',
+            'language_description' => "Spanish (Español)",
+            'type'                 => 'language'
+        }
+    ];
+
+    # Test 1: No parameters, expect English names
+    my $languages = getLanguages();
+    cmp_deeply(
+        $languages, $expected,
+        'getLanguages returned the expected results when no parameters are passed, description is "English (Native)"'
+    );
+
+    # Test 2: Specific language without full translations
+    $expected->[2]->{language_description} = "Español (Español)";
+    $languages = getLanguages('es');
+    cmp_deeply(
+        $languages, $expected,
+        'getLanguages returned the expected results when "es" is requested, description is "Spanish falling back to English when missing (Native)"'
+    );
+
+    # Test 3: Specific language with translations
+    $expected->[0]->{language_description} = "Anglais (English)";
+    $expected->[1]->{language_description} = "Français (Français)";
+    $expected->[2]->{language_description} = "Espagnol (Español)";
+    $languages                             = getLanguages('fr');
+    cmp_deeply(
+        $languages, $expected,
+        'getLanguages returned the expected results when "fr" is requested, description is "French (Native)"'
+    );
+
+    # Test 4: Filtered results based on AdvancedSearchLanguages
+    t::lib::Mocks::mock_preference( 'AdvancedSearchLanguages', 'eng,fra' );
+    $languages = getLanguages( 'en', 1 );
+    is( scalar(@$languages), 2, 'Returned 2 filtered languages' );
+    is_deeply(
+        [ map { $_->{iso639_2_code} } @$languages ],
+        [ 'eng', 'fra' ],
+        'Filtered ISO639-2 codes are correct'
+    );
+
+    # Cleanup: Restore database to original state
+    $dbh->do("DELETE FROM language_descriptions");
+    $dbh->do("DELETE FROM language_subtag_registry");
+    $dbh->do("DELETE FROM language_rfc4646_to_iso639");
+
+    $schema->storage->txn_rollback;
+};
