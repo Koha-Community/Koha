@@ -138,6 +138,8 @@ sub tidy_tt {
             run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
         if ($success) {
 
+            while ( !-f $file ) { sleep 1; }
+
             # Revert the substitutions done by the prettier plugin
             edit_file sub {
                 s#<!--</head>-->#</head>#g;
