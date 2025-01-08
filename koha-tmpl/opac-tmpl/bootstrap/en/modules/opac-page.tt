@@ -25,33 +25,33 @@
 
     <div class="container-fluid">
         <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
             [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                 <div class="col-lg-2">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' %]
                     </div>
                 </div>
-                <div class="col-10 order-first order-md-first order-lg-2">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
             [% END %]
+
+            <div class="[% column_class | html %]">
 
             [% IF page %]
                 <div id="page_[% page.additional_content_id | html %]" class="maincontent">
                     <h1>[% page.title | html %]</h1>
 
-                        <div class="page_content">
-                            [% page.content | $raw %]
-                        </div>
-
-                    [% ELSE %]
-
-                        <div class="alert alert-error">
-                            This page does not exist.
-                        </div>
-
-                    [% END %]
+                    <div class="page_content">
+                        [% page.content | $raw %]
+                    </div>
                 </div> <!-- /.maincontent -->
+            [% ELSE %]
+                <div class="maincontent">
+                    <div class="alert alert-error">
+                        This page does not exist.
+                    </div>
+                </div> <!-- /.maincontent -->
+            [% END %]
             </div> <!-- / .col -->
         </div> <!-- /.row -->
     </div> <!-- /.container-fluid -->
