@@ -678,6 +678,13 @@ Circulation:
                   0: "Don't block"
             - returning of items that have been withdrawn.
         -
+            - "Prevent the ability to withdraw items with the following statuses:"
+            - pref: PreventWithdrawingItemsStatus
+              multiple:
+                intransit: In-transit
+                checkedout: Checked out
+            -
+        -
             - pref: BlockReturnOfLostItems
               choices:
                   1: Block
