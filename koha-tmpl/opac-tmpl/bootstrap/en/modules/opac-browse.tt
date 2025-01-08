@@ -26,7 +26,9 @@
 
     <div class="container-fluid">
         <div class="row">
-            [% IF ( OpacNav || OpacNavBottom ) %]
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                 <div class="col-lg-2">
                     <div id="navigation">
                     [% INCLUDE 'navigation.inc' %]
@@ -34,11 +36,7 @@
                 </div>
             [% END %]
 
-            [% IF ( OpacNav ) %]
-                <div class="col-10 order-first order-md-first order-lg-2">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
-            [% END %]
+            <div class="[% column_class | html %]">
 
             [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' && Koha.Preference('OpacBrowseSearch') %]
                 <div id="browse-search" class="maincontent">
