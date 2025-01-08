@@ -157,7 +157,7 @@ subtest 'getLanguages()' => sub {
             'subtag'               => 'en',
             'iso639_2_code'        => 'eng',
             'description'          => 'English',
-            'language_description' => 'English (English)',
+            'language_description' => 'English',
             'type'                 => 'language'
         },
         {
@@ -188,7 +188,7 @@ subtest 'getLanguages()' => sub {
     );
 
     # Test 2: Specific language without full translations
-    $expected->[2]->{language_description} = "Español (Español)";
+    $expected->[2]->{language_description} = "Español";
     $languages = getLanguages('es');
     cmp_deeply(
         $languages, $expected,
@@ -197,7 +197,7 @@ subtest 'getLanguages()' => sub {
 
     # Test 3: Specific language with translations
     $expected->[0]->{language_description} = "Anglais (English)";
-    $expected->[1]->{language_description} = "Français (Français)";
+    $expected->[1]->{language_description} = "Français";
     $expected->[2]->{language_description} = "Espagnol (Español)";
     $languages                             = getLanguages('fr');
     cmp_deeply(
