@@ -63,12 +63,11 @@
                 </div>
             [% END %]
 
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
             [% IF ( OpacNav||loggedinusername ) %]
-                <div class="col-lg-10 order-first order-md-first order-lg-2">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
+                [% column_class = "col-lg-10 order-first order-md-first order-lg-2" %]
             [% END %]
-
+            <div class="[% column_class | html %]">
                 [% IF !backends_available %]
                     <div class="alert alert-warning">ILL module configuration problem. Contact your administrator.</div>
                 [% ELSE %]
