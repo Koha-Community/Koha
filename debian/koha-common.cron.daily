@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+koha-run-backups --days 2 --output /var/spool/koha
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_renewals.pl -c
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/automatic_checkin.pl
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/recalls/expire_recalls.pl
@@ -30,4 +31,3 @@ koha-foreach --chdir --enabled --noemail /usr/share/koha/bin/cronjobs/cleanup_da
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/holds/auto_unsuspend_holds.pl > /dev/null 2>&1
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/merge_authorities.pl -b
 koha-foreach --chdir --enabled /usr/share/koha/bin/cronjobs/plugins_nightly.pl
-koha-run-backups --days 2 --output /var/spool/koha
