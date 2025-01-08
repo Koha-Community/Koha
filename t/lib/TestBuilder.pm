@@ -210,25 +210,6 @@ sub build_sample_item {
     )->store->get_from_storage;
 }
 
-=pod
-
-=head2 build_sample_ill_request
-
-Builds a sample ILL request with the supplied arguments.
-
-C<$args> is a hashref with the following optional keys:
-
-=over 4
-
-=item * C<biblio_id> (default: a new sample biblio created with L<build_sample_biblio>)
-
-=item * C<backend> (default: Standard)
-
-=item * C<branchcode> (default: a random branch)
-
-=back
-
-=cut
 sub build_sample_ill_request {
     my ( $self, $args ) = @_;
 
@@ -239,7 +220,7 @@ sub build_sample_ill_request {
     return $self->build_object(
         {
             class => 'Koha::ILL::Requests',
-            value  => $args,
+            value => $args,
         }
     )->store->get_from_storage;
 }
@@ -757,13 +738,13 @@ Note that you should wrap these actions in a transaction yourself.
 
     my $builder = t::lib::TestBuilder->new;
 
-    Constructor - Returns the object TestBuilder
+Constructor - Returns the object TestBuilder
 
 =head2 schema
 
     my $schema = $builder->schema;
 
-    Getter - Returns the schema of DBIx::Class
+Getter - Returns the schema of DBIx::Class
 
 =head2 delete
 
@@ -772,42 +753,60 @@ Note that you should wrap these actions in a transaction yourself.
         records => $patron, # OR: records => [ $patron, ... ],
     });
 
-    Delete individual records, created by builder.
-    Returns the number of delete attempts, or undef.
+Delete individual records, created by builder.
+Returns the number of delete attempts, or undef.
 
 =head2 build
 
     $builder->build({ source  => $source_name, value => $value });
 
-    Create a test record in the table, represented by $source_name.
-    The name is required and must conform to the DBIx::Class schema.
-    Values may be specified by the optional $value hashref. Will be
-    randomized otherwise.
-    If needed, TestBuilder creates linked records for foreign keys.
-    Returns the values of the new record as a hashref, or undef if
-    the record could not be created.
+Create a test record in the table, represented by $source_name.
+The name is required and must conform to the DBIx::Class schema.
+Values may be specified by the optional $value hashref. Will be
+randomized otherwise.
+If needed, TestBuilder creates linked records for foreign keys.
+Returns the values of the new record as a hashref, or undef if
+the record could not be created.
 
-    Note that build also supports recursive hash references inside the
-    value hash for foreign key columns, like:
-        value => {
-            column1 => 'some_value',
-            fk_col2 => {
-                columnA => 'another_value',
-            }
+Note that build also supports recursive hash references inside the
+value hash for foreign key columns, like:
+    value => {
+        column1 => 'some_value',
+        fk_col2 => {
+            columnA => 'another_value',
         }
-    The hash for fk_col2 here means: create a linked record with build
-    where columnA has this value. In case of a composite FK the hashes
-    are merged.
+    }
+The hash for fk_col2 here means: create a linked record with build
+where columnA has this value. In case of a composite FK the hashes
+are merged.
 
-    Realize that passing primary key values to build may result in undef
-    if a record with that primary key already exists.
+Realize that passing primary key values to build may result in undef
+if a record with that primary key already exists.
 
 =head2 build_object
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' [, value => { ... }] });
 
 Given a plural Koha::Object-derived class, it creates a random element, and
 returns the corresponding Koha::Object.
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' [, value => { ... }] });
+=head2 build_sample_ill_request
+
+    my $ill_request = $builder->build_sample_ill_request({ biblio_id => $biblio_id });
+
+Builds a sample ILL request with the supplied arguments.
+
+C<$args> is a hashref with the following optional keys:
+
+=over 4
+
+=item * C<biblio_id> (default: a new sample biblio created with L<build_sample_biblio>)
+
+=item * C<backend> (default: Standard)
+
+=item * C<branchcode> (default: a random branch)
+
+=back
 
 =head1 AUTHOR
 
