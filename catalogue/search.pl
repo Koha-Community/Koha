@@ -329,9 +329,12 @@ if ( $template_type eq 'advsearch' ) {
 
     $template->param(uc(C4::Context->preference("marcflavour")) =>1 );
 
-    # load the language limits (for search)
-    my $languages_limit_loop = getLanguages($lang, 1);
-    $template->param(search_languages_loop => $languages_limit_loop,);
+    if ( $template_type && $template_type eq 'advsearch' ) {
+
+        # load the language limits (for search)
+        my $languages_limit_loop = getLanguages( $lang, 1 );
+        $template->param( search_languages_loop => $languages_limit_loop, );
+    }
 
     # Expanded search options in advanced search:
     # use the global setting by default, but let the user override it
