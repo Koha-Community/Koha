@@ -78,17 +78,17 @@
 
     <div class="container-fluid">
         <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
             [% IF ( OpacNav ||  OpacNavBottom ) %]
+                [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                 <div class="col-lg-2">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' %]
                     </div>
                 </div>
-                <div class="col-10 order-first order-md-first order-lg-2">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
             [% END %]
 
+            <div class="[% column_class | html %]">
             [% IF ( library ) %]
                 <div id="library_info" class="maincontent" vocab="http://schema.org/" typeof="Library">
                     <h1 property="name">[% library.branchname | html %]</h1>
@@ -108,12 +108,12 @@
             [% ELSE %]
                 <div id="library_info" class="maincontent">
                     <h1>Libraries</h1>
+                    [% SET div_class = "section_library" %]
                     [% FOREACH library IN libraries %]
                         [% IF ( branchcode == library.branchcode ) %]
-                            <div class="section_library current" id="section_[% library.branchcode | html %]">
-                        [% ELSE %]
-                            <div class="section_library" id="section_[% library.branchcode | html %]">
+                            [% div_class = "section_library current" %]
                         [% END %]
+                        <div class="[% div_class | html %]" id="section_[% library.branchcode | html %]">
                         <h2 property="name">
                             <a href="/cgi-bin/koha/opac-library.pl?branchcode=[% library.branchcode | url %]">
                                 [% library.branchname | html %]
