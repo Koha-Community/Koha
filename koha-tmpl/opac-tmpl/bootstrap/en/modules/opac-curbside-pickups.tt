@@ -110,11 +110,11 @@
                     <h2>Curbside pickups</h2>
 
                     [% FOR m IN messages %]
+                        [% SET alert_type = "alert alert-info" %]
                         [% IF m.type == "error" %]
-                        <div class="alert alert-warning">
-                        [% ELSE %]
-                        <div class="alert alert-info">
+                            [% alert_type = "alert alert-warning" %]
                         [% END %]
+                        <div class="[% alert_type | html %]">
                             [% SWITCH m.code %]
                             [% CASE 'not_enabled' %]
                                 <span>The curbside pickup feature is not enabled for this library.</span>
@@ -186,12 +186,14 @@
                                                             <input type="hidden" name="op" value="cud-arrival-alert" />
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF ! p.staged_datetime || p.arrival_datetime %]
-                                                            <button class="btn disabled" disabled href="#" >
+                                                                <button class="btn disabled" disabled href="#" >
+                                                                    <i class="fa fa-bell" aria-hidden="true"></i> Alert staff of your arrival
+                                                                </button>
                                                             [% ELSE %]
-                                                            <button type="submit" class="btn" href="#" >
+                                                                <button type="submit" class="btn" href="#" >
+                                                                    <i class="fa fa-bell" aria-hidden="true"></i> Alert staff of your arrival
+                                                                </button>
                                                             [% END %]
-                                                            <i class="fa fa-bell" aria-hidden="true"></i> Alert staff of your arrival
-                                                            </button>
                                                         </form>
                                                         <p>
                                                         <form method="post">
@@ -200,10 +202,13 @@
                                                             <input type="hidden" name="pickup_id" value="[% p.id | html %]" />
                                                             [% IF p.delivered_datetime %]
                                                                 <button class="btn disabled" disabled href="#" >
+                                                                    <i class="fa fa-ban" aria-hidden="true"></i> Cancel this pickup
+                                                                </button>
                                                             [% ELSE %]
                                                                 <button type="submit" class="btn" href="#" >
+                                                                    <i class="fa fa-ban" aria-hidden="true"></i> Cancel this pickup
+                                                                </button>
                                                             [% END %]
-                                                                <i class="fa fa-ban" aria-hidden="true"></i> Cancel this pickup</button>
                                                         </form>
                                                     </td>
                                                     <td></td>
