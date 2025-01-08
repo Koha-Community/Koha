@@ -35,17 +35,17 @@
                 </div>
             [% END %]
 
+            [% SET column_class = "col order-md-1 maincontent" %]
             [% IF ( OpacNav ||  OpacNavBottom && OpacNavRight ) %]
                 [% #  Three-column layout with right and left sidebars %]
-                <div class="col-12 col-lg-7 order-md-1 maincontent">
+                [% column_class = "col-12 col-lg-7 order-md-1 maincontent" %]
             [% ELSIF ( OpacNavRight ) %]
                 [% #  Two-column layout with right sidebar %]
-                <div class="col-12 col-lg-9 order-md-1 maincontent">
+                [% column_class = "col-12 col-lg-9 order-md-1 maincontent" %]
             [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
-                <div class="col-12 col-lg-10 order-md-1 maincontent">
-            [% ELSE %]
-                <div class="col order-md-1 maincontent">
+                [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]
             [% END %]
+            <div class="[% column_class | html %]">
 
                 [% IF ( ! confirmed ) %]
                     <div id="registration-pending">
