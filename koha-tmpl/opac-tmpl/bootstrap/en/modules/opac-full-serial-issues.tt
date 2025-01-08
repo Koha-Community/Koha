@@ -115,11 +115,11 @@
                         </div>
 
                         [% FOREACH year IN years %]
+                            [% SET div_style = "display:none" %]
                             [% IF loop.first %]
-                                <div class="yeardata tabsub" id="show[% year.year | html %]" style="display:block">
-                            [% ELSE %]
-                                <div class="yeardata tabsub" id="show[% year.year | html %]" style="display:none">
+                                [% div_style = "display:block" %]
                             [% END %]
+                            <div class="yeardata tabsub" id="show[% year.year | html %]" style="[% div_style | html %]">
                                 <table class="subscriptionstclass table table-bordered table-striped">
                                     <caption class="sr-only">Subscriptions</caption>
                                     <thead>
@@ -154,11 +154,12 @@
                                                 [% IF ( serial.status2 && serial.planneddate ) %]
                                                     <td data-order="[% serial.planneddate | html %]">
                                                         [% serial.planneddate | $KohaDates %]
+                                                    </td>
                                                 [% ELSE %]
                                                     <td data-order="9999-12-31">
                                                         &nbsp;
+                                                    </td>
                                                 [% END %]
-                                                </td>
                                                 <td>[% serial.serialseq | html %]</td>
                                                 <td>
                                                     [% INCLUDE 'serial-status.inc' serial = serial %]
