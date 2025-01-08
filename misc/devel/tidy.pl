@@ -132,16 +132,19 @@ sub tidy_vue {
 
 sub tidy_tt {
     my ($file) = @_;
-    my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
-        run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
-    if ($success) {
+    my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
+    for ( 1 .. 2 ) {
+        ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+            run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
+        if ($success) {
 
-        # Revert the substitutions done by the prettier plugin
-        edit_file sub {
-            s#<!--</head>-->#</head>#g;
-            s#<!--<body(.*)-->#<body$1#g;
-            s#<!--</body>-->#</body>#g;
-        }, $file;
+            # Revert the substitutions done by the prettier plugin
+            edit_file sub {
+                s#<!--</head>-->#</head>#g;
+                s#<!--<body(.*)-->#<body$1#g;
+                s#<!--</body>-->#</body>#g;
+            }, $file;
+        }
     }
     return ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
 }
