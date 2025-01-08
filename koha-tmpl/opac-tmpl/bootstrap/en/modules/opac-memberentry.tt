@@ -73,11 +73,11 @@
 
                 <h1>Your personal details</h1>
 
+                [% SET container_id = "add-content" %]
                 [% IF op == 'edit' %]
-                    <div id="update-account" class="maincontent">
-                [% ELSE %]
-                    <div id="add-account" class="maincontent">
+                    [% container_id = "update-account" %]
                 [% END %]
+                <div id="[% container_id | html %]" class="maincontent">
 
                 [% IF op == 'edit' %]
                     [% UNLESS OPACPatronDetails %]
@@ -981,14 +981,15 @@
                     [% IF ( Koha.Preference('ExtendedPatronAttributes') && patron_attribute_classes.size ) %]
                         <div class="row">
                             <div class="col">
+                                [% SET fieldset_id = "" %]
+                                [% SET legend = "Additional information" %]
                                 [% FOREACH pa_class IN patron_attribute_classes %]
                                     [% IF pa_class.class %]
-                                        <fieldset id="aai_[% pa_loo.class | html %]" class="rows patron-attributes">
-                                            <legend>[% pa_class.lib | html %]</legend>
-                                    [% ELSE %]
-                                        <fieldset class="rows patron-attributes">
-                                            <legend>Additional information</legend>
+                                        [% fieldset_id = "aai_" _ pa_loo.class %]
+                                        [% legend = pa_class.lib %]
                                     [% END %]
+                                    <fieldset id="[% fieldset_id | html %]" class="rows patron-attributes">
+                                        <legend>[% legend | html %]</legend>
                                         <ol class="attributes_table">
                                             [% FOREACH pa IN pa_class.items %]
                                                 [% FOREACH pa_value IN pa.values %]
