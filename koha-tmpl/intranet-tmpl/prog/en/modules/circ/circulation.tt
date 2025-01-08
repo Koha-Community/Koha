@@ -105,6 +105,10 @@
                         <div class="alert alert-warning">Staff members are not allowed to discharge borrowers, nor borrowers to request a discharge.</div>
                     [% END %]
 
+    [% IF ( noguarantor ) %]
+        <div class="alert alert-warning">This patron could not be renewed: they need a guarantor.</div>
+    [% END %]
+
                     [% IF is_anonymous %]
                         <div class="alert alert-warning">This is the anonymous patron, so circulation is disabled.</div>
                     [% END %]

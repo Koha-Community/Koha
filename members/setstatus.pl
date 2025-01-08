@@ -24,6 +24,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Try::Tiny;
 
 use CGI qw ( -utf8 );
 use C4::Auth qw( checkauth );
@@ -47,13 +48,23 @@ my $dateexpiry;
 my $logged_in_user = Koha::Patrons->find( { userid =>  $loggedinuserid } );
 my $patron         = Koha::Patrons->find( $borrowernumber );
 
+my $cannot_renew = '0';
+
 # Ideally we should display a warning on the interface if the logged in user is
 # not allowed to modify this patron.
 # But a librarian is not supposed to hack the system
 if ( $logged_in_user->can_see_patron_infos($patron) ) {
     if ( $reregistration eq 'y' ) {
         # re-reregistration function to automatic calcul of date expiry
+        try {
         $dateexpiry = $patron->renew_account;
+        } catch {
+            if ( ref($_) eq 'Koha::Exceptions::Patron::Relationship::NoGuarantor' ) {
+                $cannot_renew = '1';
+            } else {
+                $_->rethrow();
+            }
+        }
     } else {
         my $sth = $dbh->prepare("UPDATE borrowers SET debarred = ?, debarredcomment = '' WHERE borrowernumber = ?");
         $sth->execute( $status, $borrowernumber );
@@ -62,13 +73,19 @@ if ( $logged_in_user->can_see_patron_infos($patron) ) {
 }
 
 if($destination eq "circ"){
-    if($dateexpiry){
+    if ($cannot_renew) {
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&noguarantor=1");
+    } elsif ($dateexpiry) {
         print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber&was_renewed=1");
     } else {
         print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     }
 } else {
-    if($dateexpiry){
+    if ($cannot_renew) {
+        print $input->redirect(
+            "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&error=CANT_RENEW_CHILD_WITHOUT_GUARANTOR"
+        );
+    } elsif ($dateexpiry) {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber&was_renewed=1");
     } else {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");

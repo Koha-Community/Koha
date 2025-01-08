@@ -786,6 +786,7 @@ $template->param(
     patron_lists_count      => $patron_lists_count,
     override_high_holds     => $override_high_holds,
     nopermission            => scalar $query->param('nopermission'),
+    noguarantor             => scalar $query->param('noguarantor'),
     autoswitched            => $autoswitched,
     logged_in_user          => $logged_in_user,
 );
