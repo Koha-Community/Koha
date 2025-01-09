@@ -171,4 +171,6 @@
 [% KohaPlugins.get_plugins_intranet_js | $raw %]
 
 </body>
+<!-- prettier-ignore-start -->
 </html>
+<!-- prettier-ignore-end -->
