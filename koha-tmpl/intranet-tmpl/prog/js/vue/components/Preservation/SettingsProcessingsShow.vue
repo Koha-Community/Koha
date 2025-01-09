@@ -7,7 +7,6 @@
                     name: 'SettingsProcessingsFormEdit',
                     params: { processing_id: processing.processing_id },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />

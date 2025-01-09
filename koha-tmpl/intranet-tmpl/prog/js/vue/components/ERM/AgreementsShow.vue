@@ -7,7 +7,6 @@
                     name: 'AgreementsFormAddEdit',
                     params: { agreement_id: agreement.agreement_id },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />

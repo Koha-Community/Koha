@@ -7,7 +7,6 @@
                     name: 'EHoldingsLocalPackagesFormAddEdit',
                     params: { package_id: erm_package.package_id },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />

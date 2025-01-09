@@ -7,7 +7,6 @@
                     name: 'EHoldingsLocalTitlesFormAddEdit',
                     params: { title_id: title.title_id },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />

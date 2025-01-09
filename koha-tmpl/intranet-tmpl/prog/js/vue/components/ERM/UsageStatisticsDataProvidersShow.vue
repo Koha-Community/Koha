@@ -10,7 +10,6 @@
                             usage_data_provider.erm_usage_data_provider_id,
                     },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />
