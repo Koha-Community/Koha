@@ -54,16 +54,17 @@
 
     <div class="container-fluid">
         <div class="row">
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
             [% IF ( OpacNav||loggedinusername ) %]
+                [% column_class = "col-md-12 col-lg-10 order-1" %]
                 <div class="col col-lg-2 order-2 order-lg-1">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-10 order-1">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
             [% END %]
+
+            <div class="[% column_class | html %]">
 
                     <div id="usertags" class="maincontent">
                         <h1>All tags</h1>
