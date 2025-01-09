@@ -3,7 +3,6 @@
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
-[% IF ( fullpage ) %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Download list [% shelf.shelfname | html %] &rsaquo; [% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>[% INCLUDE 'doc-head-close.inc' %]
     [% BLOCK cssinclude %][% END %]
@@ -39,12 +38,11 @@
                         </div>
                     [% END %]
 
+                    [% SET column_class = "col order-first order-md-first order-lg-2" %]
                     [% IF ( OpacNav||loggedinusername ) %]
-                        <div class="col-10 order-first order-md-first order-lg-2">
-                    [% ELSE %]
-                        <div class="col order-first order-md-first order-lg-2">
+                        [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     [% END %]
-[% END # / IF fullpage %]
+                    <div class="[% column_class | html %]">
 
                     <div id="userdownloadshelf" class="maincontent">
 
@@ -105,7 +103,6 @@
 
                     </div> <!-- / #userdownloadshelf -->
 
-[% IF ( fullpage ) %]
                 </div> <!-- / .col-10 -->
             </div> <!-- / .row -->
         </div> <!-- / .container-fluid -->
@@ -123,4 +120,3 @@
             });
         </script>
     [% END %]
-[% END # / IF fullpage %]
