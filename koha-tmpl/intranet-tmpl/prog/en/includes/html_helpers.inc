@@ -61,11 +61,13 @@
     [% FOREACH itemtype IN itemtypes %]
         [% IF itemtype.itemtype == selected_itemtype %]
             <option value="[% itemtype.itemtype | html %]" selected="selected">
+                [% itemtype.translated_description | html %]
+            </option>
         [% ELSE %]
             <option value="[% itemtype.itemtype | html %]">
+                [% itemtype.translated_description | html %]
+            </option>
         [% END %]
-            [% itemtype.translated_description | html %]
-        </option>
     [% END %]
 [% END %]
 
@@ -103,11 +105,17 @@
                     [% IF ( mv.type == 'hidden' ) %]
                         <input type="hidden" id="[%- mv.id | html -%]" name="[% kohafield | html %]" class="input_marceditor [% kohafield | html %]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]">
                     [% ELSIF ( mv.type == 'select' ) %]
+                        [% SET select_readonly = '' %]
+                        [% SET select_disabled = '' %]
                         [% IF ( mv.readonly || subfield.IS_RETURN_CLAIM ) %]
-                            <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor [% kohafield | html %]" readonly="readonly" disabled="disabled" data-width="50%">
+                            [% SET select_class = 'input_marceditor ' _ kohafield %]
+                            [% SET select_readonly = 'readonly="readonly"' %]
+                            [% SET select_disabled = 'disabled="disabled"' %]
                         [% ELSE %]
-                            <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor select2 [% kohafield | html %]" data-category="[% mv.category | html %]" data-width="50%">
+                            [% SET select_class = 'input_marceditor select2 ' _ kohafield %]
                         [% END %]
+
+                        <select name="[% kohafield | html %]" id="[%- mv.id | html -%]" class="input_marceditor [% kohafield | html %]" [% select_readonly | html %] [% select_disabled | html %] data-category="[% mv.category | html %]" data-width="50%">
 
                         [% SET matched = 0 %]
                         [% FOREACH aval IN mv.values %]
@@ -127,10 +135,10 @@
                         [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
                         [%# If the current value is not in the authorised list  and is not a field where 0 means unset #%]
                                 <option value="[%- mv.default | html -%]" selected="selected">[%- mv.default | html -%] (Not an authorised value)</option>
+                        [% END %]
                             </select>
+                        [% UNLESS matched || ( ( kohafield == 'items.damaged' || kohafield == 'items.itemlost' || kohafield == 'items.withdrawn' || kohafield == 'items.notforloan' ) && mv.default == '0' ) %]
                             <span style="float:right;" title="The current value [% mv.default | html %] is not configured for the authorised value category controlling this subfield"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
-                        [% ELSE %]
-                            </select>
                         [% END %]
                     [% ELSIF ( mv.type == 'text_auth' ) %]
                         [% IF mv.readonly %]
@@ -265,11 +273,13 @@
                 [% FOREACH item_header IN headers %]
                     [% IF item_header.column_name %]
                         <th data-colname="[% item_header.column_name | html %]">
+                            [% item_header.header_value | html %]
+                        </th>
                     [% ELSE %]
                         <th>
+                            [% item_header.header_value | html %]
+                        </th>
                     [% END %]
-                        [% item_header.header_value | html %]
-                    </th>
                 [% END %]
             </tr>
         </thead>
@@ -328,17 +338,18 @@
                     <td class="holds_count">
                         [% IF item.holds %]
                             [% IF item.item_holds %]
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="Holds on this item: [% item.item_holds | html %] / Total holds on this record: [% item.holds | html -%]" >
+                                [% SET a_title = tx("Holds on this item: {item_holds} / Total holds on this record: {total_holds}", { item_holds=item.item_holds, total_holds=item.holds }) %]
                             [% ELSE %]
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="No holds on this item / Total holds on this record: [% item.holds | html -%]" >
+                                [% SET a_title = tx("No holds on this item / Total holds on this record: {total_holds}", { total_holds=item.holds }) %]
                             [% END %]
                         [% ELSE %]
                             [% IF item.holds %]
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="Holds on this record: [% item.holds | html -%]" >
+                                [% SET a_title = tx("Holds on this record: {total_holds}", { total_holds=item.holds }) %]
                             [% ELSE %]
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="No holds on this record" >
+                                [% SET a_title = t("No holds on this record") %]
                             [% END %]
                         [% END # /IF item.holds %]
+                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item.biblionumber | uri %]" title="[% a_title | html %]">
                         [% IF item.holds %]
                             [% item.item_holds | html %]/[% item.holds | html %]
                         [% ELSE %]
@@ -378,11 +389,13 @@
 [% BLOCK tabs %]
     [% IF ( id ) %]
         <div id="[% id | html %]" class="toptabs">
+            [% content | $raw %]
+        </div>
     [% ELSE %]
         <div class="toptabs">
+            [% content | $raw %]
+        </div>
     [% END %]
-        [% content | $raw %]
-    </div>
 [% END %]
 
 [% BLOCK tabs_nav %]
@@ -392,26 +405,28 @@
 [% END %]
 
 [% BLOCK tab_item %]
-    [% IF ( id ) %]
-        <li id="[% id | html %]" class="nav-item" role="presentation">
-    [% ELSE %]
-        <li class="nav-item" role="presentation">
-    [% END %]
+    <li [% IF id %]id="[% id | html %]"[% END %] class="nav-item" role="presentation">
     [% IF ( bt_active ) %]
         [% IF (linktab) %]
             <a class="nav-link active" href="?tab=[% tabname | url %]" id="[% tabname | html %]-tab">
+                [% content | $raw %]
+            </a>
         [% ELSE %]
             <a class="nav-link active" href="#[% tabname | uri %]_panel" id="[% tabname | html %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
+                [% content | $raw %]
+            </a>
         [% END %]
     [% ELSE %]
         [% IF (linktab) %]
             <a class="nav-link" href="?tab=[% tabname | url %]" id="[% tabname | uri %]-tab">
+                [% content | $raw %]
+            </a>
         [% ELSE %]
             <a class="nav-link" href="#[% tabname | uri %]_panel" id="[% tabname | uri %]-tab" data-tabname="[% tabname | uri %]" aria-controls="[% tabname | uri %]_panel" role="tab" data-bs-toggle="tab" data-bs-target="#[% tabname | uri %]_panel">
+                [% content | $raw %]
+            </a>
         [% END %]
     [% END %]
-            [% content | $raw %]
-        </a>
     </li>
 [% END %]
 
@@ -425,11 +440,13 @@
 [% BLOCK tab_panel %]
     [% IF ( bt_active ) %]
         <div class="tab-pane show active" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
+            [% content| $raw %]
+        </div>
     [% ELSE %]
         <div class="tab-pane" id="[% tabname | html %]_panel" role="tabpanel" aria-labelledby="[% tabname | html %]-tab" tabindex="0">
+            [% content| $raw %]
+        </div>
     [% END %]
-        [% content| $raw %]
-    </div>
 [% END %]
 
 [% # BOOTSTRAP BREADCRUMBS WRAPPER USAGE                                       %]
@@ -537,13 +554,16 @@
         [% IF ( context == "sidebar" ) %]
             <fieldset class="brief">
                 <h4>Search orders</h4>
+                [% INCLUDE 'filter-orders.inc' context == context %]
+                <input type="hidden" name="do_search" value="1" />
+            </fieldset>
         [% ELSE %]
             <fieldset class="rows">
                 <legend>Search orders</legend>
+                [% INCLUDE 'filter-orders.inc' context == context %]
+                <input type="hidden" name="do_search" value="1" />
+            </fieldset>
         [% END %]
-            [% INCLUDE 'filter-orders.inc' context == context %]
-            <input type="hidden" name="do_search" value="1" />
-        </fieldset>
         <fieldset class="action">
             <input type="submit" class="btn btn-primary" value="Search" />
         </fieldset>
