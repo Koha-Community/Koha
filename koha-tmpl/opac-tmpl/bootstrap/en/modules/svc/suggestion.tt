@@ -3,6 +3,19 @@
 [% USE AdditionalContents %]
 [% SET OpacNav = AdditionalContents.get( location => "OpacNav", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
 [% SET OpacNavBottom = AdditionalContents.get( location => "OpacNavBottom", lang => lang, library => logged_in_user.branchcode || default_branch, blocktitle => 0 ) %]
+[% BLOCK didyoumean %]
+    [% IF suggestions && suggestions.size %]
+        <div>
+            <span class="suggestionlabel">Did you mean:</span>
+            [% FOREACH suggestion IN suggestions %]
+                <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label | html %]</a></span>
+            [% END %]
+        </div>
+    [% ELSE %]
+        <span class="nosuggestions">Sorry, no suggestions.</span>
+    [% END %]
+[% END %]
+
 [% IF (render=='standalone') %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Search suggestions</title>
@@ -21,32 +34,23 @@
 
         <div class="container-fluid">
             <div class="row">
+                [% SET column_class = "col order-first order-md-first order-lg-2" %]
                 [% IF ( OpacNav || OpacNavBottom ) %]
+                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="col-10 order-first order-md-first order-lg-2">
-                [% ELSE %]
-                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
+
+                <div class="[% column_class | html %]">
+
                    <div id="searchsuggestions">
             <h1 class="title">Suggestions</h1>
-[% END %]
 
-[% IF suggestions && suggestions.size %]
-    <div>
-        <span class="suggestionlabel">Did you mean:</span>
-        [% FOREACH suggestion IN suggestions %]
-            <span class="searchsuggestion"><a href="/cgi-bin/koha/opac-search.pl?q=[% suggestion.search |uri %]">[% suggestion.label | html %]</a></span>
-        [% END %]
-    </div>
-[% ELSE %]
-    <span class="nosuggestions">Sorry, no suggestions.</span>
-[% END %]
+            [% PROCESS didyoumean  %]
 
-[% IF (render=='standalone') %]
                     </div> <!-- / #searchsuggestions -->
                 </div> <!-- / .span10/12 -->
             </div> <!-- / .row -->
@@ -54,4 +58,6 @@
     </div> <!-- / .main -->
     [% INCLUDE 'opac-bottom.inc' %]
     [% BLOCK jsinclude %][% END %]
+[% ELSE %]
+    [% PROCESS didyoumean  %]
 [% END %]
