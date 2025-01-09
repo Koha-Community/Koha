@@ -79,7 +79,6 @@
                     name: 'TrainsFormAddItem',
                     params: { train_id: train.train_id },
                 }"
-                class="btn btn-default"
                 icon="plus"
                 :title="$__('Add items')"
             />
@@ -96,7 +95,6 @@
                     name: 'TrainsFormEdit',
                     params: { train_id: train.train_id },
                 }"
-                class="btn btn-default"
                 icon="pencil"
                 :title="$__('Edit')"
             />

@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="to" :class="class"
+    <router-link :to="to" class="btn btn-default"
         ><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</router-link
     >
 </template>
@@ -9,10 +9,6 @@ export default {
     props: {
         to: {
             type: [String, Object],
-        },
-        class: {
-            type: String,
-            default: "btn btn-default",
         },
         icon: {
             type: String,
