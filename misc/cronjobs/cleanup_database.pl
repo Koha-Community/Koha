@@ -174,6 +174,7 @@ my $reports;
 my $edifact_msg_days;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'h|help'                     => \$help,
@@ -297,7 +298,6 @@ if ( $pDebarments && $allDebarments ) {
 
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
 
-cronlogaction( { info => $command_line_options } );
 
 my $dbh = C4::Context->dbh();
 my $sth;

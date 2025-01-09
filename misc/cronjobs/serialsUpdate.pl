@@ -60,6 +60,7 @@ my $note    = '';
 my $nonote  = 0;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help|h|?'  => \$help,
@@ -72,8 +73,6 @@ GetOptions(
 
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
-
-cronlogaction({ info => $command_line_options });
 
 $verbose and !$confirm and print "### Database will not be modified ###\n";
 

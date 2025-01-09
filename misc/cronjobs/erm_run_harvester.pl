@@ -100,6 +100,7 @@ C<erm_run_harvester.pl --begin-date 2000-01-01 --end-date 2024-01-01 --debug --d
 =cut
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 # Command line option values
 my $help       = 0;
@@ -130,8 +131,6 @@ unless ($begin_date) {
     print "ERROR: You must specify a begin-date\n\n";
     pod2usage(1);
 }
-
-cronlogaction( { info => $command_line_options } );
 
 debug_msg("Dry run: Harvests will not be enqueued") if $dry_run;
 while ( my $udprovider = $udproviders->next ) {

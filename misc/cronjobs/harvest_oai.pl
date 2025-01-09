@@ -29,6 +29,7 @@ use C4::Log   qw( cronlogaction );
 use Try::Tiny qw( catch try );
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $verbose, $id, $days, $list, $force );
 
@@ -98,8 +99,6 @@ try {
     cronlogaction( { info => $message } );
     exit;
 };
-
-cronlogaction( { info => $command_line_options } );
 
 my $harvester =
     Koha::OAI::Client::Harvester->new( { server => $server, days => $days, force => $force, logger => \&logFunction } );

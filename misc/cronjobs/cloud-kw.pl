@@ -35,6 +35,7 @@ my $help        = 0;
 my $conf        = '';
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions( 
     'verbose'   => \$verbose,
@@ -48,8 +49,6 @@ sub usage {
 } 
 
 usage() if $help || !$conf;
-
-cronlogaction({ info => $command_line_options });
 
 my @clouds;
 print "Reading configuration file: $conf\n" if $verbose;

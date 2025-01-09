@@ -28,6 +28,9 @@ use Koha::Patrons;
 use C4::Letters;
 use Koha::Notice::Message;
 
+my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
+
 # Getting options
 my ( $help, $verbose, $confirm );
 GetOptions(
@@ -47,7 +50,6 @@ Exiting cronjob
 
 END_WARN
 }
-cronlogaction();
 
 my @failed_notices = Koha::Notice::Messages->get_failed_notices( { days => 7 } )->as_list;
 

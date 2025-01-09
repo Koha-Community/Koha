@@ -15,6 +15,7 @@ my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
     @category_code, $branchcode, $file, $confirm );
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'h|help'                 => \$help,
@@ -45,8 +46,6 @@ if ( $last_seen and not C4::Context->preference('TrackLastPatronActivityTriggers
 unless ( $not_borrowed_since or $expired_before or $last_seen or @category_code or $branchcode or $file ) {
     pod2usage(q{At least one filter is mandatory});
 }
-
-cronlogaction({ info => $command_line_options });
 
 my @file_members;
 if ($file) {

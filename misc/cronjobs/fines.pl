@@ -51,6 +51,7 @@ my $maxdays;
 my $verify_issue;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'h|help'    => \$help,
@@ -95,8 +96,6 @@ catch {
     cronlogaction({ info => $message });
     exit;
 };
-
-cronlogaction({ info => $command_line_options });
 
 my @borrower_fields =
   qw(cardnumber categorycode surname firstname email phone address citystate);

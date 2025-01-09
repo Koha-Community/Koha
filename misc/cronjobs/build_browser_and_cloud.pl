@@ -16,6 +16,7 @@ use C4::Log;
 use Koha::Biblios;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $confirm,$field,$batch,$max_digits,$cloud_tag);
@@ -58,8 +59,6 @@ my $browser_tag = $1;
 my $browser_subfield = $2;
 warn "browser : $browser_tag / $browser_subfield" unless $batch;
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
-
-cronlogaction({ info => $command_line_options });
 
 my $dbh = C4::Context->dbh;
 

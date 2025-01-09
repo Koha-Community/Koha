@@ -65,6 +65,7 @@ my $force       = 0;
 my $unallocated = 0;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'h|help'        => \$help,
@@ -82,8 +83,6 @@ if ( $rthq && !$force ) {
     say "Use --force to force building the holds queue.";
     exit(1);
 }
-
-cronlogaction( { info => $command_line_options } );
 
 my $loops = C4::Context->preference('HoldsQueueParallelLoopsCount');
 CreateQueue( { loops => $loops, unallocated => $unallocated } );

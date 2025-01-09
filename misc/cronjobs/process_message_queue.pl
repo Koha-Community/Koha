@@ -38,6 +38,7 @@ my @letter_code;
 my $exit_on_plugin_failure = 0;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'u|username:s'             => \$username,
@@ -85,8 +86,6 @@ try {
     cronlogaction( { info => $message } );
     exit;
 };
-
-cronlogaction( { info => $command_line_options } );
 
 # Remove empty elements, see bug 37075
 @letter_code = grep { $_ ne q{} } @letter_code;

@@ -186,6 +186,7 @@ my $help    = 0;
 my $man     = 0;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
             'help|?'         => \$help,
@@ -217,7 +218,6 @@ END_WARN
 unless ($confirm) {
      pod2usage(1);
 }
-cronlogaction({ info => $command_line_options });
 
 my %branches = ();
 if (@branchcodes) {

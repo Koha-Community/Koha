@@ -205,6 +205,7 @@ my $password = undef;
 my $method = 'LOGIN';
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help|?'            => \$help,
@@ -230,8 +231,6 @@ GetOptions(
 pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ($help and $verbose);
 pod2usage(1) if $help;
-
-cronlogaction({ info => $command_line_options });
 
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";

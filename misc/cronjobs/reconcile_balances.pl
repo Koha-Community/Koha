@@ -65,6 +65,7 @@ my $help    = 0;
 my $verbose = 0;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help'    => \$help,
@@ -72,7 +73,6 @@ GetOptions(
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
-cronlogaction({ info => $command_line_options });
 
 my @patron_ids = Koha::Account::Lines->search(
         {

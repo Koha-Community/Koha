@@ -12,6 +12,7 @@ use C4::Items;
 use C4::Log qw( cronlogaction );
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 # Getting options
 my ( $verbose, $help, $confirm );
@@ -30,7 +31,6 @@ my $rules = eval { JSON::from_json( $syspref_content ) };
 pod2usage({ -message => "Unable to load the configuration : $@", -exitval => 1 })
     if $@;
 
-cronlogaction({ info => $command_line_options });
 
 my $report = C4::Items::ToggleNewStatus( { rules => $rules, report_only => not $confirm } );
 
