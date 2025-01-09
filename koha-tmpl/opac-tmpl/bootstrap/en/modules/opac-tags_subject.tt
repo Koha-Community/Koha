@@ -20,16 +20,17 @@
 
         <div class="container-fluid">
             <div class="row">
+                [% SET column_class = "col order-first order-md-first order-lg-2" %]
                 [% IF ( OpacNav || OpacNavBottom ) %]
+                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     <div class="col-lg-2">
                         <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
+                            [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                         </div>
                     </div>
-                    <div class="col-10 order-first order-md-first order-lg-2">
-                [% ELSE %]
-                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
+
+                <div class="[% column_class | html %]">
 
                     <div id="subjectcloud" class="maincontent">
                         <h1>Subject cloud</h1>
