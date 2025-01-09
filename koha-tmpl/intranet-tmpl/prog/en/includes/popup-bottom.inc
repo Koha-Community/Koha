@@ -4,4 +4,6 @@
         [% jsinclude | $raw # Parse the page template's JavaScript block if necessary %]
     [% END %]
 </body>
+<!-- prettier-ignore-start -->
 </html>
+<!-- prettier-ignore-end -->
