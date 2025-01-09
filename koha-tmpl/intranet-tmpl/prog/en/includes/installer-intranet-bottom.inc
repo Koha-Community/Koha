@@ -22,4 +22,6 @@
         [% INCLUDE 'calendar.inc' %]
         [% jsinclude | $raw # Parse the page template's JavaScript block if necessary %]
     </body>
+<!-- prettier-ignore-start -->
 </html>
+<!-- prettier-ignore-end -->
