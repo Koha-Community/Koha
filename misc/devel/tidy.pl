@@ -3,6 +3,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
+use Array::Utils        qw( array_minus );
 use File::Slurp         qw( read_file write_file );
 use IPC::System::Simple qw( capture );
 use IPC::Cmd            qw( run );
@@ -37,6 +38,17 @@ unless (@files) {
     push @files, get_js_files();
     push @files, get_tt_files();
 }
+
+my @exceptions = qw(
+    misc/cronjobs/rss/lastAcquired.tt
+    misc/cronjobs/rss/lastAcquired-1.0.tt
+    misc/cronjobs/rss/lastAcquired-2.0.tt
+    misc/cronjobs/rss/longestUnseen.tt
+    misc/cronjobs/rss/mostReserved.tt
+    t/db_dependent/misc/translator/sample.tt
+);
+
+@files = array_minus( @files, @exceptions );
 
 my $nb_files = scalar @files;
 my $pm       = Parallel::ForkManager->new($nproc);
