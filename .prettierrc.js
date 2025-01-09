@@ -13,6 +13,7 @@ module.exports = {
         {
             files: ["*.tt", "*.inc"],
             options: {
+                printWidth: 240,
                 parser: "jinja-template",
                 plugins: ["prettier-plugin-jinja-template"],
             },
