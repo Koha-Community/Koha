@@ -250,15 +250,8 @@
 
 </head>
 
-[% IF ( plugin ) %]
     <body id="tools_upload" class="tools">
-        <div class="main container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                    <main>
-                        [% INCLUDE 'messages.inc' %]
-[% ELSE %]
-    <body id="tools_upload" class="tools">
+[% UNLESS plugin %]
     [% WRAPPER 'header.inc' %]
         [% INCLUDE 'cat-search.inc' %]
     [% END %]
@@ -283,13 +276,19 @@
             [% END %]
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
+[% END %]
 
+
+[% IF plugin %]
+    [% SET div_class = 'col-sm-12' %]
+[% ELSE %]
+    [% SET div_class = 'col-md-10 order-md-2 order-sm-1' %]
+[% END %]
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
+            <div class="[% div_class | html %]">
                 <main>
                     [% INCLUDE 'messages.inc' %]
-[% END %]
 
 <h1>Uploads</h1>
 <div class="alert alert-warning" id="myalerts" style="display:none;"></div>
@@ -298,14 +297,15 @@
 [% IF op == 'new' %]
     [% PROCESS form_new %]
     <div class="row">
+        [% SET div_class="col" %]
         [% IF uploadcategories %]
             <div class="col-6">
                 [% PROCESS form_browse %]
             </div>
             <div class="col-6">
-        [% ELSE %]
-            <div class="col">
+            [% SET div_class="col-6" %]
         [% END %]
+        <div class="[% div_class | html %]">
             [% PROCESS form_search %]
         </div>
     </div>
@@ -326,10 +326,9 @@
     [% END %]
 [% END %]
 
-[% IF !plugin %]
             </main>
         </div> <!-- /.col-md-10.order-md-2 -->
-
+[% IF !plugin %]
         <div class="col-md-2 order-sm-2 order-md-1">
             <aside>
                 [% IF op == 'report' %]
@@ -341,12 +340,8 @@
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
         </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-[% ELSE %]
-            </main>
-        </div> <!-- .col-sm-12 -->
-     </div> <!-- /.row -->
 [% END %]
+     </div> <!-- /.row -->
 </div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
