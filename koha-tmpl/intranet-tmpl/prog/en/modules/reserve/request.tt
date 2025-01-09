@@ -1919,7 +1919,7 @@
                 e.preventDefault();
                 if($('.holds_table .select_hold:checked').length) {
                     cancel_link = $(this);
-                    $("#cancel_modal_form #inputs").empty;
+                    $("#cancel_modal_form #inputs").empty();
                     biblionumbers.forEach( function(biblionumber){
                         $("#cancel_modal_form #inputs").append('<input type="hidden" name="biblionumber" value="'+biblionumber+'">');
                     });
