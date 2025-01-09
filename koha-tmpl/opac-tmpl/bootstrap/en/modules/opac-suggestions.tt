@@ -379,7 +379,8 @@
                                         [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
                                                 <p class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</p>
                                         [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                                <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                                <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</p>
+                                                <p>Once the library has processed those suggestions you will be able to place more.</p>
                                         [% ELSE %]
                                                 <a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add_form"><i class="fa fa-plus"  aria-hidden="true"></i> New purchase suggestion</a>
                                         [% END %]
@@ -402,7 +403,7 @@
 
                                     [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 || loggedinusername %]
                                     <table id="suggestt" class="table table-bordered tabled">
-                                        <caption class="sr-only">Your purchase suggestions<caption>
+                                        <caption class="sr-only">Your purchase suggestions</caption>
                                         <thead>
                                             <tr>
                                                 [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
@@ -514,7 +515,8 @@
                                     [% IF ( Koha.Preference('MaxTotalSuggestions') != ''  && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
                                         <p class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</p>
                                     [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != ''  && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                        <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                        <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time.</p>
+                                        <p>Once the library has processed those suggestions you will be able to place more.</p>
                                     [% ELSE %]
                                         <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add_form"><i class="fa fa-plus" aria-hidden="true"></i> New purchase suggestion</a></p>
                                     [% END %]
