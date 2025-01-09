@@ -170,6 +170,9 @@ my $branch_lim;
 my %fields;
 my @where;
 
+my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
+
 GetOptions(
     'help|?'          => \$help,
     'man'             => \$man,
@@ -201,8 +204,6 @@ if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
 ( $verbose && !$doit ) and print "No actions will be taken (test mode)\n";
 
 $verbose and print "Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
-
-cronlogaction();
 
 my %params;
 

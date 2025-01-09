@@ -30,6 +30,7 @@ my (
 );
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 $send = 1;
 GetOptions(
@@ -73,8 +74,6 @@ if ( $ods and @letter_codes != 1 ) {
 }
 
 $delimiter ||= q|,|;
-
-cronlogaction({ info => $command_line_options });
 
 my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
 my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );

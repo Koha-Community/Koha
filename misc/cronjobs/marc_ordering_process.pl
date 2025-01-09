@@ -67,6 +67,7 @@ use Koha::MarcOrderAccounts;
 use C4::Log qw( cronlogaction );
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $verbose, $confirm, $delete );
 GetOptions(
@@ -77,8 +78,6 @@ GetOptions(
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
-
-cronlogaction( { info => $command_line_options } );
 
 $verbose = 1            unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;

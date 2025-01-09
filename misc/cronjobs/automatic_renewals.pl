@@ -88,6 +88,7 @@ use Koha::Libraries;
 use Koha::Patrons;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $help, $send_notices, $verbose, $confirm, $digest_per_branch );
 GetOptions(
@@ -129,8 +130,6 @@ To change this, edit the "EnhancedMessagingPreferences" syspref.
 
 END_WARN
 }
-
-cronlogaction( { info => $command_line_options } );
 
 $verbose = 1            unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;

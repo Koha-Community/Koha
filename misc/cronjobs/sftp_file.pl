@@ -127,6 +127,7 @@ my $status_email_message = undef;
 my $sftp_status          = undef;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|?'         => \$help,
@@ -143,8 +144,6 @@ GetOptions(
 pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ( $help and $verbose );
 pod2usage(1) if $help;
-
-cronlogaction( { info => $command_line_options } );
 
 # Check we have all the SFTP details we need
 if ( !$user || !$pass || !$host || !$upload_dir ) {

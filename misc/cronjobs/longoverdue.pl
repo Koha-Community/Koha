@@ -56,6 +56,7 @@ my $list_itemtypes = 0;
 my @skip_lost_values;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'l|lost=s%'         => \$lost,
@@ -319,8 +320,6 @@ unless ($confirm) {
     $verbose = 1;     # If you're not running it for real, then the whole point is the print output.
     print "### TEST MODE -- NO ACTIONS TAKEN ###\n";
 }
-
-cronlogaction({ info => $command_line_options });
 
 # In my opinion, this line is safe SQL to have outside the API. --atz
 our $bounds_sth = C4::Context->dbh->prepare("SELECT DATE_SUB(CURDATE(), INTERVAL ? DAY)");

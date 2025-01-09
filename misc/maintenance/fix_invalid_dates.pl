@@ -40,10 +40,18 @@ This script fixes any date fields in the database that have '0000-00-00' values 
 my $verbose = 0;
 my $doit    = 0;
 
+my $command_line_options = join( " ", @ARGV );
+
 GetOptions(
     'v|verbose' => \$verbose,
     'c|confirm' => \$doit,
 );
+
+if ($doit) {
+    cronlogaction( { action => 'Run', info => $command_line_options } );
+} else {
+    warn "Running in dry-run mode, provide --confirm to apply the changes\n";
+}
 
 my $schema = Koha::Database->new->schema;
 

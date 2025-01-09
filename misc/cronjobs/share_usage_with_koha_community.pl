@@ -12,6 +12,7 @@ use C4::Log qw( cronlogaction );
 use POSIX qw( strftime );
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 my ( $help, $verbose, $force, $quiet );
 GetOptions(
@@ -37,8 +38,6 @@ Setting the quiet flag will silence this message.
     );
     exit 1;
 }
-
-cronlogaction({ info => $command_line_options });
 
 my $need_update = ($force ? 1 : C4::UsageStats::NeedUpdate() );
 

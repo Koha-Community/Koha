@@ -86,6 +86,7 @@ my $confirm      = 0;
 my $reason;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'h|help|?'   => \$help,
@@ -107,8 +108,6 @@ qq{\nError: You must specify a value for days waiting to cancel holds.\n},
         }
     );
 }
-
-cronlogaction({ info => $command_line_options });
 
 warn "Running in test mode, no actions will be taken" unless ($confirm);
 

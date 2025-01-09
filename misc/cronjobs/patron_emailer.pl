@@ -118,6 +118,7 @@ my $error_msgs = {
 };
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help|?'      => \$help,
@@ -132,8 +133,6 @@ GetOptions(
 ) or pod2usage(1);
 pod2usage(1) if $help;
 pod2usage(1) unless $report_id && $notice && $module;
-
-cronlogaction({ info => $command_line_options });
 
 my ( $emails, $errors ) = C4::Reports::Guided::EmailReport({
     email      => $email,

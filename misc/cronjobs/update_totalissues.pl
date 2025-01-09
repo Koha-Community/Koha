@@ -53,6 +53,7 @@ my $progress    = 100;
 my $unit;
 
 my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my $result = GetOptions(
     'v|verbose'    => \$verbose,
@@ -88,8 +89,6 @@ unless ( $usestats || $useitems ) {
 }
 
 usage() if $want_help;
-
-cronlogaction( { info => $command_line_options } );
 
 my $dbh = C4::Context->dbh;
 

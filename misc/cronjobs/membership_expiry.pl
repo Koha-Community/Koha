@@ -179,6 +179,7 @@ my $letter_expiry;
 my $letter_renew;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help|?'         => \$help,
@@ -225,8 +226,6 @@ if ( !C4::Context->preference('TrackLastPatronActivityTriggers')
         -exitval => 1
     );
 }
-
-cronlogaction({ info => $command_line_options });
 
 my $expdays = C4::Context->preference('MembershipExpiryDaysNotice');
 if( !$expdays ) {

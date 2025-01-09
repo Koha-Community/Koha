@@ -26,14 +26,16 @@ use C4::Suggestions;
 use C4::Log qw( cronlogaction );
 use C4::Context;
 
-my ( $help, $days, $confirm );
+my ( $help, $days, $confirm, $verbose );
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
-    'help|?' => \$help,
-    'days:i' => \$days,
-    'confirm'=> \$confirm,
+    'help|?'    => \$help,
+    'days:i'    => \$days,
+    'confirm'   => \$confirm,
+    'v|verbose' => \$verbose,
 );
 
 my $usage = << 'ENDUSAGE';
@@ -42,6 +44,7 @@ Parameters:
 -help|? This message
 -days TTT to define the age of suggestions to delete
 -confirm flag needed to confirm purge operation
+-verbose flag to increase feedback
 
 The days parameter falls back to the value of system preference
 PurgeSuggestionsOlderThan. Suggestions are deleted only for a positive
@@ -59,8 +62,7 @@ if( !$confirm || $help || !defined($days) ) {
     print "No confirm parameter passed!\n\n" if !$confirm && !$help;
     print $usage;
 } elsif( $days and $days > 0 ) {
-    $command_line_options .= " ( effective days = $days )";
-    cronlogaction({ info => $command_line_options });
+    print "Purging suggestions older than $days days\n" if $verbose;
     DelSuggestionsOlderThan($days);
 } else {
     warn "This script requires a positive number of days. Aborted.\n";

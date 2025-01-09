@@ -177,6 +177,7 @@ my $opt_out = 0;
 my @mtts;
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 GetOptions(
     'help|?'       => \$help,
@@ -195,8 +196,6 @@ pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 $lettercode ||= 'HOLD_REMINDER';
-
-cronlogaction({ info => $command_line_options });
 
 # Unless a delay is specified by the user we target all waiting holds
 unless (defined $days) {

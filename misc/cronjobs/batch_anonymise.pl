@@ -44,6 +44,7 @@ USAGE
 }
 
 my $command_line_options = join(" ",@ARGV);
+cronlogaction({ info => $command_line_options });
 
 my ( $help, $days, $verbose );
 
@@ -61,8 +62,6 @@ if ( !$days  ) {
     print "The days parameter is mandatory.\n\n";
     usage(1);
 }
-
-cronlogaction({ info => $command_line_options });
 
 my $date = dt_from_string->subtract( days => $days );
 
