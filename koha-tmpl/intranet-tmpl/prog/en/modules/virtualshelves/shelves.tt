@@ -132,11 +132,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 offset-md-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' wide_centered=1 %]
 
             [% IF op != 'transfer' %][% INCLUDE 'virtualshelves-toolbar.inc' %][% END %]
 
@@ -562,10 +558,7 @@
                 <!-- Values will be set here by placeHold() -->
             </form>
 
-        </main>
-    </div> <!-- /.col-md-10.order-md-2 -->
-</div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% IF ( can_add_biblios ) %]
     <!-- Modal -->
