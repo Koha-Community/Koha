@@ -31,16 +31,17 @@
 
         <div class="container-fluid">
             <div class="row">
-                [% IF ( OpacNav || OpacNavBottom ) %]
+                [% SET column_class = "col order-first order-md-first order-lg-2" %]
+                [% IF ( OpacNav ||  OpacNavBottom ) %]
+                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     <div class="col-lg-2">
                         <div id="navigation">
                             [% INCLUDE 'navigation.inc' %]
                         </div>
                     </div>
-                    <div class="col-10 order-first order-md-first order-lg-2">
-                [% ELSE %]
-                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
+
+                <div class="[% column_class | html %]">
                     <div id="userserialissues" class="maincontent">
                         <h1>Issues for a subscription</h1>
                         <div id="views">
@@ -53,7 +54,7 @@
                         <div id="subscriptionhistory">
                             [% FOREACH subscription_LOO IN subscription_LOOP %]
                                 <div id="subscriptionline[% subscription_LOO.subscriptionid | html %]" class="subscriptionline">
-                                    <caption><h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2><caption>
+                                    <h2>Subscription information for [% subscription_LOO.bibliotitle | html %]</h2>
                                     <p>
                                         <span>The current subscription began on [% subscription_LOO.startdate | html %] and is issued</span>
                                         [% IF ( subscription_LOO.periodicity1 ) %]
