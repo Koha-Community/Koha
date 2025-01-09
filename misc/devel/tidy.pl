@@ -155,6 +155,8 @@ sub tidy_tt {
             $content =~ s#<!--</head>-->#</head>#g;
             $content =~ s#<!--<body(.*)-->#<body$1#g;
             $content =~ s#<!--</body>-->#</body>#g;
+            $content =~ s#\n*( *)<script>\n*#\n$1<script>\n#g;
+            $content =~ s#\n*( *)</script>\n*#\n$1</script>\n#g;
             write_file( $file, $content );
         }
     }
