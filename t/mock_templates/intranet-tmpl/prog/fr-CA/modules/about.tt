@@ -109,11 +109,7 @@
                     [% IF elasticsearch_fatal_config_error %]
                         <td><span class="bg-warning">[% elasticsearch_fatal_config_error | html %]</span></td>
                     [% ELSE %]
-                        [% IF elasticsearch_status.running %]
-                            <td class="bg-success">
-                        [% ELSE %]
-                            <td>
-                        [% END %]
+                        <td [% IF elasticsearch_status.running %]class="bg-success"[% END %]>
                             <span>Version:</span>
                             <span>[% elasticsearch_status.version | html %]</span>
                             |
@@ -139,11 +135,7 @@
             [% END %]
             <tr>
                 <th scope="row">Memcached: </th>
-                [% IF memcached_running AND is_memcached_still_active AND where_is_memcached_config == 'config_only' %]
-                    <td class="bg-success">
-                [% ELSE %]
-                    <td>
-                [% END %]
+                <td [% IF memcached_running AND is_memcached_still_active AND where_is_memcached_config == 'config_only' %]class="bg-success"[% END %]>
                     <span>Servers:</span>
                     [% IF memcached_servers %]
                         <span>[% memcached_servers | html %]</span>
@@ -246,27 +238,26 @@
             [% FOREACH tabl IN table %]
                 <tr>
                     [% FOREACH ro IN tabl.row %]
-                        [% IF ( ro.current ) %]
-                            [% IF ( ro.require ) %]
-                                <th scope="row" style="font-weight:bold;" title="Module current">
-                            [% ELSE %]
-                                <th scope="row" style="font-weight:normal" title="Module current">
-                            [% END %]
-                        [% ELSIF ( ro.upgrade ) %]
-                            [% IF ( ro.require ) %]
-                                <th scope="row" style="background-color:#FFCB2F;font-weight:bold;" title="Module upgrade needed">
-                            [% ELSE %]
-                                <th scope="row" style="background-color:#FFCB2F;font-weight:normal" title="Module upgrade needed">
-                            [% END %]
+                        [% IF ( ro.require ) %]
+                            [% SET th_font_weight = "bold" %]
                         [% ELSE %]
-                            [% IF ( ro.name == '' ) %]
-                                <th>
-                            [% ELSIF ( ro.require ) %]
-                                <th scope="row" style="background-color:#FF8A8A;font-weight:bold;" title="Required module missing">
-                            [% ELSE %]
-                                <th scope="row" style="background-color:#FF8A8A;font-weight:normal" title="Optional module missing">
+                            [% SET th_font_weight = "normal" %]
+                        [% END %]
+                        [% IF ( ro.current ) %]
+                            [% SET th_title = t("Module current") %]
+                        [% ELSIF ( ro.upgrade ) %]
+                            [% SET th_background_color = "#FFCB2F" %]
+                            [% SET th_title = t("Module upgrade needed") %]
+                        [% ELSE %]
+                            [% IF ( ro.require ) %]
+                                [% SET th_background_color = "#FF8A8A" %]
+                                [% SET th_title = t("Required module missing") %]
+                            [% ELSIF ( ro.name != '' ) %]
+                                [% SET th_background_color = "#FF8A8A" %]
+                                [% SET th_title = t("Optional module missing") %]
                             [% END %]
                         [% END # /IF ro.current %]
+                        <th scope="row" style="background-color:[% th_background_color | html %];font-weight:[% th_font_weight | html %];" title="[% th_title | html %]">
                         [% IF ( ro.name ) %]
                             [% ro.name | html %]
                             <span style="font-weight:normal; font-size:smaller">
@@ -277,13 +268,12 @@
                         [% END %]
                         </th>
                         [% IF ( ro.name == '' ) %]
-                            <td>
+                            <td></td>
                         [% ELSIF ( ro.version ) %]
-                            <td>[% ro.version | html %]
+                            <td>[% ro.version | html %]</td>
                         [% ELSE %]
-                            <td style="font-weight:bold">Not Installed
+                            <td style="font-weight:bold">Not Installed</td>
                         [% END %]
-                            </td>
                     [% END # /FOREACH ro %]
                 </tr>
             [% END # /FOREACH tabl %]
@@ -485,7 +475,7 @@
                     [% IF warnPrefOpacHiddenItems %]
                         <tr>
                             <th scope="row"><strong>Warning</strong> </th>
-                            <td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</th></tr>
+                            <td>System preference 'OpacHiddenItems' generates a warning and will produce unexpected behaviors: [% warnPrefOpacHiddenItems | html %]</td></tr>
                     [% END %]
                     [% IF warnPrefPatronSelfRegistrationDefaultCategory %]
                         <tr><th scope="row"><strong>Warning</strong> </th><td>System preference 'PatronSelfRegistration' is set, but 'PatronSelfRegistrationDefaultCategory' does not contain a valid patron category code. Patron self-registration is disabled.</td></tr>
@@ -494,7 +484,7 @@
                         [% FOR p IN warnXSLT %]
                             <tr>
                                 <th scope="row"><strong>Warning</strong> </th>
-                                <td>System preference '[% p.syspref | html %]' is '[% p.value | html %]', but the file '[% p.filename | html %]' does not exist.</th></tr>
+                                <td>System preference '[% p.syspref | html %]' is '[% p.value | html %]', but the file '[% p.filename | html %]' does not exist.</td></tr>
                         [% END %]
                     [% END %]
                     [% IF invalid_yesno.count %]
@@ -1061,7 +1051,7 @@
 
         <h2>FileSaver.js</h2>
         <p>
-            <a href="https://github.com/eligrey/FileSaver.js">FileSaver.js v2.0.4</a>: <a href="https://github.com/eligrey/FileSaver.js/blob/v2.0.4/LICENSE.md">MIT License</p>
+            <a href="https://github.com/eligrey/FileSaver.js">FileSaver.js v2.0.4</a>: <a href="https://github.com/eligrey/FileSaver.js/blob/v2.0.4/LICENSE.md">MIT License</a>
 
         <h2>Flatpicker</h2>
         <p>
