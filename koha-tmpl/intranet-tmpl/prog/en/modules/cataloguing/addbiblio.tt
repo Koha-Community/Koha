@@ -896,6 +896,7 @@ $(document).ready(function(){
                     [% END # /IF duplicatebiblionumber %]
                 [% END # /UNLESS number %]
 
+                <!-- prettier-ignore-start -->
                 [% IF ( done ) %]
                     <script>
                         opener.document.forms['f'].biblionumber.value=[% biblionumber | html %];
@@ -1042,7 +1043,6 @@ $(document).ready(function(){
                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                 <input type="hidden" name="breedingid" value="[% breedingid | html %]" />
 
-                <!-- prettier-ignore-start -->
                 [% WRAPPER tabs id= "addbibliotabs" %]
                     [% WRAPPER tab_panels %]
                         [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -1260,7 +1260,6 @@ $(document).ready(function(){
                         [% END # /FOREACH BIG_LOOP %]
                     [% END # /WRAPPER tab_panels %]
                 [% END # /WRAPPER tabs %]
-                <!-- prettier-ignore-end -->
 
                 [%# Fields for fast cataloging %]
                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -1270,6 +1269,7 @@ $(document).ready(function(){
                 <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                 [%# End of fields for fast cataloging %]
             </form> <!-- /name=f -->
+            <!-- prettier-ignore-end -->
 
             [% INCLUDE 'modals/cataloguing_create_av.inc' %]
 
