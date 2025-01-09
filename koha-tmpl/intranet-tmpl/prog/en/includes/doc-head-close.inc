@@ -50,7 +50,12 @@ var Koha = {};
 [% IF ( login ) %]
     [% Asset.css("css/login.css") | $raw %]
 [% END %]
-[% IF ( IntranetUserCSS ) %]<style>[% IntranetUserCSS | $raw %]</style>[% END %]
+
+[% IF ( IntranetUserCSS ) %]
+    <!-- prettier-ignore-start -->
+    <style>[% IntranetUserCSS | $raw %]</style>
+    <!-- prettier-ignore-end -->
+[% END %]
 
 [% KohaPlugins.get_plugins_intranet_head | $raw %]
 
