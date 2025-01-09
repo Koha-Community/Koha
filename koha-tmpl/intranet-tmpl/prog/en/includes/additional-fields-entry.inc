@@ -3,22 +3,23 @@
 [% USE ClassSources %]
 [% USE ItemTypes %]
 [% IF wrap_fieldset != 0 %]
-<fieldset class="rows" id="additional_fields_form_section">
-    <legend>Additional fields</legend>
-    <ol>
+    <fieldset class="rows" id="additional_fields_form_section">
+        <legend>Additional fields</legend>
+        [% PROCESS build_additional_fields_ol %]
+    </fieldset>
+[% ELSE %]
+    [% PROCESS build_additional_fields_ol %]
 [% END %]
+
+[% BLOCK build_additional_fields_ol %]
+    <ol>
         [% FOR field IN available %]
         [% authorised_value_category = field.effective_authorised_value_category %]
             [% IF authorised_value_category %]
                 <li>
                 <label for="additional_field_[% field.id | html %]"> [% field.name | html %]: </label>
-                [% IF field.marcfield && field.marcfield_mode == 'get' %]
-                    <select name="additional_field_[% field.id | html %]" id="additional_field_[% field.id | html %]" class="marcfieldget" disabled>
-                [% ELSE %]
-                    [% IF !field.repeatable %]
-                        <select name="additional_field_[% field.id | html %]" id="additional_field_[% field.id | html %]">
-                    [% END %]
-                [% END %]
+                [% IF ( field.marcfield && field.marcfield_mode == 'get' ) || !field.repeatable %]
+                    <select name="additional_field_[% field.id | html %]" id="additional_field_[% field.id | html %]" [% IF field.marcfield && field.marcfield_mode == 'get' %]class="marcfieldget" disabled[% END %]>
                     [% IF !field.repeatable %]
                         [% IF batch_edit %]
                             <option value="">No change</option>
@@ -76,7 +77,6 @@
                             [% END %]
                         [% END %]
                     [% END %]
-                [% IF field.marcfield || !field.repeatable %]
                     </select>
                 [% END %]
                 [% IF !search_form %]
@@ -110,6 +110,10 @@
                         <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                     [% END %]
                     [% SET text_field_value_rendered = 1 %]
+                    [% IF field.marcfield && field.marcfield_mode == 'set' && !search_form %]
+                        This value will be saved to the [% field.marcfield | html %] subfield of the selected bibliographic record.
+                    [% END %]
+                    </li>
                 [% END %]
                 [% IF !text_field_value_rendered %]
                     <li>
@@ -125,14 +129,12 @@
                     [% IF field.repeatable && !search_form %]
                         <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                     [% END %]
+                    [% IF field.marcfield && field.marcfield_mode == 'set' && !search_form %]
+                        This value will be saved to the [% field.marcfield | html %] subfield of the selected bibliographic record.
+                    [% END %]
+                    </li>
+
                 [% END %]
-                [% IF field.marcfield && field.marcfield_mode == 'set' && !search_form %]
-                    This value will be saved to the [% field.marcfield | html %] subfield of the selected bibliographic record.
-                [% END %]
-                </li>
             [% END %]
         [% END %]
-[% IF wrap_fieldset != 0 %]
-    </ol>
-</fieldset>
 [% END %]
