@@ -3,7 +3,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
-use File::Slurp         qw( edit_file );
+use File::Slurp         qw( read_file write_file );
 use IPC::System::Simple qw( capture );
 use IPC::Cmd            qw( run );
 use Parallel::ForkManager;
@@ -135,17 +135,15 @@ sub tidy_tt {
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
     for ( 1 .. 2 ) {
         ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
-            run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
+            run( command => sprintf( q{yarn run prettier --write %s}, $file ) );
         if ($success) {
 
-            while ( !-f $file ) { sleep 1; }
-
             # Revert the substitutions done by the prettier plugin
-            edit_file sub {
-                s#<!--</head>-->#</head>#g;
-                s#<!--<body(.*)-->#<body$1#g;
-                s#<!--</body>-->#</body>#g;
-            }, $file;
+            my $content = read_file($file);
+            $content =~ s#<!--</head>-->#</head>#g;
+            $content =~ s#<!--<body(.*)-->#<body$1#g;
+            $content =~ s#<!--</body>-->#</body>#g;
+            write_file( $file, $content );
         }
     }
     return ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf );
