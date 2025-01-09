@@ -1,8 +1,13 @@
 [% USE AuthorisedValues %]
 [% FOR field IN available %]
         [% IF is_table_cell %]
-            <td>
+            <td>[% PROCESS additional_fields_display %]</td>
+        [% ELSE %]
+            [% PROCESS additional_fields_display %]
         [% END %]
+[% END %]
+
+[% BLOCK additional_fields_display %]
         [% SET values_list = [] %]
         [% FOR value IN values.${field.id} %]
             [% IF field.authorised_value_category %]
@@ -18,8 +23,5 @@
                 <span class="label"> [% field.name | html %]: </span>
                 [% values_list.join(', ') | html %]
             </li>
-        [% END %]
-        [% IF is_table_cell %]
-            </td>
         [% END %]
 [% END %]
