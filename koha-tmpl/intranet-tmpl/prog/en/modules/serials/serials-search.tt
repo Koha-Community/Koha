@@ -216,11 +216,9 @@
         </div>
     [% END # /BLOCK subscriptions_table %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
+    [% SET asides = ['serials-menu'] %]
+    [% IF done_searched && !mana %][% asides.unshift('serials-advsearch_brief') %][% END %]
+    [% WRAPPER 'main-container.inc' asides=asides %]
 
                     [% INCLUDE 'serials-toolbar.inc' %]
 
@@ -294,22 +292,7 @@
                         [% END # IF ( total ) %]
                     [% END # /IF done_searched %]
 
-                </main>
-            </div> <!-- /.col-md-10.order-md-2 -->
-
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-
-                    [% IF ( done_searched ) %]
-                        [% UNLESS ( mana ) %]
-                            [% INCLUDE 'serials-advsearch.inc' brief=1 %]
-                        [% END # / UNLESS ( mana ) %]
-                    [% END # / IF ( done_searched ) %]
-                    [% INCLUDE 'serials-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-md-2.order-md-1 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
+    [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

@@ -41,11 +41,7 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+[% WRAPPER 'main-container.inc' aside='serials-menu' %]
 
 [% IF ( op ) %]
     <h1>New routing list for <em>[% title | html %]</em></h1>
@@ -134,16 +130,8 @@
 </fieldset>
 <fieldset class="action"><input type="submit" id="submit_save_note_form" name="submit" class="btn btn-primary" value="Save" /></fieldset>
 
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
+[% END %]
 
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'serials-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
 [% MACRO jsinclude BLOCK %]
     <script>
         $(document).ready(function(){

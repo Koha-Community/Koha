@@ -26,6 +26,8 @@
                         [% CASE 'vendor-menu' %][% INCLUDE 'vendor-menu.inc' %]
                         [% CASE 'pos-menu' %][% INCLUDE 'pos-menu.inc' %]
                         [% CASE 'reports-menu' %][% INCLUDE 'reports-menu.inc' %]
+                        [% CASE 'serials-advsearch_brief' %][% INCLUDE 'serials-advsearch.inc' brief=1 %]
+                        [% CASE 'serials-menu' %][% INCLUDE 'serials-menu.inc' %]
                         [% CASE 'subscriptions-search' %][% INCLUDE 'subscriptions-search.inc' %]
                         [% CASE 'tools-menu' %][% INCLUDE 'tools-menu.inc' %]
                         [% END %]
