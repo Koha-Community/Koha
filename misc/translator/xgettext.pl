@@ -98,22 +98,6 @@ sub remember {
 
 ###############################################################################
 
-sub string_list {
-    my @t = keys %text;
-
-    # The real gettext tools seems to sort case sensitively; I don't know why
-    @t = sort { $a cmp $b } @t if $sort eq 's';
-    @t = sort {
-        my @aa = sort { $a->pathname cmp $b->pathname || $a->line_number <=> $b->line_number } @{ $text{$a} };
-        my @bb = sort { $a->pathname cmp $b->pathname || $a->line_number <=> $b->line_number } @{ $text{$b} };
-        $aa[0]->pathname cmp $bb[0]->pathname
-            || $aa[0]->line_number <=> $bb[0]->line_number;
-    } @t if $sort eq 'F';
-    return @t;
-}
-
-###############################################################################
-
 sub text_extract {
     my ($h) = @_;
     for ( ; ; ) {
