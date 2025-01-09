@@ -144,17 +144,9 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        [% IF ( multi_hold || nobiblio ) # No sidebar menu when placing multiple holds or biblio not found %]
-            [% SET div_class = "col-md-10 offset-md-1" %]
-        [% ELSE %]
-            [% SET div_class="col-md-10 order-md-2 order-sm-1" %]
-        [% END %]
-        <div class="[% div_class | html %]">
-
-        <main>
-            [% INCLUDE 'messages.inc' %]
+[%# No sidebar menu when placing multiple holds or biblio not found %]
+[% SET aside = (multi_hold || nobiblio) ? '' : 'biblio-view-menu' %]
+[% WRAPPER 'main-container.inc' aside=aside wide_centered=1 %]
             <h1>Holds</h1>
 
             [% IF ( nobiblio ) %]
@@ -1384,18 +1376,7 @@
                     </form> <!-- /#existing_holds -->
                 [% END # IF reserveloop %]
             [% END # UNLESS patron %]
-
-        </main>
-
-        </div> <!-- /.col-md-10.offset-md-1 OR /.col-md-10.order-md-2 -->
-        [% UNLESS ( multi_hold || nobiblio ) %]
-                <div class="col-md-2 order-sm-2 order-md-1">
-                    <aside>
-                        [% INCLUDE 'biblio-view-menu.inc' %]
-                    </aside>
-                </div> <!-- /.col-md-2.order-md-1 -->
-        [% END %]
-    </div> <!-- /.row -->
+[% END %]
 
     <div id="cancelModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -1443,7 +1424,6 @@
             [% INCLUDE 'csrf-token.inc' %]
         </form>
     </div>
-</div> <!-- /.main.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
