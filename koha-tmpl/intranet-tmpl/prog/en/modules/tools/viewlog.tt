@@ -89,11 +89,18 @@
     [% END #/ WRAPPER breadcrumbs %]
 [% END #/ WRAPPER sub-header.inc %]
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 order-md-2 order-sm-1">
-            <main>
-                [% INCLUDE 'messages.inc' %]
+
+[% SET asides = [] %]
+[% IF ( circulation ) %]
+    [% asides.push('circ-menu') %]
+[% ELSE %]
+    [% IF ( CATALOGUING && object ) %]
+        [% asides.push('biblio-view-menu') %]
+    [% ELSE %]
+        [% asides.push('tools-menu') %]
+    [% END %]
+[% END %]
+[% WRAPPER 'main-container.inc' asides=asides %]
 
                 <h1>Log viewer</h1>
                     <form method="get" action="/cgi-bin/koha/tools/viewlog.pl">
@@ -330,25 +337,7 @@
                     [% END %]
                 [% END %]
 
-
-            </main>
-        </div> <!-- /.col-md-10.order-md-2 -->
-
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% IF ( circulation ) %]
-                    [% INCLUDE 'circ-menu.inc' %]
-                [% ELSE %]
-                    [% IF ( CATALOGUING && object ) %]
-                        [% INCLUDE 'biblio-view-menu.inc' %]
-                    [% ELSE %]
-                        [% INCLUDE 'tools-menu.inc' %]
-                    [% END %]
-                [% END %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-     </div> <!-- /.row -->
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 <div class="modal" id="compareInfo" tabindex="-1" role="dialog" aria-labelledby="compareInfoLabel">
     <div class="modal-dialog modal-lg">

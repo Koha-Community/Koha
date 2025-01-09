@@ -153,17 +153,8 @@
         </div> <!-- /.modal-dialog -->
     </div> <!-- /.modal -->
 
-    [% IF add_form or copy_form %]
-        [% SET div_class="col-md-8 offset-md-2" %]
-    [% ELSE %]
-        [% SET div_class="col-md-10 order-md-2 order-sm-1" %]
-    [% END %]
-
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="[% div_class | html %]">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
+    [% SET aside = ( add_form || copy_form ) ? '' : 'tools-menu' %]
+    [% WRAPPER 'main-container.inc' aside=aside %]
 
                 [% IF ( no_op_set ) %]
                     <h1>Notices and slips</h1>
@@ -586,18 +577,7 @@
                     </div>
                 [% END # /IF delete_confirm %]
 
-                </main>
-            </div> <!-- /.col-md-8 OR /.col-md10-->
-        </div> <!-- /.row -->
-
-    [% UNLESS add_form or copy_form %]
-        <div class="col-md-2 order-sm-2 order-md-1">
-            <aside>
-                [% INCLUDE 'tools-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-md-2.order-md-1 -->
-    [% END %]
-</div> <!-- /.main.container-fluid -->
+[% END %]
 
 [% BLOCK message_templates %]
     [% WRAPPER accordion panelgroup_id="${lang}" %]

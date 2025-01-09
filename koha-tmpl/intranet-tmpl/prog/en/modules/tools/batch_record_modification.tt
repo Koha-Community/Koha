@@ -48,11 +48,7 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-10 order-md-2 order-sm-1">
-                <main>
-                    [% INCLUDE 'messages.inc' %]
+    [% WRAPPER 'main-container.inc' aside='cat-menu' %]
 
                     <h1>Batch record modification</h1>
 
@@ -292,15 +288,7 @@
                             No action defined for the template.
                         </div>
                     [% END %]
-                </main>
-            </div> <!-- /.col-md-10.order-md-2 -->
-            <div class="col-md-2 order-sm-2 order-md-1">
-                <aside>
-                    [% INCLUDE 'cat-menu.inc' %]
-                </aside>
-            </div> <!-- /.col-md-2.order-md-1 -->
-        </div> <!-- /.row -->
-    </div> <!-- /.main.container-fluid -->
+    [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
