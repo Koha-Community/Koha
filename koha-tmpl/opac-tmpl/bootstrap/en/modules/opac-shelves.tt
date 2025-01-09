@@ -138,26 +138,31 @@
 
     <div class="container-fluid">
         <div class="row">
-            [% IF ( OpacNav||loggedinusername ) %]
+
+            [% SET column_class = "col order-first order-md-first order-lg-2" %]
+            [% IF ( OpacNav || OpacNavBottom || loggedinusername ) %]
+                [% column_class = "col-md-12 col-lg-10 order-1" %]
                 <div class="col col-lg-2 order-2 order-lg-1">
                     <div id="navigation">
                         [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-10 order-1">
-            [% ELSE %]
-                <div class="col order-first order-md-first order-lg-2">
             [% END %]
+
+            <div class="[% column_class | html %]">
 
                 <div id="usershelves" class="maincontent">
 
                     [% FOR m IN messages %]
+                        [% SET alert_class = "alert alert-success" %]
                         [% SWITCH m.type %]
                             [% CASE 'message' %]
-                                <div class="alert alert-success" role="alert">
+                                [% alert_class = "alert alert-success" %]
                             [% CASE 'error' %]
-                                <div class="alert alert-danger" role="alert">
+                                [% alert_class = "alert alert-danger" %]
                         [% END %]
+                        <div class="[% alert_class | html %]" role="alert">
+
                         [% SWITCH m.code %]
                         [% CASE 'error_on_update' %]
                             <span>An error occurred when updating this list.</span>
