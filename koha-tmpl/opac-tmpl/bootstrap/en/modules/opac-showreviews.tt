@@ -22,16 +22,17 @@
 
         <div class="container-fluid">
             <div class="row">
+                [% SET column_class = "col order-first order-md-first order-lg-2" %]
                 [% IF ( OpacNav || OpacNavBottom ) %]
+                    [% column_class = "col-10 order-first order-md-first order-lg-2" %]
                     <div class="col-lg-2">
                         <div id="navigation">
-                            [% INCLUDE 'navigation.inc' %]
+                            [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
                         </div>
                     </div>
-                    <div class="col-10 order-first order-md-first order-lg-2">
-                [% ELSE %]
-                    <div class="col order-first order-md-first order-lg-2">
                 [% END %]
+
+                <div class="[% column_class | html %]">
                    <div id="showreviews" class="searchresults maincontent">
                         <h1>Recent comments <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink" aria-label="Subscribe to recent comments"><i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to recent comments"></i></a></h1>
                         <table class="table table-striped">
