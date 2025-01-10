@@ -41,6 +41,7 @@ use Fcntl qw( LOCK_EX O_CREAT O_RDWR SEEK_SET );
 die "Syspref 'EDIFACT' is disabled" unless C4::Context->preference('EDIFACT');
 
 # we dont have a lock dir in context so use the logdir
+my $logdir  = C4::Context->config('logdir');
 my $pidfile = "$logdir/edicron.pid";
 
 my $pid_handle = check_pidfile();
@@ -49,7 +50,7 @@ my $schema = Koha::Database->new()->schema();
 
 my @edi_accts = $schema->resultset('VendorEdiAccount')->all();
 
-my $logger = Koha::Logger->get({ interface => 'edi', prefix => 0 });
+my $logger = Koha::Logger->get( { interface => 'edi', prefix => 0 } );
 
 for my $acct (@edi_accts) {
     if ( $acct->quotes_enabled ) {
@@ -144,8 +145,7 @@ foreach my $response (@downloaded_responses) {
 if ( close $pid_handle ) {
     unlink $pidfile;
     exit 0;
-}
-else {
+} else {
     $logger->error("Error on pidfile close: $!");
     exit 1;
 }
@@ -154,7 +154,7 @@ sub check_pidfile {
 
     # sysopen my $fh, $pidfile, O_EXCL | O_RDWR or log_exit "$0 already running"
     sysopen my $fh, $pidfile, O_RDWR | O_CREAT
-      or log_exit("$0: open $pidfile: $!");
+        or log_exit("$0: open $pidfile: $!");
     flock $fh => LOCK_EX or log_exit("$0: flock $pidfile: $!");
 
     sysseek $fh, 0, SEEK_SET or log_exit("$0: sysseek $pidfile: $!");
