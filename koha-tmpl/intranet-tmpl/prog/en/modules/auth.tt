@@ -6,6 +6,7 @@
 [% USE Categories %]
 [% USE Registers %]
 [% USE AuthClient %]
+[% USE AdditionalContents %]
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -48,7 +49,19 @@
 
 <div id="login">
 <h1><a href="http://koha-community.org">Koha</a></h1>
-[% IF (Koha.Preference('StaffLoginInstructions')) %]<div id="login_instructions">[% Koha.Preference('StaffLoginInstructions') | $raw %]</div>[% END %]
+
+[% SET StaffLoginInstructions = AdditionalContents.get( location => "StaffLoginInstructions", lang => lang ) %]
+
+[% IF ( StaffLoginInstructions.content && StaffLoginInstructions.content.count > 0 ) %]
+    <div id="[% StaffLoginInstructions.location | html %]" class="page-section">
+        [% FOREACH n IN StaffLoginInstructions.content %]
+            <div class="[% n.lang | html %]_item">
+                <div class="[% n.lang | html %]_body">[% n.content | $raw %]</div>
+            </div>
+        [% END %]
+    </div> <!-- /#StaffLoginInstructions -->
+[% END # /IF StaffLoginInstructions %]
+
 [% IF ( nopermission ) %]
 <div id="login_error">
     <strong>Error:</strong>

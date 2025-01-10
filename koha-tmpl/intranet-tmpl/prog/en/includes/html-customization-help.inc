@@ -118,6 +118,10 @@
     Show this content on the lists home page in the staff interface.
 </div>
 
+<div id="StaffLoginInstructions_notes" class="hint customization_note">
+    Show this content on the staff interface login page.
+</div>
+
 <div id="StaffPatronsHome_notes" class="hint customization_note">
     Show this content on the patrons home page in the staff interface.
 </div>

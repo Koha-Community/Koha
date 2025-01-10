@@ -754,7 +754,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('StaffHighlightedWords','1','','Highlight search terms on staff interface','YesNo'),
 ('StaffInterfaceLanguages','en',NULL,'Set the default language in the staff interface.','Languages'),
 ('StaffLangSelectorMode','footer','top|both|footer','Select the location to display the language selector in staff interface','Choice'),
-('StaffLoginInstructions', '', NULL, 'HTML to go into the login box for the staff interface','Free'),
 ('StaffLoginLibraryBasedOnIP', '1','', 'Set the logged in library for the user based on their current IP','YesNo'),
 ('StaffLoginRestrictLibraryByIP','0',NULL,'If ON, IP authentication is enabled, blocking access to the staff interface from unauthorized IP addresses based on branch','YesNo'),
 ('StaffSearchResultsDisplayBranch','holdingbranch','holdingbranch|homebranch','Controls the display of the home or holding branch for staff search results','Choice'),
