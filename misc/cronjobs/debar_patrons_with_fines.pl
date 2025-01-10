@@ -76,8 +76,8 @@ use Koha::Patron::Debarments;
 
 use C4::Log qw( cronlogaction );
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 my ( $amount, $help, $confirm, $message, $expiration, $file, $verbose );
 GetOptions(
@@ -128,7 +128,7 @@ my $verb = $confirm ? 'Debarred' : 'Found';
 print "debar_patrons_with_fines: $verb $count_patrons patrons";
 print( $errors ? ", had $errors failures\n" : "\n" );
 
-cronlogaction({ action => 'End', info => "COMPLETED" });
+cronlogaction( { action => 'End', info => "COMPLETED" } );
 
 sub getMessageContent {
     return $message if ($message);
