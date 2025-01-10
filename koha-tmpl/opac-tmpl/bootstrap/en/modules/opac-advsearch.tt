@@ -10,7 +10,23 @@
     [% PROCESS 'library_name_title' %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %][% END %]
+[% BLOCK cssinclude %]
+    [% FILTER collapse %]
+        <style>
+            .adv-search-grid {
+                display: grid;
+                gap: .5rem;
+                grid-template-columns: repeat( auto-fit, minmax( 15rem, 1fr ) );
+            }
+
+            .adv-search-item {
+                display:flex;
+                flex-direction: row;
+                gap: .5rem;
+            }
+        </style>
+    [% END %]
+[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='advsearch' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -33,11 +49,8 @@
                         <h1>Advanced search</h1>
                         <fieldset>
                             <legend>Search for:</legend>
-                            [% IF ( expanded_options ) %]
-                                <div class="advanced-search-terms extended">
-                            [% ELSE %]
-                                <div class="advanced-search-terms">
-                            [% END # /IF ( expanded_options ) %]
+                            [% SET advsearch_class = expanded_options ? "advanced-search-terms extended" : "advanced-search-terms" %]
+                            <div class="[% advsearch_class | html %]">
                                 [% FOREACH search_box IN [ 1, 2, 3] %]
                                     <div class="search-term-row">
                                         <div class="search-term-input">
@@ -181,28 +194,36 @@
                                     [% WRAPPER tab_panel tabname="advsearch-tab-${advsearchloo.advanced_search_type}" %]
                                         <fieldset>
                                             <legend>Limit to any of the following:</legend>
-                                            <div class="row">
+                                            <div class="adv-search-grid">
                                                 [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
                                                     [% IF (advsearchloo.advanced_search_type != 'itemtypes') OR (((!itemtypeloo.searchcategory) AND (itemtypeloo.cat == 0)) OR (itemtypeloo.cat == 1)) %]
-                                                        <div class="col-sm-6 col-lg-3">
-                                                            <input type="checkbox"
-                                                                id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
-                                                                name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
-                                                                value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
-                                                            />
-                                                            <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
+                                                        <div class="adv-search-item">
+                                                            <div>
+                                                                <input type="checkbox"
+                                                                    id="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]"
+                                                                    name="[% IF ( itemtypeloo.cat == 1 ) %]searchcat[% ELSE %]limit[% END %]"
+                                                                    value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
+                                                                />
+                                                            </div>
+                                                            <div>
                                                                 [% UNLESS ( Koha.Preference('OpacNoItemTypeImages')) %]
                                                                     [% IF ( itemtypeloo.imageurl ) %]
-                                                                        <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                                        <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
+                                                                            <img class="itemtype-image" src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
+                                                                        </label>
                                                                     [% END %]
                                                                     &nbsp;
                                                                 [% END %]
-                                                                <span class="itypetext">[% itemtypeloo.description | html %]</span>
-                                                            </label>
+                                                            </div>
+                                                            <div>
+                                                                <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
+                                                                    <span class="itypetext">[% itemtypeloo.description | html %]</span>
+                                                                </label>
+                                                            </div>
                                                         </div>
-                                                    [% IF ( loop.last ) %]</div>[% ELSE %][% UNLESS ( loop.count % 4 ) %]</div><div class="row">[% END %][% END %]
                                                     [% END %]
                                                 [% END %]
+                                            </div>
                                         </fieldset>
                                     [% END # /tab_panel#advsearch-advsearchloo.advanced_search_type %]
                                 [% END # / FOREACH advancedsearchesloop %]
