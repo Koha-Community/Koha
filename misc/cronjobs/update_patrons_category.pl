@@ -18,9 +18,9 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Log qw(cronlogaction);
+use C4::Log      qw(cronlogaction);
 use Getopt::Long qw( GetOptions );
-use Pod::Usage qw( pod2usage );
+use Pod::Usage   qw( pod2usage );
 use Koha::Logger;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -170,8 +170,8 @@ my $branch_lim;
 my %fields;
 my @where;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 GetOptions(
     'help|?'          => \$help,
@@ -229,14 +229,14 @@ my $cat_to   = Koha::Patron::Categories->find($tocat);
 die "Categories not found" unless $cat_from && $cat_to;
 
 $params{"me.categorycode"} = $fromcat;
-$params{"me.branchcode"} = $branch_lim if $branch_lim;
+$params{"me.branchcode"}   = $branch_lim if $branch_lim;
 
 if ($verbose) {
     print "Conditions:\n";
-    print "    Registered before $reg_bef\n"      if $reg_bef;
-    print "    Registered after  $reg_aft\n"      if $reg_aft;
-    print "    Total fines more than $fine_min\n" if $fine_min;
-    print "    Total fines less than $fine_max\n" if $fine_max;
+    print "    Registered before $reg_bef\n"                           if $reg_bef;
+    print "    Registered after  $reg_aft\n"                           if $reg_aft;
+    print "    Total fines more than $fine_min\n"                      if $fine_min;
+    print "    Total fines less than $fine_max\n"                      if $fine_max;
     print "    Age below minimum for " . $cat_from->description . "\n" if $ageunder;
     print "    Age above maximum for " . $cat_from->description . "\n" if $ageover;
     if ( defined $branch_lim ) {
@@ -250,7 +250,7 @@ while ( my ( $key, $value ) = each %fields ) {
     $params{ "me." . $key } = $value;
 }
 
-my $where_literal = join ' AND ', @where;
+my $where_literal  = join ' AND ', @where;
 my $target_patrons = Koha::Patrons->search( \%params );
 $target_patrons = $target_patrons->search( \$where_literal ) if @where;
 $target_patrons = $target_patrons->search_patrons_to_update_category(
@@ -271,11 +271,11 @@ if ($verbose) {
     while ( my $target_patron = $target_patrons->next() ) {
         $target_patron->discard_changes();
         $verbose
-          and print $testdisplay
-          . "Updated "
-          . $target_patron->firstname() . " "
-          . $target_patron->surname()
-          . " from $fromcat to $tocat\n";
+            and print $testdisplay
+            . "Updated "
+            . $target_patron->firstname() . " "
+            . $target_patron->surname()
+            . " from $fromcat to $tocat\n";
     }
     $target_patrons->reset;
 }

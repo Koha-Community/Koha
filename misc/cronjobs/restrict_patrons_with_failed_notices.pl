@@ -28,8 +28,8 @@ use Koha::Patrons;
 use C4::Letters;
 use Koha::Notice::Message;
 
-my $command_line_options = join(" ",@ARGV);
-cronlogaction({ info => $command_line_options });
+my $command_line_options = join( " ", @ARGV );
+cronlogaction( { info => $command_line_options } );
 
 # Getting options
 my ( $help, $verbose, $confirm );
