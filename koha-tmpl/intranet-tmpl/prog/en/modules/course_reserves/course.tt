@@ -22,6 +22,10 @@
     .instructor_line {
         padding: 0.3em;
     }
+    fieldset.rows label[for="find_instructor"] {
+        text-align: left;
+        margin: 0;
+    }
 </style>
 </head>
 
@@ -133,10 +137,10 @@
                                     </div>
                                 [% END %]
                             </div>
-                            <p>
+                            <div id="instructor_search" class="instructor_line">
                                 <label for="find_instructor">Instructor search:</label>
                                 <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit" />
-                            </p>
+                            </div>
                             <div id="find_instructor_container"></div>
                         </div> </li
                     ><li>

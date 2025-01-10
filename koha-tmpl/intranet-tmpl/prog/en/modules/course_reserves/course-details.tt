@@ -31,8 +31,8 @@
         div.rows span.label {
             float: left;
         }
-        #course_instructors {
-            float: left;
+        #instructors {
+            margin-left: 10rem;
         }
         .instructor_line {
             padding: 0.3em;
@@ -110,14 +110,12 @@
                 [% IF course.instructors && course.instructors.count > 0 %]
                     <li>
                         <span class="label">Instructors: </span>
-                        <div id="course_instructors">
-                            <div id="instructors">
-                                [% FOREACH i IN course.instructors %]
-                                    <div class="instructor_line">
-                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a>
-                                    </div>
-                                [% END %]
-                            </div>
+                        <div id="instructors">
+                            [% FOREACH i IN course.instructors %]
+                                <div class="instructor_line">
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a>
+                                </div>
+                            [% END %]
                         </div>
                     </li>
                 [% END %]
