@@ -1,8 +1,9 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "33268",
-    description => "Add rules to preserve current marc record overlay rules behavior",
+    description => "Add rules to preserve current MARC record overlay rules behavior",
     up          => sub {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
@@ -27,6 +28,6 @@ return {
             };
             $dbh->do( $query, undef, '*', $module, $filter, 1, 1, 1, 1 );
         }
-        say $out "Added record overlay rules to preserve current behavior";
+        say_success( $out, "Added record overlay rules to preserve current behavior" );
     },
 };
