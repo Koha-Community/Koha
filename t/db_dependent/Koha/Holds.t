@@ -266,14 +266,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item1->id);
+        ( $status ) = CheckReserves($item1);
         is( $status, 'Reserved', "Hold for the itemtype1 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
 
-        ( $status ) = CheckReserves($item1->id);
+        ( $status ) = CheckReserves($item1);
         is( $status, '', "Hold for the itemtype1 cancelled" );
 
         is( $account->balance() - $start_balance, 111, "Used circulation rule for itemtype1" );
@@ -293,14 +293,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item2->id);
+        ( $status ) = CheckReserves($item2);
         is( $status, 'Reserved', "Hold for the itemtype2 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
 
-        ( $status ) = CheckReserves($item2->id);
+        ( $status ) = CheckReserves($item2);
         is( $status, '', "Hold for the itemtype2 cancelled" );
 
         is( $account->balance() - $start_balance, 222, "Used ExpireReservesMaxPickUpDelayCharge preference as expire_reserves_charge set to undef" );
@@ -320,14 +320,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item3->id);
+        ( $status ) = CheckReserves($item3);
         is( $status, 'Reserved', "Hold for the itemtype3 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
 
-        ( $status ) = CheckReserves($item3->id);
+        ( $status ) = CheckReserves($item3);
         is( $status, '', "Hold for the itemtype3 cancelled" );
 
         is( $account->balance() - $start_balance, 333, "Used ExpireReservesMaxPickUpDelayCharge preference as there's no circulation rules for itemtype3" );
@@ -347,14 +347,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item4->id);
+        ( $status ) = CheckReserves($item4);
         is( $status, 'Reserved', "Hold for the itemtype4 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
 
-        ( $status ) = CheckReserves($item4->id);
+        ( $status ) = CheckReserves($item4);
         is( $status, '', "Hold for the itemtype4 cancelled" );
 
         is( $account->balance() - $start_balance, 444, "Used circulation rule for itemtype4 with library_B_code" );
@@ -374,14 +374,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item5->id);
+        ( $status ) = CheckReserves($item5);
         is( $status, 'Reserved', "Hold for the itemtype5 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 1 });
 
-        ( $status ) = CheckReserves($item5->id);
+        ( $status ) = CheckReserves($item5);
         is( $status, '', "Hold for the itemtype5 cancelled" );
 
         is( $account->balance() - $start_balance, 0, "Used circulation rule for itemtype4 with library_C_code even though it's 0" );
@@ -399,14 +399,14 @@ subtest 'cancel' => sub {
 
         $account = Koha::Account->new({ patron_id => $borrowernumber });
 
-        ( $status ) = CheckReserves($item4->id);
+        ( $status ) = CheckReserves($item4);
         is( $status, 'Reserved', "Hold for the itemtype4 created" );
 
         $start_balance = $account->balance();
 
         Koha::Holds->find( $reserve_id )->cancel({ charge_cancel_fee => 0 });
 
-        ( $status ) = CheckReserves($item4->id);
+        ( $status ) = CheckReserves($item4);
         is( $status, '', "Hold for the itemtype4 cancelled" );
 
         is( $account->balance() - $start_balance, 0, "Patron not charged when charge_cancel_fee is 0" );
