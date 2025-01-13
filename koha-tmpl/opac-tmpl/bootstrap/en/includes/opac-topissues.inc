@@ -35,11 +35,7 @@
                         <select name="itemtype" id="itemtype">
                             <option value="">All item types</option>
                             [% FOREACH itemtype IN ItemTypes.Get() %]
-                                [% IF itemtype.itemtype == selected_itemtype %]
-                                    <option value="[% itemtype.itemtype | html %]" selected="selected">
-                                [% ELSE %]
-                                    <option value="[% itemtype.itemtype | html %]">
-                                [% END %]
+                                <option value="[% itemtype.itemtype | html %]" [% IF itemtype.itemtype == selected_itemtype %]selected="selected"[% END %]>
                                     [% itemtype.translated_description | html %]
                                 </option>
                             [% END %]
@@ -53,11 +49,7 @@
                         <select name="ccode" id="ccode">
                             <option value="">All collections</option>
                             [% FOREACH ccode IN AuthorisedValues.Get('CCODE', 1) %]
-                                [% IF ccode.authorised_value == selected_ccode %]
-                                    <option value="[% ccode.authorised_value | html %]" selected="selected">
-                                [% ELSE %]
-                                    <option value="[% ccode.authorised_value | html %]">
-                                [% END %]
+                                <option value="[% ccode.authorised_value | html %]" [% IF ccode.authorised_value == selected_ccode %]selected="selected"[% END %]>
                                     [% ccode.lib | html %]
                                 </option>
                             [% END %]
@@ -67,26 +59,10 @@
 
                 <li><label for="timeLimit">Acquired in the last:</label>
                             <select name="timeLimit" id="timeLimit">
-                                [% IF ( timeLimit == 3 ) %]
-                                    <option value="3" selected="selected">3 months</option>
-                                [% ELSE %]
-                                    <option value="3">3 months</option>
-                                [% END %]
-                                [% IF ( timeLimit == 6 ) %]
-                                    <option value="6" selected="selected">6 months</option>
-                                [% ELSE %]
-                                    <option value="6">6 months</option>
-                                [% END %]
-                                [% IF ( timeLimit == 12 ) %]
-                                    <option value="12" selected="selected">12 months</option>
-                                [% ELSE %]
-                                    <option value="12">12 months</option>
-                                [% END %]
-                                [% IF ( timeLimit == 999 ) %]
-                                    <option value="999" selected="selected">No limit</option>
-                                [% ELSE %]
-                                    <option value="999">No limit</option>
-                                [% END %]
+                                <option value="3" [% IF timeLimit == 3  %]selected="selected"[% END %]>3 months</option>
+                                <option value="6" [% IF timeLimit == 6 %]selected="selected"[% END %]>6 months</option>
+                                <option value="12" [% IF timeLimit == 12 %]selected="selected"[% END %]>12 months</option>
+                                <option value="999" [% IF timeLimit == 999 %]selected="selected"[% END %]>No limit</option>
                             </select></li>
                 <li>
                     <input type="hidden" name="do_it" value="1" />
