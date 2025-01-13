@@ -40,13 +40,13 @@
             [% UNLESS ( HOLD.is_waiting || HOLD.is_in_transit || HOLD.is_in_processing) %]
                 [% SET all_holds_waiting = 0 %]
             [% END %]
+            [% SET tr_class = '' %]
             [% IF ( HOLD.is_at_destination ) %]
-                <tr class="reserved">
+                [% tr_class = 'reserved' %]
             [% ELSIF HOLD.is_in_transit %]
-                <tr class="transfered">
-            [% ELSE %]
-                <tr>
+                [% tr_class = 'transfered' %]
             [% END %]
+            <tr class="[% tr_class | html %]">
                 <td class="title">
                     [% IF ! onlyinfo %]
                         [% INCLUDE 'biblio-title.inc' biblio=HOLD.biblio link=> 1 %]
@@ -68,17 +68,16 @@
                 <td class="reservedate" data-order="[% HOLD.reservedate | html %]">
                     [% HOLD.reservedate | $KohaDates %]
                 </td>
-                [% IF ! HOLD.found %]
-                    <td class="expirationdate" data-order="[% HOLD.expirationdate | html %]">
+                <td class="expirationdate" data-order="[% !HOLD.found ? HOLD.expirationdate : '0000-00-00' | html %]">
+                    [% IF ! HOLD.found %]
                         [% IF ( HOLD.expirationdate ) %]
                             [% HOLD.expirationdate | $KohaDates %]
                         [% ELSE %]
                             Never expires
                         [% END %]
-                [% ELSE %]
-                    <td class="expirationdate" data-order="0000-00-00">
+                    [% ELSE %]
                         -
-                [% END %]
+                    [% END %]
                 </td>
                 [% UNLESS( singleBranchMode) %]
                     <td class="branch">
@@ -173,7 +172,8 @@
                                 </form>
                             [% ELSE %]
                                 [% IF AutoResumeSuspendedHolds %]
-                                    <a class="btn btn-link suspend_hold js-show" href="#" role="button" data-title="[% HOLD.biblio.title | html %] [% FOREACH subtitle IN HOLD.biblio.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-reserve_id="[% HOLD.reserve_id | html %]"><i class="fa fa-pause" aria-hidden="true"></i> Suspend</a>
+                                    [%- SET subtitles = HOLD.biblio.subtitle.split(' \| ') -%]
+                                    <a class="btn btn-link suspend_hold js-show" href="#" role="button" data-title="[% HOLD.biblio.title | html %] [% FOREACH subtitle IN subtitles %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-reserve_id="[% HOLD.reserve_id | html %]"><i class="fa fa-pause" aria-hidden="true"></i> Suspend</a>
                                 [% ELSE %]
                                     <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                         [% INCLUDE 'csrf-token.inc' %]
