@@ -2,7 +2,9 @@
 <rss version="2.0">
    <channel>
       <title></title>
+      <!-- prettier-ignore-start -->
       <link></link>
+      <!-- prettier-ignore-end -->
       <description></description>
       <language></language>
       <pubDate></pubDate>
@@ -14,7 +16,9 @@
       [% FOREACH message_lis IN message_list %]
       <item>
         <title>[% message_lis.subject | html %]</title>
+        <!-- prettier-ignore-start -->
         <link>[% message_lis.title | html %]</link>
+        <!-- prettier-ignore-end -->
         <description>[% message_lis.content | html %]</description>
         <pubDate>[% message_lis.time_queued | html %]</pubDate>
         <guid>[% message_lis.title | html %]</guid>
