@@ -20,7 +20,11 @@
 
             <tbody>
                 [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
-                    [% IF ACCOUNT_LINE.amountoutstanding > 0 || ACCOUNT_LINE.amountoutstanding < 0 %]<tr class="outstanding">[% ELSE %]<tr>[% END%]
+                    [% SET tr_class = '' %]
+                    [% IF ACCOUNT_LINE.amountoutstanding > 0 || ACCOUNT_LINE.amountoutstanding < 0 %]
+                        [% tr_class = "outstanding" %]
+                    [% END %]
+                    <tr class="[% tr_class | html %]">
                         [% IF ENABLE_OPAC_PAYMENTS %]
                             <td>
                                 [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
@@ -40,8 +44,17 @@
                             [%- IF ACCOUNT_LINE.description %][% ACCOUNT_LINE.description | html %][% END %]
                             [% IF ACCOUNT_LINE.itemnumber %]([% ACCOUNT_LINE.item.biblio.title | html %])[% END %]
                         </td>
-                        [% IF ( ACCOUNT_LINE.is_credit ) %]<td class="credit">[% ACCOUNT_LINE.amount * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amount | $Price %][% END %]</td>
-                        [% IF ( ACCOUNT_LINE.is_credit ) %]<td class="credit">[% ACCOUNT_LINE.amountoutstanding * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amountoutstanding | $Price %][% END %]</td>
+                        [% SET td_class = ACCOUNT_LINE.is_credit ? 'credit' : 'debit' %]
+                        [% IF ( ACCOUNT_LINE.is_credit ) %]
+                            <td class="credit">[% ACCOUNT_LINE.amount * -1 | $Price %]</td>
+                        [% ELSE %]
+                            <td class="debit">[% ACCOUNT_LINE.amount | $Price %]</td>
+                        [% END %]
+                        [% IF ( ACCOUNT_LINE.is_credit ) %]
+                            <td class="credit">[% ACCOUNT_LINE.amountoutstanding * -1 | $Price %]</td>
+                        [% ELSE %]
+                            <td class="debit">[% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
+                        [% END %]
                         <td></td>
                     </tr>
                 [% END %]
@@ -60,7 +73,11 @@
                 </tr>
                 [% IF outstanding_credits.total_outstanding < 0 %]
                 [% FOREACH outstanding_credit IN outstanding_credits %]
-                    [% IF outstanding_credit.amountoutstanding < 0 %]<tr class="outstanding">[% ELSE %]<tr>[% END%]
+                    [% SET tr_class = '' %]
+                    [% IF outstanding_credit.amountoutstanding < 0 %]
+                        [% tr_class = "outstanding" %]
+                    [% END %]
+                    <tr class="[% tr_class | html %]">
                         [% IF ENABLE_OPAC_PAYMENTS %]<td></td>[% END %]
                         <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
                         <td><span title="[% outstanding_credit.timestamp | html %]">[% outstanding_credit.date | $KohaDates with_hours = 1 %]</span></td>
@@ -120,8 +137,8 @@
                             [%- IF a.description %], [% a.description | html %][% END %]
                             [% IF a.itemnumber %]([% a.item.biblio.title | html %])[% END %]
                         </td>
-                        [% IF ( a.amount < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amount | $Price %]</td>
-                        [% IF ( a.amountoutstanding < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amountoutstanding | $Price %]</td>
+                        <td class="[% a.amount < 0 ? 'credit' : 'credit' | html %]">[% a.amount | $Price %]</td>
+                        <td class="[% a.amountoutstanding < 0 ? 'credit' : 'debit' | html %]">[% a.amountoutstanding | $Price %]</td>
                     <td></td>
                     </tr>
                 [% END %]
