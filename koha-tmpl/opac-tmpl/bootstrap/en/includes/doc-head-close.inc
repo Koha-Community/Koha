@@ -46,17 +46,23 @@
     [% Asset.css("css/print.css", { media = "print" }) | $raw %]
 [% END %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]
+    <!-- prettier-ignore-start -->
     <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
+    <!-- prettier-ignore-end -->
 [% END %]
 [% IF Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <!-- prettier-ignore-start -->
     <style>
         [% Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
     </style>
+    <!-- prettier-ignore-end -->
 [% END %]
 [% IF SCO_login %]
     [% SET SCOUserCSS = Koha.Preference('SCOUserCSS') %]
     [% IF SCOUserCSS %]
+        <!-- prettier-ignore-start -->
         <style>[% SCOUserCSS | $raw %]</style>
+        <!-- prettier-ignore-end -->
     [% END %]
 [% END %]
 [% IF ( Koha.Preference('OPACBaseURL') ) %]
