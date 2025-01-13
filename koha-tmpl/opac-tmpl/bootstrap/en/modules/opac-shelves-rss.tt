@@ -4,7 +4,9 @@
 
 <channel>
  <title>[% shelf.shelfname | html %]</title>
+ <!-- prettier-ignore-start -->
  <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;viewshelf=[% shelf.shelfnumber | html %]</link>
+ <!-- prettier-ignore-end -->
  <description>RSS feed for public list [% shelf.shelfname | html %]</description>
 
 [% FOREACH i IN itemsloop %]
@@ -15,7 +17,9 @@
         by [% i.author | html %]
     [% END %]
   </title>
+  <!-- prettier-ignore-start -->
   <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]</link>
+  <!-- prettier-ignore-end -->
  </item>
 [% END %]
 
