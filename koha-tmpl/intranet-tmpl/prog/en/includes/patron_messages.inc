@@ -24,9 +24,9 @@
                 <span class="circ-hlt">Expiration:</span>
                 <span>Patron's card expires on [% patron.dateexpiry | $KohaDates %].</span>
                 [% IF ( moremember ) %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% ELSE %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% END %]
             </li>
         [% END %]
@@ -45,9 +45,9 @@
                     <span>Patron's card expired on [% expiry | $KohaDates %]</span>
                 [% END %]
                 [% IF ( moremember ) %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=member&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=member&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% ELSE %]
-                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                 [% END %]
             </li>
         [% END %]
