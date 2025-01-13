@@ -14,13 +14,23 @@
 [% Asset.css("lib/fontawesome/css/brands.min.css") | $raw %]
 [% Asset.css("lib/fontawesome/css/solid.min.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
-[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]
+    <!-- prettier-ignore-start -->
+    <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
+    <!-- prettier-ignore-end -->
+[% END %]
 [% IF Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <!-- prettier-ignore-start -->
     <style>
         [% Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
     </style>
+    <!-- prettier-ignore-end -->
 [% END %]
-[% IF ( SCOUserCSS ) %]<style>[% SCOUserCSS | $raw %]</style>[% END %]
+[% IF ( SCOUserCSS ) %]
+    <!-- prettier-ignore-start -->
+    <style>[% SCOUserCSS | $raw %]</style>
+    <!-- prettier-ignore-end -->
+[% END %]
 <script>
     var Koha = {};
     function _(s) { return s } // dummy function for gettext
