@@ -198,7 +198,7 @@ EXPECTED
 };
 
 subtest 'Use uri filter if needed' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $input = <<INPUT;
 <a href="tel:[% patron.phone %]">[% patron.phone %]</a>
 <a href="mailto:[% patron.emailpro %]" title="[% patron.emailpro %]">[% patron.emailpro %]</a>
@@ -242,6 +242,23 @@ INPUT
                 error => "wrong_html_filter",
                 line =>
                   '<a href="[% wrong_filter | html %]">[% var | html %]</a>',
+                line_number => 1
+            }
+
+        ],
+    );
+
+    $input = <<INPUT;
+<a href="[% good_filter | uri %]">[% var | html %]</a><a href="[% wrong_filter | html %]">[% var | html %]</a>
+INPUT
+    @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
+    is_deeply(
+        \@missing_filters,
+        [
+            {
+                error => "wrong_html_filter",
+                line =>
+                  '<a href="[% good_filter | uri %]">[% var | html %]</a><a href="[% wrong_filter | html %]">[% var | html %]</a>',
                 line_number => 1
             }
 
