@@ -28,13 +28,11 @@
             [% END %]
             <li id="availability_facet"><h3 id="facet-availability">Availability</h3>
                 <ul>
-                    <li>
                         [% IF ( available ) %]
-                            <strong>Showing only records with available items</strong></li><li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]">Show all records</a>
+                            <li><strong>Showing only records with available items</strong></li><li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]">Show all records</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=available">Limit to records with available items</a>
+                            <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=available">Limit to records with available items</a></li>
                         [% END %]
-                    </li>
                 </ul>
                 [% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])</li>[% END %]
             </li>
@@ -79,11 +77,7 @@
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.label == 'Collections' %][% SET facet.facet_label_value = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => facet.facet_label_value, opac =>1 ) || facet.facet_label_value %][% END %]
                             [% IF facets_loo.label == 'Languages' %][% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %][% END %]
-                            [% IF loop.count > 5 && !facet.active %]
-                                <li class="collapsible-facet" style="display:none">
-                            [% ELSE %]
-                                <li>
-                            [% END %]
+                                <li [% IF loop.count > 5 && !facet.active %]class="collapsible-facet" style="display:none"[% END %]>
                                   [% IF facet.active %]
                                     [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
                                     <span class="facet-label">[% facet.facet_label_value | html %]</span>
