@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 23;
+use Test::More tests => 24;
 
 use Test::MockModule;
 use Test::Exception;
@@ -2543,6 +2543,38 @@ subtest 'filter_by_has_holds' => sub {
     );
 
     is( $biblio->items->filter_by_has_holds->count, 2, "Filtered to 2 holds" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_in_bundle' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $biblio  = $builder->build_sample_biblio();
+
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber, } );
+
+    is( $biblio->items->filter_by_in_bundle->count, 0, "0 items in a bundle for this record" );
+
+    my $in_bundle = $item_1->in_bundle;
+
+    my $host_item = $builder->build_sample_item();
+    $schema->resultset('ItemBundle')->create( { host => $host_item->itemnumber, item => $item_1->itemnumber } );
+
+    $in_bundle = $item_1->in_bundle;
+
+    is( $biblio->items->filter_by_in_bundle->count, 1, "1 item in a bundle for this record" );
+    $schema->resultset('ItemBundle')->create( { host => $host_item->itemnumber, item => $item_2->itemnumber } );
+
+    $in_bundle = $item_2->in_bundle;
+
+    is( $biblio->items->filter_by_in_bundle->count, 2, "2 items in a bundle for this record" );
 
     $schema->storage->txn_rollback;
 
