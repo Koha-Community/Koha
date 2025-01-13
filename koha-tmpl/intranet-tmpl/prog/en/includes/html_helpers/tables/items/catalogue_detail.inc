@@ -220,7 +220,7 @@
                 });
         const item_types_notforloan = new Map(all_item_types.map( it => [it.itemtype, it.notforloan] ));
 
-        const statuses = {checked_out: _("Checked out"), local_use: _("On-site checkout"), in_transit: _("In transit"), lost: _("Lost"), withdrawn: _("Withdrawn"), damaged:_("Damaged"), not_for_loan: _("Not for loan"), on_hold: _("On hold"), recalled: _("Recalled"), available: _("Available"), restricted: _("Restricted")};
+        const statuses = {checked_out: _("Checked out"), local_use: _("On-site checkout"), in_transit: _("In transit"), lost: _("Lost"), withdrawn: _("Withdrawn"), damaged:_("Damaged"), not_for_loan: _("Not for loan"), on_hold: _("On hold"), recalled: _("Recalled"), available: _("Available"), restricted: _("Restricted"), in_bundle: _("In bundle")};
         const all_statuses = Object.keys(statuses).map(k => {return {_id: k, _str: statuses[k]}});
 
         const can_edit_items_from = [% To.json(can_edit_items_from || []) | $raw %];

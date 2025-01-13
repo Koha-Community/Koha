@@ -1477,7 +1477,9 @@ sub _status {
         push @statuses, 'restricted';
     }
 
-    # TODO in_bundle?
+    if ( $self->in_bundle ) {
+        push @statuses, 'in_bundle';
+    }
 
     return join ',', @statuses;
 }

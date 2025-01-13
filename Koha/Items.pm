@@ -316,6 +316,24 @@ sub filter_by_has_recalls {
     return $self->search( { 'me.itemnumber' => { '-in' => $recalls } } );
 }
 
+=head3 filter_by_in_bundle
+
+Returns a new resultset, containing only those items that currently are part of a bundle.
+
+=cut
+
+sub filter_by_in_bundle {
+    my ($self) = @_;
+
+    my @in_bundle_items;
+    while ( my $item = $self->next ) {
+        push @in_bundle_items, $item if $item->in_bundle;
+    }
+
+    my @bundled_items = map { $_->itemnumber } @in_bundle_items;
+    return $self->search( { 'me.itemnumber' => { '-in' => \@bundled_items } } );
+}
+
 =head3 filter_by_available
 
   my $available_items = $items->filter_by_available;
@@ -662,6 +680,9 @@ sub search {
         }
         if ( $status eq 'recalled' ) {
             $self = $self->filter_by_has_recalls;
+        }
+        if ( $status eq 'in_bundle' ) {
+            $self = $self->filter_by_in_bundle;
         }
 
         if ( $status eq 'available' ) {
