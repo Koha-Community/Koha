@@ -362,7 +362,7 @@
                                             </thead>
                                             <tbody>
                                                 [% FOREACH ISSUE IN ISSUES %]
-                                                    [% IF ( ISSUE.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
+                                                    <tr [% IF ISSUE.overdue %]class="overdue"[% END %]>
                                                     [% IF ( JacketImages ) %]
                                                         <td class="jacketcell">
                                                             [% IF ( OPACAmazonCoverImages ) %]
@@ -442,11 +442,7 @@
                                                         [% ISSUE.itemcallnumber | html %]
                                                     </td>
                                                     [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions_contains('renew') ) ) %]
-                                                        [% IF ( ISSUE.status && canrenew ) %]
-                                                            <td class="renew" data-order="[% ISSUE.renewsleft | html %]">
-                                                        [% ELSE %]
-                                                            <td class="renew" data-order="0">
-                                                        [% END %]
+                                                        <td class="renew" data-order="[% ISSUE.status && canrenew ? ISSUE.renewsleft : 0 | html %]">
                                                         [% IF ISSUE.renewed %]<span class="bbadge text-bg-success">Renewed!</span><br />[% END %]
                                                         [% IF ( ISSUE.status ) %]
                                                             [% IF ( canrenew ) %]
@@ -531,7 +527,8 @@
                                                             <div id="viewnote_[% ISSUE.issue_id | html %]">
                                                                 [% ISSUE.note | html %]
                                                             </div>
-                                                            <a id="save_[% ISSUE.issue_id | html %]" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | html %]" class="btn btn-primary btn-sm btn-add-note noprint" data-title="[% ISSUE.title | html %] [% FOREACH subtitle IN ISSUE.subtitle.split(' \| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-issueid="[% ISSUE.issue_id | html %]" id="save_[% ISSUE.issue_id | html %]">
+                                                            [% SET subtitles = ISSUE.subtitle.split('\|') %]
+                                                            <a id="save_[% ISSUE.issue_id | html %]" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | html %]" class="btn btn-primary btn-sm btn-add-note noprint" data-title="[% ISSUE.title | html %] [% FOREACH subtitle IN subtitles %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %][% subtitle | html %][% END %]" data-issueid="[% ISSUE.issue_id | html %]" id="save_[% ISSUE.issue_id | html %]">
                                                                 [% IF ( ISSUE.note ) -%]
                                                                     <span>Edit note</span>
                                                                 [% ELSE -%]
