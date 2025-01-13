@@ -208,19 +208,21 @@ $(document).ready(function () {
 
     var sidebar_menu = $(".sidebar_menu");
     if (sidebar_menu.length > 0) {
-        var path = location.pathname.substring(1);
-        var url = window.location.toString();
-        var params = "";
-        if (url.match(/\?(.+)$/)) {
-            params = "?" + RegExp.$1;
-        }
-        if ($('a[href$="/' + path + params + '"]', sidebar_menu).length == 0) {
-            $('a[href$="/' + path + '"]', sidebar_menu).addClass("current");
-        } else {
-            $('a[href$="/' + path + params + '"]', sidebar_menu).addClass(
-                "current"
-            );
-        }
+        sidebar_menu.each(function () {
+            var path = location.pathname.substring(1);
+            var url = window.location.toString();
+            var params = "";
+            if (url.match(/\?(.+)$/)) {
+                params = "?" + RegExp.$1;
+            }
+            if ($('a[href$="/' + path + params + '"]', $(this)).length == 0) {
+                $('a[href$="/' + path + '"]', $(this)).addClass("current");
+            } else {
+                $('a[href$="/' + path + params + '"]', $(this)).addClass(
+                    "current"
+                );
+            }
+        });
     }
 
     $("#catalog-search-link a").on("mouseenter mouseleave", function () {

@@ -173,6 +173,7 @@ export default {
 <style>
 #menu ul ul,
 .sidebar_menu ul ul {
+    background-color: transparent;
     padding-left: 2em;
     font-size: 100%;
 }
@@ -198,7 +199,7 @@ textarea {
 }
 .sidebar_menu ul li a.current.disabled {
     background-color: inherit;
-    border-left: 5px solid #e6e6e6;
+    border-left: 5px solid transparent;
     color: #000;
 }
 .sidebar_menu ul li a.disabled {
