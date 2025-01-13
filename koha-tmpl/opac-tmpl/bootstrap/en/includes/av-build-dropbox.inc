@@ -10,20 +10,12 @@
 [% DEFAULT class = '' size = 20 %]
 
 [% IF avs.count %]
-  [% IF required %]
-      <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" required="required">
-  [% ELSE %]
-      <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]">
-  [% END %]
+  <select id="[% name | html %]" name="[% name | html %]" class="[% class | html %]" [% IF required %]required="required"[% END %]>
   [% IF blank %]
     <option value="">None</option>
   [% END %]
   [% FOR av IN avs %]
-    [% IF av.authorised_value == default %]
-      <option value="[% av.authorised_value | html %]" selected="selected">[% av.lib | html_entity %]</option>
-    [% ELSE %]
-      <option value="[% av.authorised_value | html %]">[% av.lib | html_entity %]</option>
-    [% END %]
+      <option value="[% av.authorised_value | html %]" [% IF av.authorised_value == default %]selected="selected"[% END %]>[% av.lib | html_entity %]</option>
   [% END %]
   </select>
 [% ELSE %]
