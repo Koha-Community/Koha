@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 use Test::MockModule;
 use Test::Exception;
@@ -2575,6 +2575,36 @@ subtest 'filter_by_in_bundle' => sub {
     $in_bundle = $item_2->in_bundle;
 
     is( $biblio->items->filter_by_in_bundle->count, 2, "2 items in a bundle for this record" );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'filter_by_has_recalls' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    $biblio = $builder->build_sample_biblio( { author => 'Hall, Daria' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+        }
+    );
+
+    C4::Circulation::AddIssue( $patron, $item->barcode );
+
+    is( $biblio->items->filter_by_has_recalls->count, 0, "0 items with recalls on this record" );
+
+    Koha::Recalls->add_recall( { biblio => $item->biblio, item => $item, patron => $patron } );
+
+    is( $biblio->items->filter_by_has_recalls->count, 1, "1 item with recalls on this record" );
 
     $schema->storage->txn_rollback;
 
