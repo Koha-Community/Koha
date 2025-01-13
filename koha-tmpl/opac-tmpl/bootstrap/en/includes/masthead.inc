@@ -263,17 +263,15 @@
                                                     <select name="limit" id="select_library" class="form-select">
                                                         <option value="">All libraries</option>
 
-                                                        [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
-
-                                                        [% FOREACH library IN AllPublicBranches %]
-                                                            [% IF library.selected %]
-                                                                <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
-                                                            [% ELSE %]
-                                                                <option value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
-                                                            [% END %]
-                                                        [% END %]
-
                                                         [% IF LibrarySearchGroups %]
+                                                            <optgroup label="Libraries">
+                                                                [% FOREACH library IN AllPublicBranches %]
+                                                                    [% IF library.selected %]
+                                                                        <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
+                                                                    [% ELSE %]
+                                                                        <option value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
+                                                                    [% END %]
+                                                                [% END %]
                                                             </optgroup>
                                                             <optgroup label="Groups">
                                                                 [% FOREACH lsg IN LibrarySearchGroups %]
@@ -284,7 +282,15 @@
                                                                     [% END # / bc.selected %]
                                                                 [% END %]
                                                             </optgroup>
-                                                        [% END # / BranchCategoriesLoop %]
+                                                        [% ELSE %]
+                                                            [% FOREACH library IN AllPublicBranches %]
+                                                                [% IF library.selected %]
+                                                                    <option selected="selected" value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
+                                                                [% ELSE %]
+                                                                    <option value="branch:[% library.branchcode | html %]">[% library.branchname | html %]</option>
+                                                                [% END %]
+                                                            [% END %]
+                                                        [% END %]
                                                     </select> <!-- /#select_library -->
                                                 </div> <!-- /.col-sm-auto -->
                                             [% ELSE %]
