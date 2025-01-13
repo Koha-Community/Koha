@@ -1,16 +1,18 @@
 <div id="header_langmenu">
     <ul class="navbar-nav">
         [% IF ( context == "footer" ) -%]
-            <li class="nav-item dropup">
-        [% ELSE -%]
-            <li class="nav-item dropdown">
+            [% SET li_class = 'nav-item dropup' %]
+        [% ELSE %]
+            [% SET li_class = 'nav-item dropdown' %]
         [% END %]
+        <li class="[% li_class | html %]">
             <a href="#" title="Switch languages" class="nav-link dropdown-toggle" id="langmenu" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-flag fa-fw fa-icon-[% context | html %]" aria-hidden="true"></i> <span class="langlabel">Languages</span> <b class="caret"></b></a>
             [% IF ( context == "footer" ) -%]
-                <div aria-labelledby="langmenu" role="menu" class="dropdown-menu">
-            [% ELSE -%]
-                <div aria-labelledby="langmenu" role="menu" class="dropdown-menu dropdown-menu-end">
+                [% SET div_class = 'dropdown-menu' %]
+            [% ELSE %]
+                [% SET div_class = 'dropdown-menu dropdown-menu-end' %]
             [% END %]
+            <div aria-labelledby="langmenu" role="menu" class="[% div_class | html %]">
                 [% FOREACH languages_loo IN languages_loop %]
                     [% IF ( languages_loo.group_enabled ) %]
                         [% IF ( languages_loo.plural ) %]
