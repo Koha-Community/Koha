@@ -43,13 +43,23 @@
 [% ELSE %]
     [% Asset.css("css/sco.css") | $raw %]
 [% END %]
-[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]
+    <!-- prettier-ignore-start -->
+    <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
+    <!-- prettier-ignore-end -->
+[% END %]
 [% IF Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) %]
+    <!-- prettier-ignore-start -->
     <style>
         [% Branches.GetBranchSpecificCSS( Branches.GetLoggedInBranchcode() || default_branch) | $raw %]
     </style>
+    <!-- prettier-ignore-end -->
 [% END %]
-[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style>[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]
+    <!-- prettier-ignore-start -->
+    <style>[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>
+    <!-- prettier-ignore-end -->
+[% END %]
 <script>
     var Koha = {};
     function _(s) { return s } // dummy function for gettext
