@@ -922,10 +922,12 @@
                                                 src="[% HTML5MediaSet.srcblock | url %]" frameborder="0"></iframe>
                                         [% ELSE %]
                                             [% SET ctrl_preload = ' controls preload=none' #translatability %]
+                                            <!-- prettier-ignore-start -->
                                             <[% HTML5MediaParent _ ctrl_preload | html %] >
                                             <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | url %]" [% HTML5MediaSet.typeblock | html %] />
                                             <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
                                             </[% HTML5MediaParent | html %]>
+                                            <!-- prettier-ignore-end -->
                                         [% END %]
                                     </p>
                                 [% END %]
