@@ -19,7 +19,10 @@
 [% SET AllPublicBranches = Branches.all(  search_params => { public => 1 }, selected => opac_name ) %]
 
 <button id="scrolltocontent">Skip to main content</button>
+<!-- prettier-ignore-start -->
+<!-- closed in opac-bottom.inc -->
 <div id="wrapper">
+<!-- prettier-ignore-end -->
     <div id="header-region" class="noprint">
         <nav class="navbar navbar-expand">
             <div id="logo">

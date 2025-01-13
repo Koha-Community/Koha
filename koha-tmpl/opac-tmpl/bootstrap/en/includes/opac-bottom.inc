@@ -20,7 +20,9 @@
                 </div>
             </div>
         [% END #/ opaccredits %]
+    <!-- prettier-ignore-start -->
     </div> <!-- / #wrapper in masthead.inc -->
+    <!-- prettier-ignore-end -->
 
     [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || Koha.Preference( 'CookieConsent' ) || OpacKohaUrl || ( ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'footer') ) %]
         <footer id="changelanguage" class="navbar navbar-expand navbar-light bg-light noprint">
@@ -55,7 +57,6 @@
                                 </a>
                             </div>
                         [% END # /IF OpacKohaUrl %]
-                    </ul> <!-- /.navbar-nav -->
                 </div> <!-- /.collapse.navbar-collapse -->
             </div> <!-- /.container-fluid -->
         </footer> <!-- / #changelanguage -->
@@ -205,4 +206,6 @@ $(document).ready(function() {
 [% END %]
 [% KohaPlugins.get_plugins_opac_js | $raw %]
 </body>
+<!-- prettier-ignore-start -->
 </html>
+<!-- prettier-ignore-end -->
