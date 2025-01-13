@@ -306,11 +306,7 @@
                                 [% SET rating_avg = ratings.get_avg_rating() %]
                                 [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
 
-                                [% IF ( borrowernumber ) %]
-                                    <select id="star_rating" class="star_rating" name="rating" data-biblionumber="[% biblio.biblionumber | html %]" data-context="rating-[% biblio.biblionumber | html %]" autocomplete="off">
-                                [% ELSE %]
-                                    <select id="star_rating" class="star_rating" name="rating" disabled="disabled" autocomplete="off">
-                                [% END %]
+                                <select id="star_rating" class="star_rating" name="rating" [% IF borrowernumber %]data-biblionumber="[% biblio.biblionumber | html %]" data-context="rating-[% biblio.biblionumber | html %]"[% END %] autocomplete="off">
                                     [% IF ( rating_avg_int == 0 ) %]
                                         <option value="" selected="selected"></option>
                                     [% END %]
@@ -1029,11 +1025,11 @@
                                     <div class="nav_pages">
                                         <ul id="listResults">
                                             [% FOREACH listitem IN listResults %]
+                                                [% SET li_class = 'li_pag_' _ loop.count %]
                                                 [% IF ( listitem.biblionumber == biblionumber ) %]
-                                                    <li class="li_pag_[% loop.count | html %] highlight">
-                                                [% ELSE %]
-                                                    <li class="li_pag_[% loop.count | html %]">
+                                                    [% li_class = li_class _ ' highlight' %]
                                                 [% END %]
+                                                <li class="[% li_class | html %]">
                                                 [% IF ( listitem.biblionumber == biblionumber ) %]
                                                     <a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[%- title | html -%] [%- part_number | html -%] [%- part_name | html -%]&quot;" class="a_pag" id="a_pag_[% loop.count | html %]">[% loop.count + offset | html %]</a>
                                                 [% ELSE %]
@@ -1366,8 +1362,9 @@
                         [% IF Koha.Preference('OPACURLOpenInNewWindow') %][% SET target_attr = '_blank'; SET rel_attr = 'noreferrer' %][% END %]
 
                         [%# Check if there are multiple URIs; in the single case we only use pref URLLinkText or Link to resource %]
-                        [% IF ITEM_RESULT.uri.split(' \| ').size > 1 %]
-                            [% FOREACH uri IN ITEM_RESULT.uri.split(' \| ') %]
+                        [% SET uris = ITEM_RESULT.uri.split(' \| ') %]
+                        [% IF uris.size > 1 %]
+                            [% FOREACH uri IN uris %]
                                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                     <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">[% uri | html %]</a>
                                 [% ELSE %]
@@ -1377,11 +1374,13 @@
                         [% ELSE %]
                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                 <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | html %]" property="url">
+                                    [% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]
+                                </a>
                             [% ELSE %]
                                 <a target="[% target_attr | html %]" rel="[% rel_attr | html %]" href="[% ITEM_RESULT.uri | safe_url %]" property="url">
+                                    [% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]
+                                </a>
                             [% END %]
-                                [% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]
-                            </a>
                         [% END %]
                     [% END %]
                     </td>
