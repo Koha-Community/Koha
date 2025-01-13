@@ -50,13 +50,15 @@
 [% #     [ END ]                                                                                         %]
 
 [% BLOCK tabs %]
-    [% IF ( id ) %]
+    [% IF id %]
         <div id="[% id | html %]" class="toptabs">
+            [% content | $raw %]
+        </div>
     [% ELSE %]
         <div class="toptabs">
+            [% content | $raw %]
+        </div>
     [% END %]
-        [% content | $raw %]
-    </div>
 [% END %]
 
 [% BLOCK tabs_nav %]
@@ -86,11 +88,7 @@
 [% END %]
 
 [% BLOCK tab_panels %]
-    [% IF ( id ) %]
-        <div class="tab-content" id="[% id | html %]_content">
-    [% ELSE %]
-        <div class="tab-content">
-    [% END %]
+    <div class="tab-content" [% IF id %]id="[% id | html %]_content"[% END %]>
         [% content | $raw %]
     </div>
 [% END %]
@@ -98,11 +96,13 @@
 [% BLOCK tab_panel %]
     [% IF ( bt_active ) %]
         <div role="tabpanel" class="tab-pane show active" id="[% tabname | html %]_panel" aria-labelledby="[% tabname | html %]-tab">
+            [% content| $raw %]
+        </div>
     [% ELSE %]
         <div role="tabpanel" class="tab-pane" id="[% tabname | html %]_panel" aria-labelledby="[% tabname | html %]-tab">
+            [% content| $raw %]
+        </div>
     [% END %]
-        [% content| $raw %]
-    </div>
 [% END %]
 
 [% # BOOTSTRAP BREADCRUMBS WRAPPER USAGE                                       %]
