@@ -61,7 +61,7 @@
 [% BLOCK waiting_holds %]
     [% SET waiting_holds = cp.patron.holds.search( found => 'W', branchcode => Branches.GetLoggedInBranchcode ) %]
     [% FOREACH h IN waiting_holds %]
-       <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)<br/>
+       <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | uri %]&biblionumber=[% h.biblionumber | uri %]#item[% h.itemnumber | uri %]">[% h.item.barcode | html %]</a>)<br/>
     [% END %]
 [% END %]
 
@@ -395,7 +395,7 @@
                                                     <td>
                                                         [% FOREACH c IN cp.checkouts %]
                                                             [% IF date.format(c.issuedate, format = '%Y-%m-%d') == today_iso %]
-                                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% c.item.biblionumber | uri %]">[% c.item.biblio.title | html %]</a> ([% c.item.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% c.itemnumber | html %]&biblionumber=[% c.item.biblionumber | html %]#item[% c.itemnumber | html %]">[% c.item.barcode | html %]</a>)<br/>
+                                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% c.item.biblionumber | uri %]">[% c.item.biblio.title | html %]</a> ([% c.item.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% c.itemnumber | uri %]&biblionumber=[% c.item.biblionumber | uri %]#item[% c.itemnumber | uri %]">[% c.item.barcode | html %]</a>)<br/>
                                                             [% END %]
                                                         [% END %]
                                                     </td>
@@ -446,7 +446,7 @@
                                                             [% IF waiting_holds.count %]
                                                                 [% FOREACH h IN waiting_holds %]
                                                                     <li>
-                                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | html %]&biblionumber=[% h.biblionumber | html %]#item[% h.itemnumber | html %]">[% h.item.barcode | html %]</a>)
+                                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% h.biblionumber | uri %]">[% h.biblio.title | html %]</a> ([% h.biblio.author | html %], <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% h.itemnumber | uri %]&biblionumber=[% h.biblionumber | uri %]#item[% h.itemnumber | uri %]">[% h.item.barcode | html %]</a>)
                                                                     </li>
                                                                 [% END %]
                                                             [% ELSE %]

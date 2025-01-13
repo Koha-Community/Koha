@@ -438,12 +438,12 @@
                                                 <span class="blocker">
                                                     [% patron.dateexpiry | $KohaDates %]
                                                     <strong><em>Expired</em></strong>
-                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                                                 </span>
                                             [% ELSIF ( patron.is_going_to_expire ) %]
                                                 [% patron.dateexpiry | $KohaDates %]
                                                 <strong><em>Patron expires soon</em></strong>
-                                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | html %]">Edit details</a>
+                                                <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=edit_form&amp;borrowernumber=[% patron.borrowernumber | uri %]">Edit details</a>
                                             [% ELSE %]
                                                 [% patron.dateexpiry | $KohaDates %]
                                             [% END %]
