@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 use Test::MockModule;
 use Test::Exception;
@@ -2608,4 +2608,129 @@ subtest 'filter_by_has_recalls' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'filter_by_available' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $biblio  = $builder->build_sample_biblio();
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { branchcode => $patron->branchcode } );
+
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_4 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    my $item_5 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->branchcode,
+            itemlost     => 0,
+            withdrawn    => 0,
+            damaged      => 0,
+            notforloan   => 0,
+            onloan       => undef,
+        }
+    );
+
+    # Create items with varying states
+    # Test: Initial available items
+    is(
+        $biblio->items->filter_by_available->count,
+        5,
+        "Filtered to 4 available items"
+    );
+
+    # Mark item_1 as lost
+    $item_1->itemlost(3)->store;
+    C4::Circulation::LostItem( $item_1->itemnumber, 1 );
+
+    is(
+        $biblio->items->filter_by_available->count,
+        4,
+        "Filtered to 4 available items, 1 is lost"
+    );
+
+    #Mark item_2 as damaged
+    $item_2->damaged(1)->store;
+
+    is(
+        $biblio->items->filter_by_available->count,
+        3,
+        "Filtered to 3 available items, 1 is lost, 1 is damaged"
+    );
+
+    #Mark item_3 as withdrawn
+    $item_3->withdrawn(1)->store;
+
+    is(
+        $biblio->items->filter_by_available->count,
+        2,
+        "Filtered to 2 available items, 1 is lost, 1 is damaged, 1 is withdrawn"
+    );
+
+    #Checkout item_4
+    C4::Circulation::AddIssue( $patron, $item_4->barcode );
+    is(
+        $biblio->items->filter_by_available->count,
+        1,
+        "Filtered to 1 available items, 1 is lost, 1 is damaged, 1 is withdrawn, 1 is checked out"
+    );
+
+    #Mark item_5 as notforloan
+    $item_5->notforloan(1)->store;
+    is(
+        $biblio->items->filter_by_available->count,
+        0,
+        "Filtered to 0 available items, 1 is lost, 1 is damaged, 1 is withdrawn, 1 is checked out, 1 is notforloan"
+    );
+
+    $schema->storage->txn_rollback;
 };
