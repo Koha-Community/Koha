@@ -66,7 +66,7 @@
             </div>
             [% IF loggedinusername && can_remove_biblios %]
                 <button class="btn btn-link btn-sm disabled removeitems tag_hides">
-                    <i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list</button>
+                    <i class="fa fa-fw fa-remove" aria-hidden="true"></i> Remove from list
                 </button>
             [% END %]
 
