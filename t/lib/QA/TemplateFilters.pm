@@ -77,7 +77,7 @@ sub _process_tt_content {
               if $line =~ m{\[%(\s|-|~)*USE raw(\s|-|~)*%\]};    # Does [% Use raw %] exist?
 
             my $e;
-            if ( $line =~ qr{<a href="([^"]+)} ) {
+            while ( $line =~ m{<a href="([^"]+)}g ) {
                 my $to_uri_escape = $1;
                 while (
                     $to_uri_escape =~ m{
