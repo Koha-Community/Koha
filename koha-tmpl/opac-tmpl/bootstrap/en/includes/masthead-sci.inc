@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="/cgi-bin/koha/sci/sci-main.pl" class="nav-link helpModal-trigger" role="button" data-bs-toggle="modal"><i class="fa fa-info-circle fa-icon-black" aria-hidden="true"></i> Help</a></li>
+                            <a href="/cgi-bin/koha/sci/sci-main.pl" class="nav-link helpModal-trigger" role="button" data-bs-toggle="modal"><i class="fa fa-info-circle fa-icon-black" aria-hidden="true"></i> Help</a>
                         </li>
                     </ul>
                 </li>
