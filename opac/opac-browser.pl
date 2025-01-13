@@ -86,11 +86,6 @@ if ($filter eq '' and $level == 1) {
     $have_hierarchy = 1 if @hierarchy_loop;
 }
 
-# mark every third entry in level_loop
-for (my $i = 0; $i <= $#level_loop; $i++) {
-    $level_loop[$i]->{count3} = 1 if 2 == $i % 3 && $i != $#level_loop;
-}
-
 $template->param(
     LEVEL_LOOP => \@level_loop,
     HIERARCHY_LOOP => \@hierarchy_loop,
