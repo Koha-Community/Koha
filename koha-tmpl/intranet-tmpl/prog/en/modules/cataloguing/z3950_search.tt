@@ -123,7 +123,7 @@
                                     [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server | html %]</li>
                                     [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server | html %]</li>
                                     [% ELSIF errcon.error.match( '^XSLTH' ) %]<li>[% errcon.server | html %] record [% errcon.seq | html %]: [% PROCESS 'xslt-handler.inc' code=errcon.error %]</li>
-                                    [% ELSE %]<li>[% errcon.server | html %] record [% errcon.seq | html %]: [% errcon.error | html %] - [% errcon.error_msg | html %]</li>
+                                    [% ELSE %]<li>[% errcon.error_msg | html %] (ref. [% errcon.error | html %]) for [% errcon.server | html %] result [% errcon.seq | html %]</li>
                                     [% END %]
                                 [% END %]
                                 </ul>
