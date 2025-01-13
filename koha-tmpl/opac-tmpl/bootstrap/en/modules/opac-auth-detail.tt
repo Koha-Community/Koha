@@ -23,7 +23,7 @@
     [% END %]
 [% END %]
 [%# FIXME authid is modified when passed authheadingdisplay %]
-[%# It's then wrong in the JS %]
+[%# It is then wrong in the JS %]
 [% SET original_authid = authid %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-authoritiesdetail' bodyclass='scrollto' %]
@@ -48,15 +48,16 @@
                         </div>
                     </div>
                     [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
-                        <div class="col-lg-5 order-first order-md-first order-lg-2">
+                        [% SET div_class = 'col-lg-5 order-first order-md-first order-lg-2' %]
                     [% ELSE %]
-                        <div class="col-lg-10 order-first order-md-first order-lg-2">
+                        [% SET div_class = 'col-lg-10 order-first order-md-first order-lg-2' %]
                     [% END %]
                 [% ELSIF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
-                    <div class="col-lg-6 order-first order-md-first order-lg-2">
+                    [% SET div_class = 'col-lg-6 order-first order-md-first order-lg-2' %]
                 [% ELSE %]
-                    <div class="col order-first order-md-first order-lg-2">
+                    [% SET div_class = 'col order-first order-md-first order-lg-2' %]
                 [% END %]
+                <div class="[% div_class | html %]">
                     <div id="userauthdetails" class="maincontent">
                         <div id="views">
                             <span class="view">
@@ -148,10 +149,11 @@
                                             <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
                                                 [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
                                                     <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                    [% MARCurl.linktext | html %]</a>
                                                 [% ELSE %]
                                                     <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
+                                                    [% MARCurl.linktext | html %]</a>
                                                 [% END %]
-                                                [% MARCurl.linktext | html %]</a>
                                                 [% IF ( MARCurl.notes ) %]
                                                     <ul>
                                                         [% FOREACH note IN MARCurl.notes %]
@@ -187,10 +189,11 @@
                 </div> <!-- / .col-lg-10/12 -->
                 [% IF Koha.Preference( 'OPACAuthorIdentifiersAndInformation' ) && author_information.size %]
                     [% IF ( OpacNav || OpacNavBottom ) %]
-                        <div class="col-lg-5 order-lg-3">
+                        [% SET div_class = 'col-lg-5 order-lg-3' %]
                     [% ELSE %]
-                        <div class="col-lg-6 order-lg-3">
+                        [% SET div_class = 'col-lg-6 order-lg-3' %]
                     [% END %]
+                    <div class="[% div_class | html %]">
                         <div class="author_identifier_info">
                             <span>Author information</span>
                             <ul>
