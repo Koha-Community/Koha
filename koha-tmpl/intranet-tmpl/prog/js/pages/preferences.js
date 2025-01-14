@@ -1,4 +1,3 @@
-/* keep tidy */
 /* global KOHA CodeMirror to_highlight search_jumped humanMsg dataTablesDefaults themelang */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 

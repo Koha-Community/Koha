@@ -1,4 +1,3 @@
-/* keep tidy */
 // Bookings
 var bookings_table;
 $(document).ready(function () {

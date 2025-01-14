@@ -17,23 +17,16 @@
 
 use Modern::Perl;
 use File::Slurp qw( read_file );
-use File::Find;
-use FindBin();
-use Data::Dumper qw( Dumper );
-use Test::More tests => 1;
+use Test::More;
 
-my $cmd      = q{git grep -l '/\* keep tidy \*/'  -- '*.js'};
-my @js_files = qx{$cmd};
+my @js_files =
+    qx{git ls-files '*.js' '*.ts' ':(exclude)koha-tmpl/intranet-tmpl/lib' ':(exclude)koha-tmpl/intranet-tmpl/js/Gettext.js' ':(exclude)koha-tmpl/opac-tmpl/lib' ':(exclude)Koha/ILL/Backend/'};
 
-my @not_tidy;
+plan tests => scalar @js_files;
+
 foreach my $filepath (@js_files) {
     chomp $filepath;
     my $tidy    = qx{yarn --silent run prettier --trailing-comma es5 --arrow-parens avoid $filepath};
     my $content = read_file $filepath;
-    if ( $content ne $tidy ) {
-        push @not_tidy, $filepath;
-    }
+    ok( $content eq $tidy, "$filepath should be kept tidy" );
 }
-
-is( scalar(@not_tidy), 0, sprintf( 'No .js file should be messy %s/%s', scalar(@not_tidy), scalar(@js_files) ) )
-    or diag Dumper \@not_tidy;

@@ -1,4 +1,3 @@
-/* keep tidy */
 $(document).ready(function () {
     document.addEventListener("click", function (event) {
         const detailTrigger = event.target.closest(".detail-trigger");

@@ -1,4 +1,3 @@
-/* keep tidy */
 $(document).ready(function () {
     $("body").on("click", ".submit-form-link", function (e) {
         e.preventDefault();

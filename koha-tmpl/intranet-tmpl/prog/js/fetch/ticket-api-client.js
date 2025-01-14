@@ -1,4 +1,3 @@
-/* keep tidy */
 import HttpClient from "./http-client.js";
 
 export class TicketAPIClient extends HttpClient {

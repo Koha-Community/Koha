@@ -1,4 +1,3 @@
-/* keep tidy */
 class Dialog {
     constructor(options = {}) {}
 
