@@ -355,6 +355,7 @@ sub longoverdue_sth {
 
 my $dbh = C4::Context->dbh;
 my $circ_control_pref = C4::Context->preference('CircControl');
+my $home_holding_pref = C4::Context->preference('HomeOrHoldingBranch');
 
 my @available_categories = Koha::Patron::Categories->search()->get_column('categorycode');
 $borrower_category = [ map { uc $_ } @$borrower_category ];
@@ -478,7 +479,11 @@ foreach my $startrange (sort keys %$lost) {
                     } elsif ( $_ eq 'PickupLibrary' ) {
                         $lib = C4::Context->userenv->{'branch'};
                     } else {    # ( $_ eq 'ItemHomeLibrary' )
-                        $lib = Koha::Items->find( $row->{itemnumber} )->homebranch();
+                        if ($home_holding_pref eq 'homebranch') {
+                            $lib = Koha::Items->find( $row->{itemnumber} )->homebranch();
+                        } else { # ( $home_holding_pref eq 'holdingbranch' )
+                            $lib = Koha::Items->find( $row->{itemnumber} )->holdingbranch();
+                        }
                     }
                 }
                 next ITEM unless ( $branches_to_process{$lib} );
