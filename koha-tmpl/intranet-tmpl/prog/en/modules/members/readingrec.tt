@@ -83,7 +83,7 @@
                     [% FOREACH checkout IN all_checkouts %]
                         [% SET item = checkout.item %]
                         [% SET biblio = item.biblio %]
-                        [% IF checkout.returndate %]<tr>[% ELSE %]<tr class="onissue">[% END %]
+                        <tr>
                             <td style="display:none;">
                                 [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
                                 [% ELSE %][% issuetype = 'standard_checkout' | html %]
@@ -132,7 +132,7 @@
                                 [% checkout.returndate | $KohaDates with_hours => 1 %]
                             [% ELSE %]
                                 <td data-order="checked out">
-                                <small>Checked out</small>
+                                <span class="checked-out-badge badge badge-pill bg-warning text-dark">Checked out</span>
                             [% END %]
                             </td>
                         </tr>
