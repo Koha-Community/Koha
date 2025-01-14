@@ -840,7 +840,7 @@ subtest 'checkauth & check_cookie_auth' => sub {
         my $stdout;
         open STDOUT, '>', \$stdout;
         C4::Auth::checkauth( $cgi, 0, { catalogue => 1 } );
-        like( $stdout, qr{<title>\s*Log in to your account} );
+        like( $stdout, qr{<title\s*>\s*Log in to your account} );
         $sessionID = ( $stdout =~ m{Set-Cookie: CGISESSID=((\d|\w)+);} ) ? $1 : undef;
         ok($sessionID);
         close STDOUT;
@@ -1569,7 +1569,7 @@ subtest 'AutoSelfCheckAllowed' => sub {
                 flagsrequired => { self_check => "self_checkout_module" },
             }
         );
-        like( $stdout, qr{<title>\s*Log in to your account} );
+        like( $stdout, qr{<title\s*>\s*Log in to your account} );
         close STDOUT;
     };
 
@@ -1593,7 +1593,7 @@ subtest 'AutoSelfCheckAllowed' => sub {
                 flagsrequired => { self_check => "self_checkout_module" },
             }
         );
-        like( $stdout, qr{<title>\s*Log in to your account} );
+        like( $stdout, qr{<title\s*>\s*Log in to your account} );
         close STDOUT;
     };
 
@@ -1616,7 +1616,7 @@ subtest 'AutoSelfCheckAllowed' => sub {
                 flagsrequired => { self_check => "self_checkout_module" },
             }
         );
-        like( $stdout, qr{<title>\s*Log in to your account} );
+        like( $stdout, qr{<title\s*>\s*Log in to your account} );
         close STDOUT;
     };
 

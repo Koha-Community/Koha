@@ -1,102 +1,102 @@
-[%- BLOCK account_type_description -%]
-    [%- IF account.credit_type_code -%]
-        [%- PROCESS credit_type_description credit_type = account.credit_type -%]
-    [%- ELSIF account.debit_type_code -%]
-        [%- PROCESS debit_type_description debit_type = account.debit_type -%]
-    [%- END -%]
-    [%- PROCESS account_status_description account=account -%]
-[%- END -%]
+[%~ BLOCK account_type_description ~%]
+    [%~ IF account.credit_type_code ~%]
+        [%~ PROCESS credit_type_description credit_type = account.credit_type ~%]
+    [%~ ELSIF account.debit_type_code ~%]
+        [%~ PROCESS debit_type_description debit_type = account.debit_type ~%]
+    [%~ END ~%]
+    [%~ PROCESS account_status_description account=account ~%]
+[%~ END ~%]
 
-[%- BLOCK debit_type_description -%]
-    [%- SWITCH debit_type.code -%]
+[%~ BLOCK debit_type_description ~%]
+    [%~ SWITCH debit_type.code ~%]
 
-    [%- CASE 'ACCOUNT' -%]
+    [%~ CASE 'ACCOUNT' ~%]
         <span>Account creation fee</span>
-    [%- CASE 'ACCOUNT_RENEW' -%]
+    [%~ CASE 'ACCOUNT_RENEW' ~%]
         <span>Account renewal fee</span>
-    [%- CASE 'ARTICLE_REQUEST' -%]
+    [%~ CASE 'ARTICLE_REQUEST' ~%]
         <span>Article request fee</span>
-    [%- CASE 'LOST' -%]
+    [%~ CASE 'LOST' ~%]
         <span>Lost item</span>
-    [%- CASE 'MANUAL' -%]
+    [%~ CASE 'MANUAL' ~%]
         <span>Manual fee</span>
-    [%- CASE 'NEW_CARD' -%]
+    [%~ CASE 'NEW_CARD' ~%]
         <span>New card</span>
-    [%- CASE 'OVERDUE' -%]
+    [%~ CASE 'OVERDUE' ~%]
         <span>Fine</span>
-    [%- CASE 'PROCESSING' -%]
+    [%~ CASE 'PROCESSING' ~%]
         <span>Lost item processing fee</span>
-    [%- CASE 'RENT' -%]
+    [%~ CASE 'RENT' ~%]
         <span>Rental fee</span>
-    [%- CASE 'RENT_DAILY' -%]
+    [%~ CASE 'RENT_DAILY' ~%]
         <span>Daily rental fee</span>
-    [%- CASE 'RENT_RENEW' -%]
+    [%~ CASE 'RENT_RENEW' ~%]
         <span>Renewal of rental item</span>
-    [%- CASE 'RENT_DAILY_RENEW' -%]
+    [%~ CASE 'RENT_DAILY_RENEW' ~%]
         <span>Renewal of daily rental item</span>
-    [%- CASE 'RESERVE' -%]
+    [%~ CASE 'RESERVE' ~%]
         <span>Hold fee</span>
-    [%- CASE 'RESERVE_EXPIRED' -%]
+    [%~ CASE 'RESERVE_EXPIRED' ~%]
         <span>Hold waiting too long</span>
-    [%- CASE 'PAYOUT' -%]
+    [%~ CASE 'PAYOUT' ~%]
         <span>Payment from library to patron</span>
-    [%- CASE 'VOID' -%]
+    [%~ CASE 'VOID' ~%]
         <span>Credit has been voided</span>
-    [%- CASE -%]
+    [%~ CASE ~%]
         <span>[% debit_type.description | html %]</span>
-    [%- END -%]
-[%- END -%]
+    [%~ END ~%]
+[%~ END ~%]
 
-[%- BLOCK credit_type_description -%]
-    [%- SWITCH credit_type.code -%]
+[%~ BLOCK credit_type_description ~%]
+    [%~ SWITCH credit_type.code ~%]
 
-    [%- CASE 'CANCELLATION' -%]
+    [%~ CASE 'CANCELLATION' ~%]
         <span>Cancelled charge</span>
-    [%- CASE 'CREDIT' -%]
+    [%~ CASE 'CREDIT' ~%]
         <span>Credit</span>
-    [%- CASE 'DISCOUNT' -%]
+    [%~ CASE 'DISCOUNT' ~%]
         <span>Discount</span>
-    [%- CASE 'FORGIVEN' -%]
+    [%~ CASE 'FORGIVEN' ~%]
         <span>Forgiven</span>
-    [%- CASE 'LOST_FOUND' -%]
+    [%~ CASE 'LOST_FOUND' ~%]
         <span>Lost item fee refund</span>
-    [%- CASE 'OVERPAYMENT' -%]
+    [%~ CASE 'OVERPAYMENT' ~%]
         <span>Overpayment refund</span>
-    [%- CASE 'PAYMENT' -%]
+    [%~ CASE 'PAYMENT' ~%]
         <span>Payment</span>
-    [%- CASE 'PROCESSING_FOUND' -%]
+    [%~ CASE 'PROCESSING_FOUND' ~%]
         <span>Lost item processing fee refund</span>
-    [%- CASE 'PURCHASE' -%]
+    [%~ CASE 'PURCHASE' ~%]
         <span>Purchase</span>
-    [%- CASE 'REFUND' -%]
+    [%~ CASE 'REFUND' ~%]
         <span>Refund</span>
-    [%- CASE 'WRITEOFF' -%]
+    [%~ CASE 'WRITEOFF' ~%]
         <span>Writeoff</span>
-    [%- CASE -%]
+    [%~ CASE ~%]
         <span>[% credit_type.description | html %]</span>
-    [%- END -%]
-[%- END -%]
+    [%~ END ~%]
+[%~ END ~%]
 
-[%- BLOCK account_status_description -%]
-    [%- SWITCH account.status -%]
+[%~ BLOCK account_status_description ~%]
+    [%~ SWITCH account.status ~%]
 
-    [%- CASE 'UNRETURNED' -%]
+    [%~ CASE 'UNRETURNED' ~%]
         <span> (Accruing)</span>
-    [%- CASE 'RETURNED' -%]
+    [%~ CASE 'RETURNED' ~%]
         <span> (Returned)</span>
-    [%- CASE 'REPLACED' -%]
+    [%~ CASE 'REPLACED' ~%]
         <span> (Replaced)</span>
-    [%- CASE 'REFUNDED' -%]
+    [%~ CASE 'REFUNDED' ~%]
         <span> (Refunded)</span>
-    [%- CASE 'FORGIVEN' -%]
+    [%~ CASE 'FORGIVEN' ~%]
         <span> (Forgiven)</span>
-    [%- CASE 'VOID' -%]
+    [%~ CASE 'VOID' ~%]
         <span> (Voided)</span>
-    [%- CASE 'LOST' -%]
+    [%~ CASE 'LOST' ~%]
         <span> (Lost)</span>
-    [%- CASE 'CANCELLED' -%]
+    [%~ CASE 'CANCELLED' ~%]
         <span> (Cancelled)</span>
-    [%- CASE -%]
+    [%~ CASE ~%]
 
-    [%- END -%]
-[%- END -%]
+    [%~ END ~%]
+[%~ END ~%]
