@@ -7,7 +7,6 @@ use List::Util qw( first );
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
-use IPC::System::Simple qw(system capture);
 $Term::ANSIColor::AUTOLOCAL = 1;
 
 my $git_dir       = '.';
@@ -155,7 +154,7 @@ while ( my ($i, $commit) = each @commits ) {
         # Tidy the file
         my $cmd = "$conflict_resolver_script --write $file";
         try {
-            capture $cmd;
+            system $cmd;
         } catch {
             say RED "Cannot tidy $file: $_";
             exit 2;
