@@ -3,10 +3,9 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
-use Array::Utils        qw( array_minus );
-use File::Slurp         qw( read_file write_file );
-use IPC::System::Simple qw( capture );
-use IPC::Cmd            qw( run );
+use Array::Utils qw( array_minus );
+use File::Slurp  qw( read_file write_file );
+use IPC::Cmd     qw( run );
 use Parallel::ForkManager;
 
 my ( $perl_files, $js_files, $tt_files, $nproc, $verbose, $help );
@@ -25,7 +24,7 @@ GetOptions(
 
 pod2usage(1) if $help;
 
-$nproc ||= capture q{nproc};
+$nproc ||= qx{nproc};
 
 my @files = @ARGV;
 
@@ -104,21 +103,21 @@ sub tidy {
 
 sub get_perl_files {
     my @files;
-    push @files, capture q{git ls-files '*.pl' '*.pm' '*.t' ':(exclude)Koha/Schema/Result'};
-    push @files, capture q{git ls-files svc opac/svc};                                         # Files without extension
+    push @files, qx{git ls-files '*.pl' '*.pm' '*.t' ':(exclude)Koha/Schema/Result'};
+    push @files, qx{git ls-files svc opac/svc};                                         # Files without extension
     chomp for @files;
     return @files;
 }
 
 sub get_js_files {
-    my @files = capture
-        q{git ls-files '*.js' '*.ts' '*.vue' ':(exclude)koha-tmpl/intranet-tmpl/lib' ':(exclude)koha-tmpl/intranet-tmpl/js/Gettext.js' ':(exclude)koha-tmpl/opac-tmpl/lib' ':(exclude)Koha/ILL/Backend/'};
+    my @files =
+        qx{git ls-files '*.js' '*.ts' '*.vue' ':(exclude)koha-tmpl/intranet-tmpl/lib' ':(exclude)koha-tmpl/intranet-tmpl/js/Gettext.js' ':(exclude)koha-tmpl/opac-tmpl/lib' ':(exclude)Koha/ILL/Backend/'};
     chomp for @files;
     return @files;
 }
 
 sub get_tt_files {
-    my @files = capture q{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/'};
+    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/'};
     chomp for @files;
     return @files;
 }
