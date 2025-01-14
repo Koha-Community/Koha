@@ -75,6 +75,8 @@ sub new {
 sub _scale_image {
     my ( $self, $image, $maxwidth, $maxheight ) = @_;
     my ( $width, $height ) = $image->getBounds();
+	$image->alphaBlending(0);
+	$image->saveAlpha(1);
     if ( $width > $maxwidth || $height > $maxheight ) {
 
         my $percent_reduce;    # Percent we will reduce the image dimensions by...
@@ -86,11 +88,11 @@ sub _scale_image {
         }
         my $width_reduce  = sprintf( "%.0f", ( $width * $percent_reduce ) );
         my $height_reduce = sprintf( "%.0f", ( $height * $percent_reduce ) );
-        my $newimage      = GD::Image->new( $width_reduce, $height_reduce, 1 );    #'1' creates true color image...
-        $newimage->copyResampled(
-            $image, 0, 0, 0, 0, $width_reduce,
-            $height_reduce, $width, $height
-        );
+        my $newimage = GD::Image->new( $width_reduce, $height_reduce, 1 )
+          ;        #'1' creates true color image...
+        $newimage->alphaBlending(0);
+        $newimage->saveAlpha(1);
+        $newimage->copyResampled( $image, 0, 0, 0, 0, $width_reduce, $height_reduce, $width, $height );
         return $newimage;
     } else {
         return $image;

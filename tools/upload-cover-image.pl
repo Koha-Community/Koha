@@ -103,6 +103,7 @@ if ( $op eq 'cud-process' && $fileID ) {
     my $upload = Koha::UploadedFiles->find($fileID);
     if ( $filetype eq 'image' ) {
         my $fh       = $upload->file_handle;
+        GD::Image->trueColor(1);
         my $srcimage = GD::Image->new($fh);
         $fh->close if $fh;
         if ( defined $srcimage ) {
@@ -186,7 +187,8 @@ if ( $op eq 'cud-process' && $fileID ) {
                             my $full_filename =
                                 Cwd::abs_path("$dir/$filename");    #Resolve any relative filepath references
                             my $srcimage;
-                            if ( $full_filename =~ /^\Q$dir\E/ ) {
+                            if ( $full_filename =~ /^\Q$dir\E/ ){
+                                GD::Image->trueColor(1);
                                 $srcimage = GD::Image->new($full_filename);
                             }
                             my $biblio;
