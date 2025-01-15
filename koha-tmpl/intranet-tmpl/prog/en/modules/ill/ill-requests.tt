@@ -858,6 +858,7 @@
                 <h1>Confirm automatic request</h1>
                 <div id="results" class="page-section">
                     <form method="post" id="confirmautoill-form">
+                        [% INCLUDE 'csrf-token.inc' %]
                         <fieldset class="rows">
                             <ul class="list-group" id="autoillbackends"> </ul>
                             <p id="autoillbackend-message" class="text-info"></p>
@@ -877,7 +878,7 @@
                                 <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]" />
                                 [% i = i + 1 %]
                             [% END %]
-                            <input type="hidden" name="method" value="create" />
+                            <input type="hidden" name="op" value="cud-create" />
                             <input type="hidden" name="stage" value="form" />
                             <input type="hidden" name="confirm_auto_submitted" value="1" />
                             <input type="submit" class="btn btn-primary" value="Confirm" />
