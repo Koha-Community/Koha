@@ -899,7 +899,7 @@
                         <input type="hidden" name="op" value="cud-create" />
                         <input type="hidden" name="stage" value="0" />
                         [% IF auto_migrate %]
-                            <a class="btn btn-link" href="ill-requests.pl?op=illview&amp;illrequest_id=[% request.illrequest_id %]"> <i class="fa fa-arrow-left"></i> Return to request </a>
+                            <a class="btn btn-link" href="ill-requests.pl?op=illview&amp;illrequest_id=[% request.illrequest_id | uri %]"> <i class="fa fa-arrow-left"></i> Return to request </a>
                         [% ELSE %]
                             <button type="submit" class="btn btn-link" onclick="this.form.submit()"> <i class="fa fa-arrow-left"></i> Return to form </button>
                         [% END %]
@@ -912,7 +912,7 @@
                         </fieldset>
                         <fieldset class="action">
                             [% IF auto_migrate %]
-                                <a id="confirm-auto-migrate" data-illrequest_id="[% request.illrequest_id %]" class="btn btn-primary disabled">Confirm</a>
+                                <a id="confirm-auto-migrate" data-illrequest_id="[% request.illrequest_id | html %]" class="btn btn-primary disabled">Confirm</a>
                                 <a class="cancel" href="ill-requests.pl">Cancel</a>
                             [% ELSE %]
                                 [% FOREACH key IN whole.keys %]
