@@ -121,7 +121,7 @@ sub get_js_files {
 }
 
 sub get_tt_files {
-    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/'};
+    my @files = qx{git ls-files '*.tt' '*.inc' ':(exclude)Koha/ILL/Backend/' ':(exclude)doc-head-open.inc'};
     chomp for @files;
     return @files;
 }

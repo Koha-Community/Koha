@@ -31,7 +31,5 @@
     <!-- prettier-ignore-end -->
 [% END %]
 
-[% IF ( bidi ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]" class="no-js"></html>[% ELSE %]<html lang="[% lang | html %]" class="no-js"></html>[% END %]
+[% IF ( bidi ) %]<html lang="[% lang | html %]" dir="[% bidi | html %]" class="no-js">[% ELSE %]<html lang="[% lang | html %]" class="no-js">[% END %]
 <head>
-    </head>
-</head>
