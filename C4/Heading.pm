@@ -198,6 +198,9 @@ sub _search {
         push @value,    $self->{'search_form'};
     }
 
+    if ( $check_thesaurus && ( !$thesaurus || $thesaurus eq 'notdefined' ) && $self->{field}->tag =~ /38.|658/ ) {
+        $thesaurus = 'DBN';
+    }
     if ( $check_thesaurus && $thesaurus ) {
         push @marclist, 'thesaurus';
         push @and_or, 'and';
@@ -212,7 +215,7 @@ sub _search {
         if ( $marcflavour eq 'MARC21' ) {
             my $heading_use_search_field =
                   $biblio_tag =~ /^[127]/ ? 'Heading-use-main-or-added-entry'
-                : $biblio_tag =~ /^6/     ? 'Heading-use-subject-added-entry'
+                : $biblio_tag =~ /^[63]/  ? 'Heading-use-subject-added-entry'
                 : $biblio_tag =~ /^[48]/  ? 'Heading-use-series-added-entry'
                 :                           undef;
             if ($heading_use_search_field) {
