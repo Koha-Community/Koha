@@ -54,7 +54,7 @@ sub show_history_check {
 
     my $opac_no_matching_requests_for_patron = 0;
     if ( $self->{ui_context} eq 'opac' ) {
-        my $patron_cardnumber = C4::Context->userenv->{'cardnumber'} || 0;
+        my $patron_cardnumber = C4::Context->userenv ? C4::Context->userenv->{'cardnumber'} || 0 : 0;
         my ( $matching_requests_for_patron, $remaining_matching_requests ) =
             $self->_get_split_matching_requests($patron_cardnumber);
         $opac_no_matching_requests_for_patron = 1
