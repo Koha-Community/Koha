@@ -1,8 +1,6 @@
 <!-- Delete Vendor modal form -->
 <div id="deleteVendorModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="deleteVendorModalLabel">
-    <form method="post" action="/cgi-bin/koha/acqui/supplier.pl">
-        [% INCLUDE 'csrf-token.inc' %]
-        <input type="hidden" name="op" value="cud-delete" />
+    <form id="deleteVendorForm">
         <input type="hidden" name="booksellerid" id="booksellerid" value="" />
         <div class="modal-dialog" role="document">
             <div class="modal-content">

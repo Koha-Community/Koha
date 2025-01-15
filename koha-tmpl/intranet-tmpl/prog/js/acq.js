@@ -436,4 +436,16 @@ $(document).ready(function () {
         var item = button.data("booksellerid");
         $("#booksellerid").val(item);
     });
+    $("#deleteVendorForm").on("submit", function (e) {
+        e.preventDefault();
+        var id = $("#booksellerid").val();
+        let options = {
+            url: "/api/v1/acquisitions/vendors/" + id,
+            method: "DELETE",
+            contentType: "application/json",
+        };
+        $.ajax(options).then(function (thing, result) {
+            window.location.href = "/cgi-bin/koha/vendors";
+        });
+    });
 });
