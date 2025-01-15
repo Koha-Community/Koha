@@ -462,6 +462,8 @@ sub _convert_facets {
 
     return if !$es;
 
+    use locale;
+
     my %type_to_label = map { $_->name => { order => $_->facet_order, av_cat => $_->authorised_value_category, label => $_->label } }
         Koha::SearchEngine::Elasticsearch->get_facet_fields;
 
