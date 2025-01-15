@@ -111,7 +111,7 @@ if ($format =~ /endnote/) {
     $format = 'endnote';
 }
 elsif ($format =~ /marcxml/) {
-    $marc = marc2marcxml($marc);
+    $marc = marc2marcxml($marc, undef, undef, 1);
     $format = 'marcxml';
 }
 elsif ($format=~ /mods/) {
@@ -137,12 +137,12 @@ elsif ($format =~ /marc8/) {
     $format = 'marc8';
 }
 elsif ($format =~ /utf8/) {
-    C4::Charset::SetUTF8Flag($marc,1);
+    C4::Charset::SetUTF8Flag($marc,0);
     $marc = $marc->as_usmarc();
     $format = 'utf8';
 }
 elsif ($format =~ /marcstd/) {
-    C4::Charset::SetUTF8Flag($marc,1);
+    C4::Charset::SetUTF8Flag($marc,0);
     ($error,$marc) = marc2marc($marc, 'marcstd', C4::Context->preference('marcflavour'));
     $format = 'marcstd';
 }
