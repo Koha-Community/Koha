@@ -927,7 +927,7 @@
                             <ul class="list-unstyled">
                                 [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
                                     <li>
-                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id %]</a>
+                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id | html %]</a>
                                     </li>
                                 [% END %]
                             </ul>
@@ -939,7 +939,7 @@
                             <ul class="list-unstyled">
                                 [% FOREACH remaining_matching_request IN remaining_matching_requests %]
                                     <li>
-                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% remaining_matching_request.illrequest_id %]">ILL Request #[% remaining_matching_request.illrequest_id %]</a> by [%- INCLUDE 'patron-title.inc' patron => remaining_matching_request.patron hide_patron_infos_if_needed => 1 -%]
+                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% remaining_matching_request.illrequest_id %]">ILL Request #[% remaining_matching_request.illrequest_id | html %]</a> by [%- INCLUDE 'patron-title.inc' patron => remaining_matching_request.patron hide_patron_infos_if_needed => 1 -%]
                                     </li>
                                 [% END %]
                             </ul>

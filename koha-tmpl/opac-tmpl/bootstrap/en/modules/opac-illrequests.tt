@@ -321,7 +321,9 @@
                                         <ul class="list-unstyled">
                                             [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
                                                 <li>
-                                                    <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id %]</a>
+                                                    <a href="/cgi-bin/koha/opac-illrequests.pl?op=view&amp;illrequest_id=[% matching_request_for_patron.illrequest_id | uri %]"
+                                                        >ILL Request #[% matching_request_for_patron.illrequest_id | html %]</a
+                                                    >
                                                 </li>
                                             [% END %]
                                         </ul>
