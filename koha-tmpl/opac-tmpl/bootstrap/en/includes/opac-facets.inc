@@ -77,7 +77,13 @@
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.label == 'Collections' %][% SET facet.facet_label_value = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => facet.facet_label_value, opac =>1 ) || facet.facet_label_value %][% END %]
                             [% IF facets_loo.label == 'Languages' %][% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %][% END %]
-                                <li [% IF loop.count > 5 && !facet.active %]class="collapsible-facet" style="display:none"[% END %]>
+                                [% SET li_class = '' %]
+                                [% SET li_style = '' %]
+                                [% IF loop.count > 5 && !facet.active %]
+                                    [% li_class = "collapsible-facet" %]
+                                    [% li_style = "display:none" %]
+                                [% END %]
+                                <li class="[% li_class | html %]" style="[% li_style | html %]">
                                   [% IF facet.active %]
                                     [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
                                     <span class="facet-label">[% facet.facet_label_value | html %]</span>
