@@ -986,7 +986,8 @@ sub add_request {
     # generate $request_details
     my $request_details = _get_request_details( $params, $params->{other} );
 
-    my ( $brw_count, $brw ) = _validate_borrower( $params->{other}->{'cardnumber'} ) unless $unauthenticated_request;
+    my ( $brw_count, $brw );
+    ( $brw_count, $brw ) = _validate_borrower( $params->{other}->{'cardnumber'} ) unless $unauthenticated_request;
 
     ## Create request
 
