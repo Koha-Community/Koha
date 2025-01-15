@@ -69,7 +69,9 @@ define( [ 'resources' ], function( Resources ) {
 
                 function show() {
                     $collapsed.hide();
-                    $node.val( widget.getFixed( start, end ).replace(/\s+$/, '') );
+                    if ( end - start > 1 ) {
+                        $node.val( widget.getFixed( start, end ).replace(/\s+$/, '') );
+                    }
                     $node.show();
                     $node[0].focus();
                 }
@@ -161,7 +163,7 @@ define( [ 'resources' ], function( Resources ) {
                         $input = $( '<select name="f' + Widget.PadNum(start, 2) + '" title="' + $(this).children('name').text() + '"></select>' );
 
                         $values.each( function() {
-                            $input.append( '<option value="' + $(this).attr('code') + '">' + $(this).attr('code') + ' - ' + $(this).children('description').text() + '</option>' );
+                            $input.append( '<option value="' + $(this).attr('code').replace('#', ' ') + '">' + $(this).attr('code') + ' - ' + $(this).children('description').text() + '</option>' );
                         } );
                     }
 
