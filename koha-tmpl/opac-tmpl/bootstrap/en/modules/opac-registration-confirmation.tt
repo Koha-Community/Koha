@@ -37,10 +37,10 @@
 
             [% SET column_class = "col order-md-1 maincontent" %]
             [% IF ( OpacNav ||  OpacNavBottom && OpacNavRight ) %]
-                [% #  Three-column layout with right and left sidebars %]
+                [%#  Three-column layout with right and left sidebars %]
                 [% column_class = "col-12 col-lg-7 order-md-1 maincontent" %]
             [% ELSIF ( OpacNavRight ) %]
-                [% #  Two-column layout with right sidebar %]
+                [%#  Two-column layout with right sidebar %]
                 [% column_class = "col-12 col-lg-9 order-md-1 maincontent" %]
             [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
                 [% column_class = "col-12 col-lg-10 order-md-1 maincontent" %]

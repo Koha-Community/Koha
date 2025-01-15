@@ -9,7 +9,7 @@
 [% tnp('context', 'item', 'items', count) | $raw %]
 [% tnpx('context', '{count} item', '{count} items', count, { count = count }) | $raw %]
 
-[% # it also works on multiple lines
+[%# it also works on multiple lines
     tnpx (
         'context',
         '{count} item',
@@ -21,7 +21,7 @@
     ) | $raw
 %]
 
-[% # and t* calls can be nested
+[%# and t* calls can be nested
     tx('status is {status}', {
         status = active ? t('active') : t('inactive')
     }) | $raw

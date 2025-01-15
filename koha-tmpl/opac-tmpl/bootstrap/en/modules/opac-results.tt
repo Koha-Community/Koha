@@ -221,7 +221,7 @@
                                     <!-- Actual Search Results -->
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr>
-                                            [% # Cell 1: Checkbox %]
+                                            [%# Cell 1: Checkbox %]
                                             [% IF ( SEARCH_RESULT.title ) %]
                                                 [% check_title = SEARCH_RESULT.title %]
                                             [% ELSE %]
@@ -244,7 +244,7 @@
                                                 [% END # IF opacbookbag%]
                                             </td>
 
-                                            [% # Cell 2: Show result number if OpacHiddenItems is empty %]
+                                            [%# Cell 2: Show result number if OpacHiddenItems is empty %]
                                             <td class="numcol[%- IF suppress_result_number -%] hidden[%- END -%]">
                                                 [% UNLESS suppress_result_number %]
                                                     [% SEARCH_RESULT.result_number | html %].
@@ -252,7 +252,7 @@
                                             </td>
 
                                             [% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) && !Koha.Preference('OpacNoItemTypeImages') %]
-                                                [% # Cell 3: Show item type image %]
+                                                [%# Cell 3: Show item type image %]
                                                 <td class="itypecol">
                                                     [% IF ( SEARCH_RESULT.imageurl ) %]
                                                         <img class="itemtype-image" src="[% SEARCH_RESULT.imageurl | html %]" title="[% SEARCH_RESULT.description | html %]" alt="[% SEARCH_RESULT.description | html %]" />
@@ -267,7 +267,7 @@
                                                     [% INCLUDE 'cover-images.inc' %]
                                                 </td>
                                             [% END %]
-                                            [% # Cell 4: Search result details and controls %]
+                                            [%# Cell 4: Search result details and controls %]
                                             <td class="bibliocol">
                                                 [% IF ( COinSinOPACResults && SEARCH_RESULT.coins ) %]
                                                     <!-- COinS / Openurl -->

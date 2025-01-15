@@ -931,7 +931,7 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="cud-list" />
-                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    [%# Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
                                         [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
                                     </textarea>
@@ -941,7 +941,7 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="recordtype" value="biblio" />
                                     <input type="hidden" name="op" value="cud-list" />
-                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    [%# Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">
                                         [%- recordnumbers = PROCESS batch_list results=results batch_type='biblionumber' | trim | html %][% IF recordnumbers %][% SET batch_biblionumbers = 1 %][% recordnumbers | html %][% END -%]
                                     </textarea>
@@ -997,7 +997,7 @@
                                 <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification" target="_blank">
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-show" />
-                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    [%# Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     [%- borrowernumbers = PROCESS batch_list results=results batch_type='borrowernumber' | trim | html -%]
                                     [%- IF borrowernumbers -%]
                                         [%- SET batch_borrowernumbers = 1 -%]
@@ -1019,7 +1019,7 @@
                                     [% INCLUDE 'csrf-token.inc' %]
                                     <input type="hidden" name="op" value="cud-add" />
                                     <input type="hidden" name="batch_id" value="0" />
-                                    [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+                                    [%# Preserve the whitespace of the following textarea in order to format the values correctly %]
                                     <textarea style="display:none;" name="bor_num_list" id="bor_num_list">
                                         [%- borrowernumbers = PROCESS batch_list results=results batch_type='borrowernumber' | trim | html %][% IF borrowernumbers %][% SET batch_borrowernumbers = 1 %][% borrowernumbers | html %][% END -%]
                                     </textarea>

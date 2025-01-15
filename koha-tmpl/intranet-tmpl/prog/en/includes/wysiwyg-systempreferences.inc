@@ -1,6 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
-[% #Enable tinymce for system preferences %]
+[%#Enable tinymce for system preferences %]
 [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
 [% INCLUDE 'str/tinymce_i18n.inc' %]
 <!-- wysiwyg-systempreferences.inc -->
