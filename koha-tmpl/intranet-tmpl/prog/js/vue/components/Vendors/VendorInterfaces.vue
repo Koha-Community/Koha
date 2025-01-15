@@ -4,8 +4,8 @@
             {{ $__("Interfaces") }}
         </h2>
         <ol v-for="vi in vendor.interfaces" :key="vi.id">
-            <legend>{{ vi.name }}</legend>
-            <li>
+            <h3>{{ vi.name }}</h3>
+            <li v-if="vi.type">
                 <label>{{ $__("Type") }}:</label>
                 <span>
                     {{ get_lib_from_av("av_vendor_interface_types", vi.type) }}
