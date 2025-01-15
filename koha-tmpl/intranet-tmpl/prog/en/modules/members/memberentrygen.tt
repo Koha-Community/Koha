@@ -211,6 +211,9 @@ legend.collapsed i.fa.fa-caret-down::before {
                                     [% IF ( ERROR_child_no_guarantor ) %]
                                         <li id="ERROR_child_no_guarantor">A child patron needs a guarantor.</li>
                                     [% END %]
+                                [% IF ( ERROR_child_is_guarantor ) %]
+                                    <li id="ERROR_child_is_guarantor">Child patron cannot be a guarantor.</li>
+                                [% END %]
                                     [% IF ( ERROR_guarantor_is_guarantee ) %]
                                         <li id="ERROR_guarantor_is_guarantee">A guarantor cannot be a guarantee.</li>
                                     [% END %]
