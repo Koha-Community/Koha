@@ -114,13 +114,17 @@ export default {
             delete vendor.physical;
             delete vendor.subscriptions_count;
 
-            vendor.contacts = vendor.contacts.map(
-                ({ id, booksellerid, ...requiredProperties }) =>
-                    requiredProperties
+            vendor.contacts = this.checkContactOrInterface(
+                vendor.contacts.map(
+                    ({ id, booksellerid, ...requiredProperties }) =>
+                        requiredProperties
+                )
             );
-            vendor.interfaces = vendor.interfaces.map(
-                ({ interface_id, vendor_id, ...requiredProperties }) =>
-                    requiredProperties
+            vendor.interfaces = this.checkContactOrInterface(
+                vendor.interfaces.map(
+                    ({ interface_id, vendor_id, ...requiredProperties }) =>
+                        requiredProperties
+                )
             );
 
             const client = APIClient.acquisition;
@@ -141,6 +145,17 @@ export default {
                     error => {}
                 );
             }
+        },
+        checkContactOrInterface(array) {
+            return array.reduce((acc, curr) => {
+                const atLeastOneFieldFilled = Object.keys(curr).some(
+                    key => curr[key]
+                );
+                if (atLeastOneFieldFilled) {
+                    acc.push(curr);
+                }
+                return acc;
+            }, []);
         },
     },
     components: {

@@ -58,10 +58,6 @@
         >
             <legend>
                 {{ $__("Interface details") }}
-                <a href="#" @click.prevent="deleteInterface(i)"
-                    ><i class="fa fa-trash"></i>
-                    {{ $__("Remove this interface") }}</a
-                >
             </legend>
             <ol>
                 <li>
@@ -131,6 +127,10 @@
                     />
                 </li>
             </ol>
+            <span class="btn btn-default" @click.prevent="deleteContact(i)"
+                ><font-awesome-icon icon="trash" />
+                {{ $__("Delete interface") }}</span
+            >
         </fieldset>
         <span class="btn btn-default" @click="addInterface"
             ><font-awesome-icon icon="plus" />

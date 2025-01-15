@@ -195,11 +195,15 @@ export default {
             if (!this.vendor.aliases) {
                 this.vendor.aliases = [];
             }
+            if (!this.newAlias) return;
             this.vendor.aliases.push({ alias: this.newAlias });
             this.newAlias = "";
         },
         removeAlias(e) {
-            this.vendor.aliases.splice(this.vendor.aliases.indexOf(e.alias), 1);
+            const aliasIndex = this.vendor.aliases
+                .map(e => e.alias)
+                .indexOf(e.alias);
+            this.vendor.aliases.splice(aliasIndex, 1);
         },
     },
     components: {
