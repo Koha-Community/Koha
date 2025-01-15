@@ -1,10 +1,10 @@
 <template>
     <div v-if="!initialized">{{ $__("Loading") }}</div>
     <div v-else id="vendor_add">
-        <h2 v-if="vendor.id">
+        <h1 v-if="vendor.id">
             {{ $__("Edit vendor #%s").format(vendor.id) }}
-        </h2>
-        <h2 v-else>{{ $__("New vendor") }}</h2>
+        </h1>
+        <h1 v-else>{{ $__("Add vendor") }}</h1>
         <div>
             <form @submit="onSubmit($event)">
                 <VendorDetails :vendor="vendor" />
