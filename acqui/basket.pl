@@ -241,7 +241,7 @@ if ( $op eq 'cud-delete-order' ) {
             );
             print $query->redirect( '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid . '&closed=1' );
         } else {
-            print $query->redirect( '/cgi-bin/koha/vendors/' . $booksellerid );
+            print $query->redirect( '/cgi-bin/koha/acqui/booksellers.pl?booksellerid=' . $booksellerid );
         }
         exit;
     } else {
@@ -609,7 +609,7 @@ sub edi_close_and_order {
             );
             print $query->redirect("/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=$booksellerid&closed=1");
         } else {
-            print $query->redirect("/cgi-bin/koha/vendors/$booksellerid");
+            print $query->redirect("/cgi-bin/koha/acqui/booksellers.pl?booksellerid=$booksellerid");
         }
         exit;
     } else {

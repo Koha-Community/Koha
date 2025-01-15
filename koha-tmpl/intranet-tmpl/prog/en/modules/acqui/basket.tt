@@ -282,7 +282,7 @@
                         </div>
                         <a href="/cgi-bin/koha/vendors">Go back to vendor page</a>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/vendors/[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a>
+                        <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a>
                         <a href="/cgi-bin/koha/vendors" class="btn btn-default btn-sm">Show all active baskets</a>
                     [% END # /IF (cannotdelbiblios) %]
                 [% ELSE # IF ( delete_confirmed ) %]

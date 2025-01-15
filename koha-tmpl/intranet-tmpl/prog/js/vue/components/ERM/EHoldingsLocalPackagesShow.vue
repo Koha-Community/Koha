@@ -35,7 +35,7 @@
                         <label>{{ $__("Vendor") }}:</label>
                         <span>
                             <a
-                                :href="`/cgi-bin/koha/vendors/${erm_package.vendor_id}`"
+                                :href="`/cgi-bin/koha/acqui/booksellers.pl?booksellerid=${erm_package.vendor_id}`"
                                 >{{ erm_package.vendor.name }}</a
                             >
                         </span>
