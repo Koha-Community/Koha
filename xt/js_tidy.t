@@ -26,7 +26,7 @@ plan tests => scalar @js_files;
 
 foreach my $filepath (@js_files) {
     chomp $filepath;
-    my $tidy    = qx{yarn --silent run prettier --trailing-comma es5 --arrow-parens avoid $filepath};
+    my $tidy    = qx{yarn --silent run prettier $filepath};
     my $content = read_file $filepath;
     ok( $content eq $tidy, "$filepath should be kept tidy" );
 }

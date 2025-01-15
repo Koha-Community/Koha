@@ -132,13 +132,12 @@ sub tidy_perl {
 
 sub tidy_js {
     my ($file) = @_;
-    run( command => sprintf q{yarn --silent run prettier --trailing-comma es5 --arrow-parens avoid --write %s}, $file );
+    run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
 }
 
 sub tidy_vue {
     my ($file) = @_;
-    run( command => sprintf
-            q{yarn --silent run prettier --trailing-comma es5 --semi false --arrow-parens avoid --write %s}, $file );
+    run( command => sprintf q{yarn --silent run prettier --write %s}, $file );
 }
 
 sub tidy_tt {

@@ -25,7 +25,7 @@ plan tests => scalar @vue_files;
 
 foreach my $filepath (@vue_files) {
     chomp $filepath;
-    my $tidy    = qx{yarn --silent run prettier --trailing-comma es5 --semi false --arrow-parens avoid $filepath};
+    my $tidy    = qx{yarn --silent run prettier $filepath};
     my $content = read_file $filepath;
     ok( $content eq $tidy, "$filepath should be kept tidy" );
 }
