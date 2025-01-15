@@ -120,6 +120,10 @@ sub text_extract {
         my $s = TmplTokenizer::next_token($h);
         last unless defined $s;
         my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
+
+        die sprintf( "Incorrect structure found at %s:%s: '%s'", $s->pathname, $s->line_number, $s->string )
+            if $kind eq C4::TmplTokenType::TAG && !$attr;
+
         if ($kind eq C4::TmplTokenType::TEXT) {
 	    if ($t =~ /\S/s && $t !~ /<!/){
 		remember( $s, $t );
