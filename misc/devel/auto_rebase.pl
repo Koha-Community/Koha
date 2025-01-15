@@ -3,7 +3,8 @@ use Modern::Perl;
 use Term::ANSIColor qw(:constants);
 use Git::Wrapper;
 use File::Slurp qw( write_file );
-use List::Util qw( first );
+use File::Temp  qw( tempfile );
+use List::Util  qw( first );
 use Getopt::Long;
 use Pod::Usage;
 use Try::Tiny;
@@ -34,10 +35,24 @@ if ( $git->status('-uno')->is_dirty ) {
     exit 1;
 }
 
-# Check if the conflict resolver script exists
-my $conflict_resolver_script = 'prettier';
-## TODO will need to use the tidy script from the target branch
-#die "Conflict resolver script '$conflict_resolver_script' not found.\n" unless -x $conflict_resolver_script;
+# Check if the conflict resolver script exists on the target branch
+my ( $conflict_resolver_script, $temp_fh )
+    ;    # Keep this scope for $temp_fh, or the file will be deleted after the try block
+try {
+    my @tidy = $git->RUN( 'show', "$target_branch:misc/devel/tidy.pl" );
+    $temp_fh                  = File::Temp->new( CLEANUP => 1 );
+    $conflict_resolver_script = $temp_fh->filename;
+    write_file( $conflict_resolver_script, join( "\n", @tidy ) );
+} catch {
+    say MAGENTA $_->error;
+    if ( $_->error =~ m{fatal: path 'misc/devel/tidy\.pl'} ) {
+        say RED sprintf "Conflict resolver script 'misc/devel/tidy.pl' not found on the target branch '%s'.\n",
+            $target_branch;
+    } else {
+        say RED "Something wrong happened when retrieving the conflict resolved script from the target branch.";
+    }
+    exit 2;
+};
 
 my ($source_branch) = $git->RUN( 'symbolic-ref', '--short', 'HEAD' );
 
@@ -152,7 +167,7 @@ while ( my ($i, $commit) = each @commits ) {
         write_file( $file, join "\n", @content );
 
         # Tidy the file
-        my $cmd = "$conflict_resolver_script --write $file";
+        my $cmd = "$conflict_resolver_script $file";
         try {
             system $cmd;
         } catch {
