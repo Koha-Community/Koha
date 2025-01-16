@@ -77,7 +77,7 @@ sub confirm_auto_template_params {
     $params->{method} = 'confirmautoill' if $self->{ui_context} eq 'staff';
     delete $params->{stage}              if $self->{ui_context} eq 'staff';
 
-    my @backends = $self->get_priority_backends();
+    my @backends = $self->get_priority_backends( $self->{ui_context} );
     return (
         whole              => $params,
         metadata           => $self->prep_metadata($params),
@@ -100,11 +100,15 @@ Returns backends ordered by AutoILLBackendPriority
 =cut
 
 sub get_priority_backends {
-    my ( $self, $params ) = @_;
+    my ( $self, $ui_context ) = @_;
+
+    my $opac_backends;
+    $opac_backends = Koha::ILL::Request::Config->new->opac_available_backends() if $ui_context eq 'opac';
 
     my @backends;
     my @priority_enabled_backends = split ",", C4::Context->preference('AutoILLBackendPriority');
     foreach my $backend (@priority_enabled_backends) {
+        next if $ui_context eq 'opac' && !grep { $_ eq $backend } @$opac_backends;
         my $loaded_backend          = Koha::ILL::Request->new->load_backend($backend);
         my $availability_check_info = $loaded_backend->_backend->availability_check_info( $self->{metadata} );
         push @backends, $availability_check_info if $availability_check_info;
