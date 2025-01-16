@@ -394,7 +394,6 @@ my $target_map = {
     # ignore files and directories created by the install itself
     './pm_to_blib'      => 'NONE',
     './blib'            => 'NONE',
-    '.eslintrc.json'    => 'NONE',
     '.prettierrc.js'    => 'NONE',
     '.sass-lint.yml'    => 'NONE',
     '.scss-lint.yml'    => 'NONE',
@@ -405,6 +404,7 @@ my $target_map = {
     'tsconfig.json'     => 'NONE',
     'webpack.config.js' => 'NONE',
     'rspack.config.js'  => 'NONE',
+    'eslint.config.mjs' => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
