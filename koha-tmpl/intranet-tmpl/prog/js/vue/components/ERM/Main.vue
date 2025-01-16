@@ -102,11 +102,11 @@ export default {
                 av_item_reports_metrics: "ERM_ITEM_REPORTS_METRICS",
             }
 
-            let av_cat_array = Object.keys(authorised_values).map(function (
-                av_cat
-            ) {
-                return '"' + authorised_values[av_cat] + '"'
-            })
+            let av_cat_array = Object.keys(authorised_values).map(
+                function (av_cat) {
+                    return '"' + authorised_values[av_cat] + '"'
+                }
+            )
 
             promises.push(
                 av_client.values
@@ -184,7 +184,9 @@ form .v-select {
 }
 
 .v-select,
-input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not(
+        [type="checkbox"]
+    ):not([type="radio"]),
 textarea {
     border-color: rgba(60, 60, 60, 0.26);
     border-width: 1px;

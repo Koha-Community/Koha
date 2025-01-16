@@ -160,23 +160,25 @@ export default {
                         )
                     },
                     initComplete: function () {
-                        $.fn.dataTable.ext.search.push(function apply_filter(
-                            settings,
-                            data,
-                            dataIndex,
-                            row
-                        ) {
-                            return (
-                                row.package.name.match(
-                                    new RegExp(filters.package_name, "i")
-                                ) &&
-                                (filters.selection_type == 0 ||
-                                    (filters.selection_type == 1 &&
-                                        row.is_selected) ||
-                                    (filters.selection_type == 2 &&
-                                        !row.is_selected))
-                            )
-                        })
+                        $.fn.dataTable.ext.search.push(
+                            function apply_filter(
+                                settings,
+                                data,
+                                dataIndex,
+                                row
+                            ) {
+                                return (
+                                    row.package.name.match(
+                                        new RegExp(filters.package_name, "i")
+                                    ) &&
+                                    (filters.selection_type == 0 ||
+                                        (filters.selection_type == 1 &&
+                                            row.is_selected) ||
+                                        (filters.selection_type == 2 &&
+                                            !row.is_selected))
+                                )
+                            }
+                        )
                     },
                 },
             })

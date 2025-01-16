@@ -120,7 +120,9 @@ form .v-select {
 }
 
 .v-select,
-input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]),
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not(
+        [type="checkbox"]
+    ),
 textarea {
     border-color: rgba(60, 60, 60, 0.26);
     border-width: 1px;
