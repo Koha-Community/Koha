@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "35152",
@@ -30,12 +31,12 @@ return {
                 undef, $insert_id, $routinglistnote
             );
 
-            say $out "Added 'RoutingListNote' additional content";
+            say_success( $out, "Added 'RoutingListNote' HTML customization" );
         }
 
         # Remove old system preference
         $dbh->do("DELETE FROM systempreferences WHERE variable='RoutingListNote'") == 1
-            && say $out "Removed system preference 'RoutingListNote'";
+            && say_success( $out, "Removed system preference 'RoutingListNote'" );
 
     },
 };
