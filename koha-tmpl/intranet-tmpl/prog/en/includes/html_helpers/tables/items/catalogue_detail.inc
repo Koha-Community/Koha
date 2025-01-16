@@ -17,7 +17,7 @@
                 [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="itype">Item type</th>[% END %]
                 <th id="[% tab | html %]_holdingbranch" data-colname="holdingbranch">Current library</th>
                 <th id="[% tab | html %]_homebranch" data-colname="homebranch">Home library</th>
-                <th id="[% tab | html %]_loction" data-colname="location">Shelving location</th>
+                <th id="[% tab | html %]_location" data-colname="location">Shelving location</th>
                 <th id="[% tab | html %]_ccode" data-colname="ccode">Collection</th>
                 [% IF Koha.Preference('EnableItemGroups') %]
                     <th id="[% tab | html %]_item_group" data-colname="item_group">Item group</th>
