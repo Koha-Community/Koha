@@ -50,7 +50,7 @@ while ( my $s = $rs->next ) {
       };
 }
 
-my $translated_languages = C4::Languages::getTranslatedLanguages( 'intranet', C4::Context->preference('template') );
+my $translated_languages = C4::Languages::getTranslatedLanguages();    # opac and intranet
 
 $template->param(
     translations => \@translations,
