@@ -34,8 +34,8 @@ return {
         }
 
         # Remove old system preference
-        $dbh->do("DELETE FROM systempreferences WHERE variable='RoutingListNote'");
-        say $out "Removed system preference 'RoutingListNote'";
+        $dbh->do("DELETE FROM systempreferences WHERE variable='RoutingListNote'") == 1
+            && say $out "Removed system preference 'RoutingListNote'";
 
     },
 };
