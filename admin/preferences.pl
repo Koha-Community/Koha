@@ -93,7 +93,7 @@ sub _get_chunk {
             $interface = 'intranet';
             $theme     = C4::Context->preference('template');
         }
-        $chunk->{'languages'} = getTranslatedLanguages( $interface, $theme, undef, $current_languages );
+        $chunk->{'languages'} = getTranslatedLanguages( $interface, $theme );
         $chunk->{'type'} = 'languages';
     } elsif ( $options{ 'choices' } ) {
         my $add_blank;

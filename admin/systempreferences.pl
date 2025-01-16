@@ -186,7 +186,7 @@ sub GetPrefParams {
             $interface = 'intranet';
             $theme     = C4::Context->preference('template');
         }
-        my $languages_loop = getTranslatedLanguages( $interface, $theme, $lang, $currently_selected_languages );
+        my $languages_loop = getTranslatedLanguages( $interface, $theme, $lang );
 
         $params->{'languages_loop'}    = $languages_loop;
         $params->{'type_langselector'} = 1;

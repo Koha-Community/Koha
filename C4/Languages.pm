@@ -113,6 +113,8 @@ Returns a reference to an array of hashes:
 
 sub getTranslatedLanguages {
     my ($interface, $theme, $current_language) = @_;
+    $interface //= q{};
+    $theme     //= q{};
     my @languages;
 
     my @enabled_languages;
