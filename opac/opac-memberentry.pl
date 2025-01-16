@@ -100,7 +100,7 @@ if ( defined $min ) {
     );
 }
 
-my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
+my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('opacthemes') );
 
 $template->param(
     op                => $op,
