@@ -200,8 +200,8 @@ import { storeToRefs } from "pinia";
 
 export default {
     setup() {
-        const mainStore = inject("mainStore");
-        const { authorisedValues } = storeToRefs(mainStore);
+        const ERMStore = inject("ERMStore");
+        const { authorisedValues } = storeToRefs(ERMStore);
 
         return {
             authorisedValues,

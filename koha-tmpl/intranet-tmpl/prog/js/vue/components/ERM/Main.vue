@@ -43,11 +43,12 @@ export default {
 
         const mainStore = inject("mainStore");
 
-        const { loading, loaded, setError, loadAuthorisedValues } = mainStore;
+        const { loading, loaded, setError } = mainStore;
 
         const ERMStore = inject("ERMStore");
 
         const { config, authorisedValues } = storeToRefs(ERMStore);
+        const { loadAuthorisedValues } = ERMStore;
 
         return {
             vendorStore,
@@ -70,8 +71,6 @@ export default {
         this.loading();
 
         const fetch_config = () => {
-            let promises = [];
-
             const acq_client = APIClient.acquisition;
             acq_client.vendors.getAll().then(
                 vendors => {
@@ -79,32 +78,29 @@ export default {
                 },
                 error => {}
             );
-            this.loadAuthorisedValues(this.authorisedValues).then(() => {
+            this.loadAuthorisedValues(
+                this.authorisedValues,
+                this.ERMStore
+            ).then(() => {
                 this.loaded();
                 this.initialized = true;
             });
         };
 
         const client = APIClient.erm;
-        client.config
-            .get()
-            .then(config => {
-                this.config = config;
-                if (this.config.settings.ERMModule != 1) {
-                    this.loaded();
-                    return this.setError(
-                        this.$__(
-                            "The e-resource management module is disabled, turn on <a href='/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule'>ERMModule</a> to use it"
-                        ),
-                        false
-                    );
-                }
-                return fetch_config();
-            })
-            .then(() => {
+        client.config.get().then(config => {
+            this.config = config;
+            if (this.config.settings.ERMModule != 1) {
                 this.loaded();
-                this.initialized = true;
-            });
+                return this.setError(
+                    this.$__(
+                        'The e-resource management module is disabled, turn on <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=ERMModule">ERMModule</a> to use it'
+                    ),
+                    false
+                );
+            }
+            return fetch_config();
+        });
     },
     methods: {
         async filterProviders(navigationTree) {
