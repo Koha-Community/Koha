@@ -82,7 +82,7 @@ subtest 'when interface is not intranet or opac' => sub {
 
     Koha::Language->set_requested_language('fr-FR');
     $cache->clear_from_cache('getlanguage');
-    is(C4::Languages::getlanguage(), 'fr-FR', 'but language requested through Koha::Language is prefered');
+    is(C4::Languages::getlanguage(), 'fr-FR', 'but language requested through Koha::Language is preferred');
 
     @languages = ();
     $cache->clear_from_cache('getlanguage');

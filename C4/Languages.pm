@@ -698,7 +698,7 @@ sub getlanguage {
             @languages = split /,/, $preference_value;
         }
 
-        # Chose language from the URL
+        # Choose language from the URL
         my $cgi_param_language = $cgi->param( 'language' );
         if ( defined $cgi_param_language && any { $_ eq $cgi_param_language } @languages) {
             $language = $cgi_param_language;
