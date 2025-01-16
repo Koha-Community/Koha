@@ -405,8 +405,7 @@
                         </optgroup>
                     </select>
                     [%- SET pref_BlockExpiredPatronOpacActions_link = '<a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=BlockExpiredPatronOpacActions&ok=Search">BlockExpiredPatronOpacActions</a>' -%]
-                    <div class="hint">
-                        Choose which OPAC actions, if any, should be blocked for expired patrons in this category. Alternatively, you can use the system preference [%- pref_BlockExpiredPatronOpacActions_link | $raw | $KohaSpan -%] instead.
+                    <div class="hint">Choose which OPAC actions, if any, should be blocked for expired patrons in this category. Alternatively, you can use the system preference [%- pref_BlockExpiredPatronOpacActions_link | $raw | $KohaSpan -%] instead.</div>
                 </li>
                 [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' )  %]
                   <li><label for="checkprevcheckout">Check for previous checkouts: </label>
