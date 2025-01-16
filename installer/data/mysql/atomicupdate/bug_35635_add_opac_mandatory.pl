@@ -8,16 +8,16 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        $dbh->do(
-            q{
-                ALTER TABLE borrower_attribute_types
-                MODIFY COLUMN `mandatory` tinyint(1) DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not in the staff interface'
-            }
-        );
-
-        say $out "Modified column 'borrower_attribute_types.mandatory'";
-
         if ( !column_exists( 'borrower_attribute_types', 'opac_mandatory' ) ) {
+
+            $dbh->do(
+                q{
+                    ALTER TABLE borrower_attribute_types
+                    MODIFY COLUMN `mandatory` tinyint(1) DEFAULT 0 COMMENT 'defines if the attribute is mandatory or not in the staff interface'
+                }
+            );
+            say $out "Modified column 'borrower_attribute_types.mandatory'";
+
             $dbh->do(
                 q{
                     ALTER TABLE borrower_attribute_types
@@ -25,7 +25,6 @@ return {
                     AFTER `mandatory`
                 }
             );
-
             say $out "Added column 'borrower_attribute_types.opac_mandatory'";
 
             $dbh->do(
