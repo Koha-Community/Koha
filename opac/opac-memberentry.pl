@@ -475,7 +475,7 @@ sub CheckMandatoryAttributes {
     for my $attribute (@$attributes) {
         my $attr = Koha::Patron::Attribute::Types->find( $attribute->{code} );
         push @empty_mandatory_fields, $attribute->{code}
-            if $attr && $attr->mandatory && $attribute->{attribute} =~ m|^\s*$|;
+            if $attr && $attr->opac_mandatory && $attribute->{attribute} =~ m|^\s*$|;
     }
 
     return @empty_mandatory_fields;
