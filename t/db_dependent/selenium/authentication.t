@@ -142,7 +142,7 @@ SKIP: {
     };
 
     subtest 'OPAC interface authentication' => sub {
-        plan tests => 7;
+        plan tests => 11;
 
         my $mainpage = $s->opac_base_url . q|opac-main.pl|;
 
@@ -159,6 +159,23 @@ SKIP: {
         # Using the modal
         $driver->find_element('//a[@class="nav-link login-link loginModal-trigger"]')->click;
         $s->fill_form( { muserid => $patron->userid, mpassword => $password } );
+
+        is(
+            $driver->find_element('//div[@id="loginModal"]//input[@id="mpassword"]')->get_attribute('type'),
+            'password',
+            'Password field is obscured initially'
+        );
+
+        $driver->find_element('//input[@id="show-password-toggle-checkbox-modal"]')->click;
+
+        is(
+            $driver->find_element('//div[@id="loginModal"]//input[@id="mpassword"]')->get_attribute('type'),
+            'text',
+            'Password field is shown'
+        );
+
+        $driver->find_element('//input[@id="show-password-toggle-checkbox-modal"]')->click;
+
         $driver->find_element('//div[@id="loginModal"]//input[@type="submit"]')->click;
         like( $driver->get_title, qr(Koha online catalog), 'Patron without permission should be able to login to the OPAC using the modal' );
         $driver->find_element('//div[@id="userdetails"]');
@@ -190,6 +207,22 @@ SKIP: {
 
         # Using the form on the right
         $s->fill_form( { userid => $patron->userid, password => $password } );
+
+        is(
+            $driver->find_element('//div[@id="login"]//input[@id="password"]')->get_attribute('type'),
+            'password',
+            'Password field is obscured initially'
+        );
+
+        $driver->find_element('//input[@id="show-password-toggle-checkbox-main"]')->click;
+
+        is(
+            $driver->find_element('//div[@id="login"]//input[@id="password"]')->get_attribute('type'),
+            'text',
+            'Password field is shown'
+        );
+
+        $driver->find_element('//input[@id="show-password-toggle-checkbox-main"]')->click;
         $s->submit_form;
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron without permissions should be able to login to the OPAC using the form on the right');
