@@ -1,5 +1,7 @@
 package Koha::App::Plugin::Language;
 
+# Copyright 2025 Koha development team
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
