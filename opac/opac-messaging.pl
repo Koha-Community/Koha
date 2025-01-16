@@ -90,7 +90,7 @@ if( $opac_messaging && C4::Context->preference("SMSSendDriver") eq 'Email' ) {
 my $new_session_id = $query->cookie('CGISESSID');
 
 if ( C4::Context->preference('TranslateNotices') ) {
-    my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('template') );
+    my $translated_languages = C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('opacthemes') );
     $template->param(
         languages => $translated_languages,
         patron_lang => $patron->lang,

@@ -44,10 +44,8 @@ sub get_default {
     my $self = shift;
     my $lang = $self->lang;
     if ( $lang eq 'default' ) {
-        my $translated_languages = C4::Languages::getTranslatedLanguages(
-            'opac',
-            C4::Context->preference('template')
-        );
+        my $translated_languages =
+            C4::Languages::getTranslatedLanguages( 'opac', C4::Context->preference('opacthemes') );
         $lang = @{ @{$translated_languages}[0]->{sublanguages_loop} }[0]->{rfc4646_subtag};
     }
 
