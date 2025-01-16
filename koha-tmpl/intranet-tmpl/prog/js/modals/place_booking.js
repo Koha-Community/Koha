@@ -435,9 +435,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     f => f.name === "dateDisable"
                 );
                 if (disableExists.length === 0) {
-                    periodPicker.config.disable.push(function dateDisable(
-                        date
-                    ) {
+                    periodPicker.config.disable.push(
+                        function dateDisable(date) {
                         // set local copy of selectedDates
                         let selectedDates = periodPicker.selectedDates;
 
@@ -579,7 +578,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             }
 
                             // patron has not yet selected a start date (start date checks)
-                            else if (date <= end_date && date >= start_date) {
+                                else if (
+                                    date <= end_date &&
+                                    date >= start_date
+                                ) {
                                 // same item, disable date
                                 if (
                                     booking.item_id &&
@@ -607,7 +609,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                 //   level booking is the item you just booked out overlapping the end date.
                             }
                         }
-                    });
+                        }
+                    );
                 }
 
                 // Setup listener for itemtype select2
@@ -727,7 +730,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     f => f.name === "periodChange"
                 );
                 if (changeExists.length === 0) {
-                    periodPicker.config.onChange.push(function periodChange(
+                    periodPicker.config.onChange.push(
+                        function periodChange(
                         selectedDates,
                         dateStr,
                         instance
@@ -748,7 +752,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             // Add subsequent dates based on renewalsAllowed and renewalLength
                             for (let i = 0; i < renewalsAllowed; i++) {
                                 nextDate.setDate(
-                                    nextDate.getDate() + parseInt(renewalLength)
+                                        nextDate.getDate() +
+                                            parseInt(renewalLength)
                                 );
                                 boldDates.push(new Date(nextDate));
                             }
@@ -784,9 +789,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                             );
 
                             // set available items in select2
-                            let booked_items = bookings.filter(function (
-                                booking
-                            ) {
+                                let booked_items = bookings.filter(
+                                    function (booking) {
                                 let start_date = flatpickr.parseDate(
                                     booking.start_date
                                 );
@@ -803,8 +807,10 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                 }
                                 // This booking overlaps
                                 return true;
-                            });
-                            $("#booking_item_id > option").each(function () {
+                                    }
+                                );
+                                $("#booking_item_id > option").each(
+                                    function () {
                                 let option = $(this);
                                 if (
                                     booking_item_id &&
@@ -812,13 +818,19 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                 ) {
                                     option.prop("disabled", false);
                                 } else if (
-                                    booked_items.some(function (booked_item) {
+                                            booked_items.some(
+                                                function (booked_item) {
                                         return (
-                                            option.val() == booked_item.item_id
+                                                        option.val() ==
+                                                        booked_item.item_id
                                         );
-                                    })
+                                                }
+                                            )
                                 ) {
-                                    option.attr("data-available", false);
+                                            option.attr(
+                                                "data-available",
+                                                false
+                                            );
                                     option.prop("disabled", true);
                                 } else {
                                     option.attr("data-available", true);
@@ -826,22 +838,26 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                         option.prop("disabled", false);
                                     }
                                 }
-                            });
+                                    }
+                                );
                             $("#booking_item_id").trigger("change.select2");
                         }
                         // Range not set, reset field options and flatPickr state
                         else {
                             boldDates = [];
                             instance.set("maxDate", null);
-                            $("#booking_item_id > option").each(function () {
+                                $("#booking_item_id > option").each(
+                                    function () {
                                 let option = $(this);
                                 if (option.data("pickup")) {
                                     option.prop("disabled", false);
                                 }
-                            });
+                                    }
+                                );
                             $("#booking_item_id").trigger("change.select2");
                         }
-                    });
+                        }
+                    );
                 }
 
                 // Create a bookings store keyed on date
@@ -877,12 +893,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                     f => f.name === "dayCreate"
                 );
                 if (dayCreateExists.length === 0) {
-                    periodPicker.config.onDayCreate.push(function dayCreate(
-                        dObj,
-                        dStr,
-                        instance,
-                        dayElem
-                    ) {
+                    periodPicker.config.onDayCreate.push(
+                        function dayCreate(dObj, dStr, instance, dayElem) {
                         const currentDate = dayElem.dateObj;
                         const dateString = currentDate
                             .toISOString()
@@ -906,7 +918,8 @@ $("#placeBookingModal").on("show.bs.modal", function (e) {
                                 dots.appendChild(dot);
                             });
                         }
-                    });
+                        }
+                    );
                 }
 
                 // Add hints for days before the start range and after the end range

@@ -1047,7 +1047,9 @@ h2 {
     width: 100%;
     text-align: left;
 }
-input:not([type="submit"]):not([type="search"]):not([type="button"]):not([type="checkbox"]) {
+input:not([type="submit"]):not([type="search"]):not([type="button"]):not(
+        [type="checkbox"]
+    ) {
     min-width: 5%;
 }
 .month_selectors {
