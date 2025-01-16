@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Koha::Installer::Output qw(say_warning say_success say_info);
 
 return {
     bug_number  => "35154",
@@ -29,12 +30,12 @@ return {
                 undef, $insert_id, $stafflogininstructions
             );
 
-            say $out "Added 'StaffLoginInstructions' HTML customization";
+            say_success( $out, "Added 'StaffLoginInstructions' HTML customization" );
         }
 
         # Remove old system preference
         $dbh->do("DELETE FROM systempreferences WHERE variable='StaffLoginInstructions'");
-        say $out "Removed system preference 'StaffLoginInstructions'";
+        say_success( $out, "Removed system preference 'StaffLoginInstructions'" );
 
     },
 };
