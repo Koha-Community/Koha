@@ -11,8 +11,8 @@ return {
         say $dbh->do(
             q{
             UPDATE columns_settings
-            SET columnname = REGEXP_REPLACE(columnname, '.*holdings_', '')
-            WHERE module="catalogue" AND page="detail" AND ( tablename="holdings_table" OR tablename="otherholdings_table")
+            SET columnname = SUBSTRING(columnname,LOCATE("_",columnname)+1)
+            WHERE module="catalogue" AND page="detail" AND ( tablename="holdings_table" OR tablename="otherholdings_table") AND (columnname LIKE 'holdings_%' OR columnname LIKE 'otherholdings_%')
         }
         );
         say_success( $out, "Column names renamed" );
