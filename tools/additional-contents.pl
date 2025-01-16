@@ -226,7 +226,7 @@ if ( $op eq 'list' ) {
     $template->param( additional_contents => $additional_contents );
 }
 
-my $translated_languages = C4::Languages::getTranslatedLanguages;
+my $translated_languages = C4::Languages::getTranslatedLanguages();
 my @languages;
 for my $language (@$translated_languages) {
     for my $sublanguage ( @{ $language->{sublanguages_loop} } ) {
