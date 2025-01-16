@@ -6,7 +6,6 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% PROCESS 'i18n.inc' %]
-[% INCLUDE 'js-date-format.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% FILTER collapse %]
     [% t("Invoices") | html %] &rsaquo;
@@ -14,7 +13,6 @@
     [% t("Koha") | html %]
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
 </head>
 
 <body id="acq_invoices" class="acq">
@@ -426,6 +424,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'select2.inc' %]
+    [% INCLUDE 'js-date-format.inc' %]
     <script>
         $(document).ready(function() {
             $('[id^="CheckAll"]').click( function() {
