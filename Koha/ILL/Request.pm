@@ -1959,6 +1959,25 @@ sub append_unauthenticated_notes {
     $self->notesopac($unauthenticated_notes_text)->store;
 }
 
+=head3 unauth_request_data_check
+
+    unauth_request_data_check($metadata);
+
+Checks if unauthenticated request data is present
+
+=cut
+
+sub unauth_request_data_check {
+    my ($metadata) = @_;
+
+    return 1 unless C4::Context->preference("ILLOpacUnauthenticatedRequest");
+
+    return
+           $metadata->{unauthenticated_first_name}
+        && $metadata->{unauthenticated_last_name}
+        && $metadata->{unauthenticated_email};
+}
+
 =head3 append_to_note
 
     append_to_note("Some text");

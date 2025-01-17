@@ -24,6 +24,7 @@ use C4::Installer;
 
 use Koha::DateUtils qw/ dt_from_string /;
 use Koha::I18N      qw(__);
+use Koha::ILL::Request;
 use Koha::ILL::Requests;
 use Koha::ILL::Request::Attribute;
 use C4::Biblio  qw( AddBiblio );
@@ -292,7 +293,7 @@ sub create {
             C4::Context->preference("ILLOpacUnauthenticatedRequest") && !$other->{'cardnumber'};
         if ($unauthenticated_request) {
             ( $failed, $result ) = _validate_form_params( $other, $result, $params );
-            if ( !_unauth_request_data_check($other) ) {
+            if ( !Koha::ILL::Request::unauth_request_data_check($other) ) {
                 $result->{status} = "missing_unauth_data";
                 $result->{value}  = $params;
                 $failed           = 1;
@@ -1226,25 +1227,6 @@ sub _set_suppression {
     $record->append_fields($new942);
 
     return 1;
-}
-
-=head3 _unauth_request_data_check
-
-    _unauth_request_data_check($other);
-
-Checks if unauthenticated request data is present
-
-=cut
-
-sub _unauth_request_data_check {
-    my ($other) = @_;
-
-    return 1 unless C4::Context->preference("ILLOpacUnauthenticatedRequest");
-
-    return
-           $other->{unauthenticated_first_name}
-        && $other->{unauthenticated_last_name}
-        && $other->{unauthenticated_email};
 }
 
 =head3 _validate_form_params
