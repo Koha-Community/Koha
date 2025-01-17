@@ -463,6 +463,31 @@ sub _convert_facets {
     return if !$es;
 
     use locale;
+    state $languages;
+    my $lang;
+    unless ($languages) {
+        use CGI qw('-no_undef_params' -utf8 );
+        use C4::Languages;
+        my $cgi = CGI->new;
+        if ($cgi) {
+            $lang = C4::Languages::getlanguage($cgi);
+            $lang = substr( $lang, 0, 2 );    #Get db code from Koha lang value
+                # $rfc_lang = C4::Languages::get_rfc4646_from_iso639($lang);
+        }
+        $lang //= 'en';
+        my $all_languages = C4::Languages::getLanguages($lang);
+        $languages = {
+            map {
+                $_->{iso639_2_code} => C4::Languages::language_get_description(
+                    C4::Languages::get_rfc4646_from_iso639(
+                        $_->{iso639_2_code}
+                    ),
+                    $lang,
+                    'language'
+                )
+            } @$all_languages
+        };
+    }
 
     my %type_to_label = map { $_->name => { order => $_->facet_order, av_cat => $_->authorised_value_category, label => $_->label } }
         Koha::SearchEngine::Elasticsearch->get_facet_fields;
@@ -480,7 +505,8 @@ sub _convert_facets {
         location => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @locations },
         ccode => { map { $_->authorised_value => ( $opac ? ( $_->lib_opac || $_->lib ) : $_->lib ) } @collections },
         holdingbranch => $library_names,
-        homebranch => $library_names
+        homebranch => $library_names,
+        ln => $languages,
     );
     my @facets;
     $exp_facet //= '';
