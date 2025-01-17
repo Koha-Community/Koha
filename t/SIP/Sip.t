@@ -56,7 +56,7 @@ warning_is { $invalidTest = C4::SIP::Sip::Checksum::verify_cksum("1234567") }
 is($invalidTest, 0, "Checksum: 1234567 is invalid as expected");
 
 subtest 'remove_password_from_message' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     is(
         C4::SIP::Sip::remove_password_from_message("INPUT MSG: '9300CNterm1|COterm1|CPCPL|'"),
@@ -83,6 +83,13 @@ subtest 'remove_password_from_message' => sub {
             "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC1234|AD1234|BON"),
         '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|AD***|BON',
         "11 Checkout"
+    );
+
+    is(
+        C4::SIP::Sip::remove_password_from_message(
+            "11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC12|34|AD1234|BON"),
+        '11YN20240903    134450                  AOCPL|AA23529000035676|AB39999000003697|AC***|34|AD***|BON',
+        "11 Checkout with pipe in password"
     );
 
     is(
