@@ -34,7 +34,7 @@ use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions::Ill;
-use Koha::I18N qw(__);
+use Koha::I18N qw(__ __x);
 use Koha::ILL::Backend::Standard;
 use Koha::ILL::Batches;
 use Koha::ILL::Comments;
@@ -1937,6 +1937,26 @@ sub attach_processors {
             $update->attach_processor($processor);
         }
     }
+}
+
+=head3 append_unauthenticated_notes
+
+    append_unauthenticated_notes($metadata);
+
+Append unauthenticated details to staff and opac notes
+
+=cut
+
+sub append_unauthenticated_notes {
+    my ( $self, $metadata ) = @_;
+    my $unauthenticated_notes_text = __x(
+        "Unauthenticated request.\nFirst name: {first_name}.\nLast name: {last_name}.\nEmail: {email}.",
+        first_name => $metadata->{'unauthenticated_first_name'},
+        last_name  => $metadata->{'unauthenticated_last_name'},
+        email      => $metadata->{'unauthenticated_email'}
+    );
+    $self->append_to_note($unauthenticated_notes_text);
+    $self->notesopac($unauthenticated_notes_text)->store;
 }
 
 =head3 append_to_note

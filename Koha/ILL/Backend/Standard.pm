@@ -1015,15 +1015,7 @@ sub add_request {
         }
     } keys %{$request_details};
     $request->extended_attributes( \@request_details_array );
-
-    if ($unauthenticated_request) {
-        my $unauthenticated_notes_text =
-              "Unauthenticated request.\nFirst name: $params->{other}->{'unauthenticated_first_name'}"
-            . ".\nLast name: $params->{other}->{'unauthenticated_last_name'}."
-            . "\nEmail: $params->{other}->{'unauthenticated_email'}.";
-        $request->append_to_note($unauthenticated_notes_text);
-        $request->notesopac($unauthenticated_notes_text)->store;
-    }
+    $request->append_unauthenticated_notes( $params->{other} ) if $unauthenticated_request;
 
     return $request;
 }
