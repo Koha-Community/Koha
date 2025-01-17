@@ -178,11 +178,12 @@ sub opac_available_backends {
     my $reduced  = C4::Context->preference('ILLOpacbackends');
     my $backends = $self->available_backends($reduced);
     if ( !$loggedinuser && C4::Context->preference('ILLOpacUnauthenticatedRequest') ) {
-        foreach my $backend ( @{$backends} ) {
-            my $loaded_b = Koha::ILL::Request->new->load_backend($backend);
-            @$backends = grep { !/$backend/ } @$backends
-                if ( $loaded_b->_backend_capability('opac_unauthenticated_ill_requests') == 0 );
-        }
+        $backends = [
+            grep {
+                my $loaded_b = Koha::ILL::Request->new->load_backend($_);
+                $loaded_b->_backend_capability('opac_unauthenticated_ill_requests')
+            } @$backends
+        ];
     }
     return $backends;
 }
