@@ -157,32 +157,12 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
     # fix up item type for display
     my $item = Koha::Items->find( $itemnumber );
     my $biblio = $item->biblio;
+    my $hold   = Koha::Holds->find($reserve_id) or die "Hold for item $itemnumber not found\n";   #TODO Not very elegant
 
     if ( $cancel_reserve ) {
-        my $hold = Koha::Holds->find( $reserve_id );
-        if ( $hold ) {
             $hold->cancel( { charge_cancel_fee => !$forgivemanualholdsexpire, cancellation_reason => $cancel_reason} );
-        } # FIXME else?
-    } else {
-        my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
-
-        # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
-        # i.e., whether to apply waiting status
-        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
-
-        my $hold = Koha::Holds->find($reserve_id);
-        if ($diffBranchSend) {
-            my $tobranch = $hold->pickup_library();
-
-            # Add transfer, enqueue if one is already in the queue, and immediately set to in transit
-            my $transfer = $item->request_transfer( { to => $tobranch, reason => 'Reserve', enqueue => 1 } );
-            $transfer->transit;
-        }
-    }
     # check if we have other reserves for this document, if we have a result send the message of transfer
-    # FIXME do we need to do this if we didn't take the cancel_reserve branch above?
     my ( undef, $nextreservinfo, undef ) = CheckReserves( $item, C4::Context->preference('ConfirmFutureHolds') );
-
     if ( $userenv_branch ne $nextreservinfo->{'branchcode'} ) {
         my $patron = Koha::Patrons->find( $nextreservinfo->{'borrowernumber'} );
         $template->param(
@@ -192,6 +172,21 @@ if ( $query->param('reserve_id') && $op eq 'cud-affect_reserve') {
             patron         => $patron,
             diffbranch     => 1,
         );
+    }
+    } else {
+        my $diffBranchSend = ( $userenv_branch ne $diffBranchReturned ) ? $diffBranchReturned : undef;
+
+        # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
+        # i.e., whether to apply waiting status
+        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
+
+        if ($diffBranchSend) {
+            my $tobranch = $hold->pickup_library();
+
+            # Add transfer, enqueue if one is already in the queue, and immediately set to in transit
+            my $transfer = $item->request_transfer( { to => $tobranch, reason => 'Reserve', enqueue => 1 } );
+            $transfer->transit;
+        }
     }
 }
 
