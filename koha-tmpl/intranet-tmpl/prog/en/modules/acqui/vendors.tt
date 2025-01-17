@@ -30,6 +30,7 @@
         [% INCLUDE 'columns_settings.inc' %]
         [% INCLUDE 'js-patron-format.inc' %]
         [% INCLUDE 'js-date-format.inc' %]
+        [% INCLUDE 'format_price.inc' %]
         <script>
             const userPermissions = [% To.json(user_permissions) | $raw %];
             const currencies = [% To.json(currencies) | $raw %];

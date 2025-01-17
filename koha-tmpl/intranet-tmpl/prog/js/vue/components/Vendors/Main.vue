@@ -100,7 +100,7 @@ export default {
             this.vendorStore.currencies = currencies;
             this.vendorStore.gstValues = gstValues.map(gv => {
                 return {
-                    label: `${(gv.option * 100).toFixed(2)}%`,
+                    label: `${Number(gv.option * 100).format_price()}%`,
                     value: gv.option,
                 };
             });
