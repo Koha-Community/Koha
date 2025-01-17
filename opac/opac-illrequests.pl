@@ -117,7 +117,7 @@ if ( $op eq 'list' ) {
 } elsif ( $op eq 'cud-create' ) {
     if ( !$params->{backend} ) {
         my $req = Koha::ILL::Request->new;
-        $template->param( backends => $req->available_backends );
+        $template->param( backends => $backends );
     } else {
         $params->{backend} = 'Standard' if $params->{backend} eq 'FreeForm';
         my $request = Koha::ILL::Request->new->load_backend( $params->{backend} );
