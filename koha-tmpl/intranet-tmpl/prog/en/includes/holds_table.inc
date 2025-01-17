@@ -237,7 +237,7 @@
             [%- END -%]
                 [%- END -%]
                 <td>
-                    <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="request.pl?op=cancel&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                    <a class="cancel-hold" title="Cancel hold" data-borrowernumber="[% hold.borrowernumber | html %]" data-biblionumber="[% hold.biblionumber | html %]" data-id="[% hold.reserve_id | html %]" href="#">
                         <i class="fa fa-trash" aria-label="Cancel hold"></i>
                     </a>
                 </td>
