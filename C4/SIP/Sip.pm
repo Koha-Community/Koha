@@ -249,7 +249,7 @@ We do this by looking for:
 
   delimiter + AC/AD/CO + something + delimiter
 
-and replcing it with:
+and replacing it with:
 
   delimiter + field name + asterisks + delimiter
 
@@ -275,10 +275,10 @@ Messages and fields that can contain passwords:
 sub remove_password_from_message {
     my ($message) = @_;
 
-    $message =~ s/\Q${field_delimiter}\EAC.*?\Q${field_delimiter}\E/${field_delimiter}AC***${field_delimiter}/g;
-    $message =~ s/\Q${field_delimiter}\EAD.*?\Q${field_delimiter}\E/${field_delimiter}AD***${field_delimiter}/g;
-    $message =~ s/\Q${field_delimiter}\ECO.*?\Q${field_delimiter}\E/${field_delimiter}CO***${field_delimiter}/g;
-
+    # regex does not work with (AC|AD|CO), probably due to .*? and the g modifier
+    # NOTE: Does not work correctly if the password contains a field delimiter, but you cannot login either.
+    $message =~ s/\Q${field_delimiter}\E$_.*?\Q${field_delimiter}\E/${field_delimiter}$_***${field_delimiter}/g
+        for ( 'AC', 'AD', 'CO' );
     return $message;
 }
 
