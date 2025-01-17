@@ -100,7 +100,7 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`earliest_${data_type}`]
                                 ? row[`earliest_${data_type}`]
-                                : this.$__("N/A")
+                                : __("N/A")
                             return date
                         },
                     },
@@ -112,7 +112,7 @@ export default {
                         render: function (data, type, row, meta) {
                             const date = row[`latest_${data_type}`]
                                 ? row[`latest_${data_type}`]
-                                : this.$__("N/A")
+                                : __("N/A")
                             return date
                         },
                     }
