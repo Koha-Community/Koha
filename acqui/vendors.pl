@@ -48,7 +48,8 @@ $template->param(
     user_permissions => $user_permissions,
     currencies       => Koha::Acquisition::Currencies->search->unblessed,
     gst_values       => \@gst_values,
-    edifact          => C4::Context->preference('EDIFACT')
+    edifact          => C4::Context->preference('EDIFACT'),
+    marc_orders      => C4::Context->preference('MarcOrderingAutomation'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

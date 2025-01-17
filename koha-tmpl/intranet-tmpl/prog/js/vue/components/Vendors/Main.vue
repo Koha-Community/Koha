@@ -97,6 +97,7 @@ export default {
             this.loaded();
             this.userPermissions = userPermissions;
             this.config.settings.edifact = edifact;
+            this.config.settings.marcOrderAutomation = marcOrderAutomation;
             this.vendorStore.currencies = currencies;
             this.vendorStore.gstValues = gstValues.map(gv => {
                 return {
