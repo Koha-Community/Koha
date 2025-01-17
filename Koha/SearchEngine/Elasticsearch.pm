@@ -687,7 +687,22 @@ sub marc_records_to_documents {
                             if ($data) {
 				                # NOTE - dla 710 chcemy modyfikacji - nie chcemy wlaczac do faset wydawcow ($4)
                                 my @mappings = @{ $subfields_join_mappings->{$subfields_group} };
-				                @mappings = grep { $_->[0] !~ /__facet$/ } @mappings if $field->tag eq '710' && $field->subfield('4');
+                                if ( $tag eq '710' ) {
+                                    if (   $field->subfield('4')
+                                        && $field->subfield('4') =~ /pbl/ )
+                                    {
+                                        @mappings = grep {
+                                                 $_->[0] !~ /__facet$/
+                                              || $_->[0] eq
+                                              'publisher-710__facet'
+                                        } @mappings;
+                                    }
+                                    else {
+                                        @mappings =
+                                          grep { $_->[0] !~ /^publisher-710/ }
+                                          @mappings;
+                                    }
+                                }
                                 $self->_process_mappings(\@mappings, $data, $record_document, {
                                         altscript => $altscript,
                                         data_source => 'subfields_group',
