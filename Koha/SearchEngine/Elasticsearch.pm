@@ -524,7 +524,7 @@ sub _process_mappings {
             # Nonfiling chars does not make sense for multiple values
             # Only apply on first element
             if ( $nonfiling_chars > 0 ) {
-                if ($sort) {
+                if ( $sort || $target =~ /__facet$/ ) {
                     $values->[0] = substr $values->[0], $nonfiling_chars;
                 } else {
                     push @{$values}, substr $values->[0], $nonfiling_chars;
@@ -1297,6 +1297,15 @@ sub _get_marc_mapping_rules {
         foreach my $indicator (keys %title_fields) {
             foreach my $field_tag (@{$title_fields{$indicator}}) {
                 my $mappings = $rules->{data_fields}->{$field_tag}->{subfields}->{a} // [];
+                foreach my $subfields_group (
+                    keys
+                    %{ $rules->{data_fields}->{$field_tag}->{subfields_join} } )
+                {
+                    next unless $subfields_group =~ /^a/;
+                    push @$mappings,
+                      @{ $rules->{data_fields}->{$field_tag}->{subfields_join}
+                          ->{$subfields_group} };
+                }
                 foreach my $mapping ( @{$mappings} ) {
                     # Mark this as to be processed for nonfiling characters indicator
                     # later on in _process_mappings
