@@ -622,6 +622,8 @@ if ( $record && $op eq 'duplicate' &&
     $record->delete_fields(@control_num);
 }
 if ( $record && $op eq 'duplicate' ) {
+    $record->delete_fields( $record->field('001') );
+    $record->delete_fields( $record->field('035') );
     if ( C4::Context->preference('marcflavour') eq 'MARC21' && $record->field('008') ) {
         my $s008 = $record->field('008')->data;
         my $date = POSIX::strftime( "%y%m%d", localtime );

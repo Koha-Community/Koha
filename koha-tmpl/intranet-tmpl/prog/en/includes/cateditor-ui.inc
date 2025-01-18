@@ -423,6 +423,10 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             if ( !record.error ) {
                 var remove_control_num = [% IF Koha.Preference('autoControlNumber') == 'OFF' %] false [% ELSE %] true [% END %];
                 if( remove_control_num ){ record.removeField("001"); }
+                if( parts[0] === 'duplicate' ) {
+                    while(record.hasField("001")) record.removeField("001");
+                    while(record.hasField("035")) record.removeField("035");
+                }
                 editor.displayRecord( record );
                 editor.focus();
             }
