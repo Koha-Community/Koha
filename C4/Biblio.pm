@@ -217,6 +217,8 @@ sub AddBiblio {
         return;
     }
 
+    $record->delete_fields( $record->field('001') );
+
     my $schema = Koha::Database->schema;
     my ( $biblionumber, $biblioitemnumber );
     try {
