@@ -696,6 +696,9 @@ sub AddAuthority {
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
 
     my $heading = $authority->heading_object( { record => $record } );
+    my $control_number;
+    $control_number = $record->subfield( '010', 'a' )
+      if $record->subfield( '010', 'a' );
 
     # Update
     $authority->update(
@@ -704,6 +707,7 @@ sub AddAuthority {
             marc         => $record->as_usmarc,
             marcxml      => $record->as_xml_record($format),
             heading      => $heading ? $heading->display_form : '',
+            control_number => $control_number,
         }
     );
 

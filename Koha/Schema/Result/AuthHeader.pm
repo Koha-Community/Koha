@@ -50,6 +50,12 @@ __PACKAGE__->table("auth_header");
   default_value: current_timestamp
   is_nullable: 0
 
+=head2 control_number
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 20
+
 =head2 heading
 
   data_type: 'longtext'
@@ -64,11 +70,6 @@ __PACKAGE__->table("auth_header");
 =head2 authtrees
 
   data_type: 'longtext'
-  is_nullable: 1
-
-=head2 marc
-
-  data_type: 'blob'
   is_nullable: 1
 
 =head2 linkid
@@ -102,14 +103,14 @@ __PACKAGE__->add_columns(
     default_value => \"current_timestamp",
     is_nullable => 0,
   },
+  "control_number",
+  { data_type => "varchar", is_nullable => 1, size => 20 },
   "heading",
   { data_type => "longtext", is_nullable => 1 },
   "origincode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
   { data_type => "longtext", is_nullable => 1 },
-  "marc",
-  { data_type => "blob", is_nullable => 1 },
   "linkid",
   { data_type => "bigint", is_nullable => 1 },
   "marcxml",
@@ -127,6 +128,20 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("authid");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<cnumberidx>
+
+=over 4
+
+=item * L</control_number>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("cnumberidx", ["control_number"]);
 
 =head1 RELATIONS
 
@@ -146,8 +161,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2024-07-31 14:45:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQKXXu/9rBZ89hnDzJMsvA
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2025-07-29 11:11:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:40wfbBwncZlZarVBtCp8EA
 
 sub koha_object_class {
     'Koha::Authority';
