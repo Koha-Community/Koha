@@ -30,6 +30,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::ImportBatch;
 use C4::XSLT;
 use C4::Templates;
+use C4::Record;
 use Koha::RecordProcessor;
 
 my $input       = CGI->new;
@@ -75,6 +76,9 @@ if(!ref $record) {
 }
 
 $record_processor->process($record);
+my ( $error, $record_iso ) =
+  marc2marc( $record, 'marcstd', C4::Context->preference('marcflavour') );
+$record = MARC::Record->new_from_usmarc($record_iso);
 
 if ($view eq 'card' || $view eq 'html') {
     my $xml = $record->as_xml;

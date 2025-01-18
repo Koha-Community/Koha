@@ -61,6 +61,7 @@ use C4::Record qw( marc2cites );
 use C4::Reserves qw( IsAvailableForItemLevelRequest );
 use C4::Members;
 use C4::Koha qw( GetNormalizedISBN );
+use C4::Record;
 use List::MoreUtils qw( uniq );
 use Koha::Biblios;
 use Koha::CirculationRules;
@@ -152,6 +153,9 @@ if ( !$record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
+my ( $error, $record_iso ) =
+  marc2marc( $record, 'marcstd', C4::Context->preference('marcflavour') );
+$record = MARC::Record->new_from_usmarc($record_iso);
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){

@@ -26,6 +26,7 @@ use C4::Auth   qw( get_template_and_user );
 use C4::Biblio qw(GetMarcSubjects);
 use C4::Output qw( output_html_with_http_headers );
 use C4::Templates;
+use C4::Record;
 use Koha::Biblios;
 use Koha::Email;
 use Koha::Patrons;
@@ -55,6 +56,9 @@ if ( $op eq "cud-send" && $email_add && $user_email ) {
         $bib = int($bib);
         my $biblio = Koha::Biblios->find($bib) or next;
         $iso2709 .= $biblio->metadata_record( { interface => 'opac' } )->as_usmarc();
+        my ( $error, $record_iso ) = marc2marc( $biblio->metadata->record,
+            'marcstd', C4::Context->preference('marcflavour') );
+        $iso2709 .= $record_iso // q{};
     }
 
     if ( !defined $iso2709 ) {
