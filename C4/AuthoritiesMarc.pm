@@ -670,6 +670,7 @@ sub AddAuthority {
     # Save record into auth_header, update 001
     my $action;
     my $authority;
+    my $stored_control_number;
     if ( !$authid ) {
         $action = 'create';
 
@@ -689,6 +690,8 @@ sub AddAuthority {
         $authority = Koha::Authorities->find($authid);
         $authority->authtypecode($authtypecode);
         # In the case we are changing type we need to set this to ensure heading field is correctly chosen
+        $stored_control_number = $authority->control_number;
+        $stored_control_number ||= $authority->record->subfield( '010', 'a' );
     }
 
     # Insert/update the recordID in MARC record
@@ -696,9 +699,76 @@ sub AddAuthority {
     $record->insert_fields_ordered( MARC::Field->new( '001', $authid ) );
 
     my $heading = $authority->heading_object( { record => $record } );
-    my $control_number;
-    $control_number = $record->subfield( '010', 'a' )
+    my $record_control_number;
+    $record_control_number = $record->subfield( '010', 'a' )
       if $record->subfield( '010', 'a' );
+    if ($stored_control_number) {
+        if (   $record_control_number
+            && $record_control_number ne $stored_control_number )
+        {
+            Koha::Logger->get->warn(
+"CONTROL NUMBER CONFLICT: in $authid attempt to change control number from $stored_control_number to $record_control_number - restoring from database"
+            );
+            $record->field('010')->update( a => $stored_control_number );
+        }
+        if ( !$record_control_number ) {
+            Koha::Logger->get->warn(
+"CONTROL NUMBER CONFLICT: in $authid attempt to remove control number - restoring $stored_control_number"
+            );
+            $record->delete_fields( $record->field('010') )
+              ;    # just in case strange 010 existed
+            $record->insert_fields_ordered(
+                MARC::Field->new(
+                    '010', ' ', ' ', a => $stored_control_number
+                )
+            );
+        }
+    }
+    else {
+        my $prefix =
+          (      $record->field('1..')->as_string('xyzv')
+              || $record->field('1..')->tag =~ /^15/ ) ? 's'
+          : $record->field('130')       ? 't'
+          : $record->field('1[01][01]') ? 'n'
+          :                               'X';
+        my $number_part = sprintf( "20%08d", $authid );
+        my $new_control_number = "$prefix $number_part";
+
+        if ( $action eq 'create' ) {
+            if ( C4::Context->interface eq 'intranet' ) {
+                $record->delete_fields( $record->field('010') );
+                $record->insert_fields_ordered(
+                    MARC::Field->new(
+                        '010', ' ', ' ', a => $new_control_number
+                    )
+                );
+                $stored_control_number = $new_control_number;
+            }
+            else    # external action
+            {
+                if ($record_control_number) {
+                    $stored_control_number = $record_control_number;
+                }
+                else {
+                    $record->insert_fields_ordered(
+                        MARC::Field->new(
+                            '010', ' ', ' ', a => $new_control_number
+                        )
+                    );
+                    $stored_control_number = $new_control_number;
+                }
+            }
+        }
+        else # update
+        {
+            # this should never happen
+            Koha::Logger->get->warn(
+"CRITICAL ERROR with NUMBER CONFLICT: in $authid attempt to update a record without original controll number in the database"
+            );
+            die
+"CRITICAL ERROR with NUMBER CONFLICT: in $authid attempt to update a record without original controll number in the database";
+        }
+    }
 
     # Update
     $authority->update(
@@ -707,7 +777,7 @@ sub AddAuthority {
             marc         => $record->as_usmarc,
             marcxml      => $record->as_xml_record($format),
             heading      => $heading ? $heading->display_form : '',
-            control_number => $control_number,
+            control_number => $stored_control_number,
         }
     );
 
