@@ -87,6 +87,9 @@
     [%- CASE 'preservation' -%]
         <span class="main_permission preservation_permission">Manage the preservation module</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'nukat' -%]
+        <span class="main_permission preservation_permission">NUKAT permissions</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
@@ -921,6 +924,47 @@
     [%- CASE 'manage_record_sources' -%]
         <span class="sub_permission manage_record_sources_subpermission">
             Manage record sources
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+  [%# nukat %]
+    [%- CASE 'all_symbols' -%]
+        <span class="sub_permission all_symbols_subpermission">
+            Manage symbols for all libraries
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_auth' -%]
+        <span class="sub_permission delete_auth_subpermission">
+            Delete authority records
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_biblio' -%]
+        <span class="sub_permission delete_biblio_subpermission">
+            Delete bibliographic records
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_dbn_mesh' -%]
+        <span class="sub_permission edit_dbn_mesh_subpermission">
+            Edit dbn / mesh auth records
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'merge_auth' -%]
+        <span class="sub_permission marge_auth_subpermission">
+            Merge authority records
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'merge_biblio' -%]
+        <span class="sub_permission merge_biblio_subpermission">
+            Merge bibliographic records
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'own_symbols' -%]
+        <span class="sub_permission own_symbols_subpermission">
+            Manage symbols for own library
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'z3950' -%]
+        <span class="sub_permission z3950_subpermission">
+            Use Z59.50 service
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
