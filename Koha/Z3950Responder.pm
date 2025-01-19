@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use C4::Biblio qw( GetMarcFromKohaField );
 use C4::Koha qw( GetAuthorisedValues );
-use C4::Auth qw( checkpw_internal );
+use C4::Auth qw( checkpw_internal haspermission );
 
 use Koha::Caches;
 
@@ -155,12 +155,16 @@ sub init_handler {
         $args->{ERR_STR}  = "No username and/or password provided";
         return;
     }
-    my ( $authenticated, undef, undef, undef ) =
-      checkpw_internal( $args->{USER}, $args->{PASS}, 1 );
+    my $authenticated = checkpw_internal( $args->{USER}, $args->{PASS}, 1 );
     unless ($authenticated) {
         $args->{ERR_CODE} = 1011;
         $args->{ERR_STR}  = "Bad username and/or password provided";
         return;
+    }
+    unless ( haspermission( $args->{USER}, { 'nukat' => 'z3950' } ) ) {
+        $args->{ERR_CODE} = 1011;
+        $args->{ERR_STR} =
+          "The account has no permissions to access the service";
     }
 
     # This holds all of the per-connection state.
