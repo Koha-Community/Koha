@@ -1,6 +1,10 @@
 const { startDevServer } = require("@cypress/webpack-dev-server");
 const webpackConfig = require("@vue/cli-service/webpack.config.js");
 
+const mysql = require("cypress-mysql");
+
+const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
+
 module.exports = (on, config) => {
     on("dev-server:start", options =>
         startDevServer({
@@ -9,18 +13,8 @@ module.exports = (on, config) => {
         })
     );
 
-    return config;
-};
-
-const mysql = require("cypress-mysql");
-
-module.exports = (on, config) => {
     mysql.configurePlugin(on);
-};
 
-const { buildSampleObject, buildSampleObjects } = require("./mockData.js");
-
-module.exports = (on, config) => {
     on("task", {
         buildSampleObject,
         buildSampleObjects,
