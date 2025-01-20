@@ -174,6 +174,30 @@ sub add_credit {
     };
 }
 
+=head3 get_credit
+
+=cut
+
+sub get_credit {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
+
+    return try {
+        my $credit = $c->objects->find( $patron->account->credits, $c->param('credit_id') );
+
+        return $c->render_resource_not_found("Credit")
+            unless $credit;
+
+        return $c->render( status => 200, openapi => $credit );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
 =head3 list_debits
 
 =cut
@@ -189,6 +213,30 @@ sub list_debits {
     return try {
         my $debits = $c->objects->search( $patron->account->debits );
         return $c->render( status => 200, openapi => $debits );
+    } catch {
+        $c->unhandled_exception($_);
+    };
+}
+
+=head3 get_debit
+
+=cut
+
+sub get_debit {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->param('patron_id') );
+
+    return $c->render_resource_not_found("Patron")
+        unless $patron;
+
+    return try {
+        my $debit = $c->objects->find( $patron->account->debits, $c->param('debit_id') );
+
+        return $c->render_resource_not_found("Debit")
+            unless $debit;
+
+        return $c->render( status => 200, openapi => $debit );
     } catch {
         $c->unhandled_exception($_);
     };

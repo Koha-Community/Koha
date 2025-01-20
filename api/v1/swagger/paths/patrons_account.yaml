@@ -144,6 +144,47 @@
     x-koha-authorization:
       permissions:
         updatecharges: remaining_permissions
+"/patrons/{patron_id}/account/credits/{credit_id}":
+  get:
+    x-mojo-to: Patrons::Account#get_credit
+    operationId: getPatronCredit
+    tags:
+      - patrons
+    summary: Get a patron credit
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/credit_id_pp"
+    responses:
+      "200":
+        description: A patron credit
+        schema:
+          $ref: "../swagger.yaml#/definitions/credit"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
+        updatecharges: remaining_permissions
 "/patrons/{patron_id}/account/debits":
   get:
     x-mojo-to: Patrons::Account#list_debits
@@ -245,4 +286,45 @@
           $ref: "../swagger.yaml#/definitions/error"
     x-koha-authorization:
       permissions:
+        updatecharges: remaining_permissions
+"/patrons/{patron_id}/account/debits/{debit_id}":
+  get:
+    x-mojo-to: Patrons::Account#get_debit
+    operationId: getPatronDebit
+    tags:
+      - patrons
+    summary: Get a patron debit
+    produces:
+      - application/json
+    parameters:
+      - $ref: "../swagger.yaml#/parameters/patron_id_pp"
+      - $ref: "../swagger.yaml#/parameters/debit_id_pp"
+    responses:
+      "200":
+        description: A patron debit
+        schema:
+          $ref: "../swagger.yaml#/definitions/debit"
+      "400":
+        description: Bad request
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "403":
+        description: Access forbidden
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "404":
+        description: Patron not found
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "500":
+        description: Internal error
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+      "503":
+        description: Under maintenance
+        schema:
+          $ref: "../swagger.yaml#/definitions/error"
+    x-koha-authorization:
+      permissions:
+        borrowers: edit_borrowers
         updatecharges: remaining_permissions

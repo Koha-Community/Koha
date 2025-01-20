@@ -483,6 +483,10 @@ paths:
     $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account"
   "/patrons/{patron_id}/account/credits":
     $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1credits"
+  "/patrons/{patron_id}/account/credits/{credit_id}":
+      $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1credits~1{credit_id}"
+  "/patrons/{patron_id}/account/debits/{debit_id}":
+      $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1debits~1{debit_id}"
   "/patrons/{patron_id}/account/debits":
     $ref: "./paths/patrons_account.yaml#/~1patrons~1{patron_id}~1account~1debits"
   "/patrons/{patron_id}/extended_attributes":
@@ -717,6 +721,18 @@ parameters:
     description: Internal club identifier
     in: path
     name: club_id
+    required: true
+    type: integer
+  credit_id_pp:
+    description: Internal credit identifier
+    in: path
+    name: credit_id
+    required: true
+    type: integer
+  debit_id_pp:
+    description: Internal debit identifier
+    in: path
+    name: debit_id
     required: true
     type: integer
   eholdings_title_id_pp:
