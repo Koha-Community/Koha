@@ -42,10 +42,19 @@ subtest 'show_history_check' => sub {
 
     use_ok('Koha::ILL::Request::Workflow::HistoryCheck');
 
+    my $fake_cardnumber = '123456789';
+    my $ill_patron      = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { cardnumber => $fake_cardnumber }
+        }
+    );
+
     my $metadata = {
-        title  => 'This is a title',
-        author => 'This is an author',
-        issn   => $issn
+        title      => 'This is a title',
+        author     => 'This is an author',
+        issn       => $issn,
+        cardnumber => $fake_cardnumber,
     };
 
     # Because hashes can reorder themselves, we need to make sure ours is in a
@@ -61,7 +70,7 @@ subtest 'show_history_check' => sub {
 
     is(
         $history_check->prep_metadata($sorted),
-        'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsImlzc24iOiIzMjEzMjEzMjEiLCJ0aXRsZSI6%0AIlRoaXMgaXMgYSB0aXRsZSJ9%0A',
+        'eyJhdXRob3IiOiJUaGlzIGlzIGFuIGF1dGhvciIsImNhcmRudW1iZXIiOiIxMjM0NTY3ODkiLCJp%0Ac3NuIjoiMzIxMzIxMzIxIiwidGl0bGUiOiJUaGlzIGlzIGEgdGl0bGUifQ%3D%3D%0A',
         'prep_metadata works'
     );
 
@@ -77,7 +86,7 @@ subtest 'show_history_check' => sub {
     # Mock ILLHistoryCheck enabled
     t::lib::Mocks::mock_preference( 'ILLHistoryCheck', 1 );
 
-    my $ill_request = $builder->build_sample_ill_request();
+    my $ill_request = $builder->build_sample_ill_request( { borrowernumber => $ill_patron->borrowernumber } );
     is(
         $history_check->show_history_check($ill_request),
         0, 'Request with ISSN ' . $issn . ' does not exist even though syspref is on. Not showing history check screen'
@@ -92,7 +101,7 @@ subtest 'show_history_check' => sub {
 
     is(
         $history_check->show_history_check($ill_request),
-        1, 'Request with ISSN ' . $issn . ' exists and syspref is on. Able to show history check screen'
+        1, 'Request with ISSN ' . $issn . ' exists, syspref is on and is same patron. Able to show history check screen'
     );
 
     # Mock ILLHistoryCheck disabled
@@ -109,13 +118,14 @@ subtest 'show_history_check' => sub {
 
 subtest 'after_request_created' => sub {
 
-    plan tests => 4;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
 
-    my $metadata = {
+    my $fake_cardnumber = '123456789';
+    my $metadata        = {
         title  => 'This is a title',
         author => 'This is an author',
         issn   => $issn
@@ -127,23 +137,7 @@ subtest 'after_request_created' => sub {
         }
     );
 
-    my $other_patron = $builder->build_object(
-        {
-            class => 'Koha::Patrons',
-        }
-    );
-
     t::lib::Mocks::mock_userenv( { patron => $authenticated_patron } );
-
-    # Create an old request
-    my $existing_ill_request =
-        $builder->build_sample_ill_request( { borrowernumber => $other_patron->borrowernumber } );
-    $builder->build(
-        {
-            source => 'Illrequestattribute',
-            value  => { illrequest_id => $existing_ill_request->illrequest_id, type => 'issn', value => $issn }
-        }
-    );
 
     # Create a new request with new issn
     my $new_ill_request =
@@ -165,10 +159,18 @@ subtest 'after_request_created' => sub {
         'History check didn\'t find any matching requests. Staff notes have not been updated.'
     );
 
-    # Create a third request with preexisting issn by other patron
+    # Create a second request with preexisting issn by self patron
+    my $second_ill_request =
+        $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
     my $third_ill_request =
         $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
     $metadata->{issn} = $issn;
+    $builder->build(
+        {
+            source => 'Illrequestattribute',
+            value  => { illrequest_id => $second_ill_request->illrequest_id, type => 'issn', value => $issn }
+        }
+    );
     $builder->build(
         {
             source => 'Illrequestattribute',
@@ -178,29 +180,7 @@ subtest 'after_request_created' => sub {
     $opac_history_check->after_request_created( $metadata, $third_ill_request );
 
     like(
-        $third_ill_request->notesstaff, qr/Request has been submitted by other patrons in the past/,
-        'Contains staffnotes related submissions by other patrons'
-    );
-
-    # Create a fourth request with preexisting issn by self patron and others
-    my $fourth_ill_request =
-        $builder->build_sample_ill_request( { borrowernumber => $authenticated_patron->borrowernumber } );
-    $metadata->{issn} = $issn;
-    $builder->build(
-        {
-            source => 'Illrequestattribute',
-            value  => { illrequest_id => $fourth_ill_request->illrequest_id, type => 'issn', value => $issn }
-        }
-    );
-    $opac_history_check->after_request_created( $metadata, $fourth_ill_request );
-
-    like(
-        $fourth_ill_request->notesstaff, qr/Request has been submitted by other patrons in the past/,
-        'Contains staffnotes related submissions by other patrons'
-    );
-
-    like(
-        $fourth_ill_request->notesstaff, qr/Request has been submitted by this patron in the past/,
+        $third_ill_request->notesstaff, qr/Request has been submitted by this patron in the past/,
         'Contains staffnotes related submissions by self patron'
     );
 

@@ -921,25 +921,15 @@
                             [% END %]
                         </table>
                         &nbsp;
-                        <h3>This interlibrary loan has been requested before:</h3>
                         [% IF matching_requests_for_patron.size %]
-                            <h4>By this patron [%- INCLUDE 'patron-title.inc' patron => request_patron_obj hide_patron_infos_if_needed => 1 -%]:</h4>
+                            <h4>This interlibrary loan has already been placed by this patron [%- INCLUDE 'patron-title.inc' patron => request_patron_obj hide_patron_infos_if_needed => 1 -%]:</h4>
                             <ul class="list-unstyled">
                                 [% FOREACH matching_request_for_patron IN matching_requests_for_patron %]
                                     <li>
-                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% matching_request_for_patron.illrequest_id %]">ILL Request #[% matching_request_for_patron.illrequest_id | html %]</a>
-                                    </li>
-                                [% END %]
-                            </ul>
-                        [% END %]
-                        [% IF remaining_matching_requests.size %]
-                            [% IF matching_requests_for_patron.size %]
-                                <h4>By other patrons:</h4>
-                            [% END %]
-                            <ul class="list-unstyled">
-                                [% FOREACH remaining_matching_request IN remaining_matching_requests %]
-                                    <li>
-                                        <a href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% remaining_matching_request.illrequest_id %]">ILL Request #[% remaining_matching_request.illrequest_id | html %]</a> by [%- INCLUDE 'patron-title.inc' patron => remaining_matching_request.patron hide_patron_infos_if_needed => 1 -%]
+                                        <a target="_blank" href="/cgi-bin/koha/ill/ill-requests.pl?op=illview&amp;illrequest_id=[% matching_request_for_patron.illrequest_id | uri %]"
+                                            ><i class="fa fa-fw fa-external-link-square"></i>Request [% matching_request_for_patron.id_prefix | html %][% matching_request_for_patron.illrequest_id | html %]
+                                            ([% matching_request_for_patron.status | html %]) on [% matching_request_for_patron.placed | html %]</a
+                                        >
                                     </li>
                                 [% END %]
                             </ul>

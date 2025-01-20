@@ -52,22 +52,10 @@ Given $params, return true if history check should be shown
 sub show_history_check {
     my ( $self, $request ) = @_;
 
-    my $opac_no_matching_requests_for_patron = 0;
-    if ( $self->{ui_context} eq 'opac' ) {
-        my $patron_cardnumber = C4::Context->userenv ? C4::Context->userenv->{'cardnumber'} || 0 : 0;
-        my ( $matching_requests_for_patron, $remaining_matching_requests ) =
-            $self->_get_split_matching_requests($patron_cardnumber);
-        $opac_no_matching_requests_for_patron = 1
-            if $matching_requests_for_patron  && !scalar @{$matching_requests_for_patron};
-    }
-
     return
 
         # ILLHistoryCheck is enabled
         C4::Context->yaml_preference("ILLHistoryCheck")
-
-        # It's not OPAC with no matching requests for patron
-        && !$opac_no_matching_requests_for_patron
 
         # Matching requests were found
         && $self->_find_matching_requests()
@@ -107,14 +95,12 @@ sub history_check_template_params {
         $mapping_function = sub { return $_[0] };
     }
 
-    my ( $matching_requests_for_patron, $remaining_matching_requests ) =
-        $self->_get_split_matching_requests( $params->{cardnumber} );
+    my $matching_requests_for_patron = $self->_find_matching_requests();
 
     return (
         whole                        => $params,
         metadata                     => $self->prep_metadata($params),
         matching_requests_for_patron => $matching_requests_for_patron,
-        remaining_matching_requests  => $remaining_matching_requests,
         $self->{ui_context} eq 'staff'
         ? (
             key_mapping        => $mapping_function,
@@ -144,9 +130,8 @@ sub after_request_created {
 
     return if ( $self->{ui_context} ne 'opac' );
 
-    my $patron_cardnumber = C4::Context->userenv->{'cardnumber'} || 0;
-    my ( $matching_requests_for_patron, $remaining_matching_requests ) =
-        $self->_get_split_matching_requests($patron_cardnumber);
+    my $patron_cardnumber            = C4::Context->userenv->{'cardnumber'} || 0;
+    my $matching_requests_for_patron = $self->_find_matching_requests();
 
     my $staffnotes;
 
@@ -157,19 +142,6 @@ sub after_request_created {
             if ( $appended_self_note == 0 ) {
                 $staffnotes .= __("Request has been submitted by this patron in the past:");
                 $appended_self_note = 1;
-            }
-            $staffnotes .= ' ' . $self->_get_request_staff_link($matching_request);
-        }
-    }
-
-    if ($remaining_matching_requests) {
-        my $appended_others_note = 0;
-        foreach my $matching_request ( @{$remaining_matching_requests} ) {
-            next if $matching_request->illrequest_id eq $request->illrequest_id;
-            if ( $appended_others_note == 0 ) {
-                $staffnotes .=
-                    ( $staffnotes ? "\n" : '' ) . __("Request has been submitted by other patrons in the past:");
-                $appended_others_note = 1;
             }
             $staffnotes .= ' ' . $self->_get_request_staff_link($matching_request);
         }
@@ -196,38 +168,6 @@ sub _get_request_staff_link {
         . $request->illrequest_id . '</a>';
 }
 
-=head3 _get_split_matching_requests
-
-    my ( $matching_requests_for_patron, $remaining_matching_requests )
-        = $self->_get_split_matching_requests( $cardnumber );
-
-Splits the matching requests from _find_matching_requests into two arrays.
-
-One array contains ILL requests made by the patron with the cardnumber
-specified, and the other contains the rest of the matching requests.
-
-=cut
-
-sub _get_split_matching_requests {
-    my ( $self, $cardnumber ) = @_;
-
-    my $all_matching_requests = $self->_find_matching_requests();
-    my @matching_requests_for_patron;
-    my @remaining_matching_requests;
-
-    return ( undef, undef ) if !$all_matching_requests;
-
-    foreach my $request ( @{$all_matching_requests} ) {
-        if ( $request->patron && $request->patron->cardnumber eq $cardnumber ) {
-            push @matching_requests_for_patron, $request;
-        } else {
-            push @remaining_matching_requests, $request;
-        }
-    }
-    return ( \@matching_requests_for_patron, \@remaining_matching_requests );
-
-}
-
 =head3 _find_matching_requests
 
     my $matching_requests = $self->_find_matching_requests();
@@ -241,18 +181,30 @@ sub _find_matching_requests {
 
     my @id_fields = ( 'doi', 'issn', 'isbn', 'pubmedid' );
 
-    return 0 unless grep { $self->{metadata}->{$_} } @id_fields;
+    my @existing_id_fields = grep { $self->{metadata}->{$_} } @id_fields;
+    return 0 unless scalar @existing_id_fields;
 
-    my @query = ();
-    foreach my $id_field (@id_fields) {
-        push @query, {
+    if ( grep { $_ eq 'doi' } @existing_id_fields ) {
+        @existing_id_fields = grep { $_ eq 'doi' } @existing_id_fields;
+    }
+
+    if ( grep { $_ eq 'pubmedid' } @existing_id_fields ) {
+        @existing_id_fields = grep { $_ eq 'pubmedid' } @existing_id_fields;
+    }
+
+    my $patron = Koha::Patrons->find( { cardnumber => $self->{metadata}->{cardnumber} } );
+
+    my $query;
+    $query->{'-and'} = [ { 'me.borrowernumber' => $patron->borrowernumber } ] if $patron;
+    foreach my $id_field (@existing_id_fields) {
+        push @{ $query->{'-or'} }, {
             'illrequestattributes.type'  => $id_field,
             'illrequestattributes.value' => $self->{metadata}->{$id_field},
         };
     }
 
     my $matching_requests = Koha::ILL::Requests->search(
-        \@query,
+        $query,
         {
             join     => 'illrequestattributes',
             distinct => 'illrequest_id',
