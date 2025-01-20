@@ -370,6 +370,10 @@ sub add_item {
 
         $item->store->discard_changes;
 
+        my $base_url = $c->req->url->to_string;
+        $base_url =~ s|/biblios/\d+||;
+        $c->res->headers->location( $base_url . '/' . $item->id );
+
         $c->render(
             status  => 201,
             openapi => $c->objects->to_api($item),
@@ -718,6 +722,8 @@ sub add {
                 },
             );
         }
+
+        $c->res->headers->location( $c->req->url->to_string . '/' . $biblio_id );
 
         return $c->render(
             status  => 200,

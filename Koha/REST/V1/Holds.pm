@@ -216,6 +216,8 @@ sub add {
 
         my $hold = Koha::Holds->find($hold_id);
 
+        $c->res->headers->location( $c->req->url->to_string . '/' . $hold_id );
+
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($hold),

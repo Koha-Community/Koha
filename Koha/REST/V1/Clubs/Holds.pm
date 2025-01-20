@@ -108,6 +108,8 @@ sub add {
             }
         );
 
+        $c->res->headers->location( $c->req->url->to_string . '/' . $club_hold->id );
+
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($club_hold),

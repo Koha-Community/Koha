@@ -84,6 +84,7 @@ sub add {
                 openapi => $return
             );
         } else {
+            $c->res->headers->location( $c->req->url->to_string . '/' . $status->code );
             return $c->render(
                 status  => 201,
                 openapi => $status
