@@ -1058,8 +1058,6 @@ sub _openurl_to_ill {
         volume  => 'volume',
         isbn    => 'isbn',
         issn    => 'issn',
-        rft_id  => 'doi',
-        id      => 'doi',
         doi     => 'doi',
         year    => 'year',
         title   => 'title',
@@ -1097,8 +1095,19 @@ sub _openurl_to_ill {
             # Otherwise, pass it through untransformed and maybe move it
             # to our custom parameters array
             if ( !exists $ignore->{$meta_key} ) {
-                push @{$custom_key},   $meta_key;
-                push @{$custom_value}, $params->{other}->{$meta_key};
+                if ($meta_key eq 'id' || $meta_key eq 'rft_id') {
+                    if ( $params->{other}->{$meta_key} =~ /:/ ) {
+                        my ( $k, $v ) = split /:/, $params->{other}->{$meta_key}, 2;
+                        if ( defined $k && defined $v ) {
+                            $return->{ lc $k } = $v;
+                        }
+                    } else {
+                        $return->{doi} = $params->{other}->{$meta_key};
+                    }
+                }else{
+                    push @{$custom_key},   $meta_key;
+                    push @{$custom_value}, $params->{other}->{$meta_key};
+                }
             } else {
                 $return->{$meta_key} = $params->{other}->{$meta_key};
             }
