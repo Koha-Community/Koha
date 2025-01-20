@@ -1166,6 +1166,11 @@ sub article_request_type {
 
 =head3 current_holds
 
+    my $holds = $item->current_holds
+
+Return the holds placed on this item.
+Respects the lookahead days in ConfirmFutureHolds pref.
+
 =cut
 
 sub current_holds {
