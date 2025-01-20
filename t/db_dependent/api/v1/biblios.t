@@ -899,9 +899,9 @@ subtest 'set_rating() tests' => sub {
 };
 
 
-subtest 'post() tests' => sub {
+subtest 'add() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -1357,6 +1357,22 @@ subtest 'post() tests' => sub {
             } => $marc
         )->status_is(200);
     };
+
+    my $mock_biblio = Test::MockModule->new('C4::Biblio');
+
+    # FIXME: AddBiblio wraps everything inside a transaction and a try/catch block
+    # this will need a tweak if this behavior changes
+    $mock_biblio->mock( 'AddBiblio', sub { return ( undef, undef ); } );
+
+    $t->post_ok( "//$userid:$password@/api/v1/biblios" =>
+            { 'Content-Type' => 'application/marc', 'x-framework-id' => $frameworkcode } => $marc )
+        ->status_is(400)
+        ->json_is(
+        {
+            error      => 'Error creating record',
+            error_code => 'record_creation_failed'
+        }
+        );
 
     $schema->storage->txn_rollback;
 };
