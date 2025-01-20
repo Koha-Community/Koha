@@ -1815,3 +1815,10 @@ cy.getSushiService = () => {
 
 const mysql = require("cypress-mysql");
 mysql.addCommands();
+
+Cypress.Commands.add("set_syspref", (variable, value) => {
+    cy.window().then(win => {
+        const client = win.APIClient.syspref;
+        return client.sysprefs.update(variable, value);
+    });
+});
