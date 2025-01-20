@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 6;
+use Test::More tests => 8;
 
 use Test::Mojo;
 
@@ -30,7 +30,8 @@ use Koha::Account::Lines;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth',        1 );
+t::lib::Mocks::mock_preference( 'NotifyPasswordChange', 1 );
 
 my $t = Test::Mojo->new('Koha::REST::V1');
 
@@ -300,6 +301,51 @@ subtest 'add_credit() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'get_credit() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $userid   = $patron->userid;
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+
+    my $patron_id = $patron->id;
+    my $credit    = $patron->account->add_credit(
+        {
+            amount      => 100,
+            description => "A description",
+            type        => "NEW_CARD",
+            interface   => 'test',
+        }
+    );
+    my $credit_id = $credit->id;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits/$credit_id")->status_is(200)
+        ->json_is( '/account_line_id' => $credit_id )->json_is( '/patron_id' => $patron_id );
+
+    $credit->delete();
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits/$credit_id")->status_is(404)
+        ->json_is( '/error_code' => 'not_found' )->json_is( '/error' => 'Credit not found' );
+
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete();
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$deleted_patron_id/account/credits/$credit_id")->status_is(404)
+        ->json_is( '/error_code' => 'not_found' )->json_is( '/error' => 'Patron not found' );
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'list_credits() test' => sub {
     plan tests => 3;
 
@@ -336,6 +382,51 @@ subtest 'list_credits() test' => sub {
         $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/credits")->status_is(200)->tx->res->json;
 
     is( -105, $ret->[0]->{amount} + $ret->[1]->{amount}, 'Total credits are -105' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_debit() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $userid   = $patron->userid;
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+
+    my $patron_id = $patron->id;
+    my $debit     = $patron->account->add_debit(
+        {
+            amount      => 100,
+            description => "A description",
+            type        => "NEW_CARD",
+            interface   => 'test',
+        }
+    );
+    my $debit_id = $debit->id;
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/debits/$debit_id")->status_is(200)
+        ->json_is( '/account_line_id' => $debit_id )->json_is( '/patron_id' => $patron_id );
+
+    $debit->delete();
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$patron_id/account/debits/$debit_id")->status_is(404)
+        ->json_is( '/error_code' => 'not_found' )->json_is( '/error' => 'Debit not found' );
+
+    my $deleted_patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $deleted_patron_id = $deleted_patron->id;
+    $deleted_patron->delete();
+
+    $t->get_ok("//$userid:$password@/api/v1/patrons/$deleted_patron_id/account/debits/$debit_id")->status_is(404)
+        ->json_is( '/error_code' => 'not_found' )->json_is( '/error' => 'Patron not found' );
 
     $schema->storage->txn_rollback;
 };
