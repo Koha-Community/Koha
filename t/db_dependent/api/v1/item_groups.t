@@ -55,21 +55,21 @@ subtest 'list() tests' => sub {
     my $biblio_id = $biblio->id;
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups" )
-        ->status_is( 200, 'SWAGGER3.2.2' );
+        ->status_is( 200, 'REST3.2.2' );
     my $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 0, 'Results count is 2');
 
     my $item_group_1 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id, display_order => 1, description => "Vol 1" } )->store();
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups" )
-        ->status_is( 200, 'SWAGGER3.2.2' );
+        ->status_is( 200, 'REST3.2.2' );
     $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 1, 'Results count is 2');
 
     my $item_group_2 = Koha::Biblio::ItemGroup->new( { biblio_id => $biblio->id, display_order => 2, description => "Vol 2" } )->store();
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups" )
-      ->status_is( 200, 'SWAGGER3.2.2' );
+      ->status_is( 200, 'REST3.2.2' );
 
     $response_count = scalar @{ $t->tx->res->json };
     is( $response_count, 2, 'Results count is 2');
@@ -108,7 +108,7 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt
     $t->post_ok( "//$auth_userid:$password@/api/v1/biblios/$biblio_id/item_groups" => json => $item_group )
-      ->status_is( 201, 'SWAGGER3.2.1' );
+      ->status_is( 201, 'REST3.2.1' );
 
     # Invalid biblio id
     {   # hide useless warnings
@@ -154,8 +154,8 @@ subtest 'update() tests' => sub {
 
     # Authorized attempt
     $t->put_ok( "//$auth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_group_id" => json => { description => "Vol A" } )
-      ->status_is(200, 'SWAGGER3.2.1')
-      ->json_has( '/description' => "Vol A", 'SWAGGER3.3.3' );
+      ->status_is(200, 'REST3.2.1')
+      ->json_has( '/description' => "Vol A", 'REST3.3.3' );
 
     # Invalid biblio id
     $t->put_ok( "//$auth_userid:$password@/api/v1/biblios/XXX/item_groups/$item_group_id" => json => { description => "Vol A" } )
@@ -194,8 +194,8 @@ subtest 'delete() tests' => sub {
     my $item_groupid = $item_group->id;
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid" )
-        ->status_is(204, 'SWAGGER3.2.4')
-        ->content_is('', 'SWAGGER3.3.4');
+        ->status_is(204, 'REST3.2.4')
+        ->content_is('', 'REST3.3.4');
 
     # Unauthorized attempt to delete
     $t->delete_ok( "//$unauth_userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid" )
@@ -240,7 +240,7 @@ subtest 'volume items add() + delete() tests' => sub {
       ->json_is( { error => 'Item group does not belong to passed biblio_id' } );
 
     $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid/items" => json => { item_id => $item_1->id } )
-      ->status_is( 201, 'SWAGGER3.2.1' );
+      ->status_is( 201, 'REST3.2.1' );
 
     @items = $item_group->items;
     is( scalar(@items), 1, 'Item group now has one item');
@@ -249,14 +249,14 @@ subtest 'volume items add() + delete() tests' => sub {
     my $item_2_id = $item_2->id;
 
     $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid/items" => json => { item_id => $item_2->id } )
-      ->status_is( 201, 'SWAGGER3.2.1' );
+      ->status_is( 201, 'REST3.2.1' );
 
     @items = $item_group->items->as_list;
     is( scalar(@items), 2, 'Item group now has two items');
 
     $t->delete_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/item_groups/$item_groupid/items/$item_1_id" )
-        ->status_is(204, 'SWAGGER3.2.4')
-        ->content_is('', 'SWAGGER3.3.4');
+        ->status_is(204, 'REST3.2.4')
+        ->content_is('', 'REST3.3.4');
 
     @items = $item_group->items;
     is( scalar(@items), 1, 'Item group now has one item');

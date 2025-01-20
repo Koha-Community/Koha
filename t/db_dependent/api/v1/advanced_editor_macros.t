@@ -88,7 +88,7 @@ subtest 'list() tests' => sub {
     ## Authorized user tests
     # Make sure we are returned with the correct amount of macros
     $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros" )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_has('/' . $macros_index . '/macro_id')
       ->json_hasnt('/' . ($macros_index + 1) . '/macro_id');
 
@@ -227,7 +227,7 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
-      ->status_is( 201, 'SWAGGER3.2.1' )
+      ->status_is( 201, 'REST3.2.1' )
       ->json_has( '/macro_id', 'We generated a new id' )
       ->json_is( '/name' => $macro_values->{name}, 'The name matches what we supplied' )
       ->json_is( '/macro_text' => $macro_values->{macro_text}, 'The text matches what we supplied' )

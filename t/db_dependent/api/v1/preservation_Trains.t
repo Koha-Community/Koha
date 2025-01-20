@@ -201,9 +201,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $train_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/trains" => json => $train )
-        ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/preservation/trains/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name' => $train->{name} )->json_is( '/description' => $train->{description} )
         ->json_is( '/default_processing_id' => $train->{default_processing_id} )
         ->json_is( '/not_for_loan'          => $train->{not_for_loan} )->tx->res->json->{train_id};
@@ -344,8 +344,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/preservation/trains/$train_id")->status_is(403);
 
     # Delete existing train
-    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent train
     $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id")->status_is(404);
@@ -435,7 +435,7 @@ subtest '*_item() tests' => sub {
     ];
     my $train_item_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/trains/$train_id/items" => json =>
-            { item_id => $item_1->itemnumber, attributes => $item_attributes } )->status_is( 201, 'SWAGGER3.2.1' )
+            { item_id => $item_1->itemnumber, attributes => $item_attributes } )->status_is( 201, 'REST3.2.1' )
         ->json_is( '/item_id' => $item_1->itemnumber )->json_is( '/processing_id' => $train->default_processing_id )
         ->json_has('/added_on')->tx->res->json->{train_item_id};
     my $train_item = Koha::Preservation::Train::Items->find($train_item_id);
@@ -501,7 +501,7 @@ subtest '*_item() tests' => sub {
 
     # Delete existing item
     $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id")
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Delete non existing item
     $t->delete_ok("//$userid:$password@/api/v1/preservation/trains/$train_id/items/$train_item_id")->status_is(404)

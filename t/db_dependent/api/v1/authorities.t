@@ -146,8 +146,8 @@ subtest 'delete() tests' => sub {
     $patron->flags( 2 ** 14 )->store; # 14 => editauthorities userflag
 
     $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/authorities/".$authority->id)
       ->status_is(404);

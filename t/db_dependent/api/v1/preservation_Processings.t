@@ -197,9 +197,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $processing_id =
         $t->post_ok( "//$userid:$password@/api/v1/preservation/processings" => json => $processing )
-        ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/preservation/processings/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name' => $processing->{name} )->tx->res->json->{processing_id};
 
     # Authorized attempt to create with null id
@@ -337,7 +337,7 @@ subtest 'delete() tests' => sub {
 
     # Delete existing processing
     $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent processing
     $t->delete_ok("//$userid:$password@/api/v1/preservation/processings/$processing_id")->status_is(404);

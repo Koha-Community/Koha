@@ -71,7 +71,7 @@ subtest 'list() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources?_per_page=10")->status_is( 200, 'SWAGGER3.2.2' );
+    $t->get_ok("//$userid:$password@/api/v1/record_sources?_per_page=10")->status_is( 200, 'REST3.2.2' );
 
     my $response_count = scalar @{ $t->tx->res->json };
 
@@ -79,7 +79,7 @@ subtest 'list() tests' => sub {
 
     my $id = $source->record_source_id;
     $t->get_ok("//$userid:$password@/api/v1/record_sources?q={\"record_source_id\": $id}")->status_is(200)
-        ->json_is( '' => [ $source->to_api ], 'SWAGGER3.3.2' );
+        ->json_is( '' => [ $source->to_api ], 'REST3.3.2' );
 
     $source->delete;
 
@@ -123,8 +123,8 @@ subtest 'get() tests' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 200, 'SWAGGER3.2.2' )
-        ->json_is( '' => $source->to_api, 'SWAGGER3.3.2' );
+    $t->get_ok("//$userid:$password@/api/v1/record_sources/$id")->status_is( 200, 'REST3.2.2' )
+        ->json_is( '' => $source->to_api, 'REST3.3.2' );
 
     $source->delete;
 
@@ -227,7 +227,7 @@ subtest 'add() tests' => sub {
 
     my $source_id =
         $t->post_ok( "//$userid:$password@/api/v1/record_sources" => json => { name => 'test1' } )
-        ->status_is( 201, 'SWAGGER3.2.2' )->json_is( '/name', 'test1' )->json_is( '/can_be_edited', 0 )
+        ->status_is( 201, 'REST3.2.2' )->json_is( '/name', 'test1' )->json_is( '/can_be_edited', 0 )
         ->tx->res->json->{record_source_id};
 
     my $created_source = Koha::RecordSources->find($source_id);

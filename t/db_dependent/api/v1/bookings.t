@@ -255,8 +255,8 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $booking_id =
-        $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is( 201, 'SWAGGER3.2.1' )
-        ->header_like( Location => qr|^\/api\/v1\/bookings/\d*|, 'SWAGGER3.4.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/bookings" => json => $booking )->status_is( 201, 'REST3.2.1' )
+        ->header_like( Location => qr|^\/api\/v1\/bookings/\d*|, 'REST3.4.1' )
         ->json_is( '/biblio_id' => $biblio->id )->tx->res->json->{booking_id};
 
     # Authorized attempt to create with null id
@@ -430,8 +430,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/bookings/$booking_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/bookings/$booking_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/bookings/$booking_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/bookings/$booking_id")->status_is(404);
 

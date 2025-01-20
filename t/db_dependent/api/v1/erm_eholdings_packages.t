@@ -262,9 +262,9 @@ subtest 'add() tests' => sub {
     my $ehpackage_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/packages" => json =>
-          $ehpackage )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $ehpackage )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/erm/eholdings/local/packages/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name' => $ehpackage->{name} )
       ->json_is( '/print_identifier' => $ehpackage->{print_identifier} )
       ->json_is( '/notes'            => $ehpackage->{notes} )
@@ -426,7 +426,7 @@ subtest 'delete() tests' => sub {
     # Delete existing EHolding package
     $t->delete_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/packages/$ehpackage_id"
-    )->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+    )->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent EHolding package
     $t->delete_ok(

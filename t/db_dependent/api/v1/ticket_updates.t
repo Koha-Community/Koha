@@ -169,9 +169,9 @@ subtest 'add_update() tests' => sub {
     my $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
-          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $update )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/status' => undef )
@@ -223,9 +223,9 @@ subtest 'add_update() tests' => sub {
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
-          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $update )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/status' => undef )
@@ -247,9 +247,9 @@ subtest 'add_update() tests' => sub {
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
-          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $update )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/status' => undef )
@@ -281,9 +281,9 @@ subtest 'add_update() tests' => sub {
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
-          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $update )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/status' => $update->{status} )
@@ -303,9 +303,9 @@ subtest 'add_update() tests' => sub {
     $update_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/tickets/$ticket_id/updates" => json =>
-          $update )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $update )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/message' => $update->{message} )
       ->json_is( '/public'  => $update->{public} )
       ->json_is( '/status' => $update->{status} )

@@ -240,9 +240,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $usage_data_provider_id =
         $t->post_ok( "//$userid:$password@/api/v1/erm/usage_data_providers" => json => $usage_data_provider )
-        ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/erm/usage_data_providers/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name' => $usage_data_provider->{name} )
         ->json_is( '/customer_id'    => $usage_data_provider->{customer_id} )
         ->json_is( '/requestor_id'   => $usage_data_provider->{requestor_id} )
@@ -401,7 +401,7 @@ subtest 'delete() tests' => sub {
 
     # Delete existing usage_data_provider
     $t->delete_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id")
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent usage_data_provider
     $t->delete_ok("//$userid:$password@/api/v1/erm/usage_data_providers/$usage_data_provider_id")->status_is(404);

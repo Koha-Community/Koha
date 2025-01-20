@@ -47,7 +47,7 @@ subtest 'list_patron_attributes() tests' => sub {
     my $userid = $patron->userid;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/extended_attributes')
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( [] );
 
     # Let's add 3 attributes
@@ -56,7 +56,7 @@ subtest 'list_patron_attributes() tests' => sub {
     }
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/extended_attributes')
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '' => $patron->extended_attributes->to_api, 'Extended attributes retrieved correctly' );
 
     my $non_existent_patron = $builder->build_object({ class => 'Koha::Patrons' });
@@ -84,7 +84,7 @@ subtest 'list_patron_attributes() tests' => sub {
 
         $t->get_ok( "//$userid:$password@/api/v1/patrons/"
               . $user->id
-              . '/extended_attributes' )->status_is( 200, 'SWAGGER3.2.2' )
+              . '/extended_attributes' )->status_is( 200, 'REST3.2.2' )
           ->json_is(
             '' => $user->extended_attributes->to_api,
             'Extended attributes retrieved correctly'
@@ -333,7 +333,7 @@ subtest 'overwrite() tests' => sub {
     $patron->add_extended_attribute({ code => $unique_attr_type->code,  attribute => 'unique' });
 
     $t->get_ok("//$userid:$password@/api/v1/patrons/" . $patron->id . '/extended_attributes')
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '' => $patron->extended_attributes->to_api, 'Extended attributes retrieved correctly' );
 
     my $updated_attributes = [
@@ -403,8 +403,8 @@ subtest 'delete() tests' => sub {
     my $attr = $dummy_patron->add_extended_attribute({ code => $attr_type->code, attribute => 'blah' });
 
     $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $dummy_patron->id . '/extended_attributes/' . $attr->id )
       ->status_is(404)

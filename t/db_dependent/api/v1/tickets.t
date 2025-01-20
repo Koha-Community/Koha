@@ -205,9 +205,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $ticket_id =
       $t->post_ok( "//$userid:$password@/api/v1/tickets" => json => $ticket )
-      ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+      ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/tickets/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/biblio_id' => $ticket->{biblio_id} )
       ->json_is( '/title'       => $ticket->{title} )
       ->json_is( '/body'        => $ticket->{body} )
@@ -257,9 +257,9 @@ subtest 'add() tests' => sub {
 
         $ticket_id =
             $t->post_ok( "//$useridp:$password@/api/v1/public/tickets" => json => $ticket )
-            ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+            ->status_is( 201, 'REST3.2.1' )->header_like(
             Location => qr|^\/api\/v1\/public\/tickets/\d*|,
-            'SWAGGER3.4.1'
+            'REST3.4.1'
         )->json_is( '/biblio_id' => $ticket->{biblio_id} )->json_is( '/title' => $ticket->{title} )
             ->json_is( '/body' => $ticket->{body} )->json_is( '/reporter_id' => $patron->id )
             ->tx->res->json->{ticket_id};
@@ -404,7 +404,7 @@ subtest 'delete() tests' => sub {
       ->status_is(403);
 
     $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/tickets/$ticket_id")
       ->status_is(404);

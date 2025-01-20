@@ -519,7 +519,7 @@ subtest 'add() tests' => sub {
           ->status_is(201, 'Patron created successfully')
           ->header_like(
             Location => qr|^\/api\/v1\/patrons/\d*|,
-            'SWAGGER3.4.1'
+            'REST3.4.1'
           )
           ->json_has('/patron_id', 'got a patron_id')
           ->json_is( '/cardnumber'    => $newpatron->{cardnumber})
@@ -1148,8 +1148,8 @@ subtest 'delete() tests' => sub {
         $patron->protected(0)->store();
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
-          ->status_is(204, 'SWAGGER3.2.4')
-          ->content_is('', 'SWAGGER3.3.4');
+          ->status_is(204, 'REST3.2.4')
+          ->content_is('', 'REST3.3.4');
 
         my $deleted_patrons = Koha::Old::Patrons->search({ borrowernumber =>  $patron->borrowernumber });
         is( $deleted_patrons->count, 1, 'The patron has been moved to the vault' );

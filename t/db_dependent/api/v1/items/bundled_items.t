@@ -56,7 +56,7 @@ subtest 'bundled_items()' => sub {
     $patron->set_password( { password => $password, skip_validation => 1 } );
     $userid = $patron->userid;
 
-    $t->get_ok("//$userid:$password@/api/v1/items/$itemnumber/bundled_items")->status_is( 200, 'SWAGGER3.2.2' );
+    $t->get_ok("//$userid:$password@/api/v1/items/$itemnumber/bundled_items")->status_is( 200, 'REST3.2.2' );
 
     my $response_count = scalar @{ $t->tx->res->json };
 

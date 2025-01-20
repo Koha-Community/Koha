@@ -191,8 +191,8 @@ subtest 'delete() tests' => sub {
     $t->delete_ok("//$unauth_userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is(403);
 
     # Delete existing counter_file
-    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent counter_file
     $t->delete_ok("//$userid:$password@/api/v1/erm/counter_files/$counter_file_id")->status_is(404);
