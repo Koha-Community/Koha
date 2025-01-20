@@ -184,7 +184,7 @@ subtest 'get_balance() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -209,9 +209,13 @@ subtest 'add_credit() tests' => sub {
 
     my $credit = { amount => 100 };
 
-    my $ret = $t->post_ok(
-        "//$userid:$password@/api/v1/patrons/$patron_id/account/credits" =>
-          json => $credit )->status_is(201)->tx->res->json;
+    my $ret =
+        $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/credits" => json => $credit )
+        ->status_is(201)
+        ->header_is(
+        'Location' => "/api/v1/patrons/$patron_id/account/credits/" . $t->tx->res->json->{account_line_id},
+        "REST3.4.1"
+        )->tx->res->json;
 
     is_deeply(
         $ret,
@@ -371,7 +375,7 @@ subtest 'list_debits() test' => sub {
 
 subtest 'add_debit() tests' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -445,7 +449,12 @@ subtest 'add_debit() tests' => sub {
 
     my $account_line_id = $ret->{account_line_id};
 
-    $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $debit )->status_is(201);
+    $t->post_ok( "//$userid:$password@/api/v1/patrons/$patron_id/account/debits" => json => $debit )
+        ->status_is(201)
+        ->header_is(
+        'Location' => "/api/v1/patrons/$patron_id/account/debits/" . $t->tx->res->json->{account_line_id},
+        "REST3.4.1"
+        );
 
     is(
         $account->outstanding_debits->total_outstanding,
