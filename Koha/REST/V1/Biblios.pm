@@ -704,9 +704,22 @@ sub add {
             ) if $duplicatebiblionumber;
         }
 
-        my ( $biblio_id ) = AddBiblio( $record, $frameworkcode, { record_source_id => $record_source_id } );
+        my ($biblio_id) = C4::Biblio::AddBiblio( $record, $frameworkcode, { record_source_id => $record_source_id } );
 
-        $c->render(
+        if ( !$biblio_id ) {
+
+            # FIXME: AddBiblio wraps everything inside a transaction and a try/catch block
+            # this will need a tweak if this behavior changes
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error      => 'Error creating record',
+                    error_code => 'record_creation_failed',
+                },
+            );
+        }
+
+        return $c->render(
             status  => 200,
             openapi => { id => $biblio_id }
         );

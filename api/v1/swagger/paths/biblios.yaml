@@ -29,7 +29,10 @@
       "200":
         description: A biblio
       "400":
-        description: Bad request
+        description: |
+          Bad request. Possible `error_code` attribute values:
+
+            * `record_creation_failed`: An error occurred during record creation. The cause could not be determined.
         schema:
           $ref: "../swagger.yaml#/definitions/error"
       "401":
