@@ -131,7 +131,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 14;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -180,10 +180,13 @@ subtest 'add() tests' => sub {
         );
 
     # Authorized attempt to write
-    my $status_id =
-        $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )->status_is(201)
-        ->json_has( '/id',        'ID' )->json_has( '/name', 'Name' )->json_has( '/code', 'Code' )
-        ->json_has( '/is_system', 'is_system' );
+    $t->post_ok( "//$userid:$password@/api/v1/ill/batchstatuses" => json => $status_metadata )
+        ->status_is(201)
+        ->json_has( '/id',        'ID' )
+        ->json_has( '/name',      'Name' )
+        ->json_has( '/code',      'Code' )
+        ->json_has( '/is_system', 'is_system' )
+        ->header_is( 'Location' => '/api/v1/ill/batchstatuses/' . $t->tx->res->json->{code}, "REST3.4.1" );
 
     # Authorized attempt to create with null id
     $status_metadata->{id} = undef;

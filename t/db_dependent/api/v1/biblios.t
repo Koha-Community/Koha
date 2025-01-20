@@ -287,8 +287,8 @@ subtest 'delete() tests' => sub {
 
     # Bibs with no items can be deleted
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
       ->status_is(404);
@@ -901,7 +901,7 @@ subtest 'set_rating() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -1312,9 +1312,11 @@ subtest 'add() tests' => sub {
     $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode, "x-record-schema" => 'INVALID'})
       ->status_is(400, 'Invalid header x-record-schema');
 
-    $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode} => $marcxml)
-      ->status_is(200)
-      ->json_has('/id');
+    $t->post_ok( "//$userid:$password@/api/v1/biblios" =>
+            { 'Content-Type' => 'application/marcxml+xml', 'x-framework-id' => $frameworkcode } => $marcxml )
+        ->status_is(200)
+        ->json_has('/id')
+        ->header_is( 'Location' => "/api/v1/biblios/" . $t->tx->res->json->{id}, "REST3.4.1" );
 
     $t->post_ok("//$userid:$password@/api/v1/biblios" => {'Content-Type' => 'application/marc-in-json', 'x-framework-id' => $frameworkcode, 'x-confirm-not-duplicate' => 1} => $mij)
       ->status_is(200)
@@ -1893,59 +1895,64 @@ subtest 'list() tests' => sub {
 };
 
 subtest 'add_item() tests' => sub {
-  plan tests => 7;
 
-  $schema->storage->txn_begin;
+    plan tests => 8;
 
-  my $patron = $builder->build_object(
-      {
-          class => 'Koha::Patrons',
-          value => { flags => 0 }
-      }
-  );
-  my $password = 'thePassword123';
-  $patron->set_password( { password => $password, skip_validation => 1 } );
-  my $userid = $patron->userid;
+    $schema->storage->txn_begin;
 
-  my $biblio = $builder->build_sample_biblio();
-  my $biblio_id = $biblio->biblionumber;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
 
-  my $barcode = 'mybarcode';
-  my $matching_items = Koha::Items->search({ barcode => $barcode });
+    my $biblio    = $builder->build_sample_biblio();
+    my $biblio_id = $biblio->biblionumber;
 
-  while (my $item = $matching_items->next) {
-    $item->delete;
-  }
+    my $barcode        = 'mybarcode';
+    my $matching_items = Koha::Items->search( { barcode => $barcode } );
 
-  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => { external_id => $barcode })
-    ->status_is(403, 'Not enough permissions to create an item');
+    while ( my $item = $matching_items->next ) {
+        $item->delete;
+    }
 
-  # Add permissions
-  $builder->build(
-      {
-          source => 'UserPermission',
-          value  => {
-              borrowernumber => $patron->borrowernumber,
-              module_bit     => 9,
-              code           => 'edit_catalogue'
-          }
-      }
-  );
+    $t->post_ok( "//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => { external_id => $barcode } )
+        ->status_is( 403, 'Not enough permissions to create an item' );
 
-  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
-      external_id => $barcode,
-    })
-    ->status_is(201, 'Item created')
-    ->json_is('/biblio_id', $biblio_id);
+    # Add permissions
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 9,
+                code           => 'edit_catalogue'
+            }
+        }
+    );
 
-  my $item = $builder->build_sample_item();
+    $t->post_ok(
+        "//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
+            external_id => $barcode,
+        }
+    )->status_is( 201, 'Item created' )->json_is( '/biblio_id', $biblio_id );
 
-  $t->post_ok("//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
-      external_id => $item->barcode,
-    })
-    ->status_is(409, 'Duplicate barcode');
+    my $item_id = $t->tx->res->json->{item_id};
+    $t->header_is( 'Location' => "/api/v1/items/$item_id", "REST3.4.1" );
 
-  $schema->storage->txn_rollback;
+    my $item = $builder->build_sample_item();
+
+    $t->post_ok(
+        "//$userid:$password@/api/v1/biblios/$biblio_id/items" => json => {
+            external_id => $item->barcode,
+        }
+    )->status_is( 409, 'Duplicate barcode' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'update_item() tests' => sub {

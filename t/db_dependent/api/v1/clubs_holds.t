@@ -61,7 +61,7 @@ subtest 'add() tests' => sub {
 
     subtest 'librarian access tests' => sub {
 
-        plan tests => 20;
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
@@ -144,13 +144,15 @@ subtest 'add() tests' => sub {
           ->status_is(409)
           ->json_is( '/error' => "Cannot place a hold on a club without patrons." );
 
-        $t->post_ok( "//$userid:$password@/api/v1/clubs/"
-              . $club_with_enrollments->id
-              . "/holds" => json => $data )
-          ->status_is( 201, 'Created Hold' )
-          ->json_has( '/club_hold_id', 'got a club hold id' )
-          ->json_is( '/club_id'   => $club_with_enrollments->id )
-          ->json_is( '/biblio_id' => $item->biblionumber );
+        $t->post_ok( "//$userid:$password@/api/v1/clubs/" . $club_with_enrollments->id . "/holds" => json => $data )
+            ->status_is( 201, 'Created Hold' )
+            ->json_has( '/club_hold_id', 'got a club hold id' )
+            ->json_is( '/club_id'   => $club_with_enrollments->id )
+            ->json_is( '/biblio_id' => $item->biblionumber )
+            ->header_is(
+            'Location' => '/api/v1/clubs/' . $club_with_enrollments->id . '/holds/' . $t->tx->res->json->{club_hold_id},
+            'REST3.4.1'
+            );
 
         $schema->storage->txn_rollback;
     };
