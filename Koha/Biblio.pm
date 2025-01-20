@@ -803,8 +803,8 @@ sub old_holds {
 
     my $holds = $biblio->current_holds
 
-    Return the holds placed on this bibliographic record.
-    Respects the lookahead days in ConfirmFutureHolds pref.
+Return the holds placed on this bibliographic record.
+Respects the lookahead days in ConfirmFutureHolds pref.
 
 =cut
 
