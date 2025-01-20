@@ -168,6 +168,8 @@ sub add_credit {
 
         $credit->discard_changes;
 
+        $c->res->headers->location( $c->req->url->to_string . '/' . $credit->id );
+
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($credit),
