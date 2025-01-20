@@ -74,6 +74,8 @@ sub add {
             Koha::Exceptions::TransferLimit::Duplicate->throw();
         }
 
+        $c->res->headers->location( $c->req->url->to_string . '/' . $transfer_limit->id );
+
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($transfer_limit),

@@ -68,6 +68,7 @@ sub add {
 
     return try {
         my $profile = Koha::ImportBatchProfile->new_from_api( $body )->store;
+        $c->res->headers->location( $c->req->url->to_string . '/' . $profile->id );
         return $c->render(
             status  => 201,
             openapi => $c->objects->to_api($profile),
