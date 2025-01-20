@@ -202,7 +202,7 @@ subtest 'post() tests' => sub {
       ->json_is(q{})
       ->header_like(
           Location => qr|^\/api\/v1\/authorities/\d*|,
-          'SWAGGER3.4.1'
+          'REST3.4.1'
       );
 
     # x-koha-override not passed to force block because duplicate
@@ -217,7 +217,7 @@ subtest 'post() tests' => sub {
       ->json_is(q{})
       ->header_like(
           Location => qr|^\/api\/v1\/authorities/\d*|,
-          'SWAGGER3.4.1'
+          'REST3.4.1'
       );
 
     $t->post_ok("//$userid:$password@/api/v1/authorities" => {'Content-Type' => 'application/marc', 'x-authority-type' => 'CORPO_NAME', 'x-koha-override' => 'duplicate' } => $marc)
@@ -225,7 +225,7 @@ subtest 'post() tests' => sub {
       ->json_is(q{})
       ->header_like(
           Location => qr|^\/api\/v1\/authorities/\d*|,
-          'SWAGGER3.4.1'
+          'REST3.4.1'
       );
 
     $schema->storage->txn_rollback;

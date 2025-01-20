@@ -54,7 +54,7 @@ subtest 'list() tests' => sub {
     my $limit = $builder->build_object({ class => 'Koha::Item::Transfer::Limits' });
 
     $t->get_ok( "//$userid:$password@/api/v1/transfer_limits" )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( [$limit->to_api] );
 
     $schema->storage->txn_rollback;
@@ -62,7 +62,7 @@ subtest 'list() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -106,8 +106,9 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
-      ->status_is( 201, 'SWAGGER3.2.1' )
-      ->json_has( '' => $limit_hashref, 'SWAGGER3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )
+        ->json_has( '' => $limit_hashref, 'REST3.3.1' )
+        ->header_is( 'Location' => '/api/v1/transfer_limits/' . $t->tx->res->json->{limit_id}, 'REST3.4.1' );
 
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits" => json => $limit_hashref )
       ->status_is( 409, 'Conflict creating the resource' )
@@ -148,8 +149,8 @@ subtest 'delete() tests' => sub {
       ->status_is(403);
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/$limit_id" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/$limit_id" )
       ->status_is(404);
@@ -228,7 +229,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Create all combinations of to/from libraries
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'SWAGGER3.2.1' )->json_has( '' => $limit_hashref, 'SWAGGER3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     my $limits = Koha::Item::Transfer::Limits->search;
 
@@ -237,7 +238,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of to/from libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -246,7 +247,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     # Create all combinations of 'to' libraries
     $limit_hashref->{to_library_id} = $library->id;
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'SWAGGER3.2.1' )->json_has( '' => $limit_hashref, 'SWAGGER3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -254,7 +255,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of 'to' libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -266,7 +267,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
     delete $limit_hashref->{to_library_id};
     $limit_hashref->{from_library_id} = $library->id;
     $t->post_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 201, 'SWAGGER3.2.1' )->json_has( '' => $limit_hashref, 'SWAGGER3.3.1' );
+        ->status_is( 201, 'REST3.2.1' )->json_has( '' => $limit_hashref, 'REST3.3.1' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 
@@ -275,7 +276,7 @@ subtest 'batch_add() and batch_delete() tests' => sub {
 
     # Delete all combinations of 'from' libraries
     $t->delete_ok( "//$auth_userid:$password@/api/v1/transfer_limits/batch" => json => $limit_hashref )
-        ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+        ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     $limits = Koha::Item::Transfer::Limits->search;
 

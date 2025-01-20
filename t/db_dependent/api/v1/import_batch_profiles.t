@@ -110,8 +110,9 @@ subtest 'list profiles' => sub {
 
 };
 
-subtest 'add profile' => sub {
-    plan tests => 5;
+subtest 'add() tests' => sub {
+
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -140,12 +141,13 @@ subtest 'add profile' => sub {
         name => 'profileName',
         overlay_action => 'overlay_action'
     };
-    $t->post_ok("//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data)
-      ->status_is(201)
-      ->json_has('/profile_id')
-      ->json_is('/name', $post_data->{name})
-      ->json_is('/overlay_action', $post_data->{overlay_action});
 
+    $t->post_ok( "//$uid:$pwd@/api/v1/import_batch_profiles", json => $post_data )
+        ->status_is(201)
+        ->json_has('/profile_id')
+        ->json_is( '/name',           $post_data->{name} )
+        ->json_is( '/overlay_action', $post_data->{overlay_action} )
+        ->header_is( 'Location', '/api/v1/import_batch_profiles/' . $t->tx->res->json->{profile_id}, 'REST3.4.1' );
 
     $schema->storage->txn_rollback;
 

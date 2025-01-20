@@ -200,7 +200,7 @@ subtest "Test endpoints without permission" => sub {
 
 subtest "Test endpoints with permission" => sub {
 
-    plan tests => 44;
+    plan tests => 45;
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
@@ -214,8 +214,8 @@ subtest "Test endpoints with permission" => sub {
       ->json_hasnt('/1');
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->patch_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" => json => $patch_data )
       ->status_is(404)
@@ -235,8 +235,8 @@ subtest "Test endpoints with permission" => sub {
       ->json_is([]);
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id2" => json => "Cancellation reason" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     # Make sure pickup location checks doesn't get in the middle
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
@@ -245,8 +245,9 @@ subtest "Test endpoints with permission" => sub {
     $mock_item->mock( 'pickup_locations', sub { return Koha::Libraries->search });
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
-      ->status_is(201)
-      ->json_has('/hold_id');
+        ->status_is(201)
+        ->json_has('/hold_id')
+        ->header_is( 'Location' => '/api/v1/holds/' . $t->tx->res->json->{hold_id}, "REST3.4.1" );
 
     # Get id from response
     $reserve_id = $t->tx->res->json->{hold_id};
@@ -294,8 +295,8 @@ subtest 'Reserves with itemtype' => sub {
     };
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     # Make sure pickup location checks doesn't get in the middle
     my $mock_biblio = Test::MockModule->new('Koha::Biblio');
@@ -517,8 +518,8 @@ subtest 'suspend and resume tests' => sub {
     );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     # Pass a an expiration date for the suspension
     my $date = dt_from_string()->add( days => 5 );
@@ -535,8 +536,8 @@ subtest 'suspend and resume tests' => sub {
         ->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $hold->set_waiting->discard_changes;
 
@@ -1519,8 +1520,8 @@ subtest 'delete() tests' => sub {
         )
     );
 
-    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id )->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id )->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $hold = Koha::Holds->find(
         AddReserve(
