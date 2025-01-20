@@ -691,17 +691,18 @@ sub add {
             );
         }
 
-        my ( $duplicatebiblionumber, $duplicatetitle );
-            ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
-
         my $confirm_not_duplicate = $headers->header('x-confirm-not-duplicate');
 
-        return $c->render(
-            status  => 400,
-            openapi => {
-                error => "Duplicate biblio $duplicatebiblionumber",
-            }
-        ) unless !$duplicatebiblionumber || $confirm_not_duplicate;
+        if ( !$confirm_not_duplicate ) {
+            my ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
+
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error => "Duplicate biblio $duplicatebiblionumber",
+                }
+            ) if $duplicatebiblionumber;
+        }
 
         my ( $biblio_id ) = AddBiblio( $record, $frameworkcode, { record_source_id => $record_source_id } );
 
