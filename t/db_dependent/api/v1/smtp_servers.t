@@ -192,9 +192,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $smtp_server_id =
       $t->post_ok( "//$userid:$password@/api/v1/config/smtp_servers" => json =>
-          $smtp_server_data )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $smtp_server_data )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/config\/smtp_servers\/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name' => $smtp_server_data->{name} )
       ->json_is( '/state'       => $smtp_server_data->{state} )
       ->json_is( '/postal_code' => $smtp_server_data->{postal_code} )
@@ -348,7 +348,7 @@ subtest 'delete() tests' => sub {
 
     $t->delete_ok(
         "//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok(
         "//$userid:$password@/api/v1/config/smtp_servers/$smtp_server_id")

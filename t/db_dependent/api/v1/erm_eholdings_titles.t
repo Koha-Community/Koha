@@ -275,9 +275,9 @@ subtest 'add() tests' => sub {
     my $ehtitle_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles" => json =>
-          $ehtitle )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $ehtitle )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/erm/eholdings/local/titles/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/publication_title' => $ehtitle->{publication_title} )
       ->json_is( '/print_identifier' => $ehtitle->{print_identifier} )
       ->json_is( '/notes'            => $ehtitle->{notes} )
@@ -550,7 +550,7 @@ subtest 'delete() tests' => sub {
     # Delete existing EHolding title
     $t->delete_ok(
         "//$userid:$password@/api/v1/erm/eholdings/local/titles/$ehtitle_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent EHolding title
     $t->delete_ok(

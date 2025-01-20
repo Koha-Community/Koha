@@ -197,10 +197,10 @@ subtest 'add() tests' => sub {
 
     # Authorized attempt to write
     my $rota_id =
-        $t->post_ok( "//$userid:$password@/api/v1/rotas" => json => $rota )->status_is( 201, 'SWAGGER3.2.1' )
+        $t->post_ok( "//$userid:$password@/api/v1/rotas" => json => $rota )->status_is( 201, 'REST3.2.1' )
         ->header_like(
         Location => qr|^\/api\/v1\/rotas/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/title' => $rota->{title} )->json_is( '/description' => $rota->{description} )
         ->json_is( '/active' => $rota->{active} )->json_is( '/cyclical' => $rota->{cyclical} )
         ->tx->res->json->{rota_id};
@@ -341,8 +341,8 @@ subtest 'delete() tests' => sub {
     # Unauthorized attempt to delete
     $t->delete_ok("//$unauth_userid:$password@/api/v1/rotas/$rota_id")->status_is(403);
 
-    $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( '', 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( '', 'REST3.3.4' );
 
     $t->delete_ok("//$userid:$password@/api/v1/rotas/$rota_id")->status_is(404);
 

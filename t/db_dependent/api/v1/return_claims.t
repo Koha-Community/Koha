@@ -78,7 +78,7 @@ subtest 'claim_returned() tests' => sub {
         }
     )->status_is(201)->header_like(
         Location => qr|^\/api\/v1\/return_claims/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     );
 
     my $claim_id = $t->tx->res->json->{claim_id};
@@ -293,8 +293,8 @@ subtest 'delete() tests' => sub {
 
     # Test deleting a return claim
     $t->delete_ok("//$userid:$password@/api/v1/return_claims/" . $claim->id)
-      ->status_is( 204, 'SWAGGER3.2.4' )
-      ->content_is( '', 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )
+      ->content_is( '', 'REST3.3.4' );
 
     my $THE_claim = Koha::Checkouts::ReturnClaims->find($claim->id);
     isnt( $THE_claim, "Return claim was deleted" );

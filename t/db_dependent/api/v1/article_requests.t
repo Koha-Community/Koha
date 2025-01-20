@@ -70,7 +70,7 @@ subtest 'cancel() tests' => sub {
     $t->delete_ok( "//$userid:$password@/api/v1/article_requests/"
           . $article_request->id
           . "?cancellation_reason=$reason&notes=$notes" )
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( q{}, 'SWAGGER3.2.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( q{}, 'REST3.2.4' );
 
     # refresh object
     $article_request->discard_changes;
@@ -150,8 +150,8 @@ subtest 'patron_cancel() tests' => sub {
         "//$userid:$password@/api/v1/public/patrons/$patron_id/article_requests/"
           . $article_request->id
           . "?cancellation_reason=$reason&notes=$notes" )
-      ->status_is( 204, 'SWAGGER3.2.4' )
-      ->content_is( q{}, 'SWAGGER3.2.4' );
+      ->status_is( 204, 'REST3.2.4' )
+      ->content_is( q{}, 'REST3.2.4' );
 
     # refresh object
     $article_request->discard_changes;

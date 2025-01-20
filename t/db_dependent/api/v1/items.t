@@ -81,7 +81,7 @@ subtest 'list() tests' => sub {
     $userid = $patron->userid;
 
     $t->get_ok( "//$userid:$password@/api/v1/items?_per_page=10" )
-      ->status_is( 200, 'SWAGGER3.2.2' );
+      ->status_is( 200, 'REST3.2.2' );
 
     my $response_count = scalar @{ $t->tx->res->json };
 
@@ -89,11 +89,11 @@ subtest 'list() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
       ->status_is(200)
-      ->json_is( '' => [ $item->to_api ], 'SWAGGER3.3.2');
+      ->json_is( '' => [ $item->to_api ], 'REST3.3.2');
 
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode => {'x-koha-embed' => 'biblio'} )
       ->status_is(200)
-      ->json_is( '' => [ { %{$item->to_api}, biblio => $item->biblio->to_api } ], 'SWAGGER3.3.2');
+      ->json_is( '' => [ { %{$item->to_api}, biblio => $item->biblio->to_api } ], 'REST3.3.2');
 
 
     my $barcode = $item->barcode;
@@ -284,8 +284,8 @@ subtest 'get() tests' => sub {
     $userid = $patron->userid;
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '' => $item->to_api, 'SWAGGER3.3.2' );
+      ->status_is( 200, 'REST3.2.2' )
+      ->json_is( '' => $item->to_api, 'REST3.3.2' );
 
     my $non_existent_code = $item->itemnumber;
     $item->delete;
@@ -305,14 +305,14 @@ subtest 'get() tests' => sub {
     isnt( $biblio->itemtype, $itype->itemtype, "Test biblio level itemtype and item level itemtype do not match");
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itypes:0' )
       ->json_is( '/effective_item_type_id' => $biblio->itemtype, 'item-level_itypes:0' );
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/item_type_id' => $itype->itemtype, 'item-level_itype:1' )
       ->json_is( '/effective_item_type_id' => $itype->itemtype, 'item-level_itypes:1' );
 
@@ -323,18 +323,18 @@ subtest 'get() tests' => sub {
     $item->notforloan(1)->store();
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/not_for_loan_status' => 1, 'not_for_loan_status is 1' )
       ->json_is( '/effective_not_for_loan_status' => 1, 'effective_not_for_loan_status picks up item level' );
 
     $item->notforloan(0)->store();
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 2, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:1' );
 
     $itype->notforloan(0)->store();
-    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'SWAGGER3.2.2' )
+    $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )->status_is( 200, 'REST3.2.2' )
         ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )->json_is(
         '/effective_not_for_loan_status' => 0,
         'effective_not_for_loan_status now picks up itemtype level and falls back to 0 because undef'
@@ -342,7 +342,7 @@ subtest 'get() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
-      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->status_is( 200, 'REST3.2.2' )
       ->json_is( '/not_for_loan_status' => 0, 'not_for_loan_status is 0' )
       ->json_is( '/effective_not_for_loan_status' => 3, 'effective_not_for_loan_status now picks up itemtype level - item-level_itypes:0' );
 
@@ -416,8 +416,8 @@ subtest 'delete() tests' => sub {
     $fail = 0;
 
     $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
-      ->status_is(204, 'SWAGGER3.2.4')
-      ->content_is('', 'SWAGGER3.3.4');
+      ->status_is(204, 'REST3.2.4')
+      ->content_is('', 'REST3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/items/" . $item->id)
       ->status_is(404);

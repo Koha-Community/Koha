@@ -249,9 +249,9 @@ subtest 'add() tests' => sub {
     my $license_id =
       $t->post_ok(
         "//$userid:$password@/api/v1/erm/licenses" => json => $license )
-      ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+      ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^/api/v1/erm/licenses/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->json_is( '/name'             => $license->{name} )
       ->json_is( '/description'     => $license->{description} )
       ->json_is( '/type'            => $license->{type} )
@@ -421,7 +421,7 @@ subtest 'delete() tests' => sub {
 
     # Delete existing license
     $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( '', 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( '', 'REST3.3.4' );
 
     # Attempt to delete non-existent license
     $t->delete_ok("//$userid:$password@/api/v1/erm/licenses/$license_id")

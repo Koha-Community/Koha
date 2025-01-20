@@ -219,9 +219,9 @@ subtest 'add() tests' => sub {
     # Authorized attempt to write
     my $generated_suggestion =
       $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json =>
-          $suggestion_data )->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+          $suggestion_data )->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/suggestions\/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->tx->res->json;
 
     my $suggestion_id = $generated_suggestion->{suggestion_id};
@@ -412,7 +412,7 @@ subtest 'delete() tests' => sub {
 
     $t->delete_ok(
         "//$userid:$password@/api/v1/suggestions/$suggestion_id")
-      ->status_is( 204, 'SWAGGER3.2.4' )->content_is( q{}, 'SWAGGER3.3.4' );
+      ->status_is( 204, 'REST3.2.4' )->content_is( q{}, 'REST3.3.4' );
 
     $t->delete_ok(
         "//$userid:$password@/api/v1/suggestions/$suggestion_id")
@@ -457,7 +457,7 @@ subtest 'Permissions tests' => sub {
 
     # Unauthorized attempt to write
     $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
-        ->status_is( 403, 'SWAGGER3.2.1' );
+        ->status_is( 403, 'REST3.2.1' );
 
     $builder->build(
         {
@@ -473,9 +473,9 @@ subtest 'Permissions tests' => sub {
     # Authorized attempt to write
     my $generated_suggestion =
         $t->post_ok( "//$userid:$password@/api/v1/suggestions" => json => $suggestion_data )
-        ->status_is( 201, 'SWAGGER3.2.1' )->header_like(
+        ->status_is( 201, 'REST3.2.1' )->header_like(
         Location => qr|^\/api\/v1\/suggestions\/\d*|,
-        'SWAGGER3.4.1'
+        'REST3.4.1'
     )->tx->res->json;
 
     my $suggestion_id = $generated_suggestion->{suggestion_id};
@@ -498,8 +498,8 @@ subtest 'Permissions tests' => sub {
         }
     );
 
-    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is( 204, 'SWAGGER3.2.4' )
-        ->content_is( q{}, 'SWAGGER3.3.4' );
+    $t->delete_ok("//$userid:$password@/api/v1/suggestions/$suggestion_id")->status_is( 204, 'REST3.2.4' )
+        ->content_is( q{}, 'REST3.3.4' );
 
     $schema->storage->txn_rollback;
 };
