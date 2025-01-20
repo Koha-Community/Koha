@@ -2,12 +2,15 @@ const { faker } = require("@faker-js/faker");
 const { readYamlFile } = require("./../plugins/readYamlFile.js");
 const fs = require('fs');
 
-const generateMockData = type => {
+const generateMockData = (type, properties) => {
     if (Array.isArray(type)) {
         type = type.filter(t => t != '"null"')[0];
     }
     switch (type) {
         case "string":
+            if(properties?.maxLength){
+                return faker.string.alpha({ length: { min: properties.minLength || 1, max: properties.maxLength } })
+            }
             return faker.lorem.words(3);
         case "integer":
             return faker.number.int();
@@ -36,7 +39,7 @@ const generateDataFromSchema = (properties, values = {}) => {
                 value?.format == "date" || value?.format == "date-time"
                     ? value.format
                     : value.type;
-            mockData[key] = generateMockData(type);
+            mockData[key] = generateMockData(type, value);
         }
     });
     return mockData;
