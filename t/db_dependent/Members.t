@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More tests => 51;
+use Test::More tests => 53;
 use Test::MockModule;
 use Test::Exception;
 
@@ -28,6 +28,7 @@ use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron qw( AddPatronList AddPatronsToList );
 use Koha::Patrons;
+use Koha::Patron::Debarments qw( AddDebarment );
 use Koha::Patron::Relationship;
 
 use t::lib::Mocks;
@@ -358,6 +359,36 @@ is( scalar(@$patstodel), 2, 'Borrowers without issues deleted by expiration_date
 $patstodel =
     GetBorrowersToExpunge( { not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel), 2, 'Borrowers without issues deleted by last issue date' );
+
+# Test the "without_restriction_types" parameter of GetBorrowersToExpunge().
+my $borrower3 = $builder->build(
+    {
+        source => 'Borrower',
+        value  => { categorycode => 'CIVILIAN', flags => undef }
+    }
+);
+my $list2 = AddPatronList( { name => 'Test List 2', owner => $owner } );
+AddPatronsToList( { list => $list2, borrowernumbers => [ $borrower3->{borrowernumber} ] } );
+$patstodel = GetBorrowersToExpunge(
+    {
+        without_restriction_types => 'MANUAL',
+        patron_list_id            => $list2->patron_list_id()
+    }
+);
+is( scalar(@$patstodel), 1, 'Borrower without restriction deleted' );
+Koha::Patron::Debarments::AddDebarment(
+    {
+        borrowernumber => $borrower3->{borrowernumber},
+        type           => 'MANUAL'
+    }
+);
+$patstodel = GetBorrowersToExpunge(
+    {
+        without_restriction_types => 'MANUAL',
+        patron_list_id            => $list2->patron_list_id()
+    }
+);
+is( scalar(@$patstodel), 0, 'Borrower with restriction not deleted' );
 
 # Test GetBorrowersToExpunge and TrackLastPatronActivityTriggers
 my $new_category = $builder->build_object(
