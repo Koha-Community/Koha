@@ -40,11 +40,11 @@ sub public_read_list {
     return [
         'volume',           'number',                'isbn',
         'issn',             'ean',                   'publicationyear',
-        'publishercode',    'volumedate',            'columedesc',
+        'publishercode',    'volumedate',            'volumedesc',
         'collectiontitle',  'collectionissn',        'collectionvolume',
         'editionstatement', 'editionresponsibility', 'pages',
         'place',            'lccn',                  'url',
-        'cn_source',        'cn_class',              'cn)item',
+        'cn_source',        'cn_class',              'cn_item',
         'cn_suffix',        'cn_sort',               'agerestriction',
         'totalissues'
     ];
