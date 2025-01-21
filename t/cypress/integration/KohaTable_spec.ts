@@ -561,10 +561,6 @@ describe("Hit all tables", () => {
                             cy.request({
                                 method: "POST",
                                 url: "/api/v1/biblios",
-                                auth: {
-                                    username: "koha",
-                                    password: "koha",
-                                },
                                 headers: {
                                     "Content-Type": "application/marc-in-json",
                                     "x-confirm-not-duplicate": 1,
