@@ -334,6 +334,20 @@ tbody tr.active td {
     width: 15em;
 }
 
+#item-template-toolbar div:has(label[for="use_template_for_session"]) {
+    display: flex;
+    align-items: center;
+}
+
+#item-template-toolbar div:has(label[for="use_template_for_session"])::after {
+    content: "|";
+    padding-left: 7px;
+}
+
+#toolbar {
+    padding: 5px 0;
+}
+
 .toolbar-tabs-container {
     flex-basis: 100%;
     margin-top: .5em;
