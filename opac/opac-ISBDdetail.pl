@@ -42,7 +42,7 @@ use Modern::Perl;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Context;
-use C4::Output qw( parametrized_url output_html_with_http_headers );
+use C4::Output qw( parametrized_url output_html_with_http_headers redirect_if_opac_suppressed );
 use CGI        qw ( -utf8 );
 use C4::Biblio qw(
     CountItemsIssued
@@ -76,31 +76,8 @@ if ( !$biblio ) {
 }
 
 # If record should be suppressed, handle it early
-if ( C4::Context->preference('OpacSuppression') ) {
-
-    # redirect to opac-blocked info page or 404?
-    my $redirect_url;
-    if ( C4::Context->preference("OpacSuppressionRedirect") ) {
-        $redirect_url = "/cgi-bin/koha/opac-blocked.pl";
-    } else {
-        $redirect_url = "/cgi-bin/koha/errors/404.pl";
-    }
-    if ( $biblio->opac_suppressed() ) {
-
-        # if OPAC suppression by IP address
-        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
-            my $IPAddress = $ENV{'REMOTE_ADDR'};
-            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
-            if ( $IPAddress !~ /^$IPRange/ ) {
-                print $query->redirect($redirect_url);
-                exit;
-            }
-        } else {
-            print $query->redirect($redirect_url);
-            exit;
-        }
-    }
-}
+redirect_if_opac_suppressed( $query, $biblio )
+    if C4::Context->preference('OpacSuppression');
 
 #open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

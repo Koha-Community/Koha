@@ -33,7 +33,7 @@ use C4::Koha        qw(
 );
 use C4::Search  qw( new_record_from_zebra searchResults getRecords );
 use C4::Serials qw( CountSubscriptionFromBiblionumber SearchSubscriptions GetLatestSerials );
-use C4::Output  qw( parametrized_url output_html_with_http_headers );
+use C4::Output  qw( parametrized_url output_html_with_http_headers redirect_if_opac_suppressed );
 use C4::Biblio  qw(
     CountItemsIssued
     GetBiblioData
@@ -112,31 +112,8 @@ unless ( $biblio && $record ) {
 }
 
 # If record should be suppressed, handle it early
-if ( C4::Context->preference('OpacSuppression') ) {
-
-    # redirect to opac-blocked info page or 404?
-    my $redirect_url;
-    if ( C4::Context->preference("OpacSuppressionRedirect") ) {
-        $redirect_url = "/cgi-bin/koha/opac-blocked.pl";
-    } else {
-        $redirect_url = "/cgi-bin/koha/errors/404.pl";
-    }
-    if ( $biblio->opac_suppressed() ) {
-
-        # if OPAC suppression by IP address
-        if ( C4::Context->preference('OpacSuppressionByIPRange') ) {
-            my $IPAddress = $ENV{'REMOTE_ADDR'};
-            my $IPRange   = C4::Context->preference('OpacSuppressionByIPRange');
-            if ( $IPAddress !~ /^$IPRange/ ) {
-                print $query->redirect($redirect_url);
-                exit;
-            }
-        } else {
-            print $query->redirect($redirect_url);
-            exit;
-        }
-    }
-}
+redirect_if_opac_suppressed( $query, $biblio )
+    if C4::Context->preference('OpacSuppression');
 
 my $metadata_extractor = $biblio->metadata_extractor;
 
