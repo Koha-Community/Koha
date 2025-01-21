@@ -3,6 +3,8 @@ import { createPinia } from "pinia";
 import { $__ } from "../i18n";
 import { useMainStore } from "../stores/main";
 import { useNavigationStore } from "../stores/navigation";
+import { usePermissionsStore } from "../stores/permissions";
+import { useVendorStore } from "../stores/vendors";
 
 /**
  * Represents a web component with an import function and optional configuration.
@@ -40,7 +42,27 @@ type WebComponentDynamicImport = {
  * ],
  */
 export const componentRegistry: Map<string, WebComponentDynamicImport> =
-    new Map([]);
+    new Map([
+        [
+            "acquisitions-menu",
+            {
+                importFn: async () => {
+                    const module = await import(
+                        /* webpackChunkName: "acquisitions-menu" */
+                        "../components/Islands/AcquisitionsMenu.vue"
+                    );
+                    return module.default;
+                },
+                config: {
+                    stores: [
+                        "vendorStore",
+                        "navigationStore",
+                        "permissionsStore",
+                    ],
+                },
+            },
+        ],
+    ]);
 
 /**
  * Hydrates custom elements by scanning the document and loading only necessary components.
@@ -52,6 +74,8 @@ export function hydrate(): void {
         const storesMatrix = {
             mainStore: useMainStore(pinia),
             navigationStore: useNavigationStore(pinia),
+            permissionsStore: usePermissionsStore(pinia),
+            vendorStore: useVendorStore(pinia),
         };
 
         const islandTagNames = Array.from(componentRegistry.keys()).join(", ");
