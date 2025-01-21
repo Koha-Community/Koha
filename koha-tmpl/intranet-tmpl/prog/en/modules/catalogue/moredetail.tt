@@ -439,9 +439,10 @@
                                             [% IF (ITEM_DAT.datelastborrowed ) %][% ITEM_DAT.datelastborrowed | $KohaDates %][% END %]
                                         </li>
                                         [% IF Koha.Preference('StoreLastBorrower') && ITEM_DAT.object.last_returned_by %]
+                                            [% SET last_returned_by = ITEM_DAT.object.last_returned_by.cardnumber || ITEM_DAT.object.last_returned_by.borrowernumber %]
                                             <li>
                                                 <span class="label">Last returned by:</span>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% ITEM_DAT.object.last_returned_by.cardnumber | html %]</a>
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_retruned_by | html %]</a>
                                             </li>
                                         [% END %]
                                         [% FOR i IN ITEM_DAT.old_issues %]
@@ -452,7 +453,8 @@
                                                 [% ELSE %]
                                                     <span class="label">Previous borrower:</span>
                                                 [% END %]
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% b.borrowernumber | uri %]">[% b.cardnumber | html %]</a>&nbsp;
+                                                [% SET last_or_previous_borrower = b.cardnumber || b.borrowernumber %]
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% b.borrowernumber | uri %]">[% last_or_previous_borrower | html %]</a>&nbsp;
                                             </li>
                                         [% END %]
                                         [% IF ( ITEM_DAT.paidfor ) %]
