@@ -3,6 +3,9 @@
     [% CASE 'identifiers' %]
         <li class="identifier_[% info.source.lower | html %]">
         [% SWITCH info.source.lower %]
+            [% CASE 'control_number' %]
+                <span>Control number: </span>
+                [% info.number | html %]
             [% CASE 'orcid' %]
                 <span>ORCID: </span>
                 <a href="https://orcid.org/[% info.number | url %]">[% info.number | html %]</a>

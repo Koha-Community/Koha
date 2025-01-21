@@ -162,6 +162,12 @@ sub get_identifiers_and_information {
         if ( $info eq 'identifiers' ) {
 
             # identifiers (024$2$a)
+            push @{ $information->{identifiers} },
+              {
+                source => 'control_number',
+                number => $record->subfield( '010', 'a' ),
+              }
+              if $record->subfield( '010', 'a' );
             for my $field ( $record->field('024') ) {
                 my $sf_2 = $field->subfield('2');
                 my $sf_a = $field->subfield('a');
