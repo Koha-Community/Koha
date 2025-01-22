@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Koha::SFTP::Servers;
+use Koha::File::Transports;
 
 use Try::Tiny qw( catch try );
 
@@ -37,7 +37,7 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $sftp_servers_set = Koha::SFTP::Servers->new;
+        my $sftp_servers_set = Koha::File::Transports->new;
         my $sftp_servers     = $c->objects->search($sftp_servers_set);
         return $c->render(
             status  => 200,
@@ -58,7 +58,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $sftp_server = Koha::SFTP::Servers->find( $c->param('sftp_server_id') );
+        my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
 
         return $c->render_resource_not_found("FTP/SFTP server")
             unless $sftp_server;
@@ -116,7 +116,7 @@ Controller method that handles updating a Koha::SFTP::Server object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $sftp_server = Koha::SFTP::Servers->find( $c->param('sftp_server_id') );
+    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
 
     return $c->render_resource_not_found("FTP/SFTP server")
         unless $sftp_server;
@@ -153,7 +153,7 @@ Controller method that handles deleting a Koha::SFTP::Server object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $sftp_server = Koha::SFTP::Servers->find( $c->param('sftp_server_id') );
+    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
 
     return $c->render_resource_not_found("FTP/SFTP server")
         unless $sftp_server;
@@ -175,7 +175,7 @@ Controller method that invokes Koha::SFTP::Server->test_conn
 sub test {
     my $c = shift->openapi->valid_input or return;
 
-    my $sftp_server = Koha::SFTP::Servers->find( $c->param('sftp_server_id') );
+    my $sftp_server = Koha::File::Transports->find( $c->param('sftp_server_id') );
 
     return $c->render_resource_not_found("FTP/SFTP server")
         unless $sftp_server;
