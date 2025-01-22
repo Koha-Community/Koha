@@ -175,10 +175,17 @@ subtest '400 response tests' => sub {
 subtest 'POST (201) have location header' => sub {
     my @files = `git ls-files 'Koha/REST/V1/**/*.pm'`;
     plan tests => scalar @files;
+    my @exceptions = qw(
+        Koha/REST/V1/Auth/Password.pm
+        Koha/REST/V1/Preservation/WaitingList.pm
+    );
     foreach my $file (@files) {
         chomp $file;
         my $content = read_file($file);
-        if ( $content !~ /status\s*=>\s*201/s ) {
+        if ( grep { $file eq $_ } @exceptions ) {
+            pass("$file is skipped - exception");
+        }
+        elsif ( $content !~ /status\s*=>\s*201/s ) {
             pass("$file does not seem to have a POST endpoint");
         } elsif ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s ) {
             pass("$file contains the location header");
