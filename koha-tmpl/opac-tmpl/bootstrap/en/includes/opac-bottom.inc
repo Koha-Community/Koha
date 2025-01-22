@@ -162,7 +162,7 @@
 [% END %]
 
 [% Asset.js("lib/js-cookie/js.cookie-3.0.1.min.js") | $raw %]
-[% Asset.js("bootstrap/js/show-password-toggle.js") | $raw %]
+[% Asset.js("js/show-password-toggle.js") | $raw %]
 <script>
 $(document).ready(function() {
     if($('#searchsubmit').length) {
