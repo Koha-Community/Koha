@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::NoWarnings;
+use Test::More tests => 45;
 use Test::Warn;
 
 my $destructorcount = 0;

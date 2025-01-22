@@ -21,7 +21,8 @@ use Modern::Perl;
 use Test::Deep     qw( cmp_deeply re );
 use Test::MockTime qw/set_fixed_time set_relative_time restore_time/;
 
-use Test::More tests => 35;
+use Test::NoWarnings;
+use Test::More tests => 36;
 use DateTime;
 use File::Basename;
 use File::Spec;

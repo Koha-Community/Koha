@@ -29,7 +29,8 @@ use Koha::Item;
 use Koha::DateUtils qw( dt_from_string );
 use t::lib::TestBuilder;
 
-use Test::More tests => 35;
+use Test::NoWarnings;
+use Test::More tests => 36;
 use Test::Exception;
 use Test::Warn;
 

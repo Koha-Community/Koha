@@ -1,5 +1,6 @@
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use C4::Acquisition qw( NewBasket AddInvoice ModOrder ModOrderUsers GetOrder GetOrderUsers ModReceiveOrder );
 use C4::Biblio      qw( AddBiblio );

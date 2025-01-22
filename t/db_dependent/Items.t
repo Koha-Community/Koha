@@ -36,7 +36,8 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 14;
+use Test::NoWarnings;
+use Test::More tests => 15;
 
 use Test::Warn;
 

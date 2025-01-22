@@ -8,7 +8,8 @@ use warnings;
 
 use Test::MockModule;
 use Test::MockObject;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 use t::lib::Mocks;
 use MARC::Record;
 

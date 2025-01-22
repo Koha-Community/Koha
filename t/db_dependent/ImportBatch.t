@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 20;
+use Test::NoWarnings;
+use Test::More tests => 21;
 use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;

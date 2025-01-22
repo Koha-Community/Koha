@@ -29,7 +29,8 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 9;
+use Test::NoWarnings;
+use Test::More tests => 10;
 
 my $schema = Koha::Database->new->schema;
 

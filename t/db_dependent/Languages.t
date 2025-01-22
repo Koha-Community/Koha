@@ -6,7 +6,8 @@ use utf8;
 use Modern::Perl;
 
 use Encode;
-use Test::More tests => 22;
+use Test::NoWarnings;
+use Test::More tests => 23;
 use Test::Deep;
 use Test::Exception;
 use List::Util qw(first);

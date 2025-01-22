@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use t::lib::Mocks qw(mock_preference);
 use t::lib::TestBuilder;

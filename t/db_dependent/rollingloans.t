@@ -11,7 +11,8 @@ use Koha::Patrons;
 use t::lib::TestBuilder;
 use t::lib::Mocks qw(mock_preference);
 
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

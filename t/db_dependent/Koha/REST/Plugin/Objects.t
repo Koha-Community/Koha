@@ -134,7 +134,8 @@ get '/cities/:city_id/rs' => sub {
 };
 
 # The tests
-use Test::More tests => 18;
+use Test::NoWarnings;
+use Test::More tests => 19;
 use Test::Mojo;
 
 use t::lib::Mocks;

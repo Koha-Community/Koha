@@ -6,7 +6,8 @@ use C4::Context;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
 use Test::MockModule;
-use Test::More tests => 9;
+use Test::NoWarnings;
+use Test::More tests => 10;
 use t::lib::Mocks;
 
 BEGIN {

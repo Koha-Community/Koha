@@ -16,6 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use Test::NoWarnings;
 use Test::More tests => 8;
 use Test::Warn;
 use utf8;

@@ -4,7 +4,8 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 83;
+use Test::NoWarnings;
+use Test::More tests => 84;
 
 use Test::MockModule;
 use Test::Warn;

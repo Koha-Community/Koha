@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 35;
+use Test::NoWarnings;
+use Test::More tests => 36;
 use Test::MockModule;
 use Test::Warn;
 use YAML::XS;

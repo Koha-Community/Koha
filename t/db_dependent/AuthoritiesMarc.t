@@ -5,7 +5,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Field;

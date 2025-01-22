@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use threads;    # used for parallel
+use Test::NoWarnings;
 use Test::More;
 use Test::Strict;
 use Parallel::ForkManager;

@@ -4,7 +4,8 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::NoWarnings;
+use Test::More tests => 20;
 use Test::Warn;
 
 use DateTime;

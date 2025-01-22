@@ -20,6 +20,7 @@
 use strict;
 use warnings;
 
+use Test::NoWarnings;
 use Test::More;
 
 BEGIN {

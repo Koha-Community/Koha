@@ -22,7 +22,8 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 22;
+use Test::NoWarnings;
+use Test::More tests => 23;
 use File::Temp qw(tempfile);
 use utf8;
 

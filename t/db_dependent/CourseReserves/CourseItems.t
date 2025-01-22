@@ -24,7 +24,8 @@ use C4::CourseReserves
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 36;
+use Test::NoWarnings;
+use Test::More tests => 37;
 
 BEGIN {
     require_ok('C4::CourseReserves');

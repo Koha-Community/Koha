@@ -4,7 +4,8 @@
 # It requires a working Koha database with the sample data
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Warn;
 use Test::Deep;

@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use File::Temp qw/tempfile/;
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 BEGIN { use_ok('Koha::Util::OpenDocument'); }
 

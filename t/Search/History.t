@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use URI::Escape;
 use JSON qw( decode_json );
 

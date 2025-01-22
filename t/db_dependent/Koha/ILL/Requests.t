@@ -41,7 +41,8 @@ use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
 use Test::Warn;
 
-use Test::More tests => 16;
+use Test::NoWarnings;
+use Test::More tests => 17;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

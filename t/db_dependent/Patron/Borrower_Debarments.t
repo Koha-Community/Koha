@@ -13,7 +13,8 @@ use Koha::ActionLogs;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 39;
+use Test::NoWarnings;
+use Test::More tests => 40;
 
 use_ok('Koha::Patron::Debarments');
 

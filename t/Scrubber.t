@@ -3,7 +3,8 @@
 use Modern::Perl;
 
 $| = 1;
-use Test::More tests => 31;
+use Test::NoWarnings;
+use Test::More tests => 32;
 use Test::Warn;
 
 BEGIN {

@@ -3,7 +3,8 @@
 # This test deals with GetFictiveIssueNumber (from C4::Serials)
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 
 use Koha::Database;
 use C4::Serials qw( GetFictiveIssueNumber GetSubscription );

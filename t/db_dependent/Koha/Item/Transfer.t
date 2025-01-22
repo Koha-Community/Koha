@@ -24,7 +24,8 @@ use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 7;
+use Test::NoWarnings;
+use Test::More tests => 8;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;

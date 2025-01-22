@@ -11,7 +11,8 @@ use t::lib::TestBuilder;
 use C4::Auth qw( get_session checkauth get_template_and_user );
 use Koha::Database;
 
-use Test::More tests => 27;
+use Test::NoWarnings;
+use Test::More tests => 28;
 use Test::Warn;
 use URI::Escape;
 use List::Util qw( shuffle );

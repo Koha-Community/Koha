@@ -26,7 +26,8 @@ require C4::Context;
 # work around spurious wide character warnings
 use open ':std', ':encoding(utf8)';
 
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 use t::lib::Mocks;

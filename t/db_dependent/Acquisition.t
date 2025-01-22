@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 73;
+use Test::NoWarnings;
+use Test::More tests => 74;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string output_pref);

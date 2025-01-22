@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::NoWarnings;
+use Test::More tests => 19;
 use Test::Warn;
 use CGI;
 use File::Basename;

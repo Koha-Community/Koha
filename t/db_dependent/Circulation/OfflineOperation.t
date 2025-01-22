@@ -7,7 +7,8 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Library;
 
-use Test::More tests => 7;
+use Test::NoWarnings;
+use Test::More tests => 8;
 
 BEGIN {
     use_ok(

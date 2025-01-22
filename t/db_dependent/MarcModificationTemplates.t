@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 129;
+use Test::NoWarnings;
+use Test::More tests => 130;
 
 use Koha::Database;
 use Koha::SimpleMARC;

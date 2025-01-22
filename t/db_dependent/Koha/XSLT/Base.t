@@ -20,7 +20,8 @@
 use Modern::Perl;
 
 use File::Temp qw/tempfile/;
-use Test::More tests => 33;
+use Test::NoWarnings;
+use Test::More tests => 34;
 use Test::Warn;
 
 use Koha::XSLT::Base;

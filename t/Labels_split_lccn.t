@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use C4::ClassSplitRoutine::LCC qw( split_callnumber );
+use Test::NoWarnings;
 use Test::More;
 
 BEGIN {

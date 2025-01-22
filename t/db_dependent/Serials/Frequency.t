@@ -2,7 +2,8 @@
 
 use C4::Context;
 use Koha::Database;
-use Test::More tests => 27;
+use Test::NoWarnings;
+use Test::More tests => 28;
 use Modern::Perl;
 
 my $schema = Koha::Database->new->schema;

@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::NoWarnings;
+use Test::More tests => 15;
 
 use C4::Context;
 use Koha::ActionLogs;

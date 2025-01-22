@@ -19,7 +19,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use MARC::Record;
 use MARC::Field;

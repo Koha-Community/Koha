@@ -26,7 +26,8 @@ use C4::Biblio qw( AddBiblio ModBiblio DelBiblio );
 use Koha::Database;
 use Koha::Biblios;
 
-use Test::More tests => 24;
+use Test::NoWarnings;
+use Test::More tests => 25;
 use Test::MockModule;
 
 use Koha::MarcOverlayRules;

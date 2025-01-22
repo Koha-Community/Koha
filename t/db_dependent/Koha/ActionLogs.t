@@ -17,7 +17,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use C4::Context;
 use C4::Log qw( logaction );

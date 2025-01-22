@@ -22,6 +22,7 @@ use Modern::Perl;
 use File::Spec;
 use MARC::Record;
 use English qw( -no_match_vars );
+use Test::NoWarnings;
 use Test::More;
 
 BEGIN {

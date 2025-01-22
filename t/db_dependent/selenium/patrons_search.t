@@ -27,6 +27,7 @@ our $DT_delay = 1;
 use C4::Context;
 
 use utf8;
+use Test::NoWarnings;
 use Test::More;
 use Test::MockModule;
 

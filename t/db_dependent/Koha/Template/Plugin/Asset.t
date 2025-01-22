@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::NoWarnings;
+use Test::More tests => 17;
 use Template;
 use Test::MockModule;
 

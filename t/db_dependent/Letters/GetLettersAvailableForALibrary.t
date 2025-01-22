@@ -1,5 +1,6 @@
 use Modern::Perl;
-use Test::More tests => 19;
+use Test::NoWarnings;
+use Test::More tests => 20;
 
 use C4::Context;
 use C4::Letters qw( GetLetters GetLettersAvailableForALibrary DelLetter );

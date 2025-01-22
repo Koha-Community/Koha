@@ -20,7 +20,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 use Test::Exception;
 
 use Koha::Database;

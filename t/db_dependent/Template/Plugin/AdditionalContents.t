@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 
 use C4::Context;
 use Koha::Caches;

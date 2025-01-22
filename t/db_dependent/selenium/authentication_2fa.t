@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 use utf8;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 
 use C4::Context;
 use Koha::AuthUtils;

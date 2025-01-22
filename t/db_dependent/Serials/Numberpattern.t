@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 95;
+use Test::NoWarnings;
+use Test::More tests => 96;
 
 use C4::Context;
 use Koha::Database;

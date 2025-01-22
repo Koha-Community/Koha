@@ -20,7 +20,8 @@
 use Modern::Perl;
 
 use t::lib::TestBuilder;
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Koha::Database;
 
 use_ok('Koha::Subscription::Numberpatterns');

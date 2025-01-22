@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::NoWarnings;
+use Test::More tests => 24;
 use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;

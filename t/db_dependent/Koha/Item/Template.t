@@ -26,7 +26,8 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

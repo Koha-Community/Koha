@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use File::Spec;
 
+use Test::NoWarnings;
 use Test::More;
 
 BEGIN {

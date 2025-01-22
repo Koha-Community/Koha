@@ -16,7 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 use File::Slurp;
 use C4::Context;
 my $content = read_file( C4::Context->config("intranetdir") . '/installer/data/mysql/kohastructure.sql' );

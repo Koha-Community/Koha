@@ -4,7 +4,8 @@ use Modern::Perl;
 use Data::Dumper qw/Dumper/;
 use MARC::Record;
 use MARC::Field;
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 use t::lib::Mocks;
 use Koha::Authority::ControlledIndicators;

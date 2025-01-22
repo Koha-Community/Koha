@@ -369,7 +369,8 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 10;
+use Test::NoWarnings;
+use Test::More tests => 11;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {

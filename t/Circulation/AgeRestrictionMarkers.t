@@ -22,7 +22,8 @@ use Modern::Perl;
 
 use DateTime;
 use Koha::DateUtils qw( dt_from_string );
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::Warn;
 
 use t::lib::Mocks;

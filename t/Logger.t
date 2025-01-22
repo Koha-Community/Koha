@@ -22,7 +22,8 @@ use Koha::Logger;
 use t::lib::Mocks;
 
 use File::Temp qw/tempfile/;
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 use Test::Warn;
 use Test::Exception;
 

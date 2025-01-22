@@ -5,7 +5,8 @@ use Modern::Perl;
 use C4::Context;
 use Koha::CirculationRules;
 
-use Test::More tests => 11;
+use Test::NoWarnings;
+use Test::More tests => 12;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

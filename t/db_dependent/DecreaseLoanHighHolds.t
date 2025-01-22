@@ -30,7 +30,8 @@ use Koha::CirculationRules;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 26;
+use Test::NoWarnings;
+use Test::More tests => 27;
 
 my $dbh     = C4::Context->dbh;
 my $schema  = Koha::Database->new()->schema();

@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 70;
+use Test::NoWarnings;
+use Test::More tests => 71;
 
 use C4::Budgets qw( GetBudget GetBudgetUsers CanUserUseBudget );
 use t::lib::Mocks;

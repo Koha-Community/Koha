@@ -3,7 +3,8 @@ use Modern::Perl;
 use C4::Context;
 use Koha::Config;
 
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 use Test::Warn;
 use t::lib::Mocks;
 

@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 
+use Test::NoWarnings;
 use Test::More;
 use C4::Acquisition qw( NewBasket GetOrders GetOrdersByBiblionumber GetOrder );
 use C4::Biblio      qw( AddBiblio );

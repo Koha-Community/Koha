@@ -20,7 +20,8 @@
 use Modern::Perl;
 
 use Benchmark;
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 use Test::Deep qw( cmp_methods );
 use Test::Exception;
 

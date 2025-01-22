@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::NoWarnings;
+use Test::More tests => 8;
 
 use_ok( 'Koha::Util::FrameworkPlugin', qw(wrapper date_entered) );
 

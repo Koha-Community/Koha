@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::NoWarnings;
+use Test::More tests => 24;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;

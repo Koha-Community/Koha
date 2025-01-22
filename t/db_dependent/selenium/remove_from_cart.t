@@ -19,6 +19,7 @@ use Modern::Perl;
 use File::Basename qw(dirname );
 
 use Test::WWW::Mechanize;
+use Test::NoWarnings;
 use Test::More;
 use Test::MockModule;
 

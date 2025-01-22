@@ -29,7 +29,8 @@ use Array::Utils qw(array_minus);
 our $showsql = 0;
 GetOptions( 'showsql' => \$showsql );
 
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 our $dbh = C4::Context->dbh;
 my $intranetdir       = C4::Context->config('intranetdir');

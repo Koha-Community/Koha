@@ -89,7 +89,8 @@ get '/dbic_merge_pagination' => sub {
 
 # The tests
 
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::Mocks;

@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 46;
+use Test::NoWarnings;
+use Test::More tests => 47;
 use C4::Serials qw( GetNextSeq );
 
 # TEST CASE 1 - 1 variable, from 1 to 4

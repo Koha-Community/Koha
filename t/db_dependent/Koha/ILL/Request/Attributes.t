@@ -22,7 +22,8 @@ use Koha::Database;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 my $schema = Koha::Database->new->schema;
 use_ok('Koha::ILL::Request::Attribute');

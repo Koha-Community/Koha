@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 use Data::Dumper qw/Dumper/;
 use MARC::Field;
 use MARC::Record;

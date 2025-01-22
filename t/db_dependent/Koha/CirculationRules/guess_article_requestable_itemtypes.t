@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

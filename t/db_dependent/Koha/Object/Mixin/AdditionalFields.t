@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use t::lib::TestBuilder;
 use String::Random qw(random_string);
 use Koha::Database;

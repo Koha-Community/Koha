@@ -18,7 +18,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 use t::lib::Mocks;
 use Test::MockModule;

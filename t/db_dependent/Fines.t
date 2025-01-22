@@ -7,7 +7,8 @@ use C4::Overdues qw( CalcFine );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

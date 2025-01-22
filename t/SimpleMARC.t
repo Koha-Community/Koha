@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::NoWarnings;
+use Test::More tests => 13;
 
 use_ok("MARC::Field");
 use_ok("MARC::Record");

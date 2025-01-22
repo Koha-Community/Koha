@@ -23,6 +23,7 @@ use File::Spec;
 use MARC::Record;
 use Koha::MetadataRecord::Authority;
 
+use Test::NoWarnings;
 use Test::More;
 use Test::MockModule;
 use Test::MockObject;

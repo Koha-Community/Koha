@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 102;
+use Test::NoWarnings;
+use Test::More tests => 103;
 
 use Koha::Database;
 use C4::Serials qw( GetNextDate );

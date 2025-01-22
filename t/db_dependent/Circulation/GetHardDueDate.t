@@ -10,7 +10,8 @@ use Koha::Library;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 9;
+use Test::NoWarnings;
+use Test::More tests => 10;
 
 BEGIN {
     use_ok( 'C4::Circulation', qw( GetHardDueDate GetLoanLength ) );

@@ -20,7 +20,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 12;
+use Test::NoWarnings;
+use Test::More tests => 13;
 use Test::Exception;
 use Time::HiRes qw|usleep|;
 

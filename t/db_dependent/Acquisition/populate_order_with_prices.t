@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::NoWarnings;
+use Test::More tests => 45;
 use C4::Context;
 use Koha::Database;
 use Koha::Acquisition::Bookseller;

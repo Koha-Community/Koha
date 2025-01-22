@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 use Koha::Installer::Output qw(say_warning say_failure say_success say_info);
 

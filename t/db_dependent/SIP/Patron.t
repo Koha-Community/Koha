@@ -4,7 +4,8 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::NoWarnings;
+use Test::More tests => 12;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;

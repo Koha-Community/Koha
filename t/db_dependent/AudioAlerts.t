@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::NoWarnings;
+use Test::More tests => 34;
 
 BEGIN {
     use_ok('Koha::AudioAlert');

@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::Mojo;
 
 use Module::Load::Conditional qw(can_load);

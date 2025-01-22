@@ -6,7 +6,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 BEGIN { use_ok('Koha::Template::Plugin::HtmlTags'); }
 

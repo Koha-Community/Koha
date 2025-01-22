@@ -25,7 +25,8 @@ use Koha::CirculationRules;
 
 use Koha::Patrons;
 
-use Test::More tests => 18;
+use Test::NoWarnings;
+use Test::More tests => 19;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 

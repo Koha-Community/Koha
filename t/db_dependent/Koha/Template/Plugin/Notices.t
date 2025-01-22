@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 
 use C4::Context;
 use Koha::Database;

@@ -18,7 +18,8 @@
 use Modern::Perl;
 
 use Data::Dumper;    # REMOVEME with diag
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::MockTime qw( set_fixed_time );
 use t::lib::TestBuilder;

@@ -23,7 +23,8 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use t::lib::Selenium;
 use t::lib::TestBuilder;

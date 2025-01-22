@@ -21,7 +21,8 @@ use Modern::Perl;
 use utf8;
 
 #use Data::Dumper;
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 use Test::Warn;
 use Test::MockModule;
 use Test::MockObject;

@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::NoWarnings;
+use Test::More tests => 19;
 
 use C4::Acquisition;
 use C4::Budgets qw( AddBudgetPeriod AddBudget );

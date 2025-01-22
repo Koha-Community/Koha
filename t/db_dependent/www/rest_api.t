@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use Test::NoWarnings;
 use Test::More;    #See plan tests => \d+ below
 use LWP::UserAgent;
 

@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 43;
+use Test::NoWarnings;
+use Test::More tests => 44;
 use Data::Dumper;
 
 use C4::Acquisition

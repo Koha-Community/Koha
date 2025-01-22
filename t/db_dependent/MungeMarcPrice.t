@@ -4,6 +4,7 @@ use Modern::Perl;
 use C4::Biblio qw( MungeMarcPrice );
 use Koha::Database;
 use Koha::Acquisition::Currencies;
+use Test::NoWarnings;
 use Test::More;
 
 # work around wide character warnings

@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::NoWarnings;
+use Test::More tests => 12;
 
 use Koha::Import::Records;
 use Koha::Database;

@@ -18,7 +18,8 @@ use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockModule;
-use Test::More tests => 63;
+use Test::NoWarnings;
+use Test::More tests => 64;
 
 BEGIN {
     use_ok(

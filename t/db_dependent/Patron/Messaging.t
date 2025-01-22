@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 use File::Spec;

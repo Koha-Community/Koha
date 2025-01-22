@@ -6,7 +6,8 @@ use C4::Circulation;
 use Koha::Database;
 use Koha::Patrons;
 
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 use_ok('Koha::Patron');
 

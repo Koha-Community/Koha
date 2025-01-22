@@ -9,7 +9,8 @@ use Koha::Items;
 use Koha::Cache::Memory::Lite;
 use Koha::CirculationRules;
 
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

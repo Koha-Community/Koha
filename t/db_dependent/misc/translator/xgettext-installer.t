@@ -6,7 +6,8 @@ use File::Slurp;
 use File::Temp qw(tempdir);
 use FindBin    qw($Bin);
 use Locale::PO;
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 my $tempdir = tempdir( CLEANUP => 1 );
 

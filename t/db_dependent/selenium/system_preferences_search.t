@@ -16,6 +16,7 @@
 use Modern::Perl;
 
 use Koha::AuthUtils;
+use Test::NoWarnings;
 use Test::More;
 
 use t::lib::Mocks;

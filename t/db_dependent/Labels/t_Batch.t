@@ -20,7 +20,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::NoWarnings;
+use Test::More tests => 26;
 use MARC::Record;
 use MARC::Field;
 

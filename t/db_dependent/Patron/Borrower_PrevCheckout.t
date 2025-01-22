@@ -7,7 +7,8 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Patrons;
 
-use Test::More tests => 61;
+use Test::NoWarnings;
+use Test::More tests => 62;
 
 use_ok('Koha::Patron');
 

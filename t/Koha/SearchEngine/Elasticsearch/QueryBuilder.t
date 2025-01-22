@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 use t::lib::Mocks;
 
 use_ok('Koha::SearchEngine::Elasticsearch::QueryBuilder');

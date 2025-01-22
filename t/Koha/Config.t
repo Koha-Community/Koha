@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 use FindBin qw($Bin $Script);
 
 use_ok('Koha::Config');

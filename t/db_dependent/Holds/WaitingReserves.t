@@ -8,7 +8,8 @@ use Koha::DateUtils qw( dt_from_string );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 
 use_ok( 'C4::Reserves', qw( ModReserve ModReserveAffect ) );
 

@@ -5,7 +5,8 @@ use Modern::Perl;
 use t::lib::Mocks;
 use C4::Context;
 
-use Test::More tests => 7;
+use Test::NoWarnings;
+use Test::More tests => 8;
 use MARC::Record;
 
 use Koha::Patrons;

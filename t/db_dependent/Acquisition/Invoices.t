@@ -8,7 +8,8 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Database;
 
-use Test::More tests => 29;
+use Test::NoWarnings;
+use Test::More tests => 30;
 
 BEGIN {
     use_ok(

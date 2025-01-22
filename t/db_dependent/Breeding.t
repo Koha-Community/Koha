@@ -24,7 +24,8 @@
 
 use Modern::Perl;
 use File::Temp qw/tempfile/;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 use Test::Warn;
 
 use t::lib::Mocks qw( mock_preference );

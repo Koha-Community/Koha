@@ -4,6 +4,7 @@ use Modern::Perl;
 use DateTime::TimeZone;
 use Test::Exception;
 use Test::MockModule;
+use Test::NoWarnings;
 use Test::More;
 
 BEGIN { use_ok('Koha::DateTime::Format::SQL'); }

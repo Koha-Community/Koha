@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::NoWarnings;
+use Test::More tests => 15;
 use C4::Acquisition qw( NewBasket GetBiblioCountByBasketno GetOrders GetOrder ReopenBasket );
 use C4::Biblio      qw( AddBiblio );
 use C4::Budgets     qw( AddBudget GetBudget );

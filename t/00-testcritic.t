@@ -3,6 +3,7 @@
 # This script can be used to run perlcritic on perl files in koha
 
 use Modern::Perl;
+use Test::NoWarnings;
 use Test::More;
 use English qw(-no_match_vars);
 

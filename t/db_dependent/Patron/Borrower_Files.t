@@ -25,7 +25,8 @@ use Koha::Database;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 
-use Test::More tests => 23;
+use Test::NoWarnings;
+use Test::More tests => 24;
 
 use_ok('Koha::Patron::Files');
 

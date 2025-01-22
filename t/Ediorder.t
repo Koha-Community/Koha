@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 use t::lib::Mocks;
 
 BEGIN { use_ok('Koha::Edifact::Order') }

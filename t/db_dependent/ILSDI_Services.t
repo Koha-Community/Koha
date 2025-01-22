@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 14;
+use Test::NoWarnings;
+use Test::More tests => 15;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;

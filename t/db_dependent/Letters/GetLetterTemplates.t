@@ -1,5 +1,6 @@
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 use C4::Context;
 use C4::Letters qw( GetLetterTemplates );

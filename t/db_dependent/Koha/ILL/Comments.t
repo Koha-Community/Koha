@@ -28,7 +28,8 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;

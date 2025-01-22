@@ -4,7 +4,8 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 21;
+use Test::NoWarnings;
+use Test::More tests => 22;
 
 use t::lib::TestBuilder;
 use Koha::Database;

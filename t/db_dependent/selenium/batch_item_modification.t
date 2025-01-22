@@ -20,7 +20,8 @@ use Modern::Perl;
 use C4::Context;
 use Koha::BackgroundJobs;
 
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 use t::lib::Selenium;
 use t::lib::TestBuilder;

@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 
 use C4::Biblio;
 use C4::Context;

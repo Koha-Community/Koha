@@ -18,7 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 28;
+use Test::NoWarnings;
+use Test::More tests => 29;
 use Test::Exception;
 use File::Temp   qw/tempfile/;
 use Scalar::Util qw//;

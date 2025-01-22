@@ -3,7 +3,8 @@
 use Modern::Perl;
 use CGI;
 use Encode qw( encode );
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 
 use Koha::Caches;
 use Koha::Database;

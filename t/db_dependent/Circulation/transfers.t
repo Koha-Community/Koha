@@ -27,7 +27,8 @@ use Koha::Item::Transfers;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 19;
+use Test::NoWarnings;
+use Test::More tests => 20;
 use Test::Deep;
 
 BEGIN {

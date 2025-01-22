@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 35;
+use Test::NoWarnings;
+use Test::More tests => 36;
 use Test::MockModule;
 use FindBin qw($Bin);
 use Encode;

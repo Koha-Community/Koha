@@ -22,7 +22,8 @@ use Test::Exception;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 use List::Util qw( all );
 

@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::Deep;
 use Test::MockModule;
 use Test::Warn;

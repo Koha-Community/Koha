@@ -19,6 +19,7 @@
 
 use Modern::Perl;
 
+use Test::NoWarnings;
 use Test::More;
 use File::Spec;
 use File::Find;

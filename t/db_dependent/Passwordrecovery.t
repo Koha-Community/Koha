@@ -26,7 +26,8 @@ use Koha::Patrons;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 22;
+use Test::NoWarnings;
+use Test::More tests => 23;
 use Test::MockModule;
 use Test::Warn;
 use Carp;

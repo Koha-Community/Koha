@@ -6,7 +6,8 @@
 use Modern::Perl;
 use C4::Context;
 use Koha::Database;
-use Test::More tests => 30;
+use Test::NoWarnings;
+use Test::More tests => 31;
 
 BEGIN {
     use_ok('Koha::Misc::Files');

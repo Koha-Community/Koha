@@ -17,7 +17,8 @@
 use Modern::Perl;
 
 use MARC::Record;
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 use Test::Warn;
 
 use File::Basename;

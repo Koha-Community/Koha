@@ -4,7 +4,8 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 
 use C4::Acquisition qw( NewBasket GetBasket GetBasketAsCSV );
 use C4::Biblio      qw( AddBiblio );

@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::NoWarnings;
+use Test::More tests => 54;
 use C4::Context;
 use C4::RotatingCollections
     qw( AddItemToCollection CreateCollection DeleteCollection GetCollection GetCollectionItemBranches GetCollections GetItemsInCollection RemoveItemFromCollection TransferCollection UpdateCollection isItemInAnyCollection isItemInThisCollection );

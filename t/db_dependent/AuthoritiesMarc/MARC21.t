@@ -5,7 +5,8 @@ use strict;
 use warnings;
 
 use Test::MockModule;
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 use MARC::Field;
 use MARC::Record;
 

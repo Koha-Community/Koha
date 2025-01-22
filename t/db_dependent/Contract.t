@@ -26,7 +26,8 @@ use Koha::Acquisition::Booksellers;
 
 use DateTime::Duration;
 
-use Test::More tests => 43;
+use Test::NoWarnings;
+use Test::More tests => 44;
 
 BEGIN {
     use_ok( 'C4::Contract', qw( GetContracts GetContract AddContract ModContract DelContract ) );

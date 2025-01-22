@@ -14,7 +14,8 @@ use strict;
 use warnings;
 
 use File::Temp qw/ tempfile  /;
-use Test::More tests => 41;
+use Test::NoWarnings;
+use Test::More tests => 42;
 
 BEGIN {
     use_ok('C4::Creators');

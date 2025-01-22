@@ -19,7 +19,8 @@ use Modern::Perl;
 
 use t::lib::Mocks;
 
-use Test::More tests => 8;
+use Test::NoWarnings;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok( 'C4::SMS', qw( driver send_sms ) );

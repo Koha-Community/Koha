@@ -1,4 +1,5 @@
 use Modern::Perl;
+use Test::NoWarnings;
 use Test::More;
 
 use YAML::XS;

@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::NoWarnings;
+use Test::More tests => 24;
 use Test::MockModule;
 use DBI;
 use DateTime;

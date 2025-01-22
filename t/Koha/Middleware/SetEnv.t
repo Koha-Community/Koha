@@ -20,7 +20,8 @@
 
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 use Test::Warn;
 
 use t::lib::Mocks;

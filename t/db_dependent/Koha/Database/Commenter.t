@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 use File::Temp qw();
-use Test::More tests => 2;
+use Test::NoWarnings;
+use Test::More tests => 3;
 use Test::Exception;
 
 use C4::Context;

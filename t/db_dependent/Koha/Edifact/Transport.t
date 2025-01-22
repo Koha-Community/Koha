@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 use FindBin qw( $Bin );
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 use Test::Warn;
 
 use t::lib::TestBuilder;

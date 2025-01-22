@@ -21,7 +21,8 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 16;
+use Test::NoWarnings;
+use Test::More tests => 17;
 use Test::Warn;
 use Try::Tiny;
 use File::Basename qw(dirname);

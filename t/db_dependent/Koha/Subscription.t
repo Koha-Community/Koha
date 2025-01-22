@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::NoWarnings;
+use Test::More tests => 11;
 
 use Koha::Database;
 use Koha::Subscription;

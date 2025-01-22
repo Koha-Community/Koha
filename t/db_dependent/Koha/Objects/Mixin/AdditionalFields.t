@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::NoWarnings;
+use Test::More tests => 13;
 
 use Koha::Acquisition::Baskets;    # Koha::Acquisition::Baskets uses the mixin
 use Koha::AdditionalFields;

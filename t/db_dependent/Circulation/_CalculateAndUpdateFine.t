@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );

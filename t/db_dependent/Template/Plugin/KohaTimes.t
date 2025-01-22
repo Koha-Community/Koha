@@ -5,7 +5,8 @@ use Modern::Perl;
 use C4::Context;
 
 use Test::MockModule;
-use Test::More tests => 5;
+use Test::NoWarnings;
+use Test::More tests => 6;
 use t::lib::Mocks;
 
 BEGIN {

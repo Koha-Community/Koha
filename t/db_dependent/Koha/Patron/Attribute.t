@@ -20,7 +20,8 @@
 use Modern::Perl;
 use JSON qw( to_json );
 
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;

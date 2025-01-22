@@ -18,6 +18,7 @@
 use strict;
 use warnings;
 
+use Test::NoWarnings;
 use Test::More;
 use File::Spec;
 use File::Find;

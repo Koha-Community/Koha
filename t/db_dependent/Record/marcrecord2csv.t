@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;

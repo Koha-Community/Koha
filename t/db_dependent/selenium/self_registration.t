@@ -20,6 +20,7 @@ use utf8;
 
 use C4::Context;
 
+use Test::NoWarnings;
 use Test::More;
 use Test::MockModule;
 

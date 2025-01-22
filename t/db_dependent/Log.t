@@ -16,7 +16,8 @@
 
 use Modern::Perl;
 use Data::Dumper qw( Dumper );
-use Test::More tests => 7;
+use Test::NoWarnings;
+use Test::More tests => 8;
 
 use C4::Context;
 use C4::Log  qw( logaction cronlogaction );

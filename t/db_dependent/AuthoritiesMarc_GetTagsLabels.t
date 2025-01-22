@@ -20,7 +20,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 1;
+use Test::NoWarnings;
+use Test::More tests => 2;
 
 use t::lib::TestBuilder;
 

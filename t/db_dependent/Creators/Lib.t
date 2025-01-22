@@ -18,7 +18,8 @@
 
 use Modern::Perl;
 use Graphics::Magick;
-use Test::More tests => 653;
+use Test::NoWarnings;
+use Test::More tests => 654;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;

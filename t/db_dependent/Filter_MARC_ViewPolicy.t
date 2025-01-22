@@ -23,7 +23,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use List::MoreUtils qw/any/;
 use MARC::Record;

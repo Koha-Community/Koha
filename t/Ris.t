@@ -6,7 +6,8 @@
 use Modern::Perl;
 
 use t::lib::Mocks;
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 BEGIN {
     use_ok('C4::Ris');

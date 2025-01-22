@@ -20,7 +20,8 @@
 use Modern::Perl;
 use CGI;
 use Data::Dumper qw(Dumper);
-use Test::More tests => 3;
+use Test::NoWarnings;
+use Test::More tests => 4;
 
 use t::lib::Mocks;
 

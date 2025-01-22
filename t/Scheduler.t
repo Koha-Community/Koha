@@ -6,7 +6,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::NoWarnings;
+use Test::More tests => 7;
 
 BEGIN {
     use_ok( 'C4::Scheduler', qw( get_jobs get_at_jobs get_at_job add_at_job remove_at_job ) );

@@ -22,7 +22,8 @@ use Test::MockObject;
 use Koha::ILL::Request;
 use Koha::ILL::Request::SupplierUpdate;
 
-use Test::More tests => 4;
+use Test::NoWarnings;
+use Test::More tests => 5;
 
 use_ok('Koha::ILL::Request::SupplierUpdate');
 

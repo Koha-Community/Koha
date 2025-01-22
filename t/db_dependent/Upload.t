@@ -2,7 +2,8 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 13;
+use Test::NoWarnings;
+use Test::More tests => 14;
 use Test::Warn;
 use Try::Tiny;
 
