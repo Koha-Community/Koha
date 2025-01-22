@@ -3,7 +3,7 @@
 # This script can be used to run perlcritic on perl files in koha
 
 use Modern::Perl;
-use Test::NoWarnings;
+use Test::NoWarnings qw( had_no_warnings );
 use Test::More;
 use English qw(-no_match_vars);
 
@@ -17,3 +17,5 @@ if ($EVAL_ERROR) {
 Test::Perl::Critic->import( -profile => '.perlcriticrc' );
 my @files = map { chomp; $_ } `git ls-tree -r HEAD --name-only`;    # only files part of git
 all_critic_ok(@files);
+
+had_no_warnings;

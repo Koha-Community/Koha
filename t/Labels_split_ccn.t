@@ -17,8 +17,7 @@
 #
 # for context, see http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2691
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::NoWarnings;
 use Test::More;
@@ -42,7 +41,7 @@ BEGIN {
         $test_num += 2 * $split_num;
         $test_num += 4;
     }
-    plan tests => $test_num;
+    plan tests => $test_num + 1;
     use_ok('C4::Labels::Label');
     use vars qw($ccns);
 }

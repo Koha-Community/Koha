@@ -29,7 +29,7 @@ if ($@) {
 } elsif ( not defined $intranet ) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 } else {
-    plan tests => 1;
+    plan tests => 2;
 }
 
 $intranet =~ s#/$##;

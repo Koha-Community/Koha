@@ -30,7 +30,7 @@ my @prices2test = (
     { string => '5.99 (7.75 CAN)',            expected => '5.99' },
 );
 
-plan tests => 2 * scalar @prices2test;
+plan tests => 1 + 2 * scalar @prices2test;
 
 # set active currency test data
 my $CURRENCY = 'TEST';

@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More;
+use Test::More tests => 4;
 
 use_ok('Koha::SearchEngine::Elasticsearch::Browse');
 
@@ -77,5 +77,3 @@ subtest "_build_query tests" => sub {
         'Fuzziness and size specified'
     );
 };
-
-done_testing();

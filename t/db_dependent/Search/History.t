@@ -521,5 +521,3 @@ subtest 'LoadSearchHistoryToTheFirstLoggedUser working' => sub {
     $result2 = $schema->resultset('SearchHistory')->search()->count;
     is( $result2, $result + 1, 'new search added to borrower' );
 };
-
-done_testing;

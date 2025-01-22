@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::NoWarnings;
+use Test::NoWarnings qw( had_no_warnings );
 use Test::More;
 use File::Spec;
 use File::Find;
@@ -101,5 +101,5 @@ sub is_testable {
     return $return_value;
 }
 
+had_no_warnings;
 done_testing();
-

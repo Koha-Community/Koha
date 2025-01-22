@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 # This script is called by the pre-commit git hook to test modules compile
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use threads;    # used for parallel
-use Test::NoWarnings;
+use Test::NoWarnings qw( had_no_warnings );
 use Test::More;
 use Test::Strict;
 use Parallel::ForkManager;
@@ -55,4 +54,5 @@ foreach my $d (@dirs) {
 
 $pm->wait_all_children;
 
+had_no_warnings;
 done_testing();

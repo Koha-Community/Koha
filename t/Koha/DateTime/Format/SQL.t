@@ -5,7 +5,7 @@ use DateTime::TimeZone;
 use Test::Exception;
 use Test::MockModule;
 use Test::NoWarnings;
-use Test::More;
+use Test::More tests => 6;
 
 BEGIN { use_ok('Koha::DateTime::Format::SQL'); }
 
@@ -81,5 +81,3 @@ subtest 'normal datetime, with timezone configured' => sub {
     is( $dt->second,          12 );
     is( $dt->time_zone->name, 'floating' );
 };
-
-done_testing;

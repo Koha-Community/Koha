@@ -15,10 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::NoWarnings;
+use Test::NoWarnings qw( had_no_warnings );
 use Test::More;
 use File::Spec;
 use File::Find;
@@ -44,6 +43,9 @@ find(
             }
         },
     },
+    ,
     File::Spec->curdir()
 );
+
+had_no_warnings;
 done_testing();

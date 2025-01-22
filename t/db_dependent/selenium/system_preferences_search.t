@@ -27,7 +27,7 @@ eval { require Selenium::Remote::Driver; };
 if ($@) {
     plan skip_all => "Selenium::Remote::Driver is needed for Selenium tests.";
 } else {
-    plan tests => 1;
+    plan tests => 2;
 }
 
 my @cleanup;

@@ -18,11 +18,9 @@
 use Modern::Perl;
 
 use Test::NoWarnings;
-use Test::More;
+use Test::More tests => 33;
 use Test::MockModule;
 use Test::Warn;
-
-plan tests => 32;
 
 use_ok(
     'C4::Biblio',

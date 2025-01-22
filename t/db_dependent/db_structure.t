@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::NoWarnings;
+use Test::NoWarnings qw( had_no_warnings );
 use Test::More;
 use Koha::Database;
 
@@ -62,6 +62,5 @@ for my $modules (@modules) {
         }
     }
 }
-
+had_no_warnings;
 done_testing();
-

@@ -23,7 +23,7 @@ use File::Spec;
 use MARC::Record;
 use English qw( -no_match_vars );
 use Test::NoWarnings;
-use Test::More;
+use Test::More tests => 21;
 
 BEGIN {
     use_ok('Koha::RecordProcessor');
@@ -236,5 +236,3 @@ subtest "'TrimFields' filter tests" => sub {
     my $get521a = $record->subfield( '521', 'a' );
     is( $get521a, "This is a\t test!", "Trailing tabs are stripped while inner tabs are kept" );
 };
-
-done_testing();
