@@ -580,10 +580,6 @@ describe("Hit all tables", () => {
                                 cy.request({
                                     method: "POST",
                                     url: `/api/v1/biblios/${biblio_id}/items`,
-                                    auth: {
-                                        username: "koha",
-                                        password: "koha",
-                                    },
                                     headers: {
                                         "Content-Type": "application/json",
                                     },
