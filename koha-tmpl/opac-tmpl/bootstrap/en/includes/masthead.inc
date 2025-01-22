@@ -441,7 +441,6 @@
                                     <div class="local-login">
                                         [% PROCESS login_label for="muserid" %]<input type="text" id="muserid" name="login_userid" autocomplete="off" />
                                         <label for="mpassword">Password:</label><input type="password" id="mpassword" name="login_password" autocomplete="off" />
-                                        [% INCLUDE 'show-password-toggle.inc' checkbox_id_suffix='modal' %]
                                         <fieldset class="action">
                                             <input type="hidden" name="op" value="cud-login" />
                                             <input type="submit" class="btn btn-primary" value="Log in" />
