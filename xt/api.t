@@ -14,7 +14,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Test::Mojo;
 use Data::Dumper;
@@ -22,6 +22,7 @@ use Data::Dumper;
 use FindBin();
 use IPC::Cmd        qw(can_run);
 use List::MoreUtils qw(any);
+use File::Slurp qw(read_file);
 
 my $t    = Test::Mojo->new('Koha::REST::V1');
 my $spec = $t->get_ok( '/api/v1/', 'Correctly fetched the spec' )->tx->res->json;
@@ -168,5 +169,21 @@ subtest '400 response tests' => sub {
 
     foreach my $error (@errors) {
         print STDERR "$error\n";
+    }
+};
+
+subtest 'POST (201) have location header' => sub {
+    my @files = `git ls-files 'Koha/REST/V1/**/*.pm'`;
+    plan tests => scalar @files;
+    foreach my $file (@files) {
+        chomp $file;
+        my $content = read_file($file);
+        if ( $content !~ /status\s*=>\s*201/s ) {
+            pass("$file does not seem to have a POST endpoint");
+        } elsif ( $content =~ /\$c->res->headers->location\(.*?\);\s*return\s+\$c->render\s*\(\s*status\s*=>\s*201,/s ) {
+            pass("$file contains the location header");
+        } else {
+            fail("$file does not contain the location header");
+        }
     }
 };
