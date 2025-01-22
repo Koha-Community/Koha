@@ -456,6 +456,7 @@ sub core_types_to_classes {
         marc_import_revert_batch            => 'Koha::BackgroundJob::MARCImportRevertBatch',
         pseudonymize_statistic              => 'Koha::BackgroundJob::PseudonymizeStatistic',
         import_from_kbart_file              => 'Koha::BackgroundJob::ImportKBARTFile',
+        file_transport_test                 => 'Koha::BackgroundJob::TestTransport',
     };
 }
 

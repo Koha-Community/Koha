@@ -409,12 +409,12 @@ sub test_conn {
         }
     }
 
-    $self->update_status('tests_ok');
-    foreach my $val ( values %$sftp_test_results ) {
-        if ( defined $val->{'err'} ) {
-            $self->update_status('tests_failed');
-        }
-    }
+    #    $self->update_status('tests_ok');
+    #    foreach my $val ( values %$sftp_test_results ) {
+    #        if ( defined $val->{'err'} ) {
+    #            $self->update_status('tests_failed');
+    #        }
+    #    }
 
     return ( 1, $sftp_test_results );
 }

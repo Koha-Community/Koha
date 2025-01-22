@@ -16,12 +16,16 @@ package Koha::File::Transport;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
 use constant {
     DEFAULT_TIMEOUT   => 10,
     TEST_FILE_NAME    => '.koha_test_file',
     TEST_FILE_CONTENT => "Hello, world!\n",
 };
+use JSON            qw( decode_json encode_json );
+use List::MoreUtils qw( any );
 
+use Koha::BackgroundJob::TestTransport;
 use Koha::Database;
 use Koha::Exceptions::Object;
 use Koha::Encryption;
@@ -63,11 +67,24 @@ sub store {
         $self->$dir_field( $dir . '/' ) unless substr( $dir, -1 ) eq '/';
     }
 
+    my @config_fields  = (qw(host port user_name password key_file upload_directory download_directory));
+    my $changed_config = ( !$self->in_storage || any { $self->_result->is_column_changed($_) } @config_fields ) ? 1 : 0;
+
     # Store
     $self->SUPER::store;
 
+    # Subclass triggers
+    my $subclass = $self->transport eq 'sftp' ? 'Koha::File::Transport::SFTP' : 'Koha::File::Transport::FTP';
+    $self = $subclass->_new_from_dbic( $self->_result );
+    $self->_post_store_trigger;
+
+    # Enqueue a connection test
+    if ($changed_config) {
+        Koha::BackgroundJob::TestTransport->new->enqueue( { transport_id => $self->id } );
+    }
+
     # Return the updated object including the encrypt_sensitive_data
-    return $self->discard_changes;
+    return $self;
 }
 
 =head3 plain_text_password
@@ -111,7 +128,8 @@ sub to_api {
     my ( $self, $params ) = @_;
 
     my $json = $self->SUPER::to_api($params) or return;
-    delete @{$json}{qw(password key_file)};    # Remove sensitive data
+    delete @{$json}{qw(password key_file)};                                    # Remove sensitive data
+    $json->{status} = $self->status ? decode_json( $self->status ) : undef;    # Decode json status
 
     return $json;
 }
@@ -141,14 +159,22 @@ sub test_connection {
     $self->connect or return;
 
     for my $dir_type (qw(download upload)) {
-        my $dir = $self->{"${dir_type}_directory"};
-        next if $dir eq '';
+        my $field = "${dir_type}_directory";
+        my $dir   = $self->$field;
+        $dir ||= undef;
 
-        $self->change_directory($dir) or return;
-        $self->list_files()           or return;
+        $self->change_directory(undef) or next;
+        $self->change_directory($dir)  or next;
+        $self->list_files()            or next;
     }
 
-    return 1;
+    my $return   = 1;
+    my $messages = $self->object_messages;
+    for my $message ( @{$messages} ) {
+        $return = 0 if $message->type eq 'error';
+    }
+
+    return $return;
 }
 
 =head2 Subclass methods
@@ -220,6 +246,21 @@ sub list_files {
     die "Subclass must implement list_files";
 }
 
+=head3 _post_store_trigger
+
+    $server->_post_store_trigger;
+
+Method triggered by parent store to allow local additions to the store call
+
+=cut
+
+sub _post_store_trigger {
+    my ($self) = @_;
+
+    #Subclass may implement a _post_store_trigger as required
+    return $self;
+}
+
 =head2 Internal methods
 
 =head3 _encrypt_sensitive_data
@@ -232,14 +273,16 @@ sub _encrypt_sensitive_data {
     my ($self) = @_;
     my $encryption = Koha::Encryption->new;
 
-    # Only encrypt if the value has changed (is_changed from Koha::Object)
-    if ( ( !$self->in_storage || $self->is_changed('password') ) && $self->password ) {
+    # Only encrypt if the value has changed ($self->_result->is_column_changed from Koha::Object)
+    if ( ( !$self->in_storage || $self->_result->is_column_changed('password') ) && $self->password ) {
         $self->password( $encryption->encrypt_hex( $self->password ) );
     }
 
-    if ( ( !$self->in_storage || $self->is_changed('key_file') ) && $self->key_file ) {
+    if ( ( !$self->in_storage || $self->_result->is_column_changed('key_file') ) && $self->key_file ) {
         $self->key_file( $encryption->encrypt_hex( _dos2unix( $self->key_file ) ) );
     }
+
+    return;
 }
 
 =head3 _dos2unix

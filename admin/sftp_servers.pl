@@ -192,25 +192,6 @@ if ( $op eq 'cud-add' ) {
             reason => 'invalid_id'
         };
     }
-
-} elsif ( $op eq 'test_form' ) {
-    my $sftp_server_id = $input->param('sftp_server_id');
-    my $sftp_server;
-
-    $sftp_server = Koha::File::Transports->find($sftp_server_id)
-        unless !$sftp_server_id;
-
-    if ($sftp_server) {
-        $template->param(
-            sftp_server => $sftp_server,
-        );
-    } else {
-        push @messages, {
-            type   => 'alert',
-            code   => 'error_on_test',
-            reason => 'invalid_id',
-        };
-    }
 }
 
 if ( $op eq 'list' ) {
