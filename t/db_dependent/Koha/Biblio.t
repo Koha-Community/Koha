@@ -858,6 +858,8 @@ subtest 'get_marc_components() tests' => sub {
 subtest 'get_components_query' => sub {
     plan tests => 12;
 
+    $schema->storage->txn_begin;
+
     my $biblio = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
     my $record = $biblio->metadata->record;
@@ -895,10 +897,15 @@ subtest 'get_components_query' => sub {
         is($comp_sort, "title_asc", "$engine: UseControlNumber enabled with MarcOrgCode sort if correct");
         $record->delete_field($marc_003_field);
     }
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'get_volumes_query' => sub {
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     my $biblio       = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
@@ -940,6 +947,8 @@ subtest 'get_volumes_query' => sub {
         "(((rcn:$biblionumber AND cni:OSt) OR rcn:\"OSt $biblionumber\") NOT (bib-level:a OR bib-level:b))",
         "UseControlNumber enabled with MarcOrgCode"
     );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'generate_marc_host_field' => sub {
@@ -1014,8 +1023,9 @@ subtest 'generate_marc_host_field' => sub {
     is( $link->subfield('y'), undef,               'MARC::Field->subfield(w) returns undef if 010a is empty' );
     is( $link->subfield('0'), '1234',              'MARC::Field->subfield(0) returns content from 001' );
 
-    $schema->storage->txn_rollback;
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'link_marc_host' => sub {
