@@ -8,12 +8,15 @@ return {
         my ($args) = @_;
         my ( $dbh, $out ) = @$args{qw(dbh out)};
 
-        # Do you stuffs here
         $dbh->do(
-            q{update authorised_values set lib = "Aggregated full text" where category = "ERM_PACKAGE_CONTENT_TYPE" and authorised_value = "AggregatedFullText" and lib = "Aggregated full"}
-        );
-
-        say_success( $out, "Updated description of authorized value AggregatedFullText" );
+            q{
+            UPDATE authorised_values
+            SET lib = "Aggregated full text"
+            WHERE category = "ERM_PACKAGE_CONTENT_TYPE"
+                AND authorised_value = "AggregatedFullText"
+                AND lib = "Aggregated full"
+            }
+        ) == 1 && say_success( $out, "Updated description of authorized value AggregatedFullText" );
 
     },
 };
