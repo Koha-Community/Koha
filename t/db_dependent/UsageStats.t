@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 3;
 
 use t::lib::Mocks qw(mock_preference);
 use t::lib::TestBuilder;
@@ -33,12 +33,11 @@ use Koha::Old::Holds;
 use Koha::Patrons;
 
 BEGIN {
-    use_ok('C4::UsageStats', qw( NeedUpdate BuildReport ReportToCommunity _count ));
+    use_ok('C4::UsageStats', qw( BuildReport ReportToCommunity _count ));
 }
 
 can_ok(
     'C4::UsageStats', qw(
-      NeedUpdate
       BuildReport
       ReportToCommunity
       _count )
@@ -46,25 +45,6 @@ can_ok(
 
 my $builder = t::lib::TestBuilder->new;
 my $schema  = Koha::Database->new->schema;
-
-subtest 'NeedUpdate() tests' => sub {
-
-    plan tests => 2;
-
-    #Mocking C4::Context->preference("UsageStatsLastUpdateTime") to 0
-    my $now = strftime( "%s", localtime );
-    t::lib::Mocks::mock_preference( "UsageStatsLastUpdateTime", 0 );
-
-    my $update = C4::UsageStats->NeedUpdate;
-    is( $update, 1, "There is no last update, update needed" );
-
-    #Mocking C4::Context->preference("UsageStatsLastUpdateTime") to now
-    $now = strftime( "%s", localtime );
-    t::lib::Mocks::mock_preference( "UsageStatsLastUpdateTime", $now );
-
-    $update = C4::UsageStats->NeedUpdate;
-    is( $update, 0, "Last update just be done, no update needed " );
-};
 
 subtest 'BuildReport() tests' => sub {
 

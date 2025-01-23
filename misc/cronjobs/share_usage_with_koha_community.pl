@@ -39,18 +39,12 @@ Setting the quiet flag will silence this message.
     exit 1;
 }
 
-my $need_update = ($force ? 1 : C4::UsageStats::NeedUpdate() );
-
-if ($need_update) {
-    say "Data need to be updated" if $verbose;
-    my $report = C4::UsageStats::BuildReport();
-    C4::UsageStats::ReportToCommunity($report);
-    C4::Context->set_preference( 'UsageStatsLastUpdateTime',
-        strftime( "%s", localtime ) );
-}
-elsif ($verbose) {
-    say "Data don't need to be updated";
-}
+my $report = C4::UsageStats::BuildReport();
+C4::UsageStats::ReportToCommunity($report);
+C4::Context->set_preference(
+    'UsageStatsLastUpdateTime',
+    strftime( "%s", localtime )
+);
 
 cronlogaction({ action => 'End', info => "COMPLETED" });
 

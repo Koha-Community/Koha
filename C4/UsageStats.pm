@@ -36,26 +36,7 @@ hea.koha-community.org is the server that centralize Koha setups informations
 Koha libraries are encouraged to provide informations about their collections,
 their structure,...
 
-=head2 NeedUpdate
-
-  $needUpdateYN = C4::UsageStats::NeedUpdate;
-
-Returns Y (1) if the last update is more than 1 month old
-This way, even if the cronjob is run every minute, the webservice will be called
-only once a month !
-
 =cut
-
-sub NeedUpdate {
-    my $lastupdated = C4::Context->preference('UsageStatsLastUpdateTime') || 0;
-    my $now = strftime( "%s", localtime );
-
-    # Need to launch cron.
-    return 1 if $now - $lastupdated >= 2592000;
-
-    # Data don't need to be updated
-    return 0;
-}
 
 sub BuildReport {
     my $report;
