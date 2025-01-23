@@ -442,7 +442,7 @@
                                             [% SET last_returned_by = ITEM_DAT.object.last_returned_by.cardnumber || ITEM_DAT.object.last_returned_by.borrowernumber %]
                                             <li>
                                                 <span class="label">Last returned by:</span>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_retruned_by | html %]</a>
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.object.last_returned_by.borrowernumber | uri %]">[% last_returned_by | html %]</a>
                                             </li>
                                         [% END %]
                                         [% FOR i IN ITEM_DAT.old_issues %]
