@@ -212,10 +212,10 @@
                         <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
                             <option value="">&nbsp;</option>
                             [% FOREACH country IN country_strings.split(',') %]
-                                [% IF country.trim == CHUNK.value %]
-                                    <option value="[% country.trim | html %]" selected="selected">[% country.trim | html %]</option>
+                                [% IF country == CHUNK.value %]
+                                    <option value="[% country | html %]" selected="selected">[% country | html %]</option>
                                 [% ELSE %]
-                                    <option value="[% country.trim | html %]">[% country.trim | html %]</option>
+                                    <option value="[% country | html %]">[% country | html %]</option>
                                 [% END %]
                             [% END %]
                         </select>
