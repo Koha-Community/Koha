@@ -100,7 +100,6 @@
                             <select name="UsageStatsCountry" id="UsageStatsCountry">
                                 <option value="">&nbsp;</option>
                                 [% FOREACH country IN country_strings.split(',') %]
-                                    [% country = country.trim %]
                                     [% IF country == UsageStatsCountry %]
                                         <option value="[% country | html %]" selected="selected">[% country | html %]</option>
                                         [% SET IsUsageStatsCountryValid = 1 %]
