@@ -1,5 +1,5 @@
 /* global confirmDelete */
-/* exported uncheckbox isNotNull isNull isNum log calcTotalRow autoFillRow messenger updateCosts calcNewsuggTotal getAuthValueDropbox totalExceedsBudget budgetExceedsParent checkBudgetParent hideColumn showColumn showAllColumns hideAllColumns */
+/* exported uncheckbox isNotNull isNull isNum log calcTotalRow autoFillRow updateCosts calcNewsuggTotal getAuthValueDropbox totalExceedsBudget budgetExceedsParent checkBudgetParent hideColumn showColumn showAllColumns hideAllColumns */
 
 //=======================================================================
 //input validation:
@@ -170,25 +170,6 @@ function autoFillRow(bud_id) {
 
     remainingTotal.textContent = "0.00";
     remainingTotal.style.color = "black";
-}
-
-function messenger(X, Y, etc) {
-    // FIXME: unused?
-    win = window.open(
-        "",
-        "mess",
-        "height=" + X + ",width=" + Y + ",screenX=150,screenY=0"
-    );
-    win.focus();
-    win.document.close();
-    win.document.write(
-        "<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br />"
-    );
-    win.document.write(etc);
-    win.document.write(
-        "<center><form><input type=button onclick='self.close()' value='Close'></form></center>"
-    );
-    win.document.write("</font></body></html>");
 }
 
 //=======================================================================
