@@ -62,7 +62,7 @@
             <table id="table_readingrec">
                 <thead>
                     <tr>
-                        <th style="display:none;">Type</th>
+                        <th>Type</th>
                         <th>Date</th>
                         <th class="anti-the">Title</th>
                         <th>Author</th>
@@ -84,7 +84,7 @@
                         [% SET item = checkout.item %]
                         [% SET biblio = item.biblio %]
                         <tr>
-                            <td style="display:none;">
+                            <td>
                                 [% IF checkout.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
                                 [% ELSE %][% issuetype = 'standard_checkout' | html %]
                                 [% END %]
