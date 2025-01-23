@@ -242,6 +242,13 @@ subtest 'prepare_cgi_additional_field_values' => sub {
         }
     );
     $field2->store()->discard_changes();
+    my $field3 = Koha::AdditionalField->new(
+        {
+            tablename => 'subscription',
+            name      => random_string( 'c' x 100 )
+        }
+    );
+    $field3->store()->discard_changes();
 
     my $q = CGI->new;
     $q->param(
@@ -251,6 +258,10 @@ subtest 'prepare_cgi_additional_field_values' => sub {
     $q->param(
         -name  => 'additional_field_' . $field2->id,
         -value => '0',
+    );
+    $q->param(
+        -name  => 'additional_field_' . $field3->id,
+        -value => '',
     );
     $q->param(
         -name  => 'irrelevant_param',
@@ -274,13 +285,15 @@ subtest 'prepare_cgi_additional_field_values' => sub {
             {
                 'value' => '0',
                 'id'    => $field2->id
+            },
+            {
+                'value' => '',
+                'id'    => $field3->id
             }
         ],
         'Return of prepare_cgi_additional_field_values should be correct'
     );
-
     $schema->txn_rollback;
-
 };
 
 subtest 'strings_map() tests' => sub {
