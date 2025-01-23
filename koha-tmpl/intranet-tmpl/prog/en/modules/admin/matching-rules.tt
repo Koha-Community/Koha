@@ -156,9 +156,7 @@
                         <fieldset class="rows" id="match_points">
                             <h4>Match points</h4>
                             [% IF ( edit_matching_rule ) %]
-                                [% IF ( matchpoints ) %]
-                                    [% SET p_style = 'display:none;' %]
-                                [% END %]
+                                [% SET p_style = matchpoints ? 'display:none;' : 'display:block;' %]
                                 <p id="addMatchPoint" style="[% p_style | html %]">
                                     <a href="#" class="btn btn-link" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;"><i class="fa fa-plus" aria-hidden="true"></i>  New match point</a>
                                 </p>
@@ -270,9 +268,7 @@
                         <fieldset class="rows" id="match_checks">
                             <h4>Required match checks</h4>
                             [% IF ( edit_matching_rule ) %]
-                                [% IF ( matchchecks ) %]
-                                    [% SET p_style = 'display:none;' %]
-                                [% END %]
+                                [% SET p_style = matchpoints ? 'display:none;' : 'display:block;' %]
                                 <p id="addMatchCheck" style="[% p_style | html %]">
                                 <a href="#" class="btn btn-link" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;"><i class="fa fa-plus" aria-hidden="true"></i> New match check</a></p>
                             [% ELSE %]

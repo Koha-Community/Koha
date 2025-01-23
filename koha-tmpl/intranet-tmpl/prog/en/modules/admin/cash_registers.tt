@@ -115,7 +115,6 @@
                                 <input type="hidden" name="id" value="[% cash_register.id | html %]" />
                             </li>
                         [% END %]
-
                             <li>
                                 <label for="name" class="required">Name: </label>
                                 <input type="text" name="name" id="name" size="24" maxlength="24" value="[% cash_register.name | html %]" class="required focus" />
@@ -182,6 +181,8 @@
                        [% FOREACH cash_register IN cash_registers %]
                        [% IF cash_register.branch_default %]
                         [% SET tr_class="default" %]
+                       [% ELSE %]
+                        [% SET tr_class="" %]
                        [% END %]
                        <tr class="[% tr_class | html %]">
                            <td>[% cash_register.name | html %]</td>
