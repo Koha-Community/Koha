@@ -1593,7 +1593,7 @@ subtest 'force_password_reset_when_set_by_staff tests' => sub {
     $patron->delete()->store()->discard_changes();
     is(
         $patron->password_expired, 0,
-        "Patron forced into changing password but patron is self registered, password not expired."
+        "Patron forced into changing password but patron is self-registered, password not expired."
     );
 
     $schema->storage->txn_rollback;

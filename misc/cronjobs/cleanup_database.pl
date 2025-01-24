@@ -98,8 +98,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    --restrictions DAYS   purge patrons restrictions expired since more than DAYS days.
                          Defaults to 30 days if no days specified.
    --all-restrictions   purge all expired patrons restrictions.
-   --del-exp-selfreg  Delete expired self registration accounts
-   --del-unv-selfreg  DAYS  Delete unverified self registrations older than DAYS
+   --del-exp-selfreg  Delete expired self-registration accounts
+   --del-unv-selfreg  DAYS  Delete unverified self-registrations older than DAYS
    --unique-holidays DAYS  Delete all unique holidays older than DAYS
    --temp-uploads     Delete temporary uploads.
    --temp-uploads-days DAYS Override the corresponding preference value.
