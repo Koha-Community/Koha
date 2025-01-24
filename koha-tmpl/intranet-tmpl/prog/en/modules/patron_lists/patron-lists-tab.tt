@@ -1,3 +1,6 @@
+[% USE raw %]
+[% USE Koha %]
+[% USE Asset %]
 [% USE KohaDates %]
 
 [% IF no_access_to_patron %]
@@ -57,11 +60,18 @@
                                             <li
                                                 ><a class="dropdown-item" href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-pencil"></i> Edit list</a></li
                                             >
-                                            <li
-                                                ><a class="delete_patron dropdown-item" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"
-                                                    ><i class="fa fa-trash"></i> Delete list</a
-                                                ></li
-                                            >
+                                            <li>
+                                                <a
+                                                    class="dropdown-item submit-form-link"
+                                                    href="#"
+                                                    data-patron_list_id="[% l.patron_list_id | html %]"
+                                                    data-action="/cgi-bin/koha/patron_lists/delete.pl"
+                                                    data-method="post"
+                                                    data-op="cud-delete"
+                                                    data-confirmation-msg="Are you sure you want to delete this list?"
+                                                    ><i class="fa fa-trash-can"></i> Delete list</a
+                                                >
+                                            </li>
                                         [% END %]
                                         [% IF ( l.patron_list_patrons_rs.count ) %]
                                             <li><hr class="dropdown-divider" /></li>
