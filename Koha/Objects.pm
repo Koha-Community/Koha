@@ -94,7 +94,7 @@ sub find {
     unless ( !@pars || none { defined($_) } @pars ) {
         my $result = $self->_resultset()->find(@pars);
         if ($result) {
-            $object = $self->object_class()->_new_from_dbic($result);
+            $object = $self->object_class($result)->_new_from_dbic($result);
         }
     }
 
@@ -114,7 +114,7 @@ sub find_or_create {
 
     return unless $result;
 
-    my $object = $self->object_class->_new_from_dbic($result);
+    my $object = $self->object_class($result)->_new_from_dbic($result);
 
     return $object;
 }
@@ -301,7 +301,7 @@ sub single {
     my $single = $self->_resultset()->single;
     return unless $single;
 
-    return $self->object_class()->_new_from_dbic($single);
+    return $self->object_class($single)->_new_from_dbic($single);
 }
 
 =head3 Koha::Objects->next();
@@ -319,7 +319,7 @@ sub next {
     my $result = $self->_resultset()->next();
     return unless $result;
 
-    my $object = $self->object_class()->_new_from_dbic($result);
+    my $object = $self->object_class($result)->_new_from_dbic($result);
 
     return $object;
 }
@@ -341,7 +341,7 @@ sub last {
 
     my ($result) = $self->_resultset->slice( $count - 1, $count - 1 );
 
-    my $object = $self->object_class()->_new_from_dbic($result);
+    my $object = $self->object_class($result)->_new_from_dbic($result);
 
     return $object;
 }
@@ -507,7 +507,7 @@ wraps the DBIC object in a corresponding Koha object
 sub _wrap {
     my ( $self, @dbic_rows ) = @_;
 
-    my @objects = map { $self->object_class->_new_from_dbic($_) } @dbic_rows;
+    my @objects = map { $self->object_class($_)->_new_from_dbic($_) } @dbic_rows;
 
     return @objects;
 }
