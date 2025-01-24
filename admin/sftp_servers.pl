@@ -27,6 +27,7 @@ use C4::Auth   qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 
 use Koha::SFTP::Servers;
+use Koha::File::Transports;
 
 my $input = CGI->new;
 my $op    = $input->param('op') || 'list';
@@ -42,7 +43,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my @messages;
 
-my $sftp_servers = Koha::SFTP::Servers->search;
+my $sftp_servers = Koha::File::Transports->search;
 
 if ( $op eq 'cud-add' ) {
     my $name               = $input->param('sftp_name');
@@ -60,7 +61,7 @@ if ( $op eq 'cud-add' ) {
     my $debug              = ( scalar $input->param('sftp_debug_mode') ) ? 1 : 0;
 
     try {
-        my $sftp_server = Koha::SFTP::Server->new(
+        my $sftp_server = Koha::File::Transport->new(
             {
                 name               => $name,
                 host               => $host,
@@ -69,18 +70,14 @@ if ( $op eq 'cud-add' ) {
                 passive            => $passive,
                 auth_mode          => $auth_mode,
                 user_name          => $user_name,
+                password           => $password,
+                key_file           => $key_file,
                 download_directory => $download_directory,
                 upload_directory   => $upload_directory,
                 status             => $status,
                 debug              => $debug,
             }
         )->store;
-
-        $sftp_server->update_password($password)
-            if ($password);
-
-        $sftp_server->update_key_file($key_file)
-            if ($key_file);
 
         push @messages, {
             type => 'message',
@@ -105,7 +102,7 @@ if ( $op eq 'cud-add' ) {
     my $sftp_server_plain_text_password;
     my $sftp_server_plain_text_key;
 
-    $sftp_server = Koha::SFTP::Servers->find($sftp_server_id)
+    $sftp_server = Koha::File::Transports->find($sftp_server_id)
         unless !$sftp_server_id;
 
     unless ( !$sftp_server ) {
@@ -132,7 +129,7 @@ if ( $op eq 'cud-add' ) {
     my $sftp_server_plain_text_password;
     my $sftp_server;
 
-    $sftp_server = Koha::SFTP::Servers->find($sftp_server_id)
+    $sftp_server = Koha::File::Transports->find($sftp_server_id)
         unless !$sftp_server_id;
 
     $sftp_server_plain_text_password = $sftp_server->plain_text_password
@@ -163,18 +160,14 @@ if ( $op eq 'cud-add' ) {
                     passive            => $passive,
                     auth_mode          => $auth_mode,
                     user_name          => $user_name,
+                    password           => $password,
+                    key_file           => $key_file,
                     download_directory => $download_directory,
                     upload_directory   => $upload_directory,
                     status             => $status,
                     debug              => $debug,
                 }
             )->store;
-
-            $sftp_server->update_password($password)
-                if ($password);
-
-            $sftp_server->update_key_file($key_file)
-                if ($key_file);
 
             push @messages, {
                 type => 'message',
@@ -204,7 +197,7 @@ if ( $op eq 'cud-add' ) {
     my $sftp_server_id = $input->param('sftp_server_id');
     my $sftp_server;
 
-    $sftp_server = Koha::SFTP::Servers->find($sftp_server_id)
+    $sftp_server = Koha::File::Transports->find($sftp_server_id)
         unless !$sftp_server_id;
 
     if ($sftp_server) {
