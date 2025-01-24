@@ -16,7 +16,7 @@ my $builder = t::lib::TestBuilder->new;
 my $schema = Koha::Database->schema;
 
 subtest 'set_additional_fields with marcfield_mode = "get"' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     $schema->txn_begin;
 
@@ -52,6 +52,30 @@ subtest 'set_additional_fields with marcfield_mode = "get"' => sub {
     my $values = $subscription->additional_field_values()->as_list();
 
     is($values->[0]->value, 'some value', 'value was copied from the biblio record to the field');
+
+    $field->delete;
+    my $get_marcfield_field = Koha::AdditionalField->new(
+        {
+            tablename      => 'subscription',
+            name           => random_string( 'c' x 100 ),
+            marcfield      => '998$Z',
+            marcfield_mode => 'get',
+        }
+    );
+    $get_marcfield_field->store()->discard_changes();
+    my $q = CGI->new;
+    $q->param(
+        -name  => 'additional_field_' . $get_marcfield_field->id,
+        -value => '',
+    );
+
+    my @additional_fields =
+        Koha::Object::Mixin::AdditionalFields->prepare_cgi_additional_field_values( $q, 'subscription' );
+    $subscription->set_additional_fields( \@additional_fields );
+
+    $values = $subscription->additional_field_values()->as_list();
+
+    is( $values->[0]->value, 'some value', 'value was copied from the biblio record to the field' );
 
     $schema->txn_rollback;
 };
