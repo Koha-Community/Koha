@@ -154,7 +154,7 @@
 [% IF op =='delete_confirm' %]
     [% IF nb_of_orders or nb_of_vendors %]
     <div class="dialog alert">
-        <h1>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
+        <h1>Cannot delete currency [% currency.currency | html | $HtmlTags tag='span' attributes=>'class="ex"' %]</h1>
         <p>
             [% IF nb_of_orders %]
                 <span>This currency is used by [% nb_of_orders | html %] orders.</span>
