@@ -179,16 +179,20 @@
 
 <tfoot>
     <tr>
-        <td class="total" colspan="12">Total due:</td>
+        <th scope="row" class="total" colspan="14">Total due:</th>
         <td style="text-align: right;">[% total | $Price %]</td>
     </tr>
     [% IF outstanding_credits.total_outstanding < 0 %]
         <tr>
-            <td class="total" colspan="12">Outstanding credits could be applied: </td>
-            <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="op" value="cud-apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
+            <th scope="row" class="total" colspan="14">Outstanding credits could be applied: </th>
+            <td class="credit" style="text-align: right;"
+                ><button type="submit" id="apply_credits" name="op" value="cud-apply_credits" class="btn btn-default btn-sm"
+                    >Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button
+                ></td
+            >
         </tr>
         <tr>
-            <td class="total" colspan="12">Total due if credit applied:</td>
+            <th scope="row" class="total" colspan="14">Total due if credit applied:</th>
             <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
         </tr>
     [% END %]
