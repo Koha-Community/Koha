@@ -6008,7 +6008,7 @@ CREATE TABLE `sftp_servers` (
   `auth_mode` enum('password','key_file','noauth') NOT NULL DEFAULT 'password',
   `download_directory` mediumtext DEFAULT NULL,
   `upload_directory` mediumtext DEFAULT NULL,
-  `status` varchar(32) DEFAULT NULL,
+  `status` longtext DEFAULT NULL,
   `debug` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `host_idx` (`host`)
